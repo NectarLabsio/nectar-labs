@@ -5,7 +5,7 @@
 | G0 toolchain + facts | pending | | | |
 | G1 contract tests | PASS | 2026-11-09T20:43Z | b721641 | evidence/G1/verifier-20261109T2043Z.log, evidence/G1/verifier-gas-20261109T2043Z.csv (prior FAIL 20:33Z, 3bc0de8: see §G1 history) |
 | G2 testnet deploy | PASS | 2026-11-09T20:55Z | 5f27f44 | evidence/G2/verifier-20261109T2055Z.log (explorer pages returned HTTP 403 to WebFetch; see §G2) |
-| G3 web E2E | pending | | | |
+| G3 web E2E | FAIL | 2026-11-09T20:57Z | c940dec | evidence/G3/verifier-20261109T2057Z/ (e2e read-only exit 1: 28 axe failures, aria-prohibited-attr on loading skeleton; see §G3) |
 | G4 OutLayer | pending | | | |
 | G5 oracle | pending | | | |
 | G6 1Click depth | pending | | | |
@@ -23,6 +23,52 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G3
+
+### G3 — web E2E — FAIL — 2026-11-09T20:57Z — commit c940dec
+Fresh clone /tmp/verify-G3-1794257832 (git clone /Volumes/T7/nectar-labs, main HEAD). Logs: evidence/G3/verifier-20261109T2057Z/ (01–14 + lh-*.json; screenshot-feed-phone-light.png)
+```
+$ pnpm i --frozen-lockfile                                   -> exit 0 (pnpm 10.34.9)
+$ pnpm --filter web build                                    -> exit 0 (2 Turbopack "dynamic filesystem access" warnings)
+$ PW_CHANNEL=chrome pnpm --filter web e2e                    -> exit 1: 84 passed, 28 failed, 2 skipped (54.0s)
+  28 failed = shell.spec "<route> renders in <theme>, no horizontal scroll, axe clean" for
+  /feed /borrow /quote/new /quote/0 /position/0 /console /keepers x dark,light x desktop,phone
+  every one: axe serious "aria-prohibited-attr: 1" ->
+  <div class="stack-sm" aria-busy="true" aria-label="Loading"> (apps/web/components/states.tsx:79, div with aria-label and no role)
+  testnet read-only: feed lists NVDAx with live capacity, api health answers from the contract -> passed (desktop + phone)
+  2 skipped = write spec (no key in read-only pass)
+$ NEXT_PUBLIC_E2E_KEY_ADAPTER=1 pnpm --filter web build      -> exit 0
+$ NECTAR_E2E_BORROWER_KEY=<from ~/.nectar/keys/borrower1.json, 0600, not printed> NEXT_PUBLIC_E2E_KEY_ADAPTER=1 \
+  PW_CHANNEL=chrome pnpm --filter web exec playwright test e2e/testnet.spec.ts -g "borrow lands"
+                                                             -> exit 0: 1 passed [desktop] (6.9s), 1 skipped [phone, "one write per run"]
+$ pnpm demo:testnet (after)  -> positions: #0 Open debt $11,250.00 | #1 Open debt $10.00 ltv 556 bps (before: only #0)
+  RPC list_positions(1): borrower1.nectar.testnet, NVDAx units 1000000, debt_usd_e6 10000000, status Open
+$ pnpm --filter web build                                    -> exit 0 (final build; bundle sets no NEXT_PUBLIC_E2E_KEY_ADAPTER value)
+$ pnpm --filter web start + pnpm dlx lighthouse@13.6.0 http://localhost:3100<route> --only-categories=accessibility \
+  --chrome-flags="--headless=new <theme flag>" --output=json --quiet
+  route       dark  light   (lighthouseVersion 13.6.0, mobile emulation 412 px)
+  /           100   100
+  /feed       100   100
+  /borrow     100   100
+  /quote/new  100   100
+  /console    100   100
+  /keepers    100   100
+$ node apps/web/scripts/check-no-branding.mjs                -> exit 0 "no hackathon branding in UI sources"
+$ curl SSR HTML: / testnet x35, "mock collateral" x14, hackathon x0; /feed testnet x17, "mock collateral" x8, hackathon x0
+```
+Theme method for Lighthouse: the app has no ?theme param; with no stored `nectar-theme` key, tokens.css follows prefers-color-scheme.
+Dark = `--force-dark-mode`, light = `--blink-settings=preferredColorScheme=1`. Checked from each report's fullPageScreenshot:
+mean RGB about (28,32,35) for all dark runs and about (242,244,243) for all light runs (12-lighthouse-theme-check.log).
+Playwright themes come from localStorage `nectar-theme` (e2e/helpers.ts prime()); the data-theme assertion passed for all 13 routes in both themes.
+Phone: Pixel 7 project at 400 px. The scroll assertion (scrollWidth - clientWidth ≤ 0) runs before the axe assertion, so it passed for all 26 phone route tests, including the 14 that later failed on axe. The "/" route passed in full, as did /talk, /security, /legal/*, /docs.
+Key hygiene: no string matching ed25519:[base58]{60,} in any saved log or in the clone's test-results/playwright-report. Server on :3100 stopped.
+Explorer: none opened (no criterion for G3).
+Criteria: render 6 screens OK · Lighthouse ≥ 90 OK (all 100) · dark+light OK · phone no h-scroll OK · write flow lands OK (position #1) · disclosures/no branding OK.
+FAIL reasons:
+1. The gates.md G3 command `pnpm --filter web e2e` exits 1: 28 failures from the axe serious rule aria-prohibited-attr on the Loading skeleton (states.tsx:79) on 7 routes × 2 themes × 2 viewports.
+2. gates.md lists `pnpm --filter web lighthouse`, but apps/web/package.json has no `lighthouse` script, so the gate command as written cannot run. I used the coordinator's `pnpm dlx lighthouse@13.6.0` command instead.
+Note: Lighthouse scored 100 on the same routes. It audits after load, probably once the skeleton is gone. The axe check runs while the page is still loading, so the two results are not in conflict.
 
 ## G2
 
