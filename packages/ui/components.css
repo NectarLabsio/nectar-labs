@@ -28,9 +28,9 @@ img { max-width: 100%; }
 .warn-text { color: var(--warn); }
 .danger-text { color: var(--danger); }
 .heading-text { color: var(--heading); }
-.stack { display: grid; gap: 16px; }
-.stack-sm { display: grid; gap: 8px; }
-.stack-lg { display: grid; gap: 28px; }
+.stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.stack-sm { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+.stack-lg { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
 .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .row.between { justify-content: space-between; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
@@ -86,6 +86,9 @@ img { max-width: 100%; }
 /* Key/value list */
 .kv { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--dim); }
 .kv b, .kv strong { color: var(--heading); font-weight: 500; text-align: right; overflow-wrap: anywhere; }
+.kv > * { min-width: 0; }
+/* Long badges (e.g. "OutLayer quoter · <project> @ <version>") wrap instead of widening the phone layout viewport. */
+.kv .badge { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: right; border-radius: var(--r-ctl); }
 .kvs { display: grid; gap: 0; }
 .kvs .kv { padding: 8px 0; border-top: 1px solid var(--border); }
 .kvs .kv:first-child { border-top: 0; }
@@ -118,8 +121,9 @@ img { max-width: 100%; }
 .ribbon { background: var(--warn-fill); border-bottom: 1px solid var(--border); color: var(--warn); font-size: 12px; text-align: center; padding: 6px 12px; }
 
 /* Fields */
-.field { display: grid; gap: 6px; min-width: 0; }
+.field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; min-width: 0; }
 .field label, .field .f-label { font-size: 12px; color: var(--heading); font-weight: 500; }
+.field .hint, .field .error { overflow-wrap: anywhere; }
 .field .hint { font-size: 12px; color: var(--dim); }
 .field .error { font-size: 12px; color: var(--danger); }
 .input-wrap { display: flex; align-items: stretch; border: 1px solid var(--border-strong); border-radius: var(--r-ctl); background: var(--surface-2); min-height: 44px; }
@@ -167,8 +171,10 @@ table.t tbody tr:hover td { background: var(--accent-fill); }
 @media (prefers-reduced-motion: no-preference) { .skel { animation: skel 1.2s ease-in-out infinite; } @keyframes skel { 50% { opacity: .55 } } }
 
 /* Nav */
-.skip-target { scroll-margin-top: 80px; }
-nav.top { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+/* Keep scrolled-to / focused targets clear of the sticky nav (phone nav wraps taller) and the bottom consent/toast layer. */
+html { scroll-padding-top: 96px; scroll-padding-bottom: 24px; }
+.skip-target, summary, :target { scroll-margin-top: 96px; scroll-margin-bottom: 24px; }
+nav.top { position: sticky; top: 0; z-index: 20; isolation: isolate; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
 nav.top .wrap { display: flex; align-items: center; gap: 20px; padding-block: 12px; position: relative; }
 .lockup { display: inline-flex; align-items: center; gap: 10px; color: var(--wordmark); flex: none; }
 .lockup img.mark { width: 34px; height: 34px; }
