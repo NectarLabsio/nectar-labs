@@ -5,13 +5,13 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish = false
-description = "Nectar Labs core: Pappus funded quotes + Cramer borrowing limit (P0)"
+description = "Nectar Labs core: Pappus funded quotes + Cramer borrowing limit (P0 + P1 quoter)"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = []
+default = ["p1"]
 # P1/P2 entry points compile as stubs only when enabled (interface-p0.md).
 p1 = []
 p2 = []
