@@ -42,6 +42,10 @@ A change here goes through the orchestrator; agents report mismatches instead of
 `get_pool() -> {available_usd_e6, utilised_usd_e6, treasury_usd_e6, lenders_fees_usd_e6}` ·
 `preview_borrow(symbol, units, borrow_usd_e6) -> {b_c_usd_e6, static_limit_usd_e6, premium_usd_e6, ok, reason}`
 Position `status`: `"Open" | "Settling" | "Closed"`.
+Item shapes (clarified 2026-11-10 after WO-5): every quote object carries `quote_id` (U64 string) plus `buyer, collateral,
+committed_usd_e6, remaining_usd_e6, max_discount_bps, notice_period_ns, unlock_ns (null|U64), buyer_remote_recipient,
+fee_debt_e18, claimable_fees_usd_e6`; every position object carries `position_id` (U64 string) plus `borrower, collateral,
+units, debt_usd_e6, premium_usd_e6, pre_liq_ltv_bps, opened_ns, status`. `list_*` return arrays of these objects, never tuples.
 
 ## Events (NEP-297, `standard:"nectar"`, `version:"1.0.0"`, `data` is an array of one object)
 `quote_funded{quote_id,buyer,collateral,amount_usd_e6,max_discount_bps}` · `quote_topped_up{quote_id,amount_usd_e6}` ·
