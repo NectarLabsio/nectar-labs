@@ -220,6 +220,8 @@ pub struct ExitCapacityView {
     pub limit_bps_effective: u16,
     /// (1e4 - h_c)(Q_c + R_c + D_c)/1e4 — the second term of B_c (additive field).
     pub capacity_usd_e6: U128,
+    /// P1 (interface-p1.md): price source for this symbol.
+    pub oracle_source: OracleSource,
 }
 
 #[near(serializers = [json])]
@@ -250,4 +252,44 @@ pub struct PreviewBorrowView {
     pub premium_usd_e6: U128,
     pub ok: bool,
     pub reason: Option<String>,
+}
+
+// ---------------------------------------------------------------- P1 (interface-p1.md, state V1)
+
+/// Price source per symbol. `Owner` = P0 owner oracle. `Pyth` is stored for WO-10b.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq, Default)]
+pub enum OracleSource {
+    #[default]
+    Owner,
+    Pyth { account: AccountId, price_identifier: String },
+}
+
+/// OutLayer quoter settings (F-047). Empty `project_id`/`version_key` = P0 static pricing.
+#[near(serializers = [borsh])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct QuoterConfig {
+    pub outlayer_account: AccountId,
+    pub project_id: String,
+    pub version_key: String,
+    pub deposit_yocto: u128,
+    pub gas_tgas: u64,
+    pub max_instructions: u64,
+    pub max_memory_mb: u32,
+    pub max_execution_seconds: u32,
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct QuoterConfigView {
+    pub enabled: bool,
+    pub outlayer_account: AccountId,
+    pub project_id: String,
+    pub version_key: String,
+    pub deposit_yocto: U128,
+    pub gas_tgas: u64,
+    pub max_instructions: U64,
+    pub max_memory_mb: u32,
+    pub max_execution_seconds: u32,
+    pub max_conf_bps: u16,
 }

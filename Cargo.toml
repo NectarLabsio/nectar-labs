@@ -1,8 +1,8 @@
 [workspace]
 resolver = "3"
-# contracts/test-stubs joins via WO-10 (contract agent edits this list). quoter/ is its own workspace
+# quoter/ is its own workspace
 # (wasm32-wasip2, own Cargo.lock/profile) so it never conflicts with the NEAR contracts (P1, D-014).
-members = ["contracts/nectar-core", "contracts/mock-ft"]
+members = ["contracts/nectar-core", "contracts/mock-ft", "contracts/test-stubs"]
 exclude = ["quoter"]
 
 [workspace.package]

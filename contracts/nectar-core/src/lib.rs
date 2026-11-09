@@ -12,6 +12,7 @@
 
 pub mod events;
 pub mod math;
+mod migrate;
 pub mod types;
 
 #[cfg(feature = "p1")]
@@ -21,6 +22,8 @@ mod p2;
 
 #[cfg(test)]
 mod tests;
+#[cfg(all(test, feature = "p1"))]
+mod tests_p1;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
@@ -34,7 +37,13 @@ use crate::events::emit;
 use crate::math::{BPS, LimitParams, MathResult};
 use crate::types::*;
 
+#[cfg(feature = "p1")]
+pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p1");
+#[cfg(not(feature = "p1"))]
 pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p0");
+/// Raw storage key holding the state layout version (absent = P0 layout). Written by `new` and `migrate`.
+pub const STATE_VERSION_KEY: &[u8] = b"__state_version";
+pub const STATE_VERSION: u8 = 1;
 pub const MAX_QUOTES_PER_ASSET: usize = 64;
 pub const MAX_QUOTES_PER_SETTLEMENT: usize = 8;
 pub const MAX_PAGE: u32 = 100;
@@ -72,6 +81,31 @@ enum StorageKey {
     LenderSupplied,
     PendingPrices,
     OwedCollateral,
+    // V1 (P1) — appended so P0 prefixes are unchanged.
+    VolBps,
+    OracleSources,
+}
+
+// Defaults for the V1 fields (packages/config/config.yaml outlayer.*, oracle.max_conf_bps; F-046).
+const DEFAULT_OUTLAYER: &str = "outlayer.testnet";
+const DEFAULT_QUOTER_DEPOSIT_YOCTO: u128 = 4_000_010_000_000_000_000_000; // F-046 estimate
+const DEFAULT_QUOTER_GAS_TGAS: u64 = 100;
+const DEFAULT_MAX_INSTRUCTIONS: u64 = 100_000_000;
+const DEFAULT_MAX_MEMORY_MB: u32 = 128;
+const DEFAULT_MAX_EXECUTION_SECONDS: u32 = 30;
+const DEFAULT_MAX_CONF_BPS: u16 = 100;
+
+pub(crate) fn default_quoter() -> QuoterConfig {
+    QuoterConfig {
+        outlayer_account: DEFAULT_OUTLAYER.parse().unwrap_or_else(|_| env::panic_str("outlayer id")),
+        project_id: String::new(),
+        version_key: String::new(),
+        deposit_yocto: DEFAULT_QUOTER_DEPOSIT_YOCTO,
+        gas_tgas: DEFAULT_QUOTER_GAS_TGAS,
+        max_instructions: DEFAULT_MAX_INSTRUCTIONS,
+        max_memory_mb: DEFAULT_MAX_MEMORY_MB,
+        max_execution_seconds: DEFAULT_MAX_EXECUTION_SECONDS,
+    }
 }
 
 fn ok<T>(r: MathResult<T>) -> T {
@@ -109,6 +143,11 @@ pub struct Nectar {
     pending_prices: LookupMap<String, (u128, u64)>,
     /// "account|symbol" -> units whose ft_transfer failed (recorded, not lost)
     owed_collateral: LookupMap<String, u128>,
+    // ---- V1 (P1). P0 fields above keep their borsh order; `migrate` reads them as `NectarV0`.
+    quoter: QuoterConfig,
+    vol_bps: LookupMap<String, u16>,
+    oracle_sources: LookupMap<String, OracleSource>,
+    max_conf_bps: u16,
 }
 
 // ---------------------------------------------------------------- internal helpers
@@ -463,6 +502,126 @@ impl Nectar {
         units
     }
 
+    pub(crate) fn is_triggerable(&self, p: &Position, c: &CollateralConfig) -> bool {
+        let value = ok(math::value_usd_e6(p.units.0, c.oracle_price_usd_e6.0, c.decimals));
+        ok(math::triggerable(p.debt_usd_e6.0, value, p.pre_liq_ltv_bps))
+    }
+
+    /// <= 8 live quotes with capacity: ascending max_discount_bps, then oldest (lowest id). <= 64 reads.
+    pub(crate) fn select_quotes(&self, symbol: &str) -> Vec<(u16, u64)> {
+        let ids = self.live_ids(symbol);
+        let mut cands: Vec<(u16, u64)> = Vec::with_capacity(ids.len());
+        for id in ids.iter() {
+            if let Some(q) = self.quote(*id) {
+                if q.remaining_usd_e6.0 > 0 {
+                    cands.push((q.max_discount_bps, *id));
+                }
+            }
+        }
+        cands.sort_unstable();
+        cands.truncate(MAX_QUOTES_PER_SETTLEMENT);
+        cands
+    }
+
+    /// Settlement legs at the given `(disc_bps, quote_id)` list (already ordered, <= 8).
+    /// Checks first, then effects, then interactions; on `Err` nothing has been written.
+    pub(crate) fn settle(
+        &mut self,
+        position_id: U64,
+        mut p: Position,
+        mut c: CollateralConfig,
+        cands: &[(u16, u64)],
+        keeper: &AccountId,
+    ) -> Result<(), &'static str> {
+        let price = c.oracle_price_usd_e6.0;
+        let acc = c.acc_fee_per_dollar_e18.0;
+        let mut debt = p.debt_usd_e6.0;
+        let mut units = p.units.0;
+        let mut q_c = c.active_committed_q_usd_e6.0;
+        let mut total_repay: u128 = 0;
+        let mut keeper_units: u128 = 0;
+        let mut buyer_transfers: Vec<(AccountId, u128, u64)> = Vec::new();
+        let mut legs: Vec<(Quote, u16, u128, u128)> = Vec::new();
+        for &(disc, qid) in cands.iter().take(MAX_QUOTES_PER_SETTLEMENT) {
+            if debt == 0 || units == 0 {
+                break;
+            }
+            let Some(mut q) = self.quote(qid) else { continue };
+            if q.remaining_usd_e6.0 == 0 || q.collateral != p.collateral {
+                continue;
+            }
+            let Some(leg) =
+                math::settle_leg(debt, q.remaining_usd_e6.0, units, price, c.decimals, disc, self.keeper_fee_bps)?
+            else {
+                continue;
+            };
+            Self::checkpoint_fees(&mut q, acc)?;
+            if !q.exiting() {
+                q_c = math::sub(q_c, leg.repay_usd_e6)?;
+            }
+            q.remaining_usd_e6 = U128(math::sub(q.remaining_usd_e6.0, leg.repay_usd_e6)?);
+            Self::reset_fee_debt(&mut q, acc)?;
+            debt = math::sub(debt, leg.repay_usd_e6)?;
+            units = math::sub(units, math::add(leg.buyer_units, leg.keeper_units)?)?;
+            total_repay = math::add(total_repay, leg.repay_usd_e6)?;
+            keeper_units = math::add(keeper_units, leg.keeper_units)?;
+            // One ft_transfer per distinct buyer (bounds receipts to <= 8 + keeper + borrower).
+            match buyer_transfers.iter_mut().find(|(b, _, _)| *b == q.buyer) {
+                Some(entry) => entry.1 = math::add(entry.1, leg.buyer_units)?,
+                None => buyer_transfers.push((q.buyer.clone(), leg.buyer_units, qid)),
+            }
+            legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units));
+        }
+        if total_repay == 0 {
+            return Err("no quote capacity");
+        }
+        let utilised = math::sub(self.utilised_usd_e6, total_repay)?;
+        let available = math::add(self.available_usd_e6, total_repay)?;
+        p.debt_usd_e6 = U128(debt);
+        p.units = U128(units);
+        let release = if debt == 0 {
+            self.close_position(&mut p)
+        } else {
+            p.status = PositionStatus::Open;
+            0
+        };
+        let n_transfers = buyer_transfers.len() as u128 + u128::from(keeper_units > 0) + u128::from(release > 0);
+        let reserve = math::sub(self.gas_reserve_yocto, n_transfers).map_err(|_| "gas reserve empty")?;
+
+        // effects
+        for (q, disc, repay, seize) in legs {
+            emit(
+                "settled_near",
+                json!({ "position_id": position_id, "quote_id": q.quote_id, "disc_bps": disc,
+                        "repay_usd_e6": U128(repay), "seize_units": U128(seize), "buyer": q.buyer }),
+            );
+            if q.remaining_usd_e6.0 == 0 {
+                self.remove_live(&p.collateral, q.quote_id.0);
+            }
+            self.put_quote(q);
+        }
+        self.utilised_usd_e6 = utilised;
+        self.available_usd_e6 = available;
+        self.gas_reserve_yocto = reserve;
+        c.active_committed_q_usd_e6 = U128(q_c);
+        let token = c.token.clone();
+        let borrower = p.borrower.clone();
+        self.put_coll(c);
+        self.put_position(p);
+
+        // interactions
+        for (buyer, b, qid) in buyer_transfers {
+            Self::transfer(&token, &buyer, b, Payout::SettlementBuyer { position_id, quote_id: U64(qid) }).detach();
+        }
+        if keeper_units > 0 {
+            Self::transfer(&token, keeper, keeper_units, Payout::SettlementKeeper { position_id }).detach();
+        }
+        if release > 0 {
+            Self::transfer(&token, &borrower, release, Payout::CollateralRelease { position_id }).detach();
+        }
+        Ok(())
+    }
+
     fn owed_key(account: &AccountId, symbol: &str) -> String {
         format!("{account}|{symbol}")
     }
@@ -478,6 +637,7 @@ impl Nectar {
 impl Nectar {
     #[init]
     pub fn new(owner: AccountId, usdc_token: AccountId, keeper: AccountId) -> Self {
+        env::storage_write(STATE_VERSION_KEY, &[STATE_VERSION]);
         Self {
             owner,
             paused: false,
@@ -505,6 +665,10 @@ impl Nectar {
             lender_supplied: LookupMap::new(StorageKey::LenderSupplied),
             pending_prices: LookupMap::new(StorageKey::PendingPrices),
             owed_collateral: LookupMap::new(StorageKey::OwedCollateral),
+            quoter: default_quoter(),
+            vol_bps: LookupMap::new(StorageKey::VolBps),
+            oracle_sources: LookupMap::new(StorageKey::OracleSources),
+            max_conf_bps: DEFAULT_MAX_CONF_BPS,
         }
     }
 
@@ -831,117 +995,29 @@ impl Nectar {
     }
 
     // ------------------------------------------------------------ keeper
-    /// P0 static settlement at each quote's `max_discount_bps`, ≤ 8 quotes, ascending discount then oldest.
+    /// Settles <= 8 quotes, ascending discount then oldest. P0: each quote's `max_discount_bps`.
+    /// P1 (quoter pinned + vol set): OutLayer `request_execution` then `on_quoter_result` (interface-p1.md).
     pub fn trigger_preliquidation(&mut self, position_id: U64) {
         self.assert_not_paused();
         require!(env::predecessor_account_id() == self.keeper, ERR_KEEPER);
-        let mut p = self.position_or_panic(position_id.0);
+        let p = self.position_or_panic(position_id.0);
         require!(p.status == PositionStatus::Open, "position not open");
-        let mut c = self.coll_or_panic(&p.collateral);
+        let c = self.coll_or_panic(&p.collateral);
         require!(self.oracle_fresh(&c), "oracle stale");
-        let price = c.oracle_price_usd_e6.0;
-        let value = ok(math::value_usd_e6(p.units.0, price, c.decimals));
-        require!(ok(math::triggerable(p.debt_usd_e6.0, value, p.pre_liq_ltv_bps)), "position healthy");
-        p.status = PositionStatus::Settling;
+        require!(self.is_triggerable(&p, &c), "position healthy");
         let keeper = env::predecessor_account_id();
         emit("preliq_triggered", json!({ "position_id": position_id, "keeper": keeper }));
+        let cands = self.select_quotes(&p.collateral);
 
-        // Select ≤ 8 quotes: ascending max_discount_bps, then oldest (lowest id). ≤ 64 reads.
-        let ids = self.live_ids(&p.collateral);
-        let mut cands: Vec<(u16, u64)> = Vec::with_capacity(ids.len());
-        for id in ids.iter() {
-            if let Some(q) = self.quote(*id) {
-                if q.remaining_usd_e6.0 > 0 {
-                    cands.push((q.max_discount_bps, *id));
-                }
+        #[cfg(feature = "p1")]
+        if self.quoter_enabled() {
+            match self.vol_bps.get(&p.collateral).copied() {
+                Some(vol) => return self.start_quoter(position_id, p, &c, cands, vol),
+                None => emit("quoter_fallback", json!({ "position_id": position_id, "reason": "vol_unset" })),
             }
         }
-        cands.sort_unstable();
-        cands.truncate(MAX_QUOTES_PER_SETTLEMENT);
-
-        let acc = c.acc_fee_per_dollar_e18.0;
-        let mut debt = p.debt_usd_e6.0;
-        let mut units = p.units.0;
-        let mut q_c = c.active_committed_q_usd_e6.0;
-        let mut total_repay: u128 = 0;
-        let mut keeper_units: u128 = 0;
-        let mut buyer_transfers: Vec<(AccountId, u128, u64)> = Vec::new();
-        let mut emptied: Vec<u64> = Vec::new();
-        for (disc, qid) in cands {
-            if debt == 0 || units == 0 {
-                break;
-            }
-            let mut q = self.quote_or_panic(qid);
-            let leg = match ok(math::settle_leg(
-                debt,
-                q.remaining_usd_e6.0,
-                units,
-                price,
-                c.decimals,
-                disc,
-                self.keeper_fee_bps,
-            )) {
-                Some(l) => l,
-                None => continue,
-            };
-            ok(Self::checkpoint_fees(&mut q, acc));
-            if !q.exiting() {
-                q_c = ok(math::sub(q_c, leg.repay_usd_e6));
-            }
-            q.remaining_usd_e6 = U128(ok(math::sub(q.remaining_usd_e6.0, leg.repay_usd_e6)));
-            ok(Self::reset_fee_debt(&mut q, acc));
-            debt = ok(math::sub(debt, leg.repay_usd_e6));
-            units = ok(math::sub(units, ok(math::add(leg.buyer_units, leg.keeper_units))));
-            total_repay = ok(math::add(total_repay, leg.repay_usd_e6));
-            keeper_units = ok(math::add(keeper_units, leg.keeper_units));
-            if q.remaining_usd_e6.0 == 0 {
-                emptied.push(qid);
-            }
-            emit(
-                "settled_near",
-                json!({ "position_id": position_id, "quote_id": U64(qid), "disc_bps": disc,
-                        "repay_usd_e6": U128(leg.repay_usd_e6), "seize_units": U128(leg.buyer_units),
-                        "buyer": q.buyer }),
-            );
-            // One ft_transfer per distinct buyer (bounds receipts to ≤ 8 + keeper + borrower).
-            match buyer_transfers.iter_mut().find(|(b, _, _)| *b == q.buyer) {
-                Some(entry) => entry.1 = ok(math::add(entry.1, leg.buyer_units)),
-                None => buyer_transfers.push((q.buyer.clone(), leg.buyer_units, qid)),
-            }
-            self.put_quote(q);
-        }
-        require!(total_repay > 0, "no quote capacity");
-
-        // effects: pool, collateral, position
-        self.utilised_usd_e6 = ok(math::sub(self.utilised_usd_e6, total_repay));
-        self.available_usd_e6 = ok(math::add(self.available_usd_e6, total_repay));
-        c.active_committed_q_usd_e6 = U128(q_c);
-        p.debt_usd_e6 = U128(debt);
-        p.units = U128(units);
-        let release = if debt == 0 { self.close_position(&mut p) } else {
-            p.status = PositionStatus::Open;
-            0
-        };
-        let n_transfers = buyer_transfers.len() as u128 + u128::from(keeper_units > 0) + u128::from(release > 0);
-        self.gas_reserve_yocto = math::sub(self.gas_reserve_yocto, n_transfers)
-            .unwrap_or_else(|_| env::panic_str("gas reserve empty"));
-        for qid in emptied {
-            self.remove_live(&p.collateral, qid);
-        }
-        let token = c.token.clone();
-        let borrower = p.borrower.clone();
-        self.put_coll(c);
-        self.put_position(p);
-
-        // interactions
-        for (buyer, b, qid) in buyer_transfers {
-            Self::transfer(&token, &buyer, b, Payout::SettlementBuyer { position_id, quote_id: U64(qid) }).detach();
-        }
-        if keeper_units > 0 {
-            Self::transfer(&token, &keeper, keeper_units, Payout::SettlementKeeper { position_id }).detach();
-        }
-        if release > 0 {
-            Self::transfer(&token, &borrower, release, Payout::CollateralRelease { position_id }).detach();
+        if let Err(e) = self.settle(position_id, p, c, &cands, &keeper) {
+            env::panic_str(e);
         }
     }
 
@@ -1059,6 +1135,7 @@ impl Nectar {
             b_c_usd_per_unit_e6: per_unit,
             limit_bps_effective: if cap > 0 { c.max_nectar_ltv_bps } else { 0 },
             capacity_usd_e6: U128(cap),
+            oracle_source: self.oracle_sources.get(&symbol).cloned().unwrap_or_default(),
         }
     }
 

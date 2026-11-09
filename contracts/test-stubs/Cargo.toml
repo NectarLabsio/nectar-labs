@@ -1,0 +1,17 @@
+[package]
+name = "test-stubs"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+description = "Sandbox-only stub of outlayer.testnet request_execution (F-047/F-048). Never deployed to testnet."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = { workspace = true }
+
+[dev-dependencies]
+near-sdk = { workspace = true, features = ["unit-testing"] }
