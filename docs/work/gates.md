@@ -10,7 +10,7 @@ G0: rustc --version; cargo --version; cargo near --version; near --version; node
 G1: cargo test -p nectar-core 2>&1 | tail -40; cargo test -p nectar-core --test sandbox 2>&1 | tail -40;
     python3 contracts/nectar-core/tests/model.py --check
 G2: scripts/50-verify.sh (read-only views against config.yaml ids) ; open explorer links with WebFetch
-G3: pnpm --filter web build 2>&1 | tail -40; pnpm --filter web e2e 2>&1 | tail -40; pnpm --filter web lighthouse (a11y ≥ 90)
+G3: pnpm --filter web build 2>&1 | tail -40; PW_CHANNEL=chrome pnpm --filter web e2e 2>&1 | tail -40; LH_START=1 pnpm --filter web lighthouse (a11y ≥ 90, 6 routes × 2 themes)
 G4: near contract call-function as-read-only outlayer.testnet estimate_execution_cost json-args "$(cat packages/config/outlayer-limits.json)" network-config testnet now;
     near contract call-function as-read-only $CORE get_settlement json-args '{"position_id":"<seeded>"}' network-config testnet now → disc_bps within [0,max]; attestation URL opens
 G5: near contract call-function as-read-only $ORACLE get_price json-args '{"price_identifier":"'$NVDA_PRICE_ID'"}' network-config testnet now → publish_time < 600 s old; cargo test -p nectar-core oracle_rejects
