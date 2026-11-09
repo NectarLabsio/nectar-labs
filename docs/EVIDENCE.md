@@ -5,7 +5,7 @@
 | G0 toolchain + facts | pending | | | |
 | G1 contract tests | PASS | 2026-11-09T20:43Z | b721641 | evidence/G1/verifier-20261109T2043Z.log, evidence/G1/verifier-gas-20261109T2043Z.csv (prior FAIL 20:33Z, 3bc0de8: see §G1 history) |
 | G2 testnet deploy | PASS | 2026-11-09T20:55Z | 5f27f44 | evidence/G2/verifier-20261109T2055Z.log (explorer pages returned HTTP 403 to WebFetch; see §G2) |
-| G3 web E2E | FAIL | 2026-11-09T20:57Z | c940dec | evidence/G3/verifier-20261109T2057Z/ (e2e read-only exit 1: 28 axe failures, aria-prohibited-attr on loading skeleton; see §G3) |
+| G3 web E2E | PASS | 2026-11-09T21:15Z | 176914f | evidence/G3/verifier-20261109T2115Z/ (e2e 112 pass / 0 fail / 2 skip = write spec; LH 12/12 = 100; write flow cited from 20:57Z run, not repeated; prior FAIL 20:57Z c940dec: see §G3) |
 | G4 OutLayer | pending | | | |
 | G5 oracle | pending | | | |
 | G6 1Click depth | pending | | | |
@@ -25,6 +25,30 @@ Notes: faucet rate-limited once; retried after 90 s.
 ```
 
 ## G3
+
+### G3 — web E2E — PASS — 2026-11-09T21:15Z — commit 176914f
+Fresh clone /tmp/verify-G3b-1794258954 (git clone /Volumes/T7/nectar-labs, main HEAD 176914f). Logs: evidence/G3/verifier-20261109T2115Z/ (01–07 + lh-*.json; screenshot-feed-phone-light.png). NECTAR_E2E_BORROWER_KEY / NEXT_PUBLIC_E2E_KEY_ADAPTER unset.
+$ pnpm i --frozen-lockfile                          → exit 0
+$ pnpm --filter web build 2>&1 | tail -40           → exit 0 (21 routes, 02-build.log)
+$ PW_CHANNEL=chrome pnpm --filter web e2e 2>&1 | tail -40   → exit 0
+  112 passed, 2 skipped (53.8s). Skips = testnet.spec.ts:29 write flow, desktop + phone (no key, by design).
+  shell.spec "<route> renders in <theme>, no horizontal scroll, axe clean": 13 routes × dark/light × desktop/phone, all ✓.
+  "theme toggle switches data-theme" ✓ desktop + phone. testnet read-only (feed live capacity, api health) ✓ both.
+$ LH_START=1 pnpm --filter web lighthouse            → exit 0 (script now exists: apps/web/scripts/lighthouse.mjs, lighthouse 13.6.0)
+  | route | dark | light |
+  | / | 100 | 100 |  | /feed | 100 | 100 |  | /borrow | 100 | 100 |
+  | /quote/new | 100 | 100 |  | /console | 100 | 100 |  | /keepers | 100 | 100 |
+  Theme check (05-lighthouse-theme-check.log, fullPageScreenshot mean brightness): dark 30.8–37.8, light 231.4–242.5 on all 6 routes.
+$ node apps/web/scripts/check-no-branding.mjs       → exit 0 "no hackathon branding in UI sources"
+$ pnpm demo:testnet                                  → exit 0 (07-demo-testnet.log)
+  positions: #0 Open debt $11,250.00 · #1 Open debt $10.00 ltv 556 bps / pre-liq 7250 bps (borrower1, from the 20:57Z write run)
+Write flow NOT repeated: running testnet.spec write would open position #2 on testnet. WO-3b changed only the skeleton's ARIA role and
+added the lighthouse script; the borrow path did not change. Cited evidence from the c940dec run: evidence/G3/verifier-20261109T2057Z/06-e2e-write.log
+(write spec 1 passed), 07-demo-after.log, 08-position1-rpc.json (position_id 1, borrower1.nectar.testnet, debt_usd_e6 10000000, Open). Position #1 still exists (above).
+Key hygiene: no ed25519:[base58]{60,} in saved logs or the clone's test-results/playwright-report. Server on :3100 stopped by the script (lsof empty).
+Explorer: none opened (no G3 criterion; nearblocks returns 403 to WebFetch, see §G2).
+Criteria: e2e 0 failures OK · 12/12 Lighthouse ≥ 90 OK (all 100) · both themes OK · phone no h-scroll OK · branding clean OK · write flow OK (cited, not repeated).
+Resolves both reasons from the 20:57Z FAIL (axe aria-prohibited-attr fixed with role="status"; lighthouse script now present).
 
 ### G3 — web E2E — FAIL — 2026-11-09T20:57Z — commit c940dec
 Fresh clone /tmp/verify-G3-1794257832 (git clone /Volumes/T7/nectar-labs, main HEAD). Logs: evidence/G3/verifier-20261109T2057Z/ (01–14 + lh-*.json; screenshot-feed-phone-light.png)

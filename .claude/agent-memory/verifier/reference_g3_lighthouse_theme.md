@@ -1,13 +1,13 @@
 ---
 name: g3-lighthouse-theme
-description: How to run G3 Lighthouse per theme and prove which theme rendered; gates.md lighthouse script missing; axe vs Lighthouse disagreement
+description: How to run G3 (e2e, lighthouse script, theme proof, write-flow avoidance) from a fresh clone; history of the axe FAIL and the PASS rerun
 metadata:
   type: reference
 ---
-G3 run 2026-11-09T20:57Z (commit c940dec) FAILED only because the e2e axe check flagged aria-prohibited-attr on the loading skeleton (apps/web/components/states.tsx:79). Lighthouse gave 100 everywhere.
-- App has no ?theme; without localStorage `nectar-theme` it follows prefers-color-scheme. Lighthouse CLI dark = `--force-dark-mode`, light = `--blink-settings=preferredColorScheme=1`.
-- `--only-categories=accessibility` drops final-screenshot; use `.fullPageScreenshot.screenshot.data` (webp) -> `sips -s format bmp` -> mean RGB (no PIL on host).
-- `pnpm --filter web lighthouse` (gates.md) has no script in apps/web; record it as a discrepancy.
-- `pkill -f "next start"` misses the server; kill the PID that `lsof -iTCP:3100` reports.
-- Write flow: borrower1 key file has no account_id field; config gives borrower1.nectar.testnet (FullAccess key). Each G3 write adds a position (#1 after first run).
-**How to apply:** on G3 reruns, reuse these steps and keep within the coordinator's tool-call budget.
+G3 FAILED 2026-11-09T20:57Z (c940dec): axe aria-prohibited-attr on the loading skeleton, and no lighthouse script. PASSED on rerun 21:15Z (176914f) after WO-3b.
+- `pnpm --filter web lighthouse` now = apps/web/scripts/lighthouse.mjs; LH_START=1 starts/stops next on :3100 itself; reports go to <clone>/evidence/G3/lighthouse/ (copy them out).
+- Theme proof: `.fullPageScreenshot.screenshot.data` (webp) -> `sips -s format bmp` -> mean brightness via a small node BMP reader (no PIL). Dark ~35, light ~235.
+- Testnet write spec skips on its own when NECTAR_E2E_BORROWER_KEY / NEXT_PUBLIC_E2E_KEY_ADAPTER are unset, so a plain e2e run gives 2 skips. Each write run opens a new position, so cite the 20:57Z write evidence (06/07/08) and confirm with `pnpm demo:testnet`.
+- The `### G2 ... 2026-11-10T19:42Z 3f9c1a2` block at the top of EVIDENCE.md is the format template, not a real run.
+- Rewriting EVIDENCE.md with mv from /private/tmp warns "set owner/group" on the T7 volume, but the content still lands. Check wc -l afterwards.
+**How to apply:** on G3 reruns, reuse these steps; about 18 tool calls is enough.

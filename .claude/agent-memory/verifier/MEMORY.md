@@ -1,3 +1,3 @@
 - [G1 gas scope](feedback_g1_gas_scope.md) — every default-build change method needs a GAS row; diff methods vs labels
 - [Explorer WebFetch 403](reference_explorer_webfetch.md) — nearblocks blocks WebFetch; prove via RPC, no UA spoofing
-- [G3 Lighthouse theme](reference_g3_lighthouse_theme.md) — LH theme flags, screenshot proof, missing lighthouse script, axe skeleton FAIL
+- [G3 run recipe](reference_g3_lighthouse_theme.md) — LH script + theme proof; write spec self-skips; cite position 1; EVIDENCE template note
