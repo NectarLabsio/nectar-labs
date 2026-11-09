@@ -26,6 +26,24 @@ if [ "$STEP" = A ] || [ "$STEP" = all ]; then
   log "A2: price \$155"; owner update_owner_price '{"symbol":"NVDAx","price_usd_e6":"155000000"}'; health
   log "A3: keeper triggers #2 (expect quoter_fallback)"; trigger 2; sleep 20; health
 fi
+if [ "$STEP" = C ]; then
+  # C) discount pricing with secrets (G4 addendum): demo MM secrets for quote #1 via OutLayer secrets (F-167), vol 150 bps so the
+  #    model's discount (150 + q·γ·vol/1e8 = 159 bps for q=3000, γ=2000) sits below quote #1's 400 bps cap. Position #3: 2 NVDAx, $190,
+  #    pre-liq 7,500 at $140 (ltv 6,786); $125 makes it triggerable (7,600).
+  log "C1: store demo secrets + point nectar-core at them"
+  node "$ROOT/scripts/35-quoter-secrets.mjs" --quote 1:3000:2000 --profile mm-demo
+  owner set_quoter_secrets_ref "$(jq -cn --arg a "$OWNER" '{secrets_ref:{profile:"mm-demo", account_id:$a}}')"
+  owner set_vol_bps '{"symbol":"NVDAx","vol_bps":150}'
+  log "C2: borrower1 opens position #3 at \$140"
+  MSG='{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"190000000","pre_liq_ltv_bps":7500}}'
+  ARGS=$(jq -cn --arg r "$CORE" --arg m "$MSG" '{receiver_id:$r, amount:"2000000", msg:$m}')
+  near contract call-function as-transaction "$NVDAX" ft_transfer_call json-args "$ARGS" \
+    prepaid-gas '300 Tgas' attached-deposit '1 yoctoNEAR' sign-as "$BR" network-config testnet sign-with-keychain send </dev/null
+  log "C3: price \$125"; owner update_owner_price '{"symbol":"NVDAx","price_usd_e6":"125000000"}'; health
+  P=$(bash "$ROOT/scripts/50-verify.sh" 2>/dev/null | grep TRIGGERABLE | sed -E 's/^#([0-9]+).*/\1/' | head -1)
+  [ -n "$P" ] || { echo "no triggerable position" >&2; exit 2; }
+  log "C4: keeper triggers #$P (expect quoter_result with disc_bps below 400)"; trigger "$P"; sleep 30; health
+fi
 if [ "$STEP" = B ] || [ "$STEP" = all ]; then
   log "B1: pin the published quoter"; bash "$ROOT/scripts/30-quoter-publish.sh" pin
   log "B2: price \$140"; owner update_owner_price '{"symbol":"NVDAx","price_usd_e6":"140000000"}'; health
