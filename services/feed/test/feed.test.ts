@@ -9,7 +9,6 @@ import { FeedDb, type ExitCapacity, type LogBatch } from '../src/db.ts';
 import { NECTAR_EVENTS, parseEventLog } from '../src/events.ts';
 import { Indexer } from '../src/indexer.ts';
 import { createLogger } from '../src/log.ts';
-import { MCP_TOOLS, mcpStubManifest } from '../src/mcp.ts';
 import { TxStatusSource, ViewPollingSource, type TxOutcomeFetcher, type ViewReader, type ViewResult } from '../src/sources.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -196,18 +195,5 @@ describe('REST API', () => {
     const yaml = readFileSync(resolve(here, '../openapi.yaml'), 'utf8');
     const documented = [...yaml.matchAll(/^ {2}(\/[^:]*):\s*$/gm)].map((m) => m[1]).sort();
     assert.deepEqual(documented, [...ROUTES].sort());
-  });
-});
-
-describe('MCP stub', () => {
-  it('registers the six read-only tools and implements none of them yet (P1)', () => {
-    assert.deepEqual(
-      MCP_TOOLS.map((t) => t.name).sort(),
-      ['explain_limit', 'get_asset', 'get_feed', 'get_positions', 'get_quotes', 'get_settlements'],
-    );
-    assert.ok(MCP_TOOLS.every((t) => t.readOnly && t.status === 'stub-p1'));
-    const m = mcpStubManifest();
-    assert.equal(m.implemented, false);
-    assert.deepEqual(m.transports, ['stdio', 'http']);
   });
 });

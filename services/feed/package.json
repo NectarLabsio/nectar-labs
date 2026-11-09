@@ -3,17 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Nectar Feed: NEP-297 indexer into SQLite + read-only REST (P0); MCP server stub (tools land in P1).",
+  "description": "Nectar Feed: NEP-297 indexer into SQLite + read-only REST (P0); 1Click dry-quote sampler; read-only Feed MCP (stdio + Streamable HTTP).",
   "engines": {
     "node": ">=22.22.2"
   },
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning src/main.ts",
+    "mcp": "node --disable-warning=ExperimentalWarning src/mcp-stdio.ts",
+    "record:oneclick": "node --disable-warning=ExperimentalWarning scripts/record-oneclick-fixture.ts",
     "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.ts\"",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "near-api-js": "7.4.0"
+    "@defuse-protocol/one-click-sdk-typescript": "0.1.26",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "near-api-js": "7.4.0",
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/node": "26.6.6",
