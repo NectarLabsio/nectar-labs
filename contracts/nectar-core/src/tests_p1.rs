@@ -918,3 +918,39 @@ fn gas_reserve_view_tracks_quoter_deposit() {
     assert_eq!(c.get_gas_reserve(), U128(900));
     assert_eq!(c.get_gas_reserve(), c.get_config().gas_reserve_yocto);
 }
+
+// ------------------------------------------------------------------ WO-10c: get_price_no_older_than, 80 Tgas
+
+#[test]
+fn pyth_age_rounds_up_to_seconds() {
+    use crate::p1::pyth_age_s;
+    assert_eq!(pyth_age_s(120 * SEC), 120);
+    assert_eq!(pyth_age_s(86_400 * SEC), 86_400);
+    assert_eq!(pyth_age_s(1), 1, "never 0: Pyth would only accept the current second");
+    assert_eq!(pyth_age_s(120 * SEC + 1), 121);
+    assert_eq!(pyth_age_s(u64::MAX), u64::MAX.div_ceil(SEC));
+}
+
+#[test]
+fn pyth_trigger_closed_session_age() {
+    let _ = pyth_triggered(false);
+    assert!(event_with("pyth_price_requested", r#""age_s":86400"#));
+}
+
+#[test]
+fn pyth_trigger_open_session_age() {
+    let mut c = demo_p1(false);
+    pyth_on(&mut c);
+    set_ctx(owner(), 0, T0 + 3 * SEC);
+    c.set_session("NVDAx".into(), true);
+    set_ctx(keeper(), 0, T0 + 4 * SEC);
+    c.trigger_preliquidation(U64(0));
+    assert!(event_with("pyth_price_requested", r#""age_s":120"#));
+}
+
+#[test]
+fn default_quoter_gas_is_80_tgas() {
+    set_ctx(owner(), 0, T0);
+    let c = Nectar::new(owner(), usdc(), keeper());
+    assert_eq!(c.get_quoter_config().gas_tgas, 80);
+}

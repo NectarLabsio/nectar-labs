@@ -7,7 +7,8 @@
 //! position and runs the P0 settlement with those discounts. Business failures in the callback never
 //! panic: the position goes back to Open with `settlement_aborted`.
 //!
-//! WO-10b: Pyth source (D-013) -> trigger puts the position in Settling and calls `get_price` on the Pyth
+//! WO-10b/10c: Pyth source (D-013, D-015) -> trigger puts the position in Settling and calls
+//! `get_price_no_older_than(price_id, age)` (F-173; age = session-aware max age, seconds) on the Pyth
 //! receiver `.then(on_pyth_price)`; the callback checks age (session-aware), conf and band, writes the
 //! price, then continues with the quoter or the P0 settle. `cancel_settlement` is the owner escape for a
 //! position stuck in Settling. Optional `secrets_ref` is forwarded to `request_execution` (F-047).
@@ -34,7 +35,7 @@ pub const GAS_RECEIPTS_PER_TRANSFER: Gas = Gas::from_tgas(5);
 pub const GAS_TRIGGER_MARGIN: Gas = Gas::from_tgas(5);
 /// Stdout is <= 900 B (F-043); anything longer is rejected as `too_long`.
 pub const MAX_QUOTER_RESULT_LEN: usize = 2048;
-/// Gas attached to the Pyth `get_price` view call (single map read; measured on the sandbox stub only).
+/// Gas attached to the Pyth `get_price_no_older_than` view call (single map read; measured on the sandbox stub only).
 pub const GAS_PYTH_GET_PRICE: Gas = Gas::from_tgas(10);
 /// Own burn of `on_pyth_price` before it schedules the quoter or the settlement legs.
 pub const GAS_PYTH_CB_BASE: Gas = Gas::from_tgas(10);
@@ -92,6 +93,12 @@ pub fn check_pyth_price(
         }
     }
     Ok((price, publish_ns))
+}
+
+/// `age` argument of Pyth `get_price_no_older_than` (F-173, whole seconds): the contract's max age rounded
+/// up, so Pyth never rejects a price our own `check_pyth_price` (ns precision) would accept.
+pub fn pyth_age_s(max_age_ns: u64) -> u64 {
+    max_age_ns.div_ceil(1_000_000_000)
 }
 
 /// Pyth `PriceIdentifier` JSON: exactly 64 hex chars, no `0x` (receiver state.rs:45).
@@ -302,7 +309,8 @@ impl Nectar {
         Ok(())
     }
 
-    /// Pyth path (D-013): Settling, then `get_price` `.then(on_pyth_price)` with all remaining gas.
+    /// Pyth path (D-013, D-015): Settling, then `get_price_no_older_than(price_id, age)` (F-173)
+    /// `.then(on_pyth_price)` with all remaining gas. Our own age/conf/band checks still run in the callback.
     pub(crate) fn start_pyth_read(&mut self, position_id: U64, mut p: Position, account: AccountId, price_identifier: String) {
         let cands = self.select_quotes(&p.collateral);
         let n = self.n_transfers(&cands);
@@ -314,18 +322,20 @@ impl Nectar {
         let cb_min = GAS_PYTH_CB_BASE.as_gas() + downstream;
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
         require!(left >= GAS_PYTH_GET_PRICE.as_gas() + cb_min + GAS_TRIGGER_MARGIN.as_gas(), "attach more gas");
+        let age_s = pyth_age_s(self.max_age_ns(&self.coll_or_panic(&p.collateral)));
         // effects
         p.status = PositionStatus::Settling;
         self.put_position(p);
         emit(
             "pyth_price_requested",
-            json!({ "position_id": position_id, "account": account, "price_identifier": price_identifier }),
+            json!({ "position_id": position_id, "account": account, "price_identifier": price_identifier, "age_s": age_s }),
         );
         // interactions
-        let args = json!({ "price_identifier": price_identifier }).to_string();
+        // F-173: the arg is `price_id` (not `price_identifier`), `age` a JSON number of seconds.
+        let args = json!({ "price_id": price_identifier, "age": age_s }).to_string();
         let cb = json!({ "position_id": position_id }).to_string();
         Promise::new(account)
-            .function_call("get_price", args.into_bytes(), NearToken::from_yoctonear(0), GAS_PYTH_GET_PRICE)
+            .function_call("get_price_no_older_than", args.into_bytes(), NearToken::from_yoctonear(0), GAS_PYTH_GET_PRICE)
             .then(Promise::new(env::current_account_id()).function_call_weight(
                 "on_pyth_price",
                 cb.into_bytes(),
@@ -404,7 +414,7 @@ impl Nectar {
         }
     }
 
-    /// Pyth `get_price` callback (WO-10b). Never panics on business failures: rejected price ->
+    /// Pyth `get_price_no_older_than` callback (WO-10b/10c). `null` (no feed, or |now - publish| > age) -> `no_price`. Never panics on business failures: rejected price ->
     /// `oracle_rejected{symbol, position_id, reason}` + `settlement_aborted`, position back to Open.
     #[private]
     pub fn on_pyth_price(&mut self, position_id: U64) {
