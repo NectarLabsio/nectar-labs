@@ -316,3 +316,68 @@ pub struct PythPrice {
     pub expo: i32,
     pub publish_time: i64,
 }
+
+// ---------------------------------------------------------------- P2 (interface-p2.md, D-016)
+
+/// MPC signer settings (F-030, F-034). Stored under its own raw key (`p2::SIGNER_CONFIG_KEY`).
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SignerConfig {
+    pub account: AccountId,
+    pub path: String,
+    pub gas_tgas: u64,
+    pub expiry_s: u64,
+}
+
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum PendingStatus {
+    AwaitingSignature,
+    Signed,
+    SignFailed,
+    Cancelled,
+    Relayed,
+}
+
+/// One remote (Solana) leg of a settlement, keyed by position (at most one leg per settlement call).
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PendingSettlement {
+    pub position_id: U64,
+    pub quote_id: U64,
+    pub nonce: U64,
+    /// unix seconds
+    pub expires: U64,
+    pub preimage: String,
+    pub signature_hex: Option<String>,
+    pub repay_usd_e6: U128,
+    pub seize_units: U128,
+    pub keeper_units: U128,
+    pub recipient: String,
+    pub status: PendingStatus,
+    pub solana_tx_sig: Option<String>,
+}
+
+#[near(serializers = [borsh])]
+pub enum VPending {
+    V1(PendingSettlement),
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct VaultAuthorityHint {
+    pub signer_account: AccountId,
+    pub predecessor: AccountId,
+    pub path: String,
+    pub domain_id: u32,
+}
+
+/// A remote leg chosen inside `settle` (not stored as such).
+#[derive(Clone, Debug)]
+pub struct RemoteLeg {
+    pub quote_id: u64,
+    pub repay_usd_e6: u128,
+    pub buyer_units: u128,
+    pub keeper_units: u128,
+    pub recipient: String,
+}

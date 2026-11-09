@@ -215,7 +215,7 @@ impl Nectar {
         buyers.len() as u64 + 2
     }
 
-    fn per_transfer_gas() -> u64 {
+    pub(crate) fn per_transfer_gas() -> u64 {
         crate::GAS_FT_TRANSFER.as_gas() + crate::GAS_ON_PAYOUT.as_gas() + GAS_RECEIPTS_PER_TRANSFER.as_gas()
     }
 
@@ -273,10 +273,12 @@ impl Nectar {
         if self.gas_reserve_yocto < need {
             return Err("gas reserve empty");
         }
-        let cb_gas = Gas::from_gas(GAS_QUOTER_CB_BASE.as_gas() + n_transfers * Self::per_transfer_gas());
+        let cb_gas = Gas::from_gas(
+            GAS_QUOTER_CB_BASE.as_gas() + n_transfers * Self::per_transfer_gas() + self.remote_extra_gas(&p.collateral),
+        );
         let exec_gas = Gas::from_tgas(self.quoter.gas_tgas);
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
-        if left < self.quoter_leg_gas(n_transfers) {
+        if left < self.quoter_leg_gas(n_transfers) + self.remote_extra_gas(&p.collateral) {
             return Err("attach more gas");
         }
 
@@ -315,9 +317,9 @@ impl Nectar {
         let cands = self.select_quotes(&p.collateral);
         let n = self.n_transfers(&cands);
         let downstream = if self.quoter_enabled() && self.vol_bps.get(&p.collateral).is_some() {
-            self.quoter_leg_gas(n)
+            self.quoter_leg_gas(n) + self.remote_extra_gas(&p.collateral)
         } else {
-            n * Self::per_transfer_gas()
+            n * Self::per_transfer_gas() + self.remote_extra_gas(&p.collateral)
         };
         let cb_min = GAS_PYTH_CB_BASE.as_gas() + downstream;
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
@@ -492,6 +494,8 @@ impl Nectar {
         self.assert_owner();
         let mut p = self.position_or_panic(position_id.0);
         require!(p.status == PositionStatus::Settling, "position not settling");
+        #[cfg(feature = "p2")]
+        self.cancel_remote_leg(&mut p);
         p.status = PositionStatus::Open;
         self.put_position(p);
         emit("settlement_cancelled", json!({ "position_id": position_id }));

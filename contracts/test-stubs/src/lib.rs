@@ -19,6 +19,8 @@
 use near_sdk::serde_json::{self, Value, json};
 use near_sdk::{AccountId, PanicOnDefault, env, near};
 
+pub mod signer;
+
 #[near(contract_state)]
 #[derive(PanicOnDefault)]
 pub struct OutlayerStub {

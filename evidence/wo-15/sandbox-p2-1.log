@@ -1,0 +1,182 @@
+   Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/nectar-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.87s
+     Running tests/sandbox_p2.rs (target/debug/deps/sandbox_p2-b640d27cb29329c0)
+
+running 3 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.28s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 4.63s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794266818, tv_nsec: 910000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794266663, tv_nsec: 70000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 574ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 437.4 KB (437414 bytes)
+     - SHA-256 checksum hex : a724d890850f393e3ab7e2b4d9d7e3b4f275f245b125331a308b034546d9d847
+     - SHA-256 checksum bs58: CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/mock-ft)
+ │     Finished `dev` profile [unoptimized] target(s) in 1.08s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.59s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 218ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 152.3 KB (152268 bytes)
+     - SHA-256 checksum hex : 28578356a6e426f8ea384051ff7519c51faa2bd7ed9f711e9e4f3a05f3f372c2
+     - SHA-256 checksum bs58: 3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 4s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/test-stubs)
+ │     Finished `dev` profile [unoptimized] target(s) in 1.52s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 2.15s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794266828, tv_nsec: 300000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794266669, tv_nsec: 70000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 342ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 195.5 KB (195528 bytes)
+     - SHA-256 checksum hex : 8b815b2000e601724b816390f4ef6f6b3d27e070a4c65dd45c6116d74fc6fee0
+     - SHA-256 checksum bs58: APa5EkX92MrHsDyfND1gjBtbpVWCrq8CEYAgm6hzW9G3
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 4s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+UPGRADE,v1c_to_wo15,views_identical,true,migrate,none
+GAS,trigger+sign_failed,total,28509094118228
+GAS,trigger+sign_failed,dev-20261109232709-94717698569065.test.near,7023676921321
+GAS,trigger+sign_failed,dev-20261109232709-19462623546157.test.near,1636701674264
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232709-94717698569065.test.near,1680630206069
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232709-19462623546157.test.near,1572795610320
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232709-94717698569065.test.near,1648296200725
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232709-19462623546157.test.near,1593265717193
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232709-94717698569065.test.near,1648737684869
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232717-99971840795079.test.near,2491632901068
+GAS,trigger+sign_failed,dev-20261109232717-99971840795079.test.near,1226230629402
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232717-99971840795079.test.near,2605603339787
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109232709-94717698569065.test.near,2839683075895
+GAS,trigger+sign_failed,dev-20261109232653-55497598022689.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),total,1901963391076
+GAS,trigger+sign(1 remote, 1 near),dev-20261109232710-56716321858388.test.near,1591948858761
+
+thread 'upgrade_v1c_then_remote_leg_signed_and_relayed' (5080408) panicked at contracts/nectar-core/tests/sandbox_p2.rs:274:5:
+[ExecutionOutcome { transaction_hash: GsaZ4N4SSH2WjvGneWerGZfFyjZXQhs9woBFArMA4Bci, block_hash: Eci2eEnhihqyE9MgZdKKLX71B36koV5tzA7eGvGaVHgY, logs: [], receipt_ids: [465NJHzJLeFP4iYiDcbhdHwtCSZzh6v7B4yNbbDUuHy5], gas_burnt: NearGas { inner: 1591948858761 }, tokens_burnt: NearToken { inner: 159194885876100000000 }, executor_id: AccountId("dev-20261109232710-56716321858388.test.near"), status: Failure(ActionError(ActionError { index: Some(0), kind: FunctionCallError(ExecutionError("Smart contract panicked: position not open")) })) }]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test upgrade_v1c_then_remote_leg_signed_and_relayed ... FAILED
+GAS,retrigger+sign,total,1901963391076
+GAS,retrigger+sign,dev-20261109232709-94717698569065.test.near,1591948858761
+
+thread 'sign_failure_rolls_back_then_retry_and_cancel' (5080407) panicked at contracts/nectar-core/tests/sandbox_p2.rs:336:5:
+[ExecutionOutcome { transaction_hash: EjNWc9phFkELRaqJJPq4nUCQ5gD9vMDRCTqpxTwGMWzp, block_hash: Y5JZ1eAW32DRNhRCpXrpK1qSTimexiKz2aTGW4LUWZE, logs: [], receipt_ids: [88isCQ7Cq3uJgz35jkiJF5htXAZ1VKRVMGZiv9paGkqg], gas_burnt: NearGas { inner: 1591948858761 }, tokens_burnt: NearToken { inner: 159194885876100000000 }, executor_id: AccountId("dev-20261109232709-94717698569065.test.near"), status: Failure(ActionError(ActionError { index: Some(0), kind: FunctionCallError(ExecutionError("Smart contract panicked: position not open")) })) }]
+test sign_failure_rolls_back_then_retry_and_cancel ... FAILED
+GAS,trigger+pyth+quoter+sign+4legs,total,1906350824042
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109232709-64963581062814.test.near,1596336291727
+
+thread 'gas_trigger_pyth_quoter_sign' (5080406) panicked at contracts/nectar-core/tests/sandbox_p2.rs:381:5:
+[ExecutionOutcome { transaction_hash: 2nEW26TsBx2EtmUG2Td4F6FRv2j2ixgw2Xx4jo4rbPst, block_hash: 7LqFNLv2bUGkit4DywZQBKx4mFU7XX7n1jS7QmPMiEhJ, logs: [], receipt_ids: [A6tXsHBtcdZJC6eqJsjXSZwWz7RT8BzraJwdw1f1W7A6], gas_burnt: NearGas { inner: 1596336291727 }, tokens_burnt: NearToken { inner: 159633629172700000000 }, executor_id: AccountId("dev-20261109232709-64963581062814.test.near"), status: Failure(ActionError(ActionError { index: Some(0), kind: FunctionCallError(ExecutionError("Smart contract panicked: position not open")) })) }]
+test gas_trigger_pyth_quoter_sign ... FAILED
+
+failures:
+
+failures:
+    gas_trigger_pyth_quoter_sign
+    sign_failure_rolls_back_then_retry_and_cancel
+    upgrade_v1c_then_remote_leg_signed_and_relayed
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 58.04s
+
+error: test failed, to rerun pass `-p nectar-core --test sandbox_p2`

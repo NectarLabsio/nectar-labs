@@ -5,16 +5,16 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 publish = false
-description = "Nectar Labs core: Pappus funded quotes + Cramer borrowing limit (P0 + P1 quoter)"
+description = "Nectar Labs core: Pappus funded quotes + Cramer borrowing limit (P0 + P1 quoter + P2 chain signatures)"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [features]
-default = ["p1"]
+default = ["p1", "p2"]
 # P1/P2 entry points compile as stubs only when enabled (interface-p0.md).
 p1 = []
-p2 = []
+p2 = ["p1"]
 
 [dependencies]
 near-sdk = { workspace = true }
@@ -24,3 +24,4 @@ near-sdk = { workspace = true, features = ["unit-testing"] }
 near-workspaces = "0.24.0" # F-029
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 anyhow = "1"
+ed25519-dalek = { version = "2.2.0", default-features = false, features = ["std"] } # verify stub / vector signatures off-chain

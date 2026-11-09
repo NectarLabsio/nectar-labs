@@ -1,0 +1,184 @@
+
+running 179 tests
+test math::tests::split_sends_buyer_share_to_treasury_without_quotes ... ok
+test math::tests::premium_rounds_up_and_is_zero_below_static ... ok
+test math::tests::overflow_is_an_error_not_a_wrap ... ok
+test math::tests::ltv_and_trigger ... ok
+test math::tests::limit_zero_capacity_is_zero ... ok
+test math::tests::limit_closed_session_ignores_depth_and_uses_weekend_haircut ... ok
+test math::tests::seize_rounds_up_and_keeper_cut ... ok
+test math::tests::settle_leg_caps_on_units ... ok
+test math::tests::limit_open_session_counts_depth ... ok
+test math::tests::fee_index_matches_reference_loop ... ok
+test tests::contract_version_view ... ok
+test tests::apply_price_same_block_rejected - should panic ... ok
+test tests::apply_price_without_proposal - should panic ... ok
+test tests::claim_fees_nothing - should panic ... ok
+test tests::events_are_nep297 ... ok
+test tests::ft_on_transfer_unknown_token_panics - should panic ... ok
+test tests::ft_on_transfer_invalid_msg_refunds ... ok
+test tests::complete_withdrawal_without_initiate - should panic ... ok
+test tests::ft_on_transfer_wrong_token_for_variant_refunds ... ok
+test tests::complete_withdrawal_before_unlock - should panic ... ok
+test tests::claim_fees_pays_and_zeroes ... ok
+test tests::claim_fees_refused_when_paused - should panic ... ok
+test tests::fees_after_exit_stop_accruing ... ok
+test tests::fund_gas_reserve_accumulates ... ok
+test tests::fund_gas_reserve_requires_deposit - should panic ... ok
+test tests::complete_withdrawal_allowed_while_paused ... ok
+test tests::get_owed_collateral_default_zero ... ok
+test tests::fund_quote_creates_quote_and_q ... ok
+test tests::get_pool_view ... ok
+test tests::get_exit_capacity_view ... ok
+test tests::fund_quote_failures_refund_without_state_change ... ok
+test tests::get_health_view ... ok
+test tests::get_position_and_list_positions_views ... ok
+test tests::initiate_withdrawal_buyer_only - should panic ... ok
+test tests::get_quote_and_list_quotes_views ... ok
+test tests::model_csv_vectors_match_contract_math ... ok
+test tests::list_collaterals_paginates ... ok
+test tests::initiate_withdrawal_requires_one_yocto - should panic ... ok
+test tests::initiate_and_complete_withdrawal ... ok
+test tests::new_sets_defaults ... ok
+test tests::initiate_withdrawal_twice - should panic ... ok
+test tests::lock_and_borrow_at_limit ... ok
+test tests::lock_and_borrow_pool_insufficient_refunds ... ok
+test tests::lock_and_borrow_stale_oracle_refunds ... ok
+test tests::lock_and_borrow_failures_refund ... ok
+test tests::pause_owner_only - should panic ... ok
+test tests::on_payout_failed_borrow_proceeds_become_repayment ... ok
+test tests::on_payout_success_is_noop ... ok
+test tests::on_payout_failed_fees_restored ... ok
+test tests::on_payout_failed_collateral_recorded_as_owed ... ok
+test tests::on_payout_failed_withdrawal_restores_quote ... ok
+test tests::pause_unpause_and_paused_refunds ... ok
+test tests::propose_apply_bypasses_band ... ok
+test tests::preview_borrow_view ... ok
+test tests::set_dex_depth_and_reserve_owner_values ... ok
+test tests::set_dex_depth_owner_only - should panic ... ok
+test tests::set_fee_split_must_sum - should panic ... ok
+test tests::set_fee_split_ok ... ok
+test tests::set_keeper_owner_only - should panic ... ok
+test tests::set_keeper_rotates ... ok
+test tests::set_oracle_params_ok ... ok
+test tests::set_oracle_params_rejects_zero_age - should panic ... ok
+test tests::set_quote_params_ok ... ok
+test tests::set_reserve_owner_only - should panic ... ok
+test tests::set_session_unknown_symbol - should panic ... ok
+test tests::repay_partial_full_and_overpay ... ok
+test tests::set_session_switches_haircut_and_depth ... ok
+test tests::supply_lending_liquidity ... ok
+test tests::top_up_quote ... ok
+test tests::top_up_settles_fees_first ... ok
+test tests::settlement_consumes_exiting_quote_during_notice ... ok
+test tests::trigger_healthy_position - should panic ... ok
+test tests::trigger_needs_gas_reserve - should panic ... ok
+test tests::trigger_keeper_only - should panic ... ok
+test tests::trigger_preliquidation_static_settle_matches_model ... ok
+test tests::trigger_paused - should panic ... ok
+test tests::update_owner_price_owner_only - should panic ... ok
+test tests::update_owner_price_band ... ok
+test tests::upsert_collateral_owner_only - should panic ... ok
+test tests::upsert_collateral_creates_and_updates ... ok
+test tests::upsert_collateral_rejects_bad_bps - should panic ... ok
+test tests::upsert_collateral_rejects_usdc_token - should panic ... ok
+test tests::upsert_collateral_symbol_mismatch - should panic ... ok
+test tests::trigger_twice_on_one_position - should panic ... ok
+test tests::trigger_stale_oracle - should panic ... ok
+test tests::trigger_without_quotes_reverts - should panic ... ok
+test tests_p1::default_quoter_gas_is_80_tgas ... ok
+test tests_p1::callback_ignores_non_settling_position ... ok
+test tests::settlement_order_and_cap_of_eight ... ok
+test tests_p1::cancel_settlement_requires_settling - should panic ... ok
+test tests_p1::callback_aborts_when_price_recovered ... ok
+test tests_p1::cancel_settlement_owner_only - should panic ... ok
+test tests_p1::cancel_settlement_returns_to_open ... ok
+test tests_p1::contract_version_says_p1 ... ok
+test tests_p1::callback_aborts_when_paused ... ok
+test tests_p1::fallback_bad_hash ... ok
+test tests_p1::fallback_failed_receipt ... ok
+test tests_p1::gas_reserve_view_tracks_quoter_deposit ... ok
+test tests_p1::fallback_guest_error ... ok
+test tests_p1::fallback_null ... ok
+test tests_p1::fallback_too_long ... ok
+test tests_p1::fallback_unparseable ... ok
+test tests::fund_quote_cap_64 ... ok
+test tests_p1::migrate_by_contract_account ... ok
+test tests_p1::pyth_acceptance_rules ... ok
+test tests_p1::migrate_without_state - should panic ... ok
+test tests_p1::migrate_reads_p0_layout_and_defaults_v1 ... ok
+test tests_p1::pyth_age_rounds_up_to_seconds ... ok
+test tests_p1::migrate_rejects_stranger - should panic ... ok
+test tests_p1::migrate_twice_rejected - should panic ... ok
+test tests_p1::parse_rejects_wrong_fields ... ok
+test tests_p1::pyth_expo_to_usd_e6 ... ok
+test tests_p1::pyth_id_and_profile_validation ... ok
+test tests_p1::max_conf_bound - should panic ... ok
+test tests_p1::fallback_duplicate_fill ... ok
+test tests_p1::fallback_unknown_quote_id ... ok
+test tests_p1::outlayer_account_owner_only - should panic ... ok
+test tests_p1::pyth_accepted_then_quoter ... ok
+test tests_p1::pyth_price_recovered_aborts_healthy ... ok
+test tests_p1::pyth_accepted_then_static_settle ... ok
+test tests_p1::pyth_callback_aborts_when_paused ... ok
+test tests_p1::pyth_callback_ignores_cancelled ... ok
+test tests_p1::pyth_rejects_negative_price ... ok
+test tests_p1::pyth_rejects_failed_receipt ... ok
+test tests_p1::pyth_callback_quoter_reserve_empty_aborts ... ok
+test tests_p1::pyth_rejects_null ... ok
+test tests_p1::pyth_rejects_out_of_band ... ok
+test tests_p1::pyth_source_bad_id - should panic ... ok
+test tests_p1::pyth_rejects_stale_in_session ... ok
+test tests_p1::pyth_rejects_too_long ... ok
+test tests_p1::pyth_source_set_view_and_clear ... ok
+test tests_p1::pyth_source_owner_only - should panic ... ok
+test tests_p1::pyth_rejects_wide_conf ... ok
+test tests_p1::pyth_rejects_unparseable ... ok
+test tests_p1::pyth_trigger_closed_session_age ... ok
+test tests_p1::quoter_vectors_if_present ... ok
+test tests_p1::quoter_config_gas_bound - should panic ... ok
+test tests_p1::quoter_config_instr_bound - should panic ... ok
+test tests_p1::pyth_trigger_open_session_age ... ok
+test tests_p1::quoter_pin_half_set - should panic ... ok
+test tests_p1::quoter_pin_owner_only - should panic ... ok
+test tests_p1::quoter_setters_and_views ... ok
+test tests_p1::quoter_result_missing_fill_uses_max ... ok
+test tests_p1::quoter_result_clamps_9999_to_max ... ok
+test tests_p1::quoter_result_applies_discounts ... ok
+test tests_p1::secrets_ref_bad_profile - should panic ... ok
+test tests_p1::secrets_ref_owner_only - should panic ... ok
+test tests_p1::secrets_ref_in_request_args ... ok
+test tests_p1::trigger_pyth_needs_gas - should panic ... ok
+test tests_p1::trigger_pyth_requests_price_and_waits ... ok
+test tests_p1::trigger_pyth_skips_stale_owner_price ... ok
+test tests_p1::trigger_quoter_needs_deposit_in_reserve - should panic ... ok
+test tests_p1::trigger_quoter_needs_gas - should panic ... ok
+test tests_p2::preimage_golden_vectors_byte_for_byte ... ok
+test tests_p1::trigger_without_vol_falls_back_to_static ... ok
+test tests_p1::trigger_with_pin_requests_execution ... ok
+test tests_p1::vol_bound - should panic ... ok
+test tests_p1::vol_unknown_symbol - should panic ... ok
+test tests_p2::one_remote_leg_per_settlement ... ok
+test tests_p2::cancel_unsigned_after_expiry_rolls_back_and_late_signature_is_ignored ... ok
+test tests_p2::cancel_unsigned_before_expiry_refused - should panic ... ok
+test tests_p2::malformed_signature_is_a_failure ... ok
+test tests_p2::cancel_signed_keeps_signature_and_relay_still_records ... ok
+test tests_p2::relay_requires_signature - should panic ... ok
+test tests_p2::set_remote_chain_and_clear ... ok
+test tests_p2::relay_keeper_only - should panic ... ok
+test tests_p2::relay_rejects_bad_tx_sig - should panic ... ok
+test tests_p2::set_remote_chain_owner_only - should panic ... ok
+test tests_p2::validators_and_signature_parse ... ok
+test tests_p2::set_remote_chain_rejects_secp_domain - should panic ... ok
+test tests_p2::signer_config_and_views ... ok
+test tests_p2::signature_success_then_relay_closes ... ok
+test tests_p2::signer_config_expiry - should panic ... ok
+test tests_p2::signer_config_min_gas - should panic ... ok
+test tests_p2::sign_failure_rolls_back_leg ... ok
+test tests_p2::signer_config_owner_only - should panic ... ok
+test tests_p2::trigger_requests_signature_for_remote_leg ... ok
+test tests_p2::stale_nonce_callback_ignored ... ok
+test tests_p2::without_signer_config_remote_quotes_settle_on_near ... ok
+
+test result: ok. 179 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.77s
+

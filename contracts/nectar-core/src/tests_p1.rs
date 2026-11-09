@@ -244,7 +244,7 @@ fn migrate_without_state() {
 #[test]
 fn contract_version_says_p1() {
     let c = demo_p1(false);
-    assert!(c.contract_version().ends_with(" p1"));
+    assert!(c.contract_version().ends_with(if cfg!(feature = "p2") { " p2" } else { " p1" }));
 }
 
 // ------------------------------------------------------------------ setters / views
