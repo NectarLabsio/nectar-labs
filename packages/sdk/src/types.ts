@@ -50,6 +50,31 @@ export interface ExitCapacity {
   oracle_fresh: boolean;
   b_c_usd_per_unit_e6?: U128 | null;
   limit_bps_effective: Bps;
+  /** P1 (docs/work/interface-p1.md): absent on the P0 deployment, which is owner-oracle only. */
+  oracle_source?: OracleSource | null;
+  /** P1, optional: confidence of the last accepted Pyth price, in bps of price. */
+  oracle_conf_bps?: Bps | null;
+}
+
+// ---------------------------------------------------------------- P1 views and owner inputs (interface-p1.md, D-013, D-014)
+
+/** `set_oracle_source(symbol, source)` / `get_oracle_source(symbol)`: unit variant `"Owner"` or `{ Pyth: {...} }`. */
+export type OracleSource = "Owner" | { Pyth: { account: AccountId; price_identifier: string } };
+
+/** `set_quoter_config(...)` args. */
+export interface QuoterConfigInput {
+  deposit_yocto: U128;
+  gas_tgas: number;
+  max_instructions: U64;
+  max_memory_mb: number;
+  max_execution_seconds: number;
+}
+/** `get_quoter_config()`: config plus pin (empty strings = P0 static pricing). Field set confirmed at G4. */
+export interface QuoterConfigView extends Partial<QuoterConfigInput> {
+  project_id?: string;
+  version_key?: string;
+  max_conf_bps?: Bps;
+  [extra: string]: unknown;
 }
 
 /** `get_quote(quote_id)` / `list_quotes`. Fields: PRD §6.2 (confirm at G1). */
