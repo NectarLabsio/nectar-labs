@@ -42,8 +42,6 @@ What works today (2026-11-10): `pnpm i` and `pnpm --filter docs-site start` (doc
 - P1: a hash-pinned OutLayer TEE program returns the clearing discount, clamped to `[0, max_discount_bps]`.
 - P2: the contract builds the settlement message itself and gets an Ed25519 signature from Chain Signatures. A Solana program verifies it before releasing collateral.
 
-Figure note: 1Click depth feeds `D_c` (the figure's "R_c" label predates D-009). The figure is regenerated when P1 ships.
-
 ## How a settlement works
 ![settlement](docs/img/settlement.svg)
 P0 (static): keeper trigger → the contract repays the debt from the buyer's escrow → collateral goes to the buyer at `max_discount_bps`.
