@@ -1,5 +1,5 @@
 - [G1 gas scope](feedback_g1_gas_scope.md) — every default-build change method needs a GAS row; diff methods vs labels
 - [Explorer WebFetch 403](reference_explorer_webfetch.md) — nearblocks blocks WebFetch; prove via RPC, no UA spoofing
 - [G3 run recipe](reference_g3_lighthouse_theme.md) — LH script + theme proof; write spec self-skips; cite position 1; EVIDENCE template note
-- [G4 OutLayer recipe](reference_g4_outlayer.md) — testnet-api by-request attestation route; mainnet-host id trap; get_settlement missing
+- [G4 OutLayer recipe](reference_g4_outlayer.md) — by-request attestation; mainnet-host trap; secrets addendum checks (success flag, store_secrets args)
 - [G6 1Click recipe](reference_g6_oneclick.md) — feed (not keeper) commands; C-014 amountOutUsd trap; web badge static

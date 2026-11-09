@@ -93,6 +93,38 @@ Criteria: execution attested/visible OK (testnet-api attestation record; dashboa
   cost recorded OK (estimate 0.00400001 NEAR; actual 0.00109 NEAR, refund 0.00891) · fallback tested OK (Run A) · wasm and core hashes reproduce OK.
 Open: gates.md G4 line 2 (get_settlement) does not exist. Attestation is shown via API JSON, not the dashboard. Discount pricing is unproven until WO-10b.
 
+#### G4 addendum — discount pricing from OutLayer secrets — PASS — 2026-11-09T22:51Z — commit fea52b7
+Read-only; no transactions sent. Fresh clone /tmp/verify-G4add-20261109T2249Z/repo at main HEAD fea52b7. Logs: evidence/G4/verifier-addendum-20261109T2249Z/.
+Inputs: evidence/G4/run-C-20261109T2240Z.log, run-D-20261109T2245Z.log (scripts/45-g4-run.sh steps C/D, scripts/35-quoter-secrets.mjs --quote 1:3000:2000),
+  evidence/upgrades/run-20261109T2238Z.log (core upgrade 2, scripts/26: FQjNLgaw… → HqZaadxy…).
+$ curl rpc.testnet.near.org EXPERIMENTAL_tx_status <hash> sender keeper.nectar.testnet   (tx-run-C.json, tx-run-D.json)
+  Run C CS5KGXTBcZFY7QwxM8HDL9XBUFFnqupbPT8sQ9U23ZDd trigger_preliquidation #3, SuccessValue:
+    outlayer execution_requested request_id 15145, secrets_ref {mm-demo, nectar.testnet}, input vol_bps 150, max_discount_bps 400
+    outlayer execution_completed success:false error_message "Access denied by access condition. Check the access conditions configured by the secret owner."
+      (charged 0.001 NEAR, refunded 0.009). Cause: the C1 store used Whitelist[nectar-core, nectar.testnet]; the signer is keeper. This is the expected denial.
+    nectar quoter_fallback {position 3} → settled_near {quote 1, disc_bps 400 (= cap), repay 190000000, seize 1583334, buyer2}
+  Run D BQscYSpn4qMzwD9fDehHbqc84gcpzs1vuK18yzVCvhBb trigger_preliquidation #4, SuccessValue:
+    outlayer execution_requested request_id 15148, input vol_bps 150, max_discount_bps 400 · execution_completed success:true, 118394 instr, 236 ms,
+      charged 0.0010236 NEAR, refunded 0.0089764
+    nectar quoter_result fills [{quote_id 1, disc_bps 159}] → settled_near {quote 1, disc_bps 159, repay 170000000, seize 1542382, buyer2}
+Recompute (quoter/src/lib.rs disc_bps, QG_SCALE 1e8, floor): min(400, 150 + floor(3000·2000·150/1e8)) = min(400, 150 + 9) = 159. Matches.
+$ RPC call_function (final): get_vol_bps {"symbol":"NVDAx"} → 150 (block 276983848; set by run C set_vol_bps tx CUoyzijV…, vol_set event)
+  get_quoter_config → enabled true, version_key 3ce17749…, secrets_ref {"profile":"mm-demo","account_id":"nectar.testnet"} (block 276983854)
+$ EXPERIMENTAL_tx_status BH8aNKgudk1TocqgrpWm9irsdJhCCNuNUpV7KFdghoB8 sender nectar.testnet (run D1 store_secrets, tx-D1-store_secrets.json) → SuccessValue;
+  on-chain args access = Logic And[Whitelist[keeper.nectar.testnet], Predecessor(Whitelist[nectar-core.nectar.testnet]), WasmHash 3ce17749…],
+  accessor Project nectar.testnet/nectar-quoter, profile mm-demo; log "Updating secrets … Secrets stored".
+$ curl + WebFetch https://testnet-api.outlayer.ai/attestations/by-request/15148 (attestation-15148.json) → HTTP 200:
+  request_id 15148 · caller_account_id keeper.nectar.testnet · transaction_hash BQscYSpn… (= Run D) · project_id nectar.testnet/nectar-quoter · secrets_ref nectar.testnet/mm-demo
+  wasm_hash = executed_wasm_sha256 = 3ce17749ae1b…6cc2 · input_hash c03a2bf9… (= quoter_requested input_sha256) · block 276983419
+  tdx_quote present (6676 base64 chars) · worker_measurement present (b1773e4d…). TDX quote NOT verified cryptographically.
+$ (contracts/nectar-core) cargo near build non-reproducible-wasm   PATH += ~/.cargo/bin ~/.local/bin; SDKROOT=.../MacOSX26.5.sdk → EXIT=0 (core-build.log)
+  sha256 fa2bb4f1…0f4e (404811 B) → base58 HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX = view_account code_hash (block 276983860) = upgrade-2 deploy log.
+Disclosures: MM_1_Q_BPS=3000 / MM_1_GAMMA_BPS=2000 are demo values, not a real market maker's book. They are stored in OutLayer under
+  access And[signer keeper, predecessor nectar-core, WasmHash 3ce17749…]. The plaintext went to OutLayer's /secrets/pubkey endpoint
+  in the request body (F-167) before client-side encryption, so the coordinator has seen these values.
+Criteria: denial path → fallback at cap 400 OK · secrets path → disc_bps 159 < cap, recomputed OK · vol 150 and secrets_ref views OK · attestation for 15148 OK ·
+  core code hash reproduces from fresh clone OK. Closes the "discount pricing unproven" item above.
+
 ## G3
 
 ### G3 — web E2E — PASS — 2026-11-09T21:15Z — commit 176914f

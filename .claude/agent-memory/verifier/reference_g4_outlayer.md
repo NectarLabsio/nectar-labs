@@ -11,3 +11,4 @@ G4 PASSED 2026-11-09T22:10Z (d87eef6), read-only, about 25 tool calls.
 - Hashes: quoter/build.sh → sha256 = config version_key = bytes at fastfs wasm_url. Core: target/near/nectar_core/nectar_core.wasm, base58(sha256) via a node one-liner = view_account code_hash.
 - Run A fallback is forced by pinning version_key 0…0 (OutLayer panics "Version not found"). Fills = max until secrets_ref is set (WO-10b).
 **How to apply:** for G4 reruns, and for G5–G7 attestation or tx checks.
+- Addendum (secrets pricing) PASSED 2026-11-09T22:51Z (fea52b7), 13 tool calls: execution_completed JSON has `success`/`error_message`; parse request_data (nested JSON) for request_id/input. Confirm store_secrets access via EXPERIMENTAL_tx_status sender nectar.testnet (args base64; drop encrypted blob). Views: get_vol_bps {"symbol":"NVDAx"}, get_quoter_config.secrets_ref. Run cargo near build in background while doing RPC.
