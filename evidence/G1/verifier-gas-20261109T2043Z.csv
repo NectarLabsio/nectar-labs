@@ -1,0 +1,32 @@
+label,max_gas,max_tgas
+trigger_preliquidation(8 legs),46856045935847,46.86
+trigger_preliquidation(2 legs),19919816630723,19.92
+ft_transfer_call:LockCollateralAndBorrow,11051227417981,11.05
+ft_transfer_call:FundPappusQuote,6739323058562,6.74
+complete_quote_withdrawal,6715536178760,6.72
+ft_transfer_call:TopUpQuote,6614844629556,6.61
+claim_fees,6609675577701,6.61
+ft_transfer_call:Repay(refund),6502830100626,6.50
+ft_transfer_call:Repay(partial),6436057830363,6.44
+ft_transfer_call:invalid,6366373934517,6.37
+ft_transfer_call:SupplyLendingLiquidity,6261510565433,6.26
+upsert_collateral,2342315414937,2.34
+initiate_quote_withdrawal,2301327889416,2.30
+apply_price,2257374866034,2.26
+update_owner_price,2110165290643,2.11
+propose_price,2071576706142,2.07
+set_reserve,2032203627883,2.03
+set_dex_depth,2032157668171,2.03
+set_session,2028842774353,2.03
+mock-ft:ft_transfer,1937331976856,1.94
+unpause,1837199818559,1.84
+pause,1836380796311,1.84
+set_oracle_params,1812747324212,1.81
+set_quote_params,1812743650097,1.81
+set_fee_split,1810130526452,1.81
+set_keeper,1809751870139,1.81
+fund_gas_reserve,1792222826135,1.79
+new,1749074662595,1.75
+mock-ft:mint,1728122260829,1.73
+mock-ft:storage_deposit,1727810328399,1.73
+mock-ft:new,1529672786760,1.53
