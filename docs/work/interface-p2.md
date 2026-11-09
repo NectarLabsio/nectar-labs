@@ -18,5 +18,9 @@ Signed raw (D-016) by `v1.signer-prod.testnet.sign({request:{path:"solana-devnet
   verifies the signature off-chain against the stub's pubkey. Gas: Pyth + quoter + sign + callbacks within 300 Tgas (record).
 - scripts helper (`contracts/nectar-core/tests` or packages/sdk): derive the authority pubkey with @noble/curves (F-036) — WO-15 adds
   `packages/sdk/src/chainsig.ts` ONLY if it coordinates with web ownership: put it in contracts/…/tools instead; orchestrator wires scripts.
+## Accepted WO-15 choices (orchestrator)
+One remote leg per settlement call; relay closes only when debt is 0 (else Open); pool credit + keeper share wait for on_signature; a
+signature is never rolled back (cancel_settlement refuses an unsigned leg until `expires`); no signer config or a pending unrelayed leg →
+remote-recipient quotes settle on NEAR. Authority (solana-devnet-v1) = ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV (live view match).
 ## Solana (WO-14, needs H-TOOLCHAIN-SOLANA) / keeper relay (WO-16) — not dispatched until the toolchain exists.
 ## Copilot (WO-17) — fixture-first (NEAR AI Cloud was down at 23:05Z, H7 key absent): verifier per F-071/F-072, @phala/dcap-qvl 0.7.1 (F-073).

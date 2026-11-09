@@ -60,6 +60,8 @@ signer:
   deposit_yocto: "1"
   gas_tgas: 15 # from sign_call_gas_attachment_requirement_tera_gas (F-034)
   authority_note: derived via derived_public_key(nectar-core.nectar.testnet, solana-devnet-v1, domain 1); compute with scripts (WO-15), F-036
+  authority: ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV
+  authority_check: live derived_public_key(nectar-core.nectar.testnet, solana-devnet-v1, 1) == off-chain @noble derivation, 2026-11-09T23:4xZ
 solana:
   cluster: devnet
   program_id: TODO-G7
