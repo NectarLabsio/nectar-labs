@@ -1,0 +1,408 @@
+[
+  {
+    "assetId": "nep141:wrap.near",
+    "decimals": 24,
+    "blockchain": "near",
+    "symbol": "wNEAR",
+    "price": 3.62,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "wrap.near",
+    "coingeckoId": "wrapped-near"
+  },
+  {
+    "assetId": "nep141:eth.bridge.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "ETH",
+    "price": 2130.91,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "eth.bridge.near",
+    "coingeckoId": "ethereum"
+  },
+  {
+    "assetId": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+    "decimals": 6,
+    "blockchain": "near",
+    "symbol": "USDC",
+    "price": 0.999455,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+    "coingeckoId": "usd-coin"
+  },
+  {
+    "assetId": "nep141:853d955acef822db058eb8505911ed77f175b99e.factory.bridge.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "FRAX",
+    "price": 0.989583,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "853d955acef822db058eb8505911ed77f175b99e.factory.bridge.near",
+    "coingeckoId": "frax"
+  },
+  {
+    "assetId": "nep141:aaaaaa20d9e0e2461697782ef11675f668207961.factory.bridge.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "AURORA",
+    "price": 0.04052185,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "aaaaaa20d9e0e2461697782ef11675f668207961.factory.bridge.near",
+    "coingeckoId": "aurora-near"
+  },
+  {
+    "assetId": "nep141:2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
+    "decimals": 8,
+    "blockchain": "near",
+    "symbol": "wBTC",
+    "price": 74895,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
+    "coingeckoId": "bitcoin"
+  },
+  {
+    "assetId": "nep141:blackdragon.tkn.near",
+    "decimals": 24,
+    "blockchain": "near",
+    "symbol": "BLACKDRAGON",
+    "price": 6.33e-9,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "blackdragon.tkn.near",
+    "coingeckoId": "black-dragon"
+  },
+  {
+    "assetId": "nep141:token.0xshitzu.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "SHITZU",
+    "price": 0.00145053,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "token.0xshitzu.near",
+    "coingeckoId": "shitzu"
+  },
+  {
+    "assetId": "nep141:abg-966.meme-cooking.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "ABG",
+    "price": 0,
+    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "contractAddress": "abg-966.meme-cooking.near",
+    "coingeckoId": "abg"
+  },
+  {
+    "assetId": "nep141:noear-324.meme-cooking.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "NOEAR",
+    "price": 0,
+    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "contractAddress": "noear-324.meme-cooking.near",
+    "coingeckoId": "noear"
+  },
+  {
+    "assetId": "nep141:mpdao-token.near",
+    "decimals": 6,
+    "blockchain": "near",
+    "symbol": "mpDAO",
+    "price": 0.00786032,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "mpdao-token.near",
+    "coingeckoId": "meta-pool"
+  },
+  {
+    "assetId": "nep141:jambo-1679.meme-cooking.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "JAMBO",
+    "price": 0.00019282131411903748,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "jambo-1679.meme-cooking.near",
+    "coingeckoId": "jambo-2"
+  },
+  {
+    "assetId": "nep141:kat.token0.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "NearKat",
+    "price": 0.00008822,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "kat.token0.near",
+    "coingeckoId": "nearkat"
+  },
+  {
+    "assetId": "nep141:gnear-229.meme-cooking.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "GNEAR",
+    "price": 0,
+    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "contractAddress": "gnear-229.meme-cooking.near",
+    "coingeckoId": "gnear"
+  },
+  {
+    "assetId": "nep141:test-token.highdome3013.near",
+    "decimals": 8,
+    "blockchain": "near",
+    "symbol": "TESTNEBULA",
+    "price": 0,
+    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "contractAddress": "test-token.highdome3013.near",
+    "coingeckoId": "testnebula"
+  },
+  {
+    "assetId": "nep141:token.rhealab.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "RHEA",
+    "price": 0.03818134,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "token.rhealab.near",
+    "coingeckoId": "rhea-2"
+  },
+  {
+    "assetId": "nep141:token.publicailab.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "PUBLIC",
+    "price": 0.0035361,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "token.publicailab.near",
+    "coingeckoId": "publicai"
+  },
+  {
+    "assetId": "nep141:d9c2d319cd7e6177336b0a9c93c21cb48d84fb54.factory.bridge.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "HAPI",
+    "price": 0.14109,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "d9c2d319cd7e6177336b0a9c93c21cb48d84fb54.factory.bridge.near",
+    "coingeckoId": "hapi"
+  },
+  {
+    "assetId": "nep141:itlx.intellex_xyz.near",
+    "decimals": 24,
+    "blockchain": "near",
+    "symbol": "ITLX",
+    "price": 0.0005404069911968664,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "itlx.intellex_xyz.near",
+    "coingeckoId": "itlx"
+  },
+  {
+    "assetId": "nep141:cfi.consumer-fi.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "CFI",
+    "price": 0.00046982,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "cfi.consumer-fi.near",
+    "coingeckoId": "consumerfi-protocol"
+  },
+  {
+    "assetId": "nep141:npro.nearmobile.near",
+    "decimals": 24,
+    "blockchain": "near",
+    "symbol": "NPRO",
+    "price": 0.251632565282456,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "npro.nearmobile.near",
+    "coingeckoId": "npro"
+  },
+  {
+    "assetId": "nep141:nbtc.bridge.near",
+    "decimals": 8,
+    "blockchain": "near",
+    "symbol": "BTC",
+    "price": 74895,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "nbtc.bridge.near",
+    "coingeckoId": "bitcoin"
+  },
+  {
+    "assetId": "nep141:hood-0x5fc5360d0400a0fd4f2af552add042d716f1d168.omft.near",
+    "decimals": 6,
+    "blockchain": "hood",
+    "symbol": "USDG",
+    "price": 0.999938,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "0x5fc5360d0400a0fd4f2af552add042d716f1d168",
+    "coingeckoId": "global-dollar"
+  },
+  {
+    "assetId": "nep141:hood-0x39dbed3a2bd333467115de45665cc57f813c4571.omft.near",
+    "decimals": 18,
+    "blockchain": "hood",
+    "symbol": "PONS",
+    "price": 0.155865,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "0x39dbed3a2bd333467115de45665cc57f813c4571",
+    "coingeckoId": "pons"
+  },
+  {
+    "assetId": "nep141:hood-0x020bfc650a365f8bb26819deaabf3e21291018b4.omft.near",
+    "decimals": 18,
+    "blockchain": "hood",
+    "symbol": "CASHCAT",
+    "price": 0.073237,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "0x020bfc650a365f8bb26819deaabf3e21291018b4",
+    "coingeckoId": "cash-cat"
+  },
+  {
+    "assetId": "nep141:usdt.tether-token.near",
+    "decimals": 6,
+    "blockchain": "near",
+    "symbol": "USDT",
+    "price": 0.999065,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "usdt.tether-token.near",
+    "coingeckoId": "tether"
+  },
+  {
+    "assetId": "nep141:a35923162c49cf95e6bf26623385eb431ad920d3.factory.bridge.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "TURBO",
+    "price": 0.00070628,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "a35923162c49cf95e6bf26623385eb431ad920d3.factory.bridge.near",
+    "coingeckoId": "turbo"
+  },
+  {
+    "assetId": "nep141:purge-558.meme-cooking.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "PURGE",
+    "price": 0.00078854,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "purge-558.meme-cooking.near",
+    "coingeckoId": "forgive-me-father"
+  },
+  {
+    "assetId": "nep141:token.sweat",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "SWEAT",
+    "price": 0.00006128,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "token.sweat",
+    "coingeckoId": "sweatcoin"
+  },
+  {
+    "assetId": "nep141:hood.omft.near",
+    "decimals": 18,
+    "blockchain": "hood",
+    "symbol": "ETH",
+    "price": 2130.91,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "coingeckoId": "ethereum"
+  },
+  {
+    "assetId": "nep141:meta-pool.near",
+    "decimals": 24,
+    "blockchain": "near",
+    "symbol": "stNEAR",
+    "price": 5.47,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "meta-pool.near",
+    "coingeckoId": "staked-near"
+  },
+  {
+    "assetId": "nep141:strk-0xe646ef2a705bf5147ceffc8dfbcc7bee4946b8f7.omdep.near",
+    "decimals": 8,
+    "blockchain": "near",
+    "symbol": "strkBTC",
+    "price": 74765,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "strk-0xe646ef2a705bf5147ceffc8dfbcc7bee4946b8f7.omdep.near",
+    "coingeckoId": "strkbtc"
+  },
+  {
+    "assetId": "nep141:stjack.tkn.primitives.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "STJACK",
+    "price": 0,
+    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "contractAddress": "stjack.tkn.primitives.near"
+  },
+  {
+    "assetId": "nep141:lsd-usdt.rhealab.near",
+    "decimals": 18,
+    "blockchain": "near",
+    "symbol": "nrUsdt",
+    "price": 0.999065,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "lsd-usdt.rhealab.near",
+    "coingeckoId": "tether"
+  },
+  {
+    "assetId": "nep141:hood-0x0bd7d308f8e1639fab988df18a8011f41eacad73.omft.near",
+    "decimals": 18,
+    "blockchain": "hood",
+    "symbol": "WETH",
+    "price": 2130.91,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "0x0bd7d308f8e1639fab988df18a8011f41eacad73",
+    "coingeckoId": "ethereum"
+  },
+  {
+    "assetId": "nep141:hood-0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34.omft.near",
+    "decimals": 18,
+    "blockchain": "hood",
+    "symbol": "USDe",
+    "price": 0.998832,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
+    "coingeckoId": "ethena-usde"
+  },
+  {
+    "assetId": "nep141:cnear.assetize.near",
+    "decimals": 24,
+    "blockchain": "near",
+    "symbol": "cNEAR",
+    "price": 3.6252289814,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "cnear.assetize.near"
+  },
+  {
+    "assetId": "nep141:43d5b40dca52dfde6b794fa394e7796f34cb0c571655e4dfd9b0b7fcec06d84e",
+    "decimals": 8,
+    "blockchain": "near",
+    "symbol": "tMU",
+    "price": 0,
+    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "contractAddress": "43d5b40dca52dfde6b794fa394e7796f34cb0c571655e4dfd9b0b7fcec06d84e"
+  },
+  {
+    "assetId": "1cs_v1:near:nep141:zec.omft.near",
+    "decimals": 8,
+    "blockchain": "near",
+    "symbol": "ZEC",
+    "price": 1173.77,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "zec.omft.near",
+    "coingeckoId": "zcash"
+  },
+  {
+    "assetId": "1cs_v1:near:nep141:qtc.omft.near",
+    "decimals": 12,
+    "blockchain": "near",
+    "symbol": "QTC",
+    "price": 56.670647314475175,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "qtc.omft.near",
+    "coingeckoId": "custom:qtc"
+  },
+  {
+    "assetId": "1cs_v1:near:nep141:prl.omft.near",
+    "decimals": 8,
+    "blockchain": "near",
+    "symbol": "PRL",
+    "price": 1.6040509993382732,
+    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "contractAddress": "prl.omft.near",
+    "coingeckoId": "custom:prl"
+  }
+]

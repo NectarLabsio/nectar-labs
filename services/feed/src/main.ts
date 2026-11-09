@@ -2,6 +2,7 @@
 // CORE_ACCOUNT_ID is set (TODO-G2 until deploy → API serves whatever the DB holds, polling off).
 // Optional: KEEPER_DB_PATH + KEEPER_ACCOUNT_ID → also index NEP-297 logs of the keeper's own txs.
 
+import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
@@ -9,6 +10,8 @@ import { createApi } from './api.ts';
 import { FeedDb } from './db.ts';
 import { Indexer } from './indexer.ts';
 import { createLogger, errMsg } from './log.ts';
+import { createMcpHttpServer } from './mcp.ts';
+import { OneClickClient, OneClickSampler, defaultSamplerConfig } from './oneclick.ts';
 import { NearTxOutcomeFetcher, NearViewReader } from './near.ts';
 import { TxStatusSource, ViewPollingSource, type Source } from './sources.ts';
 
@@ -41,13 +44,30 @@ function main(): void {
   const server = createApi(db, { pollMs, source: sources.map((s) => s.kind).join('+') || 'none' });
   server.listen(port, host);
   const ac = new AbortController();
+
+  // Feed MCP over Streamable HTTP (read-only). FEED_MCP_PORT=off disables it.
+  const mcpPort = env.FEED_MCP_PORT ?? '8789';
+  const views = unset(env.CORE_ACCOUNT_ID) ? null : new NearViewReader(rpc, env.CORE_ACCOUNT_ID as string);
+  const mcp = mcpPort === 'off' ? null : createMcpHttpServer({ db, views });
+  mcp?.listen(Number(mcpPort), host);
+
+  // 1Click dry-quote sampler (Q-007: dry only). ONECLICK_ENABLED=0 disables it.
+  const oneclick = env.ONECLICK_ENABLED !== '0';
+  if (oneclick) {
+    const bearer = unset(env.ONECLICK_JWT_PATH) ? null : readFileSync(home(env.ONECLICK_JWT_PATH as string), 'utf8').trim();
+    new OneClickSampler(db, new OneClickClient(undefined, undefined, bearer), defaultSamplerConfig(env), log)
+      .run(ac.signal)
+      .catch((e: unknown) => log.error('oneclick_fatal', { error: errMsg(e) }));
+  }
+
   const stop = (): void => {
     ac.abort();
     server.close();
+    mcp?.close();
   };
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
-  log.info('feed_started', { port, sources: sources.map((s) => s.kind).join('+') || 'none', poll_ms: pollMs });
+  log.info('feed_started', { port, mcp_port: mcpPort, oneclick, sources: sources.map((s) => s.kind).join('+') || 'none', poll_ms: pollMs });
   if (sources.length > 0) {
     new Indexer(db, sources, log, pollMs).run(ac.signal).catch((e: unknown) => log.error('fatal', { error: errMsg(e) }));
   }

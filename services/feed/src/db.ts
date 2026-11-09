@@ -18,6 +18,7 @@ export interface ExitCapacity {
   oracle_fresh: boolean;
   b_c_usd_per_unit_e6?: string | null;
   limit_bps_effective: number;
+  capacity_usd_e6?: string;
 }
 
 export interface AssetSnapshot {
@@ -58,6 +59,20 @@ export interface SettlementRow {
   block_height: number | null;
   tx_hash: string | null;
   source: 'event' | 'view';
+  observed_at: number;
+}
+
+export interface OneClickSampleRow {
+  symbol: string;
+  pair: string;
+  status: 'verified' | 'no_route';
+  amount_in_usd_e6: string | null;
+  amount_out_usd_e6: string | null;
+  /** Destination amount in human units as returned (e.g. USDC); 1Click reports amountOutUsd at list price. */
+  amount_out_formatted: string | null;
+  gap_bps: number | null;
+  correlation_id: string | null;
+  quote_timestamp: string | null;
   observed_at: number;
 }
 
@@ -103,11 +118,39 @@ export class FeedDb {
         dedupe_key TEXT NOT NULL UNIQUE, observed_at INTEGER NOT NULL
       );
       CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS oneclick_samples (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        symbol TEXT NOT NULL, pair TEXT NOT NULL, status TEXT NOT NULL CHECK (status IN ('verified','no_route')),
+        amount_in_usd_e6 TEXT, amount_out_usd_e6 TEXT, amount_out_formatted TEXT, gap_bps INTEGER,
+        correlation_id TEXT UNIQUE, quote_timestamp TEXT, observed_at INTEGER NOT NULL, response TEXT
+      );
     `);
   }
 
   setMeta(key: string, value: string): void {
     this.db.prepare('INSERT INTO meta (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').run(key, value);
+  }
+
+  bumpMeta(key: string): void {
+    this.setMeta(key, String(Number(this.meta(key) ?? '0') + 1));
+  }
+
+  /** 1Click R_c series. Idempotent per correlation id; `response` is the full signed quote (verified rows only). */
+  addOneClickSample(r: OneClickSampleRow, response: string | null): void {
+    this.db
+      .prepare(
+        'INSERT OR IGNORE INTO oneclick_samples (symbol, pair, status, amount_in_usd_e6, amount_out_usd_e6, amount_out_formatted, gap_bps, correlation_id, quote_timestamp, observed_at, response) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      )
+      .run(r.symbol, r.pair, r.status, r.amount_in_usd_e6, r.amount_out_usd_e6, r.amount_out_formatted, r.gap_bps, r.correlation_id, r.quote_timestamp, r.observed_at, response);
+  }
+
+  oneClickSamples(symbol: string | null, limit: number): Array<OneClickSampleRow & { response: string | null }> {
+    const sql =
+      'SELECT symbol, pair, status, amount_in_usd_e6, amount_out_usd_e6, amount_out_formatted, gap_bps, correlation_id, quote_timestamp, observed_at, response FROM oneclick_samples' +
+      (symbol === null ? '' : ' WHERE symbol = ?') +
+      ' ORDER BY id DESC LIMIT ?';
+    const st = this.db.prepare(sql);
+    return (symbol === null ? st.all(limit) : st.all(symbol, limit)) as unknown as Array<OneClickSampleRow & { response: string | null }>;
   }
 
   meta(key: string): string | null {
