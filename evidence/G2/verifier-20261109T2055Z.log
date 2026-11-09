@@ -1,0 +1,419 @@
+== G2 verifier run 2026-11-09T20:52:02Z commit 5f27f44e53205fbd281e13a40faf94b14cb72f08 dir /tmp/verify-G2-1794257515
+$ pnpm i --frozen-lockfile
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 3.3s using pnpm v10.34.9
+$ pnpm demo:testnet
+
+> nectar-labs@ demo:testnet /private/tmp/verify-G2-1794257515
+> bash scripts/50-verify.sh
+
+
+== contract ==
+account  nectar-core.nectar.testnet   version nectar-core 0.1.0 p0
+
+== exit capacity NVDAx ==
+Q_c $15,000.00  R_c $0.00  D_c $0.00  haircut 2500 bps  session closed
+oracle $180.00 (age 320s, fresh)  effective limit 7000 bps
+
+== pool ==
+available $38,750.00  utilised $11,250.00  treasury $12.15
+
+== quotes ==
+#0  remaining $10,000.00  max discount 250 bps  live
+#1  remaining $5,000.00  max discount 400 bps  live
+
+== positions ==
+#0  Open  debt $11,250.00  ltv 6250 bps / pre-liq 7500 bps
+
+== explorer ==
+https://testnet.nearblocks.io/address/nectar-core.nectar.testnet
+https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet
+https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet
+EXIT=0
+$ near contract call-function as-read-only nectar-core.nectar.testnet get_collateral json-args '{"symbol":"NVDAx"}' network-config testnet now
+├  Logs:
+│    No logs
+Function execution return value (printed to stdout):
+{
+  "acc_fee_per_dollar_e18": "5670000000000000",
+  "active_committed_q_usd_e6": "15000000000",
+  "base_haircut_bps": 1000,
+  "base_ltv_bps": 4000,
+  "decimals": 6,
+  "limit_premium_bps": 300,
+  "market_session_open": false,
+  "max_nectar_ltv_bps": 7000,
+  "nectar_reserve_usd_e6": "0",
+  "oracle_price_usd_e6": "180000000",
+  "oracle_updated_ns": "1794257209234581408",
+  "pre_liq_max_bps": 8000,
+  "pre_liq_min_bps": 6500,
+  "price_feed_id": "TODO-G5",
+  "remote_chain": null,
+  "symbol": "NVDAx",
+  "token": "nvdax-mock.nectar.testnet",
+  "verified_dex_depth_usd_e6": "0",
+  "weekend_haircut_bps": 2500
+}
+Here is your console command if you need to script it or re-run:
+    near contract call-function as-read-only nectar-core.nectar.testnet get_collateral json-args '{"symbol":"NVDAx"}' network-config testnet now
+EXIT=0
+$ near contract call-function as-read-only nectar-core.nectar.testnet get_pool json-args '{}' network-config testnet now
+├  Logs:
+│    No logs
+Function execution return value (printed to stdout):
+{
+  "available_usd_e6": "38750000000",
+  "lenders_fees_usd_e6": "24300000",
+  "treasury_usd_e6": "12150000",
+  "utilised_usd_e6": "11250000000"
+}
+Here is your console command if you need to script it or re-run:
+    near contract call-function as-read-only nectar-core.nectar.testnet get_pool json-args {} network-config testnet now
+EXIT=0
+$ near contract call-function as-read-only nectar-core.nectar.testnet get_health json-args '{"position_id":"0"}' network-config testnet now
+├  Logs:
+│    No logs
+Function execution return value (printed to stdout):
+{
+  "debt_usd_e6": "11250000000",
+  "ltv_bps": 6250,
+  "oracle_fresh": true,
+  "pre_liq_ltv_bps": 7500,
+  "triggerable": false,
+  "value_usd_e6": "18000000000"
+}
+Here is your console command if you need to script it or re-run:
+    near contract call-function as-read-only nectar-core.nectar.testnet get_health json-args '{"position_id":"0"}' network-config testnet now
+EXIT=0
+$ near contract call-function as-read-only nectar-core.nectar.testnet preview_borrow json-args '{"symbol":"NVDAx","collateral_amount":"100000000","borrow_usd_e6":"11250000000"}' network-config testnet now
+Here is your console command if you need to script it or re-run:
+    near contract call-function as-read-only nectar-core.nectar.testnet preview_borrow json-args '{"symbol":"NVDAx","collateral_amount":"100000000","borrow_usd_e6":"11250000000"}' network-config testnet now
+Error: 
+   0: Failed to fetch query for read-only function call: 'preview_borrow' (contract <nectar-core.nectar.testnet> on network <testnet>)
+   1: Read-only function execution failed
+   2: handler error: [Function call returned an error: "wasm execution failed with error: HostError(GuestPanic { panic_msg: \"Failed to deserialize input from JSON. Error: `missing field `units` at line 1 column 80`\" })"]
+Location:
+   src/common.rs:3511
+EXIT=1
+# retry: first attempt used wrong arg name collateral_amount (verifier error); interface-p0.md says units
+$ near contract call-function as-read-only nectar-core.nectar.testnet preview_borrow json-args '{"symbol":"NVDAx","units":"100000000","borrow_usd_e6":"11250000000"}' network-config testnet now
+├  Logs:
+│    No logs
+Function execution return value (printed to stdout):
+{
+  "b_c_usd_e6": "11250000000",
+  "ok": true,
+  "premium_usd_e6": "121500000",
+  "reason": null,
+  "static_limit_usd_e6": "7200000000"
+}
+Here is your console command if you need to script it or re-run:
+    near contract call-function as-read-only nectar-core.nectar.testnet preview_borrow json-args '{"symbol":"NVDAx","units":"100000000","borrow_usd_e6":"11250000000"}' network-config testnet now
+EXIT=0
+$ near contract call-function as-read-only nectar-core.nectar.testnet get_quote json-args '{"quote_id":"0"}' network-config testnet now
+Function execution return value (printed to stdout):
+{
+  "buyer": "buyer1.nectar.testnet",
+  "buyer_remote_recipient": null,
+  "claimable_fees_usd_e6": "56700000",
+  "collateral": "NVDAx",
+  "committed_usd_e6": "10000000000",
+  "created_ns": "1794257326276632729",
+  "fee_debt_e18": "56700000",
+  "max_discount_bps": 250,
+  "notice_period_ns": "604800000000000",
+  "quote_id": "0",
+  "remaining_usd_e6": "10000000000",
+  "secrets_profile": null,
+  "unlock_ns": null
+}
+$ near contract call-function as-read-only nectar-core.nectar.testnet get_quote json-args '{"quote_id":"1"}' network-config testnet now
+Function execution return value (printed to stdout):
+{
+  "buyer": "buyer2.nectar.testnet",
+  "buyer_remote_recipient": null,
+  "claimable_fees_usd_e6": "28350000",
+  "collateral": "NVDAx",
+  "committed_usd_e6": "5000000000",
+  "created_ns": "1794257333047213632",
+  "fee_debt_e18": "28350000",
+  "max_discount_bps": 400,
+  "notice_period_ns": "604800000000000",
+  "quote_id": "1",
+  "remaining_usd_e6": "5000000000",
+  "secrets_profile": null,
+  "unlock_ns": null
+}
+$ ... get_position {"position_id":"0"}
+Function execution return value (printed to stdout):
+{
+  "borrower": "borrower1.nectar.testnet",
+  "collateral": "NVDAx",
+  "debt_usd_e6": "11250000000",
+  "nonce": "0",
+  "opened_ns": "1794257339570113921",
+  "position_id": "0",
+  "pre_liq_ltv_bps": 7500,
+  "premium_usd_e6": "121500000",
+  "remote_path": null,
+  "status": "Open",
+  "units": "100000000"
+}
+$ export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk; (cd contracts/nectar-core && cargo near build non-reproducible-wasm); (cd contracts/mock-ft && cargo near build non-reproducible-wasm)  -> both EXIT=0
+local base58(sha256) target/near/nectar_core/nectar_core.wasm = 8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV (324833 bytes)
+local base58(sha256) target/near/mock_ft/mock_ft.wasm = 3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF (152268 bytes)
+$ RPC view_account nectar-core.nectar.testnet
+{"code_hash":"8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV","amount":"3597467895743190199999999","storage_usage":326356,"block_height":276971836}
+$ RPC view_account usdc-mock.nectar.testnet
+{"code_hash":"3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF","amount":"1698720614081548600000004","storage_usage":152967,"block_height":276971842}
+$ RPC view_account nvdax-mock.nectar.testnet
+{"code_hash":"3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF","amount":"1698721520373828600000001","storage_usage":152969,"block_height":276971847}
+$ RPC view_access_key_list keeper.nectar.testnet
+keys: 1
+ed25519:Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ {"FunctionCall":{"allowance":"1000000000000000000000000","method_names":["trigger_preliquidation","relay_settlement_result"],"receiver_id":"nectar-core.nectar.testnet"}}
+$ git diff --stat b721641..HEAD -- contracts/ Cargo.toml Cargo.lock rust-toolchain.toml
+(end diff)
+
+# WebFetch https://testnet.nearblocks.io/address/nectar-core.nectar.testnet -> HTTP 403 Forbidden
+# WebFetch https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet -> HTTP 403 Forbidden
+# WebFetch https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet -> HTTP 403 Forbidden
+# WebFetch https://api-testnet.nearblocks.io/v1/account/nectar-core.nectar.testnet -> HTTP 410 Gone
+
+===== cargo near build log (full) =====
+== nectar-core
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling proc-macro2 v1.0.107
+ │    Compiling unicode-ident v1.0.27
+ │    Compiling quote v1.0.47
+ │    Compiling typenum v1.20.1
+ │    Compiling hashbrown v0.17.1
+ │    Compiling equivalent v1.0.3
+ │    Compiling zmij v1.0.23
+ │    Compiling serde_core v1.0.229
+ │    Compiling itoa v1.0.19
+ │    Compiling memchr v2.8.3
+ │    Compiling winnow v1.0.5
+ │    Compiling ident_case v1.0.1
+ │    Compiling libc v0.2.191
+ │    Compiling serde_json v1.0.154
+ │    Compiling toml_datetime v1.1.3+spec-1.1.0
+ │    Compiling indexmap v2.14.2
+ │    Compiling serde v1.0.229
+ │    Compiling hybrid-array v0.4.15
+ │    Compiling toml_parser v1.1.5+spec-1.1.0
+ │    Compiling schemars v0.8.22
+ │    Compiling cfg_aliases v0.2.2
+ │    Compiling foldhash v0.2.0
+ │    Compiling borsh v1.8.1
+ │    Compiling toml_edit v0.25.19+spec-1.1.0
+ │    Compiling block-buffer v0.12.1
+ │    Compiling crypto-common v0.2.2
+ │    Compiling const-oid v0.10.2
+ │    Compiling once_cell v1.21.4
+ │    Compiling proc-macro-crate v3.5.0
+ │    Compiling dyn-clone v1.0.20
+ │    Compiling version_check v0.9.5
+ │    Compiling digest v0.11.3
+ │    Compiling cfg-if v1.0.5
+ │    Compiling strsim v0.11.1
+ │    Compiling generic-array v0.14.9
+ │    Compiling syn v3.0.10
+ │    Compiling syn v2.0.119
+ │    Compiling serde_derive_internals v0.29.1
+ │    Compiling cpufeatures v0.3.1
+ │    Compiling darling_core v0.24.1
+ │    Compiling keccak v0.2.2
+ │    Compiling sha3 v0.11.0
+ │    Compiling rustversion v1.0.23
+ │    Compiling schemars_derive v0.8.22
+ │    Compiling fnv v1.0.7
+ │    Compiling darling_core v0.20.11
+ │    Compiling serde_derive v1.0.229
+ │    Compiling borsh-derive v1.8.1
+ │    Compiling hex v0.4.3
+ │    Compiling base64 v0.23.1
+ │    Compiling bs58 v0.5.1
+ │    Compiling near-crypto-hash v0.2.0
+ │    Compiling base64 v0.22.1
+ │    Compiling heck v0.5.0
+ │    Compiling darling_macro v0.24.1
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling darling v0.24.1
+ │    Compiling darling_macro v0.20.11
+ │    Compiling darling v0.20.11
+ │    Compiling block-buffer v0.10.4
+ │    Compiling crypto-common v0.1.6
+ │    Compiling digest v0.10.7
+ │    Compiling ripemd v0.1.3
+ │    Compiling near-digest v0.1.5
+ │    Compiling cfg_eval v0.1.2
+ │    Compiling sha2 v0.11.1
+ │    Compiling strum_macros v0.26.4
+ │    Compiling digest-io v0.1.0
+ │    Compiling Inflector v0.11.4
+ │    Compiling semver v1.0.28
+ │    Compiling strum v0.26.3
+ │    Compiling near-sdk-env v0.1.9
+ │    Compiling near-sys v0.4.1
+ │    Compiling hex-literal v1.1.0
+ │    Compiling serde_with_macros v3.24.0
+ │    Compiling near-token v0.3.6
+ │    Compiling near-account-id v3.0.0
+ │    Compiling serde_with v3.24.0
+ │    Compiling near-gas v0.3.7
+ │    Compiling near-abi v0.4.5
+ │    Compiling near-sdk-core v4.4.2
+ │    Compiling near-global-contracts v0.3.3
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/verify-G2-1794257515/contracts/nectar-core)
+ │     Finished `dev` profile [unoptimized] target(s) in 12.97s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling proc-macro2 v1.0.107
+ │    Compiling unicode-ident v1.0.27
+ │    Compiling quote v1.0.47
+ │    Compiling ident_case v1.0.1
+ │    Compiling equivalent v1.0.3
+ │    Compiling hashbrown v0.17.1
+ │    Compiling serde_core v1.0.229
+ │    Compiling winnow v1.0.5
+ │    Compiling zmij v1.0.23
+ │    Compiling toml_datetime v1.1.3+spec-1.1.0
+ │    Compiling cfg_aliases v0.2.2
+ │    Compiling serde v1.0.229
+ │    Compiling strsim v0.11.1
+ │    Compiling borsh v1.8.1
+ │    Compiling once_cell v1.21.4
+ │    Compiling typenum v1.20.1
+ │    Compiling indexmap v2.14.2
+ │    Compiling toml_parser v1.1.5+spec-1.1.0
+ │    Compiling hybrid-array v0.4.15
+ │    Compiling serde_json v1.0.154
+ │    Compiling toml_edit v0.25.19+spec-1.1.0
+ │    Compiling fnv v1.0.7
+ │    Compiling itoa v1.0.19
+ │    Compiling memchr v2.8.3
+ │    Compiling rustversion v1.0.23
+ │    Compiling proc-macro-crate v3.5.0
+ │    Compiling near-sys v0.4.1
+ │    Compiling foldhash v0.2.0
+ │    Compiling near-sdk-env v0.1.9
+ │    Compiling crypto-common v0.2.2
+ │    Compiling syn v3.0.10
+ │    Compiling syn v2.0.119
+ │    Compiling proc-macro-error-attr3 v3.1.1
+ │    Compiling block-buffer v0.12.1
+ │    Compiling proc-macro-error3 v3.1.1
+ │    Compiling bs58 v0.5.1
+ │    Compiling hex v0.4.3
+ │    Compiling base64 v0.23.1
+ │    Compiling darling_core v0.24.1
+ │    Compiling darling_core v0.20.11
+ │    Compiling serde_derive v1.0.229
+ │    Compiling borsh-derive v1.8.1
+ │    Compiling darling_macro v0.20.11
+ │    Compiling darling_macro v0.24.1
+ │    Compiling darling v0.24.1
+ │    Compiling digest v0.11.3
+ │    Compiling near-crypto-hash v0.2.0
+ │    Compiling base64 v0.22.1
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling wee_alloc v0.4.5
+ │    Compiling heck v0.5.0
+ │    Compiling strum_macros v0.26.4
+ │    Compiling impl-tools-lib v0.12.0
+ │    Compiling darling v0.20.11
+ │    Compiling impl-tools v0.12.0
+ │    Compiling near-digest v0.1.5
+ │    Compiling cfg_eval v0.1.2
+ │    Compiling memory_units v0.4.0
+ │    Compiling Inflector v0.11.4
+ │    Compiling strum v0.26.3
+ │    Compiling cfg-if v0.1.10
+ │    Compiling hex-literal v1.1.0
+ │    Compiling serde_with_macros v3.24.0
+ │    Compiling serde_with v3.24.0
+ │    Compiling near-gas v0.3.7
+ │    Compiling near-token v0.3.6
+ │    Compiling near-account-id v3.0.0
+ │    Compiling near-sdk-core v4.4.2
+ │    Compiling near-global-contracts v0.3.3
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/verify-G2-1794257515/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 13.39s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 427ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/verify-G2-1794257515/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 324.8 KB (324833 bytes)
+     - SHA-256 checksum hex : 6bd1ec5125806ad71e370953447ac635d9e86d4ce801100d03dc05eda15e2a46
+     - SHA-256 checksum bs58: 8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV
+     -                   ABI: /private/tmp/verify-G2-1794257515/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/verify-G2-1794257515/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 27s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+EXIT=0
+== mock-ft
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling mock-ft v0.1.0 (/private/tmp/verify-G2-1794257515/contracts/mock-ft)
+ │     Finished `dev` profile [unoptimized] target(s) in 0.37s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/verify-G2-1794257515/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.24s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 199ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/verify-G2-1794257515/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 152.3 KB (152268 bytes)
+     - SHA-256 checksum hex : 28578356a6e426f8ea384051ff7519c51faa2bd7ed9f711e9e4f3a05f3f372c2
+     - SHA-256 checksum bs58: 3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF
+     -                   ABI: /private/tmp/verify-G2-1794257515/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/verify-G2-1794257515/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+EXIT=0
