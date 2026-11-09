@@ -1,0 +1,67 @@
+    Finished `release` profile [optimized] target(s) in 0.17s
+rustc: rustc 1.95.0 (59807616e 2026-04-14)
+wasm=/Volumes/T7/nectar-labs/quoter/target/wasm32-wasip2/release/nectar_quoter.wasm sha256=3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2 size=92355
+
+== FastFS upload (F-057): __fastdata_fastfs on outlayer.testnet, gas 1 (fails by design; data is indexed) ==
+│    Transaction ID: Eq9GXD19JZ8YKhECY1ckRLvf55HZUbp4kiG9N6AovbZs
+Error: 
+   0: [91mError: An error occurred during a `FunctionCall` action.
+      ExecutionError("Exceeded the prepaid gas.")[0m
+
+== waiting for FastFS to serve https://test.fastfs.io/nectar.testnet/outlayer.testnet/3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2.wasm ==
+served, sha matches
+
+== create_project nectar.testnet/nectar-quoter (F-058) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  outlayer.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  create_project
+│                       args:         {
+│                                       "name": "nectar-quoter",
+│                                       "source": {
+│                                         "WasmUrl": {
+│                                           "build_target": "wasm32-wasip2",
+│                                           "hash": "3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2",
+│                                           "url": "https://test.fastfs.io/nectar.testnet/outlayer.testnet/3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2.wasm"
+│                                         }
+│                                       }
+│                                     }
+│                       gas:          100.0 Tgas
+│                       deposit:      0.1 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 4.8 Tgas
+│    Transaction fee: 0.0004300190664371 NEAR
+│    Transaction ID: 2tiLJdEv8FTCy3C5XeCgxhUKykmrhmYRgxzmU42A8XuW
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/2tiLJdEv8FTCy3C5XeCgxhUKykmrhmYRgxzmU42A8XuW
+│     [0m
+├  Function execution logs:
+│    [36mLogs [outlayer.testnet]:[39m
+│      Project created: id=nectar.testnet/nectar-quoter, uuid=p0000000000000135, owner=nectar.testnet, version=3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "create_project" call to <outlayer.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction outlayer.testnet create_project json-args '{"name":"nectar-quoter","source":{"WasmUrl":{"url":"https://test.fastfs.io/nectar.testnet/outlayer.testnet/3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2.wasm","hash":"3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2","build_target":"wasm32-wasip2"}}}' prepaid-gas '100.0 Tgas' attached-deposit '0.1 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== cost estimate (F-046) ==
+"4000010000000000000000"

@@ -44,11 +44,12 @@ oracle:
   nvda_price_id: TODO-G5
 outlayer:
   account: outlayer.testnet
-  project_id: TODO-G4
-  version_key: TODO-G4
-  wasm_sha256: TODO-G4
+  project_id: nectar.testnet/nectar-quoter
+  version_key: 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
+  wasm_sha256: 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   resource_limits: {max_instructions: 100000000, max_memory_mb: 128, max_execution_seconds: 30}
   gas_tgas: 150
+  wasm_url: https://test.fastfs.io/nectar.testnet/outlayer.testnet/3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2.wasm
 signer:
   account: v1.signer-prod.testnet
   path: solana-v1
