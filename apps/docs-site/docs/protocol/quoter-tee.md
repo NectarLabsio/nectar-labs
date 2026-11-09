@@ -5,42 +5,61 @@ description: Hash-pinned OutLayer program computing the clearing discount.
 ---
 # Quoter (TEE) and fallback
 
-<p className="verified">Verified against: F-040 (2026-11-09), F-041 (2026-11-09), F-042 (2026-11-09), F-043 (2026-11-09), F-044 (2026-11-09), F-045 (VERIFY G4), F-046 (VERIFY G4) · spec docs/PRD.md §4.5, §7 · D-004 (2026-11-09)</p>
-<p className="status">Status: P1, not built. Until G4 passes, settlement uses the fallback: each quote fills at its max_discount_bps. The fallback stays as a permanent code path.</p>
+<p className="verified">Verified against: F-040 (2026-11-09), F-041 (2026-11-09), F-043 (2026-11-09), F-045 (2026-11-09), F-167 (2026-11-09), F-168 (2026-11-09), F-169 (2026-11-09), F-172 (2026-11-09), F-177 (2026-11-09), F-178 (2026-11-09), F-179 (2026-11-09), F-180 (2026-11-09) · D-004, D-014, D-015 (2026-11-10) · docs/EVIDENCE.md G4 PASS 2026-11-09T22:10Z (d87eef6) and addendum PASS 2026-11-09T22:51Z (fea52b7) · evidence/G4/run-C-20261109T2240Z.log, run-D-20261109T2245Z.log</p>
+<p className="status">Status on 2026-11-10: live on OutLayer testnet (G4 PASS). The market-maker inputs are demo values. The fallback is a permanent code path.</p>
 
-## Platform facts
+## What is deployed
 
-| Fact | Value | Id |
+| Item | Value | Source |
 | --- | --- | --- |
-| Entry | `outlayer.testnet` `request_execution` with `source: {Project: {project_id, version_key}}`, `resource_limits`, `input_data`, `secrets_ref`, `response_format`, `payer_account_id` | F-040 |
-| Limits | `max_instructions` default 1e9 / max 5e11; `max_memory_mb` 128 / 4096; `max_execution_seconds` 60 / 180 | F-041 |
-| Cost | `estimate_execution_cost(resource_limits, input_len)` view | F-042 |
-| Output | stdout ≤ 900 bytes; HTTP only on `wasm32-wasip2`; secrets as env vars | F-043 |
-| Attestation | per execution, viewable at app.outlayer.ai/executions | F-044 |
-| Publish flow, `version_key` format | **unverified** | F-045 (G4) |
+| OutLayer contract | `outlayer.testnet` `request_execution` | F-040 |
+| Project | `nectar.testnet/nectar-quoter` | G4, `get_quoter_config` view |
+| Pinned version | `version_key` `3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2` = sha256 of the wasm (92,355 B), rebuilt by `bash quoter/build.sh` | F-045, G4 |
+| Secrets | profile `mm-demo` of `nectar.testnet`, read by the quoter as env vars `MM_1_Q_BPS`, `MM_1_GAMMA_BPS` | F-043, F-180, G4 addendum |
+| Access to secrets | `And[Whitelist[keeper.nectar.testnet], Predecessor(Whitelist[nectar-core.nectar.testnet]), WasmHash 3ce17749…]` | F-177, F-178 |
+| Cost per execution | 0.001 to 0.00103 NEAR charged, rest of the 0.01 NEAR deposit refunded (requests 15145, 15148) | G4 addendum |
 
-## Clearing discount (PRD §4.5)
+## Clearing discount (D-014)
 
 ```text
-disc_bps = min( max_discount_bps ,  regime_vol_bps + q_i · gamma_i · sigma_bps / 10^6 )
+disc_bps = min( max_discount_bps ,  vol_bps + floor(q_bps · gamma_bps · vol_bps / 10^8) )
 ```
 
-`q_i` (inventory utilisation, bps) and `gamma_i` (risk aversion, bps) are the buyer's secrets inside OutLayer. `sigma_bps` and `regime_vol_bps` come from price history. A light inventory clears cheaper than the public ceiling, and the buyer's curve never leaves the enclave.
+`q_bps` (inventory use) and `gamma_bps` (risk aversion) are the buyer's secrets inside OutLayer. `vol_bps` comes from contract config (`set_vol_bps`). D-014 corrects the PRD §4.5 divisor: three bps factors need `10^8`, not `10^6`. Integer maths only. Without secrets, a fill is priced at `max_discount_bps`.
 
-## Output (≤ 900 bytes)
+Worked example from request 15148: `min(400, 150 + floor(3000 · 2000 · 150 / 10^8)) = min(400, 159) = 159` bps.
+
+## Evidence
+
+| Path | Request | Result |
+| --- | --- | --- |
+| Secrets path | 15148 (tx `BQscYSpn4qMzwD9fDehHbqc84gcpzs1vuK18yzVCvhBb`) | `execution_completed success:true`, `quoter_result` fill quote 1 at **159 bps** (cap 400), settled. [Attestation JSON](https://testnet-api.outlayer.ai/attestations/by-request/15148): `wasm_hash` = `3ce17749…`, `input_hash` = the contract's `input_sha256`, TDX quote present (F-168) |
+| Denial → fallback | 15145 (tx `CS5KGXTBcZFY7QwxM8HDL9XBUFFnqupbPT8sQ9U23ZDd`) | secrets stored under a whitelist that did not admit the keeper signer, so OutLayer refused access (F-179). The contract emitted `quoter_fallback` and settled at the **400 bps cap** |
+| Wrong pin → fallback | G4 run A (evidence/G4/run-A-20261109T2201Z.log) | pin set to a wrong `version_key`, OutLayer returned nothing usable, `quoter_fallback`, settled at the cap |
+
+The OutLayer dashboard is `https://app.outlayer.ai/executions` (F-169). The API JSON above is the primary link because the dashboard is a client-rendered app.
+
+## Output (≤ 900 bytes, F-043)
+
+Shape from `quoter/src/lib.rs`. Values are illustrative except `vol_bps` and the fill, which match request 15148.
 
 ```json
-{"v":1,"symbol":"NVDAx","price_e6":"182340000","src":"hermes","depth_e6":"0","depth_src":"none","session_open":false,"vol_bps":420,"fills":[{"id":7,"disc_bps":65}],"ts":1762700000}
+{"v":1,"symbol":"NVDAx","position_id":"4","input_sha256":"c03a2bf9…","price_e6":"140000000","src":"oracle","depth_e6":"0","depth_src":"none","session_open":false,"vol_bps":150,"fills":[{"id":"1","disc_bps":159}],"model":"as-v1"}
 ```
 
-At most 8 fills, ids as integers, amounts as strings.
+Any input error gives `{"v":1,"error":"<short>"}` with exit code 0, and the contract falls back.
 
 ## What the contract does with it
 
+- Checks that `input_sha256` matches the request it sent.
 - Clamps every `disc_bps` to `[0, max_discount_bps]`. A faulty quoter can only make the **buyer** pay more, never the borrower.
-- Applies the oracle band to `price_e6`.
-- On failure or timeout, falls back to P0 pricing and emits `quoter_fallback`.
+- On failure, denial or timeout it falls back to the cap and emits `quoter_fallback`.
+- Gas: the G4 runs attached 100 Tgas to `request_execution`. D-015 lowers this to 80 Tgas because OutLayer reserves 50 Tgas for its callback (F-172). The next live run re-measures it.
 
 ## Honest limits
 
-The contract cannot verify the TDX quote on-chain. It trusts `outlayer.testnet` to run the pinned hash, and the attestation can be checked off-chain (F-044). Pinning is by `version_key` stored in contract state (`TODO-G4`). The owner can disable TEE pricing with `set_quoter_pin("")`, which reverts settlement to the fallback.
+- **Demo inputs.** `MM_1_Q_BPS=3000` and `MM_1_GAMMA_BPS=2000` are demo values, not a real market maker's book.
+- **Plaintext seen by the coordinator.** `scripts/35-quoter-secrets.mjs` sends the plaintext JSON to OutLayer's `/secrets/pubkey` endpoint before encrypting it on the client (F-167), so the OutLayer coordinator has seen these values. A real market maker would need a flow that never leaves plaintext with the coordinator.
+- **No on-chain TDX check.** The contract cannot verify the TDX quote. It trusts `outlayer.testnet` to run the pinned hash. The attestation can be checked off-chain, but the verifier did not verify the TDX quote cryptographically.
+- The owner can turn TEE pricing off with `set_quoter_pin`, which sends every settlement to the fallback.
+- Outbound HTTP is off in the quoter (D-014). It uses the contract-supplied price (`src: "oracle"`).

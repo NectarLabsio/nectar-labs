@@ -71,3 +71,7 @@ Point `KEEPER_ACCOUNT_ID` and `KEEPER_KEY_PATH` at the new account and restart. 
 `set_quoter_pin` with an empty pin disables TEE pricing, and settlement then uses `max_discount_bps`. The method does not exist in the P0 build.
 
 Command grammar: F-018 (call-function), F-019 (delete-keys). Incident playbooks: [Incident response](/operations/incidents).
+
+## P1 scripts
+
+Contract upgrades, quoter publish and pin, quoter secrets and the G4 run use `scripts/25`, `26`, `30`, `35` and `45`. See [Upgrades](/operations/upgrades#p1-runbook-scripts).
