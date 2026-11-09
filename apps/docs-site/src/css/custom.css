@@ -1,0 +1,27 @@
+/* Nectar theme for Docusaurus: Infima variables mapped to Nectar tokens (docs/DESIGN_SYSTEM.md). */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Mono:wght@400;500&display=swap');
+:root {
+  --ifm-font-family-base: "DM Mono", Menlo, Consolas, monospace;
+  --ifm-heading-font-family: "Syne", "Avenir Next", system-ui, sans-serif;
+  --ifm-font-size-base: 14px; --ifm-line-height-base: 1.6;
+  --ifm-color-primary: #15845f; --ifm-color-primary-dark: #106046; --ifm-color-primary-darker: #0e553e;
+  --ifm-color-primary-darkest: #0b4633; --ifm-color-primary-light: #1a9a6f; --ifm-color-primary-lighter: #1fa677; --ifm-color-primary-lightest: #2bbd88;
+  --ifm-background-color: #f9fafb; --ifm-background-surface-color: #ffffff;
+  --ifm-font-color-base: #202632; --ifm-heading-color: #141924; --ifm-color-emphasis-300: #d6dae0;
+  --ifm-code-background: #f0f2f4; --ifm-global-radius: 8px; --ifm-navbar-background-color: #ffffff; --ifm-footer-background-color: #f0f2f4;
+  --nectar-grid: rgba(110,122,145,.07);
+}
+[data-theme='dark'] {
+  --ifm-color-primary: #16f3a9; --ifm-color-primary-dark: #09aa74; --ifm-color-primary-darker: #088f62;
+  --ifm-color-primary-darkest: #06734f; --ifm-color-primary-light: #4cf5bb; --ifm-color-primary-lighter: #77f3ca; --ifm-color-primary-lightest: #a3f7db;
+  --ifm-background-color: #0d0f12; --ifm-background-surface-color: #16181d;
+  --ifm-font-color-base: #bcc3d2; --ifm-heading-color: #e6e9ef; --ifm-color-emphasis-300: #23272f;
+  --ifm-code-background: #202327; --ifm-navbar-background-color: #16181d; --ifm-footer-background-color: #16181d;
+  --nectar-grid: rgba(122,184,163,.043);
+}
+html { background-image: linear-gradient(var(--nectar-grid) 1px, transparent 1px), linear-gradient(90deg, var(--nectar-grid) 1px, transparent 1px); background-size: 24px 24px; }
+.navbar__title { font-family: var(--ifm-heading-font-family); font-weight: 700; letter-spacing: -.01em; }
+.footer { border-top: 1px solid var(--ifm-color-emphasis-300); }
+.footer__title { font-family: var(--ifm-heading-font-family); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.badge--mock { background: var(--ifm-color-emphasis-300); color: var(--ifm-font-color-base); }
+.verified { font-size: 12px; color: var(--ifm-color-emphasis-700); border-left: 2px solid var(--ifm-color-primary); padding-left: 8px; }

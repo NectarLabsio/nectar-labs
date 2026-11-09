@@ -1,0 +1,20 @@
+node_modules/
+target/
+.next/
+build/
+.docusaurus/
+evidence/*.log
+.env
+.env.local
+*.local
+~/.nectar
+**/.nectar/
+*.pem
+*.key
+# macOS / exFAT metadata (repo lives on an exFAT drive)
+._*
+.DS_Store
+.Spotlight-V100
+.Trashes
+# local toolchain caches
+.pnpm-store/

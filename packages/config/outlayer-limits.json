@@ -1,0 +1,1 @@
+{"resource_limits":{"max_instructions":100000000,"max_memory_mb":128,"max_execution_seconds":30},"input_len":512}

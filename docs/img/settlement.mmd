@@ -1,0 +1,17 @@
+sequenceDiagram
+  participant K as Keeper bot
+  participant C as nectar-core
+  participant O as OutLayer TEE
+  participant S as v1.signer MPC
+  participant V as nectar_vault (Solana)
+  K->>C: trigger_preliquidation(position_id)
+  C->>O: request_execution(pinned program, input)
+  O-->>C: disc_bps (attested) — fallback max_discount_bps
+  C->>S: sign(payload_v2 Eddsa sha256(preimage), path, domain_id 1)
+  S-->>C: SignatureResponse::Ed25519
+  C-->>K: settlement_signed event (preimage, signature)
+  K->>V: tx with Ed25519 verify ix then settle(...)
+  Note over V: Instructions sysvar check — previous ix verifies<br/>authority pubkey over NECTAR_SETTLE_V1 bytes<br/>nonce unused, not expired → pay buyer, seize units
+  V-->>K: tx signature
+  K->>C: relay_settlement_result(position_id, tx_sig)
+  C-->>K: position_settled event

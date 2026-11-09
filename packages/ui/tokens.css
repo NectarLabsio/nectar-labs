@@ -1,0 +1,53 @@
+/* packages/ui/tokens.css — the only place colors live. Nectar Network system (docs/DESIGN_SYSTEM.md).
+   Dark is the default; light applies with [data-theme="light"] or a light OS setting without an explicit choice. */
+:root {
+  color-scheme: dark;
+  --bg: #0d0f12; --surface: #16181d; --surface-2: #202327;
+  --border: #23272f; --border-strong: #303541;
+  --text: #bcc3d2; --heading: #e6e9ef; --dim: #8f96a3; --wordmark: #b4bccc;
+  --accent: #16f3a9; --accent-hover: #77f3ca; --on-accent: #0d0f12;
+  --accent-fill: rgba(0,229,160,.08); --accent-glow: rgba(22,243,169,.45); --accent-deep: #09aa74;
+  --warn: #faaf2e; --warn-bar: #faaf2e; --warn-fill: rgba(245,158,11,.08);
+  --info: #51b8ec; --danger: #ff8a80; --danger-fill: rgba(255,138,128,.10); --grid: rgba(122,184,163,.043);
+  --font-display: "Syne", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "DM Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --r-ctl: 8px; --r-card: 12px; --gutter: max(16px, env(safe-area-inset-left, 0px));
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f9fafb; --surface: #ffffff; --surface-2: #f0f2f4;
+    --border: #d6dae0; --border-strong: #cbcfd8;
+    --text: #202632; --heading: #141924; --dim: #5e6778; --wordmark: #141924;
+    --accent: #15845f; --accent-hover: #106046; --on-accent: #ffffff;
+    --accent-fill: rgba(24,149,108,.08); --accent-glow: rgba(21,132,95,.35); --accent-deep: #8fdcbf;
+    --warn: #9a5f00; --warn-bar: #dc8f09; --warn-fill: rgba(220,143,9,.10);
+    --info: #17699a; --danger: #b3261e; --danger-fill: rgba(255,138,128,.10); --grid: rgba(110,122,145,.07);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f9fafb; --surface: #ffffff; --surface-2: #f0f2f4;
+  --border: #d6dae0; --border-strong: #cbcfd8;
+  --text: #202632; --heading: #141924; --dim: #5e6778; --wordmark: #141924;
+  --accent: #15845f; --accent-hover: #106046; --on-accent: #ffffff;
+  --accent-fill: rgba(24,149,108,.08); --accent-glow: rgba(21,132,95,.35); --accent-deep: #8fdcbf;
+  --warn: #9a5f00; --warn-bar: #dc8f09; --warn-fill: rgba(220,143,9,.10);
+  --info: #17699a; --danger: #b3261e; --danger-fill: rgba(255,138,128,.10); --grid: rgba(110,122,145,.07);
+}
+body {
+  background: var(--bg); color: var(--text); font-family: var(--font-mono); font-size: 14px; line-height: 1.5;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+h1, h2, h3, h4, .display { font-family: var(--font-display); color: var(--heading); line-height: 1.1; text-wrap: balance; }
+.num { font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+  @keyframes grow { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow) } 50% { box-shadow: 0 0 0 6px transparent } }
+  @keyframes float { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+  .rise { animation: rise .32s ease-out both } .grow { transform-origin: left; animation: grow .6s ease-out both }
+  .live::before { animation: pulse 2s infinite } .float { animation: float 6s ease-in-out infinite }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "promptCacheTtl": "1h",
+  "subagentPromptCacheTtl": "1h",
+  "permissions": {
+    "allow": [
+      "Read", "Edit", "Write", "Grep", "Glob",
+      "Bash(pnpm *)", "Bash(cargo *)", "Bash(cargo near *)", "Bash(rustup *)",
+      "Bash(near *)", "Bash(solana *)", "Bash(solana-keygen *)", "Bash(spl-token *)", "Bash(anchor *)",
+      "Bash(node *)", "Bash(npx *)", "Bash(git status*)", "Bash(git add *)", "Bash(git commit *)",
+      "Bash(git diff*)", "Bash(git log*)", "Bash(git merge *)", "Bash(git worktree *)", "Bash(git tag *)",
+      "Bash(curl *)", "Bash(jq *)", "Bash(tail *)", "Bash(head *)", "Bash(ls *)", "Bash(mkdir *)",
+      "Bash(gitleaks *)", "Bash(scripts/*)", "Bash(./scripts/*)", "Bash(outlayer *)",
+      "WebFetch", "WebSearch"
+    ],
+    "deny": [
+      "Bash(git push --force*)", "Bash(git push -f*)",
+      "Bash(rm -rf /*)", "Bash(sudo *)"
+    ]
+  },
+  "env": {
+    "CLAUDE_CODE_PROMPT_CACHE_TTL": "1h",
+    "CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL": "1h",
+    "NEAR_NETWORK": "testnet",
+    "SOLANA_CLUSTER": "devnet"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard.sh" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/state.sh" }
+        ]
+      }
+    ]
+  }
+}

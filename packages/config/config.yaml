@@ -1,0 +1,52 @@
+# packages/config/config.yaml — read by scripts, web, keeper, tests. Filled by scripts at gates.
+network: testnet
+accounts:
+  owner: TODO-G2            # nectar.testnet
+  core: TODO-G2             # nectar-core.nectar.testnet
+  usdc_mock: TODO-G2        # usdc-mock.nectar.testnet
+  nvdax_mock: TODO-G2       # nvdax-mock.nectar.testnet
+  keeper: TODO-G2           # keeper.nectar.testnet
+  demo:
+    buyer1: TODO-G2
+    buyer2: TODO-G2
+    borrower1: TODO-G2
+collateral:
+  nvdax:
+    token: TODO-G2
+    decimals: 6
+    ltv_static_bps: 4000
+    ltv_max_bps: 7000
+    uplift_bps_per_usd_e6: 0.0005   # +5 bps per $1,000 committed (PRD §6.3); tune at G1 against model.csv
+    liq_threshold_bps: 8000
+    max_discount_bps: 250
+    premium_bps: 300
+    buyer_share_bps: 7000           # 70 % of premium to buyers, 30 % protocol
+    notice_presets_s: [86400, 604800]
+    remote_chain_id: solana-devnet  # P2
+    remote_vault: TODO-G7
+oracle:
+  source: owner                     # set at G5
+  max_age_s: 600
+  max_conf_bps: 100
+  nvda_price_id: TODO-G5
+outlayer:
+  account: outlayer.testnet
+  project_id: TODO-G4
+  version_key: TODO-G4
+  wasm_sha256: TODO-G4
+  resource_limits: { max_instructions: 100000000, max_memory_mb: 128, max_execution_seconds: 30 }
+  gas_tgas: 150
+signer:
+  account: v1.signer-prod.testnet
+  path: solana-v1
+  domain_id: 1
+  deposit_yocto: "1"
+  gas_tgas: TODO-G7                 # from sign_call_gas_attachment_requirement_tera_gas (F-034)
+solana:
+  cluster: devnet
+  program_id: TODO-G7
+  authority: TODO-G7
+limits:
+  max_quotes_per_asset: 64
+  max_quotes_per_settlement: 8
+  gas_reserve_target_near: 5

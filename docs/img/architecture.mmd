@@ -1,0 +1,38 @@
+flowchart TB
+  subgraph people[" "]
+    MM[Market maker<br/>funds Pappus quotes]
+    BR[Borrower<br/>borrows USDC on stock]
+    KO[Keeper operator<br/>runs settlement bot]
+    JA[Judges and agents<br/>web, docs, Feed MCP]
+  end
+  subgraph web["Web app · Next.js · wallet-selector · Nectar tokens"]
+    FEED[Feed] -.- PQ[Post a quote] -.- BO[Borrow] -.- CO[Console] -.- CP[Copilot]
+  end
+  subgraph near["NEAR testnet"]
+    CORE["nectar-core.nectar.testnet<br/>quotes · positions · pool · O(1) fee index<br/>ft_on_transfer (5 msg) · B_c from Q_c<br/>builds NECTAR_SETTLE_V1 preimage · pays MPC gas"]
+    OL["OutLayer TEE quoter<br/>outlayer.testnet · pinned version_key<br/>request_execution → disc_bps"]
+    OR["Price oracle<br/>pyth-oracle.testnet / price-oracle.testnet<br/>staleness + conf · owner fallback"]
+    CS["Chain Signatures (MPC)<br/>v1.signer-prod.testnet<br/>sign(Eddsa, path, domain 1)"]
+    MK["Mock NEP-141 tokens<br/>usdc-mock · nvdax-mock<br/>ft_transfer_call → core"]
+  end
+  subgraph off["Off-chain services (TypeScript)"]
+    KB["Keeper bot<br/>function-call key · flags, triggers, relays"]
+    FA["Feed API + MCP<br/>SQLite from NEP-297 events"]
+    OC["1Click (NEAR Intents)<br/>dry: true quotes → R_c"]
+    AI["NEAR AI Cloud copilot<br/>TEE-signed, verified in browser"]
+  end
+  subgraph sol["Solana devnet"]
+    VA["nectar_vault (Anchor)<br/>open_position · settle · cancel"]
+    ED["Ed25519 verify program<br/>checks MPC signature over preimage"]
+  end
+  MM & BR & KO & JA --> web
+  web -- "RPC views · ft_transfer_call" --> MK
+  MK -- "ft_on_transfer(msg)" --> CORE
+  CORE --> OL
+  CORE --> OR
+  CORE --> CS
+  KB -- "trigger_preliquidation · relay_settlement_result" --> CORE
+  FA -- "reads events" --> CORE
+  web -.-> FA & OC & AI
+  KB -- "[Ed25519 verify ix, settle ix]" --> VA
+  VA --> ED

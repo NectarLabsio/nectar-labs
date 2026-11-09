@@ -1,0 +1,15 @@
+{
+  "name": "nectar-labs",
+  "private": true,
+  "packageManager": "pnpm@10",
+  "engines": { "node": ">=22.22.2" },
+  "scripts": {
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "verify:quick": "pnpm lint && pnpm typecheck && pnpm test",
+    "verify": "pnpm verify:quick && bash scripts/50-verify.sh",
+    "demo:testnet": "bash scripts/50-verify.sh",
+    "demo:capture": "pnpm --filter web demo:capture"
+  }
+}
