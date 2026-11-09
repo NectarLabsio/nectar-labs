@@ -28,7 +28,22 @@ What Kunal does (1 min): open in a browser and confirm each shows a contract wit
 What Claude Code does then: marks the links human-verified in EVIDENCE §G2.
 Default if silent: RPC evidence (view_account code_hash = G1 wasm) stands; README links stay; G9 notes "explorer pages not machine-verified".
 
-## H-NEAR-FAUCET — parent testnet account        status: not needed — nectar.testnet created via faucet 2026-11-10 (10 NEAR)   needed by: G2 top-up only
+## H13 — Pyth API key (for a live NVDA price, G5)        status: OPEN   needed by: P1 / G5 (2026-11-13 12:00 UTC)
+Why a human: Hermes `/v2/updates/price/latest` returns 401 without a key (C-007, F-056); keys are tied to a personal account at app.pyth.com.
+What Kunal does (5 min): 1. https://app.pyth.com → sign up (free) → create an API key (name: nectar-labs-testnet).
+  2. In his shell: `mkdir -p ~/.nectar && printf '%s' '<paste key>' > ~/.nectar/pyth.key && chmod 600 ~/.nectar/pyth.key` (never in chat, never committed).
+  3. Reply `H13 done`.
+What Claude Code does then: keeper reads PYTH_API_KEY_PATH=~/.nectar/pyth.key, tests Hermes with Bearer auth; if it works, creates the
+  updater account, pushes the NVDA update to pyth-oracle.testnet, switches NVDAx to `oracle_source = Pyth` and runs G5 live.
+  If the key does not unlock Hermes (docs only promise it for Pyth Pro, F-056), records that and keeps the owner oracle.
+Default if silent by 2026-11-13 12:00 UTC: owner oracle stays (D-013), README/Feed show the "owner oracle" badge, G5 records the disclosed fallback.
+
+## H-NEAR-FAUCET — top up nectar.testnet with testnet NEAR     status: OPEN   needed by: P1 redeploy (WO-10 merge)
+NOW (2026-11-10): nectar.testnet holds ~0.95 NEAR. P1 needs ~2–3 NEAR: larger nectar-core wasm storage (~+0.5–1 NEAR), OutLayer
+`create_project` 0.1 NEAR, gas reserve for executions (~0.004 NEAR each, F-046), an oracle-updater sub-account.
+What Kunal does (2 min): open https://near-faucet.io/ (F-154), request NEAR for `nectar.testnet` (repeat if allowed), reply `H-NEAR-FAUCET done`.
+Default if silent: P1 contract upgrade waits; quoter and web work continue; if still silent at G4 time, G4 is recorded as blocked on funds.
+(History below: the original parent-creation entry.)
 Why a human: the faucet CLI may be rate-limited; the browser faucet needs a human.
 What Kunal does (2 min):
   1. Open the NEAR testnet wallet / faucet page the script prints, create `nectar.testnet` (or the

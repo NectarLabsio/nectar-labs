@@ -1,7 +1,9 @@
 [workspace]
 resolver = "3"
-# P0 members only. quoter/ and contracts/test-stubs/ join when P1 opens (CLAUDE.md §1: no P1 file before p0-green).
+# contracts/test-stubs joins via WO-10 (contract agent edits this list). quoter/ is its own workspace
+# (wasm32-wasip2, own Cargo.lock/profile) so it never conflicts with the NEAR contracts (P1, D-014).
 members = ["contracts/nectar-core", "contracts/mock-ft"]
+exclude = ["quoter"]
 
 [workspace.package]
 edition = "2024"
