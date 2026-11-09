@@ -1,0 +1,34 @@
+# Nectar quoter — OutLayer guest program (P1, WO-9, D-014). Own workspace: the root Cargo.toml excludes quoter/.
+# Build: cargo build --release --target wasm32-wasip2 → target/wasm32-wasip2/release/nectar_quoter.wasm
+# Its sha256 is the OutLayer version_key (F-045) pinned by scripts/30-quoter-publish.sh.
+[package]
+name = "nectar-quoter"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.95"
+license = "MIT"
+publish = false
+
+[lib]
+name = "nectar_quoter"
+path = "src/lib.rs"
+
+[[bin]]
+name = "nectar_quoter"
+path = "src/main.rs"
+
+[dependencies]
+# Only these two (WO-9): JSON parsing and the stdin binding hash. No HTTP in P1 (D-014).
+serde_json = { version = "1", default-features = false, features = ["std"] }
+sha2 = { version = "0.10", default-features = false }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+debug = false
+overflow-checks = true
+
+[workspace]
