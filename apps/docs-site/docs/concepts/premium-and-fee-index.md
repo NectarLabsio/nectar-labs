@@ -6,7 +6,7 @@ description: Who pays for the extra limit, and how buyers earn in O(1).
 # Limit premium and fee index
 
 <p className="verified">Verified against: F-013 (2026-11-09) · spec docs/PRD.md §4.2, §4.3 · docs/work/interface-p0.md · D-009 (2026-11-10)</p>
-<p className="status">Status: specification. Not deployed (G2 pending). Fee maths is checked against a reference loop in the G1 tests.</p>
+<p className="status">Status: specification. Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Fee maths is checked against a reference loop in the G1 tests.</p>
 
 ## The premium
 

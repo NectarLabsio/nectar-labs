@@ -6,7 +6,7 @@ description: Escrowed, time-committed buy quotes for one collateral asset.
 # Pappus quotes
 
 <p className="verified">Verified against: F-013 (2026-11-09), F-021 (2026-11-09) · spec docs/PRD.md §4.1, §6.3–§6.6 · docs/work/interface-p0.md · D-009 (2026-11-10)</p>
-<p className="status">Status: specification. Not deployed (G2 pending). Contract tests land at G1.</p>
+<p className="status">Status: specification. Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Contract tests land at G1.</p>
 
 A **Pappus quote** is a buyer's promise to buy up to `committed_usd_e6` of one collateral asset at no worse than `max_discount_bps` below the oracle price. The promise is backed by USDC held in `nectar-core`. One dollar backs one live quote: escrow is never re-lent.
 

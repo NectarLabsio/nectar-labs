@@ -5,8 +5,8 @@ description: What is deployed, what is mock, what is a fallback.
 ---
 # Live on testnet
 
-<p className="verified">Verified against: F-003 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-044 (2026-11-09), F-050 (2026-11-09) · ids from packages/config/config.yaml and evidence/G2/deploy-20261109T2045Z.log, demo-testnet-20261109T2049Z.log (2026-11-09, commit 5f27f44)</p>
-<p className="status">Status on 2026-11-10: deployed to NEAR testnet on 2026-11-09. Independent G2 verification is pending in docs/EVIDENCE.md.</p>
+<p className="verified">Verified against: F-003 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-044 (2026-11-09), F-050 (2026-11-09) · ids from packages/config/config.yaml and evidence/G2/deploy-20261109T2045Z.log, demo-testnet-20261109T2049Z.log, verifier-20261109T2055Z.log (2026-11-09, commit 5f27f44)</p>
+<p className="status">Status on 2026-11-10: deployed to NEAR testnet on 2026-11-09. G2 PASS 2026-11-09T20:55Z (commit 5f27f44): views answer, on-chain code_hash = G1-verified wasm, keeper key scope correct; explorer pages pending a human click (H-EXPLORER). Web gate G3: in progress. Source: docs/EVIDENCE.md, evidence/G2/verifier-20261109T2055Z.log.</p>
 
 The account ids come from `packages/config/config.yaml`. Each link opens the account on testnet NearBlocks.
 

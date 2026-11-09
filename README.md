@@ -1,13 +1,13 @@
 # Nectar Labs: committed buyers, higher limits
 
-> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Deployed to NEAR testnet on 2026-11-09 (commit 5f27f44); independent G2 verification is pending.**
+> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Deployed to NEAR testnet on 2026-11-09 (commit 5f27f44). G2 PASS 2026-11-09T20:55Z (commit 5f27f44): views answer, on-chain code_hash = G1-verified wasm, keeper key scope correct; explorer pages pending a human click (H-EXPLORER). Web gate G3: in progress.**
 
 Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nectar Labs makes exit liquidity
 *committed*. Market makers escrow time-locked quotes (Pappus) on NEAR. Borrowers get a higher limit
 (Cramér) for a premium that pays the buyers. Pre-liquidation then sells to the committed buyer at a bounded discount instead of a DEX:
 `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))` (PRD §4.2, decision D-009).
 
-## Live on testnet (ids from `packages/config/config.yaml`; deploy logs in `evidence/G2/`; G2 verification pending in docs/EVIDENCE.md)
+## Live on testnet (ids from `packages/config/config.yaml`; deploy logs in `evidence/G2/`; G2 PASS 2026-11-09T20:55Z in docs/EVIDENCE.md)
 | Component | Account / id | Kind | Status |
 | --- | --- | --- | --- |
 | nectar-core | [`nectar-core.nectar.testnet`](https://testnet.nearblocks.io/address/nectar-core.nectar.testnet) | contract, code_hash `8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV` | live (testnet) |
@@ -33,13 +33,13 @@ LTV 6,250 bps, pre-liquidation at 7,500 bps; owner price $180; session closed. A
 git clone <repo-url> nectar-labs && cd nectar-labs   # repo URL TODO-H2 (private until published)
 pnpm i
 pnpm demo:testnet            # read-only views against the testnet contract
-pnpm --filter web dev        # http://localhost:3000
-pnpm --filter docs-site start
+pnpm --filter web dev        # web app on http://localhost:3100
+pnpm --filter docs-site start  # docs on http://localhost:3000
 ```
 What works today (2026-11-10): `pnpm i`, `pnpm demo:testnet` and `pnpm --filter docs-site start`.
 `pnpm demo:testnet` works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml`
 and calls nectar-core views over public testnet RPC (no keys, no near CLI; override the RPC with `NEAR_RPC_URL`).
-`pnpm --filter web dev` starts the web app (WO-3 merged; G3 pending). Node ≥ 22.22.2, pnpm 10.34.9.
+`pnpm --filter web dev` starts the web app on port 3100 (WO-3 merged; G3 in progress, not passed). Node ≥ 22.22.2, pnpm 10.34.9.
 
 ## 60-second architecture
 ![architecture](docs/img/architecture.svg)

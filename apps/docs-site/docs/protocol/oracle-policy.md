@@ -6,7 +6,7 @@ description: Which price the contract trusts, and how it defends itself either w
 # Oracle policy
 
 <p className="verified">Verified against: F-050 (2026-11-09), F-051 (2026-11-09), F-052 (2026-11-09), F-053 (VERIFY G5), C-001 (open) · spec docs/PRD.md §8 · D-005 (2026-11-09)</p>
-<p className="status">Status: P0 uses the owner oracle (fallback, disclosed with a badge in the UI). Not deployed (G2 pending). The live source is decided at G5.</p>
+<p className="status">Status: P0 uses the owner oracle (fallback, disclosed with a badge in the UI). Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). The live source is decided at G5.</p>
 
 ## Sources disagree, so a gate decides (C-001)
 

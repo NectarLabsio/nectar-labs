@@ -6,7 +6,7 @@ description: Who is trusted for what, and what bounds each trust.
 # Trust model
 
 <p className="verified">Verified against: F-015 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-050 (2026-11-09), F-060 (2026-11-09), F-070 (2026-11-09) · spec docs/PRD.md §15 · D-003, D-005 (2026-11-09)</p>
-<p className="status">Status: design. Not deployed (G2 pending). Each bound is backed by a test named on the Threats page once G1 passes.</p>
+<p className="status">Status: design. Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Each bound is backed by a test named on the Threats page once G1 passes.</p>
 
 Every rule that moves money is enforced by `nectar-core`. Every off-chain party can at worst delay or degrade a settlement. None can redirect funds.
 

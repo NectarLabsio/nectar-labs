@@ -6,7 +6,7 @@ description: How the contract changes, now and in production.
 # Upgrades
 
 <p className="verified">Verified against: F-011 (2026-11-10), F-017 (2026-11-10), F-027 (2026-11-10) · spec docs/PRD.md §16.5</p>
-<p className="status">Status: nothing deployed (G2 pending). PROD governance is design only.</p>
+<p className="status">Status: P0 deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44); upgrades are redeploys on the same account. PROD governance is design only.</p>
 
 ## This build (testnet)
 

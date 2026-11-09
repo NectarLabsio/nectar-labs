@@ -6,7 +6,7 @@ description: The borrowing limit as the lower of an LTV ceiling and recoverable 
 # Cramér limits
 
 <p className="verified">Verified against: F-050 (2026-11-09), F-063 (2026-11-09) · spec docs/PRD.md §4.2, §8 · docs/work/interface-p0.md · D-009 (2026-11-10)</p>
-<p className="status">Status: specification. Not deployed (G2 pending). Numbers below are computed from packages/config/config.yaml, not read from chain.</p>
+<p className="status">Status: specification. Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Numbers below are computed from packages/config/config.yaml, not read from chain.</p>
 
 ## Formula (PRD §4.2, adopted by D-009)
 
