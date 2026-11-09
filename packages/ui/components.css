@@ -8,7 +8,7 @@ a:hover { color: var(--heading); }
 .prose a, a.link { color: var(--heading); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border-strong); }
 .prose a:hover, a.link:hover { text-decoration-color: var(--accent); }
 h1, h2, h3, h4 { margin: 0; letter-spacing: -.01em; }
-h1 { font-size: clamp(34px, 6vw, 56px); font-weight: 800; }
+h1 { font-size: clamp(30px, 6vw, 56px); font-weight: 800; overflow-wrap: break-word; hyphens: auto; }
 h2 { font-size: clamp(26px, 3.6vw, 40px); font-weight: 700; }
 h3 { font-size: 18px; font-weight: 700; }
 h4 { font-size: 16px; font-weight: 700; }
@@ -286,7 +286,8 @@ details p { padding: 0 0 14px; color: var(--text); max-width: 68ch; }
   .links.open a { min-height: 44px; display: flex; align-items: center; }
   .roles, .steps, .trust, .grid-3 { grid-template-columns: 1fr; }
   .fgrid { grid-template-columns: 1fr 1fr; }
-  h1 { font-size: 34px; }
+  h1 { font-size: 32px; }
+  .eq { white-space: normal; overflow-wrap: anywhere; overflow-x: visible; }
   .hero { padding-block: 40px 32px; }
   section.sec { padding-block: 40px; }
   .page { padding-block: 28px 56px; }
@@ -296,5 +297,6 @@ details p { padding: 0 0 14px; color: var(--text); max-width: 68ch; }
 @media (max-width: 420px) {
   .stats .wrap, .grid-4 { grid-template-columns: 1fr; }
   .fgrid { grid-template-columns: 1fr; }
-  .lockup img.wm { display: none !important; }
+  h1 { font-size: 28px; }
+  .prose > * { min-width: 0; }
 }

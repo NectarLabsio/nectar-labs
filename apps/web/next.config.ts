@@ -12,6 +12,8 @@ const config: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   transpilePackages: ["@nectar/ui", "@nectar/sdk"],
+  // The repo lives on exFAT: macOS "._*" files corrupt the Turbopack persistent cache ("invalid digit found in string").
+  experimental: { turbopackFileSystemCacheForDev: false, turbopackFileSystemCacheForBuild: false },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
