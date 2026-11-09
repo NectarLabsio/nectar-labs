@@ -1,0 +1,26 @@
+# verifier G1 gas, commit 3bc0de8, max per label from sandbox --nocapture
+GAS,claim_fees,6627861275805
+GAS,complete_quote_withdrawal,6720041876864
+GAS,ft_transfer_call:FundPappusQuote,6762068756666
+GAS,ft_transfer_call:LockCollateralAndBorrow,11092158814189
+GAS,ft_transfer_call:Repay(partial),6440563528467
+GAS,ft_transfer_call:Repay(refund),6511859597466
+GAS,ft_transfer_call:SupplyLendingLiquidity,6268296263537
+GAS,ft_transfer_call:TopUpQuote,6619350327660
+GAS,ft_transfer_call:invalid,6370933934517
+GAS,fund_gas_reserve,1792222826135
+GAS,fund_gas_reserve,1796782826135
+GAS,initiate_quote_withdrawal,2301327889416
+GAS,new,1749074662595
+GAS,new,1751354662595
+GAS,pause,1840940796311
+GAS,set_oracle_params,1817307324212
+GAS,set_quote_params,1812743650097
+GAS,trigger_preliquidation(2 legs),19985828026931
+GAS,trigger_preliquidation(8 legs),46974624036479
+GAS,unpause,1841759818559
+GAS,update_owner_price,2109738280279
+GAS,update_owner_price,2118858280279
+GAS,update_owner_price,2119285290643
+GAS,upsert_collateral,2342315414937
+GAS,upsert_collateral,2360555414937

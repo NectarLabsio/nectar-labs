@@ -1,0 +1,1 @@
+- [G1 gas scope](feedback_g1_gas_scope.md) — every default-build change method needs a GAS row; diff methods vs labels
