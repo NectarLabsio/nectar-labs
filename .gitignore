@@ -24,3 +24,4 @@ test-results/
 playwright-report/
 apps/web/next-env.d.ts
 *.tsbuildinfo
+evidence/G3/lighthouse/
