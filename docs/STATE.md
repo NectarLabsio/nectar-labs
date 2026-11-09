@@ -1,7 +1,7 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P1** — contract V1 live (upgrade+migrate), quoter pinned; G4 run done (fallback + real OutLayer execution), verifier checking
-Gates: G0–G3 PASS (p0-green) · G4 PASS (d87eef6; discount pricing pending secrets_ref) · G5 waits H13 / WO-10b · G6 ready · G7–G9 pending
+Phase: **P1 — G4 PASS (+TEE discount addendum), G6 PASS; G5 verifier running (expected FALLBACK disclosed until H13); WO-4e README update**
+Gates: G0–G3 PASS (p0-green) · G4 PASS (d87eef6) + addendum PASS (159 bps, request 15148) · G5 running · G6 PASS (fea52b7) · G7–G9 pending
 Open handoffs: H13, H-NEAR-FAUCET, H-EXPLORER, H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: H13 Pyth key (G5 live price) · H-NEAR-FAUCET top-up (P1 contract redeploy). Neither blocks round 1.
 
@@ -43,7 +43,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T22:26:44Z · commit 4afe109
+Last activity: 2026-11-09T22:52:24Z · commit 1eef98c
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
@@ -62,6 +62,9 @@ G4 addendum (2026-11-09T22:45Z): discount pricing PROVEN live — demo MM secret
   predecessor nectar-core, WasmHash 3ce17749…]); run D: OutLayer request success, quoter_result disc_bps 159 (= 150 + ⌊3000·2000·150/1e8⌋)
   < cap 400, settled at 159. Run C (Whitelist[core, owner]) denied → access condition enforced. vol_bps now 150.
   Positions left: #1 open ($10). Quote #1 remaining ~$2,790. Re-seed needed before demo.
+Next after G5 + WO-4e: tag p1-green if G5 is PASS or a disclosed fallback (CLAUDE.md §8 P1 acceptance allows "README says exactly which
+  fallback is active"); refresh .claude/agents/quoter.md at the boundary; open P2 (WO-13 researcher) — Solana leg needs H-TOOLCHAIN-SOLANA,
+  copilot needs H7 (fixture verifier otherwise). Re-seed demo state (needs H-NEAR-FAUCET).
 Phase-boundary TODO: refresh .claude/agents/quoter.md (still describes the
   pre-D-014 schema); scripts/30 must call set_quoter_pin(project_id, version_key) per interface-p1.
 Feed (WO-11a, f525710): 1Click sampler (dry-only, signature-verified, NVDAx no_route), MCP server stdio + HTTP :8789/mcp. For the next
