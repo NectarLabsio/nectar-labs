@@ -76,7 +76,7 @@ export function FaucetLink({ token }: { token: string }) {
 
 export function LoadingBlock({ lines = 3 }: { lines?: number }) {
   return (
-    <div className="stack-sm" aria-busy="true" aria-label="Loading">
+    <div className="stack-sm" role="status" aria-live="polite" aria-busy="true" aria-label="Loading">
       {Array.from({ length: lines }, (_, i) => (
         <Skeleton key={i} width={`${90 - i * 15}%`} />
       ))}

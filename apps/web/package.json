@@ -11,7 +11,8 @@
     "lint": "node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs",
     "e2e": "playwright test",
     "e2e:screens": "playwright test e2e/screens.spec.ts",
-    "demo:capture": "playwright test e2e/screens.spec.ts"
+    "demo:capture": "playwright test e2e/screens.spec.ts",
+    "lighthouse": "node scripts/lighthouse.mjs"
   },
   "dependencies": {
     "@hot-labs/near-connect": "0.12.0",
@@ -29,8 +30,12 @@
     "@types/node": "^22.20.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.2.0",
+    "chrome-launcher": "1.2.3",
+    "lighthouse": "13.6.0",
     "typescript": "~5.9.3",
     "yaml": "^2.9.1"
   },
-  "engines": { "node": ">=22.22.2" }
+  "engines": {
+    "node": ">=22.22.2"
+  }
 }

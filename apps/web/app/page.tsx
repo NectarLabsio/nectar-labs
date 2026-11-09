@@ -28,7 +28,7 @@ export default function Home() {
             </div>
             <p className="fine">Keeper holds no funds · every transaction previewed as its exact msg · NEAR testnet with mock collateral</p>
           </div>
-          <div className="card limitcard" aria-label="Illustrative limit example for NVDAx">
+          <div className="card limitcard" role="group" aria-label="Illustrative limit example for NVDAx">
             <div className="kv">
               <span className="label">NVDAx · mock · example</span>
               <span className="badge mock">illustrative values</span>
