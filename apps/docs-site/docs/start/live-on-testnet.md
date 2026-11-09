@@ -5,7 +5,7 @@ description: What is deployed, what is mock, what is a fallback.
 ---
 # Live on testnet
 
-<p className="verified">Verified against: F-003 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-060 (2026-11-10), F-063 (2026-11-10), F-167 (2026-11-09), F-168 (2026-11-09), F-173 (2026-11-09), F-177 (2026-11-09), F-178 (2026-11-09), F-179 (2026-11-09), C-007 (open), C-012 (open) · docs/EVIDENCE.md G2 (2026-11-09T20:55Z, 5f27f44), G4 + addendum (2026-11-09T22:10Z / 22:51Z, d87eef6 / fea52b7), G6 (2026-11-09T22:58Z, fea52b7) · evidence/upgrades/run-20261109T2238Z.log</p>
+<p className="verified">Verified against: F-003 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-060 (2026-11-10), F-063 (2026-11-10), F-070, F-073, F-075, F-076, F-078 (2026-11-09), F-167 (2026-11-09), F-168 (2026-11-09), F-173 (2026-11-09), F-177 (2026-11-09), F-178 (2026-11-09), F-179 (2026-11-09), C-007 (open), C-012 (open) · docs/EVIDENCE.md G2 (2026-11-09T20:55Z, 5f27f44), G4 + addendum (2026-11-09T22:10Z / 22:51Z, d87eef6 / fea52b7), G6 (2026-11-09T22:58Z, fea52b7) · evidence/upgrades/run-20261109T2238Z.log</p>
 <p className="status">Status on 2026-11-10: P0 gates G1–G3 PASS. G4 (OutLayer quoter) PASS, G6 (1Click depth) PASS. G5 (oracle): FALLBACK (disclosed), the owner oracle is in use. G7–G9 pending. Source: docs/EVIDENCE.md.</p>
 
 The account ids come from `packages/config/config.yaml`. Each link opens the account on testnet NearBlocks.
@@ -24,6 +24,7 @@ The account ids come from `packages/config/config.yaml`. Each link opens the acc
 | Feed REST / MCP | local only | read-only, no keys | built; runs locally, no public host. See [Feed MCP](/integrate/feed-mcp) |
 | Solana `nectar_vault` | `TODO-G7` (devnet) | Anchor program | P2 |
 | Chain Signatures | `v1.signer-prod.testnet` (F-030) | third-party MPC signer | P2 |
+| NEAR AI copilot | web app panel, NEAR AI Cloud `cloud-api.near.ai` (F-070) | P2; prose only, never a contract input | **built; no live NEAR AI answer has been verified yet.** Live mode needs key H7, and NEAR AI Cloud returned 500 on 2026-11-09 (F-078). The panel shows an answer only after the signature and attestation checks pass; otherwise it shows "unverified — hidden". Tests (`pnpm --filter web test:copilot`, `e2e/copilot.spec.ts`) run on a fixture built from a real Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording; it correctly ends "unverified — hidden". Intel DCAP quote verification runs on the server (F-073); EIP-191 signer recovery and report_data/nonce checks run in the browser (F-075, F-076). G8 re-run pending |
 
 ## What "mock", "fallback" and "PROD-only" mean here
 

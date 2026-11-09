@@ -21,7 +21,7 @@ Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nec
 | 1Click depth | `dry: true` quotes on the 1Click API (F-060) | read-only, signed quotes | **G6 PASS.** NVDAx has no 1Click route (F-063), so `D_c` = 0. The Feed shows signed dry-quote depth for a reference pair (wNEAR → USDC), with impact computed from base units at $500, $1,000 and $2,000. Nothing is ever deposited (Q-007) |
 | Feed REST / MCP | local (`pnpm --filter feed start`) | read-only, no keys | built and runs locally; no public host. MCP tools: `get_exit_capacity`, `preview_borrow`, `list_quotes`, `explain_limit` |
 | Solana `nectar_vault` | `TODO-G7` (devnet) | P2 | not built |
-| NEAR AI copilot | — | P2 | not built; live mode needs key H7 |
+| NEAR AI copilot | web app panel (`apps/web/lib/copilot/`) | P2; NEAR AI Cloud (F-070) | **built; no live NEAR AI answer has been verified yet.** Live mode needs key H7, and NEAR AI Cloud returned 500 on 2026-11-09 (F-078). The panel shows an answer only after the signature and attestation checks pass; otherwise it shows "unverified — hidden". Tests (`pnpm --filter web test:copilot`, `e2e/copilot.spec.ts`) run on a fixture built from a real Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording; it correctly ends "unverified — hidden". Intel DCAP quote verification runs on the server (F-073); EIP-191 signer recovery and report_data/nonce checks run in the browser (F-075, F-076). G8 re-run pending |
 | Mainnet, real xStocks, Reserve `R_c`, keeper bonds, DAO owner | — | **PROD-only** | not in this repo |
 
 Demo state: snapshot at 2026-11-09T20:49Z (evidence/G2/demo-testnet-20261109T2049Z.log); the seed had a $50,000 pool, quote #0 for $10,000 at 250 bps,
@@ -58,7 +58,7 @@ P1 (live on testnet): the keeper's trigger asks OutLayer for the discount, and t
 ## Tracks and why
 `defi`: a new credit primitive (committed exit liquidity as a limit input).
 `security`: contract-built preimage, pinned TEE program, keeper with a function-call key only, oracle staleness and band checks.
-`privacy`: market-maker parameters stay inside the TEE; copilot answers are TEE-signed and verified; analytics off by default and consent-gated; self-hosted fonts.
+`privacy`: market-maker parameters stay inside the TEE; the copilot shows an answer only after signature and attestation checks pass (no live NEAR AI answer verified yet: key H7 absent, NEAR AI Cloud 500 on 2026-11-09); analytics off by default and consent-gated; self-hosted fonts.
 `agents` (Feed MCP: built, read-only) is entered only if it passes G9.
 
 ## Evidence
