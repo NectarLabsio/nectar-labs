@@ -4,7 +4,7 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import type { AssetSnapshot, FeedDb, SettlementRow } from './db.ts';
 
-export const ROUTES = ['/api/feed', '/api/asset/{id}', '/api/settlements', '/healthz'] as const;
+export const ROUTES = ['/api/feed', '/api/asset/{id}', '/api/settlements', '/api/oneclick', '/healthz'] as const;
 export const CACHE_MS = 10_000;
 const SYMBOL_RE = /^[A-Za-z0-9._-]{1,32}$/;
 
@@ -86,6 +86,7 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
       cacheable: false,
     };
   }
+  if (path === '/api/oneclick') return { status: 200, body: db.oneClickReport(now), cacheable: true };
   if (path === '/api/feed') return { status: 200, body: { ...asOf, assets: db.latestSnapshots().map(asset) }, cacheable: true };
 
   const m = /^\/api\/asset\/([^/]+)$/.exec(path);

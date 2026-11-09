@@ -11,6 +11,7 @@ import { createApi } from './api.ts';
 import { FeedDb } from './db.ts';
 import { Indexer } from './indexer.ts';
 import { createLogger, errMsg } from './log.ts';
+import { seedOneClickFromFixtures } from './fixtures.ts';
 import { createMcpHttpServer } from './mcp.ts';
 import { OneClickClient, OneClickSampler, defaultSamplerConfig } from './oneclick.ts';
 import { NearTxOutcomeFetcher, NearViewReader } from './near.ts';
@@ -63,8 +64,11 @@ function main(): void {
   const mcp = mcpPort === 'off' ? null : createMcpHttpServer({ db, views });
   mcp?.listen(Number(mcpPort), host);
 
-  // 1Click dry-quote sampler (Q-007: dry only). ONECLICK_ENABLED=0 disables it.
-  const oneclick = env.ONECLICK_ENABLED !== '0';
+  // 1Click dry-quote sampler (Q-007: dry only). ONECLICK_ENABLED=0 disables it. FEED_FIXTURES=1 replays
+  // the recorded dry quotes instead (no network; signatures still verified).
+  const fixtures = env.FEED_FIXTURES === '1';
+  const oneclick = env.ONECLICK_ENABLED !== '0' && !fixtures;
+  if (fixtures) seedOneClickFromFixtures(db, log).catch((e: unknown) => log.error('oneclick_fixtures_failed', { error: errMsg(e) }));
   if (oneclick) {
     const bearer = unset(env.ONECLICK_JWT_PATH) ? null : readFileSync(home(env.ONECLICK_JWT_PATH as string), 'utf8').trim();
     new OneClickSampler(db, new OneClickClient(undefined, undefined, bearer), defaultSamplerConfig(env), log)
@@ -79,7 +83,7 @@ function main(): void {
   };
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
-  log.info('feed_started', { port, mcp_port: mcpPort, oneclick, sources: sources.map((s) => s.kind).join('+') || 'none', poll_ms: pollMs });
+  log.info('feed_started', { port, mcp_port: mcpPort, oneclick, fixtures, sources: sources.map((s) => s.kind).join('+') || 'none', poll_ms: pollMs });
   if (sources.length > 0) {
     new Indexer(db, sources, log, pollMs).run(ac.signal).catch((e: unknown) => log.error('fatal', { error: errMsg(e) }));
   }

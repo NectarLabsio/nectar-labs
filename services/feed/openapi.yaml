@@ -96,6 +96,63 @@ paths:
                     type: array
                     items: { $ref: '#/components/schemas/Settlement' }
         '400': { $ref: '#/components/responses/Error' }
+  /api/oneclick:
+    get:
+      summary: 1Click dry-quote price impact (3 sizes, base units) and per-asset route status
+      description: >
+        Per reference pair, three `dry:true` 1Click quotes at 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD; every
+        response passes the SDK `verifyQuoteSignature` or the set is not served. rate_e6 =
+        amount_out·10^dec_in·1e6 / (amount_in·10^dec_out); impact_bps = floor((rate(0.5x) − rate(n))·1e4 / rate(0.5x)),
+        0 when not worse; worst_impact_bps uses min_amount_out. USD fields of the 1Click response are not used (C-014).
+        Asset status comes from the 1Click token list (`no_route` when absent). With FEED_FIXTURES=1 the data
+        is replayed from recorded quotes and `as_of` is the recording time.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [as_of, pairs, assets]
+                properties:
+                  as_of: { type: string, format: date-time, description: last sampler tick }
+                  pairs:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, origin, destination, verified, correlation_id, samples]
+                      properties:
+                        id: { type: string, example: wnear-usdc }
+                        origin: { type: string, description: 1Click assetId }
+                        destination: { type: string, description: 1Click assetId }
+                        verified: { type: boolean, const: true }
+                        correlation_id: { type: string, description: 1x sample }
+                        observed_at: { type: string, format: date-time }
+                        samples:
+                          type: array
+                          minItems: 3
+                          maxItems: 3
+                          items:
+                            type: object
+                            required: [notional_usd, amount_in, amount_out, min_amount_out, rate_e6, impact_bps, worst_impact_bps]
+                            properties:
+                              notional_usd: { type: integer }
+                              amount_in: { type: string, description: origin base units }
+                              amount_out: { type: string, description: destination base units }
+                              min_amount_out: { type: string, description: destination base units after slippage }
+                              rate_e6: { type: string }
+                              impact_bps: { type: integer, minimum: 0 }
+                              worst_impact_bps: { type: integer, minimum: 0 }
+                              correlation_id: { type: string }
+                  assets:
+                    type: array
+                    items:
+                      type: object
+                      required: [symbol, status]
+                      properties:
+                        symbol: { type: string }
+                        status: { type: string, enum: [no_route, route] }
+                        observed_at: { type: string, format: date-time }
   /healthz:
     get:
       summary: Indexer liveness

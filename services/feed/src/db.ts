@@ -62,18 +62,31 @@ export interface SettlementRow {
   observed_at: number;
 }
 
-export interface OneClickSampleRow {
-  symbol: string;
-  pair: string;
-  status: 'verified' | 'no_route';
-  amount_in_usd_e6: string | null;
-  amount_out_usd_e6: string | null;
-  /** Destination amount in human units as returned (e.g. USDC); 1Click reports amountOutUsd at list price. */
-  amount_out_formatted: string | null;
-  gap_bps: number | null;
-  correlation_id: string | null;
-  quote_timestamp: string | null;
+/** One verified dry quote of a 3-size set; amounts are base units (strings), rate/impact from base units only (C-014). */
+export interface OneClickPairSample {
+  notional_usd: number;
+  amount_in: string;
+  amount_out: string;
+  min_amount_out: string;
+  rate_e6: string;
+  impact_bps: number;
+  worst_impact_bps: number;
+  correlation_id: string;
+}
+
+export interface OneClickSetRow {
+  pair_id: string;
+  origin: string;
+  destination: string;
   observed_at: number;
+  samples: OneClickPairSample[];
+}
+
+/** GET /api/oneclick body (openapi `OneClick`); also the source for MCP. */
+export interface OneClickReport {
+  as_of: string;
+  pairs: Array<{ id: string; origin: string; destination: string; verified: true; correlation_id: string; observed_at: string; samples: OneClickPairSample[] }>;
+  assets: Array<{ symbol: string; status: 'no_route' | 'route'; observed_at: string }>;
 }
 
 export function isExitCapacity(v: unknown): v is ExitCapacity {
@@ -118,11 +131,13 @@ export class FeedDb {
         dedupe_key TEXT NOT NULL UNIQUE, observed_at INTEGER NOT NULL
       );
       CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
-      CREATE TABLE IF NOT EXISTS oneclick_samples (
+      CREATE TABLE IF NOT EXISTS oneclick_sets (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        symbol TEXT NOT NULL, pair TEXT NOT NULL, status TEXT NOT NULL CHECK (status IN ('verified','no_route')),
-        amount_in_usd_e6 TEXT, amount_out_usd_e6 TEXT, amount_out_formatted TEXT, gap_bps INTEGER,
-        correlation_id TEXT UNIQUE, quote_timestamp TEXT, observed_at INTEGER NOT NULL, response TEXT
+        pair_id TEXT NOT NULL, origin TEXT NOT NULL, destination TEXT NOT NULL, observed_at INTEGER NOT NULL,
+        set_key TEXT NOT NULL UNIQUE, samples TEXT NOT NULL, responses TEXT NOT NULL
+      );
+      CREATE TABLE IF NOT EXISTS oneclick_assets (
+        symbol TEXT PRIMARY KEY, status TEXT NOT NULL CHECK (status IN ('no_route','route')), observed_at INTEGER NOT NULL
       );
     `);
   }
@@ -135,22 +150,52 @@ export class FeedDb {
     this.setMeta(key, String(Number(this.meta(key) ?? '0') + 1));
   }
 
-  /** 1Click R_c series. Idempotent per correlation id; `response` is the full signed quote (verified rows only). */
-  addOneClickSample(r: OneClickSampleRow, response: string | null): void {
+  /** 1Click R_c series: one verified 3-size set. Idempotent per set of correlation ids; `responses` = full signed quotes. */
+  addOneClickSet(r: OneClickSetRow, responses: string): void {
     this.db
-      .prepare(
-        'INSERT OR IGNORE INTO oneclick_samples (symbol, pair, status, amount_in_usd_e6, amount_out_usd_e6, amount_out_formatted, gap_bps, correlation_id, quote_timestamp, observed_at, response) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      )
-      .run(r.symbol, r.pair, r.status, r.amount_in_usd_e6, r.amount_out_usd_e6, r.amount_out_formatted, r.gap_bps, r.correlation_id, r.quote_timestamp, r.observed_at, response);
+      .prepare('INSERT OR IGNORE INTO oneclick_sets (pair_id, origin, destination, observed_at, set_key, samples, responses) VALUES (?, ?, ?, ?, ?, ?, ?)')
+      .run(r.pair_id, r.origin, r.destination, r.observed_at, r.samples.map((s) => s.correlation_id).join(','), JSON.stringify(r.samples), responses);
   }
 
-  oneClickSamples(symbol: string | null, limit: number): Array<OneClickSampleRow & { response: string | null }> {
-    const sql =
-      'SELECT symbol, pair, status, amount_in_usd_e6, amount_out_usd_e6, amount_out_formatted, gap_bps, correlation_id, quote_timestamp, observed_at, response FROM oneclick_samples' +
-      (symbol === null ? '' : ' WHERE symbol = ?') +
-      ' ORDER BY id DESC LIMIT ?';
-    const st = this.db.prepare(sql);
-    return (symbol === null ? st.all(limit) : st.all(symbol, limit)) as unknown as Array<OneClickSampleRow & { response: string | null }>;
+  /** Latest set per pair, newest first (`limit` sets per pair). */
+  oneClickSets(pairId: string | null, limit = 1): Array<OneClickSetRow & { responses: string }> {
+    const ids = pairId === null ? (this.db.prepare('SELECT DISTINCT pair_id FROM oneclick_sets ORDER BY pair_id').all() as Array<{ pair_id: string }>).map((r) => r.pair_id) : [pairId];
+    const st = this.db.prepare('SELECT pair_id, origin, destination, observed_at, samples, responses FROM oneclick_sets WHERE pair_id = ? ORDER BY id DESC LIMIT ?');
+    return ids.flatMap((id) =>
+      (st.all(id, limit) as Array<{ pair_id: string; origin: string; destination: string; observed_at: number; samples: string; responses: string }>).map((r) => ({
+        ...r,
+        samples: JSON.parse(r.samples) as OneClickPairSample[],
+      })),
+    );
+  }
+
+  setOneClickAsset(symbol: string, status: 'no_route' | 'route', observedAt: number): void {
+    this.db
+      .prepare('INSERT INTO oneclick_assets (symbol, status, observed_at) VALUES (?, ?, ?) ON CONFLICT(symbol) DO UPDATE SET status = excluded.status, observed_at = excluded.observed_at')
+      .run(symbol, status, observedAt);
+  }
+
+  oneClickAssets(): Array<{ symbol: string; status: 'no_route' | 'route'; observed_at: number }> {
+    return this.db.prepare('SELECT symbol, status, observed_at FROM oneclick_assets ORDER BY symbol').all() as unknown as Array<{ symbol: string; status: 'no_route' | 'route'; observed_at: number }>;
+  }
+
+  /** The single view of 1Click data used by REST and MCP. `as_of` = last sampler tick (else `now`). */
+  oneClickReport(now: number): OneClickReport {
+    const tick = this.meta('oneclick_last_tick_at');
+    const iso = (t: number): string => new Date(t).toISOString();
+    return {
+      as_of: iso(tick === null ? now : Number(tick)),
+      pairs: this.oneClickSets(null, 1).map((s) => ({
+        id: s.pair_id,
+        origin: s.origin,
+        destination: s.destination,
+        verified: true as const,
+        correlation_id: (s.samples[1] ?? s.samples[0])?.correlation_id ?? '',
+        observed_at: iso(s.observed_at),
+        samples: s.samples,
+      })),
+      assets: this.oneClickAssets().map((a) => ({ symbol: a.symbol, status: a.status, observed_at: iso(a.observed_at) })),
+    };
   }
 
   meta(key: string): string | null {

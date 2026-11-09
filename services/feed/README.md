@@ -24,7 +24,9 @@ SQLite via `node:sqlite` (no native addon). Holds no keys.
 # env: CORE_ACCOUNT_ID (polling + live MCP views; off while unset), NEAR_RPC_URL, FEED_DB_PATH (~/.nectar/feed.sqlite),
 #      FEED_PORT (8788), FEED_HOST (127.0.0.1), FEED_POLL_MS (10000), FEED_MCP_PORT (8789 | off),
 #      ONECLICK_ENABLED (1 | 0), ONECLICK_INTERVAL_MS (300000), ONECLICK_REF_PAIR (near:wNEAR->near:USDC | none),
-#      ONECLICK_NOTIONAL_USD_E6 (1000000000), ONECLICK_JWT_PATH (optional 0600 file with a 1Click JWT)
+#      comma-separated list allowed; ONECLICK_ASSETS (NVDAx), ONECLICK_NOTIONAL_USD (1000; quotes at 0.5x/1x/2x),
+#      ONECLICK_JWT_PATH (optional 0600 file with a 1Click JWT), FEED_FIXTURES=1 (replay recorded dry quotes, no network)
+#      GET /api/oneclick: impact_bps from base units (amountOut/amountIn, token decimals), never amountOutUsd (C-014)
 pnpm --filter feed start            # REST :8788, MCP over HTTP at http://127.0.0.1:8789/mcp, sampler
 pnpm --filter feed mcp              # MCP over stdio
 pnpm --filter feed test             # unit tests (recorded fixtures, in-memory MCP transport)

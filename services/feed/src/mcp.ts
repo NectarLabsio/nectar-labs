@@ -10,7 +10,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import type { ExitCapacity, FeedDb } from './db.ts';
+import type { ExitCapacity, FeedDb, OneClickReport } from './db.ts';
 import { errMsg } from './log.ts';
 import type { ViewReader } from './sources.ts';
 
@@ -47,11 +47,19 @@ async function capacity(deps: McpDeps, sym: string): Promise<{ cap: ExitCapacity
   return s === undefined ? null : { cap: s.capacity, block: s.block_height, source: 'feed-db' };
 }
 
-function oneClick(deps: McpDeps, sym: string): Record<string, unknown> {
-  const s = deps.db.oneClickSamples(sym, 1)[0];
-  if (s === undefined) return { status: 'not_sampled' };
-  if (s.status === 'no_route') return { status: 'no 1Click route', observed_at: new Date(s.observed_at).toISOString() };
-  return { status: 'verified', amount_in_usd_e6: s.amount_in_usd_e6, amount_out_usd_e6: s.amount_out_usd_e6, gap_bps: s.gap_bps, observed_at: new Date(s.observed_at).toISOString() };
+/** Same numbers as GET /api/oneclick (FeedDb.oneClickReport): asset route status + reference-pair impact sets. */
+function oneClick(deps: McpDeps, sym: string): { status: string; observed_at?: string; pairs: OneClickReport['pairs'] } {
+  const r = deps.db.oneClickReport(Date.now());
+  const a = r.assets.find((x) => x.symbol === sym);
+  const own = r.pairs.filter((p) => p.id === `${sym.toLowerCase()}-usdc`);
+  const status = a === undefined ? 'not_sampled' : a.status === 'no_route' ? 'no 1Click route' : 'route';
+  return { status, ...(a === undefined ? {} : { observed_at: a.observed_at }), pairs: own.length > 0 ? own : r.pairs };
+}
+
+/** `wnear-usdc impact $500/$1,000/$2,000 = 0/3/9 bps (worst 99/102/108 bps)` */
+function impactLine(p: OneClickReport['pairs'][number]): string {
+  const n = p.samples.map((s) => `$${s.notional_usd.toLocaleString('en-US')}`).join('/');
+  return `${p.id} impact ${n} = ${p.samples.map((s) => s.impact_bps).join('/')} bps (worst ${p.samples.map((s) => s.worst_impact_bps).join('/')} bps, verified)`;
 }
 
 function capOf(c: ExitCapacity): bigint {
@@ -140,7 +148,8 @@ export function createMcpServer(deps: McpDeps): McpServer {
           lines.push(`LTV_c (effective)        = ${ltvBps} bps (feed-db; pass units with live views for V_c)`);
         }
         const oc = oneClick(deps, sym);
-        lines.push(`1Click depth sample      = ${String(oc.status)}${oc.status === 'verified' ? ` (gap ${String(oc.gap_bps)} bps)` : ''}`);
+        lines.push(`1Click route (${sym})${' '.repeat(Math.max(1, 11 - sym.length))}= ${oc.status}`);
+        for (const p of oc.pairs) lines.push(`1Click dry quotes        = ${impactLine(p)}`);
         return text(lines.join('\n'));
       }),
   );
