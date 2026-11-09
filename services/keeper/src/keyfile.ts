@@ -14,14 +14,31 @@ export interface KeeperKey {
 
 export class KeyFileError extends Error {}
 
-export function loadKeeperKey(path: string, expectedAccountId?: string): KeeperKey {
+/** Reads a 0600 text secret (e.g. an API key) — same permission rule as key files; never logged. */
+export function loadSecretFile(path: string, envName: string): string {
   let st;
   try {
     st = statSync(path);
   } catch {
-    throw new KeyFileError(`key file not found at KEEPER_KEY_PATH`);
+    throw new KeyFileError(`secret file not found at ${envName}`);
   }
-  if (!st.isFile()) throw new KeyFileError('KEEPER_KEY_PATH is not a regular file');
+  if (!st.isFile()) throw new KeyFileError(`${envName} is not a regular file`);
+  if (process.platform !== 'win32' && (st.mode & 0o077) !== 0) {
+    throw new KeyFileError(`${envName} file mode ${(st.mode & 0o777).toString(8)} is too open; chmod 600`);
+  }
+  const v = readFileSync(path, 'utf8').trim();
+  if (v === '') throw new KeyFileError(`${envName} file is empty`);
+  return v;
+}
+
+export function loadKeeperKey(path: string, expectedAccountId?: string, envName = 'KEEPER_KEY_PATH', accountEnvName = 'KEEPER_ACCOUNT_ID'): KeeperKey {
+  let st;
+  try {
+    st = statSync(path);
+  } catch {
+    throw new KeyFileError(`key file not found at ${envName}`);
+  }
+  if (!st.isFile()) throw new KeyFileError(`${envName} is not a regular file`);
   if (process.platform !== 'win32' && (st.mode & 0o077) !== 0) {
     throw new KeyFileError(`key file mode ${(st.mode & 0o777).toString(8)} is too open; chmod 600`);
   }
@@ -37,7 +54,7 @@ export function loadKeeperKey(path: string, expectedAccountId?: string): KeeperK
   if (sk === null || !sk.startsWith('ed25519:')) throw new KeyFileError('key file has no ed25519 private_key');
   const accountId = typeof o.account_id === 'string' ? o.account_id : null;
   if (expectedAccountId !== undefined && accountId !== null && accountId !== expectedAccountId) {
-    throw new KeyFileError(`key file account_id ${accountId} != KEEPER_ACCOUNT_ID ${expectedAccountId}`);
+    throw new KeyFileError(`key file account_id ${accountId} != ${accountEnvName} ${expectedAccountId}`);
   }
   return {
     accountId,
