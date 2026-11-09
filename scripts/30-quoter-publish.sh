@@ -57,9 +57,14 @@ pin)
   case "$PID$VK" in *TODO*) echo "run '$0 publish' first" >&2; exit 2;; esac
   RL=$(jq -c '.resource_limits' "$ROOT/packages/config/outlayer-limits.json")
   owner_call() { near contract call-function as-transaction "$CORE" "$1" json-args "$2" prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as "$OWNER" network-config testnet sign-with-keychain send </dev/null; }
-  owner_call set_quoter_config "$(jq -cn --argjson r "$RL" --arg d "${QUOTER_DEPOSIT_YOCTO:-10000000000000000000000}" \
-    '{deposit_yocto:$d, gas_tgas:150, max_instructions:($r.max_instructions|tostring), max_memory_mb:$r.max_memory_mb, max_execution_seconds:$r.max_execution_seconds}')"
-  owner_call set_quoter_pin "$(jq -cn --arg p "$PID" --arg v "$VK" '{project_id:$p, version_key:$v}')"
+  owner_call set_quoter_config "$(jq -cn --argjson r "$RL" --arg d "${QUOTER_DEPOSIT_YOCTO:-10000000000000000000000}" --arg g "$(cfg .outlayer.gas_tgas)" \
+    '{deposit_yocto:$d, gas_tgas:($g|tonumber), max_instructions:($r.max_instructions|tostring), max_memory_mb:$r.max_memory_mb, max_execution_seconds:$r.max_execution_seconds}')"
+  owner_call set_vol_bps "$(jq -cn --argjson v "$(cfg .collateral.nvdax.vol_bps)" '{symbol:"NVDAx", vol_bps:$v}')"
+  owner_call set_quoter_pin "$(jq -cn --arg p "${PIN_PROJECT_ID:-$PID}" --arg v "${PIN_VERSION_KEY:-$VK}" '{project_id:$p, version_key:$v}')"
+  log "gas reserve for OutLayer deposits ($(cfg .outlayer.gas_reserve_near) NEAR)"
+  near contract call-function as-transaction "$CORE" fund_gas_reserve json-args '{}' prepaid-gas '30 Tgas' attached-deposit "$(cfg .outlayer.gas_reserve_near) NEAR" \
+    sign-as "$OWNER" network-config testnet sign-with-keychain send </dev/null
+  log "quoter config now"; rpc_view "$CORE" get_quoter_config '{}' | jq -r '.result.result | implode'
   ;;
 *) echo "usage: $0 publish|pin" >&2; exit 2 ;;
 esac

@@ -28,6 +28,7 @@ collateral:
     verified_dex_depth_usd_e6: 0 # owner-set in P0; quoter in P1
     nectar_reserve_usd_e6: 0 # PROD
     remote_chain: null # P2: { chain_id: solana-devnet, vault_program: TODO-G7, mpc_domain_id: 1 }
+    vol_bps: 420
 quotes:
   default_max_discount_bps: 250
   min_notice_period_s: 604800 # 7 days (PRD §4.1)
@@ -50,6 +51,7 @@ outlayer:
   resource_limits: {max_instructions: 100000000, max_memory_mb: 128, max_execution_seconds: 30}
   gas_tgas: 100
   wasm_url: https://test.fastfs.io/nectar.testnet/outlayer.testnet/3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2.wasm
+  gas_reserve_near: "0.1"
 signer:
   account: v1.signer-prod.testnet
   path: solana-v1
