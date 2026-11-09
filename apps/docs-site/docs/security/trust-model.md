@@ -5,7 +5,7 @@ description: Who is trusted for what, and what bounds each trust.
 ---
 # Trust model
 
-<p className="verified">Verified against: F-015 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-050 (2026-11-09), F-060 (2026-11-09), F-070 (2026-11-09) · spec docs/PRD.md §15 · D-003, D-005 (2026-11-09)</p>
+<p className="verified">Verified against: F-015 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-050 (2026-11-09), F-060 (2026-11-09), F-070 (2026-11-09), F-073, F-075, F-076, F-077, F-078 (2026-11-09) · test `e2e/copilot.spec.ts` · spec docs/PRD.md §15 · D-003, D-005 (2026-11-09)</p>
 <p className="status">Status: design. Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Each bound is backed by a test named on the Threats page once G1 passes.</p>
 
 Every rule that moves money is enforced by `nectar-core`. Every off-chain party can at worst delay or degrade a settlement. None can redirect funds.
@@ -19,7 +19,7 @@ Every rule that moves money is enforced by `nectar-core`. Every off-chain party 
 | `v1.signer-prod.testnet` MPC set (P2, F-030) | signing only what we send | contract-built preimage, path per chain, nonce, expiry |
 | 1Click (P1, F-060) | public depth figure | `dry: true` only; `D_c` = 0 if unavailable |
 | Keeper | liveness | function-call key, no deposits (F-015), cannot choose payloads (D-003) |
-| NEAR AI Cloud (P2, F-070) | prose for humans | never a contract input; signature verified in the browser |
+| NEAR AI Cloud (P2, F-070) | prose for humans | never a contract input; the answer is shown only after the checks pass: Intel DCAP quote verification on the server (F-073), EIP-191 signer recovery and report_data/nonce checks in the browser (F-075, F-076). No live answer has been verified yet (key H7 absent; `/v1/models` 500 on 2026-11-09, F-078) |
 
 ## The owner is the largest trust
 

@@ -34,6 +34,9 @@ Current state (2026-11-10): only this documentation site exists. The web app, Fe
 | Hosting provider (TODO-H5; default plan: Vercel preview) | all sites | every request | request metadata |
 | Google Analytics 4 **or** Plausible (TODO-H4) | docs site, web app | only after you click "Accept analytics", and only if configured; **off by default** | page views, anonymised IP (GA4 with IP anonymisation) or no cookies (Plausible) |
 | Email provider of kunal@nectarnetwork.fun | contact | when you email us | your message and address |
+| NEAR AI Cloud (`cloud-api.near.ai`) | web app copilot, from our server | **live mode only** (operator API key set, TODO-H7); not called in fixture mode | the question you type and a random nonce; not your IP address |
+| Phala PCCS (Intel DCAP collateral) | web app copilot, from our server | **live mode only**, to check the TDX quote | the attestation quote; no personal data |
+| NVIDIA NRAS (`nras.attestation.nvidia.com`) | web app copilot, from our server | **live mode only**, to check GPU attestation | the GPU attestation payload; no personal data |
 
 This site loads its fonts and search index from its own origin. It requests nothing from Google Fonts or any other CDN. Links to other sites (NEAR, Solana, OutLayer and others) are plain links. Those sites have their own policies once you follow them.
 
