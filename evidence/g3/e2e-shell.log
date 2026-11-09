@@ -1,0 +1,418 @@
+
+Running 114 tests using 5 workers
+
+[1/114] [desktop] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity
+[2/114] [desktop] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract
+[3/114] [desktop] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+[4/114] [phone] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity
+[5/114] [phone] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract
+[6/114] [phone] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+[7/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot / dark
+[8/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot / dark
+[9/114] [phone] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean
+[10/114] [desktop] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean
+[11/114] [phone] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean
+[12/114] [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean
+[13/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed dark
+[14/114] [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean
+[15/114] [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean
+[16/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed dark
+[17/114] [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean
+[18/114] [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean
+[19/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark
+[20/114] [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean
+[21/114] [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean
+[22/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark
+[WebServer] ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3100". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+
+[23/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark
+[24/114] [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean
+[25/114] [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean
+[26/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark
+[27/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark
+[28/114] [desktop] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean
+[29/114] [phone] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean
+[30/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark
+[31/114] [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean
+[32/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark
+[33/114] [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean
+[34/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark
+[35/114] [phone] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean
+[36/114] [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean
+[37/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark
+[38/114] [phone] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean
+[39/114] [desktop] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean
+[40/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /console dark
+[41/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark
+[42/114] [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean
+[43/114] [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean
+[44/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark
+[45/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark
+[46/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk dark
+[47/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark
+[48/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /security dark
+[49/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark
+[50/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark
+[51/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark
+[52/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark
+[53/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark
+[54/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark
+[55/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot / light
+  1) [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-privacy-rende-9e92b-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-privacy-rende-9e92b-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-privacy-rende-9e92b-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  2) [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-privacy-rende-9e92b-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-privacy-rende-9e92b-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-privacy-rende-9e92b-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[56/114] [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean
+[57/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot / light
+[58/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed light
+[59/114] [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean
+[60/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light
+[61/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed light
+[62/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light
+[63/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow light
+[64/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light
+[65/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light
+[66/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light
+[67/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light
+[68/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light
+[69/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light
+[70/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light
+[71/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /console light
+  3) [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-terms-renders-fdd1c-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-terms-renders-fdd1c-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-terms-renders-fdd1c-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[72/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light
+  4) [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-terms-renders-fdd1c-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-terms-renders-fdd1c-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-terms-renders-fdd1c-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[73/114] [phone] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean
+[74/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers light
+[75/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light
+[76/114] [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean
+[77/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk light
+[78/114] [phone] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean
+[79/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light
+[80/114] [desktop] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean
+[81/114] [phone] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean
+[82/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /security light
+[83/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light
+[84/114] [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean
+[85/114] [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean
+[86/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light
+[87/114] [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light
+[88/114] [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean
+[89/114] [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean
+[90/114] [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean
+[91/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light
+[92/114] [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean
+[93/114] [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean
+[94/114] [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean
+[95/114] [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light
+[96/114] [phone] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean
+[97/114] [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean
+[98/114] [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean
+[99/114] [desktop] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean
+[100/114] [phone] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean
+[101/114] [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean
+[102/114] [phone] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean
+[103/114] [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean
+[104/114] [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean
+[105/114] [desktop] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean
+[106/114] [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean
+  5) [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-privacy-rende-0cc91-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-privacy-rende-0cc91-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-privacy-rende-0cc91-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[107/114] [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean
+  6) [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-privacy-rende-0cc91-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-privacy-rende-0cc91-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-privacy-rende-0cc91-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[108/114] [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean
+  7) [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-terms-renders-904b0-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-terms-renders-904b0-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-terms-renders-904b0-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[109/114] [phone] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean
+  8) [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByText(/hackathon/i)
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByText(/hackathon/i) with timeout 5000ms
+      - waiting for getByText(/hackathon/i)
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      17 |       await expect(page.locator("main#main")).toBeVisible();
+      18 |       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    > 19 |       await expect(page.getByText(/hackathon/i)).toHaveCount(0);
+         |                                                  ^
+      20 |       expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+        at /Volumes/T7/nectar-labs/.claude/worktrees/agent-a77d5ee7923fbda8c/apps/web/e2e/shell.spec.ts:19:50
+
+    Error Context: test-results/shell--legal-terms-renders-904b0-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--legal-terms-renders-904b0-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/shell--legal-terms-renders-904b0-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[110/114] [phone] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off
+[111/114] [phone] › e2e/shell.spec.ts:37:1 › theme toggle switches data-theme
+[112/114] [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean
+[113/114] [desktop] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off
+[114/114] [desktop] › e2e/shell.spec.ts:37:1 › theme toggle switches data-theme
+  8 failed
+    [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean 
+    [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean 
+    [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean 
+    [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean 
+    [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean 
+    [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean 
+    [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean 
+    [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean 
+  6 skipped
+  100 passed (42.9s)

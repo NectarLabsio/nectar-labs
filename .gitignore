@@ -20,3 +20,7 @@ evidence/*.log
 .pnpm-store/
 # agent worktrees
 .claude/worktrees/
+test-results/
+playwright-report/
+apps/web/next-env.d.ts
+*.tsbuildinfo
