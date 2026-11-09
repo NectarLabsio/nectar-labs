@@ -55,6 +55,17 @@ units, debt_usd_e6, premium_usd_e6, pre_liq_ltv_bps, opened_ns, status`. `list_*
 `settled_near{position_id,quote_id,disc_bps,repay_usd_e6,seize_units,buyer}` · `oracle_updated{symbol,price_usd_e6}` · `oracle_rejected{symbol,price_usd_e6,last_usd_e6}` ·
 `collateral_upserted{symbol}` · `paused{}` · `unpaused{}`
 
+## Accepted additions from WO-2 (2026-11-10, orchestrator)
+- `get_exit_capacity` adds `capacity_usd_e6` (= (1e4−h_c)·(Q+R+D)/1e4); `b_c_usd_per_unit_e6` = max_nectar_ltv·price/1e4;
+  `limit_bps_effective` = max_nectar_ltv_bps when capacity > 0, else 0.
+- `get_owed_collateral(account)` view + `payout_failed{...}` event: collateral whose ft_transfer failed is recorded as owed
+  (claim method not built in P0 — disclosed limitation).
+- Quote gains `created_ns`; Position gains `premium_usd_e6`; `update_owner_price` returns `bool` (false = band rejection).
+- Borrow refunded if it would already exceed `pre_liq_ltv` at open. Pre-liquidation repays the full debt; keeper fee paid in
+  collateral units. Paused: `initiate_quote_withdrawal` allowed, `claim_fees` refused.
+- Rounding: V↓, ltv↑, B_c↓, static limit↓, premium↑, seize units↑, fee debt↑; ltv with V=0 & debt>0 = u32::MAX.
+- `from_index`/`limit` are u32 JSON numbers.
+
 ## Test vectors
 `contracts/nectar-core/tests/model.py` writes `tests/model.csv` (columns documented in the file). WO-5 health math and WO-3 preview UI
 read the same CSV; nobody re-derives the maths by hand.

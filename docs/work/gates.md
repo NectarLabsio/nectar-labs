@@ -18,3 +18,7 @@ G6: pnpm --filter keeper test:oneclick (dry quote + verifyQuoteSignature) ; Feed
 G7: cd solana && anchor test 2>&1 | tail -40; pnpm --filter keeper test:settle-devnet (uses config program id); open both explorer links
 G8: pnpm --filter web test:copilot (fixture) [+ --live if NEAR_AI_API_KEY present]
 G9: follow README.md top to bottom in ≤ 15 min; pnpm demo:testnet; pnpm verify; pnpm --filter docs-site build; gitleaks detect --log-opts=--all
+
+Host notes (2026-11-10): tools live in $HOME/.cargo/bin and $HOME/.local/bin (export PATH). On this Mac, Rust linking needs
+SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk (scripts/_lib.sh sets it). Clone source for the verifier is the
+local repo: `git clone /Volumes/T7/nectar-labs <tmp>` (no remote exists; never push). Playwright uses PW_CHANNEL=chrome.
