@@ -1,0 +1,67 @@
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+live code_hash=HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX storage=407347 B balance=4238429347376964899999982; new wasm sha256=a724d890850f393e3ab7e2b4d9d7e3b4f275f245b125331a308b034546d9d847 size=437414
+live code size=404811 B
+
+== top up nectar-core.nectar.testnet by 0.211 NEAR from nectar.testnet ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core.nectar.testnet
+│    actions:
+│       -- transfer deposit:    0.211 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.670 Tgas
+│    Transaction fee: 0.0000446365125 NEAR
+│    Transaction ID: 7wpdhFJpZ1gpFxapLpr9Q6rfbCsfseGfqfELR9kNiyZH
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/7wpdhFJpZ1gpFxapLpr9Q6rfbCsfseGfqfELR9kNiyZH
+│     [0m
+
+
+<nectar.testnet> has transferred 0.211 NEAR to <nectar-core.nectar.testnet> successfully.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear tokens nectar.testnet send-near nectar-core.nectar.testnet '0.211 NEAR' network-config testnet sign-with-keychain send[39m
+
+
+== deploy (code only, no init call) ==
+├  Unsigned transaction:
+│    signer_id:    nectar-core.nectar.testnet
+│    receiver_id:  nectar-core.nectar.testnet
+│    actions:
+│       -- deploy code <CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t> to a account <nectar-core.nectar.testnet>
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:B3STreMJMy8AQpj1oouG8GDBPNr9MSPgBA2FooKY9VHt
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 32.1 Tgas
+│    Transaction fee: 0.0031810861371402 NEAR
+│    Transaction ID: 7RcfcD6P9B5DipQCZy7XgykqkziCodwCqm8fNmyTPzFb
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/7RcfcD6P9B5DipQCZy7XgykqkziCodwCqm8fNmyTPzFb
+│     [0m
+
+Contract code has been successfully deployed.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy nectar-core.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/nectar_core/nectar_core.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+state_version=1 contract_version="nectar-core 0.1.0 p2" code_hash=CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t
+get_exit_capacity unchanged
+list_positions unchanged
+list_quotes unchanged
+get_quoter_config unchanged
+get_pool unchanged
