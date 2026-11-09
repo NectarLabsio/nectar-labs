@@ -1,0 +1,8 @@
+Options:
+      --signature-scheme <SIGNATURE_SCHEME>
+          Which signature scheme should the new key pair use?
+
+          Possible values:
+          - ed25519:   Ed25519 (classic, default NEAR key type)
+          - ml-dsa-65: ML-DSA-65 post-quantum signature scheme (FIPS 204)
+

@@ -20,4 +20,4 @@ WO-0 still open: `pnpm i`, `pnpm verify:quick`, gitleaks pre-commit — need H-T
 Next action after H-TOOLCHAIN: re-run G0 (`--help` for F-020), finish WO-0, dispatch WO-2 ∥ WO-3 ∥ WO-4 ∥ WO-5.
 
 Verified on: 2026-11-10
-Last activity: (written by .claude/hooks/state.sh)
+Last activity: 2026-11-09T19:37:33Z · commit ce90506

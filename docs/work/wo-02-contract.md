@@ -3,3 +3,4 @@ Goal: PRD §6–§8 state, ft_on_transfer (5 msg variants), quotes lifecycle, po
 Tests: unit per method; sandbox per msg variant and transition; tests/model.py → tests/model.csv; gas table.
 Acceptance: `cargo near build non-reproducible-wasm` + `cargo test` green; report ≤ 20 lines with gas per method.
 FACTS: F-010, F-013, F-014, F-015, F-021.
+Addendum 2026-11-10 (orchestrator): ABI is docs/work/interface-p0.md — implement exactly; collateral params per D-009 and packages/config/config.yaml. Build only with `cargo near build` (F-027: plain cargo build lacks `--cfg near`). Use F-028 names, near-workspaces 0.24.0 (F-029). First sandbox deploy also settles F-027's NEAR-VM compatibility question: report the result. Cargo workspace root is the repo Cargo.toml (members nectar-core, mock-ft; edition 2024 in [workspace.package]). PATH needs $HOME/.cargo/bin.

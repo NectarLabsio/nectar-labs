@@ -1,3 +1,4 @@
 # WO-4 — docs — site + prose (P0)
 Goal: apps/docs-site (Docusaurus 3.10.2, Nectar theme, IA per Build Prompt §11, legal pages with TODO-H9, analytics consent-gated and off); README.md per Build Prompt §13 order; RUNBOOK/DESIGN_SYSTEM/DEMO_SCRIPT refreshed with real ids after G2.
 Acceptance: `pnpm --filter docs-site build` with onBrokenLinks throw; README quick start matches scripts; every protocol page has "Verified against" FACTS ids.
+Addendum 2026-11-10 (orchestrator): `pnpm verify:quick` currently fails because apps/docs-site has a `typecheck: tsc` script but no tsconfig.json — add one (extends @docusaurus/tsconfig) and make typecheck + build green. Formula pages use D-009 (PRD §4.2). Ids are TODO-G2 until deploy; write placeholders that a later pass fills. README must not claim anything live yet: status table says "not deployed" until G2. Prior-work section marked "draft — approve (H12)".
