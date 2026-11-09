@@ -12,8 +12,9 @@
 //! - `raw`     : `body` verbatim
 //!
 //! WO-10b: the same wasm also stands in for the Pyth NEAR receiver (`pyth-oracle.testnet`, F-054):
-//! `get_price(price_identifier)` returns `pyth_body` verbatim (default `null`, i.e. `Option<Price>::None`;
-//! shape per pyth-crosschain ec40e5f receiver state.rs:101), or fails the receipt when it is `"panic"`.
+//! `get_price_no_older_than(price_id, age)` (F-173) returns `pyth_body` verbatim (default `null`, i.e.
+//! `Option<Price>::None`; shape per F-174), `null` when `|block_ts_s - publish_time| > age` (as the real
+//! receiver), or fails the receipt when it is `"panic"`.
 
 use near_sdk::serde_json::{self, Value, json};
 use near_sdk::{AccountId, PanicOnDefault, env, near};
@@ -28,6 +29,7 @@ pub struct OutlayerStub {
     requests: u64,
     pyth_body: String,
     pyth_last_id: String,
+    pyth_last_age: u64,
 }
 
 fn hex(bytes: &[u8]) -> String {
@@ -39,7 +41,7 @@ impl OutlayerStub {
     #[init]
     pub fn new() -> Self {
         Self { mode: "echo".into(), disc_bps: 65, body: String::new(), last_request: String::new(), requests: 0,
-               pyth_body: "null".into(), pyth_last_id: String::new() }
+               pyth_body: "null".into(), pyth_last_id: String::new(), pyth_last_age: 0 }
     }
 
     pub fn set_mode(&mut self, mode: String, disc_bps: Option<i64>, body: Option<String>) {
@@ -103,18 +105,28 @@ impl OutlayerStub {
         env::value_return(out.as_bytes());
     }
 
-    /// Raw JSON returned by `get_price` (e.g. `{"price":"13500000000","conf":"1000000","expo":-8,"publish_time":1700000000}`).
+    /// Raw JSON returned by `get_price_no_older_than` (e.g. `{"price":"13500000000","conf":"1000000","expo":-8,"publish_time":1700000000}`).
     pub fn set_pyth_body(&mut self, body: String) {
         self.pyth_body = body;
     }
 
-    /// Pyth receiver stand-in. Not a view so it can record the identifier it was asked for.
-    pub fn get_price(&mut self, price_identifier: String) {
-        self.pyth_last_id = price_identifier;
+    /// Pyth receiver stand-in (F-173 args). Not a view so it can record what it was asked for.
+    pub fn get_price_no_older_than(&mut self, price_id: String, age: u64) {
+        self.pyth_last_id = price_id;
+        self.pyth_last_age = age;
         if self.pyth_body == "panic" {
             env::panic_str("stub: pyth failed");
         }
-        env::value_return(self.pyth_body.as_bytes());
+        let now_s = env::block_timestamp() / 1_000_000_000;
+        let publish = near_sdk::serde_json::from_str::<Value>(&self.pyth_body)
+            .ok()
+            .and_then(|v| v.get("publish_time").and_then(Value::as_i64));
+        let too_far = publish.is_some_and(|t| (i128::from(now_s) - i128::from(t)).unsigned_abs() > u128::from(age));
+        env::value_return(if too_far { b"null" } else { self.pyth_body.as_bytes() });
+    }
+
+    pub fn get_pyth_last_age(&self) -> u64 {
+        self.pyth_last_age
     }
 
     /// Yield callback of `hang` mode (runs only on yield timeout): `null`, like a timed-out execution.
@@ -170,8 +182,9 @@ mod tests {
         ctx();
         let mut s = OutlayerStub::new();
         s.set_pyth_body(r#"{"price":"1","conf":"0","expo":0,"publish_time":1}"#.into());
-        s.get_price("ab".repeat(32));
+        s.get_price_no_older_than("ab".repeat(32), 60);
         assert_eq!(s.get_pyth_last_id(), "ab".repeat(32));
+        assert_eq!(s.get_pyth_last_age(), 60);
     }
 
     #[test]
@@ -180,7 +193,7 @@ mod tests {
         ctx();
         let mut s = OutlayerStub::new();
         s.set_pyth_body("panic".into());
-        s.get_price("00".repeat(32));
+        s.get_price_no_older_than("00".repeat(32), 60);
     }
 
     #[test]

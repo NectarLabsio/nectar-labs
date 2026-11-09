@@ -431,7 +431,8 @@ async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
     // rejections: position 0 stays Open every time
     let t = now_s(&e).await?;
     let cases = [
-        (pyth_px(13_500_000_000, 1_000_000, -8, t - 90_000), "stale"),
+        // closed session, 25 h old: Pyth `get_price_no_older_than(age=86400)` returns null (F-173)
+        (pyth_px(13_500_000_000, 1_000_000, -8, t - 90_000), "no_price"),
         (pyth_px(13_500_000_000, 200_000_000, -8, t), "conf_too_wide"),
         (pyth_px(9_000_000_000, 0, -8, t), "out_of_band"),
         (pyth_px(-13_500_000_000, 0, -8, t), "non_positive"),
@@ -450,10 +451,22 @@ async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
         assert_eq!(status(&core, 0).await?, "Open", "{reason}");
     }
     assert_eq!(pyth.view("get_pyth_last_id").await?.json::<String>()?, PYTH_ID.to_ascii_lowercase());
+    assert_eq!(pyth.view("get_pyth_last_age").await?.json::<u64>()?, 86_400, "closed-session age");
 
-    // accepted (expo -8 -> 135.000000), static settle
+    // open session, 3 min old: rejected by age=120 (D-015), position stays Open
+    owner_call(&e, &core, "set_session", json!({ "symbol": "NVDAx", "open": true })).await?;
     let t = now_s(&e).await?;
-    pyth_body(&pyth, &pyth_px(13_500_000_099, 1_000_000, -8, t)).await?;
+    pyth_body(&pyth, &pyth_px(13_500_000_000, 1_000_000, -8, t - 180)).await?;
+    let r = trigger(&e, &core, 0).await?;
+    gas("trigger+pyth(open,180s)", &r);
+    assert_eq!(events(&r, "oracle_rejected")[0]["reason"], "no_price", "{:?}", r.logs());
+    assert_eq!(pyth.view("get_pyth_last_age").await?.json::<u64>()?, 120, "open-session age");
+    assert_eq!(status(&core, 0).await?, "Open");
+    owner_call(&e, &core, "set_session", json!({ "symbol": "NVDAx", "open": false })).await?;
+
+    // accepted: closed session, 2 h old (expo -8 -> 135.000000), static settle
+    let t = now_s(&e).await?;
+    pyth_body(&pyth, &pyth_px(13_500_000_099, 1_000_000, -8, t - 7_200)).await?;
     let r = trigger(&e, &core, 0).await?;
     gas("trigger+pyth(ok)+static", &r);
     assert!(r.is_success(), "{:?}", r.failures());
@@ -513,8 +526,8 @@ async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// Pyth read + quoter + 8 distinct buyers (10 transfers) within 300 Tgas. Quoter gas 80 Tgas: with the
-/// 100 Tgas default the trigger's own budget check needs > 300 Tgas (reported to the orchestrator).
+/// Pyth read + quoter + 8 distinct buyers (10 transfers) within 300 Tgas at the default 80 Tgas quoter
+/// gas (D-015; at 100 Tgas the trigger's own budget check needs > 300 Tgas).
 #[tokio::test]
 async fn gas_trigger_pyth_quoter_eight_legs() -> anyhow::Result<()> {
     let e = env().await?;
@@ -528,9 +541,11 @@ async fn gas_trigger_pyth_quoter_eight_legs() -> anyhow::Result<()> {
     }
     let borrower = user(&e, 0, 20_000_000).await?;
     ft_call(&e.nvdax, &borrower, core.id(), 20_000_000, &borrow_msg(2_250_000_000)).await?;
+    let default_gas = view(&core, "get_quoter_config", json!({})).await?["gas_tgas"].clone();
+    assert_eq!(default_gas, json!(80), "default quoter gas (D-015)");
     let s = stub(&e).await?;
-    pin(&e, &core, &s).await?;
-    owner_call(&e, &core, "set_quoter_config", json!({ "deposit_yocto": DEPOSIT.to_string(), "gas_tgas": 80,
+    pin(&e, &core, &s).await?; // pin() sets 100 for the P0-migration test; restore the default
+    owner_call(&e, &core, "set_quoter_config", json!({ "deposit_yocto": DEPOSIT.to_string(), "gas_tgas": default_gas,
         "max_instructions": "100000000", "max_memory_mb": 128, "max_execution_seconds": 30 })).await?;
     mode(&s, "echo", 65).await?;
     let pyth = stub(&e).await?;

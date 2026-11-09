@@ -89,7 +89,7 @@ enum StorageKey {
 // Defaults for the V1 fields (packages/config/config.yaml outlayer.*, oracle.max_conf_bps; F-046).
 const DEFAULT_OUTLAYER: &str = "outlayer.testnet";
 const DEFAULT_QUOTER_DEPOSIT_YOCTO: u128 = 4_000_010_000_000_000_000_000; // F-046 estimate
-const DEFAULT_QUOTER_GAS_TGAS: u64 = 100;
+const DEFAULT_QUOTER_GAS_TGAS: u64 = 80; // D-015: Pyth + quoter + 8 legs fits 300 Tgas
 const DEFAULT_MAX_INSTRUCTIONS: u64 = 100_000_000;
 const DEFAULT_MAX_MEMORY_MB: u32 = 128;
 const DEFAULT_MAX_EXECUTION_SECONDS: u32 = 30;
