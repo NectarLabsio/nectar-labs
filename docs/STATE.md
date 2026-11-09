@@ -1,7 +1,7 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P0 — G2 PASS; G3 verifier running**
-Gates: G0 PASS (P0 tools) · G1 PASS (b721641) · G2 PASS (5f27f44; explorer pages need a human click, H-EXPLORER) · G3 running · G4–G9 pending
+Phase: **P0 — G3 re-run in flight after WO-3b; main `verify:quick` RED (keeper CSV loader) → WO-5b in flight**
+Gates: G0 PASS · G1 PASS (b721641) · G2 PASS (5f27f44) · G3 FAIL (c940dec) → re-run · G4–G9 pending
 Open handoffs: H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: nothing for P0.
 
@@ -23,6 +23,9 @@ P1 risk (C-007): Hermes `/v2/updates/price/latest` returns 401 unauthenticated o
 Clock note: host UTC is 2026-11-09 ~20:00; "2026-11-10" dates in docs are local (IST). Deadline math uses UTC.
 Merged: WO-5 keeper+feed (cdd2fbe), WO-4 docs+README (b436f93). main `pnpm verify:quick` GREEN, docs-site build GREEN.
 `pnpm demo:testnet` rewritten in Node (public RPC, no keys/CLI); exits 2 "not deployed" until G2.
+Process slip (recorded): after the WO-2 merge (f9d1b30) the orchestrator ran cargo tests but not `pnpm verify:quick`; keeper tests
+  began reading the real model.csv and have been red on main since. Found at the WO-3b merge; fix = WO-5b. p0-green waits for G3 PASS
+  AND verify:quick green. Merged since: WO-4d (ab529b1), WO-3b (3d5af4a), WO-2c (wasm unchanged).
 Queued after G3 (small orders): WO-4d docs — README/docs "G2 PASS" wording, run-a-keeper page (keeper exists), storage-and-gas
   gas values from evidence/G1 CSV, web/docs dev port clash (3100 vs 3000), RUNBOOK: refresh owner price within 24 h (closed-session
   max age) and keeper re-creation if its 1 NEAR allowance runs out; WO-2c contract — migrate deprecated
@@ -38,4 +41,4 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T20:52:26Z · commit d3afb39
+Last activity: 2026-11-09T21:14:23Z · commit ab529b1
