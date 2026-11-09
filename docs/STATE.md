@@ -1,6 +1,6 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P2 round 1** — WO-15 contract (Chain Signatures NEAR side) ∥ WO-17 web copilot (fixture-first); G0 re-record running
+Phase: **P2** — WO-15 live (code CFTfzY4…); G7 NEAR side done (MPC signature valid, pos #6 Settling); G8 FAIL→wording fix (WO-4f merged, WO-17c running); Solana leg waits H-TOOLCHAIN-SOLANA
 Gates: G0 PASS (b3a9090, re-recorded after GATE_FAIL_G0) · G1–G4 PASS · G5 FALLBACK (disclosed; re-run live if H13) · G6 PASS · G7–G9 pending
 Open handoffs: H13, H-NEAR-FAUCET, H-EXPLORER, H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: H13 Pyth key (G5 live price) · H-NEAR-FAUCET top-up (P1 contract redeploy). Neither blocks round 1.
@@ -69,6 +69,9 @@ P2 (2026-11-09 UTC): D-016 raw-preimage Ed25519 signing via v1.signer-prod.testn
 WO-17 merged (681beac): copilot verifier (EIP-191 signer recovery, report_data/nonce, dcap-qvl 0.7.1 on a real Phala sample quote). No
   real NEAR AI recording exists (API 500, no key): fixture = Phala sample quote + throwaway-key chat → correctly ends "unverified — hidden".
   G8 must judge that honestly; field names being checked by researcher (attestation JSON).
+G7 NEAR side (2026-11-09T23:5xZ): position #6 remote leg (quote #3, 100 bps, recipient DbrceqSn… throwaway) → settlement_signed by
+  v1.signer-prod.testnet; scripts/verify-ed25519.mjs: signature_valid true vs authority 6QPGoVj8…; vault program in the preimage is a
+  PLACEHOLDER (EgfPYZfK…) — Solana vault not deployed; #6 stays Settling until a relay. Owner ~0.04 NEAR — faucet needed for anything more.
 Next after G5 + WO-4e: tag p1-green if G5 is PASS or a disclosed fallback (CLAUDE.md §8 P1 acceptance allows "README says exactly which
   fallback is active"); refresh .claude/agents/quoter.md at the boundary; open P2 (WO-13 researcher) — Solana leg needs H-TOOLCHAIN-SOLANA,
   copilot needs H7 (fixture verifier otherwise). Re-seed demo state (needs H-NEAR-FAUCET).
