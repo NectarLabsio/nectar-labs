@@ -20,6 +20,14 @@ What Kunal does (≈10 min, mostly compile): `cd /Volumes/T7/nectar-labs && bash
 What Claude Code does then: records `solana`/`anchor` versions in FACTS, unblocks WO-14 when P2 opens.
 Default if silent by 2026-11-13 12:00 UTC: Solana leg cut per CLAUDE.md cut order (signer round-trip demo on NEAR only), disclosed in README.
 
+## H-EXPLORER — open the three testnet explorer links once   status: OPEN   needed by: G9 (non-blocking for G2/G3)
+Why a human: nearblocks returns HTTP 403 to automated fetches (bot protection); the verifier could not see the pages (EVIDENCE §G2).
+What Kunal does (1 min): open in a browser and confirm each shows a contract with recent transactions:
+  https://testnet.nearblocks.io/address/nectar-core.nectar.testnet · https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet · https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet
+  Reply `H-EXPLORER ok` (or what looked wrong).
+What Claude Code does then: marks the links human-verified in EVIDENCE §G2.
+Default if silent: RPC evidence (view_account code_hash = G1 wasm) stands; README links stay; G9 notes "explorer pages not machine-verified".
+
 ## H-NEAR-FAUCET — parent testnet account        status: not needed — nectar.testnet created via faucet 2026-11-10 (10 NEAR)   needed by: G2 top-up only
 Why a human: the faucet CLI may be rate-limited; the browser faucet needs a human.
 What Kunal does (2 min):
