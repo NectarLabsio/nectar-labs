@@ -14,5 +14,8 @@
     "verify": "pnpm verify:quick && bash scripts/50-verify.sh",
     "demo:testnet": "bash scripts/50-verify.sh",
     "demo:capture": "pnpm --filter web demo:capture"
+  },
+  "devDependencies": {
+    "yaml": "2.9.1"
   }
 }
