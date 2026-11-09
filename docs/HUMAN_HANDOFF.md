@@ -10,23 +10,17 @@ default applied, disclosed in README).
 
 ---
 
-## H-TOOLCHAIN — install the pinned P0 toolchain     status: OPEN   needed by: G0 → blocks G1/G2/G3 and every build agent
-Why a human: Claude Code's auto-mode permission classifier refused to run the `curl | sh` installers
-(rustup, near-cli-rs, cargo-near) into your home directory on 2026-11-10. It is your machine; you run it.
-What Kunal does (≈5 min, no sudo, installs only into ~/.rustup, ~/.cargo, ~/.local/bin):
-  1. Read it first: `less scripts/01-toolchain.sh` (pinned: Rust 1.95.0, near-cli-rs v0.31.1,
-     cargo-near v0.23.0, gitleaks 8.30.1, yq v4.54.3, pnpm 10.34.9 via corepack).
-  2. `cd /Volumes/T7/nectar-labs && bash scripts/01-toolchain.sh 2>&1 | tee evidence/G0/toolchain.log`
-  3. Open a new terminal (so ~/.cargo/bin is on PATH) and check: `near --version && cargo near --version && pnpm -v`
-  4. Either reply `H-TOOLCHAIN done`, or allow it for future sessions by adding
-     `"Bash(bash scripts/01-toolchain.sh*)"` to `permissions.allow` in `.claude/settings.json`.
-What Claude Code does then: re-runs G0 (`--help` grammar check for F-020, versions into FACTS), runs
-`pnpm i`, finishes WO-0 acceptance (`pnpm verify:quick`, guard dry test, gitleaks pre-commit), then
-dispatches WO-2 contract ∥ WO-3 web ∥ WO-4 docs ∥ WO-5 keeper.
-Default if silent: no default. P0 cannot be compiled or tested without it. File-only work (scaffold
-files, FACTS research, docs prose) continues meanwhile; nothing is reported as built or tested.
+## H-TOOLCHAIN — pinned P0 toolchain                status: DONE 2026-11-10   (Kunal asked; installed by Claude Code)
+Installed: Rust 1.95.0, near-cli-rs 0.31.1, cargo-near 0.23.0, gitleaks 8.30.1, yq v4.54.3, pnpm 10.34.9. Log: evidence/G0/toolchain.log.
 
-## H-NEAR-FAUCET — parent testnet account        status: not yet needed   needed by: G0/G2
+## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1   status: OPEN   needed by: P2 / G7 (not P0)
+Why a human: the auto-mode classifier refused `scripts/01-toolchain.sh --with-solana` (Anza installer + `cargo install avm`).
+What Kunal does (≈10 min, mostly compile): `cd /Volumes/T7/nectar-labs && bash scripts/01-toolchain.sh --with-solana 2>&1 | tee evidence/G0/toolchain-solana.log`,
+  or add `"Bash(bash scripts/01-toolchain.sh*)"` to `permissions.allow` in `.claude/settings.json`. Reply `H-TOOLCHAIN-SOLANA done`.
+What Claude Code does then: records `solana`/`anchor` versions in FACTS, unblocks WO-14 when P2 opens.
+Default if silent by 2026-11-13 12:00 UTC: Solana leg cut per CLAUDE.md cut order (signer round-trip demo on NEAR only), disclosed in README.
+
+## H-NEAR-FAUCET — parent testnet account        status: not needed — nectar.testnet created via faucet 2026-11-10 (10 NEAR)   needed by: G2 top-up only
 Why a human: the faucet CLI may be rate-limited; the browser faucet needs a human.
 What Kunal does (2 min):
   1. Open the NEAR testnet wallet / faucet page the script prints, create `nectar.testnet` (or the

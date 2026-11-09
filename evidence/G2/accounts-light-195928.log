@@ -1,0 +1,183 @@
+
+== sub-account keeper.nectar.testnet with 0.5 NEAR (F-020) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  keeper.nectar.testnet
+│    actions:
+│       -- create account:      keeper.nectar.testnet
+│       -- transfer deposit:    0.5 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: 3bDobLC7JFJmrnrQzzbLrxXuijBYkuALaGA97jxWs7hP
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/3bDobLC7JFJmrnrQzzbLrxXuijBYkuALaGA97jxWs7hP
+│     [0m
+
+
+New account <keeper.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 0.5 NEAR to <keeper.nectar.testnet> successfully.
+Added access key = ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L to keeper.nectar.testnet.
+
+The data for the access key is saved in the keychain
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself keeper.nectar.testnet '0.5 NEAR' autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== sub-account buyer1.nectar.testnet with 0.5 NEAR (F-020) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  buyer1.nectar.testnet
+│    actions:
+│       -- create account:      buyer1.nectar.testnet
+│       -- transfer deposit:    0.5 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:GjbbEoCnqiMSNhWdZqzv3uTonPKjY4Pn3f8ABJW748ex
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: 5eFWVG9J5bwLKHdWXHPyJr3rc3vGMGagYmGokdXbXxZj
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/5eFWVG9J5bwLKHdWXHPyJr3rc3vGMGagYmGokdXbXxZj
+│     [0m
+
+
+New account <buyer1.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 0.5 NEAR to <buyer1.nectar.testnet> successfully.
+Added access key = ed25519:GjbbEoCnqiMSNhWdZqzv3uTonPKjY4Pn3f8ABJW748ex to buyer1.nectar.testnet.
+
+The data for the access key is saved in the keychain
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself buyer1.nectar.testnet '0.5 NEAR' autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== sub-account buyer2.nectar.testnet with 0.5 NEAR (F-020) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  buyer2.nectar.testnet
+│    actions:
+│       -- create account:      buyer2.nectar.testnet
+│       -- transfer deposit:    0.5 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:2fQAcj4HsdWYYq3TeTmD9DyGJS8od2MPtxqxgyunNmwL
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: 8ovXhQoMfyVLqo47ZEnEiynZZ1yeWkxLBmyenb7azeFy
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/8ovXhQoMfyVLqo47ZEnEiynZZ1yeWkxLBmyenb7azeFy
+│     [0m
+
+
+New account <buyer2.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 0.5 NEAR to <buyer2.nectar.testnet> successfully.
+Added access key = ed25519:2fQAcj4HsdWYYq3TeTmD9DyGJS8od2MPtxqxgyunNmwL to buyer2.nectar.testnet.
+
+The data for the access key is saved in the keychain
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself buyer2.nectar.testnet '0.5 NEAR' autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== sub-account borrower1.nectar.testnet with 0.5 NEAR (F-020) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  borrower1.nectar.testnet
+│    actions:
+│       -- create account:      borrower1.nectar.testnet
+│       -- transfer deposit:    0.5 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:Dpn6xupWdsxoixqi5e1kgB8ge4Ze9h9aSiiG67ic2wjV
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: H6ufTwb6DK3JhkVQZaq3i5Xy6HYseXUR9Wo7qJ9X6quw
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/H6ufTwb6DK3JhkVQZaq3i5Xy6HYseXUR9Wo7qJ9X6quw
+│     [0m
+
+
+New account <borrower1.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 0.5 NEAR to <borrower1.nectar.testnet> successfully.
+Added access key = ed25519:Dpn6xupWdsxoixqi5e1kgB8ge4Ze9h9aSiiG67ic2wjV to borrower1.nectar.testnet.
+
+The data for the access key is saved in the keychain
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself borrower1.nectar.testnet '0.5 NEAR' autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== keeper function-call key (F-020; C-004; D-010: two methods only) ==
+├  Unsigned transaction:
+│    signer_id:    keeper.nectar.testnet
+│    receiver_id:  keeper.nectar.testnet
+│    actions:
+│       -- add access key:     
+│                       public key:   ed25519:EyKhZaKtQU8BxVKKeqhhxw6TSXgovoyYUpzftW1Y23uE
+│                       nonce:        0
+│                       permission:   FunctionCall(FunctionCallPermission { allowance: Some(NearToken { inner: 1000000000000000000000000 }), receiver_id: "nectar-core.nectar.testnet", method_names: ["trigger_preliquidation", "relay_settlement_result"] })
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.644 Tgas
+│    Transaction fee: 0.0000420735231114 NEAR
+│    Transaction ID: 499qwBoZwnszJ4uFj4xVsYJhNqj3LAioidDn5qyjDS6c
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/499qwBoZwnszJ4uFj4xVsYJhNqj3LAioidDn5qyjDS6c
+│     [0m
+
+
+Added access key = ed25519:EyKhZaKtQU8BxVKKeqhhxw6TSXgovoyYUpzftW1Y23uE to keeper.nectar.testnet.
+
+The data for the access key is saved in the keychain
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account add-key keeper.nectar.testnet grant-function-call-access --allowance '1 NEAR' --contract-account-id nectar-core.nectar.testnet --function-names trigger_preliquidation,relay_settlement_result autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain network-config testnet sign-with-keychain send[39m
+
+
+== ids (orchestrator writes these to config.yaml + FACTS §Account ids) ==
+PARENT=nectar.testnet
+keeper=keeper.nectar.testnet
+buyer1=buyer1.nectar.testnet
+buyer2=buyer2.nectar.testnet
+borrower1=borrower1.nectar.testnet

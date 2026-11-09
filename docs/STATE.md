@@ -1,23 +1,23 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P0 — G0 in progress, BLOCKED on H-TOOLCHAIN**
-Gates: G0 partial · G1 · G2 · G3 · G4 · G5 · G6 · G7 · G8 · G9 — pending
-Blocking right now: **H-TOOLCHAIN** — the auto-mode classifier refused to run the toolchain installers.
-  Kunal runs `bash scripts/01-toolchain.sh` (or allow-lists it), then replies `H-TOOLCHAIN done`.
-Open handoffs: H-TOOLCHAIN (blocking), H4, H5, H7, H8, H9, H10, H11, H12 (see docs/HUMAN_HANDOFF.md)
+Phase: **P0 — build round 1 dispatched** (G0 PASS except Solana/Anchor, which are P2)
+Gates: G0 PASS (P0 tools) · G1 · G2 · G3 pending · G4–G9 pending
+Open handoffs: H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
+Blocking right now: nothing for P0.
 
 Done (2026-11-10):
-- `git init`, seed commit; `.gitignore` drops exFAT `._*` files; `core.fileMode false` (T7 is exFAT)
-- G0 partial: node v22.23.4, git 2.50.1, python3 3.9.6, jq 1.7.1 present; rustc/cargo/near/cargo-near/
-  solana/anchor/gitleaks/yq absent. Release pins read from GitHub: near-cli-rs v0.31.1, cargo-near v0.23.0.
-- WO-0 partial: `scripts/01-toolchain.sh` (pinned installer), `packageManager` pnpm@10.34.9,
-  Cargo workspace (P0 members only, edition 2024), `.githooks/pre-commit` (gitleaks or fallback scan),
-  CI pins, `scripts/test-guard.sh` 10/10 PASS.
-- D-009: Cramér formula + params follow PRD §4.2/§6.2; `config.yaml` rewritten (integers, 70/20/10, 7-day min notice).
-- WO-1 researcher dispatched (FACTS seed; F-020 from near-cli-rs v0.31.1 source).
+- Toolchain: Rust 1.95.0, near-cli-rs 0.31.1, cargo-near 0.23.0, gitleaks 8.30.1, yq, pnpm 10.34.9 (evidence/G0/)
+- F-020 confirmed by `--help` (flags `--contract-account-id`, `--function-names`, `--signature-scheme`)
+- WO-0: `pnpm i` ok, gitleaks pre-commit live, guard test 10/10; `verify:quick` red only on docs-site tsconfig (WO-4 fixes)
+- D-009 (PRD §4.2 formula), D-010 (keeper key = 2 methods); docs/work/interface-p0.md = P0 ABI for all agents
+- Testnet accounts: nectar.testnet (faucet, 10 NEAR), keeper/buyer1/buyer2/borrower1 .nectar.testnet (0.5 NEAR each),
+  keeper function-call key (2 methods). Contract accounts (nectar-core, usdc-mock, nvdax-mock) created at WO-6
+  sized from wasm; parent has ~7.9 NEAR left → may need a faucet top-up (H-NEAR-FAUCET) if wasm is large.
 
-WO-0 still open: `pnpm i`, `pnpm verify:quick`, gitleaks pre-commit — need H-TOOLCHAIN.
-Next action after H-TOOLCHAIN: re-run G0 (`--help` for F-020), finish WO-0, dispatch WO-2 ∥ WO-3 ∥ WO-4 ∥ WO-5.
+In flight: researcher (WO-1 rest: wallet-selector, Next.js, 1Click/Hermes probes, indexer method) ·
+WO-2 contract · WO-3 web · WO-4 docs · WO-5 keeper (worktrees).
+Next: merge one by one with `pnpm verify:quick`; G1 via verifier; WO-6 deploy; G2; G3.
+TODO at WO-6: export keeper FC key to ~/.nectar/keys (0600), delete keeper full-access key, record view_access_key_list in EVIDENCE.
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T19:37:33Z · commit ce90506
+Last activity: (written by .claude/hooks/state.sh)
