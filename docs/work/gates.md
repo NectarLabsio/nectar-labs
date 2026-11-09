@@ -11,8 +11,10 @@ G1: cargo test -p nectar-core 2>&1 | tail -40; cargo test -p nectar-core --test 
     python3 contracts/nectar-core/tests/model.py --check
 G2: scripts/50-verify.sh (read-only views against config.yaml ids) ; open explorer links with WebFetch
 G3: pnpm --filter web build 2>&1 | tail -40; PW_CHANNEL=chrome pnpm --filter web e2e 2>&1 | tail -40; LH_START=1 pnpm --filter web lighthouse (a11y ≥ 90, 6 routes × 2 themes)
-G4: near contract call-function as-read-only outlayer.testnet estimate_execution_cost json-args "$(cat packages/config/outlayer-limits.json)" network-config testnet now;
-    near contract call-function as-read-only $CORE get_settlement json-args '{"position_id":"<seeded>"}' network-config testnet now → disc_bps within [0,max]; attestation URL opens
+G4: RPC view outlayer.testnet estimate_execution_cost with packages/config/outlayer-limits.json; bash quoter/build.sh → sha256 == config
+    outlayer.version_key == sha256(GET outlayer.wasm_url); nectar-core get_quoter_config / get_state_version / code_hash vs rebuilt wasm;
+    trigger txs from evidence/G4/run-*.log via EXPERIMENTAL_tx_status → quoter_result disc_bps within [0, quote max] (run B) and
+    quoter_fallback (run A); attestation GET https://testnet-api.outlayer.ai/attestations/by-request/<request_id> (F-168/F-169).
 G5: near contract call-function as-read-only $ORACLE get_price json-args '{"price_identifier":"'$NVDA_PRICE_ID'"}' network-config testnet now → publish_time < 600 s old; cargo test -p nectar-core oracle_rejects
 G6: pnpm --filter keeper test:oneclick (dry quote + verifyQuoteSignature) ; Feed shows R_c or "no 1Click route"
 G7: cd solana && anchor test 2>&1 | tail -40; pnpm --filter keeper test:settle-devnet (uses config program id); open both explorer links

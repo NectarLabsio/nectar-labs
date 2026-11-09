@@ -1,0 +1,8 @@
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-read-only nectar-core.nectar.testnet get_settlement json-args '{"position_id":"0"}' network-config testnet now[39m
+Error: 
+   0: [91mFailed to fetch query for read-only function call: 'get_settlement' (contract <nectar-core.nectar.testnet> on network <testnet>)[0m
+   1: [91mRead-only function execution failed[0m
+   2: [91mhandler error: [Function call returned an error: "wasm execution failed with error: MethodResolveError(MethodNotFound)"][0m
+Location:
+   [35msrc/common.rs[0m:[35m3511[0m

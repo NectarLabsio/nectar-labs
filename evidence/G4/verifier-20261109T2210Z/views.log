@@ -1,0 +1,14 @@
+== get_quoter_config
+{"enabled":true,"outlayer_account":"outlayer.testnet","project_id":"nectar.testnet/nectar-quoter","version_key":"3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2","deposit_yocto":"10000000000000000000000","gas_tgas":100,"max_instructions":"100000000","max_memory_mb":128,"max_execution_seconds":30,"max_conf_bps":100}
+== get_state_version
+1
+== contract_version
+"nectar-core 0.1.0 p1"
+== get_quote 0
+{"quote_id":"0","buyer":"buyer1.nectar.testnet","collateral":"NVDAx","committed_usd_e6":"10000000000","remaining_usd_e6":"0","max_discount_bps":250,"notice_period_ns":"604800000000000","unlock_ns":null,"buyer_remote_recipient":null,"secrets_profile":null,"fee_debt_e18":"0","claimable_fees_usd_e6":"60060000","created_ns":"1794257326276632729"}
+== get_quote 1
+{"quote_id":"1","buyer":"buyer2.nectar.testnet","collateral":"NVDAx","committed_usd_e6":"5000000000","remaining_usd_e6":"3150000000","max_discount_bps":400,"notice_period_ns":"604800000000000","unlock_ns":null,"buyer_remote_recipient":null,"secrets_profile":null,"fee_debt_e18":"18918900","claimable_fees_usd_e6":"30030000","created_ns":"1794257333047213632"}
+== get_position 0
+{"position_id":"0","borrower":"borrower1.nectar.testnet","collateral":"NVDAx","units":"0","debt_usd_e6":"0","premium_usd_e6":"121500000","pre_liq_ltv_bps":7500,"opened_ns":"1794257339570113921","remote_path":null,"nonce":"0","status":"Closed"}
+== get_position 2
+{"position_id":"2","borrower":"borrower1.nectar.testnet","collateral":"NVDAx","units":"0","debt_usd_e6":"0","premium_usd_e6":"7200000","pre_liq_ltv_bps":7500,"opened_ns":"1794261710128451375","remote_path":null,"nonce":"2","status":"Closed"}

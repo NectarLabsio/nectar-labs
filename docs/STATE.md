@@ -1,7 +1,7 @@
 # STATE.md — one screen for a returning human
 
 Phase: **P1** — contract V1 live (upgrade+migrate), quoter pinned; G4 run done (fallback + real OutLayer execution), verifier checking
-Gates: G0–G3 PASS (p0-green) · G4 verifying · G5 waits H13 (else owner-oracle fallback) · G6 ready (signed dry quote verified) · G7–G9 pending
+Gates: G0–G3 PASS (p0-green) · G4 PASS (d87eef6; discount pricing pending secrets_ref) · G5 waits H13 / WO-10b · G6 ready · G7–G9 pending
 Open handoffs: H13, H-NEAR-FAUCET, H-EXPLORER, H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: H13 Pyth key (G5 live price) · H-NEAR-FAUCET top-up (P1 contract redeploy). Neither blocks round 1.
 
@@ -43,7 +43,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T21:50:40Z · commit 9b1595e
+Last activity: 2026-11-09T22:10:41Z · commit 5b8b547
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

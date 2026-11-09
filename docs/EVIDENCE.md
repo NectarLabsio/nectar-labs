@@ -6,7 +6,7 @@
 | G1 contract tests | PASS | 2026-11-09T20:43Z | b721641 | evidence/G1/verifier-20261109T2043Z.log, evidence/G1/verifier-gas-20261109T2043Z.csv (prior FAIL 20:33Z, 3bc0de8: see §G1 history) |
 | G2 testnet deploy | PASS | 2026-11-09T20:55Z | 5f27f44 | evidence/G2/verifier-20261109T2055Z.log (explorer pages returned HTTP 403 to WebFetch; see §G2) |
 | G3 web E2E | PASS | 2026-11-09T21:15Z | 176914f | evidence/G3/verifier-20261109T2115Z/ (e2e 112 pass / 0 fail / 2 skip = write spec; LH 12/12 = 100; write flow cited from 20:57Z run, not repeated; prior FAIL 20:57Z c940dec: see §G3) |
-| G4 OutLayer | pending | | | |
+| G4 OutLayer | PASS | 2026-11-09T22:10Z | d87eef6 | evidence/G4/verifier-20261109T2210Z/ (attestation via testnet-api.outlayer.ai/attestations/by-request/15114, TDX quote present, not verified; gates.md get_settlement view missing, criterion checked from events; fills = max until WO-10b) |
 | G5 oracle | pending | | | |
 | G6 1Click depth | pending | | | |
 | G7 Solana + signer | pending | | | |
@@ -23,6 +23,42 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G4
+
+### G4 — OutLayer — PASS — 2026-11-09T22:10Z — commit d87eef6
+Fresh clone /tmp/verify-G4-1794262025 (cloned at 552de76, then pulled to d87eef6, which adds the run logs and scripts/45; main later moved to 0e15ee9, which only adds FACTS). Logs: evidence/G4/verifier-20261109T2210Z/. No transactions sent; everything below is RPC view, HTTP GET or a local build.
+$ near contract call-function as-read-only outlayer.testnet estimate_execution_cost json-args "$(cat packages/config/outlayer-limits.json)" network-config testnet now
+  → "4000010000000000000000" yocto = 0.00400001 NEAR (100M instr / 128 MB / 30 s, input_len 512) (estimate.log)
+$ near contract call-function as-read-only $CORE get_settlement json-args '{"position_id":"0"}' network-config testnet now
+  → ERROR MethodResolveError(MethodNotFound). gates.md names a view nectar-core does not have (gates-get_settlement.log). The disc_bps criterion is checked from tx events below instead. Fix the gates.md line (orchestrator).
+Quoter wasm: bash quoter/build.sh (rustc 1.95.0) → exit 0, sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2, 92355 B
+  GET outlayer.wasm_url (test.fastfs.io/.../3ce17749….wasm) → HTTP 200, 92355 B, same sha256. Matches config.yaml version_key and wasm_sha256 (quoter-sha.log)
+Core wasm: cargo near build non-reproducible-wasm (SDKROOT per host notes) → base58(sha256) FQjNLgawvz9KmeLioJs6fdd5GdB5JAVeEfSSZfEGTFfB
+  = view_account nectar-core.nectar.testnet code_hash (block 276979526) (core-hash.log)
+Views (views.log): get_quoter_config enabled, outlayer.testnet, project nectar.testnet/nectar-quoter, version_key 3ce17749…, deposit 0.01 NEAR, 100 Tgas, limits 100M/128/30
+  · get_state_version 1 · contract_version "nectar-core 0.1.0 p1" · get_quote 0 max_discount_bps 250 · get_quote 1 max_discount_bps 400 · positions 0 and 2 Closed
+Run B trigger 6ywM8Qm53Ppf36T64biUPFNbMEwAREXQ3XvZYYnEztwr (EXPERIMENTAL_tx_status, signer keeper.nectar.testnet → nectar-core, SuccessValue):
+  outlayer: Resolved project nectar.testnet/nectar-quoter version 3ce17749… source WasmUrl test.fastfs.io/…/3ce17749….wasm, wasm32-wasip2
+  outlayer: execution_requested request_id 15114, sender keeper.nectar.testnet, predecessor nectar-core.nectar.testnet, limits 100M/128/30
+  outlayer: execution_completed success true, instructions 135689; "Cost: 1090000000000000000000 yoctoNEAR, Refund: 8910000000000000000000 yoctoNEAR" (0.00109 charged of 0.01 deposit)
+  nectar: quoter_result position 0, fills [q0 disc 250 (max 250), q1 disc 400 (max 400)]: both within [0, max]
+  nectar: settled_near q0 250 bps repay 9400000000 seize 68864469 buyer1 · q1 400 bps repay 1850000000 seize 13764881 buyer2
+Run A trigger 5TSasAEy2QedbkV7SEjzFpSdZb8eqJtjHABexAYvwShC (signer keeper.nectar.testnet, SuccessValue). The run pinned version_key = 0…0 on purpose, so
+  outlayer.testnet receipt fails with "Smart contract panicked … Version not found", then nectar quoter_fallback {position 2, reason "failed"}, then
+  settled_near q0 disc 250 = quote 0 max_discount_bps 250. Fallback path tested.
+Fills equal max_discount_bps in Run B because no secrets_ref is configured yet (WO-10b). The quoter returns each quote's max. This is not evidence of discount pricing.
+Attestation:
+  WebFetch https://app.outlayer.ai/executions → Executions table headers ("Click an id to open its TEE attestation"), no rows rendered, 15114 not visible.
+  WebFetch https://outlayer.fastnear.com/docs/getting-started → 301 to app.outlayer.ai/docs/getting-started (no per-request URL); /docs/tee-attestation gives no route either.
+  WebFetch https://testnet-api.outlayer.ai/attestations/by-request/15114 (route from F-168/F-169; also curl, attestation-testnet-15114.json) → HTTP 200:
+    request_id 15114 · caller_account_id keeper.nectar.testnet · transaction_hash 6ywM8Qm5… (= Run B) · project_id nectar.testnet/nectar-quoter
+    wasm_hash = executed_wasm_sha256 = 3ce17749… (= version_key) · input_hash d1b6aa1c… (= quoter_requested input_sha256) · block 276979189
+    tdx_quote present (base64, non-empty) · worker_measurement present (b1773e4d…). TDX quote NOT verified cryptographically (not attempted).
+  Caution: https://api.outlayer.ai/attestations/15114 returns HTTP 200 for an unrelated MAINNET task (caller price-oracle.near, another wasm). Do not link it. by-request on api.outlayer.ai → 404.
+Criteria: execution attested/visible OK (testnet-api attestation record; dashboard shows nothing) · disc_bps within [0,max] OK (from events, since the gates.md view is missing) ·
+  cost recorded OK (estimate 0.00400001 NEAR; actual 0.00109 NEAR, refund 0.00891) · fallback tested OK (Run A) · wasm and core hashes reproduce OK.
+Open: gates.md G4 line 2 (get_settlement) does not exist. Attestation is shown via API JSON, not the dashboard. Discount pricing is unproven until WO-10b.
 
 ## G3
 

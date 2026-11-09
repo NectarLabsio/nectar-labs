@@ -1,0 +1,9 @@
+├  Logs:
+│    No logs[0m
+Function execution return value (printed to stdout):
+"4000010000000000000000"
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-read-only outlayer.testnet estimate_execution_cost json-args '{"resource_limits":{"max_instructions":100000000,"max_memory_mb":128,"max_execution_seconds":30},"input_len":512}' network-config testnet now[39m
+

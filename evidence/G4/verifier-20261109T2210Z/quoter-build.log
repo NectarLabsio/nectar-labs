@@ -1,0 +1,18 @@
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling serde_json v1.0.154
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling cfg-if v1.0.5
+   Compiling generic-array v0.14.9
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.6
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling nectar-quoter v0.1.0 (/private/tmp/verify-G4-1794262025/quoter)
+    Finished `release` profile [optimized] target(s) in 3.04s
+rustc: rustc 1.95.0 (59807616e 2026-04-14)
+3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2  92355  /tmp/verify-G4-1794262025/quoter/target/wasm32-wasip2/release/nectar_quoter.wasm
+exit 0
