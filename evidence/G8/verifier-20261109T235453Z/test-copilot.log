@@ -1,0 +1,24 @@
+
+> web@0.1.0 test:copilot /private/tmp/verify-G8b-1794268483/apps/web
+> node scripts/test-copilot.mjs
+
+  sample quote TCB status: UpToDate (accepted: true)
+✔ DCAP: Phala sample TDX quote verifies against Intel root with recorded collateral (52.029041ms)
+✔ DCAP: patched report_data breaks the quote signature (26.887083ms)
+✔ quote offsets match dcap-qvl Quote.parse (report_data, mr_config_id) (0.678916ms)
+✔ fixture: signature, hashes, model id and report_data pass; DCAP fails → answer hidden (39.682375ms)
+✔ gate logic: with an accepted DCAP verdict over the same quote bytes the answer is released (3.728ms)
+✔ negative: tampered response, stale nonce, foreign signer, gateway signature (9.03375ms)
+✔ F-075: MRCONFIGID check is a prefix match on 01 || sha256(app_compose) (1.380959ms)
+✔ F-074/F-076/C-018: request paths carry no provider param or aliasing header; 404 backoff grows (0.313875ms)
+✔ F-077: NRAS verdict needs overall=true and both nonces equal ours (4.20575ms)
+✔ system prompt forbids prices and amounts; request carries it (0.249584ms)
+﹣ live round trip (only with --live and NEAR_AI_API_KEY) (0.065791ms) # fixture run (pass --live)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 256.925458

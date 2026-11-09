@@ -10,7 +10,7 @@
 | G5 oracle | FALLBACK (disclosed) | 2026-11-09T22:55Z | 706d940 | evidence/G5/verifier-20261109T2254Z/ (no live Pyth price: pyth-oracle.testnet NVDA → null, Hermes 401, H13 key absent; nectar-core source = Owner; Pyth defences tested: unit 157/0 + sandbox 5/0 + sandbox_p1 4/0; gates.md filter `oracle_rejects` matches 0 tests; README $180 vs on-chain $112; see §G5) |
 | G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at 578b006: 3-size live dry quotes verify, impact from base units, no amountIn/OutUsd use; GET /api/oneclick fixture + live match shape; /feed panel and NVDAx route status come from the API; web e2e 128 passed / 0 failed; see §G6) |
 | G7 Solana + signer | pending | | | |
-| G8 copilot | FAIL (docs overclaim; all offline checks green) | 2026-11-09T23:45Z | 2b49f42 | evidence/G8/verifier-20261109T2343Z/, evidence/G8/copilot-fixture-keymissing.png (fixture 10 pass / 0 fail / 1 skip = live; e2e copilot 4/4; README:61 claims "copilot answers are TEE-signed and verified" while README:24 says "not built" and no live answer exists; live round trip not performed: H7 key absent, /v1/models HTTP 500) |
+| G8 copilot | PASS (fixture) (re-run; earlier FAIL 2b49f42 was docs wording) | 2026-11-09T23:56Z | df4706f | evidence/G8/verifier-20261109T235453Z/ (fixture 10 pass / 0 fail / 1 skip = live; --live without key exit 1; e2e copilot 4/4 with exact "Key missing" banner; README/docs-site say built, no live answer verified, fixture = Phala sample + throwaway key; panel says browser vs server checks; live round trip not performed: H7 key absent, /v1/models HTTP 500) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -76,6 +76,36 @@ FAIL reasons (docs/UI wording only; no check is wrong):
 Notes: e2e spec asserts /Key missing|Ask copilot/, so on its own it would pass without the banner; the UI probe above checked the
   banner directly. Optional checks (MRCONFIGID, NRAS, model list) do not block release in live mode, so a "verified in TEE" answer
   proves some TDX VM holds the signing key, not which compose it runs. That is consistent with F-075/F-077 and disclosed as (optional).
+
+### G8 (re-run) — copilot verifier — PASS (fixture) — 2026-11-09T23:56Z — commit df4706f
+Fresh clone /tmp/verify-G8b-1794268483 at main df4706f (merge WO-17c, after WO-4f merge c294b22). PATH += ~/.cargo/bin ~/.local/bin.
+NEAR_AI_API_KEY unset (H7). No secrets used. Never pushed. Logs: evidence/G8/verifier-20261109T235453Z/.
+$ pnpm i --frozen-lockfile                                   → exit 0 (Done in 4.3s, pnpm v10.34.9)
+$ pnpm --filter web test:copilot                             → exit 0: tests 11, pass 10, fail 0, skipped 1 (live round trip); same 10 checks as the FAIL block
+$ pnpm --filter web test:copilot -- --live  (no key)        → exit 1: "--live needs NEAR_AI_API_KEY (TODO-H7). Fixture run: pnpm --filter web test:copilot"
+$ pnpm --filter web build                                    → exit 0
+$ PW_CHANNEL=chrome pnpm --filter web exec playwright test e2e/copilot.spec.ts → 4 passed (/console, /borrow × phone, desktop)
+NEAR AI probe 23:55:49Z: GET https://cloud-api.near.ai/v1/models → HTTP 500 (status only, no key).
+Explorer links: none for this gate.
+FAIL items re-checked:
+  1/2. Docs wording. Grep of README.md + apps/docs-site/docs for "verif" within 3 lines of copilot/answer/NEAR AI (grep-copilot.txt). Every hit:
+    README.md:24 "**built; no live NEAR AI answer has been verified yet.** Live mode needs key H7 … run on a fixture built from a real
+      Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording; it correctly
+      ends "unverified — hidden". Intel DCAP quote verification runs on the server …; EIP-191 … run in the browser … G8 re-run pending"
+    README.md:61 "the copilot shows an answer only after signature and attestation checks pass (no live NEAR AI answer verified yet: key H7
+      absent, NEAR AI Cloud 500 on 2026-11-09)"
+    docs-site start/live-on-testnet.md:27 same text as README:24 ("built; no live NEAR AI answer has been verified yet" + honest fixture).
+    docs-site security/trust-model.md:22 "the answer is shown only after the checks pass: Intel DCAP … on the server, EIP-191 … in the
+      browser. No live answer has been verified yet (key H7 absent; /v1/models 500 on 2026-11-09, F-078)"; :8 is the page's "Verified against: F-…" facts line.
+    docs-site legal/privacy.md:37-39 NEAR AI Cloud, Phala PCCS, NVIDIA NRAS each "live mode only"; "not called in fixture mode". No verification claim.
+    Other hits (README:74, project/evidence.md:17/23 "pending", project/roadmap.md:15/19) are plans/status, not claims. → no overclaim; built; fixture honest.
+  3. Panel intro (components/CopilotPanel.tsx:54-56): "In your browser: EIP-191 signature recovery, request/response hashes, and the
+     report_data/nonce binding. On this server: the Intel TDX quote (DCAP, via dcap-qvl) and, in live mode, NVIDIA GPU attestation (NRAS)."
+     Matches code: dcap-qvl imported only in lib/copilot/server.ts; panel imports verifyBundle (lib/copilot/verify.ts, pure) and POSTs /api/copilot.
+  Weak test fixed: e2e/copilot.spec.ts (no key) filters .banner by .b-title /^Key missing$/, toHaveText("Key missing"), asserts the full banner
+     sentence and "Ask copilot" disabled; also asserts both browser/server intro sentences. 4/4 green.
+Live round trip not performed (H7 key absent; API 500).
+PASS (fixture): no overclaim in README/docs-site/panel; all offline checks green. Notes: docs still say "G8 re-run pending" (stale after this PASS, not an overclaim).
 
 ## G0
 
