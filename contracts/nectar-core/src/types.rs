@@ -1,6 +1,6 @@
 //! Stored records (borsh, versioned) and JSON inputs/views (interface-p0.md).
 
-use near_sdk::json_types::{U64, U128};
+use near_sdk::json_types::{I64, U64, U128};
 use near_sdk::{AccountId, near};
 
 #[near(serializers = [borsh, json])]
@@ -256,7 +256,7 @@ pub struct PreviewBorrowView {
 
 // ---------------------------------------------------------------- P1 (interface-p1.md, state V1)
 
-/// Price source per symbol. `Owner` = P0 owner oracle. `Pyth` is stored for WO-10b.
+/// Price source per symbol. `Owner` = P0 owner oracle. `Pyth` = read `get_price` in `trigger_preliquidation` (WO-10b).
 #[near(serializers = [borsh, json])]
 #[derive(Clone, Debug, PartialEq, Eq, Default)]
 pub enum OracleSource {
@@ -292,4 +292,27 @@ pub struct QuoterConfigView {
     pub max_memory_mb: u32,
     pub max_execution_seconds: u32,
     pub max_conf_bps: u16,
+    /// WO-10b: OutLayer secrets profile passed as `secrets_ref` (F-047); None = not sent.
+    pub secrets_ref: Option<SecretsRef>,
+}
+
+/// OutLayer `secrets_ref` (F-047): profile 1-64 bytes `[A-Za-z0-9_-]`. Stored under its own raw storage
+/// key (`QUOTER_SECRETS_REF_KEY`), not in the V1 root struct, so adding it needs no migrate.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SecretsRef {
+    pub profile: String,
+    pub account_id: AccountId,
+}
+
+/// Pyth NEAR receiver `Price` (pyth-crosschain ec40e5f `target_chains/near/receiver/src/state.rs:101`):
+/// value = `price * 10^expo`, `conf` in the same units, `publish_time` unix seconds. `get_price` returns
+/// `Option<Price>` (lib.rs:460), JSON `null` when missing or older than the receiver's stale threshold.
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PythPrice {
+    pub price: I64,
+    pub conf: U64,
+    pub expo: i32,
+    pub publish_time: i64,
 }
