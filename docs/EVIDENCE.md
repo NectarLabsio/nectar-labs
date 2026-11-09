@@ -2,7 +2,7 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
-| G0 toolchain + facts | FAIL | 2026-11-09T23:01Z | 90af048 | evidence/G0/verifier-20261109T230153Z/ (recorded after p0-green and p1-green were tagged; all P0 tools present, F-020 resolved; FAIL: rustc/cargo 1.95.0 and node v22.23.4 have no FACTS version entry; anchor/solana absent = P2 dependency H-TOOLCHAIN-SOLANA; orchestrator run 2026-11-09 evidence/G0/{toolchain,help,help-1954}.log; see §G0) |
+| G0 toolchain + facts | PASS | 2026-11-09T23:09Z | b3a9090 | evidence/G0/verifier-20261109T230923Z/ (re-record: F-181/F-182/F-183 now record installed rustc/cargo 1.95.0 and node v22.23.4; network probes reused from verifier-20261109T230153Z; anchor/solana absent = P2 dependency H-TOOLCHAIN-SOLANA; prior FAIL 23:01Z 90af048: see §G0) |
 | G1 contract tests | PASS | 2026-11-09T20:43Z | b721641 | evidence/G1/verifier-20261109T2043Z.log, evidence/G1/verifier-gas-20261109T2043Z.csv (prior FAIL 20:33Z, 3bc0de8: see §G1 history) |
 | G2 testnet deploy | PASS | 2026-11-09T20:55Z | 5f27f44 | evidence/G2/verifier-20261109T2055Z.log (explorer pages returned HTTP 403 to WebFetch; see §G2) |
 | G3 web E2E | PASS | 2026-11-09T21:15Z | 176914f | evidence/G3/verifier-20261109T2115Z/ (e2e 112 pass / 0 fail / 2 skip = write spec; LH 12/12 = 100; write flow cited from 20:57Z run, not repeated; prior FAIL 20:57Z c940dec: see §G3) |
@@ -64,6 +64,31 @@ Not failures:
 Notes:
  - FACTS dates look like local time (IST, +05:30), not UTC. Example: F-053 is dated 2026-11-10 but cites a curl made at 2026-11-09T19:59:55Z. UTC was still 2026-11-09 when this gate ran.
  - The gates.md G0 commands differ from the orchestrator's brief: help subcommand depth and the Hermes host. I ran both sets.
+
+### G0 — toolchain + facts — PASS — 2026-11-09T23:09Z — commit b3a9090
+Re-record after GATE_FAIL_G0. Fresh clone /tmp/verify-G0-20261109T230923Z at main b3a90906. Commands run in bash with PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH". No secrets used. Logs are in evidence/G0/verifier-20261109T230923Z/: toolchain.log, help.log, and facts.log (the FACTS rows I checked).
+Network probes are reused from evidence/G0/verifier-20261109T230153Z/network.log, taken at 23:01Z, 8 minutes earlier and inside the 2 h limit. 1Click /v0/tokens was live. All three Hermes hosts returned 401, which matches F-056 / C-007.
+```
+$ rustc --version        → rustc 1.95.0 (59807616e 2026-04-14)   FACTS: F-181 (2026-11-09, V, evidence verifier-20261109T230153Z/toolchain.log)
+$ cargo --version        → cargo 1.95.0 (f2d3ce0bd 2026-03-21)   FACTS: F-182 (2026-11-09, V, same log)
+$ node -v                → v22.23.4                              FACTS: F-183 (2026-11-09, V, same log)
+$ cargo near --version   → cargo-near-near 0.23.0                FACTS: F-011, F-023 (2026-11-10, V)
+$ near --version         → near-cli-rs 0.31.1                    FACTS: F-022 (2026-11-10, V)
+$ pnpm -v                → 10.34.9                               FACTS: F-026 (2026-11-10, V)
+$ gitleaks version       → 8.30.1                                FACTS: F-024 (2026-11-10, V)
+$ anchor --version       → bash: anchor: command not found       P2 only (F-081, F-187; H-TOOLCHAIN-SOLANA OPEN)
+$ solana --version       → bash: solana: command not found       P2 only (F-025, F-187)
+$ near account create-account --help | head -40 → Commands: sponsor-by-faucet-service, fund-myself, fund-later, help
+$ near account add-key --help | head -40        → captured in help.log
+```
+I opened the evidence that F-181, F-182 and F-183 cite (evidence/G0/verifier-20261109T230153Z/toolchain.log). It shows the same three version strings as this run.
+F-020 is V (2026-11-10). It cites help-1954.log:36-38 and help.log:2-7, and the 23:01Z run already confirmed those flags. C-004 is closed.
+Explorer: none. G0 has no explorer step.
+Verdict: PASS. Every G0 tool version is in FACTS with a date and evidence, and every installed version matches its FACTS row. F-020 is resolved.
+Not failures:
+ - anchor and solana are absent. They are a P2 / G7 dependency (H-TOOLCHAIN-SOLANA).
+ - Hermes returns 401 (C-007, H13).
+Note: the FACTS date convention is mixed. F-181 to F-183 use the UTC date (2026-11-09), while F-010 to F-026 use the IST date (2026-11-10) for the same session. Both dates fall within this session, so I did not count it as a failure.
 
 ## G5
 
