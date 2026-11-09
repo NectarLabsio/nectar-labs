@@ -1003,6 +1003,12 @@ impl Nectar {
         let p = self.position_or_panic(position_id.0);
         require!(p.status == PositionStatus::Open, "position not open");
         let c = self.coll_or_panic(&p.collateral);
+        // WO-10b: Pyth source -> freshness, conf, band and health are checked in `on_pyth_price`.
+        #[cfg(feature = "p1")]
+        if let Some(OracleSource::Pyth { account, price_identifier }) = self.oracle_sources.get(&p.collateral).cloned() {
+            emit("preliq_triggered", json!({ "position_id": position_id, "keeper": env::predecessor_account_id() }));
+            return self.start_pyth_read(position_id, p, account, price_identifier);
+        }
         require!(self.oracle_fresh(&c), "oracle stale");
         require!(self.is_triggerable(&p, &c), "position healthy");
         let keeper = env::predecessor_account_id();

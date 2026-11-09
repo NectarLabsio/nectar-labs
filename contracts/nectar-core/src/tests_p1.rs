@@ -333,17 +333,6 @@ fn vol_unknown_symbol() {
 }
 
 #[test]
-#[should_panic(expected = "WO-10b")]
-fn pyth_source_rejected_until_wo10b() {
-    let mut c = demo_p1(false);
-    set_ctx(owner(), 0, T0);
-    c.set_oracle_source(
-        "NVDAx".into(),
-        OracleSource::Pyth { account: a("pyth-oracle.testnet"), price_identifier: "00".repeat(32) },
-    );
-}
-
-#[test]
 #[should_panic(expected = "max_conf_bps out of range")]
 fn max_conf_bound() {
     let mut c = demo_p1(false);
@@ -576,4 +565,356 @@ fn quoter_vectors_if_present() {
         checked += 1;
     }
     println!("quoter vectors checked: {checked}");
+}
+
+// ------------------------------------------------------------------ WO-10b: Pyth source
+
+use crate::p1::{check_pyth_price, pyth_to_usd_e6, valid_price_identifier, valid_profile};
+use near_sdk::json_types::I64;
+
+const PYTH_ID: &str = "B1073854ED24CBC755DC527418F52B7D271F6CC967BBF8D8129112B18860A593";
+
+fn pyth_on(c: &mut Nectar) {
+    set_ctx(owner(), 0, T0 + 3 * SEC);
+    c.set_oracle_source("NVDAx".into(), OracleSource::Pyth { account: a("pyth.test"), price_identifier: PYTH_ID.into() });
+}
+
+fn px(price: i64, conf: u64, expo: i32, publish_time: i64) -> PythPrice {
+    PythPrice { price: I64(price), conf: U64(conf), expo, publish_time }
+}
+
+/// 135.00 USD at T0+5 s, conf 0.01 USD.
+fn good_px() -> PythPrice {
+    px(13_500_000_000, 1_000_000, -8, ((T0 + 5 * SEC) / SEC) as i64)
+}
+
+fn px_json(p: &PythPrice) -> Vec<u8> {
+    near_sdk::serde_json::to_vec(&Some(p.clone())).unwrap()
+}
+
+fn pyth_callback(c: &mut Nectar, result: PromiseResult) {
+    let mut b = VMContextBuilder::new();
+    b.current_account_id(core()).predecessor_account_id(core()).block_timestamp(T0 + 5 * SEC).prepaid_gas(Gas::from_tgas(290));
+    testing_env!(
+        b.build(),
+        near_sdk::test_vm_config(),
+        near_sdk::RuntimeFeesConfig::test(),
+        Default::default(),
+        vec![result]
+    );
+    c.on_pyth_price(U64(0));
+}
+
+fn pyth_triggered(pin: bool) -> Nectar {
+    let mut c = demo_p1(pin);
+    pyth_on(&mut c);
+    set_ctx(keeper(), 0, T0 + 4 * SEC);
+    c.trigger_preliquidation(U64(0));
+    c
+}
+
+#[test]
+fn pyth_expo_to_usd_e6() {
+    assert_eq!(pyth_to_usd_e6(18_000_000, -5), Ok(180_000_000));
+    assert_eq!(pyth_to_usd_e6(18_000_000_199, -8), Ok(180_000_001), "floored, against the borrower");
+    assert_eq!(pyth_to_usd_e6(180, 0), Ok(180_000_000));
+    assert_eq!(pyth_to_usd_e6(18, 1), Ok(180_000_000));
+    assert_eq!(pyth_to_usd_e6(180_000_000, -6), Ok(180_000_000));
+    assert_eq!(pyth_to_usd_e6(0, -5), Err("non_positive"));
+    assert_eq!(pyth_to_usd_e6(-5, -5), Err("non_positive"));
+    assert_eq!(pyth_to_usd_e6(9, -7), Err("zero_price"));
+    assert_eq!(pyth_to_usd_e6(i64::MAX, -100), Err("zero_price"));
+    assert_eq!(pyth_to_usd_e6(i64::MAX, i32::MIN), Err("zero_price"));
+    assert_eq!(pyth_to_usd_e6(i64::MAX, 30), Err("overflow"));
+    assert_eq!(pyth_to_usd_e6(1, i32::MAX), Err("overflow"));
+}
+
+#[test]
+fn pyth_acceptance_rules() {
+    let now = T0 + 5 * SEC;
+    let ok_ = check_pyth_price(&good_px(), now, 120 * SEC, 100, 140_000_000, 1500);
+    assert_eq!(ok_, Ok((135_000_000, now)));
+    // stale: 121 s > 120 s session max age; same price accepted with the closed-session max age
+    let old = px(13_500_000_000, 1_000_000, -8, ((now - 121 * SEC) / SEC) as i64);
+    assert_eq!(check_pyth_price(&old, now, 120 * SEC, 100, 0, 1500), Err("stale"));
+    assert!(check_pyth_price(&old, now, 86_400 * SEC, 100, 0, 1500).is_ok());
+    // conf: exactly 100 bps accepted, one unit more rejected
+    let edge = px(13_500_000_000, 135_000_000, -8, (now / SEC) as i64);
+    assert!(check_pyth_price(&edge, now, 120 * SEC, 100, 0, 1500).is_ok());
+    let wide = px(13_500_000_000, 135_000_001, -8, (now / SEC) as i64);
+    assert_eq!(check_pyth_price(&wide, now, 120 * SEC, 100, 0, 1500), Err("conf_too_wide"));
+    // band: 15% of 140 = 21 -> 119 ok, 118.99 out; no last price -> band skipped
+    let lo = px(11_900_000_000, 0, -8, (now / SEC) as i64);
+    assert!(check_pyth_price(&lo, now, 120 * SEC, 100, 140_000_000, 1500).is_ok());
+    let out = px(11_899_000_000, 0, -8, (now / SEC) as i64);
+    assert_eq!(check_pyth_price(&out, now, 120 * SEC, 100, 140_000_000, 1500), Err("out_of_band"));
+    assert!(check_pyth_price(&out, now, 120 * SEC, 100, 0, 1500).is_ok());
+    // future publish time clamps to now; negative publish time rejected; negative price rejected
+    let fut = px(13_500_000_000, 0, -8, (now / SEC + 30) as i64);
+    assert_eq!(check_pyth_price(&fut, now, 120 * SEC, 100, 0, 1500), Ok((135_000_000, now)));
+    assert_eq!(check_pyth_price(&px(13_500_000_000, 0, -8, -1), now, 120 * SEC, 100, 0, 1500), Err("bad_time"));
+    assert_eq!(check_pyth_price(&px(-1, 0, -8, 1), now, 120 * SEC, 100, 0, 1500), Err("non_positive"));
+}
+
+#[test]
+fn pyth_id_and_profile_validation() {
+    assert!(valid_price_identifier(PYTH_ID));
+    assert!(!valid_price_identifier(&format!("0x{}", &PYTH_ID[2..])));
+    assert!(!valid_price_identifier("ab"));
+    assert!(valid_profile("nectar-quoter_1"));
+    assert!(!valid_profile(""));
+    assert!(!valid_profile(&"a".repeat(65)));
+    assert!(!valid_profile("bad profile"));
+}
+
+#[test]
+fn pyth_source_set_view_and_clear() {
+    let mut c = demo_p1(false);
+    pyth_on(&mut c);
+    assert!(has_event("oracle_source_set"));
+    let want = OracleSource::Pyth { account: a("pyth.test"), price_identifier: PYTH_ID.to_ascii_lowercase() };
+    assert_eq!(c.get_oracle_source("NVDAx".into()), want);
+    assert_eq!(c.get_exit_capacity("NVDAx".into()).oracle_source, want);
+    c.set_oracle_source("NVDAx".into(), OracleSource::Owner);
+    assert_eq!(c.get_oracle_source("NVDAx".into()), OracleSource::Owner);
+}
+
+#[test]
+#[should_panic(expected = "price_identifier must be 64 hex chars")]
+fn pyth_source_bad_id() {
+    let mut c = demo_p1(false);
+    set_ctx(owner(), 0, T0);
+    c.set_oracle_source("NVDAx".into(), OracleSource::Pyth { account: a("pyth.test"), price_identifier: "zz".repeat(32) });
+}
+
+#[test]
+#[should_panic(expected = "owner only")]
+fn pyth_source_owner_only() {
+    let mut c = demo_p1(false);
+    set_ctx(keeper(), 0, T0);
+    c.set_oracle_source("NVDAx".into(), OracleSource::Pyth { account: a("pyth.test"), price_identifier: PYTH_ID.into() });
+}
+
+#[test]
+fn trigger_pyth_requests_price_and_waits() {
+    let c = pyth_triggered(false);
+    assert!(has_event("preliq_triggered"));
+    assert!(event_with("pyth_price_requested", &PYTH_ID.to_ascii_lowercase()));
+    assert!(!has_event("settled_near"));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Settling);
+}
+
+#[test]
+fn trigger_pyth_skips_stale_owner_price() {
+    // owner price 24 h + 1 s old would make the owner path panic "oracle stale"; Pyth path still reads.
+    let mut c = demo_p1(false);
+    pyth_on(&mut c);
+    set_ctx(keeper(), 0, T0 + 86_402 * SEC);
+    c.trigger_preliquidation(U64(0));
+    assert!(has_event("pyth_price_requested"));
+}
+
+#[test]
+#[should_panic(expected = "attach more gas")]
+fn trigger_pyth_needs_gas() {
+    let mut c = demo_p1(true);
+    pyth_on(&mut c);
+    let mut b = VMContextBuilder::new();
+    b.current_account_id(core()).predecessor_account_id(keeper()).block_timestamp(T0 + 4 * SEC).prepaid_gas(Gas::from_tgas(150));
+    testing_env!(b.build());
+    c.trigger_preliquidation(U64(0));
+}
+
+#[test]
+fn pyth_accepted_then_static_settle() {
+    let mut c = pyth_triggered(false);
+    pyth_callback(&mut c, PromiseResult::Successful(px_json(&good_px())));
+    assert!(event_with("oracle_updated", "\"source\":\"Pyth\""));
+    assert_eq!(c.get_collateral("NVDAx".into()).unwrap().oracle_price_usd_e6, U128(135_000_000));
+    assert!(!settled_discs().is_empty());
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Closed);
+}
+
+#[test]
+fn pyth_accepted_then_quoter() {
+    let mut c = pyth_triggered(true);
+    pyth_callback(&mut c, PromiseResult::Successful(px_json(&good_px())));
+    assert!(event_with("quoter_requested", "\"position_id\":\"0\""));
+    assert!(event_with("quoter_requested", "135000000") || c.get_collateral("NVDAx".into()).unwrap().oracle_price_usd_e6 == U128(135_000_000));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Settling);
+    assert_eq!(c.get_gas_reserve(), U128(900));
+}
+
+fn pyth_reject_case(result: PromiseResult, reason: &str) {
+    let mut c = pyth_triggered(false);
+    pyth_callback(&mut c, result);
+    assert!(event_with("oracle_rejected", &format!("\"reason\":\"{reason}\"")), "{reason}: {:?}", get_logs());
+    assert!(event_with("settlement_aborted", "oracle_rejected"));
+    assert!(!has_event("settled_near"));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+    assert_eq!(c.get_collateral("NVDAx".into()).unwrap().oracle_price_usd_e6, U128(140_000_000), "price untouched");
+}
+
+#[test]
+fn pyth_rejects_stale_in_session() {
+    let mut c = demo_p1(false);
+    set_ctx(owner(), 0, T0 + 3 * SEC);
+    let mut i = input();
+    i.market_session_open = true;
+    c.upsert_collateral("NVDAx".into(), i);
+    pyth_on(&mut c);
+    set_ctx(keeper(), 0, T0 + 4 * SEC);
+    c.trigger_preliquidation(U64(0));
+    let old = px(13_500_000_000, 1_000_000, -8, ((T0 + 5 * SEC - 121 * SEC) / SEC) as i64);
+    pyth_callback(&mut c, PromiseResult::Successful(px_json(&old)));
+    assert!(event_with("oracle_rejected", "\"reason\":\"stale\""));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+}
+
+#[test]
+fn pyth_rejects_wide_conf() {
+    pyth_reject_case(PromiseResult::Successful(px_json(&px(13_500_000_000, 200_000_000, -8, ((T0 + 5 * SEC) / SEC) as i64))), "conf_too_wide");
+}
+
+#[test]
+fn pyth_rejects_out_of_band() {
+    pyth_reject_case(PromiseResult::Successful(px_json(&px(9_000_000_000, 0, -8, ((T0 + 5 * SEC) / SEC) as i64))), "out_of_band");
+}
+
+#[test]
+fn pyth_rejects_negative_price() {
+    pyth_reject_case(PromiseResult::Successful(px_json(&px(-13_500_000_000, 0, -8, ((T0 + 5 * SEC) / SEC) as i64))), "non_positive");
+}
+
+#[test]
+fn pyth_rejects_null() {
+    pyth_reject_case(PromiseResult::Successful(b"null".to_vec()), "no_price");
+}
+
+#[test]
+fn pyth_rejects_failed_receipt() {
+    pyth_reject_case(PromiseResult::Failed, "failed");
+}
+
+#[test]
+fn pyth_rejects_unparseable() {
+    pyth_reject_case(PromiseResult::Successful(b"{\"price\":1}".to_vec()), "parse");
+}
+
+#[test]
+fn pyth_rejects_too_long() {
+    pyth_reject_case(PromiseResult::Successful(vec![b' '; 1024]), "too_long");
+}
+
+#[test]
+fn pyth_price_recovered_aborts_healthy() {
+    let mut c = pyth_triggered(false);
+    // 160 USD: within band of 140, LTV 11250/16000 = 70% < 75% -> healthy
+    pyth_callback(&mut c, PromiseResult::Successful(px_json(&px(16_000_000_000, 0, -8, ((T0 + 5 * SEC) / SEC) as i64))));
+    assert!(event_with("settlement_aborted", "position healthy"));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+}
+
+#[test]
+fn pyth_callback_aborts_when_paused() {
+    let mut c = pyth_triggered(false);
+    set_ctx(owner(), 0, T0 + 4 * SEC);
+    c.pause();
+    pyth_callback(&mut c, PromiseResult::Successful(px_json(&good_px())));
+    assert!(event_with("settlement_aborted", "paused"));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+}
+
+#[test]
+fn pyth_callback_ignores_cancelled() {
+    let mut c = pyth_triggered(false);
+    set_ctx(owner(), 0, T0 + 4 * SEC);
+    c.cancel_settlement(U64(0));
+    pyth_callback(&mut c, PromiseResult::Successful(px_json(&good_px())));
+    assert!(!has_event("oracle_updated") && !has_event("settled_near"));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+}
+
+#[test]
+fn pyth_callback_quoter_reserve_empty_aborts() {
+    let mut c = pyth_triggered(true);
+    set_ctx(owner(), 0, T0 + 4 * SEC);
+    c.set_quoter_config(U128(10_000), 100, U64(100_000_000), 128, 30);
+    pyth_callback(&mut c, PromiseResult::Successful(px_json(&good_px())));
+    assert!(event_with("settlement_aborted", "gas reserve empty"));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+}
+
+// ------------------------------------------------------------------ WO-10b: cancel_settlement
+
+#[test]
+fn cancel_settlement_returns_to_open() {
+    let mut c = demo_p1(true);
+    trigger(&mut c);
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Settling);
+    set_ctx(owner(), 0, T0 + 5 * SEC);
+    c.cancel_settlement(U64(0));
+    assert!(event_with("settlement_cancelled", "\"position_id\":\"0\""));
+    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+}
+
+#[test]
+#[should_panic(expected = "position not settling")]
+fn cancel_settlement_requires_settling() {
+    let mut c = demo_p1(false);
+    set_ctx(owner(), 0, T0 + 5 * SEC);
+    c.cancel_settlement(U64(0));
+}
+
+#[test]
+#[should_panic(expected = "owner only")]
+fn cancel_settlement_owner_only() {
+    let mut c = demo_p1(true);
+    trigger(&mut c);
+    set_ctx(keeper(), 0, T0 + 5 * SEC);
+    c.cancel_settlement(U64(0));
+}
+
+// ------------------------------------------------------------------ WO-10b: secrets_ref, gas reserve
+
+#[test]
+fn secrets_ref_in_request_args() {
+    let mut c = demo_p1(true);
+    set_ctx(owner(), 0, T0 + 3 * SEC);
+    assert!(c.quoter_request_args("{}".into()).get("secrets_ref").is_none(), "absent by default");
+    let sr = SecretsRef { profile: "nectar-quoter".into(), account_id: a("owner.testnet") };
+    c.set_quoter_secrets_ref(Some(sr.clone()));
+    assert!(has_event("quoter_secrets_ref_set"));
+    assert_eq!(c.get_quoter_config().secrets_ref, Some(sr));
+    let args = c.quoter_request_args("{}".into());
+    assert_eq!(args["secrets_ref"], json!({ "profile": "nectar-quoter", "account_id": "owner.testnet" }));
+    assert_eq!(args["input_data"], "{}");
+    c.set_quoter_secrets_ref(None);
+    assert_eq!(c.get_quoter_config().secrets_ref, None);
+    assert!(c.quoter_request_args("{}".into()).get("secrets_ref").is_none(), "null clears");
+}
+
+#[test]
+#[should_panic(expected = "profile must be 1-64 bytes")]
+fn secrets_ref_bad_profile() {
+    let mut c = demo_p1(false);
+    set_ctx(owner(), 0, T0);
+    c.set_quoter_secrets_ref(Some(SecretsRef { profile: "has space".into(), account_id: a("owner.testnet") }));
+}
+
+#[test]
+#[should_panic(expected = "owner only")]
+fn secrets_ref_owner_only() {
+    let mut c = demo_p1(false);
+    set_ctx(keeper(), 0, T0);
+    c.set_quoter_secrets_ref(None);
+}
+
+#[test]
+fn gas_reserve_view_tracks_quoter_deposit() {
+    let mut c = demo_p1(true);
+    assert_eq!(c.get_gas_reserve(), U128(1_000));
+    trigger(&mut c);
+    assert_eq!(c.get_gas_reserve(), U128(900));
+    assert_eq!(c.get_gas_reserve(), c.get_config().gas_reserve_yocto);
 }

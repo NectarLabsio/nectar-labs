@@ -6,6 +6,16 @@
 //! (F-048), reads it with `promise_result_checked` (F-130), clamps or falls back, re-checks the
 //! position and runs the P0 settlement with those discounts. Business failures in the callback never
 //! panic: the position goes back to Open with `settlement_aborted`.
+//!
+//! WO-10b: Pyth source (D-013) -> trigger puts the position in Settling and calls `get_price` on the Pyth
+//! receiver `.then(on_pyth_price)`; the callback checks age (session-aware), conf and band, writes the
+//! price, then continues with the quoter or the P0 settle. `cancel_settlement` is the owner escape for a
+//! position stuck in Settling. Optional `secrets_ref` is forwarded to `request_execution` (F-047).
+//!
+//! Gas reserve accounting: `request_execution` takes `deposit_yocto` out of `gas_reserve_yocto`; OutLayer
+//! refunds the unused part to `payer_account_id` (= this contract, F-047) as plain account balance. That
+//! refund is NOT re-credited to `gas_reserve_yocto` (no callback sees its amount); `get_gas_reserve()` shows
+//! the accounted reserve and the owner tops it up with `fund_gas_reserve`.
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, Value, json};
@@ -13,7 +23,7 @@ use near_sdk::{AccountId, Gas, GasWeight, NearToken, Promise, PromiseError, env,
 
 use crate::events::emit;
 use crate::types::*;
-use crate::{MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar, NectarExt, math, ok};
+use crate::{MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar, NectarExt, math};
 
 /// Callback own burn for parse + 8 legs (sandbox: ~13 Tgas with 10 transfers scheduled).
 pub const GAS_QUOTER_CB_BASE: Gas = Gas::from_tgas(20);
@@ -24,6 +34,75 @@ pub const GAS_RECEIPTS_PER_TRANSFER: Gas = Gas::from_tgas(5);
 pub const GAS_TRIGGER_MARGIN: Gas = Gas::from_tgas(5);
 /// Stdout is <= 900 B (F-043); anything longer is rejected as `too_long`.
 pub const MAX_QUOTER_RESULT_LEN: usize = 2048;
+/// Gas attached to the Pyth `get_price` view call (single map read; measured on the sandbox stub only).
+pub const GAS_PYTH_GET_PRICE: Gas = Gas::from_tgas(10);
+/// Own burn of `on_pyth_price` before it schedules the quoter or the settlement legs.
+pub const GAS_PYTH_CB_BASE: Gas = Gas::from_tgas(10);
+/// `Option<Price>` JSON is < 150 B.
+pub const MAX_PYTH_RESULT_LEN: usize = 512;
+/// Raw storage key of the optional quoter `SecretsRef` (outside the V1 root struct: no migrate needed).
+pub const QUOTER_SECRETS_REF_KEY: &[u8] = b"__quoter_secrets_ref";
+
+/// Pyth `price * 10^expo` USD -> USD e6, floored (a lower collateral price is against the borrower).
+pub fn pyth_to_usd_e6(price: i64, expo: i32) -> Result<u128, &'static str> {
+    if price <= 0 {
+        return Err("non_positive");
+    }
+    let p = price as u128;
+    let e = i64::from(expo) + 6;
+    let v = if e >= 0 {
+        let m = u32::try_from(e).ok().and_then(|e| 10u128.checked_pow(e)).ok_or("overflow")?;
+        p.checked_mul(m).ok_or("overflow")?
+    } else {
+        match u32::try_from(-e).ok().and_then(|d| 10u128.checked_pow(d)) {
+            Some(d) => p / d,
+            None => 0, // 10^d > u128::MAX > p
+        }
+    };
+    if v == 0 { Err("zero_price") } else { Ok(v) }
+}
+
+/// Pyth acceptance (interface-p1): age <= max age, `conf <= price * max_conf_bps / 1e4`, within `band_bps`
+/// of the last stored price (skipped when none). Returns `(price_usd_e6, publish_ns)`.
+pub fn check_pyth_price(
+    px: &PythPrice,
+    now_ns: u64,
+    max_age_ns: u64,
+    max_conf_bps: u16,
+    last_usd_e6: u128,
+    band_bps: u16,
+) -> Result<(u128, u64), &'static str> {
+    let price = pyth_to_usd_e6(px.price.0, px.expo)?;
+    let publish_s = u64::try_from(px.publish_time).map_err(|_| "bad_time")?;
+    let publish_ns = publish_s.checked_mul(1_000_000_000).ok_or("bad_time")?.min(now_ns);
+    if now_ns - publish_ns > max_age_ns {
+        return Err("stale");
+    }
+    // conf and price share expo: compare raw, exact.
+    let lhs = u128::from(px.conf.0).checked_mul(math::BPS).ok_or("overflow")?;
+    let rhs = (px.price.0 as u128).checked_mul(u128::from(max_conf_bps)).ok_or("overflow")?;
+    if lhs > rhs {
+        return Err("conf_too_wide");
+    }
+    if last_usd_e6 > 0 {
+        let lhs = price.abs_diff(last_usd_e6).checked_mul(math::BPS).ok_or("overflow")?;
+        let rhs = last_usd_e6.checked_mul(u128::from(band_bps)).ok_or("overflow")?;
+        if lhs > rhs {
+            return Err("out_of_band");
+        }
+    }
+    Ok((price, publish_ns))
+}
+
+/// Pyth `PriceIdentifier` JSON: exactly 64 hex chars, no `0x` (receiver state.rs:45).
+pub fn valid_price_identifier(s: &str) -> bool {
+    s.len() == 64 && s.bytes().all(|b| b.is_ascii_hexdigit())
+}
+
+/// OutLayer profile rule (F-047): 1-64 bytes of `[A-Za-z0-9_-]`, else request_execution panics.
+pub fn valid_profile(s: &str) -> bool {
+    (1..=64).contains(&s.len()) && s.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'_' || b == b'-')
+}
 
 /// Lower-case hex of a byte slice.
 pub fn hex(bytes: &[u8]) -> String {
@@ -116,8 +195,8 @@ impl Nectar {
         )
     }
 
-    pub(crate) fn start_quoter(&mut self, position_id: U64, mut p: Position, c: &CollateralConfig, cands: Vec<(u16, u64)>, vol: u16) {
-        require!(!cands.is_empty(), "no quote capacity");
+    /// Distinct buyers of the selection + keeper + borrower release.
+    pub(crate) fn n_transfers(&self, cands: &[(u16, u64)]) -> u64 {
         let mut buyers: Vec<AccountId> = Vec::new();
         for (_, qid) in cands.iter() {
             if let Some(q) = self.quote(*qid) {
@@ -126,24 +205,78 @@ impl Nectar {
                 }
             }
         }
-        let n_transfers = buyers.len() as u64 + 2; // + keeper + borrower release
+        buyers.len() as u64 + 2
+    }
+
+    fn per_transfer_gas() -> u64 {
+        crate::GAS_FT_TRANSFER.as_gas() + crate::GAS_ON_PAYOUT.as_gas() + GAS_RECEIPTS_PER_TRANSFER.as_gas()
+    }
+
+    /// Gas the quoter leg needs from the receipt that starts it: exec + callback + margin.
+    fn quoter_leg_gas(&self, n_transfers: u64) -> u64 {
+        Gas::from_tgas(self.quoter.gas_tgas).as_gas()
+            + GAS_QUOTER_CB_BASE.as_gas()
+            + n_transfers * Self::per_transfer_gas()
+            + GAS_TRIGGER_MARGIN.as_gas()
+    }
+
+    pub(crate) fn secrets_ref(&self) -> Option<SecretsRef> {
+        env::storage_read(QUOTER_SECRETS_REF_KEY).and_then(|b| near_sdk::borsh::from_slice(&b).ok())
+    }
+
+    /// `request_execution` args (F-047). `secrets_ref` only when set.
+    pub(crate) fn quoter_request_args(&self, stdin: String) -> Value {
+        let mut args = json!({
+            "source": { "Project": { "project_id": self.quoter.project_id, "version_key": self.quoter.version_key } },
+            "resource_limits": { "max_instructions": self.quoter.max_instructions,
+                                 "max_memory_mb": self.quoter.max_memory_mb,
+                                 "max_execution_seconds": self.quoter.max_execution_seconds },
+            "input_data": stdin,
+            "response_format": "Json",
+            "payer_account_id": env::current_account_id(),
+        });
+        if let Some(sr) = self.secrets_ref() {
+            args["secrets_ref"] = json!({ "profile": sr.profile, "account_id": sr.account_id });
+        }
+        args
+    }
+
+    /// Trigger path: business errors panic (whole tx reverts).
+    pub(crate) fn start_quoter(&mut self, position_id: U64, p: Position, c: &CollateralConfig, cands: Vec<(u16, u64)>, vol: u16) {
+        if let Err(e) = self.try_start_quoter(position_id, p, c, cands, vol) {
+            env::panic_str(e);
+        }
+    }
+
+    /// All checks before any write; `Err` = nothing written (callback path aborts instead of panicking).
+    pub(crate) fn try_start_quoter(
+        &mut self,
+        position_id: U64,
+        mut p: Position,
+        c: &CollateralConfig,
+        cands: Vec<(u16, u64)>,
+        vol: u16,
+    ) -> Result<(), &'static str> {
+        if cands.is_empty() {
+            return Err("no quote capacity");
+        }
+        let n_transfers = self.n_transfers(&cands);
         let deposit = self.quoter.deposit_yocto;
-        let need = ok(math::add(deposit, u128::from(n_transfers)));
-        require!(self.gas_reserve_yocto >= need, "gas reserve empty");
-        let per_transfer =
-            crate::GAS_FT_TRANSFER.as_gas() + crate::GAS_ON_PAYOUT.as_gas() + GAS_RECEIPTS_PER_TRANSFER.as_gas();
-        let cb_gas = Gas::from_gas(GAS_QUOTER_CB_BASE.as_gas() + n_transfers * per_transfer);
+        let need = math::add(deposit, u128::from(n_transfers))?;
+        if self.gas_reserve_yocto < need {
+            return Err("gas reserve empty");
+        }
+        let cb_gas = Gas::from_gas(GAS_QUOTER_CB_BASE.as_gas() + n_transfers * Self::per_transfer_gas());
         let exec_gas = Gas::from_tgas(self.quoter.gas_tgas);
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
-        require!(
-            left >= exec_gas.as_gas() + cb_gas.as_gas() + GAS_TRIGGER_MARGIN.as_gas(),
-            "attach more gas"
-        );
+        if left < self.quoter_leg_gas(n_transfers) {
+            return Err("attach more gas");
+        }
 
         let stdin = self.quoter_stdin(position_id.0, &p, c, &cands, vol);
         let sha = hex(&env::sha256(stdin.as_bytes()));
         // effects
-        self.gas_reserve_yocto = ok(math::sub(self.gas_reserve_yocto, deposit));
+        self.gas_reserve_yocto = math::sub(self.gas_reserve_yocto, deposit)?;
         p.status = PositionStatus::Settling;
         self.put_position(p);
         emit(
@@ -152,16 +285,7 @@ impl Nectar {
                     "quotes": cands.len() }),
         );
         // interactions
-        let args = json!({
-            "source": { "Project": { "project_id": self.quoter.project_id, "version_key": self.quoter.version_key } },
-            "resource_limits": { "max_instructions": self.quoter.max_instructions,
-                                 "max_memory_mb": self.quoter.max_memory_mb,
-                                 "max_execution_seconds": self.quoter.max_execution_seconds },
-            "input_data": stdin,
-            "response_format": "Json",
-            "payer_account_id": env::current_account_id(),
-        })
-        .to_string();
+        let args = self.quoter_request_args(stdin).to_string();
         let ids: Vec<U64> = cands.iter().map(|(_, id)| U64(*id)).collect();
         let cb = json!({ "position_id": position_id, "input_sha256": sha, "quote_ids": ids }).to_string();
         Promise::new(self.quoter.outlayer_account.clone())
@@ -172,6 +296,41 @@ impl Nectar {
                 cb.into_bytes(),
                 NearToken::from_yoctonear(0),
                 cb_gas,
+                GasWeight(1),
+            ))
+            .detach();
+        Ok(())
+    }
+
+    /// Pyth path (D-013): Settling, then `get_price` `.then(on_pyth_price)` with all remaining gas.
+    pub(crate) fn start_pyth_read(&mut self, position_id: U64, mut p: Position, account: AccountId, price_identifier: String) {
+        let cands = self.select_quotes(&p.collateral);
+        let n = self.n_transfers(&cands);
+        let downstream = if self.quoter_enabled() && self.vol_bps.get(&p.collateral).is_some() {
+            self.quoter_leg_gas(n)
+        } else {
+            n * Self::per_transfer_gas()
+        };
+        let cb_min = GAS_PYTH_CB_BASE.as_gas() + downstream;
+        let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
+        require!(left >= GAS_PYTH_GET_PRICE.as_gas() + cb_min + GAS_TRIGGER_MARGIN.as_gas(), "attach more gas");
+        // effects
+        p.status = PositionStatus::Settling;
+        self.put_position(p);
+        emit(
+            "pyth_price_requested",
+            json!({ "position_id": position_id, "account": account, "price_identifier": price_identifier }),
+        );
+        // interactions
+        let args = json!({ "price_identifier": price_identifier }).to_string();
+        let cb = json!({ "position_id": position_id }).to_string();
+        Promise::new(account)
+            .function_call("get_price", args.into_bytes(), NearToken::from_yoctonear(0), GAS_PYTH_GET_PRICE)
+            .then(Promise::new(env::current_account_id()).function_call_weight(
+                "on_pyth_price",
+                cb.into_bytes(),
+                NearToken::from_yoctonear(0),
+                Gas::from_gas(cb_min),
                 GasWeight(1),
             ))
             .detach();
@@ -245,7 +404,106 @@ impl Nectar {
         }
     }
 
+    /// Pyth `get_price` callback (WO-10b). Never panics on business failures: rejected price ->
+    /// `oracle_rejected{symbol, position_id, reason}` + `settlement_aborted`, position back to Open.
+    #[private]
+    pub fn on_pyth_price(&mut self, position_id: U64) {
+        let Some(p) = self.position(position_id.0) else { return };
+        if p.status != PositionStatus::Settling {
+            return; // cancelled meanwhile
+        }
+        let mut c = self.coll_or_panic(&p.collateral);
+        let px: Result<PythPrice, &'static str> = if env::promise_results_count() != 1 {
+            Err("no_result")
+        } else {
+            match env::promise_result_checked(0, MAX_PYTH_RESULT_LEN) {
+                Ok(b) => match serde_json::from_slice::<Option<PythPrice>>(&b) {
+                    Ok(Some(px)) => Ok(px),
+                    Ok(None) => Err("no_price"),
+                    Err(_) => Err("parse"),
+                },
+                Err(PromiseError::TooLong(_)) => Err("too_long"),
+                Err(_) => Err("failed"),
+            }
+        };
+        let checked = px.and_then(|px| {
+            check_pyth_price(
+                &px,
+                env::block_timestamp(),
+                self.max_age_ns(&c),
+                self.max_conf_bps,
+                c.oracle_price_usd_e6.0,
+                self.band_bps,
+            )
+        });
+        match checked {
+            Err(reason) => {
+                emit("oracle_rejected", json!({ "symbol": c.symbol, "position_id": position_id, "reason": reason }));
+                return self.abort_settlement(p, "oracle_rejected");
+            }
+            Ok((price, publish_ns)) => {
+                c.oracle_price_usd_e6 = U128(price);
+                c.oracle_updated_ns = U64(publish_ns);
+                emit(
+                    "oracle_updated",
+                    json!({ "symbol": c.symbol, "price_usd_e6": U128(price), "source": "Pyth", "publish_ns": U64(publish_ns) }),
+                );
+                self.put_coll(c.clone());
+            }
+        }
+        if self.paused {
+            return self.abort_settlement(p, "paused");
+        }
+        if !self.is_triggerable(&p, &c) {
+            return self.abort_settlement(p, "position healthy");
+        }
+        let cands = self.select_quotes(&p.collateral);
+        if self.quoter_enabled() {
+            match self.vol_bps.get(&p.collateral).copied() {
+                Some(vol) => {
+                    if let Err(e) = self.try_start_quoter(position_id, p.clone(), &c, cands, vol) {
+                        self.abort_settlement(p, e);
+                    }
+                    return;
+                }
+                None => emit("quoter_fallback", json!({ "position_id": position_id, "reason": "vol_unset" })),
+            }
+        }
+        let keeper = self.keeper.clone();
+        if let Err(e) = self.settle(position_id, p.clone(), c, &cands, &keeper) {
+            self.abort_settlement(p, e);
+        }
+    }
+
+    /// Owner escape: a position stuck in `Settling` (lost callback) goes back to Open. A late callback
+    /// then finds it not Settling and returns; if it was re-triggered meanwhile, the late callback still
+    /// re-checks oracle and health before settling.
+    pub fn cancel_settlement(&mut self, position_id: U64) {
+        self.assert_owner();
+        let mut p = self.position_or_panic(position_id.0);
+        require!(p.status == PositionStatus::Settling, "position not settling");
+        p.status = PositionStatus::Open;
+        self.put_position(p);
+        emit("settlement_cancelled", json!({ "position_id": position_id }));
+    }
+
     // ------------------------------------------------------------ owner setters
+    /// OutLayer `secrets_ref` (F-047) for the quoter; `null` clears.
+    pub fn set_quoter_secrets_ref(&mut self, secrets_ref: Option<SecretsRef>) {
+        self.assert_owner();
+        match &secrets_ref {
+            Some(sr) => {
+                require!(valid_profile(&sr.profile), "profile must be 1-64 bytes of [A-Za-z0-9_-]");
+                let b = near_sdk::borsh::to_vec(sr).unwrap_or_else(|_| env::panic_str("borsh"));
+                env::storage_write(QUOTER_SECRETS_REF_KEY, &b);
+            }
+            None => {
+                env::storage_remove(QUOTER_SECRETS_REF_KEY);
+            }
+        }
+        emit("quoter_secrets_ref_set", json!({ "secrets_ref": secrets_ref }));
+    }
+
     /// Empty strings disable the quoter (P0 static pricing).
     pub fn set_quoter_pin(&mut self, project_id: String, version_key: String) {
         self.assert_owner();
@@ -297,12 +555,23 @@ impl Nectar {
         }
     }
 
-    /// `Pyth` is rejected until WO-10b ships the Pyth read path, so a stored source can never brick triggers.
+    /// `Owner` or `Pyth{account, price_identifier}` (64 hex chars, stored lower-case).
     pub fn set_oracle_source(&mut self, symbol: String, source: OracleSource) {
         self.assert_owner();
         self.assert_symbol(&symbol);
-        require!(source == OracleSource::Owner, "Pyth source not available yet (WO-10b)");
-        self.oracle_sources.insert(symbol, source);
+        let source = match source {
+            OracleSource::Owner => OracleSource::Owner,
+            OracleSource::Pyth { account, price_identifier } => {
+                require!(valid_price_identifier(&price_identifier), "price_identifier must be 64 hex chars");
+                OracleSource::Pyth { account, price_identifier: price_identifier.to_ascii_lowercase() }
+            }
+        };
+        emit("oracle_source_set", json!({ "symbol": symbol, "source": source }));
+        if source == OracleSource::Owner {
+            self.oracle_sources.remove(&symbol);
+        } else {
+            self.oracle_sources.insert(symbol, source);
+        }
     }
 
     pub fn set_max_conf_bps(&mut self, max_conf_bps: u16) {
@@ -325,7 +594,13 @@ impl Nectar {
             max_memory_mb: q.max_memory_mb,
             max_execution_seconds: q.max_execution_seconds,
             max_conf_bps: self.max_conf_bps,
+            secrets_ref: self.secrets_ref(),
         }
+    }
+
+    /// Accounted gas reserve (yocto). OutLayer deposit refunds land in the account balance, not here.
+    pub fn get_gas_reserve(&self) -> U128 {
+        U128(self.gas_reserve_yocto)
     }
 
     pub fn get_oracle_source(&self, symbol: String) -> OracleSource {
