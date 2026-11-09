@@ -5,6 +5,7 @@ import { bpsToPct, computeLimit, formatUnits, formatUsdE6, health, parseUnits, p
 import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
 import { FaucetLink, Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { useBalance } from "@/components/useBalance";
+import { CopilotPanel } from "@/components/CopilotPanel";
 
 const tryParse = (s: string, d: number): bigint | null => {
   try {
@@ -96,6 +97,7 @@ export default function BorrowPage() {
           </Card>
         </div>
       </Gate>
+      <CopilotPanel />
     </div>
   );
 }

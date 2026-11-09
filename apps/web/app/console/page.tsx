@@ -5,6 +5,7 @@ import { bpsToPct, formatUsdE6, oracleSourceLabel, parseUnits, tx, type ExitCapa
 import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { OracleBadge, optionalView, pricingLabel } from "@/components/OracleBadge";
+import { CopilotPanel } from "@/components/CopilotPanel";
 
 interface Data { cap: ExitCapacity; pool: PoolView; quoter: QuoterConfigView | null; source: OracleSource | null }
 
@@ -159,6 +160,7 @@ export default function ConsolePage() {
           </div>
         )}
       </Gate>
+      <CopilotPanel />
     </div>
   );
 }
