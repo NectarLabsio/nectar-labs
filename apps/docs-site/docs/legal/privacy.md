@@ -1,28 +1,52 @@
 ---
 title: Privacy policy
+slug: /legal/privacy
+description: What the Nectar Labs sites process, why, and for how long.
 ---
 # Privacy policy
 
-_Last updated 2026-11-09 · Controller: **TODO-H9** (default: Nectar Labs, an unincorporated project by Nectar Network) · Contact: kunal@nectarnetwork.fun_
+_Last updated 2026-11-10 · Draft, not legal advice · Controller: **TODO-H9** (default if unanswered: "Nectar Labs, an unincorporated project by Nectar Network") · Contact: kunal@nectarnetwork.fun_
 
 ## What this covers
-The Nectar Labs web app, the Nectar Feed API and MCP server, and this documentation site ("the sites"). The sites are **testnet software** built for the NEAR Hackathon 2026.
 
-## What we collect
-- **Nothing you type into a wallet.** Keys never leave your wallet. The app shows the exact transaction (`msg`) before you sign.
-- **On-chain data is public by nature.** Quotes, positions and settlements live on NEAR testnet (and Solana devnet) and are visible to anyone, including your account id. We index these public events into the Feed.
-- **Server logs.** The Feed API and keeper write JSON logs (time, route, status, duration). We do not join wallet addresses to IP addresses in any log.
-- **Analytics only with consent.** No analytics script loads until you accept the banner. If accepted: `TODO-H4` (either Google Analytics 4 with IP anonymisation, or Plausible, which is cookieless). You can withdraw consent at any time via "Cookie settings" in the footer.
-- **Contact form.** The Talk page sends your message via **TODO-H9** (default: your own mail client via `mailto:`). We keep it to reply.
+This documentation site, the Nectar Labs web app and the Nectar Feed API and MCP server ("the sites"). The sites serve **testnet software**: NEAR testnet and Solana devnet, mock tokens, no real funds.
 
-## What we do not do
-Sell data · build profiles · run ads · track across sites · store private keys · collect data from minors knowingly.
+Current state (2026-11-10): only this documentation site exists. The web app, Feed API and MCP server are not built yet. Their entries below describe the planned processing and will be confirmed against the shipped code before they go live.
+
+## What we process
+
+| Data | Where | Purpose | Legal basis (GDPR / UK GDPR) | Retention |
+| --- | --- | --- | --- | --- |
+| Theme choice and consent choice | your browser's localStorage (see [Cookie policy](/legal/cookies)) | remember your settings | strictly necessary / legitimate interest | until you clear it; consent re-asked after 180 days |
+| Analytics events, **only if you accept** and only if a vendor is configured (TODO-H4) | analytics vendor | understand which pages help | consent | vendor default (TODO-H4) |
+| HTTP request metadata (IP address, user agent, URL, time) | our hosting provider (TODO-H5) | deliver the site, prevent abuse | legitimate interest | per host policy (TODO-H5) |
+| Email you send us | our mailbox | reply to you | legitimate interest / contract | until resolved + 12 months |
+| Wallet account ids and on-chain activity (web app, when shipped) | public blockchains | the protocol itself | — (public by nature) | permanent, outside our control |
+
+**On-chain data is public by nature.** Quotes, positions and settlements are on NEAR testnet and Solana devnet, visible to anyone, including your account id. We cannot erase on-chain data. That is a property of public blockchains, not a choice we make.
+
+**We never** collect private keys or seed phrases, sell data, build profiles, run ads, track you across sites, or join wallet addresses to IP addresses in any log we control.
+
+## Third parties actually used
+
+| Service | Used by | When | Data it receives |
+| --- | --- | --- | --- |
+| Hosting provider (TODO-H5; default plan: Vercel preview) | all sites | every request | request metadata |
+| Google Analytics 4 **or** Plausible (TODO-H4) | docs site, web app | only after you click "Accept analytics", and only if configured; **off by default** | page views, anonymised IP (GA4 with IP anonymisation) or no cookies (Plausible) |
+| Email provider of kunal@nectarnetwork.fun | contact | when you email us | your message and address |
+
+This site loads its fonts and search index from its own origin. It requests nothing from Google Fonts or any other CDN. Links to other sites (NEAR, Solana, OutLayer and others) are plain links. Those sites have their own policies once you follow them.
+
+Contact form (TODO-H9): until a form provider is chosen, "Talk to us" opens your own mail client (`mailto:`). No form processor is involved.
 
 ## Your rights
-Where GDPR/UK GDPR or similar laws apply: access, rectification, erasure, restriction, portability, objection. Email kunal@nectarnetwork.fun. On-chain data cannot be erased by us; this is a property of public blockchains, not a choice we make.
 
-## Retention
-Server logs 30 days · analytics per vendor defaults (TODO-H4) · contact emails until resolved + 12 months.
+Where GDPR, UK GDPR or India's Digital Personal Data Protection Act 2023 applies, you can ask for access, correction, erasure, restriction, portability, or object to processing, and you can withdraw consent at any time ([Cookie settings](/legal/cookies#cookie-settings)). Email kunal@nectarnetwork.fun. You may also complain to your data-protection authority.
+
+## Children
+
+The sites are not directed at children, and we do not knowingly process their data.
 
 ## Changes
-Changes are listed in the [Changelog](/changelog).
+
+Material changes are listed in the [Changelog](/changelog), with the date at the top of this page updated.

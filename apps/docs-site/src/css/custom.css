@@ -1,27 +1,68 @@
-/* Nectar theme for Docusaurus: Infima variables mapped to Nectar tokens (docs/DESIGN_SYSTEM.md). */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700&family=DM+Mono:wght@400;500&display=swap');
+/* Nectar theme for Docusaurus: Infima variables mapped to Nectar tokens (docs/DESIGN_SYSTEM.md,
+   packages/ui/tokens.css). Fonts are self-hosted (static/fonts, SIL OFL 1.1) so no request goes to a
+   font CDN: the docs site contacts no third party unless the visitor accepts analytics. */
+@font-face { font-family: 'Syne'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/syne-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Syne'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/syne-latin-700-normal.woff2') format('woff2'); }
+@font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/dm-mono-latin-400-normal.woff2') format('woff2'); }
+@font-face { font-family: 'DM Mono'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/dm-mono-latin-500-normal.woff2') format('woff2'); }
+
 :root {
-  --ifm-font-family-base: "DM Mono", Menlo, Consolas, monospace;
-  --ifm-heading-font-family: "Syne", "Avenir Next", system-ui, sans-serif;
-  --ifm-font-size-base: 14px; --ifm-line-height-base: 1.6;
+  --ifm-font-family-base: "DM Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --ifm-font-family-monospace: "DM Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --ifm-heading-font-family: "Syne", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --ifm-font-size-base: 14px; --ifm-line-height-base: 1.5; --ifm-heading-line-height: 1.1;
+  --ifm-global-radius: 8px; --ifm-card-border-radius: 12px; --ifm-code-font-size: 95%;
+  /* light */
   --ifm-color-primary: #15845f; --ifm-color-primary-dark: #106046; --ifm-color-primary-darker: #0e553e;
   --ifm-color-primary-darkest: #0b4633; --ifm-color-primary-light: #1a9a6f; --ifm-color-primary-lighter: #1fa677; --ifm-color-primary-lightest: #2bbd88;
   --ifm-background-color: #f9fafb; --ifm-background-surface-color: #ffffff;
-  --ifm-font-color-base: #202632; --ifm-heading-color: #141924; --ifm-color-emphasis-300: #d6dae0;
-  --ifm-code-background: #f0f2f4; --ifm-global-radius: 8px; --ifm-navbar-background-color: #ffffff; --ifm-footer-background-color: #f0f2f4;
+  --ifm-font-color-base: #202632; --ifm-heading-color: #141924; --ifm-color-emphasis-300: #d6dae0; --ifm-color-emphasis-700: #5e6778;
+  --ifm-code-background: #f0f2f4; --ifm-navbar-background-color: #ffffff; --ifm-footer-background-color: #f0f2f4;
+  --ifm-footer-link-color: #202632; --ifm-footer-title-color: #141924; --ifm-footer-color: #5e6778;
+  --ifm-table-stripe-background: rgba(110,122,145,.04);
+  --nectar-surface-2: #f0f2f4; --nectar-border: #d6dae0; --nectar-dim: #5e6778;
+  --nectar-warn: #9a5f00; --nectar-warn-fill: rgba(220,143,9,.10); --nectar-accent-fill: rgba(24,149,108,.08);
   --nectar-grid: rgba(110,122,145,.07);
 }
 [data-theme='dark'] {
   --ifm-color-primary: #16f3a9; --ifm-color-primary-dark: #09aa74; --ifm-color-primary-darker: #088f62;
   --ifm-color-primary-darkest: #06734f; --ifm-color-primary-light: #4cf5bb; --ifm-color-primary-lighter: #77f3ca; --ifm-color-primary-lightest: #a3f7db;
   --ifm-background-color: #0d0f12; --ifm-background-surface-color: #16181d;
-  --ifm-font-color-base: #bcc3d2; --ifm-heading-color: #e6e9ef; --ifm-color-emphasis-300: #23272f;
+  --ifm-font-color-base: #bcc3d2; --ifm-heading-color: #e6e9ef; --ifm-color-emphasis-300: #23272f; --ifm-color-emphasis-700: #8f96a3;
   --ifm-code-background: #202327; --ifm-navbar-background-color: #16181d; --ifm-footer-background-color: #16181d;
+  --ifm-footer-link-color: #bcc3d2; --ifm-footer-title-color: #e6e9ef; --ifm-footer-color: #8f96a3;
+  --ifm-table-stripe-background: rgba(122,184,163,.03);
+  --nectar-surface-2: #202327; --nectar-border: #23272f; --nectar-dim: #8f96a3;
+  --nectar-warn: #faaf2e; --nectar-warn-fill: rgba(245,158,11,.08); --nectar-accent-fill: rgba(0,229,160,.08);
   --nectar-grid: rgba(122,184,163,.043);
 }
-html { background-image: linear-gradient(var(--nectar-grid) 1px, transparent 1px), linear-gradient(90deg, var(--nectar-grid) 1px, transparent 1px); background-size: 24px 24px; }
-.navbar__title { font-family: var(--ifm-heading-font-family); font-weight: 700; letter-spacing: -.01em; }
-.footer { border-top: 1px solid var(--ifm-color-emphasis-300); }
+html {
+  background-color: var(--ifm-background-color);
+  background-image: linear-gradient(var(--nectar-grid) 1px, transparent 1px), linear-gradient(90deg, var(--nectar-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+h1, h2, h3, .navbar__title { font-family: var(--ifm-heading-font-family); letter-spacing: -.01em; }
+h1 { font-weight: 700; } h2, h3 { font-weight: 600; }
+.navbar { border-bottom: 1px solid var(--nectar-border); box-shadow: none; }
+.footer { border-top: 1px solid var(--nectar-border); }
+.footer--dark { --ifm-footer-background-color: var(--ifm-navbar-background-color); }
 .footer__title { font-family: var(--ifm-heading-font-family); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
-.badge--mock { background: var(--ifm-color-emphasis-300); color: var(--ifm-font-color-base); }
-.verified { font-size: 12px; color: var(--ifm-color-emphasis-700); border-left: 2px solid var(--ifm-color-primary); padding-left: 8px; }
+.footer__copyright { font-size: 12px; }
+:focus-visible { outline: 2px solid var(--ifm-color-primary); outline-offset: 2px; }
+
+/* "Verified against" line required on every protocol page */
+.verified { font-size: 12px; color: var(--ifm-color-emphasis-700); border-left: 2px solid var(--ifm-color-primary); padding-left: 8px; margin-bottom: 1rem; }
+/* Status line: live / mock / fallback / spec */
+.status { font-size: 12px; color: var(--nectar-warn); background: var(--nectar-warn-fill); border-radius: 8px; padding: 6px 10px; margin-bottom: 1rem; }
+.badge--mock { background: var(--nectar-surface-2); color: var(--ifm-font-color-base); }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* consent banner (src/theme/Root.tsx) */
+.nectar-consent {
+  position: fixed; inset-inline: 16px; bottom: 16px; max-width: 560px; margin: 0 auto; padding: 16px;
+  border-radius: 12px; background: var(--ifm-background-surface-color); border: 1px solid var(--nectar-border); z-index: 300;
+}
+.nectar-consent__title { font-family: var(--ifm-heading-font-family); font-weight: 600; margin: 0 0 4px; color: var(--ifm-heading-color); }
+.nectar-consent__body { margin: 0; font-size: 13px; }
+.nectar-consent__actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }

@@ -2,7 +2,7 @@
 
 ## Health checks
 - Keeper: `curl -s $KEEPER_URL/healthz` → `{lastBlock, allowanceYocto, pendingSettlements, oracleAgeS}`; stale if lastBlock older than 3 min.
-- Contract: `near contract call-function as-read-only $CORE get_status json-args '{}' network-config testnet now` → paused?, oracle age, gas reserve, quoter pin.
+- Contract: `near contract call-function as-read-only $CORE get_config json-args '{}' network-config testnet now` (P0 interface has no `get_status`; see docs/work/interface-p0.md) plus `get_exit_capacity '{"symbol":"NVDAx"}'` for oracle age.
 - Feed API: `curl -s $FEED_URL/api/feed | jq '.assets[0]'`.
 
 ## Incidents
@@ -19,8 +19,9 @@
 ## Commands (fill ids from packages/config/config.yaml)
 ```
 near contract call-function as-transaction $CORE pause json-args '{}' prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as $OWNER network-config testnet sign-with-keychain send
-near contract call-function as-transaction $CORE propose_price json-args '{"token":"'$NVDAX'","price_e6":"185000000","conf_e6":"50000"}' prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as $OWNER network-config testnet sign-with-keychain send
-near contract call-function as-transaction $CORE apply_price json-args '{"token":"'$NVDAX'"}' prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as $OWNER network-config testnet sign-with-keychain send
+near contract call-function as-transaction $CORE propose_price json-args '{"symbol":"NVDAx","price_usd_e6":"150000000"}' prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as $OWNER network-config testnet sign-with-keychain send
+near contract call-function as-transaction $CORE apply_price json-args '{"symbol":"NVDAx"}' prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as $OWNER network-config testnet sign-with-keychain send
+# P1 only (not in P0 build):
 near contract call-function as-transaction $CORE set_quoter_pin json-args '{"version_key":"","wasm_sha256":""}' prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as $OWNER network-config testnet sign-with-keychain send
 ```
 (Exact `call-function` grammar re-confirmed at G0 → F-018.)

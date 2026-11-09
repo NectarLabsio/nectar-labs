@@ -1,18 +1,29 @@
 ---
 title: Cookie policy
+slug: /legal/cookies
+description: Every browser storage key the Nectar Labs sites use.
 ---
 # Cookie and storage policy
 
-_Last updated 2026-11-09_
+_Last updated 2026-11-10_
 
-No cookie or storage is used for analytics until you accept the consent banner. The table lists **every** key the sites may set.
+By default this documentation site sets **no cookies** and loads **no analytics**. It keeps two small values in your browser's localStorage. Analytics can only load in a production build where a vendor has been configured (TODO-H4), and only after you click "Accept analytics".
 
-| Key | Where | Purpose | Lifetime | Category |
-| --- | --- | --- | --- | --- |
-| `nectar-consent` | localStorage | your Accept/Decline choice and its version | 180 days | necessary |
-| `nectar-theme` / `theme` | localStorage | light or dark | until cleared | necessary |
-| wallet-selector keys (`near-wallet-selector:*`) | localStorage | which NEAR wallet you connected; set by the wallet-selector library | until disconnect | necessary (app only) |
-| `_ga`, `_ga_*` | cookies | Google Analytics 4 — only if **H4 = GA4** and you accepted | up to 2 years | analytics (consent) |
-| — | — | Plausible is cookieless; if **H4 = Plausible** no analytics cookie is set | — | analytics (consent) |
+## Documentation site (this site)
 
-Change your choice: footer → **Cookie settings**, or clear site data in your browser.
+| Key | Type | Set by | Purpose | Lifetime | Category |
+| --- | --- | --- | --- | --- | --- |
+| `nectar-consent` | localStorage | our consent banner | your Accept or Decline choice: `{v, analytics, at}` | 180 days, then asked again; a new version also re-asks | strictly necessary |
+| `theme` | localStorage | Docusaurus colour-mode switch | light or dark, if you toggle it | until you clear site data | strictly necessary |
+| GA4 cookies | first-party cookies | Google Analytics 4 | analytics, **only** if H4 = GA4 **and** you accepted | per Google's defaults (listed here when H4 is decided) | analytics (consent) |
+| — | — | Plausible | cookieless; if H4 = Plausible no analytics cookie is set, and the script still loads only after you accept | — | analytics (consent) |
+
+On 2026-11-10 no analytics vendor is configured, so the last two rows do not apply to any deployed build. The keys above were checked against the installed site code (Docusaurus 3.10.2 colour mode uses `theme`; the consent component uses `nectar-consent`). Docusaurus can also store `docusaurus.tab.*`, `docusaurus.announcement.*` and `docs-preferred-version-*`, but only for tabs, announcement bars and versioned docs. This site uses none of those, so they are never set.
+
+## Web app (not shipped yet)
+
+The web app is not built yet. When it ships it will share `nectar-consent` and add its theme key and the NEAR wallet-selector's own keys (which record the wallet you connected). The exact key names will be listed here from the shipped code before launch.
+
+## Cookie settings {#cookie-settings}
+
+Open this page with `#cookie-settings` in the address (the footer link **Cookie settings** does this) to bring back the banner and change your choice. Declining after an earlier accept stops analytics from loading on later visits. Reload the page, or clear site data in your browser, to remove anything already loaded. Clearing site data also resets the choice.
