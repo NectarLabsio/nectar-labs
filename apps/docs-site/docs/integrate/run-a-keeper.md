@@ -6,7 +6,7 @@ description: One function-call key, two methods, no deposits.
 # Run a keeper
 
 <p className="verified">Verified against: F-015 (2026-11-09), F-018 (2026-11-10), F-019 (2026-11-10), F-020 (2026-11-10, --help confirmation pending), C-004 (open) · spec docs/PRD.md §10.1 · D-010 (2026-11-10)</p>
-<p className="status">Status: keeper service not built (WO-5). Account TODO-G2. P0 has one keeper account. Registry, bonds and races are PROD-only.</p>
+<p className="status">Status: keeper service not built (WO-5). Account `keeper.nectar.testnet` (function-call key for 2 methods, no full-access key; D-012); not running continuously. P0 has one keeper account. Registry, bonds and races are PROD-only.</p>
 
 ## The key
 

@@ -6,13 +6,13 @@ description: Owner commands for pause, price override and keeper rotation.
 # Runbook
 
 <p className="verified">Verified against: F-018 (2026-11-10), F-019 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · mirrors docs/RUNBOOK.md</p>
-<p className="status">Status: commands target the P0 interface. Ids are TODO-G2 until deploy. P1 and P2 commands are marked as such and do not exist in the P0 build.</p>
+<p className="status">Status: commands target the P0 interface deployed on testnet on 2026-11-09 (G2 verification pending). P1 and P2 commands are marked as such and do not exist in the P0 build.</p>
 
-Set the ids from `packages/config/config.yaml` after G2:
+Ids from `packages/config/config.yaml`:
 
 ```bash
-CORE=TODO-G2      # nectar-core account
-OWNER=TODO-G2     # owner account (keychain)
+CORE=nectar-core.nectar.testnet      # nectar-core account
+OWNER=nectar.testnet                 # owner account (keychain)
 ```
 
 ## Health
