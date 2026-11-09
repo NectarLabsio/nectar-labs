@@ -47,13 +47,20 @@ const get = (r: Row, k: string): string => {
   return v;
 };
 
-const rows = parseCsv(readFileSync(SOURCE, 'utf8'));
+const all = parseCsv(readFileSync(SOURCE, 'utf8'));
 const label = (r: Row, i: number): string => r.case ?? `row ${i + 2}`;
+// model.csv carries row kinds (`limit`, `leg`, ...) and leaves columns irrelevant to a kind empty. The
+// keeper mirrors only the `limit` maths (health + Cramér limit + premium); `leg` rows (liquidation leg
+// sizing) are the contract's job and are skipped here. The fixture has no `kind` column: all its rows
+// are limit-shaped.
+const hasKind = all.length > 0 && 'kind' in (all[0] ?? {});
+const rows = hasKind ? all.filter((r) => r.kind === 'limit') : all;
+let limitChecked = 0;
 
 describe(`health maths vs ${SOURCE === REAL ? 'contracts/nectar-core/tests/model.csv' : 'test/model.fixture.csv (WO-2 CSV not landed)'}`, () => {
-  it('CSV has rows and the health columns', () => {
-    assert.ok(rows.length > 0, 'no rows');
-    for (const c of HEALTH) assert.ok(c in (rows[0] ?? {}), `model.csv lacks column ${c}; report to orchestrator`);
+  it('CSV has limit rows and the health + limit columns', () => {
+    assert.ok(rows.length > 0, `no limit rows in ${SOURCE}`);
+    for (const c of [...HEALTH, ...LIMIT]) assert.ok(c in (rows[0] ?? {}), `model.csv lacks column ${c}; report to orchestrator`);
   });
 
   rows.forEach((r, i) => {
@@ -65,7 +72,8 @@ describe(`health maths vs ${SOURCE === REAL ? 'contracts/nectar-core/tests/model
       assert.equal(isPreLiqBreached(debt, v, BigInt(get(r, 'pre_liq_ltv_bps'))), bool(get(r, 'triggerable')), 'triggerable');
     });
 
-    if (LIMIT.every((c) => (r[c] ?? '') !== '')) {
+    {
+      // Every limit row needs every LIMIT column: an empty one fails loudly via get().
       it(`limit: ${label(r, i)}`, () => {
         const v = BigInt(get(r, 'value_usd_e6'));
         const lim = cramerLimit({
@@ -83,8 +91,15 @@ describe(`health maths vs ${SOURCE === REAL ? 'contracts/nectar-core/tests/model
         assert.equal(lim.staticLimitUsdE6, BigInt(get(r, 'static_limit_usd_e6')), 'static_limit_usd_e6');
         const prem = limitPremiumUsdE6(BigInt(get(r, 'borrow_usd_e6')), lim.staticLimitUsdE6, BigInt(get(r, 'limit_premium_bps')));
         assert.equal(prem, BigInt(get(r, 'premium_usd_e6')), 'premium_usd_e6');
+        limitChecked++;
       });
     }
+  });
+
+  // Runs last in this suite (node:test runs `it`s in declaration order): no vacuous pass.
+  it('every limit row was checked', () => {
+    assert.ok(limitChecked > 0, 'no limit rows checked');
+    assert.equal(limitChecked, rows.length, 'limit rows checked');
   });
 });
 

@@ -1,5 +1,6 @@
 // Keeper entrypoint: `pnpm --filter keeper start`. Reads ids + KEEPER_KEY_PATH from the environment;
-// refuses to start while ids are TODO-G2 or the key file is missing / too open.
+// refuses to start (exit 2) while ids are TODO-G2, the key file is missing / too open, or the key is
+// a FullAccess key on chain (startup.ts; D-012 deletion stays the primary control).
 
 import { NearCoreReader, NearKeeperWriter } from './chain.ts';
 import { ConfigError, loadConfig } from './config.ts';
@@ -8,6 +9,7 @@ import { Keeper } from './keeper.ts';
 import { KeyFileError, loadKeeperKey } from './keyfile.ts';
 import { createLogger, errMsg } from './log.ts';
 import { startHealthServer } from './server.ts';
+import { FullAccessKeyError, assertNotFullAccess } from './startup.ts';
 
 async function main(): Promise<void> {
   const log = createLogger('keeper');
@@ -25,6 +27,17 @@ async function main(): Promise<void> {
     throw e;
   }
   const reader = new NearCoreReader(cfg.rpcUrl, cfg.coreAccountId, cfg.keeperAccountId, key.publicKey);
+  try {
+    const allowance = await assertNotFullAccess(reader, cfg.keeperAccountId);
+    if (allowance.kind === 'unknown') log.warn('allowance_unknown_at_startup', { reason: allowance.reason });
+  } catch (e) {
+    if (e instanceof FullAccessKeyError) {
+      log.error('startup_refused', { error: e.message });
+      process.exitCode = 2;
+      return;
+    }
+    throw e;
+  }
   const writer = new NearKeeperWriter(cfg.rpcUrl, cfg.keeperAccountId, key.secretKey, cfg.coreAccountId, cfg.gasTgas);
   const db = new KeeperDb(cfg.dbPath);
   const keeper = new Keeper(reader, writer, db, log, { pollMs: cfg.pollMs, pageSize: cfg.pageSize });
