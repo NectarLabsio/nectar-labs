@@ -1,0 +1,11 @@
+2026-11-09T22:56:11Z
+$ env -i PATH=$PATH HOME=$HOME pnpm --filter keeper oracle-updater   # no PYTH key, no .env
+ls: .env: No such file or directory
+
+> keeper@0.1.0 oracle-updater /private/tmp/verify-G5-1794264871/services/keeper
+> node --disable-warning=ExperimentalWarning src/oracle-updater-main.ts
+
+{"ts":"2026-11-09T22:56:12.264Z","level":"warn","service":"oracle-updater","msg":"oracle_updater_disabled","reason":"PYTH_API_KEY_PATH unset (TODO-H13)"}
+EXIT 0
+
+$ pnpm --filter keeper exec node --test src/oracle-updater.test.ts

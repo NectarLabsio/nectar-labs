@@ -1,0 +1,16 @@
+## commit 706d94020b6d4dbb54a0821c06ba52c1fbb56d11
+## README.md
+18:| oracle | owner oracle on nectar-core (`update_owner_price`, $180) | **fallback**, badge in UI | owner oracle (P0, disclosed); live source decided at G5 |
+48:- The limit comes from committed capacity and an oracle price, checked for freshness (120 s in session, 24 h when closed) and against a 1,500 bps band.
+60:`security`: contract-built preimage, pinned TEE program, keeper with a function-call key only, oracle staleness and band checks.
+74:P0 core credit (G0–G3) → P1 TEE pricing, live oracle, 1Click depth, Feed MCP (G4–G6) → P2 Solana leg via Chain Signatures, copilot (G7–G8) → G9 fresh-clone rehearsal.
+## first price mention README
+16:| owner | [`nectar.testnet`](https://testnet.nearblocks.io/address/nectar.testnet) | deployer; sets params and the P0 price | live (testnet) |
+18:| oracle | owner oracle on nectar-core (`update_owner_price`, $180) | **fallback**, badge in UI | owner oracle (P0, disclosed); live source decided at G5 |
+29:LTV 6,250 bps, pre-liquidation at 7,500 bps; owner price $180; session closed. All tokens are mocks with no value.
+## apps/docs-site/docs/start/live-on-testnet.md
+18:| owner | [`nectar.testnet`](https://testnet.nearblocks.io/address/nectar.testnet) | deployer; sets params and the P0 price | live (testnet) |
+20:| oracle | owner oracle on nectar-core (`update_owner_price`), $180 | **fallback**, badge shown in UI | owner oracle (P0, disclosed); live source decided at G5 |
+29:- **Mock**: a stand-in we deployed ourselves with no value. The tokens are mocks, and so is the owner-set price.
+30:- **Fallback**: a permanent code path used when the better source is not available. P0 settlement prices at the quote's `max_discount_bps` instead of a TEE-computed discount. The P0 oracle is owner-set instead of Pyth or OutLayer. Both are disclosed in the UI (D-004, D-005).
+45:| Oracle | owner price $180 (disclosed fallback); session closed |

@@ -7,7 +7,7 @@
 | G2 testnet deploy | PASS | 2026-11-09T20:55Z | 5f27f44 | evidence/G2/verifier-20261109T2055Z.log (explorer pages returned HTTP 403 to WebFetch; see §G2) |
 | G3 web E2E | PASS | 2026-11-09T21:15Z | 176914f | evidence/G3/verifier-20261109T2115Z/ (e2e 112 pass / 0 fail / 2 skip = write spec; LH 12/12 = 100; write flow cited from 20:57Z run, not repeated; prior FAIL 20:57Z c940dec: see §G3) |
 | G4 OutLayer | PASS | 2026-11-09T22:10Z | d87eef6 | evidence/G4/verifier-20261109T2210Z/ (attestation via testnet-api.outlayer.ai/attestations/by-request/15114, TDX quote present, not verified; gates.md get_settlement view missing, criterion checked from events; fills = max until WO-10b) |
-| G5 oracle | pending | | | |
+| G5 oracle | FALLBACK (disclosed) | 2026-11-09T22:55Z | 706d940 | evidence/G5/verifier-20261109T2254Z/ (no live Pyth price: pyth-oracle.testnet NVDA → null, Hermes 401, H13 key absent; nectar-core source = Owner; Pyth defences tested: unit 157/0 + sandbox 5/0 + sandbox_p1 4/0; gates.md filter `oracle_rejects` matches 0 tests; README $180 vs on-chain $112; see §G5) |
 | G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at 578b006: 3-size live dry quotes verify, impact from base units, no amountIn/OutUsd use; GET /api/oneclick fixture + live match shape; /feed panel and NVDAx route status come from the API; web e2e 128 passed / 0 failed; see §G6) |
 | G7 Solana + signer | pending | | | |
 | G8 copilot | pending | | | |
@@ -23,6 +23,46 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G5
+
+### G5 — oracle — FALLBACK (disclosed) — 2026-11-09T22:55Z — commit 706d940
+Fresh clone /tmp/verify-G5-1794264871 at main 706d940. PATH and SDKROOT set per the gates.md host notes. Only read-only calls, no transactions sent. Logs are in evidence/G5/verifier-20261109T2254Z/.
+$ORACLE and $NVDA_PRICE_ID are not defined anywhere in the repo: config.yaml has `oracle.nvda_price_id: TODO-G5` and .env.example has `NVDA_PRICE_ID=TODO-G5`. I used ORACLE=pyth-oracle.testnet (C-012) and the F-053 Equity.US.NVDA id b1073854…a593.
+```
+$ near contract call-function as-read-only pyth-oracle.testnet get_price json-args '{"price_identifier":"b1073854…a593"}' network-config testnet now   # near-cli-get_price.log 22:55:09Z
+null                                                       -> criterion "publish_time < 600 s" NOT met
+# live-probes.log 22:55:28Z (RPC rpc.testnet.near.org, finality final)
+pyth-oracle.testnet get_price_no_older_than {price_id, age:86400} @276984374 -> null
+pyth-oracle.testnet get_price_unsafe @276984380 -> null ; price_feed_exists -> false (no update pushed)
+price-oracle.testnet get_price -> MethodResolveError(MethodNotFound)        (C-012 holds)
+hermes.pyth.network /v2/updates/price/latest?ids[]=<id> -> HTTP 401 ; hermes-beta -> HTTP 401   (C-007 holds, H13 open)
+nectar-core get_oracle_source {NVDAx} @276984398 -> "Owner"
+nectar-core get_exit_capacity {NVDAx} @276984404 -> oracle_price_usd_e6 112000000, oracle_age_s 623, oracle_fresh true, session_open false, oracle_source Owner
+$ cargo test -p nectar-core oracle_rejects                 # cargo-oracle_rejects.log
+test result: ok. 0 passed; 0 failed; 4 filtered out ; ... 0 passed  -> the gates.md filter matches NO test (stale name)
+$ cargo test -p nectar-core -- --nocapture                 # cargo-test-nectar-core.log, EXIT 0
+unittests 157 passed 0 failed ; tests/sandbox.rs 5 passed ; tests/sandbox_p1.rs 4 passed
+$ env -i PATH HOME pnpm --filter keeper oracle-updater     # keeper-oracle-updater-nokey.log (no .env in clone)
+{"level":"warn","service":"oracle-updater","msg":"oracle_updater_disabled","reason":"PYTH_API_KEY_PATH unset (TODO-H13)"}  EXIT 0
+$ node --test services/keeper/test/oracle-updater.test.ts  # keeper-oracle-updater-test.log: 14 pass / 0 fail
+```
+Tests covering each defence (all passed in the full run):
+- Staleness, 120 s with the session open and 86,400 s closed: `pyth_acceptance_rules` (121 s rejected at 120 s, accepted at 86,400 s), `pyth_rejects_stale_in_session`, `pyth_trigger_open_session_age` (age_s 120), `pyth_trigger_closed_session_age` (age_s 86400) and `pyth_age_rounds_up_to_seconds`. The contract calls `get_price_no_older_than(price_id, age)` (p1.rs:11,312). Sandbox `upgrade_v1_then_pyth_secrets_cancel` covers a 25 h-old price with the session closed → `no_price`, and a 3 min-old price with the session open → `no_price`. P0: `lock_and_borrow_stale_oracle_refunds`, `trigger_stale_oracle`.
+- Confidence (max_conf_bps): `pyth_acceptance_rules` accepts exactly 100 bps and rejects 100 bps + 1 unit (`conf_too_wide`). Also `pyth_rejects_wide_conf`, `max_conf_bound`, and the sandbox `conf_too_wide` case.
+- Band: `pyth_acceptance_rules` (119 accepted, 118.99 → `out_of_band`), `pyth_rejects_out_of_band` and the sandbox `out_of_band` case. Owner-oracle band from P0: `update_owner_price_band` (emits `oracle_rejected`), `propose_apply_bypasses_band`, `apply_price_same_block_rejected`, `apply_price_without_proposal`.
+- Negative price: `pyth_rejects_negative_price`, the sandbox `non_positive` case, and the `pyth_to_usd_e6` / `check_pyth_price` non_positive asserts.
+- Expo conversion: `pyth_expo_to_usd_e6` covers expo -5, -8, 0, +1 and -6, flooring, zero_price and overflow.
+- Rejection returns the position to Open: `pyth_reject_case` asserts `oracle_rejected{reason}` + `settlement_aborted{oracle_rejected}`, status Open and the price untouched. It is used by the null, failed, parse and too_long cases and by the conf, band and negative cases above. The sandbox loop asserts `status == "Open"` for every reason.
+Disclosure (disclosure-grep.log, at 706d940):
+- README.md:18 is the first place a reader meets the oracle: "owner oracle on nectar-core (`update_owner_price`, $180) | **fallback**, badge in UI | owner oracle (P0, disclosed); live source decided at G5".
+- apps/docs-site/docs/start/live-on-testnet.md:20 has the same row; lines 29-30 say "the owner-set price" and "The P0 oracle is owner-set instead of Pyth or OutLayer"; line 45 says "owner price $180 (disclosed fallback)".
+Explorer: none opened. No transaction was involved; all evidence comes from RPC views.
+Verdict: FALLBACK (disclosed). This is NOT a PASS, because no live Pyth price was read by nectar-core: pyth-oracle.testnet has no NVDA update, Hermes returns 401 and the H13 key is absent. The defences are tested and the owner oracle is disclosed.
+Findings for the orchestrator:
+- (1) The gates.md G5 line `cargo test -p nectar-core oracle_rejects` runs 0 tests. The tests are named `pyth_rejects_*` / `pyth_acceptance_rules`.
+- (2) $ORACLE and NVDA_PRICE_ID are still TODO-G5 in config.yaml and .env.example.
+- (3) README and docs say "owner price $180", but the live nectar-core NVDAx price is $112 (age 623 s at 22:55Z). The README is not truthful about the current value.
 
 ## G6
 

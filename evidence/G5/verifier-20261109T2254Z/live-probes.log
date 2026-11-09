@@ -1,0 +1,9 @@
+2026-11-09T22:55:28Z
+pyth-oracle.testnet.get_price_no_older_than({"price_id":"b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593","age":86400}) @276984374 -> null
+pyth-oracle.testnet.get_price_unsafe({"price_identifier":"b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593"}) @276984380 -> null
+pyth-oracle.testnet.price_feed_exists({"price_identifier":"b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593"}) @276984386 -> false
+price-oracle.testnet.get_price({"price_identifier":"b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593"}) -> ERR "wasm execution failed with error: MethodResolveError(MethodNotFound)"
+nectar-core.nectar.testnet.get_oracle_source({"symbol":"NVDAx"}) @276984398 -> "Owner"
+nectar-core.nectar.testnet.get_exit_capacity({"symbol":"NVDAx"}) @276984404 -> {"q_usd_e6":"2790000000","r_usd_e6":"0","d_usd_e6":"0","haircut_bps":2500,"session_open":false,"oracle_price_usd_e6":"112000000","oracle_age_s":"623","oracle_fresh":true,"b_c_usd_per_unit_e6":"78400000","limit_bps_effective":7000,"capacity_usd_e6":"2092500000","oracle_source":"Owner"}
+hermes.pyth.network /v2/updates/price/latest -> HTTP 401
+hermes-beta.pyth.network /v2/updates/price/latest -> HTTP 401

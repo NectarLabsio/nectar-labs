@@ -15,7 +15,9 @@ G4: RPC view outlayer.testnet estimate_execution_cost with packages/config/outla
     outlayer.version_key == sha256(GET outlayer.wasm_url); nectar-core get_quoter_config / get_state_version / code_hash vs rebuilt wasm;
     trigger txs from evidence/G4/run-*.log via EXPERIMENTAL_tx_status → quoter_result disc_bps within [0, quote max] (run B) and
     quoter_fallback (run A); attestation GET https://testnet-api.outlayer.ai/attestations/by-request/<request_id> (F-168/F-169).
-G5: near contract call-function as-read-only $ORACLE get_price json-args '{"price_identifier":"'$NVDA_PRICE_ID'"}' network-config testnet now → publish_time < 600 s old; cargo test -p nectar-core oracle_rejects
+G5: RPC pyth-oracle.testnet get_price_no_older_than {"price_id":$NVDA_PRICE_ID,"age":86400} (and get_price_unsafe) → publish_time < 600 s for
+    PASS; cargo test -p nectar-core pyth_ (staleness/conf/band/expo/abort) + sandbox_p1; nectar-core get_oracle_source NVDAx; Hermes status
+    (C-007). No live price → FALLBACK (disclosed) if defences tested and README discloses the owner oracle.
 G6: NECTAR_IT=1 pnpm --filter feed test (live dry quotes verify; dry-only enforced); curl /v0/tokens (no equity, F-063);
     GET /api/oneclick (3-size impact from base units, C-014) ; web /feed renders the 1Click panel + NVDAx route status from the API
 G7: cd solana && anchor test 2>&1 | tail -40; pnpm --filter keeper test:settle-devnet (uses config program id); open both explorer links

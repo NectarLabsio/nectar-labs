@@ -1,0 +1,10 @@
+2026-11-09T22:55:09Z
+## gate cmd: near contract call-function as-read-only pyth-oracle.testnet get_price ...
+│    No logs[0m
+Function execution return value (printed to stdout):
+null
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-read-only pyth-oracle.testnet get_price json-args '{"price_identifier":"b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593"}' network-config testnet now[39m
+

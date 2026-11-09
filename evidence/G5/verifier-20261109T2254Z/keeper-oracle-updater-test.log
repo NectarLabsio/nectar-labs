@@ -1,0 +1,109 @@
+TAP version 13
+# Subtest: oracle updater config (gating)
+    # Subtest: is disabled without PYTH_API_KEY_PATH
+    ok 1 - is disabled without PYTH_API_KEY_PATH
+      ---
+      duration_ms: 0.979875
+      type: 'test'
+      ...
+    # Subtest: is disabled without the updater account or key path, or with TODO placeholders
+    ok 2 - is disabled without the updater account or key path, or with TODO placeholders
+      ---
+      duration_ms: 1.092541
+      type: 'test'
+      ...
+    # Subtest: is disabled without feed ids, with a malformed id, or when reusing the keeper account
+    ok 3 - is disabled without feed ids, with a malformed id, or when reusing the keeper account
+      ---
+      duration_ms: 1.533291
+      type: 'test'
+      ...
+    # Subtest: enabled config has the documented defaults and normalised ids
+    ok 4 - enabled config has the documented defaults and normalised ids
+      ---
+      duration_ms: 1.505209
+      type: 'test'
+      ...
+    # Subtest: createOracleUpdater refuses a world-readable API key file
+    ok 5 - createOracleUpdater refuses a world-readable API key file
+      ---
+      duration_ms: 0.750042
+      type: 'test'
+      ...
+    # Subtest: createOracleUpdater builds an updater when everything is present (no network)
+    ok 6 - createOracleUpdater builds an updater when everything is present (no network)
+      ---
+      duration_ms: 2.614
+      type: 'test'
+      ...
+    1..6
+ok 1 - oracle updater config (gating)
+  ---
+  duration_ms: 9.301
+  type: 'suite'
+  ...
+# Subtest: oracle updater run (fixture)
+    # Subtest: parses the Hermes hex update
+    ok 1 - parses the Hermes hex update
+      ---
+      duration_ms: 0.534459
+      type: 'test'
+      ...
+    # Subtest: fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+    ok 2 - fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+      ---
+      duration_ms: 1.723042
+      type: 'test'
+      ...
+    # Subtest: honours a custom header and raw scheme
+    ok 3 - honours a custom header and raw scheme
+      ---
+      duration_ms: 1.050583
+      type: 'test'
+      ...
+    # Subtest: 401 → logged failure with status, no push, key never logged, backoff grows
+    ok 4 - 401 → logged failure with status, no push, key never logged, backoff grows
+      ---
+      duration_ms: 1.039125
+      type: 'test'
+      ...
+    # Subtest: non-200 bodies echoing the key are redacted
+    ok 5 - non-200 bodies echoing the key are redacted
+      ---
+      duration_ms: 0.64425
+      type: 'test'
+      ...
+    # Subtest: refuses a fee above the cap and a non-U128 fee
+    ok 6 - refuses a fee above the cap and a non-U128 fee
+      ---
+      duration_ms: 0.60825
+      type: 'test'
+      ...
+    # Subtest: a failed update_price_feeds surfaces as an error
+    ok 7 - a failed update_price_feeds surfaces as an error
+      ---
+      duration_ms: 0.506875
+      type: 'test'
+      ...
+    # Subtest: redact ignores tiny secrets
+    ok 8 - redact ignores tiny secrets
+      ---
+      duration_ms: 0.042208
+      type: 'test'
+      ...
+    1..8
+ok 2 - oracle updater run (fixture)
+  ---
+  duration_ms: 6.534292
+  type: 'suite'
+  ...
+1..2
+# tests 14
+# suites 2
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 223.084
+EXIT 0
