@@ -8,20 +8,22 @@ SUBS=(nectar-core usdc-mock nvdax-mock keeper buyer1 buyer2 borrower1)
 if [ "${1:-}" != "--skip-parent" ]; then
   log "parent $PARENT via faucet (F-016)"
   retry near account create-account sponsor-by-faucet-service "$PARENT" \
-    autogenerate-new-keypair save-to-keychain network-config testnet create \
+    autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain network-config testnet create \
     || { echo "FAUCET FAILED ×$RETRIES → write H-NEAR-FAUCET in docs/HUMAN_HANDOFF.md and continue other work" >&2; exit 2; }
 fi
 for s in "${SUBS[@]}"; do
-  log "sub-account $s.$PARENT (F-020 — confirm grammar at G0)"
+  log "sub-account $s.$PARENT (F-020, v0.31.1 grammar)"
   retry near account create-account fund-myself "$s.$PARENT" '5 NEAR' \
-    autogenerate-new-keypair save-to-keychain sign-as "$PARENT" \
+    autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain sign-as "$PARENT" \
     network-config testnet sign-with-keychain send
 done
-log "keeper function-call key (F-020 — confirm grammar at G0)"
+log "keeper function-call key (F-020, v0.31.1 grammar; C-004)"
+# P0 scope per PRD §6.1: two methods only (D-010). P1 adds a separate key if the Pyth passthrough is used.
 near account add-key "keeper.$PARENT" grant-function-call-access \
-  --allowance '1 NEAR' --receiver-account-id "nectar-core.$PARENT" \
-  --method-names 'trigger_preliquidation,relay_settlement_result,update_price_feeds' \
-  autogenerate-new-keypair save-to-keychain network-config testnet sign-with-keychain send
+  --allowance '1 NEAR' --contract-account-id "nectar-core.$PARENT" \
+  --function-names 'trigger_preliquidation,relay_settlement_result' \
+  autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain \
+  network-config testnet sign-with-keychain send
 mkdir -p ~/.nectar/keys && chmod 700 ~/.nectar ~/.nectar/keys
 log "write ids to config.yaml and FACTS §Account ids (orchestrator)"
 echo "PARENT=$PARENT"; for s in "${SUBS[@]}"; do echo "$s=$s.$PARENT"; done
