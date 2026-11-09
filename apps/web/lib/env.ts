@@ -1,6 +1,8 @@
 // Public runtime settings. Defaults are testnet-only.
 // RPC default from F-096 (near-connect providers example). Override with NEXT_PUBLIC_NEAR_RPC.
 export const RPC_URL = process.env.NEXT_PUBLIC_NEAR_RPC || "https://test.rpc.fastnear.com";
+// Feed API (services/feed). Reached only through the same-origin /api/indexer proxy. Empty: pages show "indexer not connected".
+export const FEED_URL = process.env.NEXT_PUBLIC_FEED_URL ?? "";
 // Explorer base for tx links: TODO-G2 confirm the testnet explorer URL in docs/FACTS.md; empty disables links.
 export const EXPLORER_TX = process.env.NEXT_PUBLIC_EXPLORER_TX ?? "";
 export const EXPLORER_ACCOUNT = process.env.NEXT_PUBLIC_EXPLORER_ACCOUNT ?? "";
