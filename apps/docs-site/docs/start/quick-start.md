@@ -6,14 +6,14 @@ description: Five commands from a fresh clone, no keys.
 # Quick start (no keys needed)
 
 <p className="verified">Verified against: F-012 (2026-11-09), F-026 (2026-11-10), F-090 (2026-11-09) · root package.json scripts, scripts/50-verify.sh, evidence/G2/demo-testnet-20261109T2049Z.log (2026-11-09)</p>
-<p className="status">Status: commands 2 to 5 work today; command 1 needs the public repo URL (H2). The contracts are deployed on testnet; G2 verification is pending.</p>
+<p className="status">Status: commands 2 to 5 work today; command 1 needs the public repo URL (H2). The contracts are deployed on testnet (G2 PASS 2026-11-09T20:55Z, commit 5f27f44); web gate G3 is in progress.</p>
 
 ```bash
 git clone <repo-url> nectar-labs && cd nectar-labs   # repo URL: TODO-H2 (private until Kunal publishes it)
 pnpm i
 pnpm demo:testnet            # read-only views against the testnet contract
-pnpm --filter web dev        # web app on http://localhost:3000
-pnpm --filter docs-site start
+pnpm --filter web dev        # web app on http://localhost:3100
+pnpm --filter docs-site start  # this site on http://localhost:3000
 ```
 
 ## Prerequisites
@@ -31,11 +31,11 @@ pnpm --filter docs-site start
 | 1 | `git clone` | works once the repo is public (H2) |
 | 2 | `pnpm i` | works; installs from `pnpm-lock.yaml` |
 | 3 | `pnpm demo:testnet` | works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml` and prints contract version, exit capacity, pool, quotes, positions and explorer links (see [Live on testnet](/start/live-on-testnet)). |
-| 4 | `pnpm --filter web dev` | starts `apps/web` (WO-3 merged; web gate G3 pending). |
+| 4 | `pnpm --filter web dev` | starts `apps/web` on http://localhost:3100 (`next dev -p 3100`; web gate G3 in progress). |
 | 5 | `pnpm --filter docs-site start` | works: this site on http://localhost:3000 |
 
 `demo:testnet` reads public state only. It never signs, needs no key and costs nothing.
 
-## Writing to testnet (after G2)
+## Writing to testnet
 
-To post a quote or borrow you need a NEAR testnet account with faucet NEAR and mock tokens. Mock USDC and mock NVDAx are test tokens with no value. How to get them will be written here once the mock-token contracts are deployed (G2).
+To post a quote or borrow you need a NEAR testnet account with faucet NEAR and mock tokens. Testnet NEAR comes from https://near-faucet.io/ (F-154). Mock USDC (`usdc-mock.nectar.testnet`) and mock NVDAx (`nvdax-mock.nectar.testnet`) are test tokens with no value; `mint` on both is owner-only (contracts/mock-ft/src/lib.rs), so there is no self-serve mint. The demo accounts on [Live on testnet](/start/live-on-testnet) are already funded.

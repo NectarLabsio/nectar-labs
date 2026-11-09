@@ -6,7 +6,7 @@ description: Sell to the committed buyer at a bounded discount instead of dumpin
 # Pre-liquidation vs liquidation
 
 <p className="verified">Verified against: F-013 (2026-11-09), F-015 (2026-11-09), F-021 (2026-11-09) · spec docs/PRD.md §4.4, §6.5 · docs/work/interface-p0.md · D-004, D-010 (2026-11-10)</p>
-<p className="status">Status: specification. Not deployed (G2 pending). P0 settles at max_discount_bps (fallback, disclosed). TEE pricing is P1.</p>
+<p className="status">Status: specification. Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). P0 settles at max_discount_bps (fallback, disclosed). TEE pricing is P1.</p>
 
 A classic liquidation sells collateral into whatever liquidity exists at that moment. Nectar's **pre-liquidation** sells to a buyer who committed in advance, at a discount the buyer agreed to before the stress started.
 

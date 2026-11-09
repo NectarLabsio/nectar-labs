@@ -5,8 +5,8 @@ description: Owner commands for pause, price override and keeper rotation.
 ---
 # Runbook
 
-<p className="verified">Verified against: F-018 (2026-11-10), F-019 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · mirrors docs/RUNBOOK.md</p>
-<p className="status">Status: commands target the P0 interface deployed on testnet on 2026-11-09 (G2 verification pending). P1 and P2 commands are marked as such and do not exist in the P0 build.</p>
+<p className="verified">Verified against: F-018 (2026-11-10), F-019 (2026-11-10) · F-154 (2026-11-09) · docs/work/interface-p0.md (2026-11-10) · config.yaml oracle max ages · evidence/G2/keeper-key-20261109T2050Z.log · mirrors docs/RUNBOOK.md</p>
+<p className="status">Status: commands target the P0 interface deployed on testnet on 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). P1 and P2 commands are marked as such and do not exist in the P0 build.</p>
 
 Ids from `packages/config/config.yaml`:
 
@@ -14,6 +14,12 @@ Ids from `packages/config/config.yaml`:
 CORE=nectar-core.nectar.testnet      # nectar-core account
 OWNER=nectar.testnet                 # owner account (keychain)
 ```
+
+## Standing duties
+
+- **Owner price every 24 h while the session is closed.** The oracle max age is 120 s in session and 86,400 s closed (`max_age_s_session`, `max_age_s_closed` in config.yaml; `set_oracle_params` on chain). An older price makes borrows and `trigger_preliquidation` fail with `oracle stale`. Refresh with `update_owner_price` (below).
+- **Keeper allowance.** `keeper.nectar.testnet` has only a function-call key with a 1 NEAR allowance and no full-access key, so the key cannot be rotated or topped up in place. When the allowance runs out, follow [Rotate the keeper](#rotate-the-keeper).
+- **Owner balance.** `nectar.testnet` holds less than 1 NEAR. Top it up from the testnet faucet https://near-faucet.io/ (F-154) before owner transactions.
 
 ## Health
 
@@ -47,10 +53,14 @@ near contract call-function as-transaction "$CORE" apply_price json-args '{"symb
 
 ## Rotate the keeper
 
+The keeper account has no full-access key, so rotation means a new keeper account. Create the account (it has a full-access key at first), add the scoped key as on [Run a keeper](/integrate/run-a-keeper), delete the new account's full-access key, then switch the contract:
+
 ```bash
 near contract call-function as-transaction "$CORE" set_keeper json-args '{"keeper":"<new_keeper>"}' prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as "$OWNER" network-config testnet sign-with-keychain send
-near account delete-keys <old_keeper> public-keys <old_public_key> network-config testnet sign-with-keychain send
+near account delete-keys <new_keeper> public-keys <full_access_public_key> network-config testnet sign-with-keychain send
 ```
+
+Point `KEEPER_ACCOUNT_ID` and `KEEPER_KEY_PATH` at the new account and restart. The old account's key cannot be deleted (no full-access key) and is inert after `set_keeper`.
 
 ## Gas reserve
 

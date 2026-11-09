@@ -6,7 +6,7 @@ description: Two-step withdrawal; capacity drops at once, money leaves later.
 # Notice periods
 
 <p className="verified">Verified against: F-013 (2026-11-09) · spec docs/PRD.md §4.1, §6.4 · docs/work/interface-p0.md · D-009 (2026-11-10)</p>
-<p className="status">Status: specification. Not deployed (G2 pending). Completion after 7 days is demonstrated in sandbox tests with time travel (G1), not live in the demo.</p>
+<p className="status">Status: specification. Deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Completion after 7 days is demonstrated in sandbox tests with time travel (G1), not live in the demo.</p>
 
 A committed buyer cannot pull escrow at the moment it is needed most. Exit is two calls separated by the quote's `notice_period_ns`.
 

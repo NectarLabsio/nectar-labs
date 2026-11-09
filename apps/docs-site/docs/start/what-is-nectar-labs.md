@@ -7,7 +7,7 @@ description: Committed, escrowed buyers raise borrowing limits on thin-exit coll
 # What Nectar Labs is
 
 <p className="verified">Verified against: F-003 (2026-11-09), F-013 (2026-11-09), F-063 (2026-11-09) · spec docs/PRD.md §1, §4.2 · D-002, D-009 (2026-11-10)</p>
-<p className="status">Status: testnet software, mock collateral. Nothing is deployed yet (gate G2 pending).</p>
+<p className="status">Status: testnet software, mock collateral. P0 contracts deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44); web gate G3 in progress.</p>
 
 Current deployment state: [Live on testnet](/start/live-on-testnet).
 
