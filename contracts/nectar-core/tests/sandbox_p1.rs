@@ -360,3 +360,192 @@ async fn gas_trigger_quoter_eight_legs() -> anyhow::Result<()> {
     println!("GAS,trigger+quoter+8legs,attached,{}", 300 * TGAS);
     Ok(())
 }
+
+// ------------------------------------------------------------------ WO-10b
+
+/// Live testnet V1 (code_hash FQjNLgawvz9KmeLioJs6fdd5GdB5JAVeEfSSZfEGTFfB).
+const V1_SHA256: &str = "d617e19238877f6e2f8d6aa015c8fe0f690b174763989dbd059f114fda7b963e";
+const PYTH_ID: &str = "B1073854ED24CBC755DC527418F52B7D271F6CC967BBF8D8129112B18860A593";
+
+fn v1_wasm() -> Vec<u8> {
+    let w = std::fs::read(root().join("contracts/nectar-core/tests/fixtures/nectar_core_v1.wasm")).expect("v1 wasm");
+    let h: String = near_sdk::env::sha256(&w).iter().map(|b| format!("{b:02x}")).collect();
+    assert_eq!(h, V1_SHA256, "fixture is the live testnet V1 wasm");
+    w
+}
+
+async fn now_s(e: &Env) -> anyhow::Result<i64> {
+    Ok((e.worker.view_block().await?.timestamp() / 1_000_000_000) as i64)
+}
+
+async fn pyth_body(s: &Contract, body: &str) -> anyhow::Result<()> {
+    s.call("set_pyth_body").args_json(json!({ "body": body })).transact().await?.into_result()?;
+    Ok(())
+}
+
+fn pyth_px(price: i64, conf: u64, expo: i32, t: i64) -> String {
+    format!(r#"{{"price":"{price}","conf":"{conf}","expo":{expo},"publish_time":{t}}}"#)
+}
+
+async fn status(core: &Contract, pos: u64) -> anyhow::Result<Value> {
+    Ok(view(core, "get_position", json!({ "position_id": pos.to_string() })).await?["status"].clone())
+}
+
+/// Live V1 wasm -> this build with no migrate (root layout unchanged), then every Pyth outcome, quoter with
+/// secrets_ref, and cancel_settlement on a position held in Settling by a never-resumed OutLayer yield.
+#[tokio::test]
+async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &v1_wasm()).await?;
+    let lender = user(&e, 100_000_000_000, 0).await?;
+    ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    let buyer1 = user(&e, 30_000_000_000, 0).await?;
+    let buyer2 = user(&e, 20_000_000_000, 0).await?;
+    ft_call(&e.usdc, &buyer1, core.id(), 30_000_000_000, &fund_msg(250)).await?;
+    ft_call(&e.usdc, &buyer2, core.id(), 20_000_000_000, &fund_msg(400)).await?;
+    for _ in 0..4 {
+        let b = user(&e, 0, 20_000_000).await?;
+        ft_call(&e.nvdax, &b, core.id(), 20_000_000, &borrow_msg(2_250_000_000)).await?;
+    }
+    let before = p0_views(&core, 4).await?;
+    let qc_before = view(&core, "get_quoter_config", json!({})).await?;
+
+    let r = core.as_account().deploy(&wasm("nectar_core")).await?;
+    assert!(r.is_success(), "upgrade deploy");
+    assert_eq!(p0_views(&core, 4).await?, before, "all views identical after V1 -> V1+WO-10b, no migrate");
+    let mut qc = view(&core, "get_quoter_config", json!({})).await?;
+    assert_eq!(qc["secrets_ref"], Value::Null);
+    qc.as_object_mut().unwrap().remove("secrets_ref");
+    assert_eq!(qc, qc_before);
+    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(1));
+    let r = core.call("migrate").transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("already migrated"));
+    println!("UPGRADE,v1_to_wo10b,views_identical,true,migrate,none");
+
+    let pyth = stub(&e).await?;
+    owner_call(&e, &core, "set_oracle_source", json!({ "symbol": "NVDAx",
+        "source": { "Pyth": { "account": pyth.id(), "price_identifier": PYTH_ID } } })).await?;
+    price(&e, &core, 155_000_000).await?;
+    price(&e, &core, 140_000_000).await?;
+
+    // rejections: position 0 stays Open every time
+    let t = now_s(&e).await?;
+    let cases = [
+        (pyth_px(13_500_000_000, 1_000_000, -8, t - 90_000), "stale"),
+        (pyth_px(13_500_000_000, 200_000_000, -8, t), "conf_too_wide"),
+        (pyth_px(9_000_000_000, 0, -8, t), "out_of_band"),
+        (pyth_px(-13_500_000_000, 0, -8, t), "non_positive"),
+        ("null".to_string(), "no_price"),
+        ("panic".to_string(), "failed"),
+    ];
+    for (body, reason) in cases.iter() {
+        pyth_body(&pyth, body).await?;
+        let r = trigger(&e, &core, 0).await?;
+        gas(&format!("trigger+pyth({reason})"), &r);
+        let rej = events(&r, "oracle_rejected");
+        assert_eq!(rej.len(), 1, "{reason}: {:?}", r.logs());
+        assert_eq!(rej[0]["reason"], *reason);
+        assert_eq!(events(&r, "settlement_aborted")[0]["reason"], "oracle_rejected");
+        assert!(events(&r, "settled_near").is_empty());
+        assert_eq!(status(&core, 0).await?, "Open", "{reason}");
+    }
+    assert_eq!(pyth.view("get_pyth_last_id").await?.json::<String>()?, PYTH_ID.to_ascii_lowercase());
+
+    // accepted (expo -8 -> 135.000000), static settle
+    let t = now_s(&e).await?;
+    pyth_body(&pyth, &pyth_px(13_500_000_099, 1_000_000, -8, t)).await?;
+    let r = trigger(&e, &core, 0).await?;
+    gas("trigger+pyth(ok)+static", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    assert_eq!(events(&r, "oracle_updated")[0]["source"], "Pyth");
+    assert!(!events(&r, "settled_near").is_empty());
+    assert_eq!(status(&core, 0).await?, "Closed");
+    assert_eq!(view(&core, "get_collateral", json!({ "symbol": "NVDAx" })).await?["oracle_price_usd_e6"], "135000000");
+
+    // accepted -> quoter with secrets_ref
+    let outl = stub(&e).await?;
+    pin(&e, &core, &outl).await?;
+    mode(&outl, "echo", 65).await?;
+    owner_call(&e, &core, "set_quoter_secrets_ref",
+        json!({ "secrets_ref": { "profile": "nectar-quoter", "account_id": e.owner.id() } })).await?;
+    let t = now_s(&e).await?;
+    pyth_body(&pyth, &pyth_px(13_500_000_000, 1_000_000, -8, t)).await?;
+    let r = trigger(&e, &core, 1).await?;
+    gas("trigger+pyth(ok)+quoter", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    assert_eq!(events(&r, "quoter_result").len(), 1);
+    assert!(events(&r, "settled_near").iter().all(|l| l["disc_bps"] == 65));
+    assert_eq!(status(&core, 1).await?, "Closed");
+    let last: Value = near_sdk::serde_json::from_str(&outl.view("get_last_request").await?.json::<String>()?)?;
+    assert_eq!(last["secrets_ref"], json!({ "profile": "nectar-quoter", "account_id": e.owner.id() }));
+    let reserve = view(&core, "get_gas_reserve", json!({})).await?;
+    assert_eq!(reserve, view(&core, "get_config", json!({})).await?["gas_reserve_yocto"]);
+
+    // cancel_settlement: OutLayer stub yields and never resumes -> position 2 held in Settling
+    let r = e.owner.call(core.id(), "cancel_settlement").args_json(json!({ "position_id": "2" })).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("position not settling"));
+    mode(&outl, "hang", 0).await?;
+    let t = now_s(&e).await?;
+    pyth_body(&pyth, &pyth_px(13_500_000_000, 1_000_000, -8, t)).await?;
+    let _pending = e.keeper.call(core.id(), "trigger_preliquidation").args_json(json!({ "position_id": "2" }))
+        .gas(Gas::from_tgas(300)).transact_async().await?;
+    let mut seen = false;
+    for _ in 0..20 {
+        e.worker.fast_forward(2).await?;
+        if status(&core, 2).await? == "Settling" {
+            seen = true;
+            break;
+        }
+    }
+    assert!(seen, "position 2 reached Settling");
+    e.worker.fast_forward(5).await?;
+    assert_eq!(status(&core, 2).await?, "Settling", "held by the unresumed yield");
+    let stranger = e.worker.dev_create_account().await?;
+    let r = stranger.call(core.id(), "cancel_settlement").args_json(json!({ "position_id": "2" })).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("owner only"));
+    let r = e.owner.call(core.id(), "cancel_settlement").args_json(json!({ "position_id": "2" })).transact().await?;
+    gas("cancel_settlement", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    assert_eq!(events(&r, "settlement_cancelled")[0]["position_id"], "2");
+    assert_eq!(status(&core, 2).await?, "Open");
+    e.worker.fast_forward(250).await?; // past any yield timeout: the late callback must not move it
+    assert_eq!(status(&core, 2).await?, "Open");
+    Ok(())
+}
+
+/// Pyth read + quoter + 8 distinct buyers (10 transfers) within 300 Tgas. Quoter gas 80 Tgas: with the
+/// 100 Tgas default the trigger's own budget check needs > 300 Tgas (reported to the orchestrator).
+#[tokio::test]
+async fn gas_trigger_pyth_quoter_eight_legs() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    owner_call(&e, &core, "set_reserve", json!({ "symbol": "NVDAx", "reserve_usd_e6": "20000000000" })).await?;
+    let lender = user(&e, 50_000_000_000, 0).await?;
+    ft_call(&e.usdc, &lender, core.id(), 50_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    for i in 0..8u16 {
+        let b = user(&e, 300_000_000, 0).await?;
+        ft_call(&e.usdc, &b, core.id(), 300_000_000, &fund_msg(200 + i * 10)).await?;
+    }
+    let borrower = user(&e, 0, 20_000_000).await?;
+    ft_call(&e.nvdax, &borrower, core.id(), 20_000_000, &borrow_msg(2_250_000_000)).await?;
+    let s = stub(&e).await?;
+    pin(&e, &core, &s).await?;
+    owner_call(&e, &core, "set_quoter_config", json!({ "deposit_yocto": DEPOSIT.to_string(), "gas_tgas": 80,
+        "max_instructions": "100000000", "max_memory_mb": 128, "max_execution_seconds": 30 })).await?;
+    mode(&s, "echo", 65).await?;
+    let pyth = stub(&e).await?;
+    owner_call(&e, &core, "set_oracle_source", json!({ "symbol": "NVDAx",
+        "source": { "Pyth": { "account": pyth.id(), "price_identifier": PYTH_ID } } })).await?;
+    price(&e, &core, 155_000_000).await?;
+    let t = now_s(&e).await?;
+    pyth_body(&pyth, &pyth_px(14_000_000_000, 1_000_000, -8, t)).await?;
+
+    let r = trigger(&e, &core, 0).await?;
+    gas("trigger+pyth+quoter+8legs", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(events(&r, "settled_near").len(), 8);
+    assert_eq!(status(&core, 0).await?, "Closed");
+    assert!(bal(&e.nvdax, borrower.id()).await? > 0);
+    println!("GAS,trigger+pyth+quoter+8legs,attached,{}", 300 * TGAS);
+    Ok(())
+}

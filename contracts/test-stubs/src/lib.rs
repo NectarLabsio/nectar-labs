@@ -10,6 +10,10 @@
 //! - `null`    : `null` (failed run / yield timeout)
 //! - `panic`   : the receipt fails (callback sees PromiseError::Failed)
 //! - `raw`     : `body` verbatim
+//!
+//! WO-10b: the same wasm also stands in for the Pyth NEAR receiver (`pyth-oracle.testnet`, F-054):
+//! `get_price(price_identifier)` returns `pyth_body` verbatim (default `null`, i.e. `Option<Price>::None`;
+//! shape per pyth-crosschain ec40e5f receiver state.rs:101), or fails the receipt when it is `"panic"`.
 
 use near_sdk::serde_json::{self, Value, json};
 use near_sdk::{AccountId, PanicOnDefault, env, near};
@@ -22,6 +26,8 @@ pub struct OutlayerStub {
     body: String,
     last_request: String,
     requests: u64,
+    pyth_body: String,
+    pyth_last_id: String,
 }
 
 fn hex(bytes: &[u8]) -> String {
@@ -32,7 +38,8 @@ fn hex(bytes: &[u8]) -> String {
 impl OutlayerStub {
     #[init]
     pub fn new() -> Self {
-        Self { mode: "echo".into(), disc_bps: 65, body: String::new(), last_request: String::new(), requests: 0 }
+        Self { mode: "echo".into(), disc_bps: 65, body: String::new(), last_request: String::new(), requests: 0,
+               pyth_body: "null".into(), pyth_last_id: String::new() }
     }
 
     pub fn set_mode(&mut self, mode: String, disc_bps: Option<i64>, body: Option<String>) {
@@ -63,6 +70,12 @@ impl OutlayerStub {
             "payer_account_id": payer_account_id, "params": params,
         })
         .to_string();
+        if self.mode == "hang" {
+            // like the real contract (F-047): yield, but never resume -> caller's callback waits (WO-10b)
+            let idx = env::promise_yield_create("on_hang", b"{}", near_sdk::Gas::from_tgas(5), near_sdk::GasWeight(0), 0);
+            env::promise_return(idx);
+            return;
+        }
         let out: String = match self.mode.as_str() {
             "panic" => env::panic_str("stub: execution failed"),
             "null" => "null".into(),
@@ -88,6 +101,29 @@ impl OutlayerStub {
             }
         };
         env::value_return(out.as_bytes());
+    }
+
+    /// Raw JSON returned by `get_price` (e.g. `{"price":"13500000000","conf":"1000000","expo":-8,"publish_time":1700000000}`).
+    pub fn set_pyth_body(&mut self, body: String) {
+        self.pyth_body = body;
+    }
+
+    /// Pyth receiver stand-in. Not a view so it can record the identifier it was asked for.
+    pub fn get_price(&mut self, price_identifier: String) {
+        self.pyth_last_id = price_identifier;
+        if self.pyth_body == "panic" {
+            env::panic_str("stub: pyth failed");
+        }
+        env::value_return(self.pyth_body.as_bytes());
+    }
+
+    /// Yield callback of `hang` mode (runs only on yield timeout): `null`, like a timed-out execution.
+    pub fn on_hang(&self) -> String {
+        "null".into()
+    }
+
+    pub fn get_pyth_last_id(&self) -> String {
+        self.pyth_last_id.clone()
     }
 
     pub fn get_last_request(&self) -> String {
@@ -127,6 +163,24 @@ mod tests {
         let stdin = r#"{"v":1,"symbol":"NVDAx","position_id":"0","quotes":[{"id":"3","max_discount_bps":250}]}"#;
         s.request_execution(json!({}), None, Some(stdin.into()), None, None, None, None);
         assert_eq!(s.get_requests(), 1);
+    }
+
+    #[test]
+    fn pyth_get_price_records_id() {
+        ctx();
+        let mut s = OutlayerStub::new();
+        s.set_pyth_body(r#"{"price":"1","conf":"0","expo":0,"publish_time":1}"#.into());
+        s.get_price("ab".repeat(32));
+        assert_eq!(s.get_pyth_last_id(), "ab".repeat(32));
+    }
+
+    #[test]
+    #[should_panic(expected = "stub: pyth failed")]
+    fn pyth_panic_body() {
+        ctx();
+        let mut s = OutlayerStub::new();
+        s.set_pyth_body("panic".into());
+        s.get_price("00".repeat(32));
     }
 
     #[test]
