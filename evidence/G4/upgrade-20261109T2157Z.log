@@ -1,0 +1,78 @@
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+live code_hash=8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV  new wasm sha256=d617e19238877f6e2f8d6aa015c8fe0f690b174763989dbd059f114fda7b963e size=381976
+
+== top up nectar-core.nectar.testnet storage from nectar.testnet (0.45 NEAR) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core.nectar.testnet
+│    actions:
+│       -- transfer deposit:    0.45 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.670 Tgas
+│    Transaction fee: 0.0000446365125 NEAR
+│    Transaction ID: 321mXeFmvsfR6zA8jooJ6YWBfcRVirs9x1EJiAgijHK9
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/321mXeFmvsfR6zA8jooJ6YWBfcRVirs9x1EJiAgijHK9
+│     [0m
+
+
+<nectar.testnet> has transferred 0.45 NEAR to <nectar-core.nectar.testnet> successfully.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear tokens nectar.testnet send-near nectar-core.nectar.testnet '0.45 NEAR' network-config testnet sign-with-keychain send[39m
+
+
+== deploy V1 + migrate (one transaction, signed by nectar-core.nectar.testnet) ==
+├  Unsigned transaction:
+│    signer_id:    nectar-core.nectar.testnet
+│    receiver_id:  nectar-core.nectar.testnet
+│    actions:
+│       -- deploy code <FQjNLgawvz9KmeLioJs6fdd5GdB5JAVeEfSSZfEGTFfB> to a account <nectar-core.nectar.testnet>
+│       -- function call:      
+│                       method name:  migrate
+│                       args:         {}
+│                       gas:          100.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:B3STreMJMy8AQpj1oouG8GDBPNr9MSPgBA2FooKY9VHt
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 30.0 Tgas
+│    Transaction fee: 0.002976601819048 NEAR
+│    Transaction ID: CEGWG9yFiEttHwankywKKZxw3UaZTEGTkZALbMyykzt3
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/CEGWG9yFiEttHwankywKKZxw3UaZTEGTkZALbMyykzt3
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"migrated","data":[{"from":"p0","to":1,"by":"nectar-core.nectar.testnet"}]}
+│    [36mLogs [nectar-core.nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+Contract code has been successfully deployed.
+The "migrate" call to <nectar-core.nectar.testnet> on behalf of <nectar-core.nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy nectar-core.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/nectar_core/nectar_core.wasm with-init-call migrate json-args {} prepaid-gas '100.0 Tgas' attached-deposit '0 NEAR' network-config testnet sign-with-keychain send[39m
+
+state_version=1  contract_version="nectar-core 0.1.0 p1"  code_hash=FQjNLgawvz9KmeLioJs6fdd5GdB5JAVeEfSSZfEGTFfB
+positions unchanged by migrate
+quotes unchanged by migrate
