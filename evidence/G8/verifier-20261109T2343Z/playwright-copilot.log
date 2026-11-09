@@ -1,0 +1,9 @@
+
+Running 4 tests using 2 workers
+
+  ✓  1 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (471ms)
+  ✓  2 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (622ms)
+  ✓  3 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (329ms)
+  ✓  4 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (385ms)
+
+  4 passed (2.0s)

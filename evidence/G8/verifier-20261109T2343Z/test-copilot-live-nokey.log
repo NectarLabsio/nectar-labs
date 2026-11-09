@@ -1,0 +1,8 @@
+
+> web@0.1.0 test:copilot /private/tmp/verify-G8-1794267776/apps/web
+> node scripts/test-copilot.mjs -- --live
+
+--live needs NEAR_AI_API_KEY (TODO-H7). Fixture run: pnpm --filter web test:copilot
+/private/tmp/verify-G8-1794267776/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 test:copilot: `node scripts/test-copilot.mjs -- --live`
+Exit status 1

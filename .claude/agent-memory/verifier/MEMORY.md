@@ -3,3 +3,4 @@
 - [G3 run recipe](reference_g3_lighthouse_theme.md) — LH script + theme proof; write spec self-skips; cite position 1; EVIDENCE template note
 - [G4 OutLayer recipe](reference_g4_outlayer.md) — by-request attestation; mainnet-host trap; secrets addendum checks (success flag, store_secrets args)
 - [G6 1Click recipe](reference_g6_oneclick.md) — feed (not keeper) commands; C-014 amountOutUsd trap; web badge static
+- [G8 copilot recipe](reference_g8_copilot.md) — fixture is Phala sample + throwaway key; loose Key-missing spec; README overclaim trap

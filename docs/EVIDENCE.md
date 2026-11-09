@@ -10,7 +10,7 @@
 | G5 oracle | FALLBACK (disclosed) | 2026-11-09T22:55Z | 706d940 | evidence/G5/verifier-20261109T2254Z/ (no live Pyth price: pyth-oracle.testnet NVDA → null, Hermes 401, H13 key absent; nectar-core source = Owner; Pyth defences tested: unit 157/0 + sandbox 5/0 + sandbox_p1 4/0; gates.md filter `oracle_rejects` matches 0 tests; README $180 vs on-chain $112; see §G5) |
 | G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at 578b006: 3-size live dry quotes verify, impact from base units, no amountIn/OutUsd use; GET /api/oneclick fixture + live match shape; /feed panel and NVDAx route status come from the API; web e2e 128 passed / 0 failed; see §G6) |
 | G7 Solana + signer | pending | | | |
-| G8 copilot | pending | | | |
+| G8 copilot | FAIL (docs overclaim; all offline checks green) | 2026-11-09T23:45Z | 2b49f42 | evidence/G8/verifier-20261109T2343Z/, evidence/G8/copilot-fixture-keymissing.png (fixture 10 pass / 0 fail / 1 skip = live; e2e copilot 4/4; README:61 claims "copilot answers are TEE-signed and verified" while README:24 says "not built" and no live answer exists; live round trip not performed: H7 key absent, /v1/models HTTP 500) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -23,6 +23,59 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G8
+
+### G8 — copilot verifier — FAIL (docs overclaim; every offline check green) — 2026-11-09T23:45Z — commit 2b49f42
+Fresh clone /tmp/verify-G8-1794267776 at main 2b49f42 (main has since moved to c0c2a2f; not re-run). PATH += ~/.cargo/bin ~/.local/bin
+(gates.md host notes). NEAR_AI_API_KEY unset (H7). No secrets used. Logs: evidence/G8/verifier-20261109T2343Z/.
+$ pnpm i --frozen-lockfile                                   → exit 0
+$ pnpm --filter web test:copilot                             → exit 0: tests 11, pass 10, fail 0, skipped 1 (live round trip)
+  ✔ DCAP: Phala sample TDX quote verifies against Intel root with recorded collateral (TCB UpToDate)
+  ✔ DCAP: patched report_data breaks the quote signature
+  ✔ quote offsets match dcap-qvl Quote.parse (report_data, mr_config_id)
+  ✔ fixture: signature, hashes, model id and report_data pass; DCAP fails → answer hidden
+  ✔ gate logic: with an accepted DCAP verdict over the same quote bytes the answer is released
+  ✔ negative: tampered response, stale nonce, foreign signer, gateway signature
+  ✔ F-075: MRCONFIGID check is a prefix match on 01 || sha256(app_compose)
+  ✔ F-074/F-076/C-018: request paths carry no provider param or aliasing header; 404 backoff grows
+  ✔ F-077: NRAS verdict needs overall=true and both nonces equal ours
+  ✔ system prompt forbids prices and amounts; request carries it
+  ﹣ live round trip (only with --live and NEAR_AI_API_KEY) # fixture run
+$ pnpm --filter web test:copilot -- --live  (no key)        → exit 1: "--live needs NEAR_AI_API_KEY (TODO-H7). Fixture run: pnpm --filter web test:copilot"
+$ pnpm --filter web build                                    → exit 0
+$ PW_CHANNEL=chrome pnpm --filter web exec playwright test e2e/copilot.spec.ts → 4 passed (/console, /borrow × phone, desktop)
+$ next start -p 3917 (no key): GET /api/copilot → 200 {"configured":false,...}; POST {nonce,notes} → 503 {"status":"key_missing"};
+  POST {fixture:true} → quoteVerdict {ran:true, ok:false, detail:"dcap-qvl rejected the quote: ISV enclave report signature is invalid"}
+UI probe (Chrome, /console): "Key missing" banner visible; "Ask copilot" disabled; after fixture run badge "unverified — hidden",
+  12 checklist rows each start with the word passed / failed / not run (0 tick glyphs), 0 .copilot-answer blocks, "Answer hidden: TDX quote …".
+NEAR AI probe 23:44:34Z: GET https://cloud-api.near.ai/v1/models → HTTP 500 "Database connection pool error" (5.2 s).
+Explorer links: none for this gate.
+
+What the fixture is (scripts/build-copilot-fixture.ts, lib/copilot/fixtures/): Phala-Network/dcap-qvl sample/tdx_quote + collateral
+(MIT), a real Intel-signed TDX quote, verified at fixed nowSecs 2025-06-20 inside the collateral window. The chat is synthetic: built
+locally and signed with a throwaway secp256k1 key that is then discarded. The synthetic quote is that sample with report_data patched to
+signer‖nonce. It is NOT a recorded NEAR AI response. Verdict end to end: report_data checks pass, DCAP fails → "unverified — hidden" (correct).
+Exercised with real crypto offline: EIP-191 recovery (+ foreign signer rejected), sha256 request/response hashes (+ tampered response
+rejected), provider_tee 3-part text + model id (gateway 2-part rejected), report_data F-075 right-padded signer ‖ nonce (+ stale nonce
+rejected), dcap-qvl 0.7.1 on the genuine sample (accepts) and patched quote (rejects), quote offsets vs dcap-qvl Quote.parse, MRCONFIGID
+prefix 01‖sha256(app_compose) (F-075), NRAS verdict logic on synthetic JWTs (F-077), signature 404 backoff.
+Live only (not run): NEAR AI chat / signature / attestation, Phala PCCS collateral fetch, NVIDIA NRAS POST, /v1/models listing, MRCONFIGID
+on a real app_compose. RTMR3 replay is not implemented (shown "not run").
+FACTS match: attestationPath = /attestation/report?model=&signing_algo=ecdsa&nonce= (F-074); signaturePath = /signature/<id>?model=&signing_algo=ecdsa
+(F-076); compose read at info.tcb_info.app_compose (F-074); no provider= / x-no-aliasing anywhere in apps/web (C-018); signer must match a
+model_attestations[].signing_address (F-076); model id shown "unverified (F-078)". SYSTEM_PROMPT forbids prices, amounts, LTVs.
+Live round trip not performed (H7 key absent; API returned 500).
+FAIL reasons (docs/UI wording only; no check is wrong):
+  1. README.md:61 (`privacy` track): "copilot answers are TEE-signed and verified". Present tense. No NEAR AI answer has ever been
+     received or verified, and only the fixture path runs. Overclaim.
+  2. README.md:24 status row says "not built; live mode needs key H7". The fixture verifier and panel are built and merged, so this row
+     is inaccurate and contradicts line 61.
+  3. CopilotPanel.tsx intro: "shown only after the browser verifies the TEE signature and attestation". The Intel DCAP chain runs
+     server-side; the browser checks the server's verdict and the quote hash. The checklist row does say "(server)". Minor.
+Notes: e2e spec asserts /Key missing|Ask copilot/, so on its own it would pass without the banner; the UI probe above checked the
+  banner directly. Optional checks (MRCONFIGID, NRAS, model list) do not block release in live mode, so a "verified in TEE" answer
+  proves some TDX VM holds the signing key, not which compose it runs. That is consistent with F-075/F-077 and disclosed as (optional).
 
 ## G0
 

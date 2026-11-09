@@ -1,0 +1,16 @@
+Key missing banner visible: true
+Ask copilot disabled: true
+ li: passed · Signature is from the model TEE (provider_tee) — signed text has 3 parts (provider_tee)
+ li: passed · Signed model id equals requested model — signed deepseek-ai/DeepSeek-V3.1, requested deepseek-ai/Deep
+ li: passed · sha256(request) matches signed text — local fafa91cdc99604ff…
+ li: passed · sha256(response) matches signed text — local 84529d97216d7830…
+ li: passed · Signature recovers (EIP-191) to attested signing_address — recovered 0xcdae5dbce6b295f4a2ff84f4bc33fe
+ li: passed · report_data[0..32] = signing_address zero-padded — quote cdae5dbce6b295f4a2ff84f4bc33feaacf86e356…
+ li: passed · report_data[32..64] = this request's nonce — nonce c290f7a34b4a56d3…
+ li: failed · TDX quote verified with @phala/dcap-qvl (server) — dcap-qvl rejected the quote: ISV enclave report si
+ li: not run · MRCONFIGID starts with 01 || sha256(app_compose) (optional) — app_compose not present in the report
+ li: not run · RTMR3 event-log replay (optional) — not implemented in this build
+ li: not run · NVIDIA NRAS (JWT signature not verified — same as the reference example) (optional) — live mode only
+ li: not run · Model id listed by NEAR AI /v1/models (optional) — model id unverified (F-078): live model list unav
+answer blocks: 0
+tick chars in checklist: 0
