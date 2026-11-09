@@ -2,9 +2,6 @@
 import { Badge } from "@nectar/ui";
 import { oracleSourceLabel, type ExitCapacity, type QuoterConfigView } from "@nectar/sdk";
 
-// NVDAx is mock collateral with no 1Click route (F-063); D_c stays owner-set for it.
-export const NO_1CLICK_ROUTE = new Set(["NVDAx"]);
-
 /** Oracle badge: source, age, confidence. Owner oracle (P0, or P1 without a Pyth key per D-013) carries no confidence interval. */
 export function OracleBadge({ cap }: { cap: ExitCapacity }) {
   const src = oracleSourceLabel(cap.oracle_source);

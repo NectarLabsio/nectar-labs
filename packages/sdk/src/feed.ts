@@ -36,6 +36,58 @@ export interface FeedSettlements {
   items: FeedSettlement[];
 }
 
+/** One dry 1Click sample (GET /api/oneclick, WO-11c §3). Amounts are base-unit strings; rate_e6 = out/in in whole tokens × 1e6. */
+export interface FeedOneClickSample {
+  notional_usd: number;
+  amount_in: string;
+  amount_out: string;
+  min_amount_out: string;
+  rate_e6: string;
+  /** 1 − rate(n)/rate(0.5×) from amountOut, floored at 0. */
+  impact_bps: Bps;
+  /** Same, from minAmountOut (worst case the solver may deliver). */
+  worst_impact_bps: Bps;
+}
+export interface FeedOneClickPair {
+  id: string;
+  origin: string;
+  destination: string;
+  /** Every sample in the set passed verifyQuoteSignature (the feed drops the set otherwise). */
+  verified: boolean;
+  correlation_id?: string | null;
+  samples: FeedOneClickSample[];
+}
+export interface FeedOneClickAsset {
+  symbol: string;
+  /** Sampled from the 1Click token list; "no_route" when the asset is absent. */
+  status: string;
+}
+export interface FeedOneClick {
+  as_of: string;
+  pairs: FeedOneClickPair[];
+  assets: FeedOneClickAsset[];
+}
+
+/** Route status for a symbol from the sampled token list, or null when the feed did not report it (never assumed). */
+export function oneClickRouteStatus(d: FeedOneClick | null | undefined, symbol: string): string | null {
+  return d?.assets.find((a) => a.symbol === symbol)?.status ?? null;
+}
+
+/** rate_e6 string → decimal string with up to 6 fraction digits, no float. */
+export function formatRateE6(rateE6: string): string {
+  let v: bigint;
+  try {
+    v = BigInt(rateE6);
+  } catch {
+    return "—";
+  }
+  const neg = v < 0n;
+  if (neg) v = -v;
+  const whole = v / 1_000_000n;
+  const frac = (v % 1_000_000n).toString().padStart(6, "0").replace(/0+$/, "");
+  return `${neg ? "−" : ""}${whole.toString()}${frac ? `.${frac}` : ""}`;
+}
+
 export interface FeedHealth {
   ok: boolean;
   last_block_seen: number | null;

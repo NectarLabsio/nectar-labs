@@ -1,0 +1,18 @@
+{
+  "as_of": "2026-11-10T09:00:00.000Z",
+  "pairs": [
+    {
+      "id": "wnear-usdc",
+      "origin": "nep141:wrap.near",
+      "destination": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+      "verified": true,
+      "correlation_id": "e2e-fixture-not-a-live-quote",
+      "samples": [
+        { "notional_usd": 500, "amount_in": "175438596491228070175438596", "amount_out": "500000000", "min_amount_out": "497500000", "rate_e6": "2850000", "impact_bps": 0, "worst_impact_bps": 50 },
+        { "notional_usd": 1000, "amount_in": "350877192982456140350877192", "amount_out": "999000000", "min_amount_out": "994005000", "rate_e6": "2847150", "impact_bps": 10, "worst_impact_bps": 59 },
+        { "notional_usd": 2000, "amount_in": "701754385964912280701754385", "amount_out": "1994000000", "min_amount_out": "1984030000", "rate_e6": "2841450", "impact_bps": 30, "worst_impact_bps": 79 }
+      ]
+    }
+  ],
+  "assets": [{ "symbol": "NVDAx", "status": "no_route" }]
+}
