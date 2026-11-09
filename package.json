@@ -1,9 +1,12 @@
 {
   "name": "nectar-labs",
   "private": true,
-  "packageManager": "pnpm@10",
-  "engines": { "node": ">=22.22.2" },
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=22.22.2"
+  },
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true",
     "lint": "pnpm -r --if-present lint",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --if-present test",

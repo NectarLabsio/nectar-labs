@@ -1,3 +1,20 @@
 [workspace]
-resolver = "2"
-members = ["contracts/nectar-core", "contracts/mock-ft", "contracts/test-stubs", "quoter"]
+resolver = "3"
+# P0 members only. quoter/ and contracts/test-stubs/ join when P1 opens (CLAUDE.md §1: no P1 file before p0-green).
+members = ["contracts/nectar-core", "contracts/mock-ft"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.95"
+license = "MIT"
+
+[workspace.dependencies]
+near-sdk = "5.30.1"   # F-010
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true

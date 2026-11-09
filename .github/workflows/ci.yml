@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@1.95.0
         with: { targets: wasm32-unknown-unknown,wasm32-wasip2 }
-      - run: cargo install cargo-near --locked || true
+      - run: cargo install cargo-near --version 0.23.0 --locked
       - run: cargo test --workspace 2>&1 | tail -n 80
       - run: for c in contracts/nectar-core contracts/mock-ft; do (cd $c && cargo near build non-reproducible-wasm 2>&1 | tail -n 20); done
   node:
@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with: { version: 10 }
+        # version read from package.json packageManager (pnpm@10.34.9)
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: pnpm }
       - run: pnpm i --frozen-lockfile

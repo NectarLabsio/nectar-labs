@@ -11,22 +11,35 @@ accounts:
     buyer2: TODO-G2
     borrower1: TODO-G2
 collateral:
+  # PRD §6.2 field names, integers only (D-009). B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)).
   nvdax:
-    token: TODO-G2
+    symbol: NVDAx
+    token: TODO-G2                  # nvdax-mock.nectar.testnet
     decimals: 6
-    ltv_static_bps: 4000
-    ltv_max_bps: 7000
-    uplift_bps_per_usd_e6: 0.0005   # +5 bps per $1,000 committed (PRD §6.3); tune at G1 against model.csv
-    liq_threshold_bps: 8000
-    max_discount_bps: 250
-    premium_bps: 300
-    buyer_share_bps: 7000           # 70 % of premium to buyers, 30 % protocol
-    notice_presets_s: [86400, 604800]
-    remote_chain_id: solana-devnet  # P2
-    remote_vault: TODO-G7
+    price_feed_id: TODO-G5
+    base_ltv_bps: 4000              # static limit without Nectar
+    max_nectar_ltv_bps: 7000        # LTV_c ceiling with committed quotes
+    base_haircut_bps: 1000          # h_c in session
+    weekend_haircut_bps: 2500       # h_c when market_session_open == false (D_c forced to 0)
+    limit_premium_bps: 300          # charged on borrow above base_ltv·V, up front from proceeds
+    pre_liq_min_bps: 6500
+    pre_liq_max_bps: 8000
+    market_session_open: false      # owner-set in P0
+    verified_dex_depth_usd_e6: 0    # owner-set in P0; quoter in P1
+    nectar_reserve_usd_e6: 0        # PROD
+    remote_chain: null              # P2: { chain_id: solana-devnet, vault_program: TODO-G7, mpc_domain_id: 1 }
+quotes:
+  default_max_discount_bps: 250
+  min_notice_period_s: 604800       # 7 days (PRD §4.1)
+  notice_presets_s: [604800, 2592000]
+  min_quote_usd_e6: 100000000       # $100, storage-griefing floor (PRD §15)
+fee_split: { buyers_bps: 7000, lenders_bps: 2000, treasury_bps: 1000 }   # PRD §4.3
+keeper_fee_bps: 50
 oracle:
   source: owner                     # set at G5
-  max_age_s: 600
+  max_age_s_session: 120           # PRD §8
+  max_age_s_closed: 86400          # PRD §8, closed session (weekend haircut applies)
+  band_bps: 1500                   # PRD §8 sanity band; owner override propose/apply
   max_conf_bps: 100
   nvda_price_id: TODO-G5
 outlayer:
