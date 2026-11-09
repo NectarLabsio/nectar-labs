@@ -27,10 +27,13 @@ Columns (header row of model.csv):
 Cells that do not apply to a kind are empty.
 
 Rows named demo_* are the sandbox scenario in tests/sandbox.rs (closed session, NVDAx $180 -> $155 -> $140).
-Run:  python3 contracts/nectar-core/tests/model.py
+Run:  python3 contracts/nectar-core/tests/model.py          (write)
+      python3 contracts/nectar-core/tests/model.py --check  (CI: fail if model.csv differs)
 """
 import csv
+import io
 import os
+import sys
 
 BPS = 10_000
 E18 = 10 ** 18
@@ -184,14 +187,31 @@ def rows():
     return out
 
 
+def render():
+    buf = io.StringIO()
+    w = csv.DictWriter(buf, fieldnames=COLUMNS, lineterminator="\n")
+    w.writeheader()
+    for r in rows():
+        w.writerow({k: r.get(k, "") for k in COLUMNS})
+    return buf.getvalue()
+
+
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(here, "model.csv")
+    text = render()
+    if "--check" in sys.argv:
+        # model.csv must be exactly what this script produces; the contract side is checked by
+        # `cargo test -p nectar-core model_csv_vectors_match_contract_math` (unit) and tests/sandbox.rs.
+        with open(path) as f:
+            on_disk = f.read()
+        if on_disk != text:
+            print("model.csv is stale or hand-edited: run python3 tests/model.py", file=sys.stderr)
+            sys.exit(1)
+        print("model.csv OK (%d rows)" % (text.count("\n") - 1))
+        return
     with open(path, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=COLUMNS, lineterminator="\n")
-        w.writeheader()
-        for r in rows():
-            w.writerow({k: r.get(k, "") for k in COLUMNS})
+        f.write(text)
     print("wrote", path)
 
 

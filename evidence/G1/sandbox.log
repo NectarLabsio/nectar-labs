@@ -1,0 +1,132 @@
+   Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/contracts/nectar-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.00s
+     Running tests/sandbox.rs (target/debug/deps/sandbox-c862029d41135863)
+
+running 4 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.35s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 11.00s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794255686, tv_nsec: 760000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794255579, tv_nsec: 160000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 627ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 324.8 KB (324833 bytes)
+     - SHA-256 checksum hex : 6bd1ec5125806ad71e370953447ac635d9e86d4ce801100d03dc05eda15e2a46
+     - SHA-256 checksum bs58: 8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 12s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.32s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 4.01s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794255692, tv_nsec: 350000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794255584, tv_nsec: 470000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 225ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 152.3 KB (152268 bytes)
+     - SHA-256 checksum hex : 28578356a6e426f8ea384051ff7519c51faa2bd7ed9f711e9e4f3a05f3f372c2
+     - SHA-256 checksum bs58: 3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+GAS,new,1751354662595
+GAS,new,1751354662595
+GAS,new,1751354662595
+GAS,new,1751354662595
+GAS,upsert_collateral,2360555414937
+GAS,upsert_collateral,2360555414937
+GAS,upsert_collateral,2360555414937
+GAS,upsert_collateral,2360555414937
+GAS,update_owner_price,2118858280279
+GAS,update_owner_price,2118858280279
+GAS,update_owner_price,2118858280279
+GAS,update_owner_price,2118858280279
+GAS,fund_gas_reserve,1796782826135
+GAS,fund_gas_reserve,1796782826135
+GAS,fund_gas_reserve,1796782826135
+GAS,fund_gas_reserve,1796782826135
+GAS,set_quote_params,1817303650097
+GAS,ft_transfer_call:invalid,6370933934517
+GAS,set_oracle_params,1817307324212
+GAS,ft_transfer_call:SupplyLendingLiquidity,6270630565433
+GAS,ft_transfer_call:FundPappusQuote,6757563058562
+GAS,ft_transfer_call:TopUpQuote,6623964629556
+GAS,pause,1840940796311
+GAS,ft_transfer_call:LockCollateralAndBorrow,11089987417981
+GAS,update_owner_price,2119285290643
+GAS,unpause,1841759818559
+GAS,ft_transfer_call:Repay(partial),6440617830363
+GAS,update_owner_price,2119285290643
+test refunds_and_guards ... ok
+GAS,trigger_preliquidation(2 legs),19981430932619
+GAS,ft_transfer_call:Repay(refund),6498270100626
+GAS,initiate_quote_withdrawal,2315007889416
+GAS,claim_fees,6623355577701
+test demo_flow_matches_model ... ok
+GAS,complete_quote_withdrawal,6729216178760
+test topup_exit_and_repay ... ok
+GAS,update_owner_price,2119285290643
+GAS,update_owner_price,2119285290643
+GAS,trigger_preliquidation(8 legs),46960944036479
+test preliq_eight_buyers_gas ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 44.28s
+
