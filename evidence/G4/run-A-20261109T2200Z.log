@@ -1,0 +1,49 @@
+
+== A0: borrower1 opens position #2 (5 NVDAx, $600, pre-liq 7,500) at $180 ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  update_owner_price
+│                       args:         {
+│                                       "price_usd_e6": "180000000",
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.5 Tgas
+│    Transaction fee: 0.000221934996251 NEAR
+│    Transaction ID: 9cMkBV8JBcyE183tFmR32wJsmanqzvGxdpnN6UFqBuFb
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/9cMkBV8JBcyE183tFmR32wJsmanqzvGxdpnN6UFqBuFb
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+
+Function execution return value (printed to stdout):
+true
+
+
+The "update_owner_price" call to <nectar-core.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core.nectar.testnet update_owner_price json-args '{"symbol":"NVDAx","price_usd_e6":"180000000"}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+error: unexpected argument '{"receiver_id":"nectar-core.nectar.testnet","amount":"5000000","msg":"{\"LockCollateralAndBorrow\":\"borrow_usd_e6\":\"600000000\"}"}' found
+
+Usage: near contract call-function as-transaction [CONTRACT_ACCOUNT_ID] [FUNCTION_NAME] [FUNCTION_ARGS_TYPE] [FUNCTION_ARGS] [COMMAND]
+
+For more information, try '--help'.

@@ -17,8 +17,10 @@ STEP="${1:-all}"
 if [ "$STEP" = A ] || [ "$STEP" = all ]; then
   log "A0: borrower1 opens position #2 (5 NVDAx, \$600, pre-liq 7,500) at \$180"
   owner update_owner_price '{"symbol":"NVDAx","price_usd_e6":"180000000"}'
-  near contract call-function as-transaction "$NVDAX" ft_transfer_call \
-    "$(jq -cn --arg r "$CORE" '{receiver_id:$r, amount:"5000000", msg:"{\"LockCollateralAndBorrow\":{\"collateral\":\"NVDAx\",\"borrow_usd_e6\":\"600000000\",\"pre_liq_ltv_bps\":7500}}"}')" \
+  # msg via --arg (bash 3.2 mis-parses \" inside a single-quoted jq program nested in "$(...)")
+  MSG='{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"600000000","pre_liq_ltv_bps":7500}}'
+  ARGS=$(jq -cn --arg r "$CORE" --arg m "$MSG" '{receiver_id:$r, amount:"5000000", msg:$m}')
+  near contract call-function as-transaction "$NVDAX" ft_transfer_call json-args "$ARGS" \
     prepaid-gas '300 Tgas' attached-deposit '1 yoctoNEAR' sign-as "$BR" network-config testnet sign-with-keychain send </dev/null
   log "A1: pin a WRONG version_key"; PIN_VERSION_KEY=$(printf '0%.0s' $(seq 1 64)) bash "$ROOT/scripts/30-quoter-publish.sh" pin
   log "A2: price \$155"; owner update_owner_price '{"symbol":"NVDAx","price_usd_e6":"155000000"}'; health

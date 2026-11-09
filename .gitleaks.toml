@@ -1,9 +1,10 @@
-# gitleaks config: default rules + one narrow allowlist. Public content hashes (wasm sha256 = OutLayer version_key, NEAR code_hash)
-# are high-entropy but not secrets (FACTS F-045, F-140). Anything else still trips the default rules.
+# gitleaks config: default rules + one narrow allowlist. Public content hashes (wasm sha256 = OutLayer version_key, NEAR code_hash,
+# OutLayer input_sha256) are high-entropy but not secrets (FACTS F-045, F-140). The allowlist targets the matched text only, so any
+# other secret on the same line is still reported.
 [extend]
 useDefault = true
 
 [allowlist]
 description = "public content hashes, not secrets"
-regexTarget = "line"
-regexes = ['''^\s*(version_key|wasm_sha256|code_hash|sha256)\s*:\s*"?[0-9a-fA-F]{64}"?\s*(#.*)?$''']
+regexTarget = "match"
+regexes = ['''(version_key|wasm_sha256|code_hash|input_sha256|sha256)["'\\]*\s*[:=]\s*["'\\]*[0-9a-fA-F]{64}["'\\]*''']
