@@ -83,6 +83,11 @@ pub struct Quote {
     pub unlock_ns: Option<U64>,
     pub buyer_remote_recipient: Option<String>,
     pub secrets_profile: Option<String>,
+    // MasterChef reward debt, denominated in USD e6 (µUSDC) despite the `_e18` suffix:
+    // `ceil(weight_usd_e6 * acc_fee_per_usd_e18 / 1e18)` at the last checkpoint, where weight is
+    // `remaining_usd_e6` (0 while exiting). Only the index it is multiplied by is e18-scaled.
+    // Name kept for ABI/borsh compatibility with the deployed contract.
+    // (Plain comment, not `///`: a doc comment enters the embedded ABI and changes the wasm hash.)
     pub fee_debt_e18: U128,
     pub claimable_fees_usd_e6: U128,
     pub created_ns: U64,

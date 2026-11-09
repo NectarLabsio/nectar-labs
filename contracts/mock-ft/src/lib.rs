@@ -190,8 +190,6 @@ impl MockFt {
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[allow(deprecated)]
-    use near_sdk::test_utils::testing_env_with_promise_results;
     use near_sdk::test_utils::{VMContextBuilder, accounts, get_logs};
     use near_sdk::{PromiseResult, testing_env};
 
@@ -275,8 +273,13 @@ mod tests {
         testing_env!(ctx(accounts(1), 1).build());
         let _ = t.ft_transfer_call(accounts(2), U128(100), None, "x".into());
         let c = ctx("usdc".parse().unwrap(), 0).build();
-        #[allow(deprecated)]
-        testing_env_with_promise_results(c, result);
+        testing_env!(
+            c,
+            near_sdk::test_vm_config(),
+            near_sdk::RuntimeFeesConfig::test(),
+            Default::default(),
+            vec![result]
+        );
         let used = t.ft_resolve_transfer(accounts(1), accounts(2), U128(100));
         (t, used)
     }
