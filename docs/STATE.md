@@ -1,7 +1,7 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P1 open** (p0-green a68b4f6). Round 1: WO-9 quoter ∥ WO-10a contract ∥ WO-11a feed ∥ WO-12 web
-Gates: G0 PASS · G1 PASS (b721641) · G2 PASS (5f27f44) · G3 PASS (176914f; write flow from c940dec run) · G4–G9 pending
+Phase: **P1** — contract V1 live (upgrade+migrate), quoter pinned; G4 run done (fallback + real OutLayer execution), verifier checking
+Gates: G0–G3 PASS (p0-green) · G4 verifying · G5 waits H13 (else owner-oracle fallback) · G6 ready (signed dry quote verified) · G7–G9 pending
 Open handoffs: H13, H-NEAR-FAUCET, H-EXPLORER, H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: H13 Pyth key (G5 live price) · H-NEAR-FAUCET top-up (P1 contract redeploy). Neither blocks round 1.
 
@@ -51,6 +51,11 @@ Fixed: evidence/g3 vs G3 case collision had kept the G3 verifier logs out of git
 Quoter PUBLISHED (568e344): OutLayer project nectar.testnet/nectar-quoter, version_key 3ce17749…, FastFS URL in config.yaml;
   pin waits for WO-10a. .gitleaks.toml allowlists public content-hash lines only.
 WO-11b merged (d7b2e91): Pyth updater (off until H13; synthetic Hermes fixture), Neardata indexer default (fixture from G2 seed block).
+P1 live (2026-11-09 UTC): nectar-core V1 code_hash FQjNLgaw… (wasm d617e192…), state_version 1; quoter pinned
+  nectar.testnet/nectar-quoter @3ce17749…; NVDAx vol 420 bps; gas reserve funded. G4 run (d87eef6): pos #2 fallback, pos #0 quoter_result
+  via OutLayer request 15114 (0.00109 NEAR). Fills = max_discount until secrets_ref exists (WO-10b + OutLayer secrets research).
+  DEMO STATE CONSUMED: quote #0 used up, Q_c $3,150, positions #0/#2 closed → re-seed before the demo (needs USDC/NVDAx mints + quotes).
+  Owner nectar.testnet ~0.28 NEAR → H-NEAR-FAUCET now matters (next upgrade + re-seed).
 Phase-boundary TODO: refresh .claude/agents/quoter.md (still describes the
   pre-D-014 schema); scripts/30 must call set_quoter_pin(project_id, version_key) per interface-p1.
 Feed (WO-11a, f525710): 1Click sampler (dry-only, signature-verified, NVDAx no_route), MCP server stdio + HTTP :8789/mcp. For the next
