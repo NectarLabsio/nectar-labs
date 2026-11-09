@@ -12,7 +12,7 @@ use std::sync::OnceLock;
 use near_sdk::serde_json::{Value, json};
 use near_workspaces::network::Sandbox;
 use near_workspaces::result::ExecutionFinalResult;
-use near_workspaces::types::{Gas, NearToken};
+use near_workspaces::types::{AccessKey, Gas, KeyType, NearToken, SecretKey};
 use near_workspaces::{Account, AccountId, Contract, Worker};
 
 fn root() -> PathBuf {
@@ -33,6 +33,17 @@ fn wasm(crate_dir: &str, name: &str) -> Vec<u8> {
     });
     let _ = crate_dir;
     std::fs::read(root().join(format!("target/near/{name}/{name}.wasm"))).expect("wasm")
+}
+
+/// A scoped-key call is refused either at tx validation (RPC error) or in execution (failed outcome).
+fn refused(r: near_workspaces::Result<ExecutionFinalResult>, what: &str) {
+    match r {
+        Err(err) => println!("KEYSCOPE,{what},rejected-at-validation,{err}"),
+        Ok(x) => {
+            assert!(x.is_failure(), "{what}: expected failure");
+            println!("KEYSCOPE,{what},failed-in-execution,{:?}", x.failures().first());
+        }
+    }
 }
 
 fn gas(label: &str, r: &ExecutionFinalResult) {
@@ -70,11 +81,13 @@ const UNITS: u128 = 100_000_000;
 
 async fn deploy_ft(worker: &Worker<Sandbox>, owner: &Account, symbol: &str) -> anyhow::Result<Contract> {
     let c = worker.dev_deploy(&wasm("mock-ft", "mock_ft")).await?;
-    c.call("new")
+    let r = c
+        .call("new")
         .args_json(json!({ "owner": owner.id(), "name": format!("Mock {symbol}"), "symbol": symbol, "decimals": 6 }))
         .transact()
-        .await?
-        .into_result()?;
+        .await?;
+    gas("mock-ft:new", &r);
+    r.into_result()?;
     Ok(c)
 }
 
@@ -228,8 +241,36 @@ async fn demo_flow_matches_model() -> anyhow::Result<()> {
         .await?;
     assert!(r.is_failure(), "keeper method is not payable");
 
-    let r = e
-        .keeper
+    // PRD §6.10 key scope: the keeper signs with a function-call key limited to the keeper methods
+    // on nectar-core (F-015, F-020). `relay_settlement_result` is P2-only (absent from this build).
+    let sk = SecretKey::from_random(KeyType::ED25519);
+    let ak = AccessKey::function_call_access(
+        e.core.id(),
+        &["trigger_preliquidation", "relay_settlement_result"],
+        Some(NearToken::from_near(1)),
+    );
+    e.keeper.batch(e.keeper.id()).add_key(sk.public_key(), ak).transact().await?.into_result()?;
+    let keeper_fc = Account::from_secret_key(e.keeper.id().clone(), sk, &e.worker);
+    // (b) the scoped key cannot sign a token transfer (wrong receiver, and FC keys cannot attach the 1 yocto)
+    let r = keeper_fc
+        .call(e.usdc.id(), "ft_transfer")
+        .args_json(json!({ "receiver_id": e.keeper.id(), "amount": "1" }))
+        .deposit(NearToken::from_yoctonear(1))
+        .transact()
+        .await;
+    refused(r, "FC key refused for usdc.ft_transfer");
+    let r = keeper_fc
+        .call(e.usdc.id(), "ft_transfer")
+        .args_json(json!({ "receiver_id": e.keeper.id(), "amount": "1" }))
+        .transact()
+        .await;
+    refused(r, "FC key refused for usdc (receiver not in scope)");
+    // ... nor a nectar-core method outside its method list
+    let r = keeper_fc.call(e.core.id(), "pause").transact().await;
+    refused(r, "FC key refused for unlisted method");
+    assert_eq!(view(&e.core, "get_config", json!({})).await?["paused"], false, "not paused");
+    // (a) trigger works with the scoped key
+    let r = keeper_fc
         .call(e.core.id(), "trigger_preliquidation")
         .args_json(json!({ "position_id": "0" }))
         .gas(Gas::from_tgas(300))
@@ -441,5 +482,64 @@ async fn preliq_eight_buyers_gas() -> anyhow::Result<()> {
     assert_eq!(pos["status"], "Closed");
     let list = view(&e.core, "list_positions", json!({ "from_index": 0, "limit": 10 })).await?;
     assert_eq!(list[0]["position_id"], "0");
+    Ok(())
+}
+
+/// Gas rows for the owner setters and the two-step price override, plus standalone mock-ft calls
+/// (G1: every public non-view method of the default build has a measurement).
+#[tokio::test]
+async fn owner_setters_and_ft_gas() -> anyhow::Result<()> {
+    let e = setup().await?;
+    async fn owner_call(e: &Env, method: &str, args: Value) -> anyhow::Result<()> {
+        let r = e.owner.call(e.core.id(), method).args_json(args).transact().await?;
+        gas(method, &r);
+        assert!(r.is_success(), "{method}: {:?}", r.failures());
+        Ok(())
+    }
+    let new_keeper = e.worker.dev_create_account().await?;
+    owner_call(&e, "set_keeper", json!({ "keeper": new_keeper.id() })).await?;
+    owner_call(&e, "set_fee_split", json!({ "buyers_bps": 6000, "lenders_bps": 3000, "treasury_bps": 1000 })).await?;
+    owner_call(&e, "set_session", json!({ "symbol": "NVDAx", "open": true })).await?;
+    owner_call(&e, "set_dex_depth", json!({ "symbol": "NVDAx", "depth_usd_e6": "2500000000" })).await?;
+    owner_call(&e, "set_reserve", json!({ "symbol": "NVDAx", "reserve_usd_e6": "1000000000" })).await?;
+    // 300 is outside the oracle band from 180: update_owner_price refuses, propose/apply overrides
+    owner_call(&e, "propose_price", json!({ "symbol": "NVDAx", "price_usd_e6": "300000000" })).await?;
+    e.worker.fast_forward(1).await?;
+    owner_call(&e, "apply_price", json!({ "symbol": "NVDAx" })).await?;
+    let cfg = view(&e.core, "get_config", json!({})).await?;
+    assert_eq!(cfg["keeper"], new_keeper.id().to_string());
+    assert_eq!(cfg["fee_split"]["buyers_bps"], 6000);
+    let c = view(&e.core, "get_collateral", json!({ "symbol": "NVDAx" })).await?;
+    assert_eq!(c["market_session_open"], true);
+    assert_eq!(c["verified_dex_depth_usd_e6"], "2500000000");
+    assert_eq!(c["nectar_reserve_usd_e6"], "1000000000");
+    assert_eq!(c["oracle_price_usd_e6"], "300000000");
+    // non-owner refused
+    let r = e.keeper.call(e.core.id(), "set_keeper").args_json(json!({ "keeper": e.keeper.id() })).transact().await?;
+    assert!(r.is_failure(), "set_keeper is owner-only");
+
+    let a = e.worker.dev_create_account().await?;
+    let b = e.worker.dev_create_account().await?;
+    let r = e.owner.call(e.usdc.id(), "mint").args_json(json!({ "account_id": a.id(), "amount": "5000000" })).transact().await?;
+    gas("mock-ft:mint", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    let r = b
+        .call(e.usdc.id(), "storage_deposit")
+        .args_json(json!({ "account_id": b.id(), "registration_only": true }))
+        .deposit(NearToken::from_millinear(2))
+        .transact()
+        .await?;
+    gas("mock-ft:storage_deposit", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    let r = a
+        .call(e.usdc.id(), "ft_transfer")
+        .args_json(json!({ "receiver_id": b.id(), "amount": "2000000" }))
+        .deposit(NearToken::from_yoctonear(1))
+        .transact()
+        .await?;
+    gas("mock-ft:ft_transfer", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    assert_eq!(bal(&e.usdc, a.id()).await?, 3_000_000);
+    assert_eq!(bal(&e.usdc, b.id()).await?, 2_000_000);
     Ok(())
 }

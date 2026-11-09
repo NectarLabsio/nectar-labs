@@ -1,21 +1,31 @@
-GAS,claim_fees,6627915577701
-GAS,complete_quote_withdrawal,6724656178760
-GAS,ft_transfer_call:FundPappusQuote,6762123058562
-GAS,ft_transfer_call:LockCollateralAndBorrow,11083183619245
-GAS,ft_transfer_call:Repay(partial),6449737830363
-GAS,ft_transfer_call:Repay(refund),6521070100626
-GAS,ft_transfer_call:SupplyLendingLiquidity,6284310565433
+GAS,apply_price,2271054866034
+GAS,claim_fees,6623355577701
+GAS,complete_quote_withdrawal,6733776178760
+GAS,ft_transfer_call:FundPappusQuote,6757563058562
+GAS,ft_transfer_call:LockCollateralAndBorrow,11087671216717
+GAS,ft_transfer_call:Repay(partial),6445177830363
+GAS,ft_transfer_call:Repay(refund),6507390100626
+GAS,ft_transfer_call:SupplyLendingLiquidity,6270630565433
 GAS,ft_transfer_call:TopUpQuote,6628524629556
-GAS,ft_transfer_call:invalid,6393733934517
-GAS,fund_gas_reserve,1792222826135
-GAS,initiate_quote_withdrawal,2301327889416
-GAS,new,1746794662595
-GAS,pause,1836380796311
-GAS,set_oracle_params,1812747324212
-GAS,set_quote_params,1812743650097
-GAS,trigger_preliquidation(2 legs),19947230932619
-GAS,trigger_preliquidation(8 legs),46915289734583
-GAS,unpause,1837199818559
-GAS,update_owner_price,2109738280279
-GAS,update_owner_price,2110165290643
-GAS,upsert_collateral,2342351616201
+GAS,ft_transfer_call:invalid,6370933934517
+GAS,fund_gas_reserve,1796782826135
+GAS,initiate_quote_withdrawal,2315007889416
+GAS,mock-ft:ft_transfer,1937331976856
+GAS,mock-ft:mint,1728122260829
+GAS,mock-ft:new,1525112786760
+GAS,mock-ft:storage_deposit,1727810328399
+GAS,new,1751354662595
+GAS,pause,1840940796311
+GAS,propose_price,2080696706142
+GAS,set_dex_depth,2041277668171
+GAS,set_fee_split,1814690526452
+GAS,set_keeper,1814311870139
+GAS,set_oracle_params,1817307324212
+GAS,set_quote_params,1817303650097
+GAS,set_reserve,2041323627883
+GAS,set_session,2037962774353
+GAS,trigger_preliquidation(2 legs),19979096630723
+GAS,trigger_preliquidation(8 legs),46970045935847
+GAS,unpause,1841759818559
+GAS,update_owner_price,2118858280279
+GAS,upsert_collateral,2360519213673
