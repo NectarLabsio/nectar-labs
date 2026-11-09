@@ -1,7 +1,7 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P0 — G1 FAIL (gas rows only), fix in flight (WO-2b)**; deploy waits for G1 PASS
-Gates: G0 PASS (P0 tools) · G1 FAIL→re-run after WO-2b (docs/GATE_FAIL_G1.md) · G2 · G3 pending · G4–G9 pending
+Phase: **P0 — G1 PASS, deployed + seeded on testnet (WO-6); G2 verifier running**
+Gates: G0 PASS (P0 tools) · G1 PASS (b721641) · G2 running · G3 next · G4–G9 pending
 Open handoffs: H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: nothing for P0.
 
@@ -29,8 +29,9 @@ Open follow-ups: (a) P2/WO-13: PRD §6.5 says sha256(preimage) before sign, §9 
   read-only; (d) FACTS entries for gtag/Plausible script URLs — next researcher batch; (e) Feed OpenAPI docs page now possible
   (services/feed/openapi.yaml merged). Lesson: 60-turn cap too small for WO-3/WO-4 size → future work orders split smaller.
 All P0 build WOs merged: WO-2 contract (f9d1b30), WO-3 web (1324045), WO-4 docs (b436f93), WO-4b (db0606a), WO-5 (cdd2fbe).
-WO-6 deploy + seed scripts ready (6114bbd), not run: contract accounts 3.6/1.7/1.7 NEAR fit the faucet budget.
-TODO at WO-6: export keeper FC key to ~/.nectar/keys (0600), delete keeper full-access key, record view_access_key_list in EVIDENCE.
+WO-6 DONE (5f27f44): nectar-core / usdc-mock / nvdax-mock live; seeded = model.csv demo rows; `pnpm demo:testnet` shows them.
+Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/keys/keeper.function-call.json, borrower1.json (G3 write flow).
+Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T20:32:00Z · commit db0606a
+Last activity: 2026-11-09T20:40:14Z · commit b721641

@@ -1,0 +1,31 @@
+├  Unsigned transaction:
+│    signer_id:    borrower1.nectar.testnet
+│    receiver_id:  borrower1.nectar.testnet
+│    actions:
+│       -- add access key:     
+│                       public key:   ed25519:219E55GC7pX3iUHesXWUPwXQJRyHLZ3yZ3yFBwe4PToU
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:Dpn6xupWdsxoixqi5e1kgB8ge4Ze9h9aSiiG67ic2wjV
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.643 Tgas
+│    Transaction fee: 0.000041964925 NEAR
+│    Transaction ID: zJeji6XXU9qqcyDrAnkpFg91d8p7un5Xxunz12b6zMZ
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/zJeji6XXU9qqcyDrAnkpFg91d8p7un5Xxunz12b6zMZ
+│     [0m
+
+
+Added access key = ed25519:219E55GC7pX3iUHesXWUPwXQJRyHLZ3yZ3yFBwe4PToU to borrower1.nectar.testnet.
+
+The data for the access key is saved in a file /Users/lemmalabs/.near-credentials/testnet/borrower1.nectar.testnet/ed25519_219E55GC7pX3iUHesXWUPwXQJRyHLZ3yZ3yFBwe4PToU.json
+The data for the access key is saved in a file /Users/lemmalabs/.near-credentials/testnet/borrower1.nectar.testnet.json
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account add-key borrower1.nectar.testnet grant-full-access autogenerate-new-keypair --signature-scheme ed25519 save-to-legacy-keychain network-config testnet sign-with-keychain send[39m
+
