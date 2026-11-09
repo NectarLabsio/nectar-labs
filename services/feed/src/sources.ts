@@ -6,8 +6,8 @@
 // 2. TxStatusSource (optional): given known transaction hashes (e.g. the keeper's own
 //    `keeper_runs.tx_hash`), fetches the outcome with receipts and feeds the NEP-297 logs to the DB
 //    (PRD §10.2). near-api-js 7.4.0 exposes this as provider.viewTransactionStatusWithReceipts.
-// A general "tail every receipt to nectar-core" source is NOT implemented: the cheapest documented
-// RPC approach is unverified in docs/FACTS.md (researcher run requested in the WO-5 report).
+// 3. NeardataSource (neardata.ts, default for events): tails every final block via Neardata (F-122)
+//    and ingests receipts executed by nectar-core.
 
 import type { FeedDb, LogBatch, PositionObservation, QuoteRow } from './db.ts';
 import { isExitCapacity } from './db.ts';
