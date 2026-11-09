@@ -49,8 +49,8 @@ pub const MAX_QUOTES_PER_SETTLEMENT: usize = 8;
 pub const MAX_PAGE: u32 = 100;
 pub const MAX_STRING_LEN: usize = 128;
 
-pub const GAS_FT_TRANSFER: Gas = Gas::from_tgas(8);
-pub const GAS_ON_PAYOUT: Gas = Gas::from_tgas(8);
+pub const GAS_FT_TRANSFER: Gas = Gas::from_tgas(5); // mock-ft ft_transfer burns ~1.6 Tgas (WO-10a sandbox GAS lines)
+pub const GAS_ON_PAYOUT: Gas = Gas::from_tgas(5); // on_payout burns ~1.6 Tgas (success branch)
 pub const ONE_YOCTO: NearToken = NearToken::from_yoctonear(1);
 
 // Defaults from packages/config/config.yaml (D-009).

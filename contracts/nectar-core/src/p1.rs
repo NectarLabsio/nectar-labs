@@ -9,14 +9,17 @@
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, Value, json};
-use near_sdk::{AccountId, Gas, NearToken, Promise, PromiseError, env, near, require};
+use near_sdk::{AccountId, Gas, GasWeight, NearToken, Promise, PromiseError, env, near, require};
 
 use crate::events::emit;
 use crate::types::*;
 use crate::{MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar, NectarExt, math, ok};
 
-/// Callback burn without transfers (measured in the sandbox, see tests/sandbox_p1.rs GAS lines).
+/// Callback own burn for parse + 8 legs (sandbox: ~13 Tgas with 10 transfers scheduled).
 pub const GAS_QUOTER_CB_BASE: Gas = Gas::from_tgas(20);
+/// Per transfer, on top of the attached ft_transfer + on_payout gas: exec fees of the two receipts the
+/// callback creates are charged to it (sandbox: 6 Tgas/transfer was not enough with 10 transfers).
+pub const GAS_RECEIPTS_PER_TRANSFER: Gas = Gas::from_tgas(5);
 /// Gas left in `trigger_preliquidation` after scheduling both promises.
 pub const GAS_TRIGGER_MARGIN: Gas = Gas::from_tgas(5);
 /// Stdout is <= 900 B (F-043); anything longer is rejected as `too_long`.
@@ -127,7 +130,8 @@ impl Nectar {
         let deposit = self.quoter.deposit_yocto;
         let need = ok(math::add(deposit, u128::from(n_transfers)));
         require!(self.gas_reserve_yocto >= need, "gas reserve empty");
-        let per_transfer = crate::GAS_FT_TRANSFER.as_gas() + crate::GAS_ON_PAYOUT.as_gas();
+        let per_transfer =
+            crate::GAS_FT_TRANSFER.as_gas() + crate::GAS_ON_PAYOUT.as_gas() + GAS_RECEIPTS_PER_TRANSFER.as_gas();
         let cb_gas = Gas::from_gas(GAS_QUOTER_CB_BASE.as_gas() + n_transfers * per_transfer);
         let exec_gas = Gas::from_tgas(self.quoter.gas_tgas);
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
@@ -162,11 +166,13 @@ impl Nectar {
         let cb = json!({ "position_id": position_id, "input_sha256": sha, "quote_ids": ids }).to_string();
         Promise::new(self.quoter.outlayer_account.clone())
             .function_call("request_execution", args.into_bytes(), NearToken::from_yoctonear(deposit), exec_gas)
-            .then(Promise::new(env::current_account_id()).function_call(
+            // minimum = cb_gas; all gas left unused by this trigger also goes to the callback (weight 1)
+            .then(Promise::new(env::current_account_id()).function_call_weight(
                 "on_quoter_result",
                 cb.into_bytes(),
                 NearToken::from_yoctonear(0),
                 cb_gas,
+                GasWeight(1),
             ))
             .detach();
     }
