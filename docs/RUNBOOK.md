@@ -1,5 +1,12 @@
 # RUNBOOK.md — operations and incidents (testnet now, mainnet shape)
 
+## Ids (testnet, from packages/config/config.yaml; deployed 2026-11-09, G2 verification pending)
+```bash
+CORE=nectar-core.nectar.testnet
+OWNER=nectar.testnet
+KEEPER=keeper.nectar.testnet   # function-call key only (D-012); keeper not running continuously
+```
+
 ## Health checks
 - Keeper: `curl -s $KEEPER_URL/healthz` → `{lastBlock, allowanceYocto, pendingSettlements, oracleAgeS}`; stale if lastBlock older than 3 min.
 - Contract: `near contract call-function as-read-only $CORE get_config json-args '{}' network-config testnet now` (P0 interface has no `get_status`; see docs/work/interface-p0.md) plus `get_exit_capacity '{"symbol":"NVDAx"}'` for oracle age.

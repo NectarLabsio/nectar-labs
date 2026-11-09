@@ -6,7 +6,7 @@ description: Public read API over committed exit capacity.
 # Feed REST
 
 <p className="verified">Verified against: F-018 (2026-11-10), F-021 (2026-11-10) · source services/feed/openapi.yaml (OpenAPI 3.1.0, v0.1.0) · test services/feed/test/feed.test.ts "openapi.yaml documents exactly the served routes"</p>
-<p className="status">Status: built in P0, runs locally (`pnpm --filter feed start`, default <code>http://127.0.0.1:8788</code>). No public host yet. View polling stays off while the core account id is <code>TODO-G2</code> in config.yaml, so responses are empty until deploy.</p>
+<p className="status">Status: built in P0, runs locally (`pnpm --filter feed start`, default <code>http://127.0.0.1:8788</code>). No public host yet. It polls views of <code>nectar-core.nectar.testnet</code> (id from config.yaml).</p>
 
 The Feed is a read-only view of committed exit capacity on `nectar-core` (NEAR testnet, mock collateral). An indexer polls the contract views (`list_collaterals`, `get_exit_capacity`, `list_quotes`, `list_positions`) and can also read NEP-297 logs (F-021) from the keeper's own transactions. Both write to SQLite. Responses are cached for 10 s and contain no account ids or buyer identities (test "serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids").
 
@@ -72,10 +72,10 @@ curl -s 'http://127.0.0.1:8788/api/asset/NVDAx?limit=24'
 The contract views are public and need no key.
 
 ```bash
-near contract call-function as-read-only TODO-G2 get_exit_capacity json-args '{"symbol":"NVDAx"}' network-config testnet now
-near contract call-function as-read-only TODO-G2 list_quotes json-args '{"symbol":"NVDAx","from_index":0,"limit":16}' network-config testnet now
+near contract call-function as-read-only nectar-core.nectar.testnet get_exit_capacity json-args '{"symbol":"NVDAx"}' network-config testnet now
+near contract call-function as-read-only nectar-core.nectar.testnet list_quotes json-args '{"symbol":"NVDAx","from_index":0,"limit":16}' network-config testnet now
 ```
 
-Command grammar: near-cli-rs v0.31.1 (F-018). The account id is `TODO-G2` until deploy.
+Command grammar: near-cli-rs v0.31.1 (F-018). The account id comes from `packages/config/config.yaml`.
 
 The MCP server that exposes the same data to agents is a P1 item. See [Feed MCP](/integrate/feed-mcp).

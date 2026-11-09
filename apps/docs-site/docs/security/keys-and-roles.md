@@ -6,14 +6,14 @@ description: Every role, every key, where it lives.
 # Keys and roles
 
 <p className="verified">Verified against: F-015 (2026-11-09), F-016 (2026-11-10), F-019 (2026-11-10), F-020 (2026-11-10), F-030 (2026-11-09), F-040 (2026-11-09) · spec docs/PRD.md §6.1, §16.1 · D-007, D-010</p>
-<p className="status">Status: accounts are not created yet (G2 pending). Planned names are shown. Ids are TODO-G2.</p>
+<p className="status">Status: accounts created on testnet 2026-11-09 (G2 verification pending). Ids from packages/config/config.yaml.</p>
 
 ## Roles in `nectar-core`
 
 | Role | Account | May call |
 | --- | --- | --- |
-| owner | `TODO-G2` (deployer key) | collateral and risk params, oracle params and owner price, fee split, keeper, pause, gas reserve |
-| keeper | `TODO-G2` | `trigger_preliquidation`, `relay_settlement_result`, 0 deposit, through a function-call key (D-010) |
+| owner | `nectar.testnet` (deployer key) | collateral and risk params, oracle params and owner price, fee split, keeper, pause, gas reserve |
+| keeper | `keeper.nectar.testnet` (no full-access key, D-012) | `trigger_preliquidation`, `relay_settlement_result`, 0 deposit, through a function-call key (D-010) |
 | token contracts | mock USDC, mock NVDAx | `ft_on_transfer` (predecessor check) |
 | quoter (P1) | `outlayer.testnet` (F-040) | only the `#[private]` callback `on_quoter_result` |
 | MPC signer (P2) | `v1.signer-prod.testnet` (F-030) | only the `#[private]` callback `on_signature` |

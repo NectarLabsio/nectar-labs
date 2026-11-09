@@ -1,25 +1,32 @@
 # Nectar Labs: committed buyers, higher limits
 
-> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. As of 2026-11-10 nothing is deployed yet: gate G2 (testnet deploy) is pending.**
+> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Deployed to NEAR testnet on 2026-11-09 (commit 5f27f44); independent G2 verification is pending.**
 
 Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nectar Labs makes exit liquidity
 *committed*. Market makers escrow time-locked quotes (Pappus) on NEAR. Borrowers get a higher limit
 (Cramér) for a premium that pays the buyers. Pre-liquidation then sells to the committed buyer at a bounded discount instead of a DEX:
 `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))` (PRD §4.2, decision D-009).
 
-## Live on testnet (filled at G2 from `packages/config/config.yaml`; proof in docs/EVIDENCE.md)
+## Live on testnet (ids from `packages/config/config.yaml`; deploy logs in `evidence/G2/`; G2 verification pending in docs/EVIDENCE.md)
 | Component | Account / id | Kind | Status |
 | --- | --- | --- | --- |
-| nectar-core | `TODO-G2` | contract | not deployed (G2 pending) |
-| mock USDC | `TODO-G2` | **mock** NEP-141 | not deployed (G2 pending) |
-| mock NVDAx | `TODO-G2` | **mock** collateral | not deployed (G2 pending) |
-| keeper | `TODO-G2` (function-call key, 2 methods) | service | not deployed (G2 pending) |
-| oracle | owner oracle in P0 | **fallback**, badge in UI | not deployed (G2 pending); live source decided at G5 |
-| OutLayer quoter | `TODO-G4` | TEE pricing, P1 | not built; **fallback**: settle at `max_discount_bps` |
+| nectar-core | [`nectar-core.nectar.testnet`](https://testnet.nearblocks.io/address/nectar-core.nectar.testnet) | contract, code_hash `8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV` | live (testnet) |
+| mock USDC | [`usdc-mock.nectar.testnet`](https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet) | **mock** NEP-141 | live (testnet) |
+| mock NVDAx | [`nvdax-mock.nectar.testnet`](https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet) | **mock** collateral | live (testnet) |
+| owner | [`nectar.testnet`](https://testnet.nearblocks.io/address/nectar.testnet) | deployer; sets params and the P0 price | live (testnet) |
+| keeper | [`keeper.nectar.testnet`](https://testnet.nearblocks.io/address/keeper.nectar.testnet) (one function-call key, 2 methods, no full-access key; D-012) | service | not running continuously (run locally) |
+| oracle | owner oracle on nectar-core (`update_owner_price`, $180) | **fallback**, badge in UI | owner oracle (P0, disclosed); live source decided at G5 |
+| settlement discount | quote's `max_discount_bps` | **fallback** | static discount (P0) |
+| OutLayer quoter | `TODO-G4` | TEE pricing, P1 | not built |
 | Solana `nectar_vault` | `TODO-G7` (devnet) | P2 | not built |
 | NEAR AI copilot | — | P2 | not built; live mode needs key H7 |
 | Feed REST / MCP | — | P1 | not built |
 | Mainnet, real xStocks, Reserve `R_c`, keeper bonds, DAO owner | — | **PROD-only** | not in this repo |
+
+Seeded demo state (`pnpm demo:testnet`, evidence/G2/demo-testnet-20261109T2049Z.log): pool $50,000 from
+[`buyer1.nectar.testnet`](https://testnet.nearblocks.io/address/buyer1.nectar.testnet) / [`buyer2.nectar.testnet`](https://testnet.nearblocks.io/address/buyer2.nectar.testnet); quote #0 $10,000 at 250 bps, quote #1 $5,000 at 400 bps;
+position #0 of [`borrower1.nectar.testnet`](https://testnet.nearblocks.io/address/borrower1.nectar.testnet): 100 mock NVDAx, debt $11,250 (Cramér limit $11,250 vs $7,200 static LTV),
+LTV 6,250 bps, pre-liquidation at 7,500 bps; owner price $180; session closed. All tokens are mocks with no value.
 
 ## Quick start (5 commands, no keys needed)
 ```
@@ -29,9 +36,10 @@ pnpm demo:testnet            # read-only views against the testnet contract
 pnpm --filter web dev        # http://localhost:3000
 pnpm --filter docs-site start
 ```
-What works today (2026-11-10): `pnpm i` and `pnpm --filter docs-site start` (docs on http://localhost:3000).
-`pnpm demo:testnet` runs `scripts/50-verify.sh`. It needs `near` (near-cli-rs v0.31.1) and `yq`, and it fails until G2 fills the ids.
-`pnpm --filter web dev` matches no project until the web app (WO-3) lands. Node ≥ 22.22.2, pnpm 10.34.9.
+What works today (2026-11-10): `pnpm i`, `pnpm demo:testnet` and `pnpm --filter docs-site start`.
+`pnpm demo:testnet` works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml`
+and calls nectar-core views over public testnet RPC (no keys, no near CLI; override the RPC with `NEAR_RPC_URL`).
+`pnpm --filter web dev` starts the web app (WO-3 merged; G3 pending). Node ≥ 22.22.2, pnpm 10.34.9.
 
 ## 60-second architecture
 ![architecture](docs/img/architecture.svg)
