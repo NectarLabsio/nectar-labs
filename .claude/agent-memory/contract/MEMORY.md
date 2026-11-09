@@ -1,0 +1,1 @@
+- [Host toolchain quirks](host_toolchain_quirks.md) — SDKROOT=MacOSX26.5.sdk needed for host linking; exFAT incremental; plain cargo check fails by design

@@ -1,0 +1,26 @@
+[package]
+name = "nectar-core"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+description = "Nectar Labs core: Pappus funded quotes + Cramer borrowing limit (P0)"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+# P1/P2 entry points compile as stubs only when enabled (interface-p0.md).
+p1 = []
+p2 = []
+
+[dependencies]
+near-sdk = { workspace = true }
+
+[dev-dependencies]
+near-sdk = { workspace = true, features = ["unit-testing"] }
+near-workspaces = "0.24.0" # F-029
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+anyhow = "1"

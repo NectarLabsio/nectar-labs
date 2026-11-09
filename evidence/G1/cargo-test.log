@@ -1,0 +1,827 @@
+   Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/contracts/mock-ft)
+   Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/contracts/nectar-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.09s
+     Running unittests src/lib.rs (target/debug/deps/mock_ft-3840d47ad2bd8876)
+
+running 11 tests
+test tests::new_and_metadata ... ok
+test tests::mint_owner_only ... ok
+
+thread 'tests::ft_transfer_insufficient' (2867271) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "insufficient balance" })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test tests::ft_transfer_insufficient - should panic ... ok
+test tests::ft_transfer_call_debits_sender ... ok
+
+thread 'tests::mint_rejects_non_owner' (2867275) panicked at contracts/mock-ft/src/lib.rs:82:9:
+owner only
+test tests::mint_rejects_non_owner - should panic ... ok
+
+thread 'tests::ft_transfer_requires_one_yocto' (2867273) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/utils/mod.rs:85:5:
+Requires attached deposit of exactly 1 yoctoNEAR
+test tests::ft_transfer_requires_one_yocto - should panic ... ok
+test tests::ft_transfer_moves_balance ... ok
+test tests::resolve_refunds_all_on_failure ... ok
+test tests::resolve_refunds_unused ... ok
+test tests::resolve_keeps_all_when_used ... ok
+test tests::storage_shims ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running unittests src/lib.rs (target/debug/deps/nectar_core-bd20e5240cfb3424)
+
+running 88 tests
+test math::tests::ltv_and_trigger ... ok
+test math::tests::limit_zero_capacity_is_zero ... ok
+test math::tests::limit_open_session_counts_depth ... ok
+test math::tests::settle_leg_caps_on_units ... ok
+test math::tests::limit_closed_session_ignores_depth_and_uses_weekend_haircut ... ok
+test math::tests::seize_rounds_up_and_keeper_cut ... ok
+test math::tests::split_sends_buyer_share_to_treasury_without_quotes ... ok
+test math::tests::premium_rounds_up_and_is_zero_below_static ... ok
+test math::tests::overflow_is_an_error_not_a_wrap ... ok
+test math::tests::fee_index_matches_reference_loop ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+test tests::contract_version_view ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+
+thread 'tests::apply_price_same_block_rejected' (2867292) panicked at contracts/nectar-core/src/lib.rs:734:9:
+apply in a later block
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test tests::apply_price_same_block_rejected - should panic ... ok
+
+thread 'tests::apply_price_without_proposal' (2867293) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "no proposed price" })
+test tests::apply_price_without_proposal - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+
+thread 'tests::claim_fees_nothing' (2867294) panicked at contracts/nectar-core/src/lib.rs:825:9:
+no fees
+test tests::claim_fees_nothing - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+
+thread 'tests::ft_on_transfer_unknown_token_panics' (2867304) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "unknown token" })
+test tests::ft_on_transfer_unknown_token_panics - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"1","unlock_ns":"1700604800000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"1","unlock_ns":"1700604810000000000"}]}
+refund: invalid msg
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"paused","data":[{}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+test tests::events_are_nep297 ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"fees_claimed","data":[{"quote_id":"0","amount_usd_e6":"56700000"}]}
+test tests::claim_fees_pays_and_zeroes ... ok
+
+thread 'tests::complete_withdrawal_without_initiate' (2867299) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "withdrawal not initiated" })
+test tests::complete_withdrawal_without_initiate - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"paused","data":[{}]}
+refund: msg not valid for this token
+refund: invalid msg
+
+thread 'tests::complete_withdrawal_before_unlock' (2867298) panicked at contracts/nectar-core/src/lib.rs:791:9:
+notice period not over
+test tests::complete_withdrawal_before_unlock - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":400}]}
+
+thread 'tests::claim_fees_refused_when_paused' (2867296) panicked at contracts/nectar-core/src/lib.rs:120:9:
+paused
+test tests::claim_fees_refused_when_paused - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"1","unlock_ns":"1700604800000000000"}]}
+refund: msg not valid for this token
+test tests::ft_on_transfer_wrong_token_for_variant_refunds ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_withdrawn","data":[{"quote_id":"1","principal_usd_e6":"5000000000","fees_usd_e6":"28350000"}]}
+test tests::complete_withdrawal_allowed_while_paused ... ok
+refund: zero amount
+test tests::ft_on_transfer_invalid_msg_refunds ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+test tests::fund_gas_reserve_accumulates ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"7500000000","premium_usd_e6":"9000000"}]}
+test tests::fees_after_exit_stop_accruing ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+test tests::fund_quote_creates_quote_and_q ... ok
+
+thread 'tests::fund_gas_reserve_requires_deposit' (2867307) panicked at contracts/nectar-core/src/lib.rs:759:9:
+attach a deposit
+test tests::fund_gas_reserve_requires_deposit - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+test tests::get_owed_collateral_default_zero ... ok
+refund: quote below minimum
+test tests::get_pool_view ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+refund: notice period below minimum
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"2","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+refund: max_discount_bps out of range
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"3","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+test tests::get_exit_capacity_view ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"4","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+refund: unknown collateral
+test tests::fund_quote_failures_refund_without_state_change ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+test tests::get_position_and_list_positions_views ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+test tests::get_quote_and_list_quotes_views ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+test tests::get_health_view ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"5","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"6","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+
+thread 'tests::initiate_withdrawal_buyer_only' (2867318) panicked at contracts/nectar-core/src/lib.rs:768:9:
+buyer only
+test tests::initiate_withdrawal_buyer_only - should panic ... ok
+test tests::model_csv_vectors_match_contract_math ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"7","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"1","unlock_ns":"1700604810000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"TSLAx"}]}
+test tests::list_collaterals_paginates ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"8","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_withdrawn","data":[{"quote_id":"1","principal_usd_e6":"5000000000","fees_usd_e6":"28350000"}]}
+test tests::initiate_and_complete_withdrawal ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"1000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+
+thread 'tests::initiate_withdrawal_requires_one_yocto' (2867319) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/utils/mod.rs:85:5:
+Requires attached deposit of exactly 1 yoctoNEAR
+test tests::initiate_withdrawal_requires_one_yocto - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"1","unlock_ns":"1700604800000000000"}]}
+
+thread 'tests::initiate_withdrawal_twice' (2867320) panicked at contracts/nectar-core/src/lib.rs:769:9:
+already exiting
+test tests::initiate_withdrawal_twice - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"9","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"15000000000","max_discount_bps":250}]}
+test tests::new_sets_defaults ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"15000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"15000000000","max_discount_bps":250}]}
+refund: insufficient pool liquidity
+test tests::lock_and_borrow_pool_insufficient_refunds ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+refund: oracle stale
+test tests::lock_and_borrow_stale_oracle_refunds ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"10","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+refund: borrow above B_c
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"11","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+test tests::lock_and_borrow_at_limit ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"12","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+refund: pre_liq_ltv_bps out of range
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"13","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+refund: borrow above pre_liq_ltv_bps
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"paused","data":[{}]}
+
+thread 'tests::pause_owner_only' (2867334) panicked at contracts/nectar-core/src/lib.rs:117:9:
+owner only
+test tests::pause_owner_only - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"14","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"repaid","data":[{"position_id":"0","amount_usd_e6":"11128500000","remaining_debt_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"payout_failed","data":[{"payout":{"BorrowProceeds":{"position_id":"0"}},"account":"borrower.test","amount":"11128500000"}]}
+test tests::on_payout_failed_borrow_proceeds_become_repayment ... ok
+refund: borrow is zero
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+refund: paused
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"unpaused","data":[{}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"15","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"fees_claimed","data":[{"quote_id":"0","amount_usd_e6":"56700000"}]}
+refund: collateral does not match token
+test tests::lock_and_borrow_failures_refund ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"payout_failed","data":[{"payout":{"SettlementBuyer":{"position_id":"0","quote_id":"0"}},"account":"buyer1.test","amount":"42"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"15000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"1","unlock_ns":"1700604800000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"1000"}]}
+test tests::pause_unpause_and_paused_refunds ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"payout_failed","data":[{"payout":{"CollateralRelease":{"position_id":"0"}},"account":"borrower.test","amount":"7"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"payout_failed","data":[{"payout":{"Fees":{"quote_id":"0"}},"account":"buyer1.test","amount":"56700000"}]}
+test tests::on_payout_failed_fees_restored ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"16","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+test tests::on_payout_success_is_noop ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"payout_failed","data":[{"payout":{"SettlementKeeper":{"position_id":"0"}},"account":"keeper.test","amount":"3"}]}
+test tests::on_payout_failed_collateral_recorded_as_owed ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_withdrawn","data":[{"quote_id":"1","principal_usd_e6":"5000000000","fees_usd_e6":"28350000"}]}
+test tests::preview_borrow_view ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"17","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"payout_failed","data":[{"payout":{"QuoteWithdrawal":{"quote_id":"1","principal_usd_e6":"5000000000","fees_usd_e6":"28350000"}},"account":"buyer2.test","amount":"5028350000"}]}
+test tests::on_payout_failed_withdrawal_restores_quote ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"18","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"90000000"}]}
+test tests::propose_apply_bypasses_band ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"19","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+
+thread 'tests::set_dex_depth_owner_only' (2867341) panicked at contracts/nectar-core/src/lib.rs:117:9:
+owner only
+test tests::set_dex_depth_owner_only - should panic ... ok
+test tests::set_dex_depth_and_reserve_owner_values ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"20","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+test tests::set_fee_split_ok ... ok
+
+thread 'tests::set_fee_split_must_sum' (2867342) panicked at contracts/nectar-core/src/lib.rs:656:9:
+fee split must sum to 10000
+test tests::set_fee_split_must_sum - should panic ... ok
+
+thread 'tests::set_keeper_owner_only' (2867344) panicked at contracts/nectar-core/src/lib.rs:117:9:
+owner only
+test tests::set_keeper_owner_only - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+test tests::set_keeper_rotates ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"21","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"repaid","data":[{"position_id":"0","amount_usd_e6":"1250000000","remaining_debt_usd_e6":"10000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"22","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+
+thread 'tests::set_oracle_params_rejects_zero_age' (2867347) panicked at contracts/nectar-core/src/lib.rs:689:9:
+max age must be > 0
+test tests::set_oracle_params_rejects_zero_age - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+test tests::set_oracle_params_ok ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"repaid","data":[{"position_id":"0","amount_usd_e6":"10000000000","remaining_debt_usd_e6":"0"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"23","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+refund: position not open
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+
+thread 'tests::set_reserve_owner_only' (2867349) panicked at contracts/nectar-core/src/lib.rs:117:9:
+owner only
+test tests::set_reserve_owner_only - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"24","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+test tests::set_quote_params_ok ... ok
+test tests::set_session_switches_haircut_and_depth ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+refund: unknown position
+test tests::repay_partial_full_and_overpay ... ok
+
+thread 'tests::set_session_unknown_symbol' (2867351) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "unknown collateral" })
+test tests::set_session_unknown_symbol - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"25","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"26","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"1000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":1000}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+test tests::supply_lending_liquidity ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"27","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_topped_up","data":[{"quote_id":"0","amount_usd_e6":"500000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":960}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"15000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"28","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+refund: buyer only
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"2","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":920}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"0","unlock_ns":"1700604801000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"29","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+refund: unknown quote
+test tests::top_up_quote ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"3","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":880}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"30","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"4","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":840}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_topped_up","data":[{"quote_id":"0","amount_usd_e6":"5000000000"}]}
+test tests::top_up_settles_fees_first ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+
+thread 'tests::trigger_healthy_position' (2867357) panicked at contracts/nectar-core/src/lib.rs:844:9:
+position healthy
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"0","disc_bps":250,"repay_usd_e6":"11250000000","seize_units":"82417583","buyer":"buyer1.test"}]}
+
+thread 'tests::trigger_needs_gas_reserve' (2867359) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "gas reserve empty" })
+test tests::trigger_healthy_position - should panic ... ok
+test tests::trigger_needs_gas_reserve - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"5","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":800}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"31","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"0","disc_bps":250,"repay_usd_e6":"10000000000","seize_units":"73260074","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"1","disc_bps":400,"repay_usd_e6":"1250000000","seize_units":"9300596","buyer":"buyer2.test"}]}
+test tests::settlement_consumes_exiting_quote_during_notice ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"6","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":760}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"32","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"7","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":720}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"33","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"paused","data":[{}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"8","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":680}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"34","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+
+thread 'tests::trigger_paused' (2867360) panicked at contracts/nectar-core/src/lib.rs:120:9:
+paused
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
+test tests::trigger_paused - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"9","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":640}]}
+
+thread 'tests::trigger_keeper_only' (2867358) panicked at contracts/nectar-core/src/lib.rs:837:9:
+keeper only
+test tests::trigger_keeper_only - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"0","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"10000000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"35","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_rejected","data":[{"symbol":"NVDAx","price_usd_e6":"100000000","last_usd_e6":"155000000"}]}
+test tests::update_owner_price_band ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+
+thread 'tests::update_owner_price_owner_only' (2867366) panicked at contracts/nectar-core/src/lib.rs:117:9:
+owner only
+test tests::update_owner_price_owner_only - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"10","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":600}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"1","buyer":"buyer2.test","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"36","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"11","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":560}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"0","disc_bps":250,"repay_usd_e6":"10000000000","seize_units":"73260074","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"1","disc_bps":400,"repay_usd_e6":"1250000000","seize_units":"9300596","buyer":"buyer2.test"}]}
+test tests::trigger_preliquidation_static_settle_matches_model ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"37","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"12","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":520}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+test tests::upsert_collateral_creates_and_updates ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"38","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"13","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":480}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"39","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+
+thread 'tests::upsert_collateral_rejects_bad_bps' (2867370) panicked at contracts/nectar-core/src/lib.rs:590:13:
+bps > 10000
+test tests::upsert_collateral_rejects_bad_bps - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
+
+thread 'tests::trigger_without_quotes_reverts' (2867364) panicked at contracts/nectar-core/src/lib.rs:913:9:
+no quote capacity
+test tests::trigger_without_quotes_reverts - should panic ... ok
+
+thread 'tests::upsert_collateral_owner_only' (2867369) panicked at contracts/nectar-core/src/lib.rs:117:9:
+owner only
+test tests::upsert_collateral_owner_only - should panic ... ok
+
+thread 'tests::upsert_collateral_rejects_usdc_token' (2867371) panicked at contracts/nectar-core/src/lib.rs:578:9:
+collateral token cannot be usdc
+test tests::upsert_collateral_rejects_usdc_token - should panic ... ok
+
+thread 'tests::trigger_stale_oracle' (2867362) panicked at contracts/nectar-core/src/lib.rs:841:9:
+oracle stale
+test tests::trigger_stale_oracle - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"40","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"14","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":440}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"0","disc_bps":250,"repay_usd_e6":"10000000000","seize_units":"73260074","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"1","disc_bps":400,"repay_usd_e6":"1250000000","seize_units":"9300596","buyer":"buyer2.test"}]}
+
+thread 'tests::trigger_twice_on_one_position' (2867363) panicked at contracts/nectar-core/src/lib.rs:839:9:
+position not open
+test tests::trigger_twice_on_one_position - should panic ... ok
+
+thread 'tests::upsert_collateral_symbol_mismatch' (2867372) panicked at contracts/nectar-core/src/lib.rs:576:9:
+symbol mismatch
+test tests::upsert_collateral_symbol_mismatch - should panic ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"41","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"15","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":400}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"42","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"16","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":360}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"43","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"17","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":320}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"44","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"18","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":280}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"45","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"19","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"750000000","max_discount_bps":240}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"46","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"47","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"155000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"48","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"49","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"19","disc_bps":240,"repay_usd_e6":"750000000","seize_units":"5488876","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"18","disc_bps":280,"repay_usd_e6":"750000000","seize_units":"5511464","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"17","disc_bps":320,"repay_usd_e6":"750000000","seize_units":"5534239","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"16","disc_bps":360,"repay_usd_e6":"750000000","seize_units":"5557203","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"15","disc_bps":400,"repay_usd_e6":"750000000","seize_units":"5580358","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"14","disc_bps":440,"repay_usd_e6":"750000000","seize_units":"5603706","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"13","disc_bps":480,"repay_usd_e6":"750000000","seize_units":"5627251","buyer":"buyer1.test"}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"12","disc_bps":520,"repay_usd_e6":"750000000","seize_units":"5650995","buyer":"buyer1.test"}]}
+test tests::settlement_order_and_cap_of_eight ... ok
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"50","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"51","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"52","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"53","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"54","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"55","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"56","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"57","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"58","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"59","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"60","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"61","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"62","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"63","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
+refund: quote cap reached for asset
+test tests::fund_quote_cap_64 ... ok
+
+test result: ok. 88 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.20s
+
+     Running tests/sandbox.rs (target/debug/deps/sandbox-c862029d41135863)
+
+running 4 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.33s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 4.23s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794255759, tv_nsec: 320000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794255579, tv_nsec: 160000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 416ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 324.8 KB (324833 bytes)
+     - SHA-256 checksum hex : 6bd1ec5125806ad71e370953447ac635d9e86d4ce801100d03dc05eda15e2a46
+     - SHA-256 checksum bs58: 8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.22s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 3.05s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794255763, tv_nsec: 760000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794255584, tv_nsec: 470000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 206ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 152.3 KB (152268 bytes)
+     - SHA-256 checksum hex : 28578356a6e426f8ea384051ff7519c51faa2bd7ed9f711e9e4f3a05f3f372c2
+     - SHA-256 checksum bs58: 3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0a0d22d2fb33f194/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 4s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+GAS,new,1746794662595
+GAS,new,1746794662595
+GAS,new,1746794662595
+GAS,new,1746794662595
+GAS,upsert_collateral,2342351616201
+GAS,upsert_collateral,2342351616201
+GAS,upsert_collateral,2342351616201
+GAS,upsert_collateral,2342351616201
+GAS,update_owner_price,2109738280279
+GAS,update_owner_price,2109738280279
+GAS,update_owner_price,2109738280279
+GAS,update_owner_price,2109738280279
+GAS,fund_gas_reserve,1792222826135
+GAS,fund_gas_reserve,1792222826135
+GAS,fund_gas_reserve,1792222826135
+GAS,fund_gas_reserve,1792222826135
+GAS,set_quote_params,1812743650097
+GAS,ft_transfer_call:invalid,6393733934517
+GAS,set_oracle_params,1812747324212
+GAS,ft_transfer_call:SupplyLendingLiquidity,6284310565433
+GAS,ft_transfer_call:FundPappusQuote,6762123058562
+GAS,ft_transfer_call:TopUpQuote,6628524629556
+GAS,pause,1836380796311
+GAS,ft_transfer_call:LockCollateralAndBorrow,11083183619245
+GAS,update_owner_price,2110165290643
+GAS,unpause,1837199818559
+GAS,ft_transfer_call:Repay(partial),6449737830363
+GAS,update_owner_price,2110165290643
+test refunds_and_guards ... ok
+GAS,trigger_preliquidation(2 legs),19947230932619
+GAS,ft_transfer_call:Repay(refund),6521070100626
+GAS,initiate_quote_withdrawal,2301327889416
+GAS,claim_fees,6627915577701
+test demo_flow_matches_model ... ok
+GAS,complete_quote_withdrawal,6724656178760
+test topup_exit_and_repay ... ok
+GAS,update_owner_price,2110165290643
+GAS,update_owner_price,2110165290643
+GAS,trigger_preliquidation(8 legs),46915289734583
+test preliq_eight_buyers_gas ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 32.67s
+
+   Doc-tests mock_ft
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nectar_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
