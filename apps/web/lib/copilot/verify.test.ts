@@ -7,8 +7,8 @@ import { createHash, randomBytes } from "node:crypto";
 import dcap from "@phala/dcap-qvl";
 import { secp256k1 } from "@noble/curves/secp256k1.js";
 import { bytesToHex } from "@noble/hashes/utils.js";
-import { SYSTEM_PROMPT, buildRequestBody, personalHash, quoteFields, recoverPersonalSign, verifyBundle, type CopilotBundle, type QuoteVerdict } from "./verify.ts";
-import { MODEL_ID, apiKey, liveBundle, verifyQuote, type Collateral } from "./server.ts";
+import { SYSTEM_PROMPT, buildRequestBody, expectedMrConfigPrefix, mrConfigMatches, personalHash, quoteFields, recoverPersonalSign, verifyBundle, type CopilotBundle, type QuoteVerdict } from "./verify.ts";
+import { MODEL_ID, apiKey, attestationPath, judgeNras, liveBundle, signatureBackoffMs, signaturePath, verifyQuote, type Collateral } from "./server.ts";
 
 const dir = resolve(import.meta.dirname, "fixtures");
 const fx = JSON.parse(readFileSync(resolve(dir, "synthetic.json"), "utf8")) as { nowSecs: number; nonce: string; bundle: Omit<CopilotBundle, "quoteVerdict"> };
@@ -44,6 +44,10 @@ test("fixture: signature, hashes, model id and report_data pass; DCAP fails → 
   for (const id of ["signature_kind", "model_id", "request_hash", "response_hash", "signature_recover", "report_data_signer", "report_data_nonce"]) assert.equal(byId(v, id), "passed", id);
   assert.equal(byId(v, "quote_dcap"), "failed");
   assert.equal(byId(v, "rtmr3_replay"), "not run");
+  assert.equal(byId(v, "gpu_nras"), "not run");
+  assert.match(v.checks.find((c) => c.id === "gpu_nras")?.label ?? "", /JWT signature not verified/);
+  assert.equal(byId(v, "model_listed"), "not run");
+  assert.match(v.checks.find((c) => c.id === "model_listed")?.detail ?? "", /model id unverified \(F-078\)/);
   assert.equal(v.verified, false);
   assert.equal(v.answer, null);
 });
@@ -70,6 +74,43 @@ test("negative: tampered response, stale nonce, foreign signer, gateway signatur
   assert.equal(byId(verifyBundle({ ...base, signature: { ...base.signature, signature: foreign } }, fx.nonce), "signature_recover"), "failed");
   const gw = base.signature.text.split(":").slice(1).join(":");
   assert.equal(byId(verifyBundle({ ...base, signature: { ...base.signature, text: gw } }, fx.nonce), "signature_kind"), "failed");
+});
+
+test("F-075: MRCONFIGID check is a prefix match on 01 || sha256(app_compose)", () => {
+  const compose = '{"docker_compose_file":"services: {}"}';
+  const prefix = expectedMrConfigPrefix(compose);
+  assert.equal(prefix.length, 66);
+  assert.ok(mrConfigMatches(prefix + "00".repeat(15), compose));
+  assert.ok(mrConfigMatches(prefix + "ab".repeat(15), compose), "trailing bytes are not checked");
+  assert.ok(!mrConfigMatches("02" + prefix.slice(2) + "00".repeat(15), compose));
+  assert.ok(!mrConfigMatches(expectedMrConfigPrefix(compose + " ") + "00".repeat(15), compose));
+  const skipped: QuoteVerdict = { ran: false, ok: false, tcbStatus: null, quoteSha256: null, detail: "skipped" };
+  const v = verifyBundle({ ...fx.bundle, attestation: { ...fx.bundle.attestation, app_compose: compose }, quoteVerdict: skipped }, fx.nonce);
+  assert.equal(byId(v, "mr_config_id"), "failed"); // fixture quote is not bound to this compose
+});
+
+test("F-074/F-076/C-018: request paths carry no provider param or aliasing header; 404 backoff grows", () => {
+  const n = "ab".repeat(32);
+  assert.equal(attestationPath("org/m", n), `/attestation/report?model=org%2Fm&signing_algo=ecdsa&nonce=${n}`);
+  assert.equal(signaturePath("chat-1", "org/m"), "/signature/chat-1?model=org%2Fm&signing_algo=ecdsa");
+  assert.doesNotMatch(attestationPath("m", n), /provider|aliasing/);
+  assert.deepEqual([0, 1, 2, 3].map(signatureBackoffMs), [500, 1000, 2000, 4000]);
+});
+
+test("F-077: NRAS verdict needs overall=true and both nonces equal ours", () => {
+  const n = "cd".repeat(32);
+  const jwt = (claims: object) => `e30.${Buffer.from(JSON.stringify(claims)).toString("base64url")}.sig`;
+  const resp = (claims: object) => [["JWT", jwt(claims)], { "GPU-0": jwt({}) }];
+  const payload = JSON.stringify({ nonce: n, evidence_list: [] });
+  assert.equal(judgeNras(resp({ "x-nvidia-overall-att-result": true, eat_nonce: n }), payload, n).ok, true);
+  assert.equal(judgeNras(resp({ "x-nvidia-overall-att-result": false, eat_nonce: n }), payload, n).ok, false);
+  assert.equal(judgeNras(resp({ "x-nvidia-overall-att-result": true, eat_nonce: "00".repeat(32) }), payload, n).ok, false);
+  assert.equal(judgeNras(resp({ "x-nvidia-overall-att-result": true, eat_nonce: n }), JSON.stringify({ nonce: "ff" }), n).ok, false);
+  assert.equal(judgeNras({}, payload, n).ok, false);
+  const base: CopilotBundle = { ...fx.bundle, quoteVerdict: { ran: false, ok: false, tcbStatus: null, quoteSha256: null, detail: "skipped" } };
+  assert.equal(byId(verifyBundle({ ...base, gpuVerdict: { ran: true, ok: true, detail: "ok" }, modelListed: true }, fx.nonce), "gpu_nras"), "passed");
+  assert.equal(byId(verifyBundle({ ...base, modelListed: true }, fx.nonce), "model_listed"), "passed");
+  assert.equal(byId(verifyBundle({ ...base, modelListed: false }, fx.nonce), "model_listed"), "failed");
 });
 
 test("system prompt forbids prices and amounts; request carries it", () => {
