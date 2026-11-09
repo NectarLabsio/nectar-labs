@@ -1,0 +1,75 @@
+$ near account create-account --help | head -40
+human-friendly console utility that helps to interact with NEAR Protocol from command line.
+
+Usage: near account create-account [COMMAND]
+
+Commands:
+  sponsor-by-faucet-service  I would like the faucet service sponsor to cover the cost of creating an account (testnet only for now)
+  fund-myself                I would like fund myself to cover the cost of creating an account
+  fund-later                 Create an implicit-account
+  help                       Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+$ near account add-key --help | head -40
+human-friendly console utility that helps to interact with NEAR Protocol from command line.
+
+Usage: near account add-key [OWNER_ACCOUNT_ID] [COMMAND]
+
+Commands:
+  grant-full-access                   Provide data for a full access key
+  grant-function-call-access          Provide data for a function-call access key
+  grant-gas-key-full-access           Provide data for a gas key with full access (created with zero balance; fund it later with `fund-gas-key`)
+  grant-gas-key-function-call-access  Provide data for a gas key with function call (created with zero balance; fund it later with `fund-gas-key`)
+  help                                Print this message or the help of the given subcommand(s)
+
+Arguments:
+  [OWNER_ACCOUNT_ID]  Which account do you want to add an access key to?
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+$ near account create-account fund-myself --help | head -25
+human-friendly console utility that helps to interact with NEAR Protocol from command line.
+
+Usage: near account create-account fund-myself [NEW_ACCOUNT_ID] [INITIAL_BALANCE] [COMMAND]
+
+Commands:
+  autogenerate-new-keypair           Automatically generate a key pair
+  use-manually-provided-seed-phrase  Use the provided seed phrase manually
+  use-manually-provided-public-key   Use the provided public key manually
+  use-ledger                         Use a ledger
+  help                               Print this message or the help of the given subcommand(s)
+
+Arguments:
+  [NEW_ACCOUNT_ID]   What is the new account ID?
+  [INITIAL_BALANCE]  Enter the amount for the account:
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+$ near account add-key x.testnet grant-function-call-access --help | head -25
+human-friendly console utility that helps to interact with NEAR Protocol from command line.
+
+Usage: near account add-key grant-function-call-access [OPTIONS] [COMMAND]
+
+Commands:
+  autogenerate-new-keypair           Automatically generate a key pair
+  use-manually-provided-seed-phrase  Use the provided seed phrase manually
+  use-manually-provided-public-key   Use the provided public key manually
+  use-mpc-contract                   Use MPC contract to derive key
+  use-ledger                         Use the Ledger Hardware wallet
+  help                               Print this message or the help of the given subcommand(s)
+
+Options:
+      --allowance <ALLOWANCE>
+          
+      --contract-account-id <CONTRACT_ACCOUNT_ID>
+          Enter the contract account ID that this access key can be used to sign call function transactions for:
+      --function-names <FUNCTION_NAMES>
+          
+  -h, --help
+          Print help
+  -V, --version
+          Print version

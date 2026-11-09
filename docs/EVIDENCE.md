@@ -2,7 +2,7 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
-| G0 toolchain + facts | pending | | | |
+| G0 toolchain + facts | FAIL | 2026-11-09T23:01Z | 90af048 | evidence/G0/verifier-20261109T230153Z/ (recorded after p0-green and p1-green were tagged; all P0 tools present, F-020 resolved; FAIL: rustc/cargo 1.95.0 and node v22.23.4 have no FACTS version entry; anchor/solana absent = P2 dependency H-TOOLCHAIN-SOLANA; orchestrator run 2026-11-09 evidence/G0/{toolchain,help,help-1954}.log; see §G0) |
 | G1 contract tests | PASS | 2026-11-09T20:43Z | b721641 | evidence/G1/verifier-20261109T2043Z.log, evidence/G1/verifier-gas-20261109T2043Z.csv (prior FAIL 20:33Z, 3bc0de8: see §G1 history) |
 | G2 testnet deploy | PASS | 2026-11-09T20:55Z | 5f27f44 | evidence/G2/verifier-20261109T2055Z.log (explorer pages returned HTTP 403 to WebFetch; see §G2) |
 | G3 web E2E | PASS | 2026-11-09T21:15Z | 176914f | evidence/G3/verifier-20261109T2115Z/ (e2e 112 pass / 0 fail / 2 skip = write spec; LH 12/12 = 100; write flow cited from 20:57Z run, not repeated; prior FAIL 20:57Z c940dec: see §G3) |
@@ -23,6 +23,47 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G0
+
+### G0 — toolchain + facts — FAIL — 2026-11-09T23:01Z — commit 90af048
+Recorded late: the orchestrator ran G0 on 2026-11-09 (evidence/G0/toolchain.log, help.log, help-1954.log; mtimes 19:53-19:55Z UTC) but it never reached this file. This verifier run comes after the tags `p0-green` and `p1-green` were set (both tags are in the repo at 90af048), so G0 did not gate P0 as CLAUDE.md §1 requires.
+Fresh clone /tmp/verify-G0-1794265313 at main 90af048. PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH". `pnpm i --frozen-lockfile` → Done in 4.6s using pnpm v10.34.9. No secrets used. Logs: evidence/G0/verifier-20261109T230153Z/{toolchain,help,network}.log.
+I ran the gates.md G0 lines exactly (`near account create-account --help | head -40`, `near account add-key --help | head -40`, Hermes through the gates.md mirror pyth.dourolabs.app). I also ran the orchestrator's variants (`create-account fund-myself --help | head -25`, `add-key x.testnet grant-function-call-access --help | head -25`, hermes.pyth.network and hermes-beta directly). The first loop failed under zsh (no word-splitting: "command not found: rustc --version"), so I reran it in bash. That was my harness mistake, not a product fault.
+```
+$ rustc --version        → rustc 1.95.0 (59807616e 2026-04-14)     FACTS: none (F-010 lists only near-sdk rust_version 1.95, the minimum)
+$ cargo --version        → cargo 1.95.0 (f2d3ce0bd 2026-03-21)     FACTS: none
+$ cargo near --version   → cargo-near-near 0.23.0                  FACTS: F-011, F-023 (2026-11-10)
+$ near --version         → near-cli-rs 0.31.1                      FACTS: F-022 (2026-11-10)
+$ node -v                → v22.23.4                                FACTS: none (F-012 + package.json engines give only the floor >=22.22.2)
+$ pnpm -v                → 10.34.9                                 FACTS: F-026 (2026-11-10), packageManager pnpm@10.34.9
+$ anchor --version       → command not found [exit 127]            P2 only: F-081 Anchor 0.32.1; H-TOOLCHAIN-SOLANA OPEN
+$ solana --version       → command not found [exit 127]            P2 only: F-025 agave v4.4.1; H-TOOLCHAIN-SOLANA OPEN
+$ gitleaks version       → 8.30.1                                  FACTS: F-024 (2026-11-10)
+$ near account create-account --help | head -40
+  Usage: near account create-account [COMMAND]  … sponsor-by-faucet-service … fund-myself
+$ near account create-account fund-myself --help | head -25
+  Usage: near account create-account fund-myself [NEW_ACCOUNT_ID] [INITIAL_BALANCE] [COMMAND]
+$ near account add-key x.testnet grant-function-call-access --help | head -25
+  Usage: near account add-key grant-function-call-access [OPTIONS] [COMMAND]
+      --allowance <ALLOWANCE>   --contract-account-id <CONTRACT_ACCOUNT_ID>   --function-names <FUNCTION_NAMES>
+$ curl -s https://1click.chaindefuser.com/v0/tokens | head -c 400
+  [{"assetId":"nep141:wrap.near","decimals":24,"blockchain":"near","symbol":"wNEAR","price":3.64,"priceUpdatedAt":"2026-11-09T23:01:00.667Z",…},{"assetId":"nep141:eth.bridge.near",…
+$ curl -s "https://pyth.dourolabs.app/hermes/v2/updates/price/latest?ids[]=b1073854…a593" | head -c 400   (id = config.yaml oracle.nvda_price_id = F-053)
+  unauthorized [http 401]
+$ (same path on hermes.pyth.network, hermes-beta.pyth.network) → unauthorized [http 401] on both
+```
+F-020: resolved. It is marked V (2026-11-10) and cites evidence/G0/help-1954.log:36-38 and evidence/G0/help.log:2-7. I opened both: the lines are `--contract-account-id`, `--function-names` and `--signature-scheme` (ed25519 | ml-dsa-65). This run's help.log shows the same flags again. C-004 is closed 2026-11-10 and points to F-020.
+Hermes 401 matches F-056 / C-007 (still open, needs the human key H13). It is expected and is not a G0 failure.
+Explorer: none. G0 has no explorer step.
+Verdict: FAIL. Reasons:
+ 1. The installed versions of rustc 1.95.0, cargo 1.95.0 and node v22.23.4 are not recorded in FACTS. Only the minimums appear: F-010 (rust_version 1.95) and F-012 / engines (node >=22.22.2). The pass rule is "all recorded in FACTS with today's date". Fix: the researcher adds FACTS entries with a date and the evidence path.
+Not failures:
+ - anchor and solana are absent. They are a P2 / G7 dependency (H-TOOLCHAIN-SOLANA OPEN, F-025, F-081).
+ - All other P0 tools are present and match FACTS. F-020 is resolved. 1Click /v0/tokens is live.
+Notes:
+ - FACTS dates look like local time (IST, +05:30), not UTC. Example: F-053 is dated 2026-11-10 but cites a curl made at 2026-11-09T19:59:55Z. UTC was still 2026-11-09 when this gate ran.
+ - The gates.md G0 commands differ from the orchestrator's brief: help subcommand depth and the Hermes host. I ran both sets.
 
 ## G5
 

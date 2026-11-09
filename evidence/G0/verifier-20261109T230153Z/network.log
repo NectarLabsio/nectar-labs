@@ -1,0 +1,11 @@
+$ curl -s https://1click.chaindefuser.com/v0/tokens | head -c 400
+[{"assetId":"nep141:wrap.near","decimals":24,"blockchain":"near","symbol":"wNEAR","price":3.64,"priceUpdatedAt":"2026-11-09T23:01:00.667Z","contractAddress":"wrap.near","coingeckoId":"wrapped-near"},{"assetId":"nep141:eth.bridge.near","decimals":18,"blockchain":"near","symbol":"ETH","price":2133.92,"priceUpdatedAt":"2026-11-09T23:01:00.667Z","contractAddress":"eth.bridge.near","coingeckoId":"ether
+$ curl -s "https://pyth.dourolabs.app/hermes/v2/updates/price/latest?ids[]=b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593" | head -c 400  (gates.md)
+unauthorized
+[http 401]
+$ curl -s -w http_code https://hermes.pyth.network/v2/updates/price/latest?ids[]=b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593
+unauthorized
+[http 401]
+$ curl -s -w http_code https://hermes-beta.pyth.network/v2/updates/price/latest?ids[]=b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593
+unauthorized
+[http 401]
