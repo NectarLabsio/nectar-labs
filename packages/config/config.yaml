@@ -2,9 +2,9 @@
 network: testnet
 accounts:
   owner: nectar.testnet # nectar.testnet
-  core: TODO-G2 # nectar-core.nectar.testnet
-  usdc_mock: TODO-G2 # usdc-mock.nectar.testnet
-  nvdax_mock: TODO-G2 # nvdax-mock.nectar.testnet
+  core: nectar-core.nectar.testnet # nectar-core.nectar.testnet
+  usdc_mock: usdc-mock.nectar.testnet # usdc-mock.nectar.testnet
+  nvdax_mock: nvdax-mock.nectar.testnet # nvdax-mock.nectar.testnet
   keeper: keeper.nectar.testnet # keeper.nectar.testnet
   demo:
     buyer1: buyer1.nectar.testnet
@@ -14,7 +14,7 @@ collateral:
   # PRD §6.2 field names, integers only (D-009). B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)).
   nvdax:
     symbol: NVDAx
-    token: TODO-G2 # nvdax-mock.nectar.testnet
+    token: nvdax-mock.nectar.testnet # nvdax-mock.nectar.testnet
     decimals: 6
     price_feed_id: TODO-G5
     base_ltv_bps: 4000 # static limit without Nectar

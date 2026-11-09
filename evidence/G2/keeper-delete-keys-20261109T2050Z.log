@@ -1,0 +1,31 @@
+├  Unsigned transaction:
+│    signer_id:    keeper.nectar.testnet
+│    receiver_id:  keeper.nectar.testnet
+│    actions:
+│       -- delete access key:  
+│                       public key:   ed25519:EyKhZaKtQU8BxVKKeqhhxw6TSXgovoyYUpzftW1Y23uE
+│       -- delete access key:  
+│                       public key:   ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.820 Tgas
+│    Transaction fee: 0.00005959055 NEAR
+│    Transaction ID: CpkRRibx79xz4KFEKT932BbJJfPZ9cGUGceHhiNDonbW
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/CpkRRibx79xz4KFEKT932BbJJfPZ9cGUGceHhiNDonbW
+│     [0m
+
+
+Access key <ed25519:EyKhZaKtQU8BxVKKeqhhxw6TSXgovoyYUpzftW1Y23uE> for account <keeper.nectar.testnet> has been successfully deleted.
+Access key <ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L> for account <keeper.nectar.testnet> has been successfully deleted.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account delete-keys keeper.nectar.testnet public-keys ed25519:EyKhZaKtQU8BxVKKeqhhxw6TSXgovoyYUpzftW1Y23uE,ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L network-config testnet sign-with-keychain send[39m
+

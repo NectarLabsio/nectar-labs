@@ -1,0 +1,22 @@
+
+== contract ==
+account  nectar-core.nectar.testnet   version nectar-core 0.1.0 p0
+
+== exit capacity NVDAx ==
+Q_c $15,000.00  R_c $0.00  D_c $0.00  haircut 2500 bps  session closed
+oracle $180.00 (age 145s, fresh)  effective limit 7000 bps
+
+== pool ==
+available $38,750.00  utilised $11,250.00  treasury $12.15
+
+== quotes ==
+#0  remaining $10,000.00  max discount 250 bps  live
+#1  remaining $5,000.00  max discount 400 bps  live
+
+== positions ==
+#0  Open  debt $11,250.00  ltv 6250 bps / pre-liq 7500 bps
+
+== explorer ==
+https://testnet.nearblocks.io/address/nectar-core.nectar.testnet
+https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet
+https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet

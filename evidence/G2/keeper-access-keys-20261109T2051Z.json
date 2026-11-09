@@ -1,0 +1,15 @@
+[
+  {
+    "public_key": "ed25519:Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ",
+    "permission": {
+      "FunctionCall": {
+        "allowance": "1000000000000000000000000",
+        "method_names": [
+          "trigger_preliquidation",
+          "relay_settlement_result"
+        ],
+        "receiver_id": "nectar-core.nectar.testnet"
+      }
+    }
+  }
+]

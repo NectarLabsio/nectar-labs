@@ -1,0 +1,31 @@
+├  Unsigned transaction:
+│    signer_id:    keeper.nectar.testnet
+│    receiver_id:  keeper.nectar.testnet
+│    actions:
+│       -- add access key:     
+│                       public key:   ed25519:Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ
+│                       nonce:        0
+│                       permission:   FunctionCall(FunctionCallPermission { allowance: Some(NearToken { inner: 1000000000000000000000000 }), receiver_id: "nectar-core.nectar.testnet", method_names: ["trigger_preliquidation", "relay_settlement_result"] })
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:D9Fz7LHnfeZN7KbusD2NXt6NuRhaTsJVn2ZJMtjHU57L
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.644 Tgas
+│    Transaction fee: 0.0000420735231114 NEAR
+│    Transaction ID: 4j4w6SYFgmTiKRV3MY4yJsB8ivf9YJcca7nypFWUmw5v
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/4j4w6SYFgmTiKRV3MY4yJsB8ivf9YJcca7nypFWUmw5v
+│     [0m
+
+
+Added access key = ed25519:Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ to keeper.nectar.testnet.
+
+The data for the access key is saved in a file /Users/lemmalabs/.near-credentials/testnet/keeper.nectar.testnet/ed25519_Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ.json
+The data for the access key is saved in a file /Users/lemmalabs/.near-credentials/testnet/keeper.nectar.testnet.json
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account add-key keeper.nectar.testnet grant-function-call-access --allowance '1 NEAR' --contract-account-id nectar-core.nectar.testnet --function-names trigger_preliquidation,relay_settlement_result autogenerate-new-keypair --signature-scheme ed25519 save-to-legacy-keychain network-config testnet sign-with-keychain send[39m
+
