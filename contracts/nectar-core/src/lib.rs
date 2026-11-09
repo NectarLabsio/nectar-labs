@@ -10,6 +10,7 @@
 //! - Bounded: ≤ 64 live quotes per asset, ≤ 8 quotes per settlement, fee index is O(1).
 //! - No floats; checked u128 arithmetic everywhere (`math.rs`).
 
+pub mod chainsig;
 pub mod events;
 pub mod math;
 mod migrate;
@@ -24,6 +25,8 @@ mod p2;
 mod tests;
 #[cfg(all(test, feature = "p1"))]
 mod tests_p1;
+#[cfg(all(test, feature = "p2"))]
+mod tests_p2;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
@@ -37,7 +40,9 @@ use crate::events::emit;
 use crate::math::{BPS, LimitParams, MathResult};
 use crate::types::*;
 
-#[cfg(feature = "p1")]
+#[cfg(feature = "p2")]
+pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p2");
+#[cfg(all(feature = "p1", not(feature = "p2")))]
 pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p1");
 #[cfg(not(feature = "p1"))]
 pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p0");
@@ -541,7 +546,10 @@ impl Nectar {
         let mut total_repay: u128 = 0;
         let mut keeper_units: u128 = 0;
         let mut buyer_transfers: Vec<(AccountId, u128, u64)> = Vec::new();
-        let mut legs: Vec<(Quote, u16, u128, u128)> = Vec::new();
+        let mut legs: Vec<(Quote, u16, u128, u128, bool)> = Vec::new();
+        // P2: at most one remote (Solana) leg per call; None without feature p2 or remote_chain/signer.
+        let remote_ctx = self.remote_ctx(position_id.0, &c);
+        let mut remote: Option<RemoteLeg> = None;
         for &(disc, qid) in cands.iter().take(MAX_QUOTES_PER_SETTLEMENT) {
             if debt == 0 || units == 0 {
                 break;
@@ -549,6 +557,13 @@ impl Nectar {
             let Some(mut q) = self.quote(qid) else { continue };
             if q.remaining_usd_e6.0 == 0 || q.collateral != p.collateral {
                 continue;
+            }
+            let recipient = match (&remote_ctx, &q.buyer_remote_recipient) {
+                (Some(_), Some(r)) if chainsig::valid_base58_address(r) => Some(r.clone()),
+                _ => None,
+            };
+            if recipient.is_some() && remote.is_some() {
+                continue; // one remote leg per settlement call; the keeper re-triggers after the relay
             }
             let Some(leg) =
                 math::settle_leg(debt, q.remaining_usd_e6.0, units, price, c.decimals, disc, self.keeper_fee_bps)?
@@ -564,19 +579,33 @@ impl Nectar {
             debt = math::sub(debt, leg.repay_usd_e6)?;
             units = math::sub(units, math::add(leg.buyer_units, leg.keeper_units)?)?;
             total_repay = math::add(total_repay, leg.repay_usd_e6)?;
-            keeper_units = math::add(keeper_units, leg.keeper_units)?;
-            // One ft_transfer per distinct buyer (bounds receipts to <= 8 + keeper + borrower).
-            match buyer_transfers.iter_mut().find(|(b, _, _)| *b == q.buyer) {
-                Some(entry) => entry.1 = math::add(entry.1, leg.buyer_units)?,
-                None => buyer_transfers.push((q.buyer.clone(), leg.buyer_units, qid)),
+            let is_remote = recipient.is_some();
+            if let Some(r) = recipient {
+                // Collateral for this leg is released on Solana, not ft_transferred here; the keeper's
+                // share and the pool credit wait for the MPC signature (`on_signature`).
+                remote = Some(RemoteLeg {
+                    quote_id: qid,
+                    repay_usd_e6: leg.repay_usd_e6,
+                    buyer_units: leg.buyer_units,
+                    keeper_units: leg.keeper_units,
+                    recipient: r,
+                });
+            } else {
+                keeper_units = math::add(keeper_units, leg.keeper_units)?;
+                // One ft_transfer per distinct buyer (bounds receipts to <= 8 + keeper + borrower).
+                match buyer_transfers.iter_mut().find(|(b, _, _)| *b == q.buyer) {
+                    Some(entry) => entry.1 = math::add(entry.1, leg.buyer_units)?,
+                    None => buyer_transfers.push((q.buyer.clone(), leg.buyer_units, qid)),
+                }
             }
-            legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units));
+            legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units, is_remote));
         }
         if total_repay == 0 {
             return Err("no quote capacity");
         }
-        let utilised = math::sub(self.utilised_usd_e6, total_repay)?;
-        let available = math::add(self.available_usd_e6, total_repay)?;
+        let pool_repay = math::sub(total_repay, remote.as_ref().map_or(0, |r| r.repay_usd_e6))?;
+        let utilised = math::sub(self.utilised_usd_e6, pool_repay)?;
+        let available = math::add(self.available_usd_e6, pool_repay)?;
         p.debt_usd_e6 = U128(debt);
         p.units = U128(units);
         let release = if debt == 0 {
@@ -585,16 +614,29 @@ impl Nectar {
             p.status = PositionStatus::Open;
             0
         };
-        let n_transfers = buyer_transfers.len() as u128 + u128::from(keeper_units > 0) + u128::from(release > 0);
-        let reserve = math::sub(self.gas_reserve_yocto, n_transfers).map_err(|_| "gas reserve empty")?;
+        let n_local = buyer_transfers.len() as u64 + u64::from(keeper_units > 0) + u64::from(release > 0);
+        // sign (1 yocto) + the remote leg's keeper transfer (scheduled by on_signature)
+        let n_remote = remote.as_ref().map_or(0, |r| 1 + u64::from(r.keeper_units > 0));
+        let reserve =
+            math::sub(self.gas_reserve_yocto, u128::from(n_local + n_remote)).map_err(|_| "gas reserve empty")?;
+        if remote.is_some() {
+            p.status = PositionStatus::Settling; // until relay_settlement_result (or sign failure)
+            self.check_remote_gas(&remote_ctx, n_local)?;
+        }
 
         // effects
-        for (q, disc, repay, seize) in legs {
-            emit(
-                "settled_near",
-                json!({ "position_id": position_id, "quote_id": q.quote_id, "disc_bps": disc,
-                        "repay_usd_e6": U128(repay), "seize_units": U128(seize), "buyer": q.buyer }),
-            );
+        let sign_call = match (remote, &remote_ctx) {
+            (Some(r), Some((rc, s))) => Some(self.record_remote_leg(&mut p, rc, s, r)?),
+            _ => None,
+        };
+        for (q, disc, repay, seize, is_remote) in legs {
+            if !is_remote {
+                emit(
+                    "settled_near",
+                    json!({ "position_id": position_id, "quote_id": q.quote_id, "disc_bps": disc,
+                            "repay_usd_e6": U128(repay), "seize_units": U128(seize), "buyer": q.buyer }),
+                );
+            }
             if q.remaining_usd_e6.0 == 0 {
                 self.remove_live(&p.collateral, q.quote_id.0);
             }
@@ -619,7 +661,38 @@ impl Nectar {
         if release > 0 {
             Self::transfer(&token, &borrower, release, Payout::CollateralRelease { position_id }).detach();
         }
+        if let Some(call) = sign_call {
+            Self::schedule_sign(call);
+        }
         Ok(())
+    }
+
+    // ---- P2 hooks: no-ops without feature `p2` (src/p2.rs implements them).
+    #[cfg(not(feature = "p2"))]
+    fn remote_ctx(&self, _position_id: u64, _c: &CollateralConfig) -> Option<(RemoteChain, SignerConfig)> {
+        None
+    }
+    #[cfg(not(feature = "p2"))]
+    fn check_remote_gas(&self, _ctx: &Option<(RemoteChain, SignerConfig)>, _n_local: u64) -> Result<(), &'static str> {
+        Ok(())
+    }
+    #[cfg(not(feature = "p2"))]
+    fn record_remote_leg(
+        &mut self,
+        _p: &mut Position,
+        _rc: &RemoteChain,
+        _s: &SignerConfig,
+        _r: RemoteLeg,
+    ) -> Result<(), &'static str> {
+        Err("p2 disabled")
+    }
+    #[cfg(not(feature = "p2"))]
+    fn schedule_sign(_call: ()) {}
+    /// Extra gas a settlement of this collateral needs downstream for the sign leg (0 without p2).
+    #[cfg(not(feature = "p2"))]
+    #[allow(dead_code)]
+    pub(crate) fn remote_extra_gas(&self, _symbol: &str) -> u64 {
+        0
     }
 
     fn owed_key(account: &AccountId, symbol: &str) -> String {

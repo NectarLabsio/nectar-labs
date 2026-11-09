@@ -1,0 +1,14 @@
+{
+  "name": "@nectar/contract-tools",
+  "private": true,
+  "type": "module",
+  "description": "WO-15 contract tools: MPC Ed25519 authority derivation (F-036) and settlement preimage golden vectors (D-016). Not a pnpm workspace member.",
+  "scripts": {
+    "derive": "node derive-authority.mjs --check",
+    "vectors": "node preimage-vectors.mjs"
+  },
+  "dependencies": {
+    "@noble/curves": "2.4.0",
+    "@noble/hashes": "2.4.0"
+  }
+}

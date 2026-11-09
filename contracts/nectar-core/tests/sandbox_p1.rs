@@ -260,7 +260,7 @@ async fn migrate_p0_state_then_quoter_outcomes() -> anyhow::Result<()> {
     assert!(format!("{:?}", r.failures()).contains("already migrated"));
 
     let v: String = core.view("contract_version").await?.json()?;
-    assert!(v.ends_with(" p1"), "{v}");
+    assert!(v.ends_with(" p1") || v.ends_with(" p2"), "{v}");
     assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(1));
     let after = p0_views(&core, 7).await?;
     assert_eq!(before, after, "all P0 views identical after migrate");
