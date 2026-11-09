@@ -1,9 +1,9 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P0 GREEN — tagged `p0-green`. P1 opens next (WO-8 researcher first).**
+Phase: **P1 open** (p0-green a68b4f6). Round 1: WO-9 quoter ∥ WO-10a contract ∥ WO-11a feed ∥ WO-12 web
 Gates: G0 PASS · G1 PASS (b721641) · G2 PASS (5f27f44) · G3 PASS (176914f; write flow from c940dec run) · G4–G9 pending
-Open handoffs: H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
-Blocking right now: nothing. P1 risk: Pyth Hermes needs an API key (C-007) → G5 may need a new handoff.
+Open handoffs: H13, H-NEAR-FAUCET, H-EXPLORER, H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
+Blocking right now: H13 Pyth key (G5 live price) · H-NEAR-FAUCET top-up (P1 contract redeploy). Neither blocks round 1.
 
 Done (2026-11-10):
 - Toolchain: Rust 1.95.0, near-cli-rs 0.31.1, cargo-near 0.23.0, gitleaks 8.30.1, yq, pnpm 10.34.9 (evidence/G0/)
@@ -26,6 +26,8 @@ Merged: WO-5 keeper+feed (cdd2fbe), WO-4 docs+README (b436f93). main `pnpm verif
 Process slip (recorded): after the WO-2 merge (f9d1b30) the orchestrator ran cargo tests but not `pnpm verify:quick`; keeper tests
   began reading the real model.csv and have been red on main since. Found at the WO-3b merge; fixed by WO-5b (e53d2a0), verify:quick green. p0-green waits for G3 PASS
   AND verify:quick green. Merged since: WO-4d (ab529b1), WO-3b (3d5af4a), WO-2c (wasm unchanged).
+P1 plan: interface-p1.md; D-013 (Pyth read in contract, separate updater, price-oracle.testnet dropped), D-014 (quoter schema/formula,
+  publish via scripts/30 without `outlayer login`). Round 2: WO-10b Pyth source, WO-11b updater + Neardata, scripts/30 publish, testnet upgrade+migrate.
 Queued after G3 (small orders): WO-4d docs — README/docs "G2 PASS" wording, run-a-keeper page (keeper exists), storage-and-gas
   gas values from evidence/G1 CSV, web/docs dev port clash (3100 vs 3000), RUNBOOK: refresh owner price within 24 h (closed-session
   max age) and keeper re-creation if its 1 NEAR allowance runs out; WO-2c contract — migrate deprecated
@@ -41,4 +43,4 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T21:19:27Z · commit e53d2a0
+Last activity: 2026-11-09T21:27:26Z · commit a68b4f6
