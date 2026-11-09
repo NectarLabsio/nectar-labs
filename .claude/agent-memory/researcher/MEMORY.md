@@ -1,2 +1,3 @@
 - [Repo tags and grammar locations](reference_repo_tags.md) — tag formats for near-cli-rs/near-sdk-rs/cargo-near and where CLI grammar/flags live
 - [OutLayer/oracle sources](reference_outlayer_oracles.md) — OutLayer repos, docs domain move, wasm-export trick, Hermes 401
+- [NEAR AI Cloud sources](reference_nearai_cloud.md) — example vs nearai-cloud-verifier repo split; gateway report public; models endpoint flaky
