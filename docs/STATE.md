@@ -43,4 +43,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T21:27:26Z · commit a68b4f6
+Last activity: 2026-11-09T21:30:27Z · commit c6ccc7a
+Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
+  (reproducible across checkout paths via quoter/build.sh). Phase-boundary TODO: refresh .claude/agents/quoter.md (still describes the
+  pre-D-014 schema); scripts/30 must call set_quoter_pin(project_id, version_key) per interface-p1.
