@@ -18,3 +18,5 @@ evidence/*.log
 .Trashes
 # local toolchain caches
 .pnpm-store/
+# agent worktrees
+.claude/worktrees/

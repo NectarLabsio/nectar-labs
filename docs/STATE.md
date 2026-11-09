@@ -17,7 +17,11 @@ Done (2026-11-10):
 In flight: researcher (WO-1 rest: wallet-selector, Next.js, 1Click/Hermes probes, indexer method) ·
 WO-2 contract · WO-3 web · WO-4 docs · WO-5 keeper (worktrees).
 Next: merge one by one with `pnpm verify:quick`; G1 via verifier; WO-6 deploy; G2; G3.
+D-011: wallets = near-connect + near-api-js 7.4.0 on Next 16 (C-008); web agent told mid-flight.
+P1 risk (C-007): Hermes `/v2/updates/price/latest` returns 401 unauthenticated on all hosts → G5 likely needs a
+  Pyth API key (new handoff when P1 opens) or falls to price-oracle.testnet / owner oracle (D-005). NVDA feed id found (F-053).
+Clock note: host UTC is 2026-11-09 ~20:00; "2026-11-10" dates in docs are local (IST). Deadline math uses UTC.
 TODO at WO-6: export keeper FC key to ~/.nectar/keys (0600), delete keeper full-access key, record view_access_key_list in EVIDENCE.
 
 Verified on: 2026-11-10
-Last activity: (written by .claude/hooks/state.sh)
+Last activity: 2026-11-09T20:03:34Z · commit d1ad818
