@@ -51,8 +51,9 @@ export function CopilotPanel() {
     <Card label="Risk copilot" title="Risk context from your notes" className="copilot">
       <div className="stack">
         <p className="small dim">
-          Paste corporate-action or risk notes. The model summarises them without prices or amounts. Answers come from NEAR AI Cloud and are shown only after the
-          browser verifies the TEE signature and attestation. Testnet, mock collateral.
+          Paste corporate-action or risk notes. The model summarises them without prices or amounts. Answers come from NEAR AI Cloud and are shown only if every
+          required check passes. In your browser: EIP-191 signature recovery, request/response hashes, and the report_data/nonce binding. On this server: the Intel
+          TDX quote (DCAP, via dcap-qvl) and, in live mode, NVIDIA GPU attestation (NRAS). Testnet, mock collateral.
         </p>
         {status === null ? <p className="small dim" role="status">Checking copilot configuration…</p> : null}
         {status && "error" in status ? <Banner tone="danger" title="Copilot unavailable">{status.error}</Banner> : null}

@@ -10,7 +10,21 @@ test.describe("copilot verifier", () => {
       await page.goto(path);
       const panel = page.locator(".copilot");
       await expect(panel).toBeVisible();
-      await expect(panel.getByText(/Key missing|Ask copilot/).first()).toBeVisible({ timeout: 15_000 });
+      const ask = panel.getByRole("button", { name: "Ask copilot", exact: true });
+      if (!process.env.NEAR_AI_API_KEY) {
+        const banner = panel.locator(".banner").filter({ has: page.locator(".b-title", { hasText: /^Key missing$/ }) });
+        await expect(banner).toBeVisible({ timeout: 15_000 });
+        await expect(banner.locator(".b-title")).toHaveText("Key missing");
+        await expect(banner).toContainText(
+          "The NEAR AI key is not configured on this server, so live answers are off. You can still run the verifier on the recorded fixture.",
+        );
+        await expect(ask).toBeDisabled();
+      } else {
+        await expect(panel.locator(".b-title", { hasText: /^Key missing$/ })).toHaveCount(0, { timeout: 15_000 });
+        await expect(ask).toBeVisible();
+      }
+      await expect(panel).toContainText("In your browser: EIP-191 signature recovery");
+      await expect(panel).toContainText("On this server: the Intel TDX quote (DCAP, via dcap-qvl)");
       await panel.getByRole("button", { name: "Run verifier on recorded fixture" }).click();
       await expect(panel.getByText("unverified — hidden")).toBeVisible({ timeout: 20_000 });
       const checks = panel.getByRole("list", { name: "Verification checks" });
