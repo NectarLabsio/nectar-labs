@@ -1,6 +1,7 @@
 // Feed entrypoint: `pnpm --filter feed start`. Serves REST from SQLite; polls views when
 // CORE_ACCOUNT_ID is set (TODO-G2 until deploy → API serves whatever the DB holds, polling off).
-// Optional: KEEPER_DB_PATH + KEEPER_ACCOUNT_ID → also index NEP-297 logs of the keeper's own txs.
+// Events: Neardata block tail (FEED_INDEXER=neardata, default) or, as fallback (FEED_INDEXER=views),
+// KEEPER_DB_PATH + KEEPER_ACCOUNT_ID → NEP-297 logs of the keeper's own txs.
 
 import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -13,6 +14,7 @@ import { createLogger, errMsg } from './log.ts';
 import { createMcpHttpServer } from './mcp.ts';
 import { OneClickClient, OneClickSampler, defaultSamplerConfig } from './oneclick.ts';
 import { NearTxOutcomeFetcher, NearViewReader } from './near.ts';
+import { HttpNeardataFetcher, NeardataSource } from './neardata.ts';
 import { TxStatusSource, ViewPollingSource, type Source } from './sources.ts';
 
 const env = process.env;
@@ -31,7 +33,17 @@ function main(): void {
   if (!unset(env.CORE_ACCOUNT_ID)) {
     const core = env.CORE_ACCOUNT_ID as string;
     sources.push(new ViewPollingSource(new NearViewReader(rpc, core), log));
-    if (!unset(env.KEEPER_DB_PATH) && !unset(env.KEEPER_ACCOUNT_ID)) {
+    // FEED_INDEXER=neardata (default): events from Neardata blocks (F-122). FEED_INDEXER=views: fallback,
+    // view polling only (+ keeper tx-status logs below).
+    const mode = unset(env.FEED_INDEXER) ? 'neardata' : (env.FEED_INDEXER as string);
+    if (mode !== 'neardata' && mode !== 'views') throw new Error('FEED_INDEXER must be neardata or views');
+    if (mode === 'neardata') {
+      const apiKey = unset(env.FEED_NEARDATA_API_KEY_PATH) ? null : readFileSync(home(env.FEED_NEARDATA_API_KEY_PATH as string), 'utf8').trim();
+      const start = unset(env.FEED_NEARDATA_START_HEIGHT) ? null : Number(env.FEED_NEARDATA_START_HEIGHT);
+      if (start !== null && !Number.isSafeInteger(start)) throw new Error('FEED_NEARDATA_START_HEIGHT must be an integer');
+      const fetcher = new HttpNeardataFetcher(unset(env.FEED_NEARDATA_URL) ? undefined : env.FEED_NEARDATA_URL, apiKey);
+      sources.push(new NeardataSource(fetcher, { contractId: core, startHeight: start, maxBlocksPerPoll: Number(env.FEED_NEARDATA_MAX_BLOCKS ?? 100) }, log));
+    } else if (!unset(env.KEEPER_DB_PATH) && !unset(env.KEEPER_ACCOUNT_ID)) {
       const kdb = new DatabaseSync(home(env.KEEPER_DB_PATH as string), { readOnly: true });
       const hashes = (): string[] =>
         (kdb.prepare("SELECT tx_hash FROM keeper_runs WHERE tx_hash IS NOT NULL ORDER BY id DESC LIMIT 200").all() as Array<{ tx_hash: string }>).map((r) => r.tx_hash);

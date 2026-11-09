@@ -73,3 +73,15 @@ You need Node ≥ 22.22.2, because the entry is TypeScript run by Node's type st
 
 Example prompts: "explain the NVDAx limit for 100 units", "list NVDAx quotes", "preview borrowing $10,000
 against 100 NVDAx".
+
+## Event source: Neardata (P1, default) with view-polling fallback
+
+With `CORE_ACCOUNT_ID` set, the feed always polls views for snapshots, and takes NEP-297 events from
+Neardata (F-122): `GET /v0/last_block/final` (302 → height) then `GET /v0/block/<h>` for each new final block,
+keeping receipts executed by nectar-core (failed receipts skipped). The cursor `neardata_height` is stored in
+SQLite meta, so restarts resume; event inserts are idempotent. Env: `FEED_INDEXER=neardata|views` (default
+`neardata`; `views` = fallback, view polling + keeper tx-status logs), `FEED_NEARDATA_URL` (default
+`https://testnet.neardata.xyz`), `FEED_NEARDATA_START_HEIGHT` (first run only; default = current final block;
+`276971305` holds the G2 seed `liquidity_supplied`), `FEED_NEARDATA_MAX_BLOCKS` (per poll, default 100),
+`FEED_NEARDATA_API_KEY_PATH` (optional FastNear key, sent as Bearer). Tests use a captured block,
+`test/fixtures/neardata-block-276971305.json`.

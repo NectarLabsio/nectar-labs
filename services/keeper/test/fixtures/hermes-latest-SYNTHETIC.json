@@ -1,0 +1,14 @@
+{
+  "_note": "SYNTHETIC fixture, not a recording: Hermes returns HTTP 401 without a key (F-056, H13). Shape follows the documented /v2/updates/price/latest response with encoding=hex; replace with a real recording once a key exists.",
+  "binary": {
+    "encoding": "hex",
+    "data": ["504e41550100000003b801000000040d00aabbccddeeff00112233445566778899"]
+  },
+  "parsed": [
+    {
+      "id": "0000000000000000000000000000000000000000000000000000000000000001",
+      "price": { "price": "18234000000", "conf": "1200000", "expo": -8, "publish_time": 1794257320 },
+      "ema_price": { "price": "18200000000", "conf": "1300000", "expo": -8, "publish_time": 1794257320 }
+    }
+  ]
+}
