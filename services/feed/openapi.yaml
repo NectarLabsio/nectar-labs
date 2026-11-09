@@ -1,0 +1,170 @@
+openapi: 3.1.0
+info:
+  title: Nectar Feed REST
+  version: 0.1.0
+  description: |
+    Read-only view of committed exit capacity on nectar-core (NEAR testnet, mock collateral).
+    Served from the feed indexer's SQLite; responses cached 10 s. No keys, no account ids in responses.
+    u128 amounts are decimal strings with suffix `_usd_e6` (USDC, 6 dp); bps are integers.
+servers:
+  - url: http://127.0.0.1:8788
+paths:
+  /api/feed:
+    get:
+      summary: Latest exit capacity for every asset
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [as_of_block, as_of, assets]
+                properties:
+                  as_of_block: { type: [integer, 'null'] }
+                  as_of: { type: string, format: date-time }
+                  assets:
+                    type: array
+                    items: { $ref: '#/components/schemas/Asset' }
+  /api/asset/{id}:
+    get:
+      summary: One asset — latest capacity, history and live quotes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Collateral symbol, e.g. NVDAx
+          schema: { type: string, pattern: '^[A-Za-z0-9._-]{1,32}$' }
+        - name: limit
+          in: query
+          required: false
+          description: History points, newest first (default 168, max 2000)
+          schema: { type: integer, minimum: 1, maximum: 2000 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [symbol, latest, history, quotes]
+                properties:
+                  as_of_block: { type: [integer, 'null'] }
+                  as_of: { type: string, format: date-time }
+                  symbol: { type: string }
+                  latest: { $ref: '#/components/schemas/Asset' }
+                  history:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        block_height: { type: integer }
+                        observed_at: { type: string, format: date-time }
+                        q_usd_e6: { type: string }
+                        limit_bps_effective: { type: integer }
+                        haircut_bps: { type: integer }
+                        session_open: { type: boolean }
+                  quotes:
+                    type: array
+                    items: { $ref: '#/components/schemas/Quote' }
+        '400': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+  /api/settlements:
+    get:
+      summary: Recent pre-liquidation settlements (events) and status changes observed via views
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 500 }
+        - name: position_id
+          in: query
+          required: false
+          schema: { type: string, pattern: '^\d{1,20}$' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  as_of_block: { type: [integer, 'null'] }
+                  as_of: { type: string, format: date-time }
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Settlement' }
+        '400': { $ref: '#/components/responses/Error' }
+  /healthz:
+    get:
+      summary: Indexer liveness
+      responses:
+        '200': { $ref: '#/components/responses/Health' }
+        '503': { $ref: '#/components/responses/Health' }
+components:
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [error]
+            properties:
+              error: { type: string }
+    Health:
+      description: Indexer health
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ok, last_block_seen, last_poll_at, source, events_indexed]
+            properties:
+              ok: { type: boolean }
+              last_block_seen: { type: [integer, 'null'] }
+              last_poll_at: { type: [string, 'null'], format: date-time }
+              last_error: { type: [string, 'null'] }
+              source: { type: string, description: 'views | views+tx_status | none' }
+              events_indexed: { type: integer }
+  schemas:
+    Asset:
+      type: object
+      description: get_exit_capacity(symbol) as last indexed (docs/work/interface-p0.md)
+      required: [symbol, q_usd_e6, r_usd_e6, d_usd_e6, haircut_bps, session_open, oracle_price_usd_e6, oracle_fresh, limit_bps_effective, block_height]
+      properties:
+        symbol: { type: string }
+        q_usd_e6: { type: string, description: committed quotes Q_c }
+        r_usd_e6: { type: string, description: Nectar Reserve R_c }
+        d_usd_e6: { type: string, description: verified DEX depth D_c (0 when session closed) }
+        haircut_bps: { type: integer }
+        session_open: { type: boolean }
+        oracle_price_usd_e6: { type: string }
+        oracle_age_s: { type: integer }
+        oracle_fresh: { type: boolean }
+        b_c_usd_per_unit_e6: { type: [string, 'null'] }
+        limit_bps_effective: { type: integer }
+        block_height: { type: integer }
+        observed_at: { type: string, format: date-time }
+    Quote:
+      type: object
+      description: No buyer identity.
+      properties:
+        quote_id: { type: string }
+        collateral: { type: [string, 'null'] }
+        amount_usd_e6: { type: [string, 'null'] }
+        max_discount_bps: { type: [integer, 'null'] }
+        status: { type: string, description: 'Live | Exiting | Withdrawn' }
+    Settlement:
+      type: object
+      properties:
+        position_id: { type: string }
+        quote_id: { type: [string, 'null'] }
+        disc_bps: { type: [integer, 'null'] }
+        repay_usd_e6: { type: [string, 'null'] }
+        seize_units: { type: [string, 'null'] }
+        status: { type: [string, 'null'], description: 'view rows: Settling | Closed' }
+        block_height: { type: [integer, 'null'] }
+        tx_hash: { type: [string, 'null'] }
+        source: { type: string, enum: [event, view] }
+        observed_at: { type: string, format: date-time }

@@ -1,0 +1,22 @@
+{
+  "name": "feed",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Nectar Feed: NEP-297 indexer into SQLite + read-only REST (P0); MCP server stub (tools land in P1).",
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/main.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "near-api-js": "7.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "typescript": "5.6.3"
+  }
+}
