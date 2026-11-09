@@ -2,8 +2,6 @@
 //! settlement ordering/caps, callbacks, and the model.csv vectors.
 
 use super::*;
-#[allow(deprecated)]
-use near_sdk::test_utils::testing_env_with_promise_results;
 use near_sdk::test_utils::{VMContextBuilder, get_logs};
 use near_sdk::{PromiseResult, testing_env};
 
@@ -840,8 +838,13 @@ fn trigger_without_quotes_reverts() {
 fn fail_payout(c: &mut Nectar, payout: Payout, account: AccountId, amount: u128) -> bool {
     let mut b = VMContextBuilder::new();
     b.current_account_id(core()).predecessor_account_id(core()).block_timestamp(T0 + 9 * SEC);
-    #[allow(deprecated)]
-    testing_env_with_promise_results(b.build(), PromiseResult::Failed);
+    testing_env!(
+        b.build(),
+        near_sdk::test_vm_config(),
+        near_sdk::RuntimeFeesConfig::test(),
+        Default::default(),
+        vec![PromiseResult::Failed]
+    );
     c.on_payout(payout, account, U128(amount))
 }
 
@@ -850,8 +853,13 @@ fn on_payout_success_is_noop() {
     let mut c = demo();
     let mut b = VMContextBuilder::new();
     b.current_account_id(core()).predecessor_account_id(core());
-    #[allow(deprecated)]
-    testing_env_with_promise_results(b.build(), PromiseResult::Successful(vec![]));
+    testing_env!(
+        b.build(),
+        near_sdk::test_vm_config(),
+        near_sdk::RuntimeFeesConfig::test(),
+        Default::default(),
+        vec![PromiseResult::Successful(vec![])]
+    );
     assert!(c.on_payout(Payout::Fees { quote_id: U64(0) }, buyer1(), U128(1)));
 }
 
