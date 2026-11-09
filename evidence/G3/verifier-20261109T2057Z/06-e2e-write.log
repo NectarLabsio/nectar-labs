@@ -1,0 +1,8 @@
+
+Running 2 tests using 2 workers
+
+  -  1 [phone] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✓  2 [desktop] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands (6.9s)
+
+  1 skipped
+  1 passed (7.9s)

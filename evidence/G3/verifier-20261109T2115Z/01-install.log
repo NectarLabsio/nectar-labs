@@ -1,0 +1,24 @@
+Scope: all 7 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +1460
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 1460, reused 1457, downloaded 0, added 371
+Progress: resolved 1460, reused 1457, downloaded 0, added 1267
+Progress: resolved 1460, reused 1457, downloaded 0, added 1439
+Progress: resolved 1460, reused 1457, downloaded 0, added 1459
+Progress: resolved 1460, reused 1457, downloaded 0, added 1460, done
+
+devDependencies:
++ yaml 2.9.1
+
+. prepare$ git config core.hooksPath .githooks 2>/dev/null || true
+. prepare: Done
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: core-js@3.51.0.                                     │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 4.7s using pnpm v10.34.9

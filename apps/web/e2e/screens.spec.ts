@@ -3,8 +3,8 @@ import { resolve } from "node:path";
 import { test } from "@playwright/test";
 import { ROUTES, prime } from "./helpers";
 
-// Evidence screenshots: every page, desktop + phone (projects), both themes → evidence/g3/screens/.
-const OUT = resolve(import.meta.dirname, "../../../evidence/g3/screens");
+// Evidence screenshots: every page, desktop + phone (projects), both themes → evidence/G3/screens/.
+const OUT = resolve(import.meta.dirname, "../../../evidence/G3/screens");
 mkdirSync(OUT, { recursive: true });
 
 for (const theme of ["dark", "light"] as const) {

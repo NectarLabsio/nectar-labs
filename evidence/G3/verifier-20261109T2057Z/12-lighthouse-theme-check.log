@@ -1,0 +1,12 @@
+lh-borrow-dark score=1 412 2326 meanRGB [28, 33, 36] dark
+lh-borrow-light score=1 412 2326 meanRGB [241, 244, 243] light
+lh-console-dark score=1 412 2365 meanRGB [27, 30, 33] dark
+lh-console-light score=1 412 2365 meanRGB [245, 246, 246] light
+lh-feed-dark score=1 412 2681 meanRGB [26, 32, 34] dark
+lh-feed-light score=1 412 2681 meanRGB [240, 243, 243] light
+lh-home-dark score=1 412 7608 meanRGB [29, 32, 35] dark
+lh-home-light score=1 412 7608 meanRGB [241, 243, 243] light
+lh-keepers-dark score=1 412 2016 meanRGB [30, 33, 36] dark
+lh-keepers-light score=1 412 2016 meanRGB [242, 242, 242] light
+lh-quote_new-dark score=1 412 2612 meanRGB [28, 33, 35] dark
+lh-quote_new-light score=1 412 2612 meanRGB [242, 244, 244] light

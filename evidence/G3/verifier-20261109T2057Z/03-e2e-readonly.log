@@ -1,0 +1,1082 @@
+
+> web@0.1.0 e2e /private/tmp/verify-G3-1794257832/apps/web
+> playwright test
+
+
+Running 114 tests using 5 workers
+
+  ✓    5 [phone] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean (1.4s)
+  ✓    4 [desktop] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean (1.6s)
+  ✘    6 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (638ms)
+  ✘    7 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (786ms)
+  ✓    3 [phone] › e2e/screens.spec.ts:12:5 › screenshot / dark (3.2s)
+  ✓    2 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / dark (3.3s)
+  ✓    1 [desktop] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (3.4s)
+  ✘    8 [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean (914ms)
+  ✓   12 [desktop] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (670ms)
+  -   14 [desktop] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✘    9 [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean (882ms)
+  ✘   13 [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean (872ms)
+  ✓   10 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (2.2s)
+  ✘   16 [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean (831ms)
+[WebServer] ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3100". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+  ✓   15 [phone] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (1.7s)
+  ✓   11 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (3.4s)
+  ✘   18 [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (757ms)
+  ✘   19 [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (731ms)
+  ✓   20 [phone] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (923ms)
+  -   23 [phone] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✓   17 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (2.4s)
+  ✘   22 [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean (802ms)
+  ✓   21 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (1.7s)
+  ✘   24 [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean (809ms)
+  ✘   27 [phone] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean (726ms)
+  ✓   25 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (1.8s)
+  ✓   26 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (1.6s)
+  ✘   28 [desktop] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean (728ms)
+  ✘   30 [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean (724ms)
+  ✓   29 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (1.7s)
+  ✓   31 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (1.7s)
+  ✘   32 [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean (710ms)
+  ✓   34 [phone] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean (647ms)
+  ✓   37 [phone] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean (563ms)
+  ✓   36 [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean (664ms)
+  ✓   38 [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (564ms)
+  ✓   33 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (2.1s)
+  ✓   39 [desktop] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean (587ms)
+  ✓   35 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (2.0s)
+  ✓   40 [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (648ms)
+  ✓   42 [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (701ms)
+  ✓   44 [phone] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean (532ms)
+  ✓   45 [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (539ms)
+  ✓   46 [phone] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean (599ms)
+  ✓   47 [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean (532ms)
+  ✓   41 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console dark (2.2s)
+  ✓   43 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark (2.4s)
+  ✘   48 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (686ms)
+  ✓   49 [desktop] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean (649ms)
+  ✘   52 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (709ms)
+  ✓   50 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (2.0s)
+  ✘   53 [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean (640ms)
+  ✘   54 [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean (691ms)
+  ✓   51 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (2.5s)
+  ✘   56 [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean (752ms)
+  ✓   55 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (1.7s)
+  ✘   58 [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean (737ms)
+  ✓   57 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (1.6s)
+  ✘   60 [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean (798ms)
+  ✘   61 [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean (720ms)
+  ✓   59 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security dark (2.3s)
+  ✘   63 [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean (751ms)
+  ✓   62 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark (2.3s)
+  ✘   64 [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean (849ms)
+  ✘   66 [phone] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean (706ms)
+  ✓   65 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (2.0s)
+  ✓   67 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (1.8s)
+  ✘   68 [desktop] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean (822ms)
+  ✘   70 [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean (765ms)
+  ✓   69 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (1.8s)
+  ✘   72 [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean (780ms)
+  ✓   73 [phone] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean (652ms)
+  ✓   71 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (2.2s)
+  ✓   76 [phone] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean (669ms)
+  ✓   75 [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean (752ms)
+  ✓   74 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (1.8s)
+  ✓   78 [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (620ms)
+  ✓   79 [desktop] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean (602ms)
+  ✓   77 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (1.7s)
+  ✓   81 [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean (555ms)
+  ✓   82 [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (627ms)
+  ✓   84 [phone] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean (602ms)
+  ✓   85 [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean (575ms)
+  ✓   86 [phone] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off (396ms)
+  ✓   87 [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean (549ms)
+  ✓   88 [phone] › e2e/shell.spec.ts:37:1 › theme toggle switches data-theme (395ms)
+  ✓   89 [desktop] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off (426ms)
+  ✓   80 [phone] › e2e/screens.spec.ts:12:5 › screenshot / light (2.6s)
+  ✓   90 [desktop] › e2e/shell.spec.ts:37:1 › theme toggle switches data-theme (407ms)
+  ✓   83 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / light (2.4s)
+  ✓   91 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed light (2.4s)
+  ✓   92 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed light (2.6s)
+  ✓   93 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (1.7s)
+  ✓   94 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (1.6s)
+  ✓   95 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (1.8s)
+  ✓   96 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (1.6s)
+  ✓   97 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (1.7s)
+  ✓   98 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (1.6s)
+  ✓   99 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (2.2s)
+  ✓  100 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (2.2s)
+  ✓  101 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console light (2.1s)
+  ✓  102 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light (1.9s)
+  ✓  103 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (1.9s)
+  ✓  104 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (2.1s)
+  ✓  105 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk light (1.7s)
+  ✓  106 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light (1.7s)
+  ✓  107 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security light (1.7s)
+  ✓  108 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light (1.6s)
+  ✓  109 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (1.9s)
+  ✓  110 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (1.7s)
+  ✓  112 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (1.7s)
+  ✓  111 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (1.9s)
+  ✓  113 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light (1.6s)
+  ✓  114 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light (1.6s)
+
+
+  1) [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean ────
+
+    Error: axe on /feed (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--feed-renders-in-dark-no-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--feed-renders-in-dark-no-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--feed-renders-in-dark-no-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean ──
+
+    Error: axe on /borrow (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--borrow-renders-in-dark-no-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--borrow-renders-in-dark-no-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--borrow-renders-in-dark-no-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean 
+
+    Error: axe on /quote/new (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-new-renders-i-b6835-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-new-renders-i-b6835-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-new-renders-i-b6835-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean ─
+
+    Error: axe on /quote/0 (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-0-renders-in--2d6a2-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-0-renders-in--2d6a2-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-0-renders-in--2d6a2-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean 
+
+    Error: axe on /position/0 (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--position-0-renders--8830a-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--position-0-renders--8830a-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--position-0-renders--8830a-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [desktop] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean ─
+
+    Error: axe on /console (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--console-renders-in--ff0ca-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--console-renders-in--ff0ca-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--console-renders-in--ff0ca-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean ─
+
+    Error: axe on /keepers (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--keepers-renders-in--332ad-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--keepers-renders-in--332ad-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--keepers-renders-in--332ad-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean ───
+
+    Error: axe on /feed (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--feed-renders-in-light-no-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--feed-renders-in-light-no-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--feed-renders-in-light-no-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean ─
+
+    Error: axe on /borrow (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--borrow-renders-in-l-a81f8-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--borrow-renders-in-l-a81f8-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--borrow-renders-in-l-a81f8-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean 
+
+    Error: axe on /quote/new (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-new-renders-i-85f29-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-new-renders-i-85f29-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-new-renders-i-85f29-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean 
+
+    Error: axe on /quote/0 (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-0-renders-in--cba37-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-0-renders-in--cba37-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-0-renders-in--cba37-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean 
+
+    Error: axe on /position/0 (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--position-0-renders--3eaff-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--position-0-renders--3eaff-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--position-0-renders--3eaff-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [desktop] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean 
+
+    Error: axe on /console (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--console-renders-in--41a4d-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--console-renders-in--41a4d-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--console-renders-in--41a4d-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean 
+
+    Error: axe on /keepers (desktop)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--keepers-renders-in--b9da9-horizontal-scroll-axe-clean-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--keepers-renders-in--b9da9-horizontal-scroll-axe-clean-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--keepers-renders-in--b9da9-horizontal-scroll-axe-clean-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [phone] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean ─────
+
+    Error: axe on /feed (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--feed-renders-in-dark-no-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--feed-renders-in-dark-no-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--feed-renders-in-dark-no-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean ───
+
+    Error: axe on /borrow (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--borrow-renders-in-dark-no-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--borrow-renders-in-dark-no-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--borrow-renders-in-dark-no-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean 
+
+    Error: axe on /quote/new (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-new-renders-i-b6835-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-new-renders-i-b6835-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-new-renders-i-b6835-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean ──
+
+    Error: axe on /quote/0 (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-0-renders-in--2d6a2-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-0-renders-in--2d6a2-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-0-renders-in--2d6a2-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean 
+
+    Error: axe on /position/0 (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--position-0-renders--8830a-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--position-0-renders--8830a-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--position-0-renders--8830a-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [phone] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean ──
+
+    Error: axe on /console (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--console-renders-in--ff0ca-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--console-renders-in--ff0ca-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--console-renders-in--ff0ca-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean ──
+
+    Error: axe on /keepers (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--keepers-renders-in--332ad-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--keepers-renders-in--332ad-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--keepers-renders-in--332ad-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [phone] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean ────
+
+    Error: axe on /feed (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--feed-renders-in-light-no-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--feed-renders-in-light-no-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--feed-renders-in-light-no-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean ──
+
+    Error: axe on /borrow (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--borrow-renders-in-l-a81f8-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--borrow-renders-in-l-a81f8-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--borrow-renders-in-l-a81f8-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean 
+
+    Error: axe on /quote/new (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-new-renders-i-85f29-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-new-renders-i-85f29-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-new-renders-i-85f29-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean ─
+
+    Error: axe on /quote/0 (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--quote-0-renders-in--cba37-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--quote-0-renders-in--cba37-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--quote-0-renders-in--cba37-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean 
+
+    Error: axe on /position/0 (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--position-0-renders--3eaff-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--position-0-renders--3eaff-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--position-0-renders--3eaff-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [phone] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean ─
+
+    Error: axe on /console (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--console-renders-in--41a4d-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--console-renders-in--41a4d-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--console-renders-in--41a4d-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean ─
+
+    Error: axe on /keepers (phone)
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "aria-prohibited-attr: 1",
+    + ]
+
+      21 |       const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+      22 |       const serious = axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
+    > 23 |       expect(serious.map((v) => `${v.id}: ${v.nodes.length}`), `axe on ${route} (${info.project.name})`).toEqual([]);
+         |                                                                                                          ^
+      24 |       expect(external, "no external requests except RPC before consent").toEqual([]);
+      25 |     });
+      26 |   }
+        at /private/tmp/verify-G3-1794257832/apps/web/e2e/shell.spec.ts:23:106
+
+    Error Context: test-results/shell--keepers-renders-in--b9da9-horizontal-scroll-axe-clean-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shell--keepers-renders-in--b9da9-horizontal-scroll-axe-clean-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shell--keepers-renders-in--b9da9-horizontal-scroll-axe-clean-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28 failed
+    [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean ─────
+    [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean ───
+    [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean 
+    [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean ──
+    [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean 
+    [desktop] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean ──
+    [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean ──
+    [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean ────
+    [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean ──
+    [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean 
+    [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean ─
+    [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean 
+    [desktop] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean ─
+    [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean ─
+    [phone] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean ───────
+    [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean ─────
+    [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean ──
+    [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean ────
+    [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean ─
+    [phone] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean ────
+    [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean ────
+    [phone] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean ──────
+    [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean ────
+    [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean ─
+    [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean ───
+    [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean 
+    [phone] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean ───
+    [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean ───
+  2 skipped
+  84 passed (54.0s)
+/private/tmp/verify-G3-1794257832/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 e2e: `playwright test`
+Exit status 1
