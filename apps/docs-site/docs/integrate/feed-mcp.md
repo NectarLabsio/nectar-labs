@@ -6,7 +6,7 @@ description: Read-only MCP tools for agents sizing loans against committed capac
 # Feed MCP
 
 <p className="verified">Verified against: F-021 (2026-11-09) · spec docs/PRD.md §10.3, §10.4 · D-009 (2026-11-10)</p>
-<p className="status">Status: P1, not built. It enters the agents track only if it ships and passes G9. The SDK version and registration commands are pinned and verified when it ships.</p>
+<p className="status">Status: P1, not built. It is listed as live only if it ships and passes G9. The SDK version and registration commands are pinned and verified when it ships.</p>
 
 A stdio and HTTP MCP server, read-only, with no keys and per-IP rate limits.
 

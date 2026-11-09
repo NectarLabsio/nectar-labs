@@ -6,7 +6,7 @@ description: Committed exit liquidity as a borrowing-limit input.
 # Whitepaper (short form)
 
 <p className="verified">Verified against: F-052 (2026-11-09), F-110 (2026-11-09), F-112 (2026-11-09), F-113 (2026-11-09), F-114 (2026-11-09) · spec docs/PRD.md §1, §3, §4 · D-009 (2026-11-10)</p>
-<p className="status">Status: design document. Market figures are dated 2026-11-09 and re-pulled before submission. All other numbers are illustrative, computed from config.yaml.</p>
+<p className="status">Status: design document. Market figures are dated 2026-11-09 and re-pulled before each release. All other numbers are illustrative, computed from config.yaml.</p>
 
 ## 1. Problem
 
