@@ -46,7 +46,9 @@ function seeded(): FeedDb {
   const db = new FeedDb(':memory:');
   db.addSnapshot({ symbol: 'NVDAx', block_height: 40, observed_at: 1, capacity: CAP });
   db.upsertQuoteFromView({ quote_id: '0', collateral: 'NVDAx', amount_usd_e6: '50000000000', max_discount_bps: 250, status: 'Live' }, 1);
-  db.addOneClickSample({ symbol: 'NVDAx', pair: 'NVDAx->near:USDC', status: 'no_route', amount_in_usd_e6: null, amount_out_usd_e6: null, amount_out_formatted: null, gap_bps: null, correlation_id: null, quote_timestamp: null, observed_at: 1 }, null);
+  db.setOneClickAsset('NVDAx', 'no_route', 1);
+  const s = (n: number, impact: number, worst: number, id: string) => ({ notional_usd: n, amount_in: '1', amount_out: '1', min_amount_out: '1', rate_e6: '1', impact_bps: impact, worst_impact_bps: worst, correlation_id: id });
+  db.addOneClickSet({ pair_id: 'wnear-usdc', origin: 'nep141:wrap.near', destination: 'nep141:usdc', observed_at: 1, samples: [s(500, 0, 100, 'a'), s(1000, 3, 102, 'b'), s(2000, 9, 108, 'c')] }, '[]');
   return db;
 }
 
@@ -64,6 +66,8 @@ describe('Feed MCP (in-memory transport)', () => {
     assert.equal(v.capacity_usd_e6, '37500000000');
     assert.equal(v.source, 'view');
     assert.deepEqual((v.oneclick as { status: string }).status, 'no 1Click route');
+    const pairs = (v.oneclick as { pairs: Array<{ id: string; samples: Array<{ impact_bps: number }> }> }).pairs;
+    assert.deepEqual(pairs.map((p) => [p.id, p.samples.map((x) => x.impact_bps)]), [['wnear-usdc', [0, 3, 9]]], 'same numbers as GET /api/oneclick');
   });
 
   it('list_quotes never returns buyer identities', async () => {
@@ -95,6 +99,7 @@ describe('Feed MCP (in-memory transport)', () => {
     assert.match(t, /B_c = min\(\$12,600\.00, \$37,500\.00\) = \$12,600\.00/);
     assert.match(t, /contract preview_borrow\s+= \$12,600\.00/);
     assert.match(t, /no 1Click route/);
+    assert.match(t, /wnear-usdc impact \$500\/\$1,000\/\$2,000 = 0\/3\/9 bps \(worst 100\/102\/108 bps, verified\)/);
   });
 
   it('DB-only mode serves from the Feed store; unknown symbol is a tool error', async () => {

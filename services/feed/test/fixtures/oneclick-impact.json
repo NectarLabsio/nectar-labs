@@ -1,0 +1,133 @@
+{
+  "recorded_at": "2026-11-09T22:22:14.925Z",
+  "notional_usd": "1000",
+  "ref_pair": "near:wNEAR->near:USDC",
+  "quotes": [
+    {
+      "quote": {
+        "amountIn": "137362637362637362637362637",
+        "amountInFormatted": "137.362637362637362637362637",
+        "amountInUsd": "500.000000000000",
+        "minAmountIn": "137362637362637362637362637",
+        "amountOut": "498235929",
+        "amountOutFormatted": "498.235929",
+        "amountOutUsd": "497.977842788778",
+        "minAmountOut": "493253569",
+        "timeEstimate": 12,
+        "refundFee": "0",
+        "withdrawFee": "0"
+      },
+      "quoteRequest": {
+        "dry": true,
+        "depositMode": "SIMPLE",
+        "swapType": "EXACT_INPUT",
+        "slippageTolerance": 100,
+        "originAsset": "nep141:wrap.near",
+        "depositType": "INTENTS",
+        "destinationAsset": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+        "amount": "137362637362637362637362637",
+        "refundTo": "nectar-feed-dry.near",
+        "refundType": "INTENTS",
+        "recipient": "nectar-feed-dry.near",
+        "recipientType": "INTENTS",
+        "deadline": "2026-11-09T22:32:14.925Z",
+        "confidentiality": "public",
+        "quoteWaitingTimeMs": 0,
+        "insured": false,
+        "appFees": [
+          {
+            "recipient": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+            "fee": 20
+          }
+        ]
+      },
+      "signature": "ed25519:3KUjdTdhxZehJf7cyvjyu1xxb5i7WCLSkZrJaZDaDW1VLYH5Z46ScyKnaeX9CKwGKT9r1iJUG4a658aFmjDc4zwc",
+      "timestamp": "2026-11-09T22:22:15.046Z",
+      "correlationId": "a4f330c0-0fd1-423d-bf67-4fa0a80fb451"
+    },
+    {
+      "quote": {
+        "amountIn": "274725274725274725274725274",
+        "amountInFormatted": "274.725274725274725274725274",
+        "amountInUsd": "1000.000000000000",
+        "minAmountIn": "274725274725274725274725274",
+        "amountOut": "996607897",
+        "amountOutFormatted": "996.607897",
+        "amountOutUsd": "996.091654109354",
+        "minAmountOut": "986641818",
+        "timeEstimate": 12,
+        "refundFee": "0",
+        "withdrawFee": "0"
+      },
+      "quoteRequest": {
+        "dry": true,
+        "depositMode": "SIMPLE",
+        "swapType": "EXACT_INPUT",
+        "slippageTolerance": 100,
+        "originAsset": "nep141:wrap.near",
+        "depositType": "INTENTS",
+        "destinationAsset": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+        "amount": "274725274725274725274725274",
+        "refundTo": "nectar-feed-dry.near",
+        "refundType": "INTENTS",
+        "recipient": "nectar-feed-dry.near",
+        "recipientType": "INTENTS",
+        "deadline": "2026-11-09T22:32:14.925Z",
+        "confidentiality": "public",
+        "quoteWaitingTimeMs": 0,
+        "insured": false,
+        "appFees": [
+          {
+            "recipient": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+            "fee": 20
+          }
+        ]
+      },
+      "signature": "ed25519:35NjTisYfLtNvk4eENpREQgZDZfztCPAJjsFX38RFWTDemjC1HNBNyCt6FBEXjLHFXYWndv3nHKbWPqKQ9PwPq6J",
+      "timestamp": "2026-11-09T22:22:15.922Z",
+      "correlationId": "fb6dea28-fdee-4d75-b7a7-2035bc27d79d"
+    },
+    {
+      "quote": {
+        "amountIn": "549450549450549450549450549",
+        "amountInFormatted": "549.450549450549450549450549",
+        "amountInUsd": "2000.000000000000",
+        "minAmountIn": "549450549450549450549450549",
+        "amountOut": "1993215795",
+        "amountOutFormatted": "1993.215795",
+        "amountOutUsd": "1992.183309218190",
+        "minAmountOut": "1973283637",
+        "timeEstimate": 12,
+        "refundFee": "0",
+        "withdrawFee": "0"
+      },
+      "quoteRequest": {
+        "dry": true,
+        "depositMode": "SIMPLE",
+        "swapType": "EXACT_INPUT",
+        "slippageTolerance": 100,
+        "originAsset": "nep141:wrap.near",
+        "depositType": "INTENTS",
+        "destinationAsset": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+        "amount": "549450549450549450549450549",
+        "refundTo": "nectar-feed-dry.near",
+        "refundType": "INTENTS",
+        "recipient": "nectar-feed-dry.near",
+        "recipientType": "INTENTS",
+        "deadline": "2026-11-09T22:32:14.925Z",
+        "confidentiality": "public",
+        "quoteWaitingTimeMs": 0,
+        "insured": false,
+        "appFees": [
+          {
+            "recipient": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+            "fee": 20
+          }
+        ]
+      },
+      "signature": "ed25519:5nnT1wSonRLH9BESozQC1MMRDMq6V5x13vJRPw9reiZEguGciJRkDdMmw4KarAW3p1m61N8jkBXcGUy1QtX8of5a",
+      "timestamp": "2026-11-09T22:22:16.456Z",
+      "correlationId": "51baecdc-d4d0-4c22-be64-a59cf99d99a8"
+    }
+  ]
+}

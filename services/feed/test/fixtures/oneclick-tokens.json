@@ -4,8 +4,8 @@
     "decimals": 24,
     "blockchain": "near",
     "symbol": "wNEAR",
-    "price": 3.62,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 3.64,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "wrap.near",
     "coingeckoId": "wrapped-near"
   },
@@ -14,8 +14,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "ETH",
-    "price": 2130.91,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 2125.47,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "eth.bridge.near",
     "coingeckoId": "ethereum"
   },
@@ -24,8 +24,8 @@
     "decimals": 6,
     "blockchain": "near",
     "symbol": "USDC",
-    "price": 0.999455,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.999482,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
     "coingeckoId": "usd-coin"
   },
@@ -34,8 +34,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "FRAX",
-    "price": 0.989583,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.989573,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "853d955acef822db058eb8505911ed77f175b99e.factory.bridge.near",
     "coingeckoId": "frax"
   },
@@ -44,8 +44,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "AURORA",
-    "price": 0.04052185,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.04038842,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "aaaaaa20d9e0e2461697782ef11675f668207961.factory.bridge.near",
     "coingeckoId": "aurora-near"
   },
@@ -54,8 +54,8 @@
     "decimals": 8,
     "blockchain": "near",
     "symbol": "wBTC",
-    "price": 74895,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 74964,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "2260fac5e5542a773aa44fbcfedf7c193bc2c599.factory.bridge.near",
     "coingeckoId": "bitcoin"
   },
@@ -64,8 +64,8 @@
     "decimals": 24,
     "blockchain": "near",
     "symbol": "BLACKDRAGON",
-    "price": 6.33e-9,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 6.411e-9,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "blackdragon.tkn.near",
     "coingeckoId": "black-dragon"
   },
@@ -74,8 +74,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "SHITZU",
-    "price": 0.00145053,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00145052,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "token.0xshitzu.near",
     "coingeckoId": "shitzu"
   },
@@ -85,7 +85,7 @@
     "blockchain": "near",
     "symbol": "ABG",
     "price": 0,
-    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "priceUpdatedAt": "2026-11-09T15:59:00.755Z",
     "contractAddress": "abg-966.meme-cooking.near",
     "coingeckoId": "abg"
   },
@@ -95,7 +95,7 @@
     "blockchain": "near",
     "symbol": "NOEAR",
     "price": 0,
-    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "priceUpdatedAt": "2026-11-09T15:59:00.755Z",
     "contractAddress": "noear-324.meme-cooking.near",
     "coingeckoId": "noear"
   },
@@ -104,8 +104,8 @@
     "decimals": 6,
     "blockchain": "near",
     "symbol": "mpDAO",
-    "price": 0.00786032,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00789569,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "mpdao-token.near",
     "coingeckoId": "meta-pool"
   },
@@ -114,8 +114,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "JAMBO",
-    "price": 0.00019282131411903748,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00019387333342841753,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "jambo-1679.meme-cooking.near",
     "coingeckoId": "jambo-2"
   },
@@ -125,7 +125,7 @@
     "blockchain": "near",
     "symbol": "NearKat",
     "price": 0.00008822,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "kat.token0.near",
     "coingeckoId": "nearkat"
   },
@@ -135,7 +135,7 @@
     "blockchain": "near",
     "symbol": "GNEAR",
     "price": 0,
-    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "priceUpdatedAt": "2026-11-09T15:59:00.755Z",
     "contractAddress": "gnear-229.meme-cooking.near",
     "coingeckoId": "gnear"
   },
@@ -145,7 +145,7 @@
     "blockchain": "near",
     "symbol": "TESTNEBULA",
     "price": 0,
-    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "priceUpdatedAt": "2026-11-09T15:59:00.755Z",
     "contractAddress": "test-token.highdome3013.near",
     "coingeckoId": "testnebula"
   },
@@ -154,8 +154,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "RHEA",
-    "price": 0.03818134,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.03836873,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "token.rhealab.near",
     "coingeckoId": "rhea-2"
   },
@@ -164,8 +164,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "PUBLIC",
-    "price": 0.0035361,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00353623,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "token.publicailab.near",
     "coingeckoId": "publicai"
   },
@@ -174,8 +174,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "HAPI",
-    "price": 0.14109,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.165868,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "d9c2d319cd7e6177336b0a9c93c21cb48d84fb54.factory.bridge.near",
     "coingeckoId": "hapi"
   },
@@ -184,8 +184,8 @@
     "decimals": 24,
     "blockchain": "near",
     "symbol": "ITLX",
-    "price": 0.0005404069911968664,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.0005433926651813796,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "itlx.intellex_xyz.near",
     "coingeckoId": "itlx"
   },
@@ -194,8 +194,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "CFI",
-    "price": 0.00046982,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00046983,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "cfi.consumer-fi.near",
     "coingeckoId": "consumerfi-protocol"
   },
@@ -204,8 +204,8 @@
     "decimals": 24,
     "blockchain": "near",
     "symbol": "NPRO",
-    "price": 0.251632565282456,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.2530260197863759,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "npro.nearmobile.near",
     "coingeckoId": "npro"
   },
@@ -214,8 +214,8 @@
     "decimals": 8,
     "blockchain": "near",
     "symbol": "BTC",
-    "price": 74895,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 74964,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "nbtc.bridge.near",
     "coingeckoId": "bitcoin"
   },
@@ -224,8 +224,8 @@
     "decimals": 6,
     "blockchain": "hood",
     "symbol": "USDG",
-    "price": 0.999938,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.999916,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "0x5fc5360d0400a0fd4f2af552add042d716f1d168",
     "coingeckoId": "global-dollar"
   },
@@ -234,8 +234,8 @@
     "decimals": 18,
     "blockchain": "hood",
     "symbol": "PONS",
-    "price": 0.155865,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.154645,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "0x39dbed3a2bd333467115de45665cc57f813c4571",
     "coingeckoId": "pons"
   },
@@ -244,8 +244,8 @@
     "decimals": 18,
     "blockchain": "hood",
     "symbol": "CASHCAT",
-    "price": 0.073237,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.072052,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "0x020bfc650a365f8bb26819deaabf3e21291018b4",
     "coingeckoId": "cash-cat"
   },
@@ -254,8 +254,8 @@
     "decimals": 6,
     "blockchain": "near",
     "symbol": "USDT",
-    "price": 0.999065,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.999122,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "usdt.tether-token.near",
     "coingeckoId": "tether"
   },
@@ -264,8 +264,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "TURBO",
-    "price": 0.00070628,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00070367,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "a35923162c49cf95e6bf26623385eb431ad920d3.factory.bridge.near",
     "coingeckoId": "turbo"
   },
@@ -274,8 +274,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "PURGE",
-    "price": 0.00078854,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00078853,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "purge-558.meme-cooking.near",
     "coingeckoId": "forgive-me-father"
   },
@@ -284,8 +284,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "SWEAT",
-    "price": 0.00006128,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.00006111,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "token.sweat",
     "coingeckoId": "sweatcoin"
   },
@@ -294,8 +294,8 @@
     "decimals": 18,
     "blockchain": "hood",
     "symbol": "ETH",
-    "price": 2130.91,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 2125.47,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "coingeckoId": "ethereum"
   },
   {
@@ -304,7 +304,7 @@
     "blockchain": "near",
     "symbol": "stNEAR",
     "price": 5.47,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "meta-pool.near",
     "coingeckoId": "staked-near"
   },
@@ -313,8 +313,8 @@
     "decimals": 8,
     "blockchain": "near",
     "symbol": "strkBTC",
-    "price": 74765,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 74902,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "strk-0xe646ef2a705bf5147ceffc8dfbcc7bee4946b8f7.omdep.near",
     "coingeckoId": "strkbtc"
   },
@@ -324,7 +324,7 @@
     "blockchain": "near",
     "symbol": "STJACK",
     "price": 0,
-    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "priceUpdatedAt": "2026-11-09T15:59:00.755Z",
     "contractAddress": "stjack.tkn.primitives.near"
   },
   {
@@ -332,8 +332,8 @@
     "decimals": 18,
     "blockchain": "near",
     "symbol": "nrUsdt",
-    "price": 0.999065,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.999122,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "lsd-usdt.rhealab.near",
     "coingeckoId": "tether"
   },
@@ -342,8 +342,8 @@
     "decimals": 18,
     "blockchain": "hood",
     "symbol": "WETH",
-    "price": 2130.91,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 2125.47,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "0x0bd7d308f8e1639fab988df18a8011f41eacad73",
     "coingeckoId": "ethereum"
   },
@@ -352,8 +352,8 @@
     "decimals": 18,
     "blockchain": "hood",
     "symbol": "USDe",
-    "price": 0.998832,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 0.998849,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "0x5d3a1ff2b6bab83b63cd9ad0787074081a52ef34",
     "coingeckoId": "ethena-usde"
   },
@@ -362,8 +362,8 @@
     "decimals": 24,
     "blockchain": "near",
     "symbol": "cNEAR",
-    "price": 3.6252289814,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 3.6452578708,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "cnear.assetize.near"
   },
   {
@@ -372,7 +372,7 @@
     "blockchain": "near",
     "symbol": "tMU",
     "price": 0,
-    "priceUpdatedAt": "2026-11-09T14:04:30.936Z",
+    "priceUpdatedAt": "2026-11-09T15:59:00.755Z",
     "contractAddress": "43d5b40dca52dfde6b794fa394e7796f34cb0c571655e4dfd9b0b7fcec06d84e"
   },
   {
@@ -380,8 +380,8 @@
     "decimals": 8,
     "blockchain": "near",
     "symbol": "ZEC",
-    "price": 1173.77,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 1173.19,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "zec.omft.near",
     "coingeckoId": "zcash"
   },
@@ -390,8 +390,8 @@
     "decimals": 12,
     "blockchain": "near",
     "symbol": "QTC",
-    "price": 56.670647314475175,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 56.508075305005576,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "qtc.omft.near",
     "coingeckoId": "custom:qtc"
   },
@@ -400,8 +400,8 @@
     "decimals": 8,
     "blockchain": "near",
     "symbol": "PRL",
-    "price": 1.6040509993382732,
-    "priceUpdatedAt": "2026-11-09T21:33:31.020Z",
+    "price": 1.6211872602004724,
+    "priceUpdatedAt": "2026-11-09T22:21:30.778Z",
     "contractAddress": "prl.omft.near",
     "coingeckoId": "custom:prl"
   }
