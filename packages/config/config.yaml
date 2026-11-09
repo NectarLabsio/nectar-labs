@@ -55,10 +55,11 @@ outlayer:
   gas_reserve_near: "0.1"
 signer:
   account: v1.signer-prod.testnet
-  path: solana-v1
+  path: solana-devnet-v1
   domain_id: 1
   deposit_yocto: "1"
-  gas_tgas: TODO-G7 # from sign_call_gas_attachment_requirement_tera_gas (F-034)
+  gas_tgas: 15 # from sign_call_gas_attachment_requirement_tera_gas (F-034)
+  authority_note: derived via derived_public_key(nectar-core.nectar.testnet, solana-devnet-v1, domain 1); compute with scripts (WO-15), F-036
 solana:
   cluster: devnet
   program_id: TODO-G7

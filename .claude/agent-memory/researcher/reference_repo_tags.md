@@ -12,3 +12,9 @@ metadata:
 - near/docs (docs.near.org source): Mintlify .mdx at repo root (web3-apps/, protocol/, data-infrastructure/), no docs/ dir; zsh has no `--include=*.md` globbing issues if you grep dirs directly.
 - near-connect (@hot-labs/near-connect) source is github.com/hot-dao/near-selector (not hot-labs/near-connect); wallet list in repository/manifest.json.
 - 1Click OpenAPI: https://1click.chaindefuser.com/docs/v0/openapi.yaml. Hermes: use `curl -g` for `ids[]=`; as of 2026-11-09 `/v2/updates/price/latest` returned 401 (C-007).
+
+## Chain Signatures / Solana sources (added 2026-11-09)
+- near/mpc: signer views `config`, `public_key({domain_id})`, `derived_public_key({path,predecessor,domain_id})`, `version`; KDF in crates/near-mpc-crypto-types/src/kdf.rs; Payload/SignatureResponse in primitives.rs.
+- Ed25519 ix layout: anza-xyz/solana-sdk ed25519-program/src/lib.rs; sysvar ids in sdk-ids/src/lib.rs.
+- Anchor CI Solana CLI pin: .github/workflows/tests.yaml (solana_cli_version).
+- solana.com guides return 429 to WebFetch; faucet.solana.com works.
