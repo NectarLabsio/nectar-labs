@@ -2,7 +2,8 @@
 
 Daemon holding one NEAR **function-call key** scoped to `trigger_preliquidation, relay_settlement_result`
 on nectar-core (D-010). It never holds owner keys, never prices anything, and sends only a `position_id`
-with 0 deposit.
+with 0 deposit. At startup it reads the key's on-chain permission and exits 2 (`startup_refused`) if it
+is a FullAccess key; deleting full-access keys on the keeper account (D-012) stays the primary control.
 
 Loop (every `KEEPER_POLL_MS`, default 10 s): `list_positions` (paged) → keep `status == "Open"` →
 `get_health` → if `triggerable && oracle_fresh` → `trigger_preliquidation(position_id)`.
