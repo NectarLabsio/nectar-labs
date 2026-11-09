@@ -27,6 +27,9 @@ img { max-width: 100%; }
 .accent { color: var(--accent); }
 .warn-text { color: var(--warn); }
 .danger-text { color: var(--danger); }
+.pass-text { color: var(--heading); font-weight: 600; }
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.checklist li { min-width: 0; overflow-wrap: anywhere; }
 .heading-text { color: var(--heading); }
 .stack { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .stack-sm { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
