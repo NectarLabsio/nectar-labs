@@ -1,7 +1,7 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P0 — G1 PASS, deployed + seeded on testnet (WO-6); G2 verifier running**
-Gates: G0 PASS (P0 tools) · G1 PASS (b721641) · G2 running · G3 next · G4–G9 pending
+Phase: **P0 — G2 PASS; G3 verifier running**
+Gates: G0 PASS (P0 tools) · G1 PASS (b721641) · G2 PASS (5f27f44; explorer pages need a human click, H-EXPLORER) · G3 running · G4–G9 pending
 Open handoffs: H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: nothing for P0.
 
@@ -23,6 +23,10 @@ P1 risk (C-007): Hermes `/v2/updates/price/latest` returns 401 unauthenticated o
 Clock note: host UTC is 2026-11-09 ~20:00; "2026-11-10" dates in docs are local (IST). Deadline math uses UTC.
 Merged: WO-5 keeper+feed (cdd2fbe), WO-4 docs+README (b436f93). main `pnpm verify:quick` GREEN, docs-site build GREEN.
 `pnpm demo:testnet` rewritten in Node (public RPC, no keys/CLI); exits 2 "not deployed" until G2.
+Queued after G3 (small orders): WO-4d docs — README/docs "G2 PASS" wording, run-a-keeper page (keeper exists), storage-and-gas
+  gas values from evidence/G1 CSV, web/docs dev port clash (3100 vs 3000), RUNBOOK: refresh owner price within 24 h (closed-session
+  max age) and keeper re-creation if its 1 NEAR allowance runs out; WO-2c contract — migrate deprecated
+  `testing_env_with_promise_results` (F-131), document/rename `fee_debt_e18` (holds e6-scale values per G2 note).
 Open follow-ups: (a) P2/WO-13: PRD §6.5 says sha256(preimage) before sign, §9 says Ed25519 signs raw bytes — researcher records
   CONFLICT, settlement.svg follows the verified answer; (b) docs/img/architecture.svg labels 1Click depth R_c (should be D_c) — docs
   agent, next docs pass; (c) landing/index.html + PRD §20 glossary still show the old uplift formula — WO-3 port uses D-009, PRD is
@@ -34,4 +38,4 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10
-Last activity: 2026-11-09T20:40:14Z · commit b721641
+Last activity: 2026-11-09T20:52:26Z · commit d3afb39
