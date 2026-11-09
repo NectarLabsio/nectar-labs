@@ -1,0 +1,38 @@
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+live code_hash=FQjNLgawvz9KmeLioJs6fdd5GdB5JAVeEfSSZfEGTFfB storage=384097 B balance=4243401293924142199999990; new wasm sha256=fa2bb4f18192eddb87320417a085b92912e1f16178fb61824f932d939be90f4e size=404811
+live code size=381976 B
+
+== deploy (code only, no init call) ==
+├  Unsigned transaction:
+│    signer_id:    nectar-core.nectar.testnet
+│    receiver_id:  nectar-core.nectar.testnet
+│    actions:
+│       -- deploy code <HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX> to a account <nectar-core.nectar.testnet>
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:B3STreMJMy8AQpj1oouG8GDBPNr9MSPgBA2FooKY9VHt
+│    Signature:  ed25519:<redacted tx signature>
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 29.8 Tgas
+│    Transaction fee: 0.0029483465471773 NEAR
+│    Transaction ID: 9nRispg6uMWiLb87um3zuUZxCoa32SRbm4Tfh7bMzvHp
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/9nRispg6uMWiLb87um3zuUZxCoa32SRbm4Tfh7bMzvHp
+│     [0m
+
+Contract code has been successfully deployed.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy nectar-core.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/nectar_core/nectar_core.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+state_version=1 contract_version="nectar-core 0.1.0 p1" code_hash=HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX
+get_exit_capacity unchanged
+list_positions unchanged
+list_quotes unchanged
+CHANGED: get_quoter_config (see /Volumes/T7/nectar-labs/evidence/upgrades/20261109T2238Z)
+get_pool unchanged
