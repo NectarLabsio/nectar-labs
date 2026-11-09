@@ -1,0 +1,42 @@
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.23s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 4.57s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794267288, tv_nsec: 880000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794266663, tv_nsec: 70000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 557ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 437.4 KB (437414 bytes)
+     - SHA-256 checksum hex : a724d890850f393e3ab7e2b4d9d7e3b4f275f245b125331a308b034546d9d847
+     - SHA-256 checksum bs58: CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm

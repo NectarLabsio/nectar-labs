@@ -1,0 +1,1 @@
+a724d890850f393e3ab7e2b4d9d7e3b4f275f245b125331a308b034546d9d847  ../../target/near/nectar_core/nectar_core.wasm

@@ -12,7 +12,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 near-sdk = { workspace = true }
-ed25519-dalek = { version = "2.2.0", default-features = false } # WO-15 signer stub (sign from a fixed test seed)
+ed25519-dalek = { version = "2.2.0", default-features = false, features = ["fast"] } # WO-15 signer stub (sign from a fixed test seed; precomputed tables keep it inside 15 Tgas)
 
 [dev-dependencies]
 near-sdk = { workspace = true, features = ["unit-testing"] }

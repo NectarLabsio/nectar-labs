@@ -1,0 +1,257 @@
+   Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/nectar-core)
+warning: hard linking files in the incremental compilation cache failed. copying files instead. consider moving the cache directory to a file system which supports hard linking in session dir `/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/debug/incremental/sandbox_p2-08gtweuhyckz7/s-ho0iwoqxis-11t7jdj-working`
+
+warning: `nectar-core` (test "sandbox_p2") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.45s
+     Running tests/sandbox_p2.rs (target/debug/deps/sandbox_p2-b640d27cb29329c0)
+
+running 3 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.25s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 4.59s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794267068, tv_nsec: 910000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794266663, tv_nsec: 70000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 550ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 437.4 KB (437414 bytes)
+     - SHA-256 checksum hex : a724d890850f393e3ab7e2b4d9d7e3b4f275f245b125331a308b034546d9d847
+     - SHA-256 checksum bs58: CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.21s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.16s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794267072, tv_nsec: 370000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794266824, tv_nsec: 200000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 225ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 152.3 KB (152268 bytes)
+     - SHA-256 checksum hex : 28578356a6e426f8ea384051ff7519c51faa2bd7ed9f711e9e4f3a05f3f372c2
+     - SHA-256 checksum bs58: 3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling curve25519-dalek v4.1.3
+ │    Compiling ed25519-dalek v2.2.0
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/test-stubs)
+ │     Finished `dev` profile [unoptimized] target(s) in 2.16s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling curve25519-dalek v4.1.3
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling ed25519-dalek v2.2.0
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 2.19s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794267077, tv_nsec: 630000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794266828, tv_nsec: 700000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 303ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 226.4 KB (226394 bytes)
+     - SHA-256 checksum hex : 738c4ef4da375114d04df0488e71f76fa1dd41983c7f3d01dd8f073f79fb6ae8
+     - SHA-256 checksum bs58: 8n3yXyHpiDPixhQ1f9ipZVSRSEMikRuTVMxEUzjfpmuy
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a51a6c06f3c9078c8/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+UPGRADE,v1c_to_wo15,views_identical,true,migrate,none
+GAS,trigger+sign_failed,total,28766892400934
+GAS,trigger+sign_failed,dev-20261109233119-87925553379426.test.near,6987196921321
+GAS,trigger+sign_failed,dev-20261109233118-72523968586463.test.near,1636701674264
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233119-87925553379426.test.near,1676070206069
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233118-72523968586463.test.near,1575129912216
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233119-87925553379426.test.near,1648296200725
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233118-72523968586463.test.near,1593265717193
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233119-87925553379426.test.near,1648737684869
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233126-55242971361086.test.near,2525069960438
+GAS,trigger+sign_failed,dev-20261109233126-55242971361086.test.near,1259852808872
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233126-55242971361086.test.near,2639225519257
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233119-87925553379426.test.near,2812323075895
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign_failed,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),total,35687019376945
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233119-64486012978215.test.near,6987196921321
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233118-51559738792615.test.near,1636701674264
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233119-64486012978215.test.near,1676070206069
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233118-51559738792615.test.near,1575129912216
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233119-64486012978215.test.near,1648296200725
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233118-51559738792615.test.near,1593265717193
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233119-64486012978215.test.near,1648737684869
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233127-31390051937409.test.near,2515826547038
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233127-31390051937409.test.near,1386807400946
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233127-31390051937409.test.near,5282708793210
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233119-64486012978215.test.near,3198817290989
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233118-51559738792615.test.near,1652556992313
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233119-64486012978215.test.near,1673516190977
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,trigger+sign(1 remote, 1 near),dev-20261109233103-34467954798965.test.near,223182562500
+GAS,relay_settlement_result,total,2561810533791
+GAS,relay_settlement_result,dev-20261109233119-64486012978215.test.near,2246646160256
+test upgrade_v1c_then_remote_leg_signed_and_relayed ... ok
+GAS,retrigger+sign,total,21993708061877
+GAS,retrigger+sign,dev-20261109233119-87925553379426.test.near,4365068610893
+GAS,retrigger+sign,dev-20261109233126-55242971361086.test.near,2553738509783
+GAS,retrigger+sign,dev-20261109233126-55242971361086.test.near,1386154374198
+GAS,retrigger+sign,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,retrigger+sign,dev-20261109233126-55242971361086.test.near,5291801992901
+GAS,retrigger+sign,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,retrigger+sign,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,retrigger+sign,dev-20261109233119-87925553379426.test.near,3198578920997
+GAS,retrigger+sign,dev-20261109233118-72523968586463.test.near,1652556992313
+GAS,retrigger+sign,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,retrigger+sign,dev-20261109233119-87925553379426.test.near,1673516190977
+GAS,retrigger+sign,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,retrigger+sign,dev-20261109233103-57225403021349.test.near,223182562500
+GAS,retrigger+sign,dev-20261109233103-57225403021349.test.near,223182562500
+test sign_failure_rolls_back_then_retry_and_cancel ... ok
+GAS,trigger+pyth+quoter+sign+4legs,total,58260045461389
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,3752754065451
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233130-19200564126037.test.near,1358670856653
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,4215569483243
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233130-19200564126037.test.near,1996446191773
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,9664416796311
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233118-67781652725429.test.near,1636812868056
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,1689532230472
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233118-67781652725429.test.near,1577532868056
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,1664452230472
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233118-67781652725429.test.near,1577532868056
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,1664452230472
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233118-67781652725429.test.near,1575264143176
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,1661781262296
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233118-67781652725429.test.near,1593265717193
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,1662082756188
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233130-19200564126037.test.near,2623808866463
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233130-19200564126037.test.near,1407025194047
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233130-19200564126037.test.near,5390764696741
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,3211613536846
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233118-67781652725429.test.near,1652556992313
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233119-24834311390674.test.near,1686861262296
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,dev-20261109233103-28645345411954.test.near,223182562500
+GAS,trigger+pyth+quoter+sign+4legs,attached,300000000000000
+test gas_trigger_pyth_quoter_sign ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 36.82s
+

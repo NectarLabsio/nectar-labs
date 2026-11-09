@@ -43,11 +43,13 @@ impl OutlayerStub {
         let idx = env::promise_yield_create("on_sign_resume", b"{}", Gas::from_tgas(5), GasWeight(0), 0);
         let data_id = env::read_register(0).unwrap_or_else(|| env::panic_str("yield id"));
         Promise::new(env::current_account_id())
-            .function_call(
+            // all gas left after the 5 Tgas yield callback (weight 1, F-171): the stub fits the live 15 Tgas
+            .function_call_weight(
                 "respond",
                 json!({ "data_id_hex": hex(&data_id), "payload_hex": payload_hex }).to_string().into_bytes(),
                 NearToken::from_yoctonear(0),
-                Gas::from_tgas(20),
+                Gas::from_tgas(1),
+                GasWeight(1),
             )
             .detach();
         env::promise_return(idx);
