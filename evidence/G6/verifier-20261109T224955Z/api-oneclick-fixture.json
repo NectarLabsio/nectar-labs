@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+content-type: application/json
+cache-control: public, max-age=10
+access-control-allow-origin: *
+Date: Mon, 09 Nov 2026 22:50:35 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+{"as_of":"2026-11-09T22:22:14.925Z","pairs":[{"id":"wnear-usdc","origin":"nep141:wrap.near","destination":"nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1","verified":true,"correlation_id":"fb6dea28-fdee-4d75-b7a7-2035bc27d79d","observed_at":"2026-11-09T22:22:14.925Z","samples":[{"notional_usd":500,"amount_in":"137362637362637362637362637","amount_out":"498235929","min_amount_out":"493253569","rate_e6":"3627157","impact_bps":0,"worst_impact_bps":100,"correlation_id":"a4f330c0-0fd1-423d-bf67-4fa0a80fb451"},{"notional_usd":1000,"amount_in":"274725274725274725274725274","amount_out":"996607897","min_amount_out":"986641818","rate_e6":"3627652","impact_bps":0,"worst_impact_bps":98,"correlation_id":"fb6dea28-fdee-4d75-b7a7-2035bc27d79d"},{"notional_usd":2000,"amount_in":"549450549450549450549450549","amount_out":"1993215795","min_amount_out":"1973283637","rate_e6":"3627652","impact_bps":0,"worst_impact_bps":98,"correlation_id":"51baecdc-d4d0-4c22-be64-a59cf99d99a8"}]}],"assets":[{"symbol":"NVDAx","status":"no_route","observed_at":"2026-11-09T22:22:14.925Z"}]}

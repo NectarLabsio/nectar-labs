@@ -8,7 +8,7 @@
 | G3 web E2E | PASS | 2026-11-09T21:15Z | 176914f | evidence/G3/verifier-20261109T2115Z/ (e2e 112 pass / 0 fail / 2 skip = write spec; LH 12/12 = 100; write flow cited from 20:57Z run, not repeated; prior FAIL 20:57Z c940dec: see §G3) |
 | G4 OutLayer | PASS | 2026-11-09T22:10Z | d87eef6 | evidence/G4/verifier-20261109T2210Z/ (attestation via testnet-api.outlayer.ai/attestations/by-request/15114, TDX quote present, not verified; gates.md get_settlement view missing, criterion checked from events; fills = max until WO-10b) |
 | G5 oracle | pending | | | |
-| G6 1Click depth | FAIL | 2026-11-09T22:14Z | 578b006 | evidence/G6/verifier-20261109T221158Z/ (live dry quote verifies; NVDAx badge renders; FAIL: Feed shows no implied depth (badge is a hard-coded set, not wired to the sampler) and the sampler's gap_bps uses amountOutUsd, which C-014 says not to use; see §G6) |
+| G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at 578b006: 3-size live dry quotes verify, impact from base units, no amountIn/OutUsd use; GET /api/oneclick fixture + live match shape; /feed panel and NVDAx route status come from the API; web e2e 128 passed / 0 failed; see §G6) |
 | G7 Solana + signer | pending | | | |
 | G8 copilot | pending | | | |
 | G9 fresh-clone rehearsal | pending | | | |
@@ -56,6 +56,42 @@ Criteria:
 - Implied depth shown on Feed: FAIL. apps/web has no oneclick/gap/depth sample consumer, so /feed never shows a depth number for the reference pair. Only the MCP `explain_limit`/`get_exit_capacity` show `gap_bps`.
 - C-014: FAIL. services/feed/src/oneclick.ts:179-181 computes `gap_bps = (amountInUsd - amountOutUsd)/amountInUsd`, which is exactly the field C-014/F-064 say not to use. On the fixture it gives 0 bps. The realised `amountOut` 1004.397702 USDC against $1,000 in (token-list price) would read about -44 bps, and `minAmountOut` 994.353724 about +56 bps. The stored response keeps `amountOut`, so samples can be recomputed.
 FAIL reasons: (1) the depth metric uses `amountOutUsd`, contrary to FACTS C-014/F-064; (2) /feed shows no implied depth, and the no-route badge is static rather than driven by the sampler. The gates.md wording ("Feed shows R_c or no 1Click route") alone would pass on the NVDAx badge, but the orchestrator's criteria do not. gates.md G6 command also needs to change to the feed commands above.
+
+### G6 — 1Click depth (re-run) — PASS — 2026-11-09T22:58Z — commit fea52b7
+Fresh clone /tmp/verify-G6b-1794264583 at main fea52b7. `pnpm i --frozen-lockfile` exit 0. Logs: evidence/G6/verifier-20261109T224955Z/. Dry quotes only; nothing deposited. The previous FAIL block above stays as the record.
+```
+$ NECTAR_IT=1 pnpm --filter feed test                    # feed-test.log
+# tests 39  # pass 39  # fail 0  # skipped 0
+ok 14 - 1Click live (NECTAR_IT=1; read-only, dry only)   (2.66 s, real network)
+  three verified dry quotes for the reference pair; NVDAx no_route from the live token list   (asserts dropped == 0, 3 samples)
+# [{"id":"wnear-usdc","samples":[[500,"3636470",0,100],[1000,"3636440",0,100],[2000,"3636378",0,100]]}]   # [usd, rate_e6, impact_bps, worst_impact_bps]
+$ grep -rn "amountInUsd\|amountOutUsd" services/feed/src
+services/feed/src/oneclick.ts:14:// amountInUsd / amountOutUsd are never read (amountOutUsd mirrors the input value, C-014).   # comment only
+  rate_e6 = rateE6(BigInt(quote.amountIn), BigInt(quote.amountOut), decIn, decOut); worst uses minAmountOut (oneclick.ts:175-188)
+  each response goes through verifyQuoteSignature; one false drops the whole set (oneclick.ts:244-269)
+$ FEED_FIXTURES=1 FEED_PORT=8798 FEED_MCP_PORT=off pnpm --filter feed start ; curl -i :8798/api/oneclick   # api-oneclick-fixture.json
+HTTP/1.1 200  {"as_of":"2026-11-09T22:22:14.925Z","pairs":[{"id":"wnear-usdc",...,"verified":true,"samples":[
+  {"notional_usd":500,...,"rate_e6":"3627157","impact_bps":0,"worst_impact_bps":100},{"notional_usd":1000,...,"rate_e6":"3627652","impact_bps":0,"worst_impact_bps":98},
+  {"notional_usd":2000,...,"rate_e6":"3627652","impact_bps":0,"worst_impact_bps":98}]}],"assets":[{"symbol":"NVDAx","status":"no_route",...}]}
+$ FEED_PORT=8799 FEED_MCP_PORT=off pnpm --filter feed start (live, no fixtures) ; curl :8799/api/oneclick   # api-oneclick-live.json
+oneclick_tick sets:1 dropped:0 no_route:1 ; samples 500/1000/2000 rate_e6 3635521/3635449/3635922, impact 0/0/0, worst 99/100/98; NVDAx no_route
+$ pnpm --filter web build  -> exit 0 ;  PW_CHANNEL=chrome pnpm --filter web e2e   # web-e2e.log
+  128 passed, 2 skipped (testnet.spec write specs self-skip without a demo key), 0 failed; oneclick.spec 3/3 x2 projects, p1.spec feed 1/1 x2
+$ NEXT_PUBLIC_FEED_URL=http://127.0.0.1:8798 pnpm --filter web build && pnpm --filter web start ; GET :3100/api/indexer/api/oneclick -> 200 (fixture body)
+/feed panel text (feed-panel-text.log): "1Click reference depth · As of 2026-11-09 22:22 UTC · WNEAR → USDC signature verified ·
+  0.5× $500 3.627157 0 % 1 % · 1× $1,000 3.627652 0 % 0.98 % · 2× $2,000 3.627652 0 % 0.98 % · NVDAx no 1Click route"
+$ curl https://1click.chaindefuser.com/v0/tokens   # v0-tokens.json
+216 tokens; equity-pattern hits AVAX FRAX GMX INX ITLX SPX TRX USDCx are all crypto (SPX = eth/sol omft at $0.36); no tokenized equity (F-063)
+```
+Screenshot: evidence/G6/verifier-20261109T224955Z/feed-oneclick-panel.png (Playwright, chrome channel, /feed against the fixture feed). All servers (8798, 8799, 3100) stopped.
+Criteria:
+- Live dry quotes at 3 sizes verify: PASS (live test asserts 0 dropped and 3 samples; the sampler drops any set with a false signature).
+- Impact from base units, no amountInUsd/amountOutUsd: PASS (only a comment mentions them; rate is from amountIn/amountOut with token decimals, worst case from minAmountOut).
+- GET /api/oneclick documented shape (WO-11c §3): PASS in fixture and live modes (extra fields observed_at and per-sample correlation_id).
+- /feed panel shows the pair's numbers and NVDAx status from the API: PASS (panel numbers equal the fixture body; OracleBadge.tsx has no route logic now; RouteStatusBadge in OneClickPanel.tsx renders only the status the feed reports).
+- Web e2e full suite: PASS (0 failed).
+- F-063 no tokenized equity in /v0/tokens: PASS.
+Notes (not failures): wNEAR→USDC is deep enough that impact_bps is 0 at all three sizes ($500 to $2,000). In the live run rate(2×) was above rate(0.5×), so the result was clamped to 0. The depth signal comes mostly from worst_impact_bps, which is about 1 %, the minAmountOut slippage floor. The live feed logs `polling_disabled` because CORE_ACCOUNT_ID is unset by default; that is outside G6 scope. gates.md G6 line now names the feed commands; no secret was needed.
 
 ## G4
 

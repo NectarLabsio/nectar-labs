@@ -1,0 +1,25 @@
+1Click reference depth
+
+As of
+2026-11-09 22:22 UTC
+
+WNEAR → USDC
+signature verified
+1Click dry quotes for WNEAR → USDC
+SIZE	RATE (OUT PER IN)	IMPACT	WORST CASE (MINAMOUNTOUT)
+
+0.5×
+$500
+	3.627157	0 %	1 %
+
+1×
+$1,000
+	3.627652	0 %	0.98 %
+
+2×
+$2,000
+	3.627652	0 %	0.98 %
+NVDAx
+no 1Click route
+
+Dry quotes only (dry: true, no deposit) at 0.5×, 1× and 2× of the reference notional. Impact = 1 − rate(n) / rate(0.5×) from amountOut; worst case uses minAmountOut. Reference pairs, not the mock collateral.

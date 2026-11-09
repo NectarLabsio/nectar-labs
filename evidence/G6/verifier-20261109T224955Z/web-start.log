@@ -1,0 +1,12 @@
+
+> web@0.1.0 start /private/tmp/verify-G6b-1794264583/apps/web
+> next start -p 3100
+
+▲ Next.js 16.4.5
+- Local:         http://localhost:3100
+- Network:       http://192.168.1.7:3100
+✓ Ready in 64ms
+✓ Running next.config.ts took 13ms
+/private/tmp/verify-G6b-1794264583/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 start: `next start -p 3100`
+Exit status 143
