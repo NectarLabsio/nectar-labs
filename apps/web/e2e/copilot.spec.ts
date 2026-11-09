@@ -18,6 +18,8 @@ test.describe("copilot verifier", () => {
       await expect(checks.locator("li").filter({ hasText: "TDX quote verified" })).toContainText("failed");
       await expect(checks.locator("li").filter({ hasText: "report_data[32..64]" })).toContainText("passed");
       await expect(checks.locator("li").filter({ hasText: "RTMR3" })).toContainText("not run");
+      await expect(checks.locator("li").filter({ hasText: "NVIDIA NRAS (JWT signature not verified" })).toContainText("not run");
+      await expect(checks.locator("li").filter({ hasText: "model id unverified (F-078)" })).toContainText("not run");
       await expect(panel.getByText(/^Answer hidden:/)).toBeVisible();
       await expect(panel.locator(".copilot-answer")).toHaveCount(0);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

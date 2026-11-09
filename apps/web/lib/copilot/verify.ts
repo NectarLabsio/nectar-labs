@@ -1,5 +1,5 @@
 // NEAR AI Cloud copilot verification (WO-17). Pure, runs in the browser and in Node tests.
-// Facts: F-071 (attestation report, report_data layout, MRCONFIGID), F-072 (signature text formats).
+// Facts: F-074 (attestation report), F-075 (report_data right-padded, mr_config prefix), F-076 (signature), F-077 (NRAS), F-078 (model ids).
 // The answer is released only when every REQUIRED check passes; other checks are listed as "not run", never hidden.
 import { secp256k1 } from "@noble/curves/secp256k1.js";
 import { keccak_256 } from "@noble/hashes/sha3.js";
@@ -12,6 +12,9 @@ export interface Check { id: string; label: string; status: CheckStatus; detail:
 /** Server verdict for the Intel TDX quote (dcap-qvl runs in a server route; F-073). */
 export interface QuoteVerdict { ran: boolean; ok: boolean; tcbStatus: string | null; quoteSha256: string | null; detail: string }
 
+/** Server verdict for NVIDIA GPU attestation via NRAS (F-077; live mode only). JWT signature is not verified, same as the reference example. */
+export interface GpuVerdict { ran: boolean; ok: boolean; detail: string }
+
 /** Everything the browser needs to verify one copilot answer. Exact bytes: request body and response text are hashed as-is. */
 export interface CopilotBundle {
   source: "live" | "fixture";
@@ -21,6 +24,10 @@ export interface CopilotBundle {
   signature: { text: string; signature: string; signing_algo: string; signature_kind?: string };
   attestation: { signing_address: string; intel_quote: string | null; app_compose?: string | null };
   quoteVerdict: QuoteVerdict;
+  /** Absent in fixture mode → GPU check "not run". */
+  gpuVerdict?: GpuVerdict;
+  /** true/false = model id found/not found in the live `/v1/models` list; null/absent = list unavailable (F-078). */
+  modelListed?: boolean | null;
 }
 
 export interface Verification { verified: boolean; checks: Check[]; answer: string | null }
@@ -52,7 +59,7 @@ export function recoverPersonalSign(message: string, signatureHex: string): stri
   return pubkeyToAddress(pub);
 }
 
-/** F-071: report_data = 32-byte signer identity zero-padded (right) + 32-byte nonce. */
+/** F-075: report_data = signing address bytes right-padded with zeros to 32 bytes ‖ raw 32-byte nonce. */
 export function expectedReportData(signingAddress: string, nonceHex: string): string {
   const id = hexToBytes(strip0x(signingAddress));
   if (id.length > 32) throw new Error("signer identity longer than 32 bytes");
@@ -78,8 +85,9 @@ export function quoteFields(quoteHex: string): { reportData: string; mrConfigId:
   return { reportData: bytesToHex(q.slice(REPORT_DATA_OFF, REPORT_DATA_OFF + 64)), mrConfigId: bytesToHex(q.slice(MRCONFIG_OFF, MRCONFIG_OFF + 48)), teeType };
 }
 
-/** F-071: MRCONFIGID = 0x01 || sha256(app_compose) || 15 zero bytes. */
-export const expectedMrConfigId = (appCompose: string): string => `01${sha256Hex(appCompose)}${"00".repeat(15)}`;
+/** F-075: MRCONFIGID must start with 0x01 || sha256(app_compose); the remaining bytes are not checked (nearai-cloud-verifier does the same). */
+export const expectedMrConfigPrefix = (appCompose: string): string => `01${sha256Hex(appCompose)}`;
+export const mrConfigMatches = (mrConfigId: string, appCompose: string): boolean => mrConfigId.toLowerCase().startsWith(expectedMrConfigPrefix(appCompose));
 
 /** Pull the assistant text out of an OpenAI-compatible non-streaming response. */
 export function extractAnswer(responseText: string): string | null {
@@ -143,10 +151,15 @@ export function verifyBundle(b: CopilotBundle, nonceHex: string): Verification {
   add("quote_dcap", "TDX quote verified with @phala/dcap-qvl (server)", !v.ran ? "failed" : pass(v.ok && sameQuote), !v.ran ? `not run: ${v.detail}` : `${v.detail}${v.tcbStatus ? ` · TCB ${v.tcbStatus}` : ""}${sameQuote ? "" : " · quote hash mismatch"}`);
 
   // 5. Optional deeper checks: listed honestly.
-  if (b.attestation.app_compose && fields) add("mr_config_id", "MRCONFIGID = 01 || sha256(app_compose) || 0…", pass(fields.mrConfigId === expectedMrConfigId(b.attestation.app_compose)), `quote ${fields.mrConfigId.slice(0, 18)}…`, false);
-  else add("mr_config_id", "MRCONFIGID = 01 || sha256(app_compose) || 0…", "not run", "app_compose not present in the report", false);
+  const mrLabel = "MRCONFIGID starts with 01 || sha256(app_compose)";
+  if (b.attestation.app_compose && fields) add("mr_config_id", mrLabel, pass(mrConfigMatches(fields.mrConfigId, b.attestation.app_compose)), `quote ${fields.mrConfigId.slice(0, 18)}…`, false);
+  else add("mr_config_id", mrLabel, "not run", "app_compose not present in the report", false);
   add("rtmr3_replay", "RTMR3 event-log replay", "not run", "not implemented in this build", false);
-  add("gpu_nras", "NVIDIA GPU attestation (NRAS)", "not run", "needs a call to NVIDIA outside the allowed runtime origins", false);
+  const gpuLabel = "NVIDIA NRAS (JWT signature not verified — same as the reference example)";
+  const g = b.gpuVerdict;
+  add("gpu_nras", gpuLabel, !g || !g.ran ? "not run" : pass(g.ok), g ? g.detail : "live mode only; not run on the recorded fixture", false);
+  const ml = b.modelListed;
+  add("model_listed", "Model id listed by NEAR AI /v1/models", ml === true ? "passed" : ml === false ? "failed" : "not run", ml === true ? `${b.modelId} listed` : ml === false ? `${b.modelId} not in the live model list` : "model id unverified (F-078): live model list unavailable", false);
 
   const verified = checks.every((c) => !c.required || c.status === "passed");
   return { verified, checks, answer: verified ? extractAnswer(b.responseText) : null };
