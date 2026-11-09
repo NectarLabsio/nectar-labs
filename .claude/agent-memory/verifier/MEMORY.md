@@ -2,3 +2,4 @@
 - [Explorer WebFetch 403](reference_explorer_webfetch.md) — nearblocks blocks WebFetch; prove via RPC, no UA spoofing
 - [G3 run recipe](reference_g3_lighthouse_theme.md) — LH script + theme proof; write spec self-skips; cite position 1; EVIDENCE template note
 - [G4 OutLayer recipe](reference_g4_outlayer.md) — testnet-api by-request attestation route; mainnet-host id trap; get_settlement missing
+- [G6 1Click recipe](reference_g6_oneclick.md) — feed (not keeper) commands; C-014 amountOutUsd trap; web badge static

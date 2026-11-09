@@ -1,0 +1,290 @@
+
+> feed@0.1.0 test /private/tmp/verify-G6-1794262313/services/feed
+> node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+
+TAP version 13
+# Subtest: NEP-297 parsing
+    # Subtest: accepts nectar events and rejects everything else with a reason
+    ok 1 - accepts nectar events and rejects everything else with a reason
+      ---
+      duration_ms: 0.522792
+      type: 'test'
+      ...
+    1..1
+ok 1 - NEP-297 parsing
+  ---
+  duration_ms: 0.858292
+  type: 'suite'
+  ...
+# Subtest: indexer store
+    # Subtest: ingests logs idempotently (restart / replay safe)
+    ok 1 - ingests logs idempotently (restart / replay safe)
+      ---
+      duration_ms: 0.835875
+      type: 'test'
+      ...
+    # Subtest: view polling writes snapshots, quotes and Open→Settling transitions
+    ok 2 - view polling writes snapshots, quotes and Open→Settling transitions
+      ---
+      duration_ms: 0.828667
+      type: 'test'
+      ...
+    # Subtest: backs off on RPC failure and records the error
+    ok 3 - backs off on RPC failure and records the error
+      ---
+      duration_ms: 1.245292
+      type: 'test'
+      ...
+    # Subtest: tx-status source feeds receipt logs once per tx
+    ok 4 - tx-status source feeds receipt logs once per tx
+      ---
+      duration_ms: 0.963459
+      type: 'test'
+      ...
+    1..4
+ok 2 - indexer store
+  ---
+  duration_ms: 4.014875
+  type: 'suite'
+  ...
+# Subtest: REST API
+    # Subtest: serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+    ok 1 - serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+      ---
+      duration_ms: 23.263958
+      type: 'test'
+      ...
+    # Subtest: healthz is 503 when the indexer has not polled recently
+    ok 2 - healthz is 503 when the indexer has not polled recently
+      ---
+      duration_ms: 0.46325
+      type: 'test'
+      ...
+    # Subtest: openapi.yaml documents exactly the served routes
+    ok 3 - openapi.yaml documents exactly the served routes
+      ---
+      duration_ms: 0.1585
+      type: 'test'
+      ...
+    1..3
+ok 3 - REST API
+  ---
+  duration_ms: 24.092958
+  type: 'suite'
+  ...
+# Subtest: Feed MCP (in-memory transport)
+    # Subtest: lists exactly the four read-only tools
+    ok 1 - lists exactly the four read-only tools
+      ---
+      duration_ms: 8.458416
+      type: 'test'
+      ...
+    # Subtest: get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+    ok 2 - get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+      ---
+      duration_ms: 3.045458
+      type: 'test'
+      ...
+    # Subtest: list_quotes never returns buyer identities
+    ok 3 - list_quotes never returns buyer identities
+      ---
+      duration_ms: 3.092833
+      type: 'test'
+      ...
+    # Subtest: preview_borrow relays the contract view; refuses without live views
+    ok 4 - preview_borrow relays the contract view; refuses without live views
+      ---
+      duration_ms: 3.996125
+      type: 'test'
+      ...
+    # Subtest: explain_limit renders the D-009 formula with live numbers and the contract check
+    ok 5 - explain_limit renders the D-009 formula with live numbers and the contract check
+      ---
+      duration_ms: 1.419542
+      type: 'test'
+      ...
+    # Subtest: DB-only mode serves from the Feed store; unknown symbol is a tool error
+    ok 6 - DB-only mode serves from the Feed store; unknown symbol is a tool error
+      ---
+      duration_ms: 1.093583
+      type: 'test'
+      ...
+    # Subtest: usd() formats e6 amounts
+    ok 7 - usd() formats e6 amounts
+      ---
+      duration_ms: 0.052959
+      type: 'test'
+      ...
+    1..7
+ok 4 - Feed MCP (in-memory transport)
+  ---
+  duration_ms: 21.713959
+  type: 'suite'
+  ...
+# Subtest: Feed MCP (Streamable HTTP, stateless)
+    # Subtest: serves tools/list and tools/call over POST /mcp
+    ok 1 - serves tools/list and tools/call over POST /mcp
+      ---
+      duration_ms: 29.318875
+      type: 'test'
+      ...
+    1..1
+ok 5 - Feed MCP (Streamable HTTP, stateless)
+  ---
+  duration_ms: 29.510417
+  type: 'suite'
+  ...
+# Subtest: neardata block shape (captured fixture)
+    # Subtest: reads the height and extracts only nectar-core receipts
+    ok 1 - reads the height and extracts only nectar-core receipts
+      ---
+      duration_ms: 4.37825
+      type: 'test'
+      ...
+    # Subtest: skips failed receipts
+    ok 2 - skips failed receipts
+      ---
+      duration_ms: 0.347833
+      type: 'test'
+      ...
+    1..2
+ok 6 - neardata block shape (captured fixture)
+  ---
+  duration_ms: 5.11825
+  type: 'suite'
+  ...
+# Subtest: NeardataSource
+    # Subtest: ingests the event, advances the cursor, and is idempotent on replay
+    ok 1 - ingests the event, advances the cursor, and is idempotent on replay
+      ---
+      duration_ms: 4.485917
+      type: 'test'
+      ...
+    # Subtest: starts at the final block without a cursor or start height, and caps blocks per poll
+    ok 2 - starts at the final block without a cursor or start height, and caps blocks per poll
+      ---
+      duration_ms: 0.462791
+      type: 'test'
+      ...
+    # Subtest: rejects a block whose height does not match the request
+    ok 3 - rejects a block whose height does not match the request
+      ---
+      duration_ms: 0.409292
+      type: 'test'
+      ...
+    # Subtest: a Neardata outage is a poll error with backoff, not a crash
+    ok 4 - a Neardata outage is a poll error with backoff, not a crash
+      ---
+      duration_ms: 0.287583
+      type: 'test'
+      ...
+    1..4
+ok 7 - NeardataSource
+  ---
+  duration_ms: 5.746917
+  type: 'suite'
+  ...
+# Subtest: 1Click recorded fixture (F-062)
+    # Subtest: the recorded live dry quote verifies with the SDK manager key
+    ok 1 - the recorded live dry quote verifies with the SDK manager key
+      ---
+      duration_ms: 16.136958
+      type: 'test'
+      ...
+    # Subtest: any tampering breaks the signature
+    ok 2 - any tampering breaks the signature
+      ---
+      duration_ms: 3.336209
+      type: 'test'
+      ...
+    # Subtest: the token list has no NVDA route (F-063)
+    ok 3 - the token list has no NVDA route (F-063)
+      ---
+      duration_ms: 0.083416
+      type: 'test'
+      ...
+    1..3
+ok 8 - 1Click recorded fixture (F-062)
+  ---
+  duration_ms: 19.926542
+  type: 'suite'
+  ...
+# Subtest: 1Click helpers
+    # Subtest: toE6 parses decimal strings without floats
+    ok 1 - toE6 parses decimal strings without floats
+      ---
+      duration_ms: 0.164125
+      type: 'test'
+      ...
+    # Subtest: unitsForUsd sizes the notional in base units
+    ok 2 - unitsForUsd sizes the notional in base units
+      ---
+      duration_ms: 0.049333
+      type: 'test'
+      ...
+    # Subtest: buildDryQuote always sets dry:true and INTENTS rails
+    ok 3 - buildDryQuote always sets dry:true and INTENTS rails
+      ---
+      duration_ms: 0.695166
+      type: 'test'
+      ...
+    1..3
+ok 9 - 1Click helpers
+  ---
+  duration_ms: 1.029417
+  type: 'suite'
+  ...
+# Subtest: 1Click client is dry-only (Q-007)
+    # Subtest: refuses a non-dry body before any network call
+    ok 1 - refuses a non-dry body before any network call
+      ---
+      duration_ms: 0.284834
+      type: 'test'
+      ...
+    1..1
+ok 10 - 1Click client is dry-only (Q-007)
+  ---
+  duration_ms: 0.445
+  type: 'suite'
+  ...
+# Subtest: 1Click sampler
+    # Subtest: NVDAx: stores "no_route" without sending a quote; ref pair: stores the verified sample
+    ok 1 - NVDAx: stores "no_route" without sending a quote; ref pair: stores the verified sample
+      ---
+      duration_ms: 14.635709
+      type: 'test'
+      ...
+    # Subtest: drops a sample whose signature does not verify
+    ok 2 - drops a sample whose signature does not verify
+      ---
+      duration_ms: 3.302541
+      type: 'test'
+      ...
+    1..2
+ok 11 - 1Click sampler
+  ---
+  duration_ms: 18.14475
+  type: 'suite'
+  ...
+# Subtest: 1Click live (NECTAR_IT=1; read-only, dry only)
+    # Subtest: fetches tokens and gets a verified dry quote for the reference pair
+    ok 1 - fetches tokens and gets a verified dry quote for the reference pair
+      ---
+      duration_ms: 1086.463792
+      type: 'test'
+      ...
+    1..1
+ok 12 - 1Click live (NECTAR_IT=1; read-only, dry only)
+  ---
+  duration_ms: 1086.706167
+  type: 'suite'
+  ...
+1..12
+# tests 32
+# suites 12
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1295.921625

@@ -1,0 +1,16 @@
+{
+ "verify": true,
+ "correlationId": "f8df1d4c-99c8-4599-86f9-7bc881c4ced8",
+ "timestamp": "2026-11-09T21:34:05.080Z",
+ "dry": true,
+ "swapType": "EXACT_INPUT",
+ "origin": "nep141:wrap.near",
+ "dest": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+ "amountIn": "276243093922651933701657458",
+ "amountInUsd": "1000.000000000000",
+ "amountOut": "1004397702",
+ "amountOutFormatted": "1004.397702",
+ "minAmountOut": "994353724",
+ "amountOutUsd": "1000.000000000000",
+ "depositAddress": null
+}

@@ -1,0 +1,17 @@
+
+Running 12 tests using 5 workers
+
+  ✓   5 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (2.3s)
+  ✓   1 [desktop] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (3.4s)
+  ✓   2 [phone] › e2e/p1.spec.ts:15:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (3.5s)
+  ✓   6 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (1.3s)
+  ✓   4 [desktop] › e2e/p1.spec.ts:15:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (3.7s)
+  ✓   3 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (3.9s)
+  ✓   7 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (1.3s)
+  ✓  10 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (1.4s)
+  ✓   8 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed light (2.6s)
+  ✓  11 [phone] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (2.2s)
+  ✓   9 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (3.6s)
+  ✓  12 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed light (2.2s)
+
+  12 passed (14.1s)

@@ -8,7 +8,7 @@
 | G3 web E2E | PASS | 2026-11-09T21:15Z | 176914f | evidence/G3/verifier-20261109T2115Z/ (e2e 112 pass / 0 fail / 2 skip = write spec; LH 12/12 = 100; write flow cited from 20:57Z run, not repeated; prior FAIL 20:57Z c940dec: see §G3) |
 | G4 OutLayer | PASS | 2026-11-09T22:10Z | d87eef6 | evidence/G4/verifier-20261109T2210Z/ (attestation via testnet-api.outlayer.ai/attestations/by-request/15114, TDX quote present, not verified; gates.md get_settlement view missing, criterion checked from events; fills = max until WO-10b) |
 | G5 oracle | pending | | | |
-| G6 1Click depth | pending | | | |
+| G6 1Click depth | FAIL | 2026-11-09T22:14Z | 578b006 | evidence/G6/verifier-20261109T221158Z/ (live dry quote verifies; NVDAx badge renders; FAIL: Feed shows no implied depth (badge is a hard-coded set, not wired to the sampler) and the sampler's gap_bps uses amountOutUsd, which C-014 says not to use; see §G6) |
 | G7 Solana + signer | pending | | | |
 | G8 copilot | pending | | | |
 | G9 fresh-clone rehearsal | pending | | | |
@@ -23,6 +23,39 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G6
+
+### G6 — 1Click depth — FAIL — 2026-11-09T22:14Z — commit 578b006
+Fresh clone /tmp/verify-G6-1794262313 at main 578b006. `pnpm i --frozen-lockfile` exit 0. Logs: evidence/G6/verifier-20261109T221158Z/.
+gates.md line (`pnpm --filter keeper test:oneclick`) is out of date. The sampler is in services/feed (WO-11a), so the correct commands are:
+```
+$ NECTAR_IT=1 pnpm --filter feed test                       # feed-test-live.log
+ok 8 - 1Click recorded fixture (F-062)   (fixture verifies; tampering breaks the signature)
+ok 10 - 1Click client is dry-only (Q-007) (non-dry body refused before any network call)
+ok 11 - 1Click sampler (NVDAx -> "no_route", no request; bad signature -> dropped)
+ok 12 - 1Click live (NECTAR_IT=1; read-only, dry only)
+    ok 1 - fetches tokens and gets a verified dry quote for the reference pair   (1086 ms)
+# tests 32  pass 32  fail 0  skipped 0
+$ node <scratch>/vq.mjs services/feed/test/fixtures/oneclick-quote-ref.json   # fixture-verify.json (offline, SDK 0.1.26)
+verify true · correlationId f8df1d4c-99c8-4599-86f9-7bc881c4ced8 · 2026-11-09T21:34:05Z · dry true · EXACT_INPUT
+nep141:wrap.near -> nep141:17208628…133a1 (USDC) · amountIn 276.2431 wNEAR · amountInUsd 1000.000000000000
+amountOut 1004397702 (1004.397702 USDC) · minAmountOut 994353724 · amountOutUsd 1000.000000000000 · no depositAddress
+$ curl -sS https://1click.chaindefuser.com/v0/tokens   # 22:11:58Z, HTTP 200, tokens.json + tokens-check.txt
+count 216 · NVDA/xStock/stock/equity/TSLA/AAPL/SPYx/QQQx matches: none · only *x symbol: USDCx (a stablecoin) · F-063 holds
+near wNEAR nep141:wrap.near 3.64 · near USDC 0.999486
+$ pnpm --filter web build                                   # exit 0, web-build.log
+$ PW_CHANNEL=chrome pnpm --filter web exec playwright test -g feed   # pw-feed.log
+12 passed (14.1s): p1 "feed shows oracle badge, no 1Click route for NVDAx…" desktop + phone; shell /feed dark/light axe clean; testnet feed lists NVDAx; screenshots
+```
+The live test does not log the reference pair or the response; it runs the sampler with default config (`near:wNEAR -> near:USDC`, $1,000) and asserts at least one `verified` row and 0 dropped. The only signed quote stored in the repo is the fixture above, which re-verifies offline. I made no POST myself. The live test posted one dry quote (dry is checked in code at oneclick.ts:142, and only GET /v0/tokens and POST /v0/quote are allowed at l.13/124).
+Screenshot: evidence/G6/verifier-20261109T221158Z/feed-desktop-dark.png (from this run's screens spec).
+Criteria:
+- Signed quote recorded and verified: PASS (live verify = true for the wNEAR->USDC ref pair; the fixture re-verifies offline).
+- Assets with no route show "no 1Click route": PASS (web /feed badge for NVDAx; MCP `get_exit_capacity` returns status "no 1Click route" from a sampler `no_route` row). However, the web badge comes from a hard-coded `NO_1CLICK_ROUTE = new Set(["NVDAx"])` (apps/web/components/OracleBadge.tsx:6), not from sampler data.
+- Implied depth shown on Feed: FAIL. apps/web has no oneclick/gap/depth sample consumer, so /feed never shows a depth number for the reference pair. Only the MCP `explain_limit`/`get_exit_capacity` show `gap_bps`.
+- C-014: FAIL. services/feed/src/oneclick.ts:179-181 computes `gap_bps = (amountInUsd - amountOutUsd)/amountInUsd`, which is exactly the field C-014/F-064 say not to use. On the fixture it gives 0 bps. The realised `amountOut` 1004.397702 USDC against $1,000 in (token-list price) would read about -44 bps, and `minAmountOut` 994.353724 about +56 bps. The stored response keeps `amountOut`, so samples can be recomputed.
+FAIL reasons: (1) the depth metric uses `amountOutUsd`, contrary to FACTS C-014/F-064; (2) /feed shows no implied depth, and the no-route badge is static rather than driven by the sampler. The gates.md wording ("Feed shows R_c or no 1Click route") alone would pass on the NVDAx badge, but the orchestrator's criteria do not. gates.md G6 command also needs to change to the feed commands above.
 
 ## G4
 

@@ -16,7 +16,8 @@ G4: RPC view outlayer.testnet estimate_execution_cost with packages/config/outla
     trigger txs from evidence/G4/run-*.log via EXPERIMENTAL_tx_status → quoter_result disc_bps within [0, quote max] (run B) and
     quoter_fallback (run A); attestation GET https://testnet-api.outlayer.ai/attestations/by-request/<request_id> (F-168/F-169).
 G5: near contract call-function as-read-only $ORACLE get_price json-args '{"price_identifier":"'$NVDA_PRICE_ID'"}' network-config testnet now → publish_time < 600 s old; cargo test -p nectar-core oracle_rejects
-G6: pnpm --filter keeper test:oneclick (dry quote + verifyQuoteSignature) ; Feed shows R_c or "no 1Click route"
+G6: NECTAR_IT=1 pnpm --filter feed test (live dry quotes verify; dry-only enforced); curl /v0/tokens (no equity, F-063);
+    GET /api/oneclick (3-size impact from base units, C-014) ; web /feed renders the 1Click panel + NVDAx route status from the API
 G7: cd solana && anchor test 2>&1 | tail -40; pnpm --filter keeper test:settle-devnet (uses config program id); open both explorer links
 G8: pnpm --filter web test:copilot (fixture) [+ --live if NEAR_AI_API_KEY present]
 G9: follow README.md top to bottom in ≤ 15 min; pnpm demo:testnet; pnpm verify; pnpm --filter docs-site build; gitleaks detect --log-opts=--all
