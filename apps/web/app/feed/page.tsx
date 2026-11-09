@@ -10,6 +10,8 @@ import {
   valueUsdE6,
   type CollateralView,
   type ExitCapacity,
+  oneClickRouteStatus,
+  type FeedOneClick,
   type FeedSettlement,
   type FeedSettlements,
   type QuoterConfigView,
@@ -17,8 +19,9 @@ import {
 import { useChain, useView } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { CramerFormula, FORMULA_TERMS } from "@/components/Formula";
-import { NO_1CLICK_ROUTE, OracleBadge, optionalView, pricingLabel } from "@/components/OracleBadge";
+import { OracleBadge, optionalView, pricingLabel } from "@/components/OracleBadge";
 import { FeedApiNotice, useFeedApi } from "@/components/useFeedApi";
+import { OneClickPanel, RouteStatusBadge } from "@/components/OneClickPanel";
 import { txUrl } from "@/lib/env";
 
 interface Row { c: CollateralView; cap: ExitCapacity; atStake: bigint; gap: bigint; upliftBps: number; upliftUsd: bigint }
@@ -40,6 +43,7 @@ export default function FeedPage() {
     return { rows, quoter };
   }, []);
   const settlements = useFeedApi<FeedSettlements>("api/settlements?limit=20");
+  const oneclick = useFeedApi<FeedOneClick>("api/oneclick");
   const first = data.data?.rows[0];
   const firstCfg = config.collaterals[0];
   const pricing = pricingLabel(data.data?.quoter);
@@ -110,7 +114,7 @@ export default function FeedPage() {
                     cell: (r) => (
                       <span className="stack-sm">
                         {formatUsdE6(r.cap.d_usd_e6, 0)}
-                        {NO_1CLICK_ROUTE.has(r.c.symbol) ? <Badge kind="fallback" title="No 1Click route for this asset (F-063); D is owner-set">no 1Click route</Badge> : null}
+                        <RouteStatusBadge status={oneClickRouteStatus(oneclick.data, r.c.symbol)} />
                       </span>
                     ),
                   },
@@ -129,6 +133,7 @@ export default function FeedPage() {
             Exit gap = collateral at stake − (Q + R + D). Uplift = effective limit − static base LTV. Owner oracle on testnet unless a Pyth source is set (disclosed); mock collateral.
           </p>
         </Gate>
+        <OneClickPanel state={oneclick} />
         <section className="stack" aria-labelledby="settlements-h">
           <h2 id="settlements-h">Settlement history</h2>
           <FeedApiNotice state={settlements} what="Settlements" />

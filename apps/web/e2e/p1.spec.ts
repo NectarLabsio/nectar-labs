@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
 import { PENDING_MSG, TESTNET_PENDING, prime } from "./helpers";
 
@@ -14,6 +16,9 @@ test.describe("P1 read-only surfaces", () => {
 
   test("feed shows oracle badge, no 1Click route for NVDAx, settlement history", async ({ page }) => {
     test.skip(TESTNET_PENDING, PENDING_MSG);
+    // NVDAx route status is sampled by the Feed API (/api/oneclick), not hard-coded: serve a fixture of that shape.
+    const body = readFileSync(resolve(import.meta.dirname, "fixtures/oneclick.json"), "utf8");
+    await page.route("**/api/indexer/api/oneclick", (r) => r.fulfill({ status: 200, contentType: "application/json", body }));
     await page.goto("/feed");
     await expect(page.getByText("no 1Click route").first()).toBeVisible({ timeout: 20_000 });
     await expect(page.getByText(/^(owner|Pyth) · \d+s · /).first()).toBeVisible();
@@ -42,5 +47,6 @@ test.describe("P1 read-only surfaces", () => {
   test("indexer proxy only passes documented paths", async ({ request }) => {
     expect((await request.get("/api/indexer/admin")).status()).toBe(404);
     expect([200, 502, 503]).toContain((await request.get("/api/indexer/api/settlements?limit=5")).status());
+    expect([200, 502, 503]).toContain((await request.get("/api/indexer/api/oneclick")).status());
   });
 });

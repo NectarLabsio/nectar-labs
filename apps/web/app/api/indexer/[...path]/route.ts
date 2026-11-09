@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 // Same-origin proxy to the Feed API (services/feed/openapi.yaml): the browser never talks to the indexer host directly.
 // Only the documented read-only paths pass; query strings are re-built from an allow-list.
-const ALLOWED = [/^api\/feed$/, /^api\/settlements$/, /^healthz$/, /^api\/asset\/[A-Za-z0-9._-]{1,32}$/];
+const ALLOWED = [/^api\/feed$/, /^api\/settlements$/, /^api\/oneclick$/, /^healthz$/, /^api\/asset\/[A-Za-z0-9._-]{1,32}$/];
 const QUERY = ["limit", "position_id"] as const;
 
 export async function GET(req: Request, ctx: { params: Promise<{ path: string[] }> }) {
