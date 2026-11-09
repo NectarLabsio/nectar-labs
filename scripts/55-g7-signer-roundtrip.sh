@@ -17,16 +17,21 @@ ftc() { ARGS=$(jq -cn --arg r "$CORE" --arg a "$3" --arg m "$4" '{receiver_id:$r
 health() { bash "$ROOT/scripts/50-verify.sh" 2>/dev/null | sed -n '/== quotes ==/,/== explorer ==/p'; }
 
 log "1: signer config + remote chain (placeholder vault program)"
-call "$CORE" set_signer_config "$(jq -cn --arg a "$(cfg .signer.account)" --arg p "$(cfg .signer.path)" '{account:$a, path:$p, gas_tgas:30, expiry_s:3600}')" "$OWNER"
-call "$CORE" set_remote_chain "$(jq -cn --arg v "$VAULT_PLACEHOLDER" '{symbol:"NVDAx", remote_chain:{chain_id:"solana-devnet", vault_program:$v, mpc_domain_id:1}}')" "$OWNER"
-log "2: buyer1 funds a \$1,000 quote @ 300 bps with a Solana recipient"
-call "$USDC" mint "{\"account_id\":\"$B1\",\"amount\":\"1000000000\"}" "$OWNER"
-ftc "$USDC" "$B1" 1000000000 "$(jq -cn --arg r "$RECIPIENT" '{FundPappusQuote:{collateral:"NVDAx", max_discount_bps:300, notice_period_ns:"604800000000000", buyer_remote_recipient:$r}}')"
-log "3: borrower1 opens 3 NVDAx / \$235 at \$112"
+if [ "${SKIP_CONFIG:-0}" != 1 ]; then
+  call "$CORE" set_signer_config "$(jq -cn --arg a "$(cfg .signer.account)" --arg p "$(cfg .signer.path)" '{account:$a, path:$p, gas_tgas:30, expiry_s:3600}')" "$OWNER"
+  call "$CORE" set_remote_chain "$(jq -cn --arg v "$VAULT_PLACEHOLDER" '{symbol:"NVDAx", remote_chain:{chain_id:"solana-devnet", vault_program:$v, mpc_domain_id:1}}')" "$OWNER"
+fi
+# The remote leg settles only if its priced fill is the cheapest quote (settlement order) — keep QUOTE_MAX_BPS below other fills.
+QMAX=${QUOTE_MAX_BPS:-300}; QAMT=${QUOTE_USD_E6:-1000000000}
+P_OPEN=${PRICE_OPEN_E6:-112000000}; P_DROP=${PRICE_DROP_E6:-100000000}; BORROW=${BORROW_E6:-235000000}
+log "2: buyer1 funds a quote ($QAMT e6 @ $QMAX bps) with a Solana recipient"
+call "$USDC" mint "{\"account_id\":\"$B1\",\"amount\":\"$QAMT\"}" "$OWNER"
+ftc "$USDC" "$B1" "$QAMT" "$(jq -cn --arg r "$RECIPIENT" --argjson q "$QMAX" '{FundPappusQuote:{collateral:"NVDAx", max_discount_bps:$q, notice_period_ns:"604800000000000", buyer_remote_recipient:$r}}')"
+log "3: borrower1 opens 3 NVDAx / $BORROW e6 at price $P_OPEN e6"
 call "$NVDAX" mint "{\"account_id\":\"$BR\",\"amount\":\"3000000\"}" "$OWNER"
-call "$CORE" update_owner_price '{"symbol":"NVDAx","price_usd_e6":"112000000"}' "$OWNER"
-ftc "$NVDAX" "$BR" 3000000 '{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"235000000","pre_liq_ltv_bps":7500}}'
-log "4: price \$100 → triggerable"; call "$CORE" update_owner_price '{"symbol":"NVDAx","price_usd_e6":"100000000"}' "$OWNER"; health
+call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"$P_OPEN\"}" "$OWNER"
+ftc "$NVDAX" "$BR" 3000000 "$(jq -cn --arg b "$BORROW" '{LockCollateralAndBorrow:{collateral:"NVDAx", borrow_usd_e6:$b, pre_liq_ltv_bps:7500}}')"
+log "4: price $P_DROP e6 → triggerable"; call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"$P_DROP\"}" "$OWNER"; health
 P=$(bash "$ROOT/scripts/50-verify.sh" 2>/dev/null | grep TRIGGERABLE | sed -E 's/^#([0-9]+).*/\1/' | head -1)
 [ -n "$P" ] || { echo "no triggerable position" >&2; exit 2; }
 log "5: keeper triggers #$P (expect quoter → sign → settlement_signed)"
