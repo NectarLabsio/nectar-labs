@@ -8,7 +8,9 @@ import type {
   ExitCapacity,
   HealthView,
   PoolView,
+  OracleSource,
   PositionView,
+  QuoterConfigView,
   QuoteView,
   U128,
   U64,
@@ -70,6 +72,9 @@ export class NectarViews {
   getHealth = (position_id: U64) => this.v<HealthView>("get_health", { position_id });
   getPool = () => this.v<PoolView>("get_pool");
   previewBorrow = (symbol: string, units: U128, borrow_usd_e6: U128) => this.v<BorrowPreview>("preview_borrow", { symbol, units, borrow_usd_e6 });
+  // P1 views: reject with RpcError on the P0 deployment (method not found); callers render "P0 static pricing" / "owner oracle".
+  getQuoterConfig = () => this.v<QuoterConfigView | null>("get_quoter_config");
+  getOracleSource = (symbol: string) => this.v<OracleSource | null>("get_oracle_source", { symbol });
 
   /** NEP-141 `ft_balance_of` on any token. */
   ftBalanceOf = (token: string, account_id: string) => this.t.call<U128>(token, "ft_balance_of", { account_id });

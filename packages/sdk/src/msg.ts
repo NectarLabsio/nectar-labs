@@ -5,6 +5,8 @@ import type {
   FtOnTransferMsg,
   FundPappusQuoteArgs,
   LockCollateralAndBorrowArgs,
+  OracleSource,
+  QuoterConfigInput,
   U128,
   U64,
 } from "./types";
@@ -151,4 +153,33 @@ export const tx = {
     coreCall(core, "set_reserve", { symbol, reserve_usd_e6: assertU128(reserve_usd_e6, "reserve_usd_e6") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set reserve" }),
   updateOwnerPrice: (core: string, symbol: string, price_usd_e6: U128) =>
     coreCall(core, "update_owner_price", { symbol, price_usd_e6: assertU128(price_usd_e6, "price_usd_e6") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Update owner price" }),
+  // P1 owner calls (interface-p1.md "Contract additions"); 0 deposit like the P0 owner calls.
+  setQuoterPin: (core: string, project_id: string, version_key: string) =>
+    coreCall(core, "set_quoter_pin", { project_id, version_key }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: project_id ? "Pin quoter" : "Disable quoter (P0 static pricing)" }),
+  setQuoterConfig: (core: string, c: QuoterConfigInput) =>
+    coreCall(
+      core,
+      "set_quoter_config",
+      {
+        deposit_yocto: assertU128(c.deposit_yocto, "deposit_yocto"),
+        gas_tgas: assertInt(c.gas_tgas, "gas_tgas", 1, 300),
+        max_instructions: assertU64(c.max_instructions, "max_instructions"),
+        max_memory_mb: assertInt(c.max_memory_mb, "max_memory_mb", 1, 0xffff_ffff),
+        max_execution_seconds: assertInt(c.max_execution_seconds, "max_execution_seconds", 1, 0xffff_ffff),
+      },
+      { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set quoter config" },
+    ),
+  setVolBps: (core: string, symbol: string, vol_bps: number) =>
+    coreCall(core, "set_vol_bps", { symbol, vol_bps: assertInt(vol_bps, "vol_bps", 0, 0xffff) }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set volatility" }),
+  setOracleSource: (core: string, symbol: string, source: OracleSource) => {
+    if (source !== "Owner" && !/^(0x)?[0-9a-fA-F]{64}$/.test(source.Pyth.price_identifier)) throw new Error("price_identifier must be 32-byte hex");
+    return coreCall(core, "set_oracle_source", { symbol, source }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: source === "Owner" ? "Use owner oracle" : "Use Pyth oracle" });
+  },
+  setMaxConfBps: (core: string, max_conf_bps: number) =>
+    coreCall(core, "set_max_conf_bps", { max_conf_bps: assertInt(max_conf_bps, "max_conf_bps", 0, 10_000) }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set max oracle confidence" }),
 };
+
+export function assertInt(v: number, field: string, lo: number, hi: number): number {
+  if (!Number.isInteger(v) || v < lo || v > hi) throw new Error(`${field} must be an integer in [${lo}, ${hi}]`);
+  return v;
+}

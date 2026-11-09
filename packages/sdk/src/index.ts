@@ -6,3 +6,4 @@ export * from "./events";
 export * from "./format";
 export * from "./views";
 export * from "./config";
+export * from "./feed";
