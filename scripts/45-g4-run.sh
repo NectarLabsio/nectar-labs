@@ -44,6 +44,20 @@ if [ "$STEP" = C ]; then
   [ -n "$P" ] || { echo "no triggerable position" >&2; exit 2; }
   log "C4: keeper triggers #$P (expect quoter_result with disc_bps below 400)"; trigger "$P"; sleep 30; health
 fi
+if [ "$STEP" = D ]; then
+  # D) retry of C after the access-condition fix: re-store secrets (Logic And[signer keeper, predecessor core, wasm hash]), open #4
+  #    (2 NVDAx, $170, pre-liq 7,500 at $125 → ltv 6,800), price $112 → 7,589 triggerable.
+  log "D1: re-store demo secrets with the corrected access condition"; node "$ROOT/scripts/35-quoter-secrets.mjs" --quote 1:3000:2000 --profile mm-demo
+  log "D2: borrower1 opens position #4 at \$125"
+  MSG='{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"170000000","pre_liq_ltv_bps":7500}}'
+  ARGS=$(jq -cn --arg r "$CORE" --arg m "$MSG" '{receiver_id:$r, amount:"2000000", msg:$m}')
+  near contract call-function as-transaction "$NVDAX" ft_transfer_call json-args "$ARGS" \
+    prepaid-gas '300 Tgas' attached-deposit '1 yoctoNEAR' sign-as "$BR" network-config testnet sign-with-keychain send </dev/null
+  log "D3: price \$112"; owner update_owner_price '{"symbol":"NVDAx","price_usd_e6":"112000000"}'; health
+  P=$(bash "$ROOT/scripts/50-verify.sh" 2>/dev/null | grep TRIGGERABLE | sed -E 's/^#([0-9]+).*/\1/' | head -1)
+  [ -n "$P" ] || { echo "no triggerable position" >&2; exit 2; }
+  log "D4: keeper triggers #$P (expect quoter_result with disc_bps below 400)"; trigger "$P"; sleep 30; health
+fi
 if [ "$STEP" = B ] || [ "$STEP" = all ]; then
   log "B1: pin the published quoter"; bash "$ROOT/scripts/30-quoter-publish.sh" pin
   log "B2: price \$140"; owner update_owner_price '{"symbol":"NVDAx","price_usd_e6":"140000000"}'; health

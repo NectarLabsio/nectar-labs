@@ -24,8 +24,15 @@ const owner = cfg.accounts.owner;
 const projectId = cfg.outlayer.project_id;
 const outlayer = cfg.outlayer.account;
 const api = process.env.OUTLAYER_API ?? 'https://testnet-api.outlayer.ai';
-// Who may use the secrets: the contract that calls request_execution, plus the owner (configurable; F-167 default is owner only).
-const access = { Whitelist: { accounts: (process.env.SECRETS_ACCESS ?? `${cfg.accounts.core},${owner}`).split(',') } };
+// Who may open the secrets (OutLayer source, keystore-worker/src/types.rs + contract AccessConditionV1; FACTS row pending):
+// plain Whitelist leaves are judged on the transaction SIGNER (the keeper, whose key signs trigger_preliquidation); Predecessor{…}
+// re-judges on the calling contract; WasmHash pins the executed code. Default: keeper-signed AND relayed by nectar-core AND our wasm.
+// (G4 run C, request 15145, was denied with Whitelist[core, owner] — the signer is the keeper.) Override with SECRETS_ACCESS_JSON.
+const access = process.env.SECRETS_ACCESS_JSON ? JSON.parse(process.env.SECRETS_ACCESS_JSON) : { Logic: { operator: 'And', conditions: [
+  { Whitelist: { accounts: [cfg.accounts.keeper] } },
+  { Predecessor: { condition: { Whitelist: { accounts: [cfg.accounts.core] } } } },
+  { WasmHash: { hash: cfg.outlayer.version_key } },
+] } };
 
 if (!quotes.length || String(projectId).startsWith('TODO')) {
   console.error('usage: --quote <id>:<q_bps>:<gamma_bps> (repeat); requires outlayer.project_id in config.yaml'); process.exit(2);
