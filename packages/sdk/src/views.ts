@@ -23,6 +23,7 @@ import type {
   U64,
 } from "./types";
 import type { PendingRelease } from "./solana";
+import { NOTE_PAGE, type NoteToken, type ReserveNoteView, type ReserveView } from "./notes";
 
 /** interface-v7 §A6: v2 answers `contract_version()` with a "2." prefix ("2.0.0-v7"). Anything else (v1: "nectar-core 0.1.0 p2") is v1. */
 export function contractGeneration(version: string | null | undefined): ContractGeneration {
@@ -118,6 +119,17 @@ export class NectarViews {
   previewSelfSettle = (position_id: U64) => this.v<SelfSettlePreview>("preview_self_settle", { position_id });
   /** interface-v7 §B (WO-21): keeper-attestation flag and OutLayer vault_read pin. */
   getRemoteConfig = () => this.v<RemoteConfigView>("get_remote_config");
+  // Position Notes (interface-v7 §C, WO-22): NEP-171 / NEP-181, pages capped at 20.
+  nftToken = (token_id: string) => this.v<NoteToken | null>("nft_token", { token_id });
+  nftTokenSvg = (token_id: string) => this.v<string>("nft_token_svg", { token_id });
+  nftTransferLocked = (token_id: string) => this.v<boolean>("nft_transfer_locked", { token_id });
+  nftSupplyForOwner = (account_id: string) => this.v<U128>("nft_supply_for_owner", { account_id });
+  /** `from_index` is a U128 string per NEP-181. */
+  nftTokensForOwner = (account_id: string, from_index = 0, limit = NOTE_PAGE) =>
+    this.v<NoteToken[]>("nft_tokens_for_owner", { account_id, from_index: String(from_index), limit: Math.min(limit, NOTE_PAGE) });
+  // Nectar Reserve (WO-23b; PROVISIONAL until it merges).
+  getReserve = (symbol: string) => this.v<ReserveView | null>("get_reserve", { symbol });
+  getReserveNote = (note_id: string) => this.v<ReserveNoteView | null>("get_reserve_note", { note_id });
   // P1 views: reject with RpcError on the P0 deployment (method not found); callers render "P0 static pricing" / "owner oracle".
   getQuoterConfig = () => this.v<QuoterConfigView | null>("get_quoter_config");
   getOracleSource = (symbol: string) => this.v<OracleSource | null>("get_oracle_source", { symbol });

@@ -39,7 +39,16 @@ function WalletButton() {
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const shieldsOn = useFeature("shields");
-  const links = shieldsOn ? [...NAV.slice(0, 2), { href: "/shield", label: "Shields" }, ...NAV.slice(2)] : NAV;
+  const notesOn = useFeature("notes");
+  const reserveOn = useFeature("reserve");
+  const links = [
+    ...NAV.slice(0, 2),
+    ...(shieldsOn ? [{ href: "/shield", label: "Shields" }] : []),
+    ...NAV.slice(2, 3),
+    ...(reserveOn ? [{ href: "/reserve", label: "Reserve" }] : []),
+    ...(notesOn ? [{ href: "/notes", label: "Notes" }] : []),
+    ...NAV.slice(3),
+  ];
   return (
     <>
       <div className="ribbon" role="note">

@@ -319,13 +319,16 @@ export interface LockCollateralAndBorrowArgs {
   shield?: ShieldInput | null;
 }
 export interface RepayArgs { position_id: U64 }
+/** v2 Nectar Reserve deposit (WO-23b, PRD §4.8): USDC only, ≥ $10. */
+export interface JoinNectarReserveArgs { collateral: string }
 
 export type FtOnTransferMsg =
   | "SupplyLendingLiquidity"
   | { FundPappusQuote: FundPappusQuoteArgs }
   | { TopUpQuote: TopUpQuoteArgs }
   | { LockCollateralAndBorrow: LockCollateralAndBorrowArgs }
-  | { Repay: RepayArgs };
+  | { Repay: RepayArgs }
+  | { JoinNectarReserve: JoinNectarReserveArgs };
 
 // ---------------------------------------------------------------- events (NEP-297, standard "nectar", version "1.0.0")
 
