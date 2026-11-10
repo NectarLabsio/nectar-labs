@@ -4,6 +4,7 @@
 import { createServer, type Server } from 'node:http';
 import type { KeeperDb } from './db.ts';
 import type { KeeperStatus } from './keeper.ts';
+import type { RelayStatus } from './solana.ts';
 
 export interface HealthBody {
   ok: boolean;
@@ -17,6 +18,18 @@ export interface HealthBody {
   pending_settlements: number;
   triggers_sent: number;
   uptime_s: number;
+  /** P2 Solana relay; null when KEEPER_SOLANA_KEYPAIR is unset. */
+  solana: {
+    v2: boolean | null;
+    last_tick_ok: boolean;
+    last_error: string | null;
+    pending_settlements: number;
+    pending_releases: number;
+    awaiting_deposit: number;
+    settles_relayed: number;
+    releases_relayed: number;
+    deposits_confirmed: number;
+  } | null;
 }
 
 export function allowanceLabel(a: KeeperStatus['allowance']): string {
@@ -32,7 +45,7 @@ export function allowanceLabel(a: KeeperStatus['allowance']): string {
   }
 }
 
-export function healthBody(s: KeeperStatus, pollMs: number, now: number): HealthBody {
+export function healthBody(s: KeeperStatus, pollMs: number, now: number, relay: RelayStatus | null = null): HealthBody {
   const fresh = s.lastTickAt !== null && now - s.lastTickAt <= 3 * pollMs;
   return {
     ok: fresh && s.consecutiveErrors < 3 && s.allowance.kind !== 'full_access',
@@ -46,10 +59,32 @@ export function healthBody(s: KeeperStatus, pollMs: number, now: number): Health
     pending_settlements: s.pendingSettlements,
     triggers_sent: s.triggersSent,
     uptime_s: Math.floor((now - s.startedAt) / 1000),
+    solana:
+      relay === null
+        ? null
+        : {
+            v2: relay.v2,
+            last_tick_ok: relay.lastTickOk,
+            last_error: relay.lastError,
+            pending_settlements: relay.pendingSettlements,
+            pending_releases: relay.pendingReleases,
+            awaiting_deposit: relay.awaitingDeposit,
+            settles_relayed: relay.settlesRelayed,
+            releases_relayed: relay.releasesRelayed,
+            deposits_confirmed: relay.depositsConfirmed,
+          },
   };
 }
 
-export function startHealthServer(status: KeeperStatus, db: KeeperDb, pollMs: number, port: number, host: string, now: () => number = Date.now): Server {
+export function startHealthServer(
+  status: KeeperStatus,
+  db: KeeperDb,
+  pollMs: number,
+  port: number,
+  host: string,
+  now: () => number = Date.now,
+  relay: RelayStatus | null = null,
+): Server {
   const server = createServer((req, res) => {
     const path = (req.url ?? '/').split('?')[0];
     const send = (code: number, body: unknown): void => {
@@ -58,7 +93,7 @@ export function startHealthServer(status: KeeperStatus, db: KeeperDb, pollMs: nu
     };
     if (req.method !== 'GET') return send(405, { error: 'method not allowed' });
     if (path === '/healthz') {
-      const body = healthBody(status, pollMs, now());
+      const body = healthBody(status, pollMs, now(), relay);
       return send(body.ok ? 200 : 503, body);
     }
     if (path === '/runs') return send(200, { runs: db.runs(50) });

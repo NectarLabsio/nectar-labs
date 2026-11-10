@@ -23,8 +23,12 @@ export interface HealthView {
   triggerable: boolean;
 }
 
-/** The only methods the keeper's function-call key may call (D-010, PRD §6.1). */
-export const KEEPER_METHODS = ['trigger_preliquidation', 'relay_settlement_result'] as const;
+/**
+ * The only methods the keeper's function-call key may call (D-010, PRD §6.1; v2 adds D-019's
+ * `confirm_remote_deposit`). `relay_release_result` is used only if WO-21 adds it (else release results go
+ * through `relay_settlement_result`). The live v1 key (F-141) allows only the first two.
+ */
+export const KEEPER_METHODS = ['trigger_preliquidation', 'relay_settlement_result', 'confirm_remote_deposit', 'relay_release_result'] as const;
 export type KeeperMethod = (typeof KEEPER_METHODS)[number];
 
 /** P0 uses only this one; `relay_settlement_result` is feature-gated (`p2`) in the contract. */
