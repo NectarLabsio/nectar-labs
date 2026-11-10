@@ -1,0 +1,5 @@
+{"ts":"2026-11-10T16:47:53.914Z","level":"info","service":"feed","msg":"feed_started","port":8788,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"8789","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
+{"ts":"2026-11-10T16:47:58.898Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T16:48:10.095Z","level":"info","service":"feed","msg":"neardata_cursor_init","height":277094034}
+{"ts":"2026-11-10T16:48:46.116Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094065 HTTP 429"}
+{"ts":"2026-11-10T16:49:09.709Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"WARNING! THIS ENDPOINT IS DEPRECATED! STOP USING IT NOW! Switch to https://fastnear.com or alternative RPC providers at https://docs.near.org/api/rpc/providers\"}, \"id\": \"1\"}"}
