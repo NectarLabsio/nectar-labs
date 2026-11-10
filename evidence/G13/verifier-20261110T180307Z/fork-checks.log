@@ -1,0 +1,32 @@
+== 2026-11-10T18:04:55Z LOCAL FORK of Base Sepolia (D-026), chain 84532, block 57050713
+--- pos 6 tx 0x759a9a8b956831b054648605932ea8af72c5bfbc73b77e4f679591f96788694b
+receipt status: true  block: 57050710
+from: 0xe4A5FB078AeaD3D67C7Acdb7D0C2895bdB47C991 to: 0xC4f46D859f9B555D95b68DC28564C5201F743d09 selector: 0xf8ac3116 (calldata 458 hex chars)
+decoded release((uint64,address,uint64,uint64),uint8,bytes32,bytes32):
+(6, 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A, 2, 1794337122)
+28
+0x3fc55e46f9c863bd2650225a3fc27d15651ac0c5cd510c20fcbdbf677ffc33f3
+0x1dff28118be271b0eaaa12ef09a4cb7bf3bbd9de94ee6b75683f9997c44107e4
+vault.hashRelease((uint64,address,uint64,uint64))(calldata struct) = 0xf5f93f431d35956ed770acef233b7398315f44951a999e3f07a1b9caa9bdc769
+ecrecover precompile 0x01 -> 0xd4189b46e51e93fee716b78ccf0325e622f0bdb5
+replay eth_call (same calldata, same from):
+Context:
+- server returned an error response: error code 3: execution reverted: custom error 0x6d9650be: , data: "0x6d9650be0000000000000000000000000000000000000000000000000000000000000002"
+positions(6) (authority,depositor,amount,status): 0xd4189B46E51e93fee716B78cCF0325e622f0bdb5 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A 3000000 [3e6] 3 
+--- pos 7 tx 0x20d13922df857bd352bde1e30bafde868c1c76d8cedd3bd33acbe38eda6fe4bb
+receipt status: true  block: 57050713
+from: 0xe4A5FB078AeaD3D67C7Acdb7D0C2895bdB47C991 to: 0xC4f46D859f9B555D95b68DC28564C5201F743d09 selector: 0x29b82ac2 (calldata 714 hex chars)
+decoded settle((uint64,uint64,uint256,uint256,address,uint64,uint64,uint8),uint8,bytes32,bytes32):
+(7, 4, 308700000, 2357389, 0xcA61FE6F57a6A36Dedf2b99E1D4D8923b1D71fa1, 6, 1794337295, 1)
+27
+0xe94b9a533aa0c077ed6ba2a92f6534bb8f99f3e4a13ceade93d8851b3fb57135
+0x05b3cb1ca0b78da3dc3afb9d31fa2cbddfb498e1a8043e8067e7ab3d22c51c11
+vault.hashSettle((uint64,uint64,uint256,uint256,address,uint64,uint64,uint8))(calldata struct) = 0x260c067c2836cd661cc13a1dbaad6a67c9ec6bd0803b592200a3ed0bdbbef2f3
+ecrecover precompile 0x01 -> 0xad6bc65253be35ca23696396f791bbbb83f6a31b
+replay eth_call (same calldata, same from):
+Context:
+- server returned an error response: error code 3: execution reverted: custom error 0x6d9650be: , data: "0x6d9650be0000000000000000000000000000000000000000000000000000000000000006"
+positions(7) (authority,depositor,amount,status): 0xaD6bC65253BE35ca23696396F791BbBB83F6A31B 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A 3000000 [3e6] 2 
+MockB20 balanceOf 0xcA61FE6F57a6A36Dedf2b99E1D4D8923b1D71fa1 = 2357389 [2.357e6]
+MockB20 balanceOf 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A = 7642611 [7.642e6]
+NonceUsed(uint64) selector: 0x6d9650be

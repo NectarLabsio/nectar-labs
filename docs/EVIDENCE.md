@@ -22,6 +22,8 @@
 | G3b web E2E (v2) | PASS (re-run after WO-26f; prior FAIL block kept) | 2026-11-10T17:39Z–17:48Z | 0ed567f | evidence/G3b/verifier-rerun-20261110T1740Z/ (e2e exit 0: 244 passed / 0 failed / 18 skipped, 0 flaky; write spec ×2 skipped, no key; LH a11y 20/20 = 100 on 10 routes × 2 themes; 400 px no-scroll; /api/feed live (as_of = request time, age_s 0, matches RPC get_exit_capacity); /feed 0 5xx, 0 console errors without NEXT_PUBLIC_FEED_URL; see §G3b) |
 | G3b (first run) | FAIL — superseded by re-run above; e2e 214/14/18 (7 flags-off/v1 specs × 2 projects); LH 20/20 ≥ 90; live v2 data OK | 2026-11-10T16:56Z–17:25Z | 2bf99e1 | evidence/G3b/verifier-20261110T1656Z/ (failing specs listed in §G3b; write spec skipped, no key; /notes list needs wallet) |
 | v7 module runs | PASS (Profit-Lock state only; self_settled tx hash not recorded) | 2026-11-10T17:20Z | 2bf99e1 | §v7 module runs (pos 0 Closed, quote 1 −$4,522.50; reserve r 10,000,000, r-NVDAx-0 → buyer2; shield pos 5 Weekend 15 bps) |
+| G12 Base toolchain + collateral | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; scripts/06 + 26 NOT RUN by verifier; real Base Sepolia deploy pending H15 | 2026-11-10T18:03Z–18:04Z | 7bface5 | evidence/G12/verifier-20261110T180307Z/ (forge test 74 pass / 0 fail / 1 skip = test_createB20_localPrecompiles "B20 precompiles absent"; local fork of Base Sepolia (D-026) chain-id 84532; vault/MockB20/registry have code on the local fork of Base Sepolia (D-026); createB20 eth_call re-run on real Base Sepolia: no revert from 0x…dEaD and 0x1111…; no explorer for a local fork; see §G12) |
+| G13 Base round trip | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; ERC-8021 suffix not appended (D-026/H19); Solana-domain revert via forge tests only | 2026-11-10T18:03Z–18:05Z | 7bface5 | evidence/G13/verifier-20261110T180307Z/ ((a) authority pos 6/7 == last20(keccak(x‖y)) of live derived_public_key domain 0; (b) relay txs 0x759a…694b / 0x20d1…e4bb status 1 on the local fork of Base Sepolia (D-026), to vault, release/settle selectors, vault hashRelease/hashSettle == NEAR digest, ecrecover 0x01 == authority; (c) positions(6) status 3 Released, positions(7) status 2 Settled, buyer1 2357389, borrower1 7642611; (d) replay → NonceUsed(2) / NonceUsed(6); (e) NEAR pos 6/7 Closed, contract_version 2.1.0-v7; see §G13) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -34,6 +36,75 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G13
+
+### G13 — Base round trip — PASS, local fork of Base Sepolia (D-026), not Base Sepolia — 2026-11-10T18:03Z–18:05Z — commit 7bface5
+Fresh clone /tmp/verify-G12G13-20261110T180307Z. Read-only. No secrets. EVM = local fork of Base Sepolia (D-026) at 127.0.0.1:8545, chain 84532, block 57050713. NEAR = public testnet via https://test.rpc.fastnear.com (finality final). Each claim in evidence/G13/summary.md was checked against the chains, not taken from the summary.
+Commands (full output in evidence/G13/verifier-20261110T180307Z/):
+```
+# NEAR views (near-views.log): contract_version; get_position {"position_id":"6"|"7"} (U64 is a string: integer arg panics);
+#   get_pending_release_evm {"position_id":"6"}; get_pending_settlement_evm {"position_id":"7"};
+#   v1.signer-prod.testnet derived_public_key {"path":"base-sepolia/pos/<id>","predecessor":"nectar-core-v2.nectar.testnet","domain_id":0}
+# base58 → 64-byte x‖y → cast keccak → last 20 bytes (authority-check.log)
+# local fork of Base Sepolia (D-026) (fork-checks.log): cast receipt/tx; cast decode-calldata release(...)/settle(...);
+#   cast call vault hashRelease/hashSettle(decoded struct); cast call 0x…01 (digest‖v‖r‖s); cast call vault <same calldata> --from <keeper>;
+#   cast call vault positions(uint64); cast call MockB20 balanceOf(buyer1|borrower1)
+contract_version "2.1.0-v7"
+pos 6: NEAR status Closed, remote.status Closed, authority 0xd4189b46e51e93fee716b78ccf0325e622f0bdb5
+       derived keccak 0x7d53…d4189b46e51e93fee716b78ccf0325e622f0bdb5 → 0xd4189b46…0bdb5  MATCH
+pos 7: NEAR status Closed, remote.status Closed, authority 0xad6bc65253be35ca23696396f791bbbb83f6a31b
+       derived keccak 0x7d21…ad6bc65253be35ca23696396f791bbbb83f6a31b → 0xad6bc652…a31b   MATCH
+release 6: pending txHash 0x759a9a8b956831b054648605932ea8af72c5bfbc73b77e4f679591f96788694b status Relayed, digest 0xf5f93f43…c769 v 28
+  receipt status true, block 57050710, from 0xe4A5…C991 (keeper) to vault 0xC4f4…3d09, selector 0xf8ac3116 = release((uint64,address,uint64,uint64),uint8,bytes32,bytes32)
+  decoded (6, 0x85D0…F30A, nonce 2, expires 1794337122); vault.hashRelease = 0xf5f93f43…c769 (== NEAR digest)
+  ecrecover precompile 0x01 → 0xd4189b46e51e93fee716b78ccf0325e622f0bdb5 == authority 6
+  replay eth_call → custom error 0x6d9650be = NonceUsed(uint64), arg 2
+settle 7:  pending txHash 0x20d13922df857bd352bde1e30bafde868c1c76d8cedd3bd33acbe38eda6fe4bb status Relayed, digest 0x260c067c…f2f3 v 27
+  receipt status true, block 57050713, same keeper → vault, selector 0x29b82ac2 = settle((uint64,uint64,uint256,uint256,address,uint64,uint64,uint8),uint8,bytes32,bytes32)
+  decoded (7, quote 4, repay 308700000, seize 2357389, 0xcA61…fa1, nonce 6, expires 1794337295, kind 1); vault.hashSettle = 0x260c067c…f2f3 (== NEAR digest)
+  ecrecover precompile 0x01 → 0xad6bc65253be35ca23696396f791bbbb83f6a31b == authority 7
+  replay eth_call → NonceUsed(uint64), arg 6
+positions(6) = (0xd418…bdb5, 0x85D0…F30A, 3000000, 3)  enum 3 = Released
+positions(7) = (0xaD6b…A31B, 0x85D0…F30A, 3000000, 2)  enum 2 = Settled
+MockB20 balanceOf buyer1   0xcA61FE6F57a6A36Dedf2b99E1D4D8923b1D71fa1 = 2357389
+MockB20 balanceOf borrower1 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A = 7642611
+```
+Explorer links opened: none. The local fork of Base Sepolia (D-026) has no explorer; NEAR txs were checked by RPC view only.
+Verdict: **PASS on the local fork of Base Sepolia (D-026), not Base Sepolia.** Claims (a) to (e) all hold. Points measured against gates-v7.md G13:
+- "confirmed on 84532": confirmed on the local fork of Base Sepolia (D-026, chain id 84532), not on Base Sepolia. A real run is pending H15.
+- "settle with ERC-8021 suffix": NOT MET, disclosed. The settle calldata is 714 hex chars, which is exact ABI length with no suffix. D-026 says "ERC-8021 suffix only if H19"; F-351 records the format as unverified.
+- "Solana-domain signature revert": shown only by forge tests (test_settle_solanaMessageSignedBySameKey_reverts and test_settle_ed25519SignatureBytes_reverts PASS in §G12). No such revert was sent on the local fork of Base Sepolia (D-026).
+- "ecrecover on-chain": ecrecover was run through the 0x01 precompile on the local fork of Base Sepolia (D-026). Both relay txs also have status 1, and the vault checks ecrecover == authority inside `_consume`.
+
+## G12
+
+### G12 — Base toolchain + collateral — PASS, local fork of Base Sepolia (D-026), not Base Sepolia — 2026-11-10T18:03Z–18:04Z — commit 7bface5
+Fresh clone /tmp/verify-G12G13-20261110T180307Z. Read-only. No secrets. Foundry at ~/.foundry/bin (forge/cast/anvil).
+Commands (full output in evidence/G12/verifier-20261110T180307Z/):
+```
+$ cd evm && find . -name '._*' -delete && forge test          # forge-test.log, exit 0
+[SKIP: B20 precompiles absent: run `forge test --network base`] test_createB20_localPrecompiles() (gas: 0)
+Suite result: ok. 12 passed / 2 passed / 1 passed / 59 passed (NectarVaultBase suite), 0 failed
+Ran 5 test suites: 74 tests passed, 0 failed, 1 skipped (75 total tests)
+$ cast chain-id --rpc-url http://127.0.0.1:8545                # local fork of Base Sepolia (D-026)
+84532                                                           (block 57050713)
+$ cast code <addr> --rpc-url http://127.0.0.1:8545              # fork-code.log; addresses = config.yaml base.*
+vault      0xC4f46D859f9B555D95b68DC28564C5201F743d09  5383 B  keccak 0xd6070445…c946
+collateral 0xD83A1571Ac3431A498f657512439B744c35CAd7E  3771 B  keccak 0x10731af1…0380 (MockB20)
+registry   0x5A87057522B19A6B757a6FB1A7888d2AF5AA52D5  1297 B  keccak 0xb1d6f637…27e5
+$ cast call 0xB20f000000000000000000000000000000000000 "createB20(uint8,bytes32,bytes,bytes[])(address)" 0 <fresh salt> \
+    $(cast abi-encode "f((uint8,string,string,address,uint8))" "(1,Nectar Probe,NPRB,<from>,18)") "[]" --from <from> \
+    --rpc-url https://sepolia.base.org                          # createB20-sim.log, 18:03:41Z, real Base Sepolia, chain 84532, block 57059770
+from 0x…dEaD  → 0xB20000000000000000000026C5e93ECDE4629b7c   (no revert)
+from 0x1111…  → 0xB2000000000000000000001F2281452A54ef1fc1   (no revert)
+factory eth_getCode = 0 bytes (precompile, so no EVM bytecode)
+```
+Explorer links opened: none. A local fork of Base Sepolia (D-026) has no explorer, and nothing was deployed to real Base Sepolia.
+Verdict: **PASS on the local fork of Base Sepolia (D-026), not Base Sepolia.** forge test is green (74/0/1); the skip is the B20-precompile test, which needs `--network base`. Chain id is 84532 and all three config.yaml base.* contracts have code on the local fork of Base Sepolia (D-026). The F-348 read-only createB20 simulation reproduces on real Base Sepolia from two arbitrary senders. Points measured against gates-v7.md G12:
+- scripts/06-base.sh (keystores) and scripts/26-deploy-base.sh: NOT RUN by the verifier. Keystores are a secret, and these scripts send txs, so they fall outside a read-only check. The deployed result was checked by `cast code` instead.
+- H15 funding: OPEN. Real Base Sepolia deployment is pending, and the collateral on the local fork of Base Sepolia (D-026) is MockB20 (DeployMock path, because B20 precompiles are absent on anvil).
+- "addresses on explorer": N/A for a local fork of Base Sepolia (D-026).
 
 ## G3b
 
