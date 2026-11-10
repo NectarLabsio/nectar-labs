@@ -76,7 +76,7 @@ Add `--scope project` to write `.mcp.json` instead of `~/.claude.json`.
 }
 ```
 
-`nectar-core.nectar.testnet` is the nectar-core id in `packages/config/config.yaml` (`accounts.core`).
+The nectar-core id comes from `packages/config/config.yaml` (`accounts.core`, now `nectar-core-v2.nectar.testnet`; v1 stays as `accounts.core_v1`).
 You need Node ≥ 22.22.2, because the entry is TypeScript run by Node's type stripping.
 
 Example prompts: "explain the NVDAx limit for 100 units", "list NVDAx quotes", "preview borrowing $10,000

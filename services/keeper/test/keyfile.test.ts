@@ -1,10 +1,15 @@
 import assert from 'node:assert/strict';
-import { chmodSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { after, describe, it } from 'node:test';
 import { ConfigError, expandHome, loadConfig } from '../src/config.ts';
 import { KeyFileError, loadKeeperKey } from '../src/keyfile.ts';
+import { flattenYaml } from '../src/repo-config.ts';
+
+// Expected ids come from the same config.yaml the loader reads (D-018: v1 -> v2 is a config change), never a literal.
+const CFG = flattenYaml(readFileSync(fileURLToPath(new URL('../../../packages/config/config.yaml', import.meta.url)), 'utf8'));
 
 const dir = mkdtempSync(join(tmpdir(), 'keeper-key-'));
 after(() => rmSync(dir, { recursive: true, force: true }));
@@ -40,8 +45,9 @@ describe('config', () => {
   it('treats TODO-* ids as unset and falls back to config.yaml', () => {
     assert.throws(() => loadConfig({ NECTAR_CONFIG_PATH: '/nonexistent.yaml', CORE_ACCOUNT_ID: 'TODO-G2', KEEPER_ACCOUNT_ID: 'k', KEEPER_KEY_PATH: '/x' }), ConfigError);
     const c = loadConfig({ CORE_ACCOUNT_ID: 'TODO-G2', KEEPER_KEY_PATH: '/x' });
-    assert.equal(c.coreAccountId, 'nectar-core.nectar.testnet');
-    assert.equal(c.keeperAccountId, 'keeper.nectar.testnet');
+    assert.match(CFG.get('accounts.core') ?? '', /\.testnet$/);
+    assert.equal(c.coreAccountId, CFG.get('accounts.core'));
+    assert.equal(c.keeperAccountId, CFG.get('accounts.keeper'));
   });
   it('still requires KEEPER_KEY_PATH (no default key)', () => {
     assert.throws(() => loadConfig({}), /KEEPER_KEY_PATH/);
