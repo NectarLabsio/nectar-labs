@@ -1,9 +1,13 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P2 / submission prep** — submission package drafted (WO-4h, nothing sent); payload builder wired (dry-run only); WO-4i (figure removal + rules copy) running; G9 after demo re-seed (needs H-NEAR-FAUCET). p2-green held on G7 PARTIAL.
-Gates: G0–G4 PASS · G5 FALLBACK (disclosed) · G6 PASS · G7 PARTIAL (NEAR side verified; Solana leg not built — H-TOOLCHAIN-SOLANA) · G8 PASS (fixture) · G9 pending
-Open handoffs: H13, H-NEAR-FAUCET, H-EXPLORER, H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
-Blocking right now: H13 Pyth key (G5 live price) · H-NEAR-FAUCET top-up (P1 contract redeploy). Neither blocks round 1.
+Phase: **P2 / submission prep — everything an agent can do without Kunal is done.** p0-green, p1-green tagged; p2-green held (G7 PARTIAL).
+Gates: G0–G4 PASS · G5 FALLBACK (disclosed, owner oracle) · G6 PASS · G7 PARTIAL (NEAR side verified; Solana leg not built) · G8 PASS (fixture) · G9 pending (dry rehearsal: quick start 154 s, no unbacked claims)
+Blocking right now (Kunal, in order — details in docs/HUMAN_HANDOFF.md):
+  1. H-NEAR-FAUCET — owner nectar.testnet ~0.04 NEAR; demo state must be re-seeded before recording (DEMO_SCRIPT re-seed list).
+  2. H-TOOLCHAIN-SOLANA — `bash scripts/01-toolchain.sh --with-solana`; unlocks WO-14 (vault) + WO-16 (relay) → full G7. Cut deadline 2026-11-13 12:00 UTC.
+  3. H7 NEAR AI key (now a separate key at nearbuilders.org/dashboard, C-019) → live G8.   4. H13 Pyth key → live G5.
+  5. H10 lead/email/size · H14 mainnet payout account + consent · H11 video · H2 repo public · H3 X post · H1 send (all Kunal-only).
+  6. H-EXPLORER (1 min) · defaults apply at deadline for H4, H5, H8, H9, H12.
 
 Done (2026-11-10):
 - Toolchain: Rust 1.95.0, near-cli-rs 0.31.1, cargo-near 0.23.0, gitleaks 8.30.1, yq, pnpm 10.34.9 (evidence/G0/)
@@ -42,8 +46,8 @@ WO-6 DONE (5f27f44): nectar-core / usdc-mock / nvdax-mock live; seeded = model.c
 Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/keys/keeper.function-call.json, borrower1.json (G3 write flow).
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
-Verified on: 2026-11-10T00:15Z UTC (daily verify: rules unchanged; C-019 Q-000 credits now a separate key; xStocks/RWA figures not re-found)
-Last activity: 2026-11-10T00:16:51Z · commit 22328a2
+Verified on: 2026-11-10T00:15Z UTC (daily verify)
+Last activity: 2026-11-10T00:35:48Z · commit 1459310
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
@@ -83,3 +87,11 @@ Phase-boundary TODO: refresh .claude/agents/quoter.md (still describes the
 Feed (WO-11a, f525710): 1Click sampler (dry-only, signature-verified, NVDAx no_route), MCP server stdio + HTTP :8789/mcp. For the next
   researcher batch: C-014 candidate — live dry quote has amountOutUsd == amountInUsd (F-064 gap always 0; real out in amountOutFormatted);
   `claude mcp add` flags + Claude Desktop config shape (TODO-FACTS in services/feed/README) before G9; dry recipient default nectar-feed-dry.near.
+
+Latest (2026-11-10 ~00:40Z UTC): G9 pre-check fixes merged — feed/keeper default ids from config.yaml (no env needed), MCP stdio banner-free
+  (`pnpm -s --filter feed mcp`), README quick start complete. Feed MCP works from a fresh clone → `agents` track claimable once final G9 records it
+  (SUBMISSION.md rule). Submission payload: scripts/build-submission.mjs (dry-run prints; send needs --send + HUMAN_CONFIRMED=1 + typed yes).
+  Live testnet state: positions #1 Open ($10), #6 Settling (signed, no relay); quotes #1 $2,555 @400, #2 $1,000 @300 (remote), #3 $295 @100 (remote);
+  owner price $89; vol 150; quoter pinned + secrets (mm-demo); signer config + remote_chain (placeholder vault EgfPYZfK…) set.
+When Kunal returns: do the OPEN handoffs top to bottom and reply with ids; then the orchestrator re-seeds the demo, runs WO-14/16 if the Solana
+  toolchain exists, re-runs G5/G8 live if keys exist, then final G9 and the submission dry-run for Kunal to send.
