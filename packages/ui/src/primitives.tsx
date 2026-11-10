@@ -73,7 +73,7 @@ export function Stat({ label, value, delta, deltaUp, spark, loading, className }
   );
 }
 
-export type BadgeKind = "neutral" | "mock" | "live" | "fallback" | "verified" | "unverified" | "paused" | "warn" | "info" | "danger" | "good" | "stale";
+export type BadgeKind = "neutral" | "mock" | "live" | "fallback" | "verified" | "unverified" | "paused" | "warn" | "info" | "danger" | "good" | "stale" | "weekend";
 export function Badge({ kind = "neutral", children, className, title }: { kind?: BadgeKind; children: ReactNode; className?: string; title?: string }) {
   return (
     <span className={cx("badge", kind !== "neutral" && kind, className)} title={title}>

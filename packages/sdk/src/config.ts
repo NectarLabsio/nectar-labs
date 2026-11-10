@@ -1,5 +1,6 @@
 // Typed view of packages/config/config.yaml (orchestrator-owned). Values still waiting on a gate are "TODO-G<n>".
 import { parse } from "yaml";
+import { DEFAULT_ORIGINATION_FEE_BPS, DEFAULT_SESSION_STALE_S, parseFeatures, type Features } from "./v7";
 
 export type Pending = `TODO-${string}`;
 export type MaybePending<T> = T | Pending;
@@ -20,7 +21,8 @@ export interface CollateralYaml {
   limit_premium_bps: number;
   pre_liq_min_bps: number;
   pre_liq_max_bps: number;
-  market_session_open: boolean;
+  /** v1 only; v2 has no owner session flag. */
+  market_session_open?: boolean;
   verified_dex_depth_usd_e6: number;
   nectar_reserve_usd_e6: number;
   remote_chain: null | { chain_id: string; vault_program: string; mpc_domain_id: number };
@@ -42,6 +44,8 @@ export interface NectarConfigYaml {
   keeper_fee_bps: number;
   oracle: { source: string; max_age_s_session: number; max_age_s_closed: number; band_bps: number; max_conf_bps: number; nvda_price_id: MaybePending<string> };
   limits: { max_quotes_per_asset: number; max_quotes_per_settlement: number; gas_reserve_target_near: number };
+  v7?: { core_v2?: string; origination_fee_bps?: number; session_stale_s?: number; [k: string]: unknown };
+  features?: Record<string, unknown>;
   [k: string]: unknown;
 }
 
@@ -72,6 +76,10 @@ export interface PublicConfig {
   limits: NectarConfigYaml["limits"];
   /** Ids still TODO, e.g. ["accounts.core"]. Non-empty means the deployment gate (G2) has not filled config yet. */
   pending: string[];
+  /** `features:` (all false until each module's gate passes). A v7 control also needs a v2 contract (featureOn). */
+  features: Features;
+  /** v7 parameters the UI shows before the contract answers (the contract stays authoritative). */
+  v7: { origination_fee_bps: number; session_stale_s: number };
 }
 
 export function parseConfig(text: string): NectarConfigYaml {
@@ -118,5 +126,10 @@ export function toPublicConfig(c: NectarConfigYaml): PublicConfig {
     oracle: { source: c.oracle.source, max_age_s_session: c.oracle.max_age_s_session, max_age_s_closed: c.oracle.max_age_s_closed, band_bps: c.oracle.band_bps },
     limits: c.limits,
     pending,
+    features: parseFeatures(c.features),
+    v7: {
+      origination_fee_bps: typeof c.v7?.origination_fee_bps === "number" ? c.v7.origination_fee_bps : DEFAULT_ORIGINATION_FEE_BPS,
+      session_stale_s: typeof c.v7?.session_stale_s === "number" ? c.v7.session_stale_s : DEFAULT_SESSION_STALE_S,
+    },
   };
 }

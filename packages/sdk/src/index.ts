@@ -7,3 +7,4 @@ export * from "./format";
 export * from "./views";
 export * from "./config";
 export * from "./feed";
+export * from "./v7";

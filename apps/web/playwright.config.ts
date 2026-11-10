@@ -9,7 +9,10 @@ export default defineConfig({
   testDir: "./e2e",
   testIgnore: ["**/._*"],
   timeout: 60_000,
-  retries: process.env.CI ? 1 : 0,
+  // Live testnet RPC reads time out intermittently under parallel load; one retry, reported as "flaky" by Playwright.
+  retries: 1,
+  // Two parallel browsers hammering the public testnet RPC make reads hang; one worker is green (WO-20). Override with PW_WORKERS.
+  workers: Number(process.env.PW_WORKERS ?? 1),
   reporter: [["list"], ["html", { open: "never", outputFolder: "playwright-report" }]],
   use: {
     baseURL: process.env.E2E_BASE_URL ?? `http://localhost:${PORT}`,

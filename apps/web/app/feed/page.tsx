@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
-import { Badge, Card, FormulaBlock, Table, TxLink } from "@nectar/ui";
+import { Badge, Card, Table, TxLink } from "@nectar/ui";
 import {
   bpsToPct,
-  computeLimit,
   exitGapUsdE6,
   formatUsdE6,
   safeHttpsUrl,
-  valueUsdE6,
+  E18,
+  valueUsdE6WithMultiplier,
   type CollateralView,
   type ExitCapacity,
   oneClickRouteStatus,
@@ -18,7 +18,8 @@ import {
 } from "@nectar/sdk";
 import { useChain, useView } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
-import { CramerFormula, FORMULA_TERMS } from "@/components/Formula";
+import { EquationCard } from "@/components/EquationCard";
+import { SessionBadge } from "@/components/Session";
 import { OracleBadge, optionalView, pricingLabel } from "@/components/OracleBadge";
 import { FeedApiNotice, useFeedApi } from "@/components/useFeedApi";
 import { OneClickPanel, RouteStatusBadge } from "@/components/OneClickPanel";
@@ -35,7 +36,7 @@ export default function FeedPage() {
       cs.map(async (c) => {
         const cap = await v.getExitCapacity(c.symbol);
         const units = ps.filter((p) => p.collateral === c.symbol && p.status !== "Closed").reduce((a, p) => a + BigInt(p.units), 0n);
-        const atStake = valueUsdE6(units, BigInt(cap.oracle_price_usd_e6), c.decimals);
+        const atStake = valueUsdE6WithMultiplier(units, BigInt(cap.oracle_price_usd_e6), c.decimals, cap.multiplier_e18 ? BigInt(cap.multiplier_e18) : E18, cap.price_kind);
         const upliftBps = Math.max(0, cap.limit_bps_effective - c.base_ltv_bps);
         return { c, cap, atStake, gap: exitGapUsdE6(atStake, cap), upliftBps, upliftUsd: (atStake * BigInt(upliftBps)) / 10_000n };
       }),
@@ -45,48 +46,17 @@ export default function FeedPage() {
   const settlements = useFeedApi<FeedSettlements>("api/settlements?limit=20");
   const oneclick = useFeedApi<FeedOneClick>("api/oneclick");
   const first = data.data?.rows[0];
-  const firstCfg = config.collaterals[0];
+  const firstCfg = config.collaterals.find((c) => c.symbol === first?.c.symbol) ?? config.collaterals[0];
   const pricing = pricingLabel(data.data?.quoter);
-  let live: React.ReactNode = null;
-  if (first) {
-    const cap = first.cap;
-    const r = computeLimit({
-      units: 10n ** BigInt(first.c.decimals),
-      price_usd_e6: BigInt(cap.oracle_price_usd_e6),
-      decimals: first.c.decimals,
-      base_ltv_bps: first.c.base_ltv_bps,
-      max_nectar_ltv_bps: first.c.max_nectar_ltv_bps,
-      base_haircut_bps: first.c.base_haircut_bps,
-      weekend_haircut_bps: first.c.weekend_haircut_bps,
-      limit_premium_bps: first.c.limit_premium_bps,
-      session_open: cap.session_open,
-      q_usd_e6: BigInt(cap.q_usd_e6),
-      r_usd_e6: BigInt(cap.r_usd_e6),
-      d_usd_e6: BigInt(cap.d_usd_e6),
-    });
-    live = (
-      <>
-        {first.c.symbol}: capacity term = (1 − {bpsToPct(r.haircut_bps)}) · ({formatUsdE6(cap.q_usd_e6, 0)} + {formatUsdE6(cap.r_usd_e6, 0)} + {formatUsdE6(r.d_effective_usd_e6, 0)}) ={" "}
-        {formatUsdE6(r.capacity_cap_usd_e6, 0)} · LTV cap {bpsToPct(first.c.max_nectar_ltv_bps)} of V<sub>c</sub> · effective limit {bpsToPct(cap.limit_bps_effective)}
-      </>
-    );
-  }
   return (
     <div className="page wrap">
       <div className="page-head">
         <span className="label">Nectar Feed</span>
         <h1>Exit capacity by market</h1>
-        <p className="lead">Committed bids, DEX depth and reserve per collateral, and the limit they support. Read live from nectar-core on NEAR testnet.</p>
+        <p className="lead">Committed quotes, the Nectar Reserve and verified DEX depth per collateral, and the limit they support. Read from nectar-core on NEAR testnet.</p>
       </div>
       <div className="stack-lg">
-        <Card label="Cramér limit (PRD §4.2)" tone="tint">
-          <FormulaBlock formula={<CramerFormula />} live={live} caption={firstCfg ? `Config: LTV ${bpsToPct(firstCfg.max_nectar_ltv_bps)}, haircut ${bpsToPct(firstCfg.base_haircut_bps)} in session / ${bpsToPct(firstCfg.weekend_haircut_bps)} closed, base ${bpsToPct(firstCfg.base_ltv_bps)}.` : undefined} />
-          <dl className="kvs" style={{ marginTop: 12 }}>
-            {FORMULA_TERMS.map(([k, v], i) => (
-              <div className="kv" key={i}><dt>{k}</dt><dd style={{ margin: 0 }}>{v}</dd></div>
-            ))}
-          </dl>
-        </Card>
+        <EquationCard symbol={first?.c.symbol} cap={first?.cap} col={firstCfg} />
         <Gate>
           {data.error ? (
             <RpcErrorBanner error={data.error} onRetry={data.reload} />
@@ -106,10 +76,10 @@ export default function FeedPage() {
                   { key: "sym", header: "Asset", cell: (r) => <span className="row">{r.c.symbol} <Badge kind="mock">mock</Badge></span>, sort: (r) => r.c.symbol },
                   { key: "at", header: "At stake", align: "right", cell: (r) => formatUsdE6(r.atStake, 0), sort: (r) => r.atStake },
                   { key: "q", header: "Committed Q", align: "right", cell: (r) => formatUsdE6(r.cap.q_usd_e6, 0), sort: (r) => BigInt(r.cap.q_usd_e6) },
-                  { key: "r", header: "Reserve R", align: "right", cell: (r) => formatUsdE6(r.cap.r_usd_e6, 0) },
+                  { key: "r", header: "Nectar Reserve R", align: "right", cell: (r) => formatUsdE6(r.cap.r_usd_e6, 0) },
                   {
                     key: "d",
-                    header: "DEX depth D",
+                    header: "Verified DEX depth D",
                     align: "right",
                     cell: (r) => (
                       <span className="stack-sm">
@@ -121,7 +91,7 @@ export default function FeedPage() {
                   { key: "g", header: "Exit gap", align: "right", cell: (r) => formatUsdE6(r.gap, 0), sort: (r) => r.gap },
                   { key: "u", header: "Uplift", align: "right", cell: (r) => `+${bpsToPct(r.upliftBps)} · ${formatUsdE6(r.upliftUsd, 0)}`, sort: (r) => r.upliftBps },
                   { key: "h", header: "Haircut", align: "right", cell: (r) => bpsToPct(r.cap.haircut_bps) },
-                  { key: "s", header: "Session", cell: (r) => <Badge kind={r.cap.session_open ? "live" : "warn"}>{r.cap.session_open ? "open" : "closed"}</Badge> },
+                  { key: "s", header: "Session", cell: (r) => <SessionBadge cap={r.cap} /> },
                   { key: "o", header: "Oracle", cell: (r) => <OracleBadge cap={r.cap} /> },
                   { key: "l", header: "Effective limit", align: "right", cell: (r) => <b>{bpsToPct(r.cap.limit_bps_effective)}</b>, sort: (r) => r.cap.limit_bps_effective },
                   { key: "a", header: "", cell: (r) => <Link className="link" href={`/borrow?c=${encodeURIComponent(r.c.symbol)}`}>Borrow</Link> },
@@ -130,7 +100,7 @@ export default function FeedPage() {
             </>
           )}
           <p className="caption">
-            Exit gap = collateral at stake − (Q + R + D). Uplift = effective limit − static base LTV. Owner oracle on testnet unless a Pyth source is set (disclosed); mock collateral.
+            Exit gap = collateral at stake − (Q + R + D). Uplift (limit uplift) = effective limit − static base LTV. Weekend parameters: D counts 0 and the weekend haircut applies. Owner oracle on testnet unless a Pyth source is set (disclosed); mock collateral.
           </p>
         </Gate>
         <OneClickPanel state={oneclick} />
