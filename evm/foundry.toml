@@ -1,0 +1,30 @@
+# Nectar Labs evm/ (WO-27, P2b Base spoke, D-026). Foundry 1.9.0 (F-343).
+# Local build/test only from this directory. The only broadcast path is scripts/26-deploy-base.sh
+# (chain 84532, Foundry keystore `--account`, never `--private-key`).
+[profile.default]
+src = "src"
+test = "test"
+script = "script"
+out = "out"
+cache_path = "cache"
+libs = ["lib"]
+remappings = ["forge-std/=lib/forge-std/src/"]
+
+# Pinned compiler (G10). solc 0.8.30 is the svm-installed release (~/.svm/0.8.30).
+solc_version = "0.8.30"
+auto_detect_solc = false
+# Cancun opcodes only (PUSH0, MCOPY, TSTORE unused): safe on Base Sepolia and on an anvil fork of it.
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+via_ir = false
+
+# macOS writes AppleDouble `._*` files on the exFAT repo drive; never compile them.
+skip = ["**/._*"]
+
+# The vectors test writes the EIP-712 vector file consumed by nectar-core (WO-29a).
+fs_permissions = [{ access = "read-write", path = "./test/eip712_vectors.json" }]
+
+[fuzz]
+runs = 512
+seed = "0x4e6563746172"
