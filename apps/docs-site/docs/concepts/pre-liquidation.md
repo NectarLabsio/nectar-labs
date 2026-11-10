@@ -28,7 +28,7 @@ The keeper calls `trigger_preliquidation(position_id)` with a function-call key 
    - **P0:** each quote fills at its own `max_discount_bps` (fallback pricing, D-004).
    - **P1:** OutLayer returns `clearing_discount_bps`. The contract clamps it to `[0, max_discount_bps]`, so a faulty quoter can only cost the buyer, never the borrower.
 4. **Settle.** The debt is repaid from the buyer's escrow and the collateral moves to the buyer: `ft_transfer` on NEAR, or a signed settlement message on Solana (P2). The borrower keeps the rest. The contract emits `settled_near`.
-5. **Reserve** fills last (PROD).
+5. **Reserve** fills last, at its own discount, only after every quote with capacity (v2; built and tested in the sandbox, testnet deployment pending). See [Nectar Reserve](/concepts/nectar-reserve).
 
 ## Seize amount
 

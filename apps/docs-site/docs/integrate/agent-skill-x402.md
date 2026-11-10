@@ -18,8 +18,8 @@ The Feed MCP server (`nectar-feed` 0.3.0; see [Feed MCP](./feed-mcp.md) for tran
 | --- | --- | --- |
 | `open_protected_stock_loan` | `account_id`, `collateral`, `units`, `borrow_usd` (required); `pay_to`, `referrer`, `shield`, `pre_liq_ltv_bps` (optional) | an **unsigned** call `{receiver_id: <collateral token>, method: "ft_transfer_call", args, deposit: "1", gas}` plus a preview: both limits, every fee, and health at −5%, −10% and −20% |
 | `quote_capacity` | `symbol` | exit capacity; on v2 also total debt and [aggregate headroom](../concepts/aggregate-limit.md) |
-| `get_note` | `token_id` | `not_available` (Position Notes are not built yet) |
-| `build_self_settle` | `position_id` | `not_available` (Profit-Lock is not built yet) |
+| `get_note` | `token_id` | `not_available`: the tool is not wired yet. [Position Notes](../concepts/position-notes.md) are built and tested in the sandbox; testnet deployment pending |
+| `build_self_settle` | `position_id` | `not_available`: the tool is not wired yet. [Profit-Lock](../concepts/profit-lock.md) is built and tested in the sandbox; testnet deployment pending |
 
 Rules the tool enforces:
 

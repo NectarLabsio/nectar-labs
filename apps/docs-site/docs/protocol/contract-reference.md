@@ -41,7 +41,7 @@ A token that is neither USDC nor a configured collateral makes `ft_on_transfer` 
 | --- | --- | --- | --- |
 | `new(owner, usdc_token, keeper)` | init | — | |
 | `upsert_collateral(symbol, config)` | owner | 0 | fields as `config.yaml` `collateral.nvdax` |
-| `set_keeper`, `set_fee_split`, `set_session`, `set_dex_depth`, `set_reserve`, `set_quote_params`, `set_oracle_params` | owner | 0 | each emits an event or is visible in `get_config` |
+| `set_keeper`, `set_fee_split`, `set_session`, `set_dex_depth`, `set_reserve`, `set_quote_params`, `set_oracle_params` | owner | 0 | each emits an event or is visible in `get_config`. `set_reserve` exists only on the live v1 contract; v2 removes it because `R_c` is the [Reserve pool](/concepts/nectar-reserve) (D-024) |
 | `update_owner_price(symbol, price_usd_e6)` | owner | 0 | P0 owner oracle. Rejected with `oracle_rejected` if more than `band_bps` from the last accepted price |
 | `propose_price(symbol, price_usd_e6)` then `apply_price(symbol)` | owner | 0 | two-step override that bypasses the band |
 | `pause()` / `unpause()` | owner | 0 | paused: money paths refuse. Views and completion of an elapsed withdrawal still work |

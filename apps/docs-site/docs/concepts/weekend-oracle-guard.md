@@ -47,9 +47,9 @@ The contract does not compute time zones. It stores a sorted list of NYSE sessio
 
 The guard does not trust a price feed's own idea of "the market is open". Coinbase's tokenized-equity Chainlink feeds keep the last close through weekends and holidays and freeze during corporate actions (F-350). A held price looks fresh to a naive reader. Requiring a price published within 900 s while the window is open means a frozen feed closes the session.
 
-## Not built yet (PRD §4.7)
+## Pending or not built (PRD §4.7)
 
-- An attested OutLayer result that can set `forced_closed` (P1 calendar job). It will be able to close a session, never open one.
+- An attested OutLayer result that sets `forced_closed`. The contract hook is built and tested in the sandbox: `request_session_check(symbol)` (anyone, 60 s cooldown) calls the OutLayer calendar job, and `on_session_check` only accepts `force_closed: true`; a `false` answer is ignored, so nothing outside the contract can open a session (`tests_v7b::calendar_job_can_close_but_never_open`, sandbox `outlayer_calendar_cannot_open_and_multiplier_bounded`). The OutLayer job itself is built (quoter/src/calendar.rs, vectors in quoter/tests/jobs_vectors.json); publish pending, so it has no testnet `version_key` yet.
 - A weekend reference price. The v2 fields `weekend_ref_price_e6` and `weekend_ref_updated_ns` exist and are unused. PROD would use a 24/7 DEX TWAP plus an implied-volatility spread.
 
 ## Tests

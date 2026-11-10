@@ -26,7 +26,7 @@ asset:     total_debt_usd_e6 + borrow  ≤ (10_000 − h_c) · (Q_c + R_c + D_c)
 | `V_position` | units × M × price (see [Corporate-action multiplier](./corporate-actions.md)) | the position's own collateral |
 | `total_debt_usd_e6` | `CollateralConfig.total_debt_usd_e6` | goes up on borrow, down on repay, and down by the debt repaid at settlement |
 | `Q_c` | `active_committed_q_usd_e6` | committed quotes ([Pappus quotes](./pappus-quotes.md)) |
-| `R_c` | `nectar_reserve_usd_e6` | Nectar Reserve; 0 until the Reserve work order ships |
+| `R_c` | `get_reserve(symbol).r_usd_e6` | [Nectar Reserve](/concepts/nectar-reserve) pool: reserve USDC minus USDC in exit notice; no owner setter (D-024) |
 | `D_c` | `verified_dex_depth_usd_e6` | verified DEX depth; forced to 0 when the session is closed ([Weekend Oracle Guard](./weekend-oracle-guard.md)) |
 | `h_c` | `base_haircut_bps` in session, `weekend_haircut_bps` otherwise | owner-set |
 

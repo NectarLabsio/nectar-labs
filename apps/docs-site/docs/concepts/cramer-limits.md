@@ -19,7 +19,7 @@ B_c = min( LTV_c · V_c ,  (1 − h_c) · (Q_c + R_c + D_c) )
 | `V_c` | collateral value: units × oracle price | `units * price_usd_e6 / 10^decimals` | owner oracle (fallback, disclosed) |
 | `LTV_c` | ceiling with committed quotes | `max_nectar_ltv_bps` | owner-set |
 | `Q_c` | committed capacity: sum of live quote remainders | `active_committed_q_usd_e6` | O(1) on fund / initiate-withdraw / settle |
-| `R_c` | Nectar Reserve | `nectar_reserve_usd_e6` | 0 (Reserve is PROD-only) |
+| `R_c` | Nectar Reserve | v1: `nectar_reserve_usd_e6` · v2: `get_reserve(symbol).r_usd_e6` | 0 on the live v1 contract. In v2 it is the [Reserve pool](/concepts/nectar-reserve) itself, with no owner setter (D-024; built and tested in the sandbox, testnet deployment pending) |
 | `D_c` | verified DEX depth | `verified_dex_depth_usd_e6` | owner-set in P0, quoter in P1; **forced to 0 when `market_session_open` is false** |
 | `h_c` | haircut | `base_haircut_bps` in session, `weekend_haircut_bps` otherwise | owner-set |
 

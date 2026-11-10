@@ -34,9 +34,14 @@ These modules are in the repo and tested, but not on testnet. The contract parts
 | --- | --- | --- |
 | Aggregate borrowing limit (two-sided check) | built and tested in the sandbox; testnet deployment pending (gate G1 v7, then G2b) | [Aggregate borrowing limit](/concepts/aggregate-limit) |
 | Weekend Oracle Guard (fails closed, NYSE windows, 900 s) | built and tested in the sandbox; testnet deployment pending | [Weekend Oracle Guard](/concepts/weekend-oracle-guard) |
-| Corporate-action multiplier | built and tested in the sandbox; testnet deployment pending; OutLayer multiplier job not built | [Corporate-action multiplier](/concepts/corporate-actions) |
+| Corporate-action multiplier | built and tested in the sandbox; testnet deployment pending; OutLayer multiplier job built, publish pending | [Corporate-action multiplier](/concepts/corporate-actions) |
 | Origination fee, referrers, `pay_to` | built and tested in the sandbox; testnet deployment pending | [Fee stack and referrals](/concepts/fee-stack) |
 | Remote collateral lifecycle (Solana) | NEAR side built and tested in the sandbox; testnet deployment pending. Solana vault deployed on devnet; round trip pending G7 | [Remote collateral on Solana](/integrate/remote-collateral-solana) |
+| Shields (weekend-safe limit, committed buyers behind it) | built and tested in the sandbox; testnet deployment pending | [Shields](/concepts/shields) |
+| Profit-Lock (self-settlement) | built and tested in the sandbox; testnet deployment pending | [Profit-Lock](/concepts/profit-lock) |
+| Position Notes (NEP-171; authority follows the Note) | built and tested in the sandbox; testnet deployment pending | [Position Notes](/concepts/position-notes) |
+| Nectar Reserve (`R_c`; fills after every quote; 7-day exit notice) | built and tested in the sandbox; testnet deployment pending | [Nectar Reserve](/concepts/nectar-reserve) |
+| OutLayer jobs (calendar, multiplier, vault read) | built; publish pending (no testnet `version_key` yet) | [Weekend Oracle Guard](/concepts/weekend-oracle-guard) |
 | Agent skill (MCP tools) | built and unit-tested on view fixtures; runs locally with the Feed | [Agent skill and x402](/integrate/agent-skill-x402) |
 | x402 paid Feed export | built and tested against mocks; testnet settle pending G14 (accounts not created, H-NEAR-FAUCET) | [Agent skill and x402](/integrate/agent-skill-x402) |
 
@@ -44,7 +49,7 @@ These modules are in the repo and tested, but not on testnet. The contract parts
 
 - **Mock**: a stand-in we deployed ourselves with no value. The tokens are mocks, and so is the owner-set price.
 - **Fallback**: a permanent code path used when the better source is not available. If the OutLayer quoter fails or is denied, settlement prices at the quote's `max_discount_bps` (D-004). The oracle is owner-set until a live Pyth price exists (D-005, D-013). Both are disclosed in the UI.
-- **PROD-only**: designed but not built here. This covers mainnet, real xStocks, Nectar Reserve (`R_c`), keeper bonds and slashing, and a DAO owner with a timelock. See [Roadmap](/project/roadmap).
+- **PROD-only**: designed but not built here. This covers mainnet, real xStocks, keeper bonds and slashing, and a DAO owner with a timelock. See [Roadmap](/project/roadmap).
 
 ## Seeded demo state
 
