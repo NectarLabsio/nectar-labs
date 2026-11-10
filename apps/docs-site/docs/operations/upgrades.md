@@ -15,8 +15,9 @@ description: How the contract changes, now and in production.
 | 0 | 2026-11-09 | P0 deploy | `scripts/20-deploy-testnet.sh` (G2) | `8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV` |
 | 1 | 2026-11-09T21:57Z | P0 → V1, deploy and `migrate` in one transaction; a failed migrate reverts the deploy | `scripts/25-upgrade-testnet.sh` | `FQjNLgawvz9KmeLioJs6fdd5GdB5JAVeEfSSZfEGTFfB` (state_version 1) |
 | 2 | 2026-11-09T22:38Z | V1 code-only, no migrate | `scripts/26-upgrade-code.sh` | `HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX` (wasm sha256 `fa2bb4f1…0f4e`) |
+| 3 | 2026-11-09T23:40Z | P2 code-only, no migrate (`contract_version` "nectar-core 0.1.0 p2", state_version 1) | `scripts/26-upgrade-code.sh` | `CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t` (`evidence/upgrades/run-20261109T2340Z.log`) |
 
-Both upgrade paths are tested in the sandbox first (`contracts/nectar-core/tests/sandbox_p1.rs`). The G4 addendum rebuilt the wasm from a fresh clone and got the same code_hash.
+Both upgrade paths are tested in the sandbox first (`contracts/nectar-core/tests/sandbox_p1.rs`). The G4 addendum rebuilt upgrade 2 and the G7 verifier rebuilt upgrade 3 from a fresh clone; both matched the on-chain code_hash.
 
 ## P1 runbook scripts
 

@@ -20,9 +20,17 @@ By default this documentation site sets **no cookies** and loads **no analytics*
 
 On 2026-11-10 no analytics vendor is configured, so the last two rows do not apply to any deployed build. The keys above were checked against the installed site code (Docusaurus 3.10.2 colour mode uses `theme`; the consent component uses `nectar-consent`). Docusaurus can also store `docusaurus.tab.*`, `docusaurus.announcement.*` and `docs-preferred-version-*`, but only for tabs, announcement bars and versioned docs. This site uses none of those, so they are never set.
 
-## Web app (not shipped yet)
+## Web app
 
-The web app is not built yet. When it ships it will share `nectar-consent` and add its theme key and the NEAR wallet-selector's own keys (which record the wallet you connected). The exact key names will be listed here from the shipped code before launch.
+Keys checked against the web app code on 2026-11-10 (`packages/ui/src/ConsentBanner.tsx`, `packages/ui/src/theme.tsx`, `apps/web/lib/wallet/near-connect.ts`):
+
+| Key | Storage | Set by | What it holds | Lifetime | Category |
+| --- | --- | --- | --- | --- | --- |
+| `nectar-consent` | localStorage | our consent banner | your Accept or Decline choice: `{v, analytics, at}` | 180 days, then asked again | strictly necessary |
+| `nectar-theme` | localStorage | theme switch | `light` or `dark`, if you toggle it | until you clear site data | strictly necessary |
+| `nectar-wallet-connected` | localStorage | wallet adapter | `1` after you connect a wallet, removed when you disconnect | until you disconnect or clear site data | strictly necessary |
+
+The wallet connector (`@hot-labs/near-connect`) loads only after you press **Connect wallet** (or connected on an earlier visit) and may store its own keys recording the wallet you chose. Those keys are set by that library, not by our code, and are not yet listed here by name.
 
 ## Cookie settings {#cookie-settings}
 

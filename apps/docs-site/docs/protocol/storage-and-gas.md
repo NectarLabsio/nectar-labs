@@ -70,7 +70,7 @@ The worst P0 case is `trigger_preliquidation` touching 8 quotes (`max_quotes_per
 | Call (later phases) | Budget | Status |
 | --- | --- | --- |
 | OutLayer `request_execution` (P1) | `gas_tgas: 150` planned; cost from `estimate_execution_cost` (F-042) | pending G4 |
-| `v1.signer-prod.testnet.sign` (P2) | from `sign_call_gas_attachment_requirement_tera_gas` (F-034), not a constant | pending G7 |
+| `v1.signer-prod.testnet.sign` (P2) | from `sign_call_gas_attachment_requirement_tera_gas` (F-034), not a constant | 30 Tgas attached in the G7 run (docs/EVIDENCE.md §G7) |
 
 OutLayer resource limits planned in config.yaml are `max_instructions` 1e8, `max_memory_mb` 128 and `max_execution_seconds` 30, all within the platform maxima in F-041.
 

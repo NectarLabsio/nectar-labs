@@ -5,8 +5,8 @@ description: The canonical settlement message the contract builds and the MPC si
 ---
 # Preimage format (`NECTAR_SETTLE_V1`)
 
-<p className="verified">Verified against: F-031 (2026-11-09), F-032 (2026-11-09), F-033 (2026-11-09), F-035 (2026-11-09), F-036 (VERIFY G7), F-080 (2026-11-09) · spec docs/PRD.md §9 · D-003 (2026-11-09)</p>
-<p className="status">Status: P2 design. Not built. The derived-key computation (F-036) and the exact byte layout are confirmed at G7.</p>
+<p className="verified">Verified against: F-031 (2026-11-09), F-032 (2026-11-09), F-033 (2026-11-09), F-035 (2026-11-09), F-036 (2026-11-09), F-080 (2026-11-09), F-082 (2026-11-09) · spec docs/PRD.md §9 · D-003 (2026-11-09), D-016 (2026-11-10) · test `tests_p2::preimage_golden_vectors_byte_for_byte` · docs/EVIDENCE.md G7 (2026-11-09T23:57Z)</p>
+<p className="status">Status: NEAR side built and live on testnet (G7 PARTIAL). nectar-core builds this preimage and the signer signs it; the byte layout is pinned by golden-vector tests. The Solana program that rebuilds and checks it is not built. In the G7 run the `program` field held a **placeholder** address because no vault is deployed.</p>
 
 The NEAR contract never signs a Solana transaction. It signs a canonical **message** that it built from its own state. The keeper supplies only `position_id` (D-003).
 
@@ -17,7 +17,7 @@ NECTAR_SETTLE_V1|chain=solana-devnet|program=<vault_program>|pos=<position_id>|q
 - ASCII, pipe-separated, decimal integers, no spaces.
 - `program` binds the message to one vault program. `chain` and the derivation path bind it to one chain.
 - `nonce` is unique per position and recorded in `used_nonces` on NEAR and in program state on Solana. `expires` bounds the relay window.
-- The Solana program rebuilds the same string from its instruction arguments and compares it byte for byte.
+- The Solana program, once built, rebuilds the same string from its instruction arguments and checks the signature over those bytes (not built yet).
 
 ## Signing request
 
@@ -33,4 +33,4 @@ NECTAR_SETTLE_V1|chain=solana-devnet|program=<vault_program>|pos=<position_id>|q
 | deposit | 1 yoctoNEAR (`SIGN_DEPOSIT_YOCTONEAR`) | F-033 |
 | response | `SignatureResponse::Ed25519 { signature }` | F-035 |
 
-Ed25519 signs the message directly, so there is no pre-hash (PRD §9). PRD §6.5 also mentions a `sha256` step. That conflict is open: G7 decides by verifying an MPC signature against the raw preimage bytes with the Solana Ed25519 program (F-080), and this page records the result.
+Ed25519 signs the message directly, so there is no pre-hash (PRD §9, decision D-016). PRD §6.5 mentioned a `sha256` step; D-016 rejected it (C-016). The G7 run confirmed it on testnet: the `Eddsa` payload decodes to the raw preimage bytes, and the returned signature verifies against them with the derived key `ed25519:6QPGoVj8…S1tV`. The path is `solana-devnet-v1`.
