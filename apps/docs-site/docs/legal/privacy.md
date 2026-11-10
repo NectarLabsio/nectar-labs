@@ -11,7 +11,7 @@ _Last updated 2026-11-10 · Draft, not legal advice · Controller: **TODO-H9** (
 
 This documentation site, the Nectar Labs web app and the Nectar Feed API and MCP server ("the sites"). The sites serve **testnet software**: NEAR testnet and Solana devnet, mock tokens, no real funds.
 
-Current state (2026-11-10): only this documentation site exists. The web app, Feed API and MCP server are not built yet. Their entries below describe the planned processing and will be confirmed against the shipped code before they go live.
+Current state (2026-11-10): this documentation site, the web app (G3 PASS) and the Feed API and MCP server are built and run locally; the Feed has no public host. The web app stores `nectar-consent`, `nectar-theme` and `nectar-wallet-connected` in your browser (see [Cookie policy](/legal/cookies)).
 
 ## What we process
 

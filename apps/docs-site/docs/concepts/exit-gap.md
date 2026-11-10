@@ -6,7 +6,7 @@ description: Collateral at stake minus what can actually absorb it.
 # Exit gap
 
 <p className="verified">Verified against: F-063 (2026-11-09), F-113 (2026-11-09), F-114 (2026-11-09) · spec docs/PRD.md §1, §17 · D-009 (2026-11-10)</p>
-<p className="status">Status: definition. The Feed that displays it is not built yet (WO-3, WO-5).</p>
+<p className="status">Status: definition. The Feed displays it; it is built and runs locally (`pnpm --filter feed start`), with no public host.</p>
 
 ```text
 exit gap_c = collateral value at stake_c − (Q_c + R_c + D_c)

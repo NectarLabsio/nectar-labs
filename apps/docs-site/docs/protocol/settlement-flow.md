@@ -6,7 +6,7 @@ description: From keeper trigger to collateral delivery, per phase.
 # Settlement flow
 
 <p className="verified">Verified against: F-013 (2026-11-09), F-021 (2026-11-09), F-031 (2026-11-09), F-033 (2026-11-09), F-035 (2026-11-09), F-040 (2026-11-09), F-080 (2026-11-09) · spec docs/PRD.md §5, §6.5, §9 · D-003, D-004 (2026-11-09)</p>
-<p className="status">Status: P0 path is the specification that WO-2 implements (deployed on testnet 2026-11-09, G2 PASS 2026-11-09T20:55Z, commit 5f27f44). P1 and P2 steps are design only until G4 and G7.</p>
+<p className="status">Status: P0 path is the specification that WO-2 implements (deployed on testnet 2026-11-09, G2 PASS 2026-11-09T20:55Z, commit 5f27f44). P1 is live (G4 PASS 2026-11-09T22:10Z). P2: the NEAR signer steps are live (G7 PARTIAL 2026-11-09T23:57Z); the Solana steps are design only.</p>
 
 ## P0 (static pricing, NEAR collateral)
 

@@ -1,16 +1,16 @@
 # Nectar Labs: committed buyers, higher limits
 
-> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Gates (docs/EVIDENCE.md, 2026-11-10): G1, G2, G3 PASS (P0) · G4 OutLayer PASS (2026-11-09T22:10Z, addendum 22:51Z) · G6 1Click depth PASS (22:58Z) · G5 oracle FALLBACK (disclosed): owner oracle in use · G7–G9 pending.**
+> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Gates (docs/EVIDENCE.md, 2026-11-10): G1, G2, G3 PASS (P0) · G4 OutLayer PASS (2026-11-09T22:10Z, addendum 22:51Z) · G6 1Click depth PASS (22:58Z) · G5 oracle FALLBACK (disclosed): owner oracle in use · G7 PARTIAL: Chain Signatures signer side verified on NEAR, Solana leg not built · G8 copilot PASS (fixture, 23:56Z) · G9 pending.**
 
 Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nectar Labs makes exit liquidity
 *committed*. Market makers escrow time-locked quotes (Pappus) on NEAR. Borrowers get a higher limit
 (Cramér) for a premium that pays the buyers. Pre-liquidation then sells to the committed buyer at a bounded discount instead of a DEX:
 `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))` (PRD §4.2, decision D-009).
 
-## Live on testnet (ids from `packages/config/config.yaml`; evidence in `evidence/G2/`, `evidence/G4/`, `evidence/G6/`, `evidence/upgrades/`)
+## Live on testnet (ids from `packages/config/config.yaml`; evidence in `evidence/G2/`, `evidence/G4/`, `evidence/G6/`, `evidence/G7/`, `evidence/upgrades/`)
 | Component | Account / id | Kind | Status |
 | --- | --- | --- | --- |
-| nectar-core | [`nectar-core.nectar.testnet`](https://testnet.nearblocks.io/address/nectar-core.nectar.testnet) | contract, code_hash `HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX` | live (testnet). Upgraded twice in place: P0 → V1 with state migration, then a V1 code-only upgrade (2026-11-09T22:38Z). The G4 addendum reproduced this hash from a fresh clone |
+| nectar-core | [`nectar-core.nectar.testnet`](https://testnet.nearblocks.io/address/nectar-core.nectar.testnet) | contract, code_hash `CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t` | live (testnet). Upgraded three times in place: P0 → V1 with state migration, a V1 code-only upgrade (22:38Z), then the P2 code-only upgrade (2026-11-09T23:40Z, `evidence/upgrades/run-20261109T2340Z.log`). The G7 verifier rebuilt this hash from a fresh clone |
 | mock USDC | [`usdc-mock.nectar.testnet`](https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet) | **mock** NEP-141 | live (testnet) |
 | mock NVDAx | [`nvdax-mock.nectar.testnet`](https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet) | **mock** collateral | live (testnet) |
 | owner | [`nectar.testnet`](https://testnet.nearblocks.io/address/nectar.testnet) | deployer; sets params and the owner price | live (testnet) |
@@ -20,13 +20,14 @@ Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nec
 | oracle | owner oracle on nectar-core (`update_owner_price`) | **owner oracle (disclosed)**, badge in UI | in use for NVDAx. The Pyth path is built and sandbox-tested (`get_price_no_older_than` with staleness, confidence and band checks; F-173, D-015) but is not live. Hermes returns 401 without an API key (C-007, handoff H13), so `pyth-oracle.testnet` has no NVDA price. `price-oracle.testnet` does not serve NVDA (C-012). **G5: FALLBACK (disclosed).** Owner oracle (disclosed); current value: run `pnpm demo:testnet` |
 | 1Click depth | `dry: true` quotes on the 1Click API (F-060) | read-only, signed quotes | **G6 PASS.** NVDAx has no 1Click route (F-063), so `D_c` = 0. The Feed shows signed dry-quote depth for a reference pair (wNEAR → USDC), with impact computed from base units at $500, $1,000 and $2,000. Nothing is ever deposited (Q-007) |
 | Feed REST / MCP | local (`pnpm --filter feed start`) | read-only, no keys | built and runs locally; no public host. MCP tools: `get_exit_capacity`, `preview_borrow`, `list_quotes`, `explain_limit` |
-| Solana `nectar_vault` | `TODO-G7` (devnet) | P2 | not built |
-| NEAR AI copilot | web app panel (`apps/web/lib/copilot/`) | P2; NEAR AI Cloud (F-070) | **built; no live NEAR AI answer has been verified yet.** Live mode needs key H7, and NEAR AI Cloud returned 500 on 2026-11-09 (F-078). The panel shows an answer only after the signature and attestation checks pass; otherwise it shows "unverified — hidden". Tests (`pnpm --filter web test:copilot`, `e2e/copilot.spec.ts`) run on a fixture built from a real Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording; it correctly ends "unverified — hidden". Intel DCAP quote verification runs on the server (F-073); EIP-191 signer recovery and report_data/nonce checks run in the browser (F-075, F-076). G8 re-run pending |
+| Chain Signatures signer | [`v1.signer-prod.testnet`](https://testnet.nearblocks.io/address/v1.signer-prod.testnet) (F-030, F-184) | third-party MPC signer; path `solana-devnet-v1`, domain 1 = Ed25519 | **live (testnet); NEAR side of G7 verified (2026-11-09T23:57Z).** nectar-core builds the settlement preimage from its own state, the signer signs the raw bytes (no pre-hash, D-016) and nectar-core emits `settlement_signed`. The signature verifies against the vault authority `ed25519:6QPGoVj8…S1tV`, which equals the signer's `derived_public_key` for (nectar-core.nectar.testnet, solana-devnet-v1) (F-036). Evidence: trigger tx [FCtApD2L…MHhe](https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe), position #6. The preimage names a **placeholder** Solana program id and a throwaway recipient; nothing was relayed to Solana |
+| Solana `nectar_vault` | `TODO-G7` (devnet) | P2, Anchor program | **not built.** The Solana CLI and Anchor are not installed (handoff H-TOOLCHAIN-SOLANA), so no Solana transaction exists and nothing on Solana verifies the signature yet. **G7: PARTIAL.** If the toolchain does not arrive by 2026-11-13 12:00 UTC, the Solana leg is cut (CLAUDE.md §1 cut order) and the NEAR signer round trip above is the shipped P2 demo |
+| NEAR AI copilot | web app panel (`apps/web/lib/copilot/`) | P2; NEAR AI Cloud (F-070) | **built; no live NEAR AI answer has been verified yet.** Live mode needs key H7, and NEAR AI Cloud returned 500 on 2026-11-09 (F-078). The panel shows an answer only after the signature and attestation checks pass; otherwise it shows "unverified — hidden". Tests (`pnpm --filter web test:copilot`, `e2e/copilot.spec.ts`) run on a fixture built from a real Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording; it correctly ends "unverified — hidden". Intel DCAP quote verification runs on the server (F-073); EIP-191 signer recovery and report_data/nonce checks run in the browser (F-075, F-076). **G8: PASS (fixture), 2026-11-09T23:56Z** |
 | Mainnet, real xStocks, Reserve `R_c`, keeper bonds, DAO owner | — | **PROD-only** | not in this repo |
 
 Demo state: snapshot at 2026-11-09T20:49Z (evidence/G2/demo-testnet-20261109T2049Z.log); the seed had a $50,000 pool, quote #0 for $10,000 at 250 bps,
 quote #1 for $5,000 at 400 bps, and position #0 with 100 mock NVDAx and $11,250 debt (Cramér limit $11,250 vs $7,200 static LTV). The
-**G4 settlement runs used up part of it**: positions were settled and quote #0 was consumed. A re-seed is pending. Live state (price, `Q_c`, open positions) is not hard-coded here; current value: run `pnpm demo:testnet`. All tokens are mocks with no value.
+**G4 settlement runs used up part of it**: positions were settled and quote #0 was consumed. A re-seed is pending. Snapshot at 2026-11-09T23:57Z (EVIDENCE §G7): position #6 is `Settling` because its signature was never relayed to Solana. Live state (price, `Q_c`, open positions) is not hard-coded here; current value: run `pnpm demo:testnet`. All tokens are mocks with no value.
 
 ## Quick start (5 commands, no keys needed)
 ```
@@ -48,21 +49,21 @@ and calls nectar-core views over public testnet RPC (no keys, no near CLI; overr
 - The limit comes from committed capacity and an oracle price, checked for freshness (120 s in session, 24 h when closed) and against a 1,500 bps band.
 - The keeper holds a function-call key for `trigger_preliquidation` and `relay_settlement_result` only. It passes ids and never prices or signs.
 - P1 (live on testnet): a hash-pinned OutLayer TEE program returns the clearing discount, clamped to `[0, max_discount_bps]`. If it fails, the contract settles at the cap.
-- P2: the contract builds the settlement message itself and gets an Ed25519 signature from Chain Signatures. A Solana program verifies it before releasing collateral.
+- P2 (NEAR side live on testnet): the contract builds the settlement message itself and gets an Ed25519 signature over the raw bytes from Chain Signatures (D-016). A Solana program will verify that signature before releasing collateral once it is built; it is not built yet (G7 PARTIAL).
 
 ## How a settlement works
 ![settlement](docs/img/settlement.svg)
 P0 (static): keeper trigger → the contract repays the debt from the buyer's escrow → collateral goes to the buyer at `max_discount_bps`.
-P1 (live on testnet): the keeper's trigger asks OutLayer for the discount, and the contract clamps it and settles, or falls back to the cap. P2 adds the Solana leg. Whether the signer payload is pre-hashed is open until G7 (see docs-site "Preimage format").
+P1 (live on testnet): the keeper's trigger asks OutLayer for the discount, and the contract clamps it and settles, or falls back to the cap. P2 (NEAR side live on testnet): the contract asks `v1.signer-prod.testnet` to sign the raw preimage (no pre-hash, D-016) and emits `settlement_signed`. The Solana relay and settle are not built, so such a position stays `Settling` (see docs-site "Preimage format").
 
 ## Tracks and why
 `defi`: a new credit primitive (committed exit liquidity as a limit input).
 `security`: contract-built preimage, pinned TEE program, keeper with a function-call key only, oracle staleness and band checks.
-`privacy`: market-maker parameters stay inside the TEE; the copilot shows an answer only after signature and attestation checks pass (no live NEAR AI answer verified yet: key H7 absent, NEAR AI Cloud 500 on 2026-11-09); analytics off by default and consent-gated; self-hosted fonts.
+`privacy`: market-maker parameters stay inside the TEE; the copilot shows an answer only after signature and attestation checks pass (G8 PASS on a fixture; no live NEAR AI answer verified yet: key H7 absent, NEAR AI Cloud 500 on 2026-11-09); analytics off by default and consent-gated; self-hosted fonts.
 `agents` (Feed MCP: built, read-only) is entered only if it passes G9.
 
 ## Evidence
-[docs/EVIDENCE.md](docs/EVIDENCE.md) records every gate with its commands, outputs and explorer links. Status on 2026-11-10: G1–G4 and G6 PASS, G5 FALLBACK (disclosed; live Pyth waits on H13), G0 and G7–G9 pending.
+[docs/EVIDENCE.md](docs/EVIDENCE.md) records every gate with its commands, outputs and explorer links. Status on 2026-11-10: G0–G4 and G6 PASS, G8 PASS (fixture), G5 FALLBACK (disclosed; live Pyth waits on H13), G7 PARTIAL (NEAR signer side verified; Solana leg not built, H-TOOLCHAIN-SOLANA), G9 pending.
 The docs site (`apps/docs-site`) carries the spec, and every protocol page has a "Verified against" line citing FACTS ids.
 
 ## Prior work (disclosure, Q-002 / Q-005): draft, approve TODO-H12
