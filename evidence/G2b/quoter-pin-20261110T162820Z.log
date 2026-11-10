@@ -1,0 +1,311 @@
+    Finished `release` profile [optimized] target(s) in 0.10s
+rustc: rustc 1.95.0 (59807616e 2026-04-14)
+wasm=/Volumes/T7/nectar-labs/quoter/target/wasm32-wasip2/release/nectar_quoter.wasm sha256=5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9 size=153412
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_quoter_config
+│                       args:         {
+│                                       "deposit_yocto": "10000000000000000000000",
+│                                       "gas_tgas": 80,
+│                                       "max_execution_seconds": 30,
+│                                       "max_instructions": "100000000",
+│                                       "max_memory_mb": 128
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:2uqzzYDUHLKNG1AHWKRyZsToKSqq9HB1QP6Kqj1X5xXFU8bRtk76p27HqL9z2jeUc3Jk362rSCL5jxtJXm3oDFcX
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.7 Tgas
+│    Transaction fee: 0.0002407878463445 NEAR
+│    Transaction ID: 85MEiPQ5v4ecuhN33mxahVnhAZ1jm2ttEPMy94NKm2qf
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/85MEiPQ5v4ecuhN33mxahVnhAZ1jm2ttEPMy94NKm2qf
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"quoter_config_set","data":[{"deposit_yocto":"10000000000000000000000","gas_tgas":80}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_quoter_config" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_quoter_config json-args '{"deposit_yocto":"10000000000000000000000","gas_tgas":80,"max_instructions":"100000000","max_memory_mb":128,"max_execution_seconds":30}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_vol_bps
+│                       args:         {
+│                                       "symbol": "NVDAx",
+│                                       "vol_bps": 420
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:4tNLCS7qNzVC8hqBgdtSKD8iQrX9W6ARBPNfKA9SeVcf2adD9PhaaXoSrbs4fH8z1Hff9HqN561ie52PZJqV9Rib
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.0 Tgas
+│    Transaction fee: 0.0002679263984387 NEAR
+│    Transaction ID: JCqD7sSeekzGPfEgfXPuzVnSrjR1RFxN6FQbmA5j9aoC
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/JCqD7sSeekzGPfEgfXPuzVnSrjR1RFxN6FQbmA5j9aoC
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"vol_set","data":[{"symbol":"NVDAx","vol_bps":420}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_vol_bps" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_vol_bps json-args '{"symbol":"NVDAx","vol_bps":420}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_quoter_pin
+│                       args:         {
+│                                       "project_id": "nectar.testnet/nectar-quoter",
+│                                       "version_key": "5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:ijqU13FQqc7DpspAP9QFzU1a7PjxcyAJfFfhnWkKv8pRrQkWR1LXzRb4N7tzAye5GFfib1mdEpUyEDk843dJfZ3
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.7 Tgas
+│    Transaction fee: 0.0002426392410857 NEAR
+│    Transaction ID: Fs1o6yKns2sxTH6eGxKaBgtzoJFJdBj5bD41ZYvJp9mD
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/Fs1o6yKns2sxTH6eGxKaBgtzoJFJdBj5bD41ZYvJp9mD
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"quoter_pin_set","data":[{"project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_quoter_pin" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_quoter_pin json-args '{"project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9"}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== v2: vault_read + calendar/multiplier jobs on the same pinned version (WO-21/WO-23a/WO-24) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_vault_read_config
+│                       args:         {
+│                                       "deposit_yocto": "10000000000000000000000",
+│                                       "gas_tgas": 80,
+│                                       "project_id": "nectar.testnet/nectar-quoter",
+│                                       "version_key": "5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:npfQdSSaYNVm1D5pNKuyfeCTvDbS2UCeKkBTeyp3CNkHq2iEAZY5fUE4UyKhcyHJ4QabmvT6whs3boHGeWkQpQH
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.9 Tgas
+│    Transaction fee: 0.0002601304491648 NEAR
+│    Transaction ID: ArLjv2NbkriJRjQxrSzq4m6feDCSJoDd3siLYQCvh8J
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/ArLjv2NbkriJRjQxrSzq4m6feDCSJoDd3siLYQCvh8J
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"vault_read_config_set","data":[{"project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9","deposit_yocto":"10000000000000000000000","gas_tgas":80}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_vault_read_config" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_vault_read_config json-args '{"project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9","deposit_yocto":"10000000000000000000000","gas_tgas":80}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_job_config
+│                       args:         {
+│                                       "deposit_yocto": "10000000000000000000000",
+│                                       "gas_tgas": 80,
+│                                       "job": "calendar",
+│                                       "project_id": "nectar.testnet/nectar-quoter",
+│                                       "version_key": "5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:42ffvnQ9jjrGYftiAKoNCFkCPpyMVq6YWMYYVHoG47CEUT5zZzJtNKry7RCAdTXTVQ2e5RHhof9WY4tpV6sLCo69
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.9 Tgas
+│    Transaction fee: 0.0002619180138774 NEAR
+│    Transaction ID: AKbUjr5FQkBoBzqzDoxLm8dzmFZZVEygqCHf1aKVVRFW
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/AKbUjr5FQkBoBzqzDoxLm8dzmFZZVEygqCHf1aKVVRFW
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"job_config_set","data":[{"job":"calendar","project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9","deposit_yocto":"10000000000000000000000","gas_tgas":80}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_job_config" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_job_config json-args '{"job":"calendar","project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9","deposit_yocto":"10000000000000000000000","gas_tgas":80}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_job_config
+│                       args:         {
+│                                       "deposit_yocto": "10000000000000000000000",
+│                                       "gas_tgas": 80,
+│                                       "job": "multiplier",
+│                                       "project_id": "nectar.testnet/nectar-quoter",
+│                                       "version_key": "5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:5kqRBC3TMyhWAR7tebstgpCJgFgJ4uEUrWFbJmsXJQG6UnbyQc2RHcDpfCafws4nz9UXYwetgKmR9ffCyYmtS5r8
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.9 Tgas
+│    Transaction fee: 0.000262268431467 NEAR
+│    Transaction ID: 6oqvyo946j1GEWPWQH6Br89znrQVvZGL6x3rkGvXBGgk
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/6oqvyo946j1GEWPWQH6Br89znrQVvZGL6x3rkGvXBGgk
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"job_config_set","data":[{"job":"multiplier","project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9","deposit_yocto":"10000000000000000000000","gas_tgas":80}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_job_config" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_job_config json-args '{"job":"multiplier","project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9","deposit_yocto":"10000000000000000000000","gas_tgas":80}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== gas reserve for OutLayer deposits (0.1 NEAR) ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  fund_gas_reserve
+│                       args:         {}
+│                       gas:          30.0 Tgas
+│                       deposit:      0.1 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:bLZrhTiLVdc1J6Au5RB3Yq33PC8hGTu2oXTJfe5J5SgfW1g5to3MauDvSunNNfffCELEnf7ETj2SpbqTmFNRePE
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.6 Tgas
+│    Transaction fee: 0.0002308231361754 NEAR
+│    Transaction ID: AW85ZTCHBeyQYgjPHf7uguBKWAofjozupCX1ZivnErEt
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/AW85ZTCHBeyQYgjPHf7uguBKWAofjozupCX1ZivnErEt
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "fund_gas_reserve" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet fund_gas_reserve json-args {} prepaid-gas '30.0 Tgas' attached-deposit '0.1 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== quoter config now ==
+{"enabled":true,"outlayer_account":"outlayer.testnet","project_id":"nectar.testnet/nectar-quoter","version_key":"5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9","deposit_yocto":"10000000000000000000000","gas_tgas":80,"max_instructions":"100000000","max_memory_mb":128,"max_execution_seconds":30,"max_conf_bps":100,"secrets_ref":null}

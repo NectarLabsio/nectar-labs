@@ -2,14 +2,16 @@
 network: testnet
 accounts:
   owner: nectar.testnet # nectar.testnet
-  core: nectar-core.nectar.testnet # nectar-core.nectar.testnet
+  core: nectar-core-v2.nectar.testnet # nectar-core.nectar.testnet
   usdc_mock: usdc-mock.nectar.testnet # usdc-mock.nectar.testnet
   nvdax_mock: nvdax-mock.nectar.testnet # nvdax-mock.nectar.testnet
-  keeper: keeper.nectar.testnet # keeper.nectar.testnet
+  keeper: keeper-v2.nectar.testnet # keeper.nectar.testnet
   demo:
     buyer1: buyer1.nectar.testnet
     buyer2: buyer2.nectar.testnet
     borrower1: borrower1.nectar.testnet
+  core_v1: nectar-core.nectar.testnet # nectar-core.nectar.testnet
+  keeper_v1: keeper.nectar.testnet # keeper.nectar.testnet
 collateral:
   # PRD §6.2 field names, integers only (D-009). B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)).
   nvdax:
@@ -47,11 +49,11 @@ oracle:
 outlayer:
   account: outlayer.testnet
   project_id: nectar.testnet/nectar-quoter
-  version_key: 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
-  wasm_sha256: 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
+  version_key: 5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9
+  wasm_sha256: 5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9
   resource_limits: {max_instructions: 100000000, max_memory_mb: 128, max_execution_seconds: 30}
   gas_tgas: 80
-  wasm_url: https://test.fastfs.io/nectar.testnet/outlayer.testnet/3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2.wasm
+  wasm_url: https://test.fastfs.io/nectar.testnet/outlayer.testnet/5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9.wasm
   gas_reserve_near: "0.1"
 signer:
   account: v1.signer-prod.testnet

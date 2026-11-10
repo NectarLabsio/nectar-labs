@@ -61,6 +61,14 @@ pin)
     '{deposit_yocto:$d, gas_tgas:($g|tonumber), max_instructions:($r.max_instructions|tostring), max_memory_mb:$r.max_memory_mb, max_execution_seconds:$r.max_execution_seconds}')"
   owner_call set_vol_bps "$(jq -cn --argjson v "$(cfg .collateral.nvdax.vol_bps)" '{symbol:"NVDAx", vol_bps:$v}')"
   owner_call set_quoter_pin "$(jq -cn --arg p "${PIN_PROJECT_ID:-$PID}" --arg v "${PIN_VERSION_KEY:-$VK}" '{project_id:$p, version_key:$v}')"
+  if rpc_view "$CORE" contract_version '{}' | jq -r '.result.result | implode' | grep -q '"2\.'; then
+    log "v2: vault_read + calendar/multiplier jobs on the same pinned version (WO-21/WO-23a/WO-24)"
+    D="${QUOTER_DEPOSIT_YOCTO:-10000000000000000000000}"; G="$(cfg .outlayer.gas_tgas)"
+    owner_call set_vault_read_config "$(jq -cn --arg p "${PIN_PROJECT_ID:-$PID}" --arg v "${PIN_VERSION_KEY:-$VK}" --arg d "$D" --arg g "$G" '{project_id:$p, version_key:$v, deposit_yocto:$d, gas_tgas:($g|tonumber)}')"
+    for job in calendar multiplier; do
+      owner_call set_job_config "$(jq -cn --arg j "$job" --arg p "${PIN_PROJECT_ID:-$PID}" --arg v "${PIN_VERSION_KEY:-$VK}" --arg d "$D" --arg g "$G" '{job:$j, project_id:$p, version_key:$v, deposit_yocto:$d, gas_tgas:($g|tonumber)}')"
+    done
+  fi
   log "gas reserve for OutLayer deposits ($(cfg .outlayer.gas_reserve_near) NEAR)"
   near contract call-function as-transaction "$CORE" fund_gas_reserve json-args '{}' prepaid-gas '30 Tgas' attached-deposit "$(cfg .outlayer.gas_reserve_near) NEAR" \
     sign-as "$OWNER" network-config testnet sign-with-keychain send </dev/null

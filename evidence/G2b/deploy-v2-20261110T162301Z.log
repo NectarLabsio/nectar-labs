@@ -1,0 +1,1810 @@
+
+== 1: funds ==
+owner nectar.testnet has 14.064353599253618 NEAR; needs ~11.0 (skips already-created accounts)
+
+== 2: accounts ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- create account:      nectar-core-v2.nectar.testnet
+│       -- transfer deposit:    9 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:6tmYgY7UieFw5Krg23GnpZpX8x3iR5usy9HFbip4ZUft
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:8HDQzGf8rkwt21x25Qh6HKi4dAQKKTtjRaqExv953ZdGzr2WJD3f8j296DucEQrThB1SeAihfJr9MNgQ6aSSyUz
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: HtodgVFkB5q7HE8Mq6X3UnTidQKcvhRGebAiGNwiEWXB
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/HtodgVFkB5q7HE8Mq6X3UnTidQKcvhRGebAiGNwiEWXB
+│     [0m
+
+
+New account <nectar-core-v2.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 9 NEAR to <nectar-core-v2.nectar.testnet> successfully.
+Added access key = ed25519:6tmYgY7UieFw5Krg23GnpZpX8x3iR5usy9HFbip4ZUft to nectar-core-v2.nectar.testnet.
+
+The data for the access key is saved in the keychain
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself nectar-core-v2.nectar.testnet '9 NEAR' autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  keeper-v2.nectar.testnet
+│    actions:
+│       -- create account:      keeper-v2.nectar.testnet
+│       -- transfer deposit:    0.5 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:BUyHhU6jLEWYAe25aDbFDkDZFHYFNU2prKrrXzTCmTQK
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:V2W5dvCfjc83E7dSDeSbmyChgJ5EuuQy3oJBpEvCWjVxzFQ9aRbTwuaiAg1QguiDCuPtMwpHjTWfWBiHqmLphnh
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: 7nhDYYJkJKX9e8Y1UQpmw6U1hPE6XEGokS6v8RUhWriy
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/7nhDYYJkJKX9e8Y1UQpmw6U1hPE6XEGokS6v8RUhWriy
+│     [0m
+
+
+New account <keeper-v2.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 0.5 NEAR to <keeper-v2.nectar.testnet> successfully.
+Added access key = ed25519:BUyHhU6jLEWYAe25aDbFDkDZFHYFNU2prKrrXzTCmTQK to keeper-v2.nectar.testnet.
+
+The data for the access key is saved in the keychain
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself keeper-v2.nectar.testnet '0.5 NEAR' autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+
+== 3: keeper-v2 function-call key (D-019 methods) + delete its full-access key ==
+keeper-v2 function-call public key: ed25519:7GknDBk6wX5StJYG2XSK4g9TeYMauyYxbAHHJbdzYBPh
+├  Unsigned transaction:
+│    signer_id:    keeper-v2.nectar.testnet
+│    receiver_id:  keeper-v2.nectar.testnet
+│    actions:
+│       -- add access key:     
+│                       public key:   ed25519:7GknDBk6wX5StJYG2XSK4g9TeYMauyYxbAHHJbdzYBPh
+│                       nonce:        0
+│                       permission:   FunctionCall(FunctionCallPermission { allowance: Some(NearToken { inner: 400000000000000000000000 }), receiver_id: "nectar-core-v2.nectar.testnet", method_names: ["trigger_preliquidation", "relay_settlement_result", "confirm_remote_deposit", "keeper_attest_deposit", "relay_release_result"] })
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:BUyHhU6jLEWYAe25aDbFDkDZFHYFNU2prKrrXzTCmTQK
+│    Signature:  ed25519:4LyDDwAdiVxsKDs3QEvAgqwrGEDipomk6NEABWwjea6qn77BqggKbrVbXfLf1cxg4BoTC8FeiVRZ34V97MCswVMc
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.645 Tgas
+│    Transaction fee: 0.0000420989374806 NEAR
+│    Transaction ID: JCxfqQwbj3MfSSEe4NFod5t2Lap492W5wNuvoDdJ8i3P
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/JCxfqQwbj3MfSSEe4NFod5t2Lap492W5wNuvoDdJ8i3P
+│     [0m
+
+
+Added access key = ed25519:7GknDBk6wX5StJYG2XSK4g9TeYMauyYxbAHHJbdzYBPh to keeper-v2.nectar.testnet.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account add-key keeper-v2.nectar.testnet grant-function-call-access --allowance '0.4 NEAR' --contract-account-id nectar-core-v2.nectar.testnet --function-names trigger_preliquidation,relay_settlement_result,confirm_remote_deposit,keeper_attest_deposit,relay_release_result use-manually-provided-public-key ed25519:7GknDBk6wX5StJYG2XSK4g9TeYMauyYxbAHHJbdzYBPh network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    keeper-v2.nectar.testnet
+│    receiver_id:  keeper-v2.nectar.testnet
+│    actions:
+│       -- delete access key:  
+│                       public key:   ed25519:BUyHhU6jLEWYAe25aDbFDkDZFHYFNU2prKrrXzTCmTQK
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:BUyHhU6jLEWYAe25aDbFDkDZFHYFNU2prKrrXzTCmTQK
+│    Signature:  ed25519:wAVyNjz2nX7X1aEX4szo42rEKBk18mRziW2LGeJ93HZjLtDhD78An87v5hG3fhbYye4YwPZ3M7J2DwsnGkcFs36
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 0.630 Tgas
+│    Transaction fee: 0.000040601225 NEAR
+│    Transaction ID: 7nV3bsgPc7d6JJzt4roXvS1JRwYuDyV6oi739jrqiyqm
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/7nV3bsgPc7d6JJzt4roXvS1JRwYuDyV6oi739jrqiyqm
+│     [0m
+
+
+Access key <ed25519:BUyHhU6jLEWYAe25aDbFDkDZFHYFNU2prKrrXzTCmTQK> for account <keeper-v2.nectar.testnet> has been successfully deleted.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account delete-keys keeper-v2.nectar.testnet public-keys ed25519:BUyHhU6jLEWYAe25aDbFDkDZFHYFNU2prKrrXzTCmTQK network-config testnet sign-with-keychain send[39m
+
+
+== 4: mock-ft code-only upgrade (multiplier under a raw key) ==
+├  Unsigned transaction:
+│    signer_id:    usdc-mock.nectar.testnet
+│    receiver_id:  usdc-mock.nectar.testnet
+│    actions:
+│       -- deploy code <55hvEqmBmZNjhmhiUagzZrx9f5rLzxC5iuHtfvG3pKA> to a account <usdc-mock.nectar.testnet>
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:CBSAzQ5JMxdU9D739mkBeRJXKFHhYKmRcyj68HGQ94wp
+│    Signature:  ed25519:3NX9BC1jWNiNvx1fD6MZGBr8Q4CCAMCVkTvXHRetFDvpHnb5Du4RZuzg3fcnmXSTpyUQwUJBtaXLyVrriHBYPJaG
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 12.1 Tgas
+│    Transaction fee: 0.0011785962184814 NEAR
+│    Transaction ID: GiwJpGuQMfhGnChcqV3psHvJ9emLN9KG5WXt6BwVdqWr
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/GiwJpGuQMfhGnChcqV3psHvJ9emLN9KG5WXt6BwVdqWr
+│     [0m
+
+Contract code has been successfully deployed.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy usdc-mock.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/mock_ft/mock_ft.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+├  Logs:
+│    No logs[0m
+Function execution return value (printed to stdout):
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-read-only usdc-mock.nectar.testnet multiplier json-args {} network-config testnet now[39m
+
+"1000000000000000000"
+├  Unsigned transaction:
+│    signer_id:    nvdax-mock.nectar.testnet
+│    receiver_id:  nvdax-mock.nectar.testnet
+│    actions:
+│       -- deploy code <55hvEqmBmZNjhmhiUagzZrx9f5rLzxC5iuHtfvG3pKA> to a account <nvdax-mock.nectar.testnet>
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:Dhdk936g1aGNCaE9VvRLxVDg3yWfAXpE7qeq5QTffJsb
+│    Signature:  ed25519:64me5AHmJf565ebuBMFC7NKKy9xjc7jB7vta6tr26eAajnf5dQgvrFGraBPU27QBaNc3k8znkwVB37oXnnTZqBPc
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 12.1 Tgas
+│    Transaction fee: 0.0011785962184814 NEAR
+│    Transaction ID: FNffB7SmUEbQM59ywzfWtv9JUaG8ksVRPykp38fPxuGr
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/FNffB7SmUEbQM59ywzfWtv9JUaG8ksVRPykp38fPxuGr
+│     [0m
+
+Contract code has been successfully deployed.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy nvdax-mock.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/mock_ft/mock_ft.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+├  Logs:
+│    No logs[0m
+Function execution return value (printed to stdout):
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-read-only nvdax-mock.nectar.testnet multiplier json-args {} network-config testnet now[39m
+
+"1000000000000000000"
+
+== 5: deploy v2 ==
+├  Unsigned transaction:
+│    signer_id:    nectar-core-v2.nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- deploy code <3W5bifwgurTNyZwHsseLU8NmJxaW5Dt2221CfhvQ31ey> to a account <nectar-core-v2.nectar.testnet>
+│       -- function call:      
+│                       method name:  new
+│                       args:         {
+│                                       "keeper": "keeper-v2.nectar.testnet",
+│                                       "owner": "nectar.testnet",
+│                                       "usdc_token": "usdc-mock.nectar.testnet"
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:6tmYgY7UieFw5Krg23GnpZpX8x3iR5usy9HFbip4ZUft
+│    Signature:  ed25519:5VQYxuzmHFosusp1n2m4KCWG3AEmLW8CDnkv8JvxYYmqK3o8tZcnMzrrpVEMCR2iVqiGaKXdz6i4riyz5645sy9n
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 55.4 Tgas
+│    Transaction fee: 0.0055172051953389 NEAR
+│    Transaction ID: 9BcG3g3xnLB9ibhY8z4ZQNBKahrRupckbxCfhAs32Kuw
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/9BcG3g3xnLB9ibhY8z4ZQNBKahrRupckbxCfhAs32Kuw
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+Contract code has been successfully deployed.
+The "new" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar-core-v2.nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy nectar-core-v2.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/nectar_core/nectar_core.wasm with-init-call new json-args '{"owner":"nectar.testnet","usdc_token":"usdc-mock.nectar.testnet","keeper":"keeper-v2.nectar.testnet"}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' network-config testnet sign-with-keychain send[39m
+
+├  Logs:
+│    No logs[0m
+Function execution return value (printed to stdout):
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-read-only nectar-core-v2.nectar.testnet contract_version json-args {} network-config testnet now[39m
+
+"2.0.0-v7"
+
+== 6: configure ==
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  upsert_collateral
+│                       args:         {
+│                                       "config": {
+│                                         "base_haircut_bps": 1000,
+│                                         "base_ltv_bps": 4000,
+│                                         "decimals": 6,
+│                                         "limit_premium_bps": 300,
+│                                         "market_session_open": false,
+│                                         "max_nectar_ltv_bps": 7000,
+│                                         "pre_liq_max_bps": 8000,
+│                                         "pre_liq_min_bps": 6500,
+│                                         "price_feed_id": "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+│                                         "price_kind": "Underlying",
+│                                         "remote_chain": null,
+│                                         "symbol": "NVDAx",
+│                                         "token": "nvdax-mock.nectar.testnet",
+│                                         "verified_dex_depth_usd_e6": "0",
+│                                         "vol_bps": 420,
+│                                         "weekend_haircut_bps": 2500
+│                                       },
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:2iQgnxXnduZsBi2zPwWKGNHfWwodQ6aYSNTwVVziGw9zUqsgR35SiHv19m2ZcehgRT63iN7K48ixHE7QWPivex3X
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.2 Tgas
+│    Transaction fee: 0.0002944834953786 NEAR
+│    Transaction ID: 3gB2BLs39o2ADeYoxSvbLpxh87tWZUdA5beA7h7c7ETd
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/3gB2BLs39o2ADeYoxSvbLpxh87tWZUdA5beA7h7c7ETd
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"collateral_upserted","data":[{"symbol":"NVDAx"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "upsert_collateral" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet upsert_collateral json-args '{"symbol":"NVDAx","config":{"symbol":"NVDAx","token":"nvdax-mock.nectar.testnet","decimals":6,"price_feed_id":"b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593","base_ltv_bps":4000,"max_nectar_ltv_bps":7000,"base_haircut_bps":1000,"weekend_haircut_bps":2500,"limit_premium_bps":300,"pre_liq_min_bps":6500,"pre_liq_max_bps":8000,"market_session_open":false,"verified_dex_depth_usd_e6":"0","remote_chain":null,"vol_bps":420,"price_kind":"Underlying"}}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  update_owner_price
+│                       args:         {
+│                                       "price_usd_e6": "180000000",
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:kV26NsRyqBCunyz5RFM5iQhBrz6JQVNgct1fVZcZdrXUWnYd1RM9qF5t2nSxHWne6p7otiRXjUMebT2ccAfP3gs
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.0 Tgas
+│    Transaction fee: 0.0002680583335431 NEAR
+│    Transaction ID: 8MxE5ZRGb1NMAxt9ET8WbwaHd4picXGz4MHU7mc13UgN
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/8MxE5ZRGb1NMAxt9ET8WbwaHd4picXGz4MHU7mc13UgN
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+
+Function execution return value (printed to stdout):
+true
+
+
+The "update_owner_price" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet update_owner_price json-args '{"symbol":"NVDAx","price_usd_e6":"180000000"}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+session windows: 287 (2026-11-10 … 2027-12-31), source https://www.nyse.com/markets/hours-calendars retrieved 2026-11-10T11:45:14Z
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_session_calendar
+│                       args:         {
+│                                       "windows": [
+│                                         [
+│                                           "1794321000000000000",
+│                                           "1794344400000000000"
+│                                         ],
+│                                         [
+│                                           "1794407400000000000",
+│                                           "1794430800000000000"
+│                                         ],
+│                                         [
+│                                           "1794493800000000000",
+│                                           "1794517200000000000"
+│                                         ],
+│                                         [
+│                                           "1794580200000000000",
+│                                           "1794603600000000000"
+│                                         ],
+│                                         [
+│                                           "1794839400000000000",
+│                                           "1794862800000000000"
+│                                         ],
+│                                         [
+│                                           "1794925800000000000",
+│                                           "1794949200000000000"
+│                                         ],
+│                                         [
+│                                           "1795012200000000000",
+│                                           "1795035600000000000"
+│                                         ],
+│                                         [
+│                                           "1795098600000000000",
+│                                           "1795122000000000000"
+│                                         ],
+│                                         [
+│                                           "1795185000000000000",
+│                                           "1795208400000000000"
+│                                         ],
+│                                         [
+│                                           "1795444200000000000",
+│                                           "1795467600000000000"
+│                                         ],
+│                                         [
+│                                           "1795530600000000000",
+│                                           "1795554000000000000"
+│                                         ],
+│                                         [
+│                                           "1795617000000000000",
+│                                           "1795640400000000000"
+│                                         ],
+│                                         [
+│                                           "1795789800000000000",
+│                                           "1795802400000000000"
+│                                         ],
+│                                         [
+│                                           "1796049000000000000",
+│                                           "1796072400000000000"
+│                                         ],
+│                                         [
+│                                           "1796135400000000000",
+│                                           "1796158800000000000"
+│                                         ],
+│                                         [
+│                                           "1796221800000000000",
+│                                           "1796245200000000000"
+│                                         ],
+│                                         [
+│                                           "1796308200000000000",
+│                                           "1796331600000000000"
+│                                         ],
+│                                         [
+│                                           "1796394600000000000",
+│                                           "1796418000000000000"
+│                                         ],
+│                                         [
+│                                           "1796653800000000000",
+│                                           "1796677200000000000"
+│                                         ],
+│                                         [
+│                                           "1796740200000000000",
+│                                           "1796763600000000000"
+│                                         ],
+│                                         [
+│                                           "1796826600000000000",
+│                                           "1796850000000000000"
+│                                         ],
+│                                         [
+│                                           "1796913000000000000",
+│                                           "1796936400000000000"
+│                                         ],
+│                                         [
+│                                           "1796999400000000000",
+│                                           "1797022800000000000"
+│                                         ],
+│                                         [
+│                                           "1797258600000000000",
+│                                           "1797282000000000000"
+│                                         ],
+│                                         [
+│                                           "1797345000000000000",
+│                                           "1797368400000000000"
+│                                         ],
+│                                         [
+│                                           "1797431400000000000",
+│                                           "1797454800000000000"
+│                                         ],
+│                                         [
+│                                           "1797517800000000000",
+│                                           "1797541200000000000"
+│                                         ],
+│                                         [
+│                                           "1797604200000000000",
+│                                           "1797627600000000000"
+│                                         ],
+│                                         [
+│                                           "1797863400000000000",
+│                                           "1797886800000000000"
+│                                         ],
+│                                         [
+│                                           "1797949800000000000",
+│                                           "1797973200000000000"
+│                                         ],
+│                                         [
+│                                           "1798036200000000000",
+│                                           "1798059600000000000"
+│                                         ],
+│                                         [
+│                                           "1798122600000000000",
+│                                           "1798135200000000000"
+│                                         ],
+│                                         [
+│                                           "1798468200000000000",
+│                                           "1798491600000000000"
+│                                         ],
+│                                         [
+│                                           "1798554600000000000",
+│                                           "1798578000000000000"
+│                                         ],
+│                                         [
+│                                           "1798641000000000000",
+│                                           "1798664400000000000"
+│                                         ],
+│                                         [
+│                                           "1798727400000000000",
+│                                           "1798750800000000000"
+│                                         ],
+│                                         [
+│                                           "1799073000000000000",
+│                                           "1799096400000000000"
+│                                         ],
+│                                         [
+│                                           "1799159400000000000",
+│                                           "1799182800000000000"
+│                                         ],
+│                                         [
+│                                           "1799245800000000000",
+│                                           "1799269200000000000"
+│                                         ],
+│                                         [
+│                                           "1799332200000000000",
+│                                           "1799355600000000000"
+│                                         ],
+│                                         [
+│                                           "1799418600000000000",
+│                                           "1799442000000000000"
+│                                         ],
+│                                         [
+│                                           "1799677800000000000",
+│                                           "1799701200000000000"
+│                                         ],
+│                                         [
+│                                           "1799764200000000000",
+│                                           "1799787600000000000"
+│                                         ],
+│                                         [
+│                                           "1799850600000000000",
+│                                           "1799874000000000000"
+│                                         ],
+│                                         [
+│                                           "1799937000000000000",
+│                                           "1799960400000000000"
+│                                         ],
+│                                         [
+│                                           "1800023400000000000",
+│                                           "1800046800000000000"
+│                                         ],
+│                                         [
+│                                           "1800369000000000000",
+│                                           "1800392400000000000"
+│                                         ],
+│                                         [
+│                                           "1800455400000000000",
+│                                           "1800478800000000000"
+│                                         ],
+│                                         [
+│                                           "1800541800000000000",
+│                                           "1800565200000000000"
+│                                         ],
+│                                         [
+│                                           "1800628200000000000",
+│                                           "1800651600000000000"
+│                                         ],
+│                                         [
+│                                           "1800887400000000000",
+│                                           "1800910800000000000"
+│                                         ],
+│                                         [
+│                                           "1800973800000000000",
+│                                           "1800997200000000000"
+│                                         ],
+│                                         [
+│                                           "1801060200000000000",
+│                                           "1801083600000000000"
+│                                         ],
+│                                         [
+│                                           "1801146600000000000",
+│                                           "1801170000000000000"
+│                                         ],
+│                                         [
+│                                           "1801233000000000000",
+│                                           "1801256400000000000"
+│                                         ],
+│                                         [
+│                                           "1801492200000000000",
+│                                           "1801515600000000000"
+│                                         ],
+│                                         [
+│                                           "1801578600000000000",
+│                                           "1801602000000000000"
+│                                         ],
+│                                         [
+│                                           "1801665000000000000",
+│                                           "1801688400000000000"
+│                                         ],
+│                                         [
+│                                           "1801751400000000000",
+│                                           "1801774800000000000"
+│                                         ],
+│                                         [
+│                                           "1801837800000000000",
+│                                           "1801861200000000000"
+│                                         ],
+│                                         [
+│                                           "1802097000000000000",
+│                                           "1802120400000000000"
+│                                         ],
+│                                         [
+│                                           "1802183400000000000",
+│                                           "1802206800000000000"
+│                                         ],
+│                                         [
+│                                           "1802269800000000000",
+│                                           "1802293200000000000"
+│                                         ],
+│                                         [
+│                                           "1802356200000000000",
+│                                           "1802379600000000000"
+│                                         ],
+│                                         [
+│                                           "1802442600000000000",
+│                                           "1802466000000000000"
+│                                         ],
+│                                         [
+│                                           "1802788200000000000",
+│                                           "1802811600000000000"
+│                                         ],
+│                                         [
+│                                           "1802874600000000000",
+│                                           "1802898000000000000"
+│                                         ],
+│                                         [
+│                                           "1802961000000000000",
+│                                           "1802984400000000000"
+│                                         ],
+│                                         [
+│                                           "1803047400000000000",
+│                                           "1803070800000000000"
+│                                         ],
+│                                         [
+│                                           "1803306600000000000",
+│                                           "1803330000000000000"
+│                                         ],
+│                                         [
+│                                           "1803393000000000000",
+│                                           "1803416400000000000"
+│                                         ],
+│                                         [
+│                                           "1803479400000000000",
+│                                           "1803502800000000000"
+│                                         ],
+│                                         [
+│                                           "1803565800000000000",
+│                                           "1803589200000000000"
+│                                         ],
+│                                         [
+│                                           "1803652200000000000",
+│                                           "1803675600000000000"
+│                                         ],
+│                                         [
+│                                           "1803911400000000000",
+│                                           "1803934800000000000"
+│                                         ],
+│                                         [
+│                                           "1803997800000000000",
+│                                           "1804021200000000000"
+│                                         ],
+│                                         [
+│                                           "1804084200000000000",
+│                                           "1804107600000000000"
+│                                         ],
+│                                         [
+│                                           "1804170600000000000",
+│                                           "1804194000000000000"
+│                                         ],
+│                                         [
+│                                           "1804257000000000000",
+│                                           "1804280400000000000"
+│                                         ],
+│                                         [
+│                                           "1804516200000000000",
+│                                           "1804539600000000000"
+│                                         ],
+│                                         [
+│                                           "1804602600000000000",
+│                                           "1804626000000000000"
+│                                         ],
+│                                         [
+│                                           "1804689000000000000",
+│                                           "1804712400000000000"
+│                                         ],
+│                                         [
+│                                           "1804775400000000000",
+│                                           "1804798800000000000"
+│                                         ],
+│                                         [
+│                                           "1804861800000000000",
+│                                           "1804885200000000000"
+│                                         ],
+│                                         [
+│                                           "1805117400000000000",
+│                                           "1805140800000000000"
+│                                         ],
+│                                         [
+│                                           "1805203800000000000",
+│                                           "1805227200000000000"
+│                                         ],
+│                                         [
+│                                           "1805290200000000000",
+│                                           "1805313600000000000"
+│                                         ],
+│                                         [
+│                                           "1805376600000000000",
+│                                           "1805400000000000000"
+│                                         ],
+│                                         [
+│                                           "1805463000000000000",
+│                                           "1805486400000000000"
+│                                         ],
+│                                         [
+│                                           "1805722200000000000",
+│                                           "1805745600000000000"
+│                                         ],
+│                                         [
+│                                           "1805808600000000000",
+│                                           "1805832000000000000"
+│                                         ],
+│                                         [
+│                                           "1805895000000000000",
+│                                           "1805918400000000000"
+│                                         ],
+│                                         [
+│                                           "1805981400000000000",
+│                                           "1806004800000000000"
+│                                         ],
+│                                         [
+│                                           "1806327000000000000",
+│                                           "1806350400000000000"
+│                                         ],
+│                                         [
+│                                           "1806413400000000000",
+│                                           "1806436800000000000"
+│                                         ],
+│                                         [
+│                                           "1806499800000000000",
+│                                           "1806523200000000000"
+│                                         ],
+│                                         [
+│                                           "1806586200000000000",
+│                                           "1806609600000000000"
+│                                         ],
+│                                         [
+│                                           "1806672600000000000",
+│                                           "1806696000000000000"
+│                                         ],
+│                                         [
+│                                           "1806931800000000000",
+│                                           "1806955200000000000"
+│                                         ],
+│                                         [
+│                                           "1807018200000000000",
+│                                           "1807041600000000000"
+│                                         ],
+│                                         [
+│                                           "1807104600000000000",
+│                                           "1807128000000000000"
+│                                         ],
+│                                         [
+│                                           "1807191000000000000",
+│                                           "1807214400000000000"
+│                                         ],
+│                                         [
+│                                           "1807277400000000000",
+│                                           "1807300800000000000"
+│                                         ],
+│                                         [
+│                                           "1807536600000000000",
+│                                           "1807560000000000000"
+│                                         ],
+│                                         [
+│                                           "1807623000000000000",
+│                                           "1807646400000000000"
+│                                         ],
+│                                         [
+│                                           "1807709400000000000",
+│                                           "1807732800000000000"
+│                                         ],
+│                                         [
+│                                           "1807795800000000000",
+│                                           "1807819200000000000"
+│                                         ],
+│                                         [
+│                                           "1807882200000000000",
+│                                           "1807905600000000000"
+│                                         ],
+│                                         [
+│                                           "1808141400000000000",
+│                                           "1808164800000000000"
+│                                         ],
+│                                         [
+│                                           "1808227800000000000",
+│                                           "1808251200000000000"
+│                                         ],
+│                                         [
+│                                           "1808314200000000000",
+│                                           "1808337600000000000"
+│                                         ],
+│                                         [
+│                                           "1808400600000000000",
+│                                           "1808424000000000000"
+│                                         ],
+│                                         [
+│                                           "1808487000000000000",
+│                                           "1808510400000000000"
+│                                         ],
+│                                         [
+│                                           "1808746200000000000",
+│                                           "1808769600000000000"
+│                                         ],
+│                                         [
+│                                           "1808832600000000000",
+│                                           "1808856000000000000"
+│                                         ],
+│                                         [
+│                                           "1808919000000000000",
+│                                           "1808942400000000000"
+│                                         ],
+│                                         [
+│                                           "1809005400000000000",
+│                                           "1809028800000000000"
+│                                         ],
+│                                         [
+│                                           "1809091800000000000",
+│                                           "1809115200000000000"
+│                                         ],
+│                                         [
+│                                           "1809351000000000000",
+│                                           "1809374400000000000"
+│                                         ],
+│                                         [
+│                                           "1809437400000000000",
+│                                           "1809460800000000000"
+│                                         ],
+│                                         [
+│                                           "1809523800000000000",
+│                                           "1809547200000000000"
+│                                         ],
+│                                         [
+│                                           "1809610200000000000",
+│                                           "1809633600000000000"
+│                                         ],
+│                                         [
+│                                           "1809696600000000000",
+│                                           "1809720000000000000"
+│                                         ],
+│                                         [
+│                                           "1809955800000000000",
+│                                           "1809979200000000000"
+│                                         ],
+│                                         [
+│                                           "1810042200000000000",
+│                                           "1810065600000000000"
+│                                         ],
+│                                         [
+│                                           "1810128600000000000",
+│                                           "1810152000000000000"
+│                                         ],
+│                                         [
+│                                           "1810215000000000000",
+│                                           "1810238400000000000"
+│                                         ],
+│                                         [
+│                                           "1810301400000000000",
+│                                           "1810324800000000000"
+│                                         ],
+│                                         [
+│                                           "1810560600000000000",
+│                                           "1810584000000000000"
+│                                         ],
+│                                         [
+│                                           "1810647000000000000",
+│                                           "1810670400000000000"
+│                                         ],
+│                                         [
+│                                           "1810733400000000000",
+│                                           "1810756800000000000"
+│                                         ],
+│                                         [
+│                                           "1810819800000000000",
+│                                           "1810843200000000000"
+│                                         ],
+│                                         [
+│                                           "1810906200000000000",
+│                                           "1810929600000000000"
+│                                         ],
+│                                         [
+│                                           "1811165400000000000",
+│                                           "1811188800000000000"
+│                                         ],
+│                                         [
+│                                           "1811251800000000000",
+│                                           "1811275200000000000"
+│                                         ],
+│                                         [
+│                                           "1811338200000000000",
+│                                           "1811361600000000000"
+│                                         ],
+│                                         [
+│                                           "1811424600000000000",
+│                                           "1811448000000000000"
+│                                         ],
+│                                         [
+│                                           "1811511000000000000",
+│                                           "1811534400000000000"
+│                                         ],
+│                                         [
+│                                           "1811856600000000000",
+│                                           "1811880000000000000"
+│                                         ],
+│                                         [
+│                                           "1811943000000000000",
+│                                           "1811966400000000000"
+│                                         ],
+│                                         [
+│                                           "1812029400000000000",
+│                                           "1812052800000000000"
+│                                         ],
+│                                         [
+│                                           "1812115800000000000",
+│                                           "1812139200000000000"
+│                                         ],
+│                                         [
+│                                           "1812375000000000000",
+│                                           "1812398400000000000"
+│                                         ],
+│                                         [
+│                                           "1812461400000000000",
+│                                           "1812484800000000000"
+│                                         ],
+│                                         [
+│                                           "1812547800000000000",
+│                                           "1812571200000000000"
+│                                         ],
+│                                         [
+│                                           "1812634200000000000",
+│                                           "1812657600000000000"
+│                                         ],
+│                                         [
+│                                           "1812720600000000000",
+│                                           "1812744000000000000"
+│                                         ],
+│                                         [
+│                                           "1812979800000000000",
+│                                           "1813003200000000000"
+│                                         ],
+│                                         [
+│                                           "1813066200000000000",
+│                                           "1813089600000000000"
+│                                         ],
+│                                         [
+│                                           "1813152600000000000",
+│                                           "1813176000000000000"
+│                                         ],
+│                                         [
+│                                           "1813239000000000000",
+│                                           "1813262400000000000"
+│                                         ],
+│                                         [
+│                                           "1813584600000000000",
+│                                           "1813608000000000000"
+│                                         ],
+│                                         [
+│                                           "1813671000000000000",
+│                                           "1813694400000000000"
+│                                         ],
+│                                         [
+│                                           "1813757400000000000",
+│                                           "1813780800000000000"
+│                                         ],
+│                                         [
+│                                           "1813843800000000000",
+│                                           "1813867200000000000"
+│                                         ],
+│                                         [
+│                                           "1813930200000000000",
+│                                           "1813953600000000000"
+│                                         ],
+│                                         [
+│                                           "1814189400000000000",
+│                                           "1814212800000000000"
+│                                         ],
+│                                         [
+│                                           "1814275800000000000",
+│                                           "1814299200000000000"
+│                                         ],
+│                                         [
+│                                           "1814362200000000000",
+│                                           "1814385600000000000"
+│                                         ],
+│                                         [
+│                                           "1814448600000000000",
+│                                           "1814472000000000000"
+│                                         ],
+│                                         [
+│                                           "1814535000000000000",
+│                                           "1814558400000000000"
+│                                         ],
+│                                         [
+│                                           "1814880600000000000",
+│                                           "1814904000000000000"
+│                                         ],
+│                                         [
+│                                           "1814967000000000000",
+│                                           "1814990400000000000"
+│                                         ],
+│                                         [
+│                                           "1815053400000000000",
+│                                           "1815076800000000000"
+│                                         ],
+│                                         [
+│                                           "1815139800000000000",
+│                                           "1815163200000000000"
+│                                         ],
+│                                         [
+│                                           "1815399000000000000",
+│                                           "1815422400000000000"
+│                                         ],
+│                                         [
+│                                           "1815485400000000000",
+│                                           "1815508800000000000"
+│                                         ],
+│                                         [
+│                                           "1815571800000000000",
+│                                           "1815595200000000000"
+│                                         ],
+│                                         [
+│                                           "1815658200000000000",
+│                                           "1815681600000000000"
+│                                         ],
+│                                         [
+│                                           "1815744600000000000",
+│                                           "1815768000000000000"
+│                                         ],
+│                                         [
+│                                           "1816003800000000000",
+│                                           "1816027200000000000"
+│                                         ],
+│                                         [
+│                                           "1816090200000000000",
+│                                           "1816113600000000000"
+│                                         ],
+│                                         [
+│                                           "1816176600000000000",
+│                                           "1816200000000000000"
+│                                         ],
+│                                         [
+│                                           "1816263000000000000",
+│                                           "1816286400000000000"
+│                                         ],
+│                                         [
+│                                           "1816349400000000000",
+│                                           "1816372800000000000"
+│                                         ],
+│                                         [
+│                                           "1816608600000000000",
+│                                           "1816632000000000000"
+│                                         ],
+│                                         [
+│                                           "1816695000000000000",
+│                                           "1816718400000000000"
+│                                         ],
+│                                         [
+│                                           "1816781400000000000",
+│                                           "1816804800000000000"
+│                                         ],
+│                                         [
+│                                           "1816867800000000000",
+│                                           "1816891200000000000"
+│                                         ],
+│                                         [
+│                                           "1816954200000000000",
+│                                           "1816977600000000000"
+│                                         ],
+│                                         [
+│                                           "1817213400000000000",
+│                                           "1817236800000000000"
+│                                         ],
+│                                         [
+│                                           "1817299800000000000",
+│                                           "1817323200000000000"
+│                                         ],
+│                                         [
+│                                           "1817386200000000000",
+│                                           "1817409600000000000"
+│                                         ],
+│                                         [
+│                                           "1817472600000000000",
+│                                           "1817496000000000000"
+│                                         ],
+│                                         [
+│                                           "1817559000000000000",
+│                                           "1817582400000000000"
+│                                         ],
+│                                         [
+│                                           "1817818200000000000",
+│                                           "1817841600000000000"
+│                                         ],
+│                                         [
+│                                           "1817904600000000000",
+│                                           "1817928000000000000"
+│                                         ],
+│                                         [
+│                                           "1817991000000000000",
+│                                           "1818014400000000000"
+│                                         ],
+│                                         [
+│                                           "1818077400000000000",
+│                                           "1818100800000000000"
+│                                         ],
+│                                         [
+│                                           "1818163800000000000",
+│                                           "1818187200000000000"
+│                                         ],
+│                                         [
+│                                           "1818423000000000000",
+│                                           "1818446400000000000"
+│                                         ],
+│                                         [
+│                                           "1818509400000000000",
+│                                           "1818532800000000000"
+│                                         ],
+│                                         [
+│                                           "1818595800000000000",
+│                                           "1818619200000000000"
+│                                         ],
+│                                         [
+│                                           "1818682200000000000",
+│                                           "1818705600000000000"
+│                                         ],
+│                                         [
+│                                           "1818768600000000000",
+│                                           "1818792000000000000"
+│                                         ],
+│                                         [
+│                                           "1819027800000000000",
+│                                           "1819051200000000000"
+│                                         ],
+│                                         [
+│                                           "1819114200000000000",
+│                                           "1819137600000000000"
+│                                         ],
+│                                         [
+│                                           "1819200600000000000",
+│                                           "1819224000000000000"
+│                                         ],
+│                                         [
+│                                           "1819287000000000000",
+│                                           "1819310400000000000"
+│                                         ],
+│                                         [
+│                                           "1819373400000000000",
+│                                           "1819396800000000000"
+│                                         ],
+│                                         [
+│                                           "1819632600000000000",
+│                                           "1819656000000000000"
+│                                         ],
+│                                         [
+│                                           "1819719000000000000",
+│                                           "1819742400000000000"
+│                                         ],
+│                                         [
+│                                           "1819805400000000000",
+│                                           "1819828800000000000"
+│                                         ],
+│                                         [
+│                                           "1819891800000000000",
+│                                           "1819915200000000000"
+│                                         ],
+│                                         [
+│                                           "1819978200000000000",
+│                                           "1820001600000000000"
+│                                         ],
+│                                         [
+│                                           "1820323800000000000",
+│                                           "1820347200000000000"
+│                                         ],
+│                                         [
+│                                           "1820410200000000000",
+│                                           "1820433600000000000"
+│                                         ],
+│                                         [
+│                                           "1820496600000000000",
+│                                           "1820520000000000000"
+│                                         ],
+│                                         [
+│                                           "1820583000000000000",
+│                                           "1820606400000000000"
+│                                         ],
+│                                         [
+│                                           "1820842200000000000",
+│                                           "1820865600000000000"
+│                                         ],
+│                                         [
+│                                           "1820928600000000000",
+│                                           "1820952000000000000"
+│                                         ],
+│                                         [
+│                                           "1821015000000000000",
+│                                           "1821038400000000000"
+│                                         ],
+│                                         [
+│                                           "1821101400000000000",
+│                                           "1821124800000000000"
+│                                         ],
+│                                         [
+│                                           "1821187800000000000",
+│                                           "1821211200000000000"
+│                                         ],
+│                                         [
+│                                           "1821447000000000000",
+│                                           "1821470400000000000"
+│                                         ],
+│                                         [
+│                                           "1821533400000000000",
+│                                           "1821556800000000000"
+│                                         ],
+│                                         [
+│                                           "1821619800000000000",
+│                                           "1821643200000000000"
+│                                         ],
+│                                         [
+│                                           "1821706200000000000",
+│                                           "1821729600000000000"
+│                                         ],
+│                                         [
+│                                           "1821792600000000000",
+│                                           "1821816000000000000"
+│                                         ],
+│                                         [
+│                                           "1822051800000000000",
+│                                           "1822075200000000000"
+│                                         ],
+│                                         [
+│                                           "1822138200000000000",
+│                                           "1822161600000000000"
+│                                         ],
+│                                         [
+│                                           "1822224600000000000",
+│                                           "1822248000000000000"
+│                                         ],
+│                                         [
+│                                           "1822311000000000000",
+│                                           "1822334400000000000"
+│                                         ],
+│                                         [
+│                                           "1822397400000000000",
+│                                           "1822420800000000000"
+│                                         ],
+│                                         [
+│                                           "1822656600000000000",
+│                                           "1822680000000000000"
+│                                         ],
+│                                         [
+│                                           "1822743000000000000",
+│                                           "1822766400000000000"
+│                                         ],
+│                                         [
+│                                           "1822829400000000000",
+│                                           "1822852800000000000"
+│                                         ],
+│                                         [
+│                                           "1822915800000000000",
+│                                           "1822939200000000000"
+│                                         ],
+│                                         [
+│                                           "1823002200000000000",
+│                                           "1823025600000000000"
+│                                         ],
+│                                         [
+│                                           "1823261400000000000",
+│                                           "1823284800000000000"
+│                                         ],
+│                                         [
+│                                           "1823347800000000000",
+│                                           "1823371200000000000"
+│                                         ],
+│                                         [
+│                                           "1823434200000000000",
+│                                           "1823457600000000000"
+│                                         ],
+│                                         [
+│                                           "1823520600000000000",
+│                                           "1823544000000000000"
+│                                         ],
+│                                         [
+│                                           "1823607000000000000",
+│                                           "1823630400000000000"
+│                                         ],
+│                                         [
+│                                           "1823866200000000000",
+│                                           "1823889600000000000"
+│                                         ],
+│                                         [
+│                                           "1823952600000000000",
+│                                           "1823976000000000000"
+│                                         ],
+│                                         [
+│                                           "1824039000000000000",
+│                                           "1824062400000000000"
+│                                         ],
+│                                         [
+│                                           "1824125400000000000",
+│                                           "1824148800000000000"
+│                                         ],
+│                                         [
+│                                           "1824211800000000000",
+│                                           "1824235200000000000"
+│                                         ],
+│                                         [
+│                                           "1824471000000000000",
+│                                           "1824494400000000000"
+│                                         ],
+│                                         [
+│                                           "1824557400000000000",
+│                                           "1824580800000000000"
+│                                         ],
+│                                         [
+│                                           "1824643800000000000",
+│                                           "1824667200000000000"
+│                                         ],
+│                                         [
+│                                           "1824730200000000000",
+│                                           "1824753600000000000"
+│                                         ],
+│                                         [
+│                                           "1824816600000000000",
+│                                           "1824840000000000000"
+│                                         ],
+│                                         [
+│                                           "1825075800000000000",
+│                                           "1825099200000000000"
+│                                         ],
+│                                         [
+│                                           "1825162200000000000",
+│                                           "1825185600000000000"
+│                                         ],
+│                                         [
+│                                           "1825248600000000000",
+│                                           "1825272000000000000"
+│                                         ],
+│                                         [
+│                                           "1825335000000000000",
+│                                           "1825358400000000000"
+│                                         ],
+│                                         [
+│                                           "1825421400000000000",
+│                                           "1825444800000000000"
+│                                         ],
+│                                         [
+│                                           "1825684200000000000",
+│                                           "1825707600000000000"
+│                                         ],
+│                                         [
+│                                           "1825770600000000000",
+│                                           "1825794000000000000"
+│                                         ],
+│                                         [
+│                                           "1825857000000000000",
+│                                           "1825880400000000000"
+│                                         ],
+│                                         [
+│                                           "1825943400000000000",
+│                                           "1825966800000000000"
+│                                         ],
+│                                         [
+│                                           "1826029800000000000",
+│                                           "1826053200000000000"
+│                                         ],
+│                                         [
+│                                           "1826289000000000000",
+│                                           "1826312400000000000"
+│                                         ],
+│                                         [
+│                                           "1826375400000000000",
+│                                           "1826398800000000000"
+│                                         ],
+│                                         [
+│                                           "1826461800000000000",
+│                                           "1826485200000000000"
+│                                         ],
+│                                         [
+│                                           "1826548200000000000",
+│                                           "1826571600000000000"
+│                                         ],
+│                                         [
+│                                           "1826634600000000000",
+│                                           "1826658000000000000"
+│                                         ],
+│                                         [
+│                                           "1826893800000000000",
+│                                           "1826917200000000000"
+│                                         ],
+│                                         [
+│                                           "1826980200000000000",
+│                                           "1827003600000000000"
+│                                         ],
+│                                         [
+│                                           "1827066600000000000",
+│                                           "1827090000000000000"
+│                                         ],
+│                                         [
+│                                           "1827239400000000000",
+│                                           "1827252000000000000"
+│                                         ],
+│                                         [
+│                                           "1827498600000000000",
+│                                           "1827522000000000000"
+│                                         ],
+│                                         [
+│                                           "1827585000000000000",
+│                                           "1827608400000000000"
+│                                         ],
+│                                         [
+│                                           "1827671400000000000",
+│                                           "1827694800000000000"
+│                                         ],
+│                                         [
+│                                           "1827757800000000000",
+│                                           "1827781200000000000"
+│                                         ],
+│                                         [
+│                                           "1827844200000000000",
+│                                           "1827867600000000000"
+│                                         ],
+│                                         [
+│                                           "1828103400000000000",
+│                                           "1828126800000000000"
+│                                         ],
+│                                         [
+│                                           "1828189800000000000",
+│                                           "1828213200000000000"
+│                                         ],
+│                                         [
+│                                           "1828276200000000000",
+│                                           "1828299600000000000"
+│                                         ],
+│                                         [
+│                                           "1828362600000000000",
+│                                           "1828386000000000000"
+│                                         ],
+│                                         [
+│                                           "1828449000000000000",
+│                                           "1828472400000000000"
+│                                         ],
+│                                         [
+│                                           "1828708200000000000",
+│                                           "1828731600000000000"
+│                                         ],
+│                                         [
+│                                           "1828794600000000000",
+│                                           "1828818000000000000"
+│                                         ],
+│                                         [
+│                                           "1828881000000000000",
+│                                           "1828904400000000000"
+│                                         ],
+│                                         [
+│                                           "1828967400000000000",
+│                                           "1828990800000000000"
+│                                         ],
+│                                         [
+│                                           "1829053800000000000",
+│                                           "1829077200000000000"
+│                                         ],
+│                                         [
+│                                           "1829313000000000000",
+│                                           "1829336400000000000"
+│                                         ],
+│                                         [
+│                                           "1829399400000000000",
+│                                           "1829422800000000000"
+│                                         ],
+│                                         [
+│                                           "1829485800000000000",
+│                                           "1829509200000000000"
+│                                         ],
+│                                         [
+│                                           "1829572200000000000",
+│                                           "1829595600000000000"
+│                                         ],
+│                                         [
+│                                           "1829917800000000000",
+│                                           "1829941200000000000"
+│                                         ],
+│                                         [
+│                                           "1830004200000000000",
+│                                           "1830027600000000000"
+│                                         ],
+│                                         [
+│                                           "1830090600000000000",
+│                                           "1830114000000000000"
+│                                         ],
+│                                         [
+│                                           "1830177000000000000",
+│                                           "1830200400000000000"
+│                                         ],
+│                                         [
+│                                           "1830263400000000000",
+│                                           "1830286800000000000"
+│                                         ]
+│                                       ]
+│                                     }
+│                       gas:          100.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:4GkzDjPJRGQc44gHM3SpcCvi34Db8ALY7JsycTWnaE1RjveNEPFSRbz7uASTY2iXQHuXiLm5yhy1TBmAR4y9kYfK
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 6.0 Tgas
+│    Transaction fee: 0.0005716675025606 NEAR
+│    Transaction ID: HcdKxytnxtN63SkZqHuCwcVv4vRQTGgFtrZpnjC4SF5Y
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/HcdKxytnxtN63SkZqHuCwcVv4vRQTGgFtrZpnjC4SF5Y
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"session_calendar_set","data":[{"windows":287,"first_open_ns":"1794321000000000000","last_close_ns":"1830286800000000000"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_session_calendar" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_session_calendar json-args '{"windows":[["1794321000000000000","1794344400000000000"],["1794407400000000000","1794430800000000000"],["1794493800000000000","1794517200000000000"],["1794580200000000000","1794603600000000000"],["1794839400000000000","1794862800000000000"],["1794925800000000000","1794949200000000000"],["1795012200000000000","1795035600000000000"],["1795098600000000000","1795122000000000000"],["1795185000000000000","1795208400000000000"],["1795444200000000000","1795467600000000000"],["1795530600000000000","1795554000000000000"],["1795617000000000000","1795640400000000000"],["1795789800000000000","1795802400000000000"],["1796049000000000000","1796072400000000000"],["1796135400000000000","1796158800000000000"],["1796221800000000000","1796245200000000000"],["1796308200000000000","1796331600000000000"],["1796394600000000000","1796418000000000000"],["1796653800000000000","1796677200000000000"],["1796740200000000000","1796763600000000000"],["1796826600000000000","1796850000000000000"],["1796913000000000000","1796936400000000000"],["1796999400000000000","1797022800000000000"],["1797258600000000000","1797282000000000000"],["1797345000000000000","1797368400000000000"],["1797431400000000000","1797454800000000000"],["1797517800000000000","1797541200000000000"],["1797604200000000000","1797627600000000000"],["1797863400000000000","1797886800000000000"],["1797949800000000000","1797973200000000000"],["1798036200000000000","1798059600000000000"],["1798122600000000000","1798135200000000000"],["1798468200000000000","1798491600000000000"],["1798554600000000000","1798578000000000000"],["1798641000000000000","1798664400000000000"],["1798727400000000000","1798750800000000000"],["1799073000000000000","1799096400000000000"],["1799159400000000000","1799182800000000000"],["1799245800000000000","1799269200000000000"],["1799332200000000000","1799355600000000000"],["1799418600000000000","1799442000000000000"],["1799677800000000000","1799701200000000000"],["1799764200000000000","1799787600000000000"],["1799850600000000000","1799874000000000000"],["1799937000000000000","1799960400000000000"],["1800023400000000000","1800046800000000000"],["1800369000000000000","1800392400000000000"],["1800455400000000000","1800478800000000000"],["1800541800000000000","1800565200000000000"],["1800628200000000000","1800651600000000000"],["1800887400000000000","1800910800000000000"],["1800973800000000000","1800997200000000000"],["1801060200000000000","1801083600000000000"],["1801146600000000000","1801170000000000000"],["1801233000000000000","1801256400000000000"],["1801492200000000000","1801515600000000000"],["1801578600000000000","1801602000000000000"],["1801665000000000000","1801688400000000000"],["1801751400000000000","1801774800000000000"],["1801837800000000000","1801861200000000000"],["1802097000000000000","1802120400000000000"],["1802183400000000000","1802206800000000000"],["1802269800000000000","1802293200000000000"],["1802356200000000000","1802379600000000000"],["1802442600000000000","1802466000000000000"],["1802788200000000000","1802811600000000000"],["1802874600000000000","1802898000000000000"],["1802961000000000000","1802984400000000000"],["1803047400000000000","1803070800000000000"],["1803306600000000000","1803330000000000000"],["1803393000000000000","1803416400000000000"],["1803479400000000000","1803502800000000000"],["1803565800000000000","1803589200000000000"],["1803652200000000000","1803675600000000000"],["1803911400000000000","1803934800000000000"],["1803997800000000000","1804021200000000000"],["1804084200000000000","1804107600000000000"],["1804170600000000000","1804194000000000000"],["1804257000000000000","1804280400000000000"],["1804516200000000000","1804539600000000000"],["1804602600000000000","1804626000000000000"],["1804689000000000000","1804712400000000000"],["1804775400000000000","1804798800000000000"],["1804861800000000000","1804885200000000000"],["1805117400000000000","1805140800000000000"],["1805203800000000000","1805227200000000000"],["1805290200000000000","1805313600000000000"],["1805376600000000000","1805400000000000000"],["1805463000000000000","1805486400000000000"],["1805722200000000000","1805745600000000000"],["1805808600000000000","1805832000000000000"],["1805895000000000000","1805918400000000000"],["1805981400000000000","1806004800000000000"],["1806327000000000000","1806350400000000000"],["1806413400000000000","1806436800000000000"],["1806499800000000000","1806523200000000000"],["1806586200000000000","1806609600000000000"],["1806672600000000000","1806696000000000000"],["1806931800000000000","1806955200000000000"],["1807018200000000000","1807041600000000000"],["1807104600000000000","1807128000000000000"],["1807191000000000000","1807214400000000000"],["1807277400000000000","1807300800000000000"],["1807536600000000000","1807560000000000000"],["1807623000000000000","1807646400000000000"],["1807709400000000000","1807732800000000000"],["1807795800000000000","1807819200000000000"],["1807882200000000000","1807905600000000000"],["1808141400000000000","1808164800000000000"],["1808227800000000000","1808251200000000000"],["1808314200000000000","1808337600000000000"],["1808400600000000000","1808424000000000000"],["1808487000000000000","1808510400000000000"],["1808746200000000000","1808769600000000000"],["1808832600000000000","1808856000000000000"],["1808919000000000000","1808942400000000000"],["1809005400000000000","1809028800000000000"],["1809091800000000000","1809115200000000000"],["1809351000000000000","1809374400000000000"],["1809437400000000000","1809460800000000000"],["1809523800000000000","1809547200000000000"],["1809610200000000000","1809633600000000000"],["1809696600000000000","1809720000000000000"],["1809955800000000000","1809979200000000000"],["1810042200000000000","1810065600000000000"],["1810128600000000000","1810152000000000000"],["1810215000000000000","1810238400000000000"],["1810301400000000000","1810324800000000000"],["1810560600000000000","1810584000000000000"],["1810647000000000000","1810670400000000000"],["1810733400000000000","1810756800000000000"],["1810819800000000000","1810843200000000000"],["1810906200000000000","1810929600000000000"],["1811165400000000000","1811188800000000000"],["1811251800000000000","1811275200000000000"],["1811338200000000000","1811361600000000000"],["1811424600000000000","1811448000000000000"],["1811511000000000000","1811534400000000000"],["1811856600000000000","1811880000000000000"],["1811943000000000000","1811966400000000000"],["1812029400000000000","1812052800000000000"],["1812115800000000000","1812139200000000000"],["1812375000000000000","1812398400000000000"],["1812461400000000000","1812484800000000000"],["1812547800000000000","1812571200000000000"],["1812634200000000000","1812657600000000000"],["1812720600000000000","1812744000000000000"],["1812979800000000000","1813003200000000000"],["1813066200000000000","1813089600000000000"],["1813152600000000000","1813176000000000000"],["1813239000000000000","1813262400000000000"],["1813584600000000000","1813608000000000000"],["1813671000000000000","1813694400000000000"],["1813757400000000000","1813780800000000000"],["1813843800000000000","1813867200000000000"],["1813930200000000000","1813953600000000000"],["1814189400000000000","1814212800000000000"],["1814275800000000000","1814299200000000000"],["1814362200000000000","1814385600000000000"],["1814448600000000000","1814472000000000000"],["1814535000000000000","1814558400000000000"],["1814880600000000000","1814904000000000000"],["1814967000000000000","1814990400000000000"],["1815053400000000000","1815076800000000000"],["1815139800000000000","1815163200000000000"],["1815399000000000000","1815422400000000000"],["1815485400000000000","1815508800000000000"],["1815571800000000000","1815595200000000000"],["1815658200000000000","1815681600000000000"],["1815744600000000000","1815768000000000000"],["1816003800000000000","1816027200000000000"],["1816090200000000000","1816113600000000000"],["1816176600000000000","1816200000000000000"],["1816263000000000000","1816286400000000000"],["1816349400000000000","1816372800000000000"],["1816608600000000000","1816632000000000000"],["1816695000000000000","1816718400000000000"],["1816781400000000000","1816804800000000000"],["1816867800000000000","1816891200000000000"],["1816954200000000000","1816977600000000000"],["1817213400000000000","1817236800000000000"],["1817299800000000000","1817323200000000000"],["1817386200000000000","1817409600000000000"],["1817472600000000000","1817496000000000000"],["1817559000000000000","1817582400000000000"],["1817818200000000000","1817841600000000000"],["1817904600000000000","1817928000000000000"],["1817991000000000000","1818014400000000000"],["1818077400000000000","1818100800000000000"],["1818163800000000000","1818187200000000000"],["1818423000000000000","1818446400000000000"],["1818509400000000000","1818532800000000000"],["1818595800000000000","1818619200000000000"],["1818682200000000000","1818705600000000000"],["1818768600000000000","1818792000000000000"],["1819027800000000000","1819051200000000000"],["1819114200000000000","1819137600000000000"],["1819200600000000000","1819224000000000000"],["1819287000000000000","1819310400000000000"],["1819373400000000000","1819396800000000000"],["1819632600000000000","1819656000000000000"],["1819719000000000000","1819742400000000000"],["1819805400000000000","1819828800000000000"],["1819891800000000000","1819915200000000000"],["1819978200000000000","1820001600000000000"],["1820323800000000000","1820347200000000000"],["1820410200000000000","1820433600000000000"],["1820496600000000000","1820520000000000000"],["1820583000000000000","1820606400000000000"],["1820842200000000000","1820865600000000000"],["1820928600000000000","1820952000000000000"],["1821015000000000000","1821038400000000000"],["1821101400000000000","1821124800000000000"],["1821187800000000000","1821211200000000000"],["1821447000000000000","1821470400000000000"],["1821533400000000000","1821556800000000000"],["1821619800000000000","1821643200000000000"],["1821706200000000000","1821729600000000000"],["1821792600000000000","1821816000000000000"],["1822051800000000000","1822075200000000000"],["1822138200000000000","1822161600000000000"],["1822224600000000000","1822248000000000000"],["1822311000000000000","1822334400000000000"],["1822397400000000000","1822420800000000000"],["1822656600000000000","1822680000000000000"],["1822743000000000000","1822766400000000000"],["1822829400000000000","1822852800000000000"],["1822915800000000000","1822939200000000000"],["1823002200000000000","1823025600000000000"],["1823261400000000000","1823284800000000000"],["1823347800000000000","1823371200000000000"],["1823434200000000000","1823457600000000000"],["1823520600000000000","1823544000000000000"],["1823607000000000000","1823630400000000000"],["1823866200000000000","1823889600000000000"],["1823952600000000000","1823976000000000000"],["1824039000000000000","1824062400000000000"],["1824125400000000000","1824148800000000000"],["1824211800000000000","1824235200000000000"],["1824471000000000000","1824494400000000000"],["1824557400000000000","1824580800000000000"],["1824643800000000000","1824667200000000000"],["1824730200000000000","1824753600000000000"],["1824816600000000000","1824840000000000000"],["1825075800000000000","1825099200000000000"],["1825162200000000000","1825185600000000000"],["1825248600000000000","1825272000000000000"],["1825335000000000000","1825358400000000000"],["1825421400000000000","1825444800000000000"],["1825684200000000000","1825707600000000000"],["1825770600000000000","1825794000000000000"],["1825857000000000000","1825880400000000000"],["1825943400000000000","1825966800000000000"],["1826029800000000000","1826053200000000000"],["1826289000000000000","1826312400000000000"],["1826375400000000000","1826398800000000000"],["1826461800000000000","1826485200000000000"],["1826548200000000000","1826571600000000000"],["1826634600000000000","1826658000000000000"],["1826893800000000000","1826917200000000000"],["1826980200000000000","1827003600000000000"],["1827066600000000000","1827090000000000000"],["1827239400000000000","1827252000000000000"],["1827498600000000000","1827522000000000000"],["1827585000000000000","1827608400000000000"],["1827671400000000000","1827694800000000000"],["1827757800000000000","1827781200000000000"],["1827844200000000000","1827867600000000000"],["1828103400000000000","1828126800000000000"],["1828189800000000000","1828213200000000000"],["1828276200000000000","1828299600000000000"],["1828362600000000000","1828386000000000000"],["1828449000000000000","1828472400000000000"],["1828708200000000000","1828731600000000000"],["1828794600000000000","1828818000000000000"],["1828881000000000000","1828904400000000000"],["1828967400000000000","1828990800000000000"],["1829053800000000000","1829077200000000000"],["1829313000000000000","1829336400000000000"],["1829399400000000000","1829422800000000000"],["1829485800000000000","1829509200000000000"],["1829572200000000000","1829595600000000000"],["1829917800000000000","1829941200000000000"],["1830004200000000000","1830027600000000000"],["1830090600000000000","1830114000000000000"],["1830177000000000000","1830200400000000000"],["1830263400000000000","1830286800000000000"]]}' prepaid-gas '100.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_signer_config
+│                       args:         {
+│                                       "account": "v1.signer-prod.testnet",
+│                                       "expiry_s": 3600,
+│                                       "gas_tgas": 30,
+│                                       "path": "solana-devnet-v1"
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:5ByDcztvGQ5tyFDUvXCm69D8fAYZdcjRjN4d1K2TgyEw8UL1VNbae2uxRJduyVau3E2acRMb7pN9ZFYipj7R5otZ
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.8 Tgas
+│    Transaction fee: 0.0002538436977776 NEAR
+│    Transaction ID: 8x5Yoy2qh2rQfakvwcFrw5EVuiJqZNiNt9N5LmBVf1oP
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/8x5Yoy2qh2rQfakvwcFrw5EVuiJqZNiNt9N5LmBVf1oP
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"signer_config_set","data":[{"account":"v1.signer-prod.testnet","path":"solana-devnet-v1","gas_tgas":30,"expiry_s":3600}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_signer_config" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_signer_config json-args '{"account":"v1.signer-prod.testnet","path":"solana-devnet-v1","gas_tgas":30,"expiry_s":3600}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_remote_chain
+│                       args:         {
+│                                       "remote_chain": {
+│                                         "chain_id": "solana-devnet",
+│                                         "mpc_domain_id": 1,
+│                                         "vault_program": "ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW"
+│                                       },
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:4HpdR9YFgm2qcE3Jn67g9gwW3u7VRtEjmP3qXgsYQ5zFw3RNTeqtyQ2HkcGe2u8GrseVXHZ2Bob2oseM9xL27wN7
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.0 Tgas
+│    Transaction fee: 0.0002752879342389 NEAR
+│    Transaction ID: 4VGFnEE9AXS5fJvv7B9tSLyzDJVc3SUdH8BUfrL6SH8H
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/4VGFnEE9AXS5fJvv7B9tSLyzDJVc3SUdH8BUfrL6SH8H
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"remote_chain_set","data":[{"symbol":"NVDAx","remote_chain":{"chain_id":"solana-devnet","vault_program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW","mpc_domain_id":1}}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_remote_chain" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_remote_chain json-args '{"symbol":"NVDAx","remote_chain":{"chain_id":"solana-devnet","vault_program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW","mpc_domain_id":1}}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_allow_keeper_deposit_attestation
+│                       args:         {
+│                                       "allow": true
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:4XrmyPhJ3nCqfa4tXJgHCo5NnxDgPiiwN9MtdKhaw1qsoGT6fM3AHnxobacrcKAh2hpuEJVNpNioks2UqYjkY8Vd
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.8 Tgas
+│    Transaction fee: 0.0002490801279578 NEAR
+│    Transaction ID: 7pcnD7YZaLnsdjgToaTp8g8wov8rRbyH4TKggpuY9avB
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/7pcnD7YZaLnsdjgToaTp8g8wov8rRbyH4TKggpuY9avB
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"keeper_deposit_attestation_set","data":[{"allow":true}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_allow_keeper_deposit_attestation" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_allow_keeper_deposit_attestation json-args '{"allow":true}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_reserve_params
+│                       args:         {
+│                                       "discount_bps": 600,
+│                                       "notice_ns": "604800000000000",
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:5cmw6bzXgmv6SUH7bAJyChLzhZxxabwXo3t6cf2L94YbJtb1DrLCKQWA4Sj6SfaPVDMUAWhHVQKYqmPfHRJp3xLb
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.0 Tgas
+│    Transaction fee: 0.0002767509218918 NEAR
+│    Transaction ID: 3hNyqC9BKLLRgcW58cgHRvagZSKm2yQdHc439bgBm5q7
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/3hNyqC9BKLLRgcW58cgHRvagZSKm2yQdHc439bgBm5q7
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"reserve_params_set","data":[{"symbol":"NVDAx","discount_bps":600,"notice_ns":"604800000000000"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_reserve_params" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_reserve_params json-args '{"symbol":"NVDAx","discount_bps":600,"notice_ns":"604800000000000"}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  set_max_voluntary_fill
+│                       args:         {
+│                                       "max_usd_e6_per_day": "5000000000",
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          50.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:4Wr9QDE7d1kGSJnwxdk4TrCihtgjt4r24YNV1dfDqopU4VgwrMsWY5JvPTdaTRU4ojFW8QFGD6M58GwvvLuyVC4u
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.0 Tgas
+│    Transaction fee: 0.0002693824466616 NEAR
+│    Transaction ID: 3F9tL7pFnFP541QxmqHD966Q9F7EWTjNYgp8SZ3pLp3g
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/3F9tL7pFnFP541QxmqHD966Q9F7EWTjNYgp8SZ3pLp3g
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"voluntary_fill_cap_set","data":[{"symbol":"NVDAx","max_usd_e6_per_day":"5000000000"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "set_max_voluntary_fill" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet set_max_voluntary_fill json-args '{"symbol":"NVDAx","max_usd_e6_per_day":"5000000000"}' prepaid-gas '50.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  fund_gas_reserve
+│                       args:         {}
+│                       gas:          30.0 Tgas
+│                       deposit:      1 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:3hPcH6JsmTSoS6Mcx7H1WfDKuwpUjWPKBVjQW1epPur2jKUJP6CzHTEfBHBKD8ofwKiVpXAfG3ycfDoyMcS26vQi
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.6 Tgas
+│    Transaction fee: 0.0002298429001598 NEAR
+│    Transaction ID: 9NqauvaySNtuzRwmT6hJ15P9u2tB3u3F2LTNcsmXauJW
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/9NqauvaySNtuzRwmT6hJ15P9u2tB3u3F2LTNcsmXauJW
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "fund_gas_reserve" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet fund_gas_reserve json-args {} prepaid-gas '30.0 Tgas' attached-deposit '1 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet  code_hash=3W5bifwgurTNyZwHsseLU8NmJxaW5Dt2221CfhvQ31ey
+next: scripts/40-seed-demo.sh (after --switch), then the verifier runs G2b/G3b

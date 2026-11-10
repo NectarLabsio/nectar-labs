@@ -26,7 +26,18 @@ call "$USDC"  mint '{"account_id":"'$BR'","amount":"1000000000"}' "$OWNER" '30 T
 call "$NVDAX" mint '{"account_id":"'$BR'","amount":"100000000"}' "$OWNER" '30 Tgas'      # 100 NVDAx
 log "pool + quotes + position"
 ftc "$USDC"  "$OWNER" 50000000000 '"SupplyLendingLiquidity"'
-ftc "$USDC"  "$B1"    10000000000 "{\"FundPappusQuote\":{\"collateral\":\"NVDAx\",\"max_discount_bps\":250,\"notice_period_ns\":\"$SEVEN_DAYS_NS\",\"buyer_remote_recipient\":null}}"
+V2=0; near contract call-function as-read-only "$CORE" contract_version json-args '{}' network-config testnet now </dev/null 2>/dev/null | grep -q '"2\.' && V2=1
+VF=""; [ $V2 = 1 ] && VF=',"accepts_voluntary_fills":true'   # v2: buyer1's quote opts into Profit-Lock fills (WO-23a)
+ftc "$USDC"  "$B1"    10000000000 "{\"FundPappusQuote\":{\"collateral\":\"NVDAx\",\"max_discount_bps\":250,\"notice_period_ns\":\"$SEVEN_DAYS_NS\",\"buyer_remote_recipient\":null$VF}}"
 ftc "$USDC"  "$B2"     5000000000 "{\"FundPappusQuote\":{\"collateral\":\"NVDAx\",\"max_discount_bps\":400,\"notice_period_ns\":\"$SEVEN_DAYS_NS\",\"buyer_remote_recipient\":null}}"
-ftc "$NVDAX" "$BR"      100000000 '{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"11250000000","pre_liq_ltv_bps":7500}}'
+BORROW=11250000000
+if [ $V2 = 1 ]; then
+  # v2 (D-018): the session closes when the price is > 900 s old (WO-19), so refresh it; size the borrow from preview_borrow (aggregate check + fees).
+  call "$CORE" update_owner_price '{"symbol":"NVDAx","price_usd_e6":"180000000"}' "$OWNER" '30 Tgas'
+  BC=$(near contract call-function as-read-only "$CORE" preview_borrow json-args '{"symbol":"NVDAx","units":"100000000","borrow_usd_e6":"11250000000"}' \
+    network-config testnet now </dev/null 2>/dev/null | sed -n '/^{/,/^}/p' | jq -r '.b_c_usd_e6 // empty')
+  [ -n "$BC" ] && [ "$BC" -lt "$BORROW" ] && BORROW=$BC
+  echo "v2 borrow sized to $BORROW e6 (b_c=$BC)"
+fi
+ftc "$NVDAX" "$BR"      100000000 "{\"LockCollateralAndBorrow\":{\"collateral\":\"NVDAx\",\"borrow_usd_e6\":\"$BORROW\",\"pre_liq_ltv_bps\":7500}}"
 log "seeded; check with: pnpm demo:testnet"
