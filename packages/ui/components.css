@@ -125,6 +125,16 @@ img { max-width: 100%; }
 .hub .spokes { display: grid; gap: 12px; }
 .note-preview { display: block; width: 100%; max-width: 600px; height: auto; border-radius: var(--r-card); border: 1px solid var(--border); }
 .multline { font-size: 12px; color: var(--heading); }
+/* Position Notes (/notes, /note/[id], /reserve) */
+.note-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.note-grid > * { min-width: 0; }
+.note-card { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: var(--r-card); background: var(--surface); color: var(--text); text-decoration: none; }
+.note-card:hover, .note-card:focus-visible { border-color: var(--accent); }
+.note-card .note-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+.note-img { display: block; width: 100%; height: auto; aspect-ratio: 600 / 360; border-radius: var(--r-ctl); border: 1px solid var(--border); background: var(--surface-2); }
+.note-img.placeholder { display: grid; place-items: center; color: var(--dim); font-size: 12px; text-align: center; padding: 12px; }
+.note-history { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 12px; }
+.note-history li { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding: 6px 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; }
 
 /* Equation / code */
 .eq { font-family: var(--font-mono); font-size: 15px; color: var(--heading); padding: 14px 16px; border: 1px solid var(--border-strong); border-radius: var(--r-ctl); background: var(--surface-2); overflow-x: auto; white-space: nowrap; }

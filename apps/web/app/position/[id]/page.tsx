@@ -2,11 +2,12 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button, Card, Field, Kv, StatusPill, type PositionPill } from "@nectar/ui";
-import { bpsToPct, formatUnits, formatUsdE6, parseUnits, tx, type HealthView, type PositionView, type ShieldView } from "@nectar/sdk";
+import { bpsToPct, formatUnits, formatUsdE6, parseUnits, positionNoteId, tx, type HealthView, type PositionView, type ShieldView } from "@nectar/sdk";
 import { useChain, useFeature, useSign, useView, useWallet } from "@/components/AppProvider";
 import { DepositSourceBadge, RemoteDeposit, RemoteOpenCard, RemoteRelease, RemoteStatusBadge, ReservationCard, isRemote } from "@/components/remote/RemoteFlow";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { ProfitLockPanel, ShieldStatusCard } from "@/components/Shields";
+import { NoteLink } from "@/components/Notes";
 
 export default function PositionPage() {
   const { id } = useParams<{ id: string }>();
@@ -60,6 +61,7 @@ export default function PositionPage() {
                 <Kv k="Pre-liquidation LTV" v={bpsToPct(pos.pre_liq_ltv_bps)} />
                 <Kv k="Oracle" v={h ? (h.oracle_fresh ? "fresh" : "stale") : "—"} />
               </div>
+              <NoteLink tokenId={positionNoteId(pos.id)} />
             </Card>
             {remote && (remote.remote.status === "AwaitingDeposit" || remote.remote.status === "Expired") ? (
               <div className="stack">

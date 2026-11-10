@@ -11,3 +11,4 @@ export * from "./v7";
 export * from "./remote";
 export * from "./solana";
 export * from "./shields";
+export * from "./notes";

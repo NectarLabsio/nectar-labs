@@ -1,9 +1,10 @@
 "use client";
 import { useParams } from "next/navigation";
 import { Badge, Button, Card, Kv } from "@nectar/ui";
-import { formatDuration, formatUsdE6, nsToSeconds, tx, type QuoteView } from "@nectar/sdk";
+import { formatDuration, formatUsdE6, nsToSeconds, quoteNoteId, tx, type QuoteView } from "@nectar/sdk";
 import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
+import { NoteLink } from "@/components/Notes";
 
 export default function QuotePage() {
   const { id } = useParams<{ id: string }>();
@@ -48,6 +49,7 @@ export default function QuotePage() {
               <Kv k="Unlock" v={unlock === null ? "no notice given" : unlock > now ? `in ${formatDuration(unlock - now)}` : "unlocked"} />
               <Kv k="Claimable fees" v={d.claimable_fees_usd_e6 ? formatUsdE6(d.claimable_fees_usd_e6) : "—"} />
             </div>
+            <NoteLink tokenId={quoteNoteId(d.id)} />
           </Card>
         )}
       </Gate>
