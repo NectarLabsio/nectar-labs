@@ -24,6 +24,8 @@ const TX: &str = "5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR
 const DEPOSIT: u128 = 4_000_010_000_000_000_000_000; // F-046 estimate
 /// Live MPC requirement (F-034); the stub fits in it too.
 const SIGN_TGAS: u64 = 15;
+/// WO-23a: 0.05 NEAR reservation deposit (refunded).
+const RESERVE_DEPOSIT: u128 = 50_000_000_000_000_000_000_000;
 
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
@@ -245,6 +247,7 @@ async fn reserve(_e: &Env, core: &Contract, borrower: &Account) -> anyhow::Resul
         .args_json(json!({ "collateral": "NVDAx", "units": UNITS.to_string(), "borrow_usd_e6": BORROW.to_string(),
                            "pre_liq_ltv_bps": 7500 }))
         .gas(Gas::from_tgas(100))
+        .deposit(NearToken::from_yoctonear(RESERVE_DEPOSIT))
         .transact()
         .await?;
     assert!(r.is_success() && r.failures().is_empty(), "reserve: {:?}", r.failures());
@@ -461,6 +464,80 @@ async fn remote_refusals_attestation_and_expiry() -> anyhow::Result<()> {
     assert!(r.is_success(), "{:?}", r.failures());
     let p = position(&core, id2).await?;
     assert_eq!((p["status"].clone(), p["remote"]["status"].clone()), (json!("Closed"), json!("Expired")));
+    Ok(())
+}
+
+async fn near_balance(a: &Account) -> anyhow::Result<u128> {
+    Ok(a.view_account().await?.balance.as_yoctonear())
+}
+
+/// WO-23a: a reservation needs 0.05 NEAR (less refused); it is refunded exactly on confirm and on expiry. Then a
+/// Profit-Lock on the confirmed remote position signs `|kind=SELF` with the position path (model `self_remote_11250`),
+/// verified off-chain, and the treasury receives the 50 bps fee once signed.
+#[tokio::test]
+async fn remote_reservation_deposit_refunds_and_self_settle_kind_self() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    seed(&e, &core).await?;
+    let s = stub(&e).await?;
+    chain(&e, &core, &s).await?;
+    let borrower = user(&e, 0, 0).await?;
+    let r = borrower.call(core.id(), "reserve_remote_position")
+        .args_json(json!({ "collateral": "NVDAx", "units": UNITS.to_string(), "borrow_usd_e6": BORROW.to_string(),
+                           "pre_liq_ltv_bps": 7500 }))
+        .deposit(NearToken::from_yoctonear(RESERVE_DEPOSIT - 1)).gas(Gas::from_tgas(100)).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("attach the reservation deposit"));
+
+    let (id, _) = reserve(&e, &core, &borrower).await?;
+    let auth = position(&core, id).await?["remote"]["authority"].as_str().unwrap().to_string();
+    let before = near_balance(&borrower).await?;
+    let r = confirm(&e, &core, &s, id, &vault_body(id, UNITS, &auth)).await?;
+    gas("confirm_remote_deposit+refund", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(events(&r, "reservation_deposit_refunded")[0]["reason"], "confirmed");
+    assert_eq!(events(&r, "reservation_deposit_refunded")[0]["amount_yocto"], RESERVE_DEPOSIT.to_string());
+    // >=: the reserve tx gas refund (to its signer, the borrower) can land in the same window
+    assert!(near_balance(&borrower).await? - before >= RESERVE_DEPOSIT, "refunded on confirm");
+
+    let other = user(&e, 0, 0).await?;
+    let (id2, _) = reserve(&e, &core, &other).await?;
+    advance(&e, 1801).await?;
+    let before = near_balance(&other).await?;
+    let r = e.keeper.call(core.id(), "expire_remote_reservation").args_json(json!({ "position_id": id2.to_string() }))
+        .transact().await?;
+    gas("expire_remote_reservation+refund", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    assert_eq!(events(&r, "reservation_deposit_refunded")[0]["account_id"], other.id().to_string());
+    assert!(near_balance(&other).await? - before >= RESERVE_DEPOSIT, "refunded on expiry (to the borrower)");
+
+    // Profit-Lock on the remote position (price refreshed after the clock advance)
+    price(&e, &core, 180_000_000).await?;
+    let b3 = user(&e, 12_000_000_000, 0).await?;
+    let m = format!(r#"{{"FundPappusQuote":{{"collateral":"NVDAx","max_discount_bps":200,"notice_period_ns":"604800000000000","buyer_remote_recipient":"{RCPT}","accepts_voluntary_fills":true}}}}"#);
+    ft_call(&e.usdc, &b3, core.id(), 12_000_000_000, &m).await?;
+    owner_call(&e, &core, "set_max_voluntary_fill", json!({ "symbol": "NVDAx", "max_usd_e6_per_day": "20000000000" })).await?;
+    let t0: u128 = view(&core, "get_pool", json!({})).await?["treasury_usd_e6"].as_str().unwrap().parse()?;
+    let st = borrower.call(core.id(), "self_settle").args_json(json!({ "position_id": id.to_string() }))
+        .deposit(NearToken::from_yoctonear(1)).gas(Gas::from_tgas(300)).transact_async().await?;
+    for _ in 0..120 {
+        let d = pending(&core, id).await?;
+        if !d.is_null() && d["status"] != "AwaitingSignature" {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(500));
+    }
+    let r = st.await?;
+    gas("self_settle(remote)+sign", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    let d = pending(&core, id).await?;
+    assert_eq!((d["status"].clone(), d["kind"].clone()), (json!("Signed"), json!(2)));
+    let pre = d["preimage"].as_str().unwrap();
+    assert!(pre.ends_with("|kind=SELF"), "{pre}");
+    // model row self_remote_11250: fill 11,306.25, Q_repaid 64,094,388
+    assert!(pre.contains(&format!("|repay_e6={BORROW}|seize_units=64094388|recipient={RCPT}|")), "{pre}");
+    verify_with(&derived_key(&s, &core, &format!("solana-devnet/pos/{id}")).await?, pre, d["signature_hex"].as_str().unwrap());
+    let t1: u128 = view(&core, "get_pool", json!({})).await?["treasury_usd_e6"].as_str().unwrap().parse()?;
+    assert_eq!(t1 - t0, 56_250_000, "Profit-Lock fee to treasury once signed");
     Ok(())
 }
 

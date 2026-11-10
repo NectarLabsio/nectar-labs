@@ -139,7 +139,7 @@ fn two_borrowers_cannot_both_draw_full_capacity() {
     assert_eq!(ft(&mut c, nvdax(), "bob.test", UNITS, &borrow_msg(11_250_000_000)), UNITS, "full refund");
     assert_eq!(ft(&mut c, nvdax(), "bob.test", UNITS, &borrow_msg(1)), UNITS);
     assert!(get_logs().iter().any(|l| l.contains("refund: aggregate_limit")));
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1), None, None);
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1), None, None, None);
     assert_eq!(p.reason.as_deref(), Some("aggregate_limit"));
     assert_eq!(p.aggregate_headroom_usd_e6, U128(0));
     assert_eq!(p.b_c_usd_e6, U128(0));
@@ -422,7 +422,7 @@ fn borrow_refused_while_ca_pending_repay_continues() {
     assert_eq!(ft_at(&mut c, nvdax(), "bob.test", UNITS, &borrow_msg(1_000_000), T0 + 3 * SEC), UNITS);
     assert!(get_logs().iter().any(|l| l.contains("refund: ca_pending")));
     set_ctx(owner(), 0, T0 + 3 * SEC);
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1_000_000), None, None);
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1_000_000), None, None, None);
     assert_eq!(p.reason.as_deref(), Some("ca_pending"));
     assert_eq!(ft_at(&mut c, usdc(), "alice.test", 1_000_000_000, r#"{"Repay":{"position_id":"0"}}"#, T0 + 3 * SEC), 0);
     assert_eq!(c.get_position(U64(0)).unwrap().debt_usd_e6, U128(4_000_000_000));
@@ -529,7 +529,7 @@ fn underlying_multiplier_values_per_unit_with_m() {
     c.set_multiplier("NVDAx".into(), U128(1_020_000_000_000_000_000));
     // per whole token: 1.02 * 180 * 70 %
     assert_eq!(c.get_exit_capacity("NVDAx".into()).b_c_usd_per_unit_e6, Some(U128(128_520_000)));
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(10_000_000_000), None, None);
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(10_000_000_000), None, None, None);
     assert_eq!(p.multiplier_e18, U128(1_020_000_000_000_000_000));
     assert_eq!(p.static_limit_usd_e6, U128(7_344_000_000), "model mult_dividend_2pct: V 18,360");
 }
@@ -640,7 +640,7 @@ fn referrer_equal_to_borrower_refused_with_full_refund() {
     assert_eq!(c.get_config().next_position_id, U64(0));
     assert_eq!(coll(&c).total_debt_usd_e6, U128(0));
     set_ctx(owner(), 0, T0);
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1_000_000), Some(a("alice.test")), Some(a("alice.test")));
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1_000_000), Some(a("alice.test")), Some(a("alice.test")), None);
     assert_eq!(p.reason.as_deref(), Some("referrer_is_borrower"));
 }
 
@@ -657,7 +657,7 @@ fn registered_referrer_gets_half_the_origination_fee() {
     assert_eq!(c.get_claimable(a("ref.test")), U128(16_875_000));
     assert_eq!(c.get_pool().treasury_usd_e6.0 - t0, 16_875_000 + 12_150_000);
     set_ctx(owner(), 0, T0 + 2 * SEC);
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(0), Some(a("ref.test")), None);
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(0), Some(a("ref.test")), None, None);
     assert_eq!(p.referrer_share_usd_e6, U128(0));
 }
 
@@ -677,7 +677,7 @@ fn preview_with_registered_referrer_returns_fee_stack() {
     let mut c = base();
     set_ctx(owner(), 0, T0);
     c.register_referrer(a("ref.test"));
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(11_250_000_000), Some(a("ref.test")), Some(a("alice.test")));
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(11_250_000_000), Some(a("ref.test")), Some(a("alice.test")), None);
     assert!(p.ok, "{:?}", p.reason);
     assert_eq!(p.origination_fee_usd_e6, U128(33_750_000));
     assert_eq!(p.referrer_share_usd_e6, U128(16_875_000));
@@ -692,7 +692,7 @@ fn set_origination_fee_bps_bounds() {
     c.set_origination_fee_bps(100);
     assert_eq!(c.get_config().origination_fee_bps, 100);
     c.set_origination_fee_bps(0);
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1_000_000_000), None, None);
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1_000_000_000), None, None, None);
     assert_eq!(p.origination_fee_usd_e6, U128(0));
     assert_eq!(p.net_proceeds_usd_e6, U128(1_000_000_000));
 }
