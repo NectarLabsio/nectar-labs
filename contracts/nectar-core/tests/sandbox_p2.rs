@@ -260,21 +260,21 @@ fn verify(pk_hex: &str, d: &Value) {
     pk.verify_strict(d["preimage"].as_str().unwrap().as_bytes(), &sig).expect("Ed25519 over the raw preimage");
 }
 
-/// Live V1c -> this build (no migrate, views identical), then trigger -> sign -> on_signature -> relay.
+/// v1 `upgrade_v1c_then_remote_leg_signed_and_relayed`, v2 form: the live V1c fixture state cannot be read by
+/// v2 code (fresh deploy, PRD §6.11); then on a fresh v2: trigger -> sign -> on_signature -> relay.
 #[tokio::test]
-async fn upgrade_v1c_then_remote_leg_signed_and_relayed() -> anyhow::Result<()> {
+async fn v2_remote_leg_signed_and_relayed() -> anyhow::Result<()> {
     let e = env().await?;
-    let core = init_core(&e, &v1c_wasm()).await?;
+    let old = init_core(&e, &v1c_wasm()).await?;
+    old.as_account().deploy(&wasm("nectar_core")).await?.into_result()?;
+    assert!(old.view("get_config").await.is_err(), "v2 code over V1c state fails closed");
+    let core = init_core(&e, &wasm("nectar_core")).await?;
     let (b1, b2, borrower) = seed(&e, &core).await?;
-    let before = snapshot(&core).await?;
-    let r = core.as_account().deploy(&wasm("nectar_core")).await?;
-    assert!(r.is_success(), "upgrade deploy");
-    assert_eq!(snapshot(&core).await?, before, "all views identical after V1c -> WO-15, no migrate");
-    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(1));
-    assert!(format!("{:?}", core.call("migrate").transact().await?.failures()).contains("already migrated"));
+    let _ = snapshot(&core).await?;
+    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(2));
     let v: String = view(&core, "contract_version", json!({})).await?.as_str().unwrap().into();
-    assert!(v.ends_with(" p2"), "{v}");
-    println!("UPGRADE,v1c_to_wo15,views_identical,true,migrate,none");
+    assert_eq!(v, "2.0.0-v7");
+
 
     let signer = stub(&e).await?;
     chain(&e, &core, &signer).await?;

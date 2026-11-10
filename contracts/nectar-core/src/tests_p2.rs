@@ -74,7 +74,7 @@ fn input() -> CollateralInput {
         limit_premium_bps: 300,
         pre_liq_min_bps: 6500,
         pre_liq_max_bps: 8000,
-        market_session_open: false,
+        price_kind: None,
         verified_dex_depth_usd_e6: U128(0),
         nectar_reserve_usd_e6: U128(0),
         remote_chain: None,
@@ -227,7 +227,7 @@ fn signer_config_and_views() {
     assert_eq!(h.predecessor, core());
     assert_eq!(h.signer_account, a("v1.signer-prod.testnet"));
     assert_eq!((h.path.as_str(), h.domain_id), ("solana-devnet-v1", 1));
-    assert!(c.contract_version().ends_with(" p2"));
+    assert_eq!(c.contract_version(), "2.0.0-v7");
 }
 
 #[test]

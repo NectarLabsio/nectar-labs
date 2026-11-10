@@ -15,7 +15,9 @@
 //! (Open if debt remains). A successful signature is never rolled back (it is public in the receipt), so
 //! cancel_settlement only rolls back an unsigned leg after its preimage `expires` (Solana rejects it then).
 //!
-//! State: raw storage keys outside the V1 root struct (no migrate), like WO-10b `QUOTER_SECRETS_REF_KEY`.
+//! State: raw storage keys outside the root struct (kept as raw keys in the v2 root too), like WO-10b
+//! `QUOTER_SECRETS_REF_KEY`. v2: the leg's repayment leaves `total_debt_usd_e6` in `settle`; rollback re-adds it.
+
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::json;
@@ -185,6 +187,10 @@ impl Nectar {
         let repay = d.repay_usd_e6.0;
         p.debt_usd_e6 = U128(ok(math::add(p.debt_usd_e6.0, repay)));
         p.units = U128(ok(math::add(p.units.0, ok(math::add(d.seize_units.0, d.keeper_units.0)))));
+        // v2 A1: the leg's repayment left the aggregate in `settle`; it comes back with the debt.
+        let mut cd = self.coll_or_panic(&p.collateral);
+        cd.total_debt_usd_e6 = U128(ok(math::add(cd.total_debt_usd_e6.0, repay)));
+        self.put_coll(cd);
         if let Some(mut q) = self.quote(d.quote_id.0) {
             let mut c = self.coll_or_panic(&p.collateral);
             let acc = c.acc_fee_per_dollar_e18.0;

@@ -4,6 +4,10 @@
 //!   unused amount it returns in `ft_resolve_transfer` (F-013).
 //! - Accounts auto-register on first receipt; `storage_deposit` exists only for script compatibility.
 //! - `mint` is owner-only.
+//! - v7 (interface-v7.md A3): `multiplier()` (default 1e18) + owner `update_multiplier`, stored under a raw
+//!   storage key so the live mock accounts take a code-only upgrade (root struct unchanged).
+//! - v7 (A4 tests): owner `set_registration_required(true)` makes transfers to an account that never
+//!   registered (`storage_deposit`, mint or a prior receipt) fail like a real NEP-145 token. Default off.
 
 use near_sdk::json_types::U128;
 use near_sdk::serde_json::json;
@@ -17,6 +21,10 @@ const GAS_FOR_RESOLVE: Gas = Gas::from_tgas(10);
 const GAS_FOR_FT_TRANSFER_CALL: Gas = Gas::from_tgas(50);
 /// Reported by `storage_balance_of` / `storage_deposit` (mock: storage is free).
 const STORAGE_BOUND_YOCTO: u128 = 1_250_000_000_000_000_000_000;
+/// Raw keys outside the root struct (no migrate on the live mocks).
+const MULTIPLIER_KEY: &[u8] = b"__multiplier_e18";
+const REGISTRATION_REQUIRED_KEY: &[u8] = b"__registration_required";
+const E18: u128 = 1_000_000_000_000_000_000;
 
 #[near(serializers = [borsh])]
 #[derive(BorshStorageKey)]
@@ -61,6 +69,9 @@ impl MockFt {
     fn internal_transfer(&mut self, from: &AccountId, to: &AccountId, amount: u128) {
         require!(from != to, "sender and receiver must differ");
         require!(amount > 0, "amount must be > 0");
+        if self.registration_required() {
+            require!(self.balances.contains_key(to), "receiver not registered");
+        }
         let fb = self.balance(from);
         let nf = fb.checked_sub(amount).unwrap_or_else(|| env::panic_str("insufficient balance"));
         let nt = self.balance(to).checked_add(amount).unwrap_or_else(|| env::panic_str("balance overflow"));
@@ -185,6 +196,38 @@ impl MockFt {
     pub fn owner(&self) -> AccountId {
         self.owner.clone()
     }
+
+    /// v7 A3: B20-style multiplier, WAD (default 1e18).
+    pub fn multiplier(&self) -> U128 {
+        U128(
+            env::storage_read(MULTIPLIER_KEY)
+                .and_then(|b| <[u8; 16]>::try_from(b.as_slice()).ok())
+                .map_or(E18, u128::from_le_bytes),
+        )
+    }
+
+    /// Owner-only (demo: a 2-for-1 split doubles M).
+    pub fn update_multiplier(&mut self, multiplier_e18: U128) {
+        require!(env::predecessor_account_id() == self.owner, "owner only");
+        require!(multiplier_e18.0 > 0, "multiplier must be > 0");
+        let old = self.multiplier();
+        env::storage_write(MULTIPLIER_KEY, &multiplier_e18.0.to_le_bytes());
+        env::log_str(&format!("multiplier updated {} -> {}", old.0, multiplier_e18.0));
+    }
+
+    /// Owner-only test switch (A4 `pay_to` failure path).
+    pub fn set_registration_required(&mut self, required: bool) {
+        require!(env::predecessor_account_id() == self.owner, "owner only");
+        if required {
+            env::storage_write(REGISTRATION_REQUIRED_KEY, &[1]);
+        } else {
+            env::storage_remove(REGISTRATION_REQUIRED_KEY);
+        }
+    }
+
+    pub fn registration_required(&self) -> bool {
+        env::storage_read(REGISTRATION_REQUIRED_KEY).is_some()
+    }
 }
 
 #[cfg(test)]
@@ -307,7 +350,65 @@ mod tests {
     }
 
     #[test]
+    fn multiplier_default_and_update() {
+        let mut t = setup();
+        assert_eq!(t.multiplier(), U128(E18));
+        t.update_multiplier(U128(2 * E18));
+        assert_eq!(t.multiplier(), U128(2 * E18));
+        assert_eq!(t.ft_balance_of(accounts(1)), U128(1_000), "raw balances unchanged");
+    }
+
+    #[test]
+    #[should_panic(expected = "owner only")]
+    fn update_multiplier_owner_only() {
+        let mut t = setup();
+        testing_env!(ctx(accounts(1), 0).build());
+        t.update_multiplier(U128(2 * E18));
+    }
+
+    #[test]
+    #[should_panic(expected = "multiplier must be > 0")]
+    fn update_multiplier_rejects_zero() {
+        let mut t = setup();
+        t.update_multiplier(U128(0));
+    }
+
+    #[test]
+    fn registration_required_blocks_unregistered_receiver() {
+        let mut t = setup();
+        assert!(!t.registration_required());
+        t.set_registration_required(true);
+        assert!(t.registration_required());
+        testing_env!(ctx(accounts(3), 1).build());
+        t.storage_deposit(None, None);
+        testing_env!(ctx(accounts(1), 1).build());
+        t.ft_transfer(accounts(3), U128(5), None); // registered
+        assert_eq!(t.ft_balance_of(accounts(3)), U128(5));
+        testing_env!(ctx(accounts(0), 0).build());
+        t.set_registration_required(false);
+        assert!(!t.registration_required());
+    }
+
+    #[test]
+    #[should_panic(expected = "receiver not registered")]
+    fn registration_required_panics_for_unknown() {
+        let mut t = setup();
+        t.set_registration_required(true);
+        testing_env!(ctx(accounts(1), 1).build());
+        t.ft_transfer(accounts(4), U128(5), None);
+    }
+
+    #[test]
+    #[should_panic(expected = "owner only")]
+    fn set_registration_required_owner_only() {
+        let mut t = setup();
+        testing_env!(ctx(accounts(1), 0).build());
+        t.set_registration_required(true);
+    }
+
+    #[test]
     fn storage_shims() {
+
         let mut t = setup();
         testing_env!(ctx(accounts(3), 1_250_000_000_000_000_000_000).build());
         let b = t.storage_deposit(None, Some(true));

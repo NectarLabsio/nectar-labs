@@ -41,9 +41,52 @@ pub fn value_usd_e6(units: u128, price_usd_e6: u128, decimals: u8) -> MathResult
     mul_div_floor(units, price_usd_e6, pow10(decimals)?)
 }
 
+/// v2 (A3): underlying units of `raw` token units, `floor(raw * M / 1e18)`.
+pub fn underlying_units(raw: u128, m_e18: u128) -> MathResult<u128> {
+    mul_div_floor(raw, m_e18, E18)
+}
+
+/// v2 (A3): `V = units·M/1e18·price/10^d`, evaluated left to right with both divisions floored
+/// (against the borrower). `m_e18 = 1e18` reproduces `value_usd_e6`.
+pub fn value_m_usd_e6(units: u128, m_e18: u128, price_usd_e6: u128, decimals: u8) -> MathResult<u128> {
+    value_usd_e6(underlying_units(units, m_e18)?, price_usd_e6, decimals)
+}
+
+/// Raw token units that hold at least `underlying` underlying units: `ceil(underlying * 1e18 / M)`.
+pub fn raw_units_ceil(underlying: u128, m_e18: u128) -> MathResult<u128> {
+    mul_div_ceil(underlying, E18, m_e18)
+}
+
+/// v2 (A3): set_multiplier bound, `old <= new <= old * (1e4 + max_increase_bps) / 1e4` (exact).
+pub fn within_increase_bound(old_e18: u128, new_e18: u128, max_increase_bps: u16) -> MathResult<bool> {
+    let lhs = new_e18.checked_mul(BPS).ok_or(ERR_OVERFLOW)?;
+    let rhs = old_e18.checked_mul(add(BPS, max_increase_bps as u128)?).ok_or(ERR_OVERFLOW)?;
+    Ok(new_e18 >= old_e18 && lhs <= rhs)
+}
+
+/// v2 (A5): origination fee on the full borrow, rounded up.
+pub fn origination_fee(borrow: u128, fee_bps: u16) -> MathResult<u128> {
+    mul_div_ceil(borrow, fee_bps as u128, BPS)
+}
+
+/// v2 (A2): `windows` sorted and non-overlapping `[open, close)`; true when one contains `now`.
+pub fn in_session_window(windows: &[(u64, u64)], now: u64) -> bool {
+    let idx = windows.partition_point(|w| w.0 <= now);
+    idx > 0 && now < windows[idx - 1].1
+}
+
+/// v2 (A2): sorted, non-overlapping, each `open < close`.
+pub fn valid_calendar(windows: &[(u64, u64)]) -> bool {
+    windows.iter().all(|w| w.0 < w.1) && windows.windows(2).all(|p| p[0].1 <= p[1].0)
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct LimitParams {
     pub decimals: u8,
+    /// v2: effective multiplier (1e18 for TokenIncludesMultiplier).
+    pub m_e18: u128,
+    /// v2: debt already drawn against this asset's Q + R + D.
+    pub total_debt_usd_e6: u128,
     pub price_usd_e6: u128,
     pub q_usd_e6: u128,
     pub r_usd_e6: u128,
@@ -67,7 +110,9 @@ pub struct Limit {
     pub ltv_cap_usd_e6: u128,
     /// base_ltv_bps * V / 1e4, rounded down (what the market lends without Nectar).
     pub static_limit_usd_e6: u128,
-    /// B_c = min(ltv_cap, capacity).
+    /// v2: capacity - total_debt, floored at 0.
+    pub headroom_usd_e6: u128,
+    /// B_c = min(ltv_cap, headroom) (v2; = min(ltv_cap, capacity) with no debt drawn).
     pub b_c_usd_e6: u128,
 }
 
@@ -84,12 +129,14 @@ pub fn capacity(p: &LimitParams) -> MathResult<(u16, u128, u128)> {
     Ok((h, d_eff, cap))
 }
 
-/// Cramér limit for `units` of collateral (interface-p0.md, D-009).
+/// Cramér limit for `units` of collateral (interface-p0.md, D-009; v2 aggregate rule, PRD §4.2).
+/// A borrow passes iff `borrow <= ltv_cap` and `total_debt + borrow <= capacity`.
 pub fn limit(units: u128, p: &LimitParams) -> MathResult<Limit> {
-    let value = value_usd_e6(units, p.price_usd_e6, p.decimals)?;
+    let value = value_m_usd_e6(units, p.m_e18, p.price_usd_e6, p.decimals)?;
     let (h, d_eff, cap) = capacity(p)?;
     let ltv_cap = mul_div_floor(value, p.max_nectar_ltv_bps as u128, BPS)?;
     let static_limit = mul_div_floor(value, p.base_ltv_bps as u128, BPS)?;
+    let headroom = cap.saturating_sub(p.total_debt_usd_e6);
     Ok(Limit {
         value_usd_e6: value,
         haircut_bps: h,
@@ -97,7 +144,8 @@ pub fn limit(units: u128, p: &LimitParams) -> MathResult<Limit> {
         capacity_usd_e6: cap,
         ltv_cap_usd_e6: ltv_cap,
         static_limit_usd_e6: static_limit,
-        b_c_usd_e6: ltv_cap.min(cap),
+        headroom_usd_e6: headroom,
+        b_c_usd_e6: ltv_cap.min(headroom),
     })
 }
 
@@ -164,9 +212,23 @@ pub fn triggerable(debt: u128, value: u128, pre_liq_ltv_bps: u16) -> MathResult<
 /// Units the buyer receives for `repay` at `disc_bps`, plus the keeper's cut (both rounded up):
 /// buyer = repay * 1e4 * 10^dec / (price * (1e4 - disc)); keeper = buyer * keeper_fee_bps / 1e4.
 pub fn seize_units(repay: u128, price_usd_e6: u128, decimals: u8, disc_bps: u16, keeper_fee_bps: u16) -> MathResult<(u128, u128)> {
+    seize_units_m(repay, E18, price_usd_e6, decimals, disc_bps, keeper_fee_bps)
+}
+
+/// v2 (A3): raw token units for `repay`. Underlying units are rounded up first, then converted to raw
+/// units rounding up again (`ceil(under * 1e18 / M)`), so a seize never undershoots; keeper as before.
+pub fn seize_units_m(
+    repay: u128,
+    m_e18: u128,
+    price_usd_e6: u128,
+    decimals: u8,
+    disc_bps: u16,
+    keeper_fee_bps: u16,
+) -> MathResult<(u128, u128)> {
     let denom = price_usd_e6.checked_mul(sub(BPS, disc_bps as u128)?).ok_or(ERR_OVERFLOW)?;
     let num = repay.checked_mul(BPS).ok_or(ERR_OVERFLOW)?;
-    let buyer = mul_div_ceil(num, pow10(decimals)?, denom)?;
+    let under = mul_div_ceil(num, pow10(decimals)?, denom)?;
+    let buyer = raw_units_ceil(under, m_e18)?;
     let keeper = mul_div_ceil(buyer, keeper_fee_bps as u128, BPS)?;
     Ok((buyer, keeper))
 }
@@ -189,20 +251,37 @@ pub fn settle_leg(
     disc_bps: u16,
     keeper_fee_bps: u16,
 ) -> MathResult<Option<Leg>> {
+    settle_leg_m(debt, quote_remaining, units, E18, price_usd_e6, decimals, disc_bps, keeper_fee_bps)
+}
+
+/// v2 (A3): `settle_leg` with `units` in raw token units and multiplier `m_e18`. The units cap converts
+/// `cap_b` raw units to underlying units (floor) before pricing, so `seize_units_m(covered) <= cap_b`.
+#[allow(clippy::too_many_arguments)]
+pub fn settle_leg_m(
+    debt: u128,
+    quote_remaining: u128,
+    units: u128,
+    m_e18: u128,
+    price_usd_e6: u128,
+    decimals: u8,
+    disc_bps: u16,
+    keeper_fee_bps: u16,
+) -> MathResult<Option<Leg>> {
     let mut repay = debt.min(quote_remaining);
     if repay == 0 || units == 0 {
         return Ok(None);
     }
-    let (mut b, mut k) = seize_units(repay, price_usd_e6, decimals, disc_bps, keeper_fee_bps)?;
+    let (mut b, mut k) = seize_units_m(repay, m_e18, price_usd_e6, decimals, disc_bps, keeper_fee_bps)?;
     if add(b, k)? > units {
         let cap_b = mul_div_floor(units, BPS, add(BPS, keeper_fee_bps as u128)?)?;
         let px_disc = price_usd_e6.checked_mul(sub(BPS, disc_bps as u128)?).ok_or(ERR_OVERFLOW)?;
-        let covered = mul_div_floor(cap_b, px_disc, BPS.checked_mul(pow10(decimals)?).ok_or(ERR_OVERFLOW)?)?;
+        let cap_under = underlying_units(cap_b, m_e18)?;
+        let covered = mul_div_floor(cap_under, px_disc, BPS.checked_mul(pow10(decimals)?).ok_or(ERR_OVERFLOW)?)?;
         repay = repay.min(covered);
         if repay == 0 {
             return Ok(None);
         }
-        (b, k) = seize_units(repay, price_usd_e6, decimals, disc_bps, keeper_fee_bps)?;
+        (b, k) = seize_units_m(repay, m_e18, price_usd_e6, decimals, disc_bps, keeper_fee_bps)?;
         if add(b, k)? > units {
             return Err("seize exceeds units");
         }
@@ -217,6 +296,8 @@ mod tests {
     fn nvdax(price: u128, q: u128, session_open: bool) -> LimitParams {
         LimitParams {
             decimals: 6,
+            m_e18: E18,
+            total_debt_usd_e6: 0,
             price_usd_e6: price,
             q_usd_e6: q,
             r_usd_e6: 0,
@@ -357,6 +438,75 @@ mod tests {
         assert!(triggerable(11_250_000_000, 14_000_000_000, 7500).unwrap());
         assert!(!triggerable(11_250_000_000, 15_500_000_000, 7500).unwrap());
         assert!(!triggerable(7500, 10_000, 7500).unwrap());
+    }
+
+    #[test]
+    fn multiplier_split_keeps_value_and_seize() {
+        // 2-for-1 split: M x2, price /2 -> V unchanged; raw seize unchanged for an even price.
+        let v1 = value_m_usd_e6(100_000_000, E18, 180_000_000, 6).unwrap();
+        let v2 = value_m_usd_e6(100_000_000, 2 * E18, 90_000_000, 6).unwrap();
+        assert_eq!(v1, v2);
+        assert_eq!(v1, value_usd_e6(100_000_000, 180_000_000, 6).unwrap());
+        let s1 = seize_units_m(10_000_000_000, E18, 140_000_000, 6, 250, 50).unwrap();
+        let s2 = seize_units_m(10_000_000_000, 2 * E18, 70_000_000, 6, 250, 50).unwrap();
+        assert_eq!(s1, s2);
+        assert_eq!(value_m_usd_e6(100, 1_020_000_000_000_000_000, 1_000_000, 0).unwrap(), 102_000_000);
+        assert_eq!(raw_units_ceil(102, 1_020_000_000_000_000_000).unwrap(), 100);
+        assert_eq!(raw_units_ceil(101, 1_020_000_000_000_000_000).unwrap(), 100);
+    }
+
+    #[test]
+    fn settle_leg_m_caps_on_raw_units() {
+        let m = 1_500_000_000_000_000_000;
+        let leg = settle_leg_m(10_000_000_000, 10_000_000_000, 10_000_000, m, 140_000_000, 6, 250, 50).unwrap().unwrap();
+        assert!(leg.buyer_units + leg.keeper_units <= 10_000_000);
+        assert!(leg.repay_usd_e6 < 10_000_000_000);
+        for units in [1u128, 7, 999, 1_000_001, 33_333_333] {
+            for m in [E18 / 3, E18, 2 * E18, 1_234_567_890_123_456_789] {
+                if let Some(l) = settle_leg_m(1_000_000_000_000_000, 10_000_000_000, units, m, 141_234_567, 6, 377, 50).unwrap() {
+                    assert!(l.buyer_units + l.keeper_units <= units, "units {units} m {m}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn increase_bound_and_origination() {
+        assert!(within_increase_bound(E18, E18 * 105 / 100, 500).unwrap());
+        assert!(!within_increase_bound(E18, 1_050_100_000_000_000_000, 500).unwrap());
+        assert!(!within_increase_bound(E18, E18 - 1, 500).unwrap());
+        assert!(within_increase_bound(E18, E18, 500).unwrap());
+        assert_eq!(origination_fee(11_250_000_000, 30).unwrap(), 33_750_000);
+        assert_eq!(origination_fee(1, 30).unwrap(), 1, "rounded up");
+        assert_eq!(origination_fee(5, 0).unwrap(), 0);
+    }
+
+    #[test]
+    fn session_window_search() {
+        let w = [(10, 20), (30, 40), (40, 50)];
+        assert!(valid_calendar(&w));
+        assert!(!in_session_window(&w, 9));
+        assert!(in_session_window(&w, 10));
+        assert!(in_session_window(&w, 19));
+        assert!(!in_session_window(&w, 20));
+        assert!(in_session_window(&w, 40));
+        assert!(!in_session_window(&w, 50));
+        assert!(!in_session_window(&[], 15));
+        assert!(!valid_calendar(&[(10, 20), (19, 30)]));
+        assert!(!valid_calendar(&[(30, 40), (10, 20)]));
+        assert!(!valid_calendar(&[(10, 10)]));
+    }
+
+    #[test]
+    fn aggregate_headroom_limits_b_c() {
+        let mut p = nvdax(180_000_000, 15_000_000_000, false);
+        p.total_debt_usd_e6 = 11_000_000_000;
+        let l = limit(100_000_000, &p).unwrap();
+        assert_eq!(l.capacity_usd_e6, 11_250_000_000);
+        assert_eq!(l.headroom_usd_e6, 250_000_000);
+        assert_eq!(l.b_c_usd_e6, 250_000_000);
+        p.total_debt_usd_e6 = 20_000_000_000;
+        assert_eq!(limit(100_000_000, &p).unwrap().b_c_usd_e6, 0);
     }
 
     #[test]

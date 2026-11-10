@@ -1,11 +1,11 @@
-//! NEP-297 events (F-021): `EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":..,"data":[{..}]}`.
+//! NEP-297 events (F-021): `EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":..,"data":[{..}]}`.
 
 use near_sdk::env;
 use near_sdk::serde::Serialize;
 use near_sdk::serde_json::{self, Value};
 
 pub const STANDARD: &str = "nectar";
-pub const VERSION: &str = "1.0.0";
+pub const VERSION: &str = "2.0.0";
 
 #[derive(Serialize)]
 #[serde(crate = "near_sdk::serde")]

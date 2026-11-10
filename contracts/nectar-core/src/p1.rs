@@ -198,7 +198,7 @@ impl Nectar {
         let sym = serde_json::to_string(&c.symbol).unwrap_or_else(|_| env::panic_str("symbol encode"));
         format!(
             r#"{{"v":1,"symbol":{sym},"position_id":"{position_id}","oracle_price_usd_e6":"{}","session_open":{},"seize_usd_e6":"{}","vol_bps":{vol},"quotes":[{quotes}]}}"#,
-            c.oracle_price_usd_e6.0, c.market_session_open, p.debt_usd_e6.0
+            c.oracle_price_usd_e6.0, self.session_open(c), p.debt_usd_e6.0
         )
     }
 
