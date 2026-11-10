@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="360" viewBox="0 0 600 360" font-family="ui-monospace,Menlo,monospace">
+<rect width="600" height="360" rx="20" fill="#0d0f12"/>
+<rect x="1" y="1" width="598" height="358" rx="19" fill="none" stroke="#16f3a9" stroke-opacity=".35"/>
+<text x="40" y="56" fill="#16f3a9" font-size="13" letter-spacing="3">NECTAR POSITION NOTE</text>
+<text x="40" y="100" fill="#e6e9ef" font-size="30" font-weight="700">{{TYPE}} {{ID}}</text>
+<text x="560" y="100" fill="#8f96a3" font-size="16" text-anchor="end">{{ASSET}}</text>
+<g fill="#8f96a3" font-size="12">
+<text x="40" y="158">{{M1_LABEL}}</text><text x="320" y="158">{{M2_LABEL}}</text>
+<text x="40" y="226">{{M3_LABEL}}</text><text x="320" y="226">{{M4_LABEL}}</text>
+</g>
+<g fill="#e6e9ef" font-size="24">
+<text x="40" y="188">{{M1_VALUE}}</text><text x="320" y="188">{{M2_VALUE}}</text>
+<text x="40" y="256">{{M3_VALUE}}</text><text x="320" y="256">{{M4_VALUE}}</text>
+</g>
+<svg x="40" y="284" width="520" height="8"><rect width="100%" height="8" rx="4" fill="#8f96a3" fill-opacity=".25"/><rect width="{{BAR_PCT}}%" height="8" rx="4" fill="#16f3a9"/></svg>
+<text x="40" y="330" fill="#16f3a9" font-size="13">{{STATUS}}</text>
+<text x="560" y="330" fill="#8f96a3" font-size="11" text-anchor="end">{{CONTRACT}} | testnet</text>
+</svg>

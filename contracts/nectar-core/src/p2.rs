@@ -161,6 +161,8 @@ impl Nectar {
         );
         let args = sign_args(&r.path, &preimage, r.domain_id);
         let cb = json!({ "position_id": p.position_id, "quote_id": U64(leg.quote_id), "nonce": U64(nonce) }).to_string();
+        // WO-22: the leg's Quote Note stays put until the leg is relayed, cancelled or fails.
+        self.note_refs_add(p.position_id.0, &[leg.quote_id]);
         self.put_pending(PendingSettlement {
             position_id: p.position_id,
             quote_id: U64(leg.quote_id),
