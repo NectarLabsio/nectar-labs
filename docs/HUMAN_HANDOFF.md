@@ -162,3 +162,10 @@ Default: not posted. Agents never post there.
 nectar.testnet holds **0.064 NEAR**. The v7 deploy (D-018) needs about **8 NEAR**: the `nectar-core-v2` account + wasm storage (~5–6), `keeper-v2` (0.5),
 `x402-relayer` (3, only if x402 survives F-329), `agent1` (0.5), and the demo reseed. Same steps as above (https://near-faucet.io/ → `nectar.testnet`, repeat if allowed).
 Until then: v7 is built and sandbox-tested, but nothing new deploys; v1 stays the live demo.
+
+## H-SOL-AIRDROP — devnet SOL for the vault deploy          status: OPEN (retrying)   needed by: G7 (Solana leg)
+Why: `solana airdrop` is rate-limited per IP (2026-11-10 17:55Z, every try failed). The vault deploy needs ≥ 4.5 SOL (program rent 2.02 + same-size buffer).
+What Kunal does (2 min): open https://faucet.solana.com (GitHub sign-in raises the limit), choose devnet, request SOL to
+`3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS` (deployer, 5 SOL if allowed) and 1 SOL to `82hq1LTc9cuYsdkKxYQVQ6p4qxvYM9hdrQ6V8zW7HVa7` (keeper fee payer); reply `H-SOL-AIRDROP done`.
+What Claude Code does then: `scripts/05-solana.sh` (mint), the vault deploy per solana/deploy.md, `init_vault`, config update, G7 run.
+Meanwhile: retries the CLI airdrop with backoff. Default if silent at 2026-11-13 12:00 UTC: the Solana leg stays local-validator only (25/25 anchor tests) + the NEAR-side signer round trip, disclosed (cut order).
