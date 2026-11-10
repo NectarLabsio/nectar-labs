@@ -1,6 +1,7 @@
-//! P1 sandbox tests (WO-10a): P0 -> V1 upgrade with live-like state, then the OutLayer quoter path
-//! against the stub in contracts/test-stubs, every quoter outcome, and the 8-leg gas budget.
-//! The P0 wasm is the G1/testnet artifact (tests/fixtures/nectar_core_p0.wasm, sha256 6bd1ec51...).
+//! P1 sandbox tests (WO-10a, v2 layout per WO-19): the OutLayer quoter path against the stub in
+//! contracts/test-stubs, every quoter outcome, and the 8-leg gas budget, on a fresh v2 deploy (`new`; v2 has no
+//! migrate, PRD §6.11). The P0 / V1 fixtures (tests/fixtures/nectar_core_p0.wasm sha256 6bd1ec51...,
+//! nectar_core_v1.wasm d617e192...) now prove that v2 code over v1 state fails closed.
 //! Gas lines: `GAS,<label>,<receipt executor>,<gas burnt>` (run with --nocapture).
 
 use std::path::PathBuf;
@@ -100,7 +101,7 @@ async fn init_core(e: &Env, code: &[u8]) -> anyhow::Result<Contract> {
         "symbol": "NVDAx", "token": e.nvdax.id(), "decimals": 6, "price_feed_id": "TODO-G5",
         "base_ltv_bps": 4000, "max_nectar_ltv_bps": 7000, "base_haircut_bps": 1000,
         "weekend_haircut_bps": 2500, "limit_premium_bps": 300, "pre_liq_min_bps": 6500,
-        "pre_liq_max_bps": 8000, "market_session_open": false,
+        "pre_liq_max_bps": 8000, "market_session_open": false, // ignored by v2 (A2); required by the p0/v1 fixtures
         "verified_dex_depth_usd_e6": "0", "nectar_reserve_usd_e6": "0", "remote_chain": null } }))
     .await?;
     price(e, &core, 180_000_000).await?;
@@ -224,13 +225,14 @@ async fn pin(e: &Env, core: &Contract, s: &Contract) -> anyhow::Result<()> {
     Ok(())
 }
 
-/// Deploy P0, seed 7 positions, upgrade + migrate, compare every P0 view, then one trigger per quoter outcome.
+/// v1 `migrate_p0_state_then_quoter_outcomes`, v2 form: fresh v2, seed 7 positions, every P0 view answers,
+/// then one trigger per quoter outcome.
 #[tokio::test]
-async fn migrate_p0_state_then_quoter_outcomes() -> anyhow::Result<()> {
+async fn v2_seed_then_quoter_outcomes() -> anyhow::Result<()> {
     let e = env().await?;
-    let core = init_core(&e, &p0_wasm()).await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
     let v: String = core.view("contract_version").await?.json()?;
-    assert!(v.ends_with(" p0"), "{v}");
+    assert_eq!(v, "2.0.0-v7");
 
     let lender = user(&e, 100_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
@@ -244,27 +246,11 @@ async fn migrate_p0_state_then_quoter_outcomes() -> anyhow::Result<()> {
         ft_call(&e.nvdax, &b, core.id(), 20_000_000, &borrow_msg(2_250_000_000)).await?;
         borrowers.push(b);
     }
-    let before = p0_views(&core, 7).await?;
-
-    // upgrade: code first (no init) so the guard paths are observable, then migrate
-    core.as_account().deploy(&wasm("nectar_core")).await?.into_result()?;
-    let stranger = e.worker.dev_create_account().await?;
-    let r = stranger.call(core.id(), "migrate").transact().await?;
-    assert!(r.is_failure(), "stranger cannot migrate");
+    let views = p0_views(&core, 7).await?;
+    assert_eq!(views["collateral"]["total_debt_usd_e6"], "15750000000", "A1: 7 x 2,250");
+    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(2));
     let r = core.call("migrate").transact().await?;
-    gas("migrate", &r);
-    assert!(r.is_success(), "migrate: {:?}", r.failures());
-    assert_eq!(events(&r, "migrated").len(), 1);
-    let r = e.owner.call(core.id(), "migrate").transact().await?;
-    assert!(r.is_failure(), "second migrate refused");
-    assert!(format!("{:?}", r.failures()).contains("already migrated"));
-
-    let v: String = core.view("contract_version").await?.json()?;
-    assert!(v.ends_with(" p1") || v.ends_with(" p2"), "{v}");
-    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(1));
-    let after = p0_views(&core, 7).await?;
-    assert_eq!(before, after, "all P0 views identical after migrate");
-    println!("MIGRATE,views_identical,true,state_version,1");
+    assert!(r.is_failure(), "v2 has no migrate");
     let qc = view(&core, "get_quoter_config", json!({})).await?;
     assert_eq!(qc["enabled"], false);
     assert_eq!(view(&core, "get_exit_capacity", json!({ "symbol": "NVDAx" })).await?["oracle_source"], "Owner");
@@ -333,7 +319,7 @@ async fn migrate_p0_state_then_quoter_outcomes() -> anyhow::Result<()> {
 async fn gas_trigger_quoter_eight_legs() -> anyhow::Result<()> {
     let e = env().await?;
     let core = init_core(&e, &wasm("nectar_core")).await?;
-    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(1));
+    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(2));
     owner_call(&e, &core, "set_reserve", json!({ "symbol": "NVDAx", "reserve_usd_e6": "20000000000" })).await?;
     let lender = user(&e, 50_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 50_000_000_000, r#""SupplyLendingLiquidity""#).await?;
@@ -391,12 +377,12 @@ async fn status(core: &Contract, pos: u64) -> anyhow::Result<Value> {
     Ok(view(core, "get_position", json!({ "position_id": pos.to_string() })).await?["status"].clone())
 }
 
-/// Live V1 wasm -> this build with no migrate (root layout unchanged), then every Pyth outcome, quoter with
-/// secrets_ref, and cancel_settlement on a position held in Settling by a never-resumed OutLayer yield.
+/// v1 `upgrade_v1_then_pyth_secrets_cancel`, v2 form (fresh v2): every Pyth outcome, quoter with secrets_ref,
+/// and cancel_settlement on a position held in Settling by a never-resumed OutLayer yield.
 #[tokio::test]
-async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
+async fn v2_pyth_secrets_cancel() -> anyhow::Result<()> {
     let e = env().await?;
-    let core = init_core(&e, &v1_wasm()).await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
     let lender = user(&e, 100_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
     let buyer1 = user(&e, 30_000_000_000, 0).await?;
@@ -407,20 +393,10 @@ async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
         let b = user(&e, 0, 20_000_000).await?;
         ft_call(&e.nvdax, &b, core.id(), 20_000_000, &borrow_msg(2_250_000_000)).await?;
     }
-    let before = p0_views(&core, 4).await?;
-    let qc_before = view(&core, "get_quoter_config", json!({})).await?;
-
-    let r = core.as_account().deploy(&wasm("nectar_core")).await?;
-    assert!(r.is_success(), "upgrade deploy");
-    assert_eq!(p0_views(&core, 4).await?, before, "all views identical after V1 -> V1+WO-10b, no migrate");
-    let mut qc = view(&core, "get_quoter_config", json!({})).await?;
+    let _ = p0_views(&core, 4).await?;
+    let qc = view(&core, "get_quoter_config", json!({})).await?;
     assert_eq!(qc["secrets_ref"], Value::Null);
-    qc.as_object_mut().unwrap().remove("secrets_ref");
-    assert_eq!(qc, qc_before);
-    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(1));
-    let r = core.call("migrate").transact().await?;
-    assert!(format!("{:?}", r.failures()).contains("already migrated"));
-    println!("UPGRADE,v1_to_wo10b,views_identical,true,migrate,none");
+    assert_eq!(qc["enabled"], false);
 
     let pyth = stub(&e).await?;
     owner_call(&e, &core, "set_oracle_source", json!({ "symbol": "NVDAx",
@@ -454,7 +430,12 @@ async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
     assert_eq!(pyth.view("get_pyth_last_age").await?.json::<u64>()?, 86_400, "closed-session age");
 
     // open session, 3 min old: rejected by age=120 (D-015), position stays Open
-    owner_call(&e, &core, "set_session", json!({ "symbol": "NVDAx", "open": true })).await?;
+    // (v2 A2: the session opens from a calendar window around now while the stored price is fresh)
+    price(&e, &core, 140_100_000).await?;
+    let t = now_s(&e).await? as u64;
+    owner_call(&e, &core, "set_session_calendar", json!({ "windows": [[
+        ((t - 3_600) * 1_000_000_000).to_string(), ((t + 3_600) * 1_000_000_000).to_string()]] })).await?;
+    assert_eq!(view(&core, "get_exit_capacity", json!({ "symbol": "NVDAx" })).await?["session_open"], true);
     let t = now_s(&e).await?;
     pyth_body(&pyth, &pyth_px(13_500_000_000, 1_000_000, -8, t - 180)).await?;
     let r = trigger(&e, &core, 0).await?;
@@ -462,7 +443,8 @@ async fn upgrade_v1_then_pyth_secrets_cancel() -> anyhow::Result<()> {
     assert_eq!(events(&r, "oracle_rejected")[0]["reason"], "no_price", "{:?}", r.logs());
     assert_eq!(pyth.view("get_pyth_last_age").await?.json::<u64>()?, 120, "open-session age");
     assert_eq!(status(&core, 0).await?, "Open");
-    owner_call(&e, &core, "set_session", json!({ "symbol": "NVDAx", "open": false })).await?;
+    owner_call(&e, &core, "set_session_calendar", json!({ "windows": [] })).await?;
+
 
     // accepted: closed session, 2 h old (expo -8 -> 135.000000), static settle
     let t = now_s(&e).await?;
@@ -562,5 +544,26 @@ async fn gas_trigger_pyth_quoter_eight_legs() -> anyhow::Result<()> {
     assert_eq!(status(&core, 0).await?, "Closed");
     assert!(bal(&e.nvdax, borrower.id()).await? > 0);
     println!("GAS,trigger+pyth+quoter+8legs,attached,{}", 300 * TGAS);
+    Ok(())
+}
+
+/// v2 is a fresh deploy (PRD §6.11, no migrate): v2 code over P0 / V1 state never misreads it.
+#[tokio::test]
+async fn v2_code_over_v1_state_fails_closed() -> anyhow::Result<()> {
+    let e = env().await?;
+    for (label, code) in [("p0", p0_wasm()), ("v1", v1_wasm())] {
+        let core = init_core(&e, &code).await?;
+        let lender = user(&e, 1_000_000_000, 0).await?;
+        ft_call(&e.usdc, &lender, core.id(), 1_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+        core.as_account().deploy(&wasm("nectar_core")).await?.into_result()?;
+        assert!(core.view("get_config").await.is_err(), "{label}: v2 cannot read the v1 root");
+        let r = core
+            .call("new")
+            .args_json(json!({ "owner": e.owner.id(), "usdc_token": e.usdc.id(), "keeper": e.keeper.id() }))
+            .transact()
+            .await?;
+        assert!(r.is_failure(), "{label}: new refuses an initialised account");
+        println!("V2_OVER_V1,{label},views_fail,true,new_refused,true");
+    }
     Ok(())
 }

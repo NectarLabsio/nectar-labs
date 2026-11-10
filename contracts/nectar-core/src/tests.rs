@@ -64,11 +64,17 @@ fn nvdax_input() -> CollateralInput {
         limit_premium_bps: 300,
         pre_liq_min_bps: 6500,
         pre_liq_max_bps: 8000,
-        market_session_open: false,
         verified_dex_depth_usd_e6: U128(0),
         nectar_reserve_usd_e6: U128(0),
         remote_chain: None,
+        price_kind: None,
     }
+}
+
+/// v2 A2: one NYSE-like window around T0 (the session then opens while the price is <= 900 s old).
+fn open_window(c: &mut Nectar) {
+    set_ctx(owner(), 0, T0);
+    c.set_session_calendar(vec![[U64(T0 - 3_600 * SEC), U64(T0 + 6 * 3_600 * SEC)]]);
 }
 
 fn setup() -> Nectar {
@@ -136,8 +142,9 @@ fn new_sets_defaults() {
 #[test]
 fn contract_version_view() {
     let c = setup();
-    assert!(c.contract_version().starts_with("nectar-core "));
+    assert_eq!(c.contract_version(), "2.0.0-v7");
     assert_eq!(c.get_config().contract_version, c.contract_version());
+    assert_eq!(c.get_state_version(), 2);
 }
 
 #[test]
@@ -222,8 +229,9 @@ fn set_fee_split_must_sum() {
     c.set_fee_split(7000, 2000, 999);
 }
 
+/// v1 `set_session` coverage, v2 form: the session comes from the calendar (A2), not an owner flag.
 #[test]
-fn set_session_switches_haircut_and_depth() {
+fn session_window_switches_haircut_and_depth() {
     let mut c = setup();
     set_ctx(owner(), 0, T0);
     c.set_dex_depth("NVDAx".into(), U128(4_000_000_000));
@@ -233,20 +241,22 @@ fn set_session_switches_haircut_and_depth() {
     assert_eq!(closed.d_usd_e6, U128(0));
     assert_eq!(closed.r_usd_e6, U128(1_000_000_000));
     assert_eq!(closed.capacity_usd_e6, U128(750_000_000));
-    c.set_session("NVDAx".into(), true);
+    assert_eq!(closed.session_reason, "no_calendar");
+    open_window(&mut c);
     let open = c.get_exit_capacity("NVDAx".into());
     assert_eq!(open.haircut_bps, 1000);
     assert_eq!(open.d_usd_e6, U128(4_000_000_000));
     assert_eq!(open.capacity_usd_e6, U128(4_500_000_000));
     assert!(open.session_open);
+    assert_eq!(open.session_reason, "open");
 }
 
 #[test]
 #[should_panic(expected = "unknown collateral")]
-fn set_session_unknown_symbol() {
+fn force_session_closed_unknown_symbol() {
     let mut c = setup();
     set_ctx(owner(), 0, T0);
-    c.set_session("TSLAx".into(), true);
+    c.force_session_closed("TSLAx".into(), true);
 }
 
 #[test]
@@ -504,7 +514,10 @@ fn lock_and_borrow_at_limit() {
     let pool = c.get_pool();
     assert_eq!(pool.available_usd_e6, U128(50_000_000_000 - 11_250_000_000));
     assert_eq!(pool.utilised_usd_e6, U128(11_250_000_000));
-    assert_eq!(pool.treasury_usd_e6, U128(12_150_000));
+    // premium treasury share 12.15 + origination 30 bps of 11,250 = 33.75 (no referrer)
+    assert_eq!(pool.treasury_usd_e6, U128(12_150_000 + 33_750_000));
+    assert_eq!(p.entry_multiplier_e18, U128(math::E18));
+    assert_eq!(c.get_collateral("NVDAx".into()).unwrap().total_debt_usd_e6, U128(11_250_000_000));
     assert_eq!(pool.lenders_fees_usd_e6, U128(24_300_000));
     assert_eq!(c.get_quote(U64(0)).unwrap().claimable_fees_usd_e6, U128(56_700_000));
     assert_eq!(c.get_quote(U64(1)).unwrap().claimable_fees_usd_e6, U128(28_350_000));
@@ -515,8 +528,10 @@ fn lock_and_borrow_failures_refund() {
     let mut c = setup();
     ft(&mut c, usdc(), lender(), 50_000_000_000, r#""SupplyLendingLiquidity""#);
     fund(&mut c, buyer1(), 15_000_000_000, 250);
-    // above B_c
+    // above the aggregate capacity (v2 A1; LTV cap is 12,600)
     assert_eq!(ft(&mut c, nvdax(), borrower(), NVDAX_UNITS, &borrow_msg(11_250_000_001, 7500)), NVDAX_UNITS);
+    // above the LTV cap (40 NVDAx: V 7,200 -> LTV cap 5,040)
+    assert_eq!(ft(&mut c, nvdax(), borrower(), 40_000_000, &borrow_msg(5_040_000_001, 8000)), 40_000_000);
     // pre_liq out of [6500, 8000]
     assert_eq!(ft(&mut c, nvdax(), borrower(), NVDAX_UNITS, &borrow_msg(1_000, 8001)), NVDAX_UNITS);
     // borrow above pre_liq (6250 bps needs pre_liq >= 6250; 11.25k/18k = 6250 -> ok at 6500; use V smaller)
@@ -988,18 +1003,27 @@ fn preview_borrow_view() {
     let mut c = setup();
     ft(&mut c, usdc(), lender(), 50_000_000_000, r#""SupplyLendingLiquidity""#);
     fund(&mut c, buyer1(), 15_000_000_000, 250);
-    let ok = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_000));
+    let ok = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_000), None, None);
     assert!(ok.ok);
     assert_eq!(ok.b_c_usd_e6, U128(11_250_000_000));
     assert_eq!(ok.static_limit_usd_e6, U128(7_200_000_000));
     assert_eq!(ok.premium_usd_e6, U128(121_500_000));
-    let over = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_001));
+    assert_eq!(ok.origination_fee_usd_e6, U128(33_750_000));
+    assert_eq!(ok.referrer_share_usd_e6, U128(0));
+    assert_eq!(ok.total_fees_usd_e6, U128(155_250_000));
+    assert_eq!(ok.net_proceeds_usd_e6, U128(11_094_750_000));
+    assert_eq!(ok.aggregate_headroom_usd_e6, U128(11_250_000_000));
+    assert_eq!(ok.multiplier_e18, U128(math::E18));
+    assert!(!ok.session_open);
+    let over = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_001), None, None);
     assert!(!over.ok);
-    assert_eq!(over.reason.as_deref(), Some("borrow above B_c"));
-    let unk = c.preview_borrow("NOPE".into(), U128(1), U128(1));
+    assert_eq!(over.reason.as_deref(), Some("aggregate_limit"));
+    let over_ltv = c.preview_borrow("NVDAx".into(), U128(40_000_000), U128(5_040_000_001), None, None);
+    assert_eq!(over_ltv.reason.as_deref(), Some("borrow above B_c"));
+    let unk = c.preview_borrow("NOPE".into(), U128(1), U128(1), None, None);
     assert_eq!(unk.reason.as_deref(), Some("unknown collateral"));
     set_ctx(owner(), 0, T0 + 86_401 * SEC);
-    let stale = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(1));
+    let stale = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(1), None, None);
     assert_eq!(stale.reason.as_deref(), Some("oracle stale"));
 }
 
@@ -1013,7 +1037,7 @@ fn get_owed_collateral_default_zero() {
 fn events_are_nep297() {
     let _c = demo();
     let l = get_logs().into_iter().find(|l| l.contains("position_opened")).unwrap();
-    assert!(l.starts_with(r#"EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"#));
+    assert!(l.starts_with(r#"EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"position_opened","data":[{"#));
     assert!(l.contains(r#""debt_usd_e6":"11250000000""#));
 }
 
@@ -1034,6 +1058,8 @@ fn model_csv_vectors_match_contract_math() {
             "limit" => {
                 let p = math::LimitParams {
                     decimals: u("decimals") as u8,
+                    m_e18: u("multiplier_e18"),
+                    total_debt_usd_e6: u("total_debt_usd_e6"),
                     price_usd_e6: u("price_usd_e6"),
                     q_usd_e6: u("q_usd_e6"),
                     r_usd_e6: u("r_usd_e6"),
@@ -1050,12 +1076,16 @@ fn model_csv_vectors_match_contract_math() {
                 assert_eq!(l.capacity_usd_e6, u("capacity_usd_e6"), "{case}");
                 assert_eq!(l.static_limit_usd_e6, u("static_limit_usd_e6"), "{case}");
                 assert_eq!(l.b_c_usd_e6, u("b_c_usd_e6"), "{case}");
+                assert_eq!(l.headroom_usd_e6, u("aggregate_headroom_usd_e6"), "{case}");
                 let borrow = u("borrow_usd_e6");
                 let pre_liq = u("pre_liq_ltv_bps") as u16;
                 let ok = borrow > 0
-                    && borrow <= l.b_c_usd_e6
+                    && borrow <= l.ltv_cap_usd_e6
+                    && u("total_debt_usd_e6") + borrow <= l.capacity_usd_e6
                     && !math::triggerable(borrow, l.value_usd_e6, pre_liq).unwrap();
                 assert_eq!(ok as u128, u("borrow_ok"), "{case}");
+                let orig = math::origination_fee(borrow, u("origination_fee_bps") as u16).unwrap();
+                assert_eq!(orig, u("origination_fee_usd_e6"), "{case}");
                 let prem = math::premium_usd_e6(borrow, l.static_limit_usd_e6, u("limit_premium_bps") as u16).unwrap();
                 assert_eq!(prem, u("premium_usd_e6"), "{case}");
                 let s = math::split_premium(prem, u("buyers_bps") as u16, u("lenders_bps") as u16, u("q_usd_e6"))
@@ -1064,17 +1094,20 @@ fn model_csv_vectors_match_contract_math() {
                 assert_eq!(s.lenders_usd_e6, u("lenders_fee_usd_e6"), "{case}");
                 assert_eq!(s.treasury_usd_e6, u("treasury_fee_usd_e6"), "{case}");
                 assert_eq!(s.acc_increment_e18, u("acc_increment_e18"), "{case}");
+                assert_eq!(borrow.saturating_sub(prem + orig), u("net_proceeds_usd_e6"), "{case}");
                 let debt = u("debt_usd_e6");
                 assert_eq!(math::ltv_bps(debt, l.value_usd_e6) as u128, u("ltv_bps"), "{case}");
                 let trig = math::triggerable(debt, l.value_usd_e6, pre_liq).unwrap();
                 assert_eq!(trig as u128, u("triggerable"), "{case}");
             }
             "leg" => {
-                let leg = math::settle_leg(
+                let leg = math::settle_leg_m(
                     u("debt_usd_e6"),
                     u("quote_remaining_usd_e6"),
                     u("units"),
+                    u("multiplier_e18"),
                     u("price_usd_e6"),
+
                     u("decimals") as u8,
                     u("disc_bps") as u16,
                     u("keeper_fee_bps") as u16,

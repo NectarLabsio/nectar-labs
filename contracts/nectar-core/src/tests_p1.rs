@@ -1,8 +1,7 @@
-//! P1 unit tests: migrate, quoter setters/views, trigger -> on_quoter_result (clamp, every fallback
+//! P1 unit tests: v2 layout/version, quoter setters/views, trigger -> on_quoter_result (clamp, every fallback
 //! reason, abort paths), parse_quoter_output, and quoter/tests/vectors.json when WO-9 is merged.
 
 use super::*;
-use crate::migrate::NectarV0;
 use crate::p1::{hex, parse_quoter_output};
 use near_sdk::test_utils::{VMContextBuilder, get_logs};
 use near_sdk::{PromiseResult, testing_env};
@@ -60,10 +59,10 @@ fn input() -> CollateralInput {
         limit_premium_bps: 300,
         pre_liq_min_bps: 6500,
         pre_liq_max_bps: 8000,
-        market_session_open: false,
         verified_dex_depth_usd_e6: U128(0),
         nectar_reserve_usd_e6: U128(0),
         remote_chain: None,
+        price_kind: None,
     }
 }
 
@@ -150,101 +149,32 @@ fn settled_discs() -> Vec<String> {
         .collect()
 }
 
-// ------------------------------------------------------------------ migrate / version
+// ------------------------------------------------------------------ version (v2: fresh deploy, no migrate)
 
-fn v0_from_new() -> NectarV0 {
-    set_ctx(owner(), 0, T0);
-    let n = Nectar::new(owner(), usdc(), keeper());
-    NectarV0 {
-        owner: n.owner,
-        paused: n.paused,
-        usdc_token: n.usdc_token,
-        keeper: n.keeper,
-        keeper_fee_bps: n.keeper_fee_bps,
-        fee_split: n.fee_split,
-        min_notice_period_ns: n.min_notice_period_ns,
-        min_quote_usd_e6: n.min_quote_usd_e6,
-        max_age_ns_session: n.max_age_ns_session,
-        max_age_ns_closed: 7,
-        band_bps: n.band_bps,
-        available_usd_e6: 123,
-        utilised_usd_e6: 0,
-        treasury_usd_e6: 0,
-        lenders_fees_usd_e6: 0,
-        gas_reserve_yocto: 55,
-        next_quote_id: 3,
-        next_position_id: 2,
-        collaterals: n.collaterals,
-        token_to_symbol: n.token_to_symbol,
-        quotes: n.quotes,
-        quotes_by_collateral: n.quotes_by_collateral,
-        positions: n.positions,
-        lender_supplied: n.lender_supplied,
-        pending_prices: n.pending_prices,
-        owed_collateral: n.owed_collateral,
-    }
-}
-
+/// v1 migrate coverage, v2 form: `new` writes layout 2 with the P1 defaults `migrate` used to set.
 #[test]
-fn migrate_reads_p0_layout_and_defaults_v1() {
-    let v0 = v0_from_new();
-    env::storage_remove(STATE_VERSION_KEY);
-    env::state_write(&v0);
+fn new_writes_v2_layout_with_p1_defaults() {
     set_ctx(owner(), 0, T0);
-    let c = Nectar::migrate();
-    assert!(has_event("migrated"));
-    let cfg = c.get_config();
-    assert_eq!(cfg.max_age_ns_closed, U64(7));
-    assert_eq!(cfg.gas_reserve_yocto, U128(55));
-    assert_eq!(cfg.next_quote_id, U64(3));
-    assert_eq!(c.get_pool().available_usd_e6, U128(123));
-    assert_eq!(c.get_state_version(), 1);
+    let c = Nectar::new(owner(), usdc(), keeper());
+    assert_eq!(c.get_state_version(), 2);
+    assert_eq!(env::storage_read(STATE_VERSION_KEY), Some(vec![2]));
     let q = c.get_quoter_config();
     assert!(!q.enabled);
     assert_eq!(q.outlayer_account, a("outlayer.testnet"));
     assert_eq!(q.max_conf_bps, 100);
+    assert_eq!(c.get_config().origination_fee_bps, 30);
 }
 
 #[test]
-fn migrate_by_contract_account() {
-    let v0 = v0_from_new();
-    env::storage_remove(STATE_VERSION_KEY);
-    env::state_write(&v0);
-    set_ctx(core(), 0, T0);
-    let _ = Nectar::migrate();
-}
-
-#[test]
-#[should_panic(expected = "owner only")]
-fn migrate_rejects_stranger() {
-    let v0 = v0_from_new();
-    env::storage_remove(STATE_VERSION_KEY);
-    env::state_write(&v0);
-    set_ctx(keeper(), 0, T0);
-    let _ = Nectar::migrate();
-}
-
-#[test]
-#[should_panic(expected = "already migrated")]
-fn migrate_twice_rejected() {
-    let v0 = v0_from_new(); // new() writes the version marker
-    env::state_write(&v0);
-    set_ctx(owner(), 0, T0);
-    let _ = Nectar::migrate();
-}
-
-#[test]
-#[should_panic(expected = "no P0 state")]
-fn migrate_without_state() {
-    set_ctx(owner(), 0, T0);
-    env::storage_remove(STATE_VERSION_KEY);
-    let _ = Nectar::migrate();
-}
-
-#[test]
-fn contract_version_says_p1() {
+fn contract_version_says_v2() {
     let c = demo_p1(false);
-    assert!(c.contract_version().ends_with(if cfg!(feature = "p2") { " p2" } else { " p1" }));
+    assert_eq!(c.contract_version(), "2.0.0-v7");
+}
+
+/// v2 A2 helper: a calendar window around T0 so the session opens while the price is fresh.
+fn open_window(c: &mut Nectar) {
+    set_ctx(owner(), 0, T0);
+    c.set_session_calendar(vec![[U64(T0 - 3_600 * SEC), U64(T0 + 6 * 3_600 * SEC)]]);
 }
 
 // ------------------------------------------------------------------ setters / views
@@ -758,10 +688,7 @@ fn pyth_reject_case(result: PromiseResult, reason: &str) {
 #[test]
 fn pyth_rejects_stale_in_session() {
     let mut c = demo_p1(false);
-    set_ctx(owner(), 0, T0 + 3 * SEC);
-    let mut i = input();
-    i.market_session_open = true;
-    c.upsert_collateral("NVDAx".into(), i);
+    open_window(&mut c); // session open: 120 s max age
     pyth_on(&mut c);
     set_ctx(keeper(), 0, T0 + 4 * SEC);
     c.trigger_preliquidation(U64(0));
@@ -941,9 +868,9 @@ fn pyth_trigger_closed_session_age() {
 fn pyth_trigger_open_session_age() {
     let mut c = demo_p1(false);
     pyth_on(&mut c);
-    set_ctx(owner(), 0, T0 + 3 * SEC);
-    c.set_session("NVDAx".into(), true);
+    open_window(&mut c);
     set_ctx(keeper(), 0, T0 + 4 * SEC);
+
     c.trigger_preliquidation(U64(0));
     assert!(event_with("pyth_price_requested", r#""age_s":120"#));
 }

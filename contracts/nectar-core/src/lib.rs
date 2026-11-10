@@ -1,5 +1,7 @@
-//! nectar-core (P0): Pappus funded quotes + Cramér borrowing limit on NEAR.
-//! ABI: docs/work/interface-p0.md. Spec: docs/PRD.md §4, §6, §8 (D-009 parameters).
+//! nectar-core v2 (`2.0.0-v7`): Pappus funded quotes + Cramér borrowing limit on NEAR.
+//! ABI: docs/work/interface-p0.md + interface-p1.md + interface-p2.md + interface-v7.md §A.
+//! Spec: docs/PRD.md §4, §6, §8 (D-009 parameters), §4.2/4.6/4.7/4.11/6.11 (v7 P0 delta, D-017/D-018).
+//! v2 is a fresh deploy with `new` (no migrate, PRD §6.11): the root layout is V2.
 //!
 //! Invariants:
 //! - `ft_on_transfer` is the only inbound token path; the predecessor must be `usdc_token` or a
@@ -13,8 +15,8 @@
 pub mod chainsig;
 pub mod events;
 pub mod math;
-mod migrate;
 pub mod types;
+mod v7;
 
 #[cfg(feature = "p1")]
 mod p1;
@@ -27,10 +29,12 @@ mod tests;
 mod tests_p1;
 #[cfg(all(test, feature = "p2"))]
 mod tests_p2;
+#[cfg(test)]
+mod tests_v7;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
-use near_sdk::store::{IterableMap, LookupMap};
+use near_sdk::store::{IterableMap, LazyOption, LookupMap, LookupSet};
 use near_sdk::{
     AccountId, BorshStorageKey, Gas, NearToken, PanicOnDefault, Promise, PromiseOrValue, assert_one_yocto, env,
     is_promise_success, near, require,
@@ -40,15 +44,21 @@ use crate::events::emit;
 use crate::math::{BPS, LimitParams, MathResult};
 use crate::types::*;
 
-#[cfg(feature = "p2")]
-pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p2");
-#[cfg(all(feature = "p1", not(feature = "p2")))]
-pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p1");
-#[cfg(not(feature = "p1"))]
-pub const CONTRACT_VERSION: &str = concat!("nectar-core ", env!("CARGO_PKG_VERSION"), " p0");
-/// Raw storage key holding the state layout version (absent = P0 layout). Written by `new` and `migrate`.
+/// interface-v7.md A6.
+pub const CONTRACT_VERSION: &str = "2.0.0-v7";
+/// Raw storage key holding the state layout version. Written by `new` (v2 has no migrate).
 pub const STATE_VERSION_KEY: &[u8] = b"__state_version";
-pub const STATE_VERSION: u8 = 1;
+pub const STATE_VERSION: u8 = 2;
+/// A2: a price older than this closes the session (PRD §4.7).
+pub const SESSION_MAX_PRICE_AGE_NS: u64 = 900 * 1_000_000_000;
+/// A2: `set_session_calendar` bound.
+pub const MAX_CALENDAR_WINDOWS: usize = 600;
+/// A3: `announce_corporate_action` notice and the `set_multiplier` step.
+pub const CA_MIN_NOTICE_NS: u64 = 3_600 * 1_000_000_000;
+pub const MULTIPLIER_MAX_INCREASE_BPS: u16 = 500;
+/// A5
+pub const DEFAULT_ORIGINATION_FEE_BPS: u16 = 30;
+pub const MAX_ORIGINATION_FEE_BPS: u16 = 100;
 pub const MAX_QUOTES_PER_ASSET: usize = 64;
 pub const MAX_QUOTES_PER_SETTLEMENT: usize = 8;
 pub const MAX_PAGE: u32 = 100;
@@ -74,6 +84,19 @@ const ERR_NO_COLLATERAL: &str = "unknown collateral";
 const ERR_NO_QUOTE: &str = "unknown quote";
 const ERR_NO_POSITION: &str = "unknown position";
 const ERR_BUYER: &str = "buyer only";
+// v2 reason codes (interface-v7.md A6)
+pub(crate) const ERR_AGGREGATE_LIMIT: &str = "aggregate_limit";
+pub(crate) const ERR_CA_PENDING: &str = "ca_pending";
+pub(crate) const ERR_REFERRER_IS_BORROWER: &str = "referrer_is_borrower";
+
+/// Fee stack of one borrow (A5): net = borrow - premium - origination.
+pub(crate) struct BorrowTerms {
+    pub premium: u128,
+    pub split: math::PremiumSplit,
+    pub origination: u128,
+    pub referrer_share: u128,
+    pub net: u128,
+}
 
 #[near(serializers = [borsh])]
 #[derive(BorshStorageKey)]
@@ -89,6 +112,10 @@ enum StorageKey {
     // V1 (P1) — appended so P0 prefixes are unchanged.
     VolBps,
     OracleSources,
+    // v2 (interface-v7.md A2, A4, A5)
+    SessionCalendar,
+    Referrers,
+    ClaimableUsdc,
 }
 
 // Defaults for the V1 fields (packages/config/config.yaml outlayer.*, oracle.max_conf_bps; F-046).
@@ -148,11 +175,19 @@ pub struct Nectar {
     pending_prices: LookupMap<String, (u128, u64)>,
     /// "account|symbol" -> units whose ft_transfer failed (recorded, not lost)
     owed_collateral: LookupMap<String, u128>,
-    // ---- V1 (P1). P0 fields above keep their borsh order; `migrate` reads them as `NectarV0`.
+    // ---- P1
     quoter: QuoterConfig,
     vol_bps: LookupMap<String, u16>,
     oracle_sources: LookupMap<String, OracleSource>,
     max_conf_bps: u16,
+    // ---- V2 (interface-v7.md §A). P1/P2 raw-key records (quoter secrets ref, `__p2_*`) stay raw keys.
+    /// A2: sorted, non-overlapping NYSE windows `[open_ns, close_ns)`; one lazily loaded value.
+    session_calendar: LazyOption<Vec<(u64, u64)>>,
+    /// A5
+    referrers: LookupSet<AccountId>,
+    origination_fee_bps: u16,
+    /// A4: USDC owed to an account (failed `pay_to`, referrer shares); paid by `withdraw_claimable`.
+    claimable_usdc: LookupMap<AccountId, u128>,
 }
 
 // ---------------------------------------------------------------- internal helpers
@@ -164,13 +199,13 @@ impl Nectar {
         require!(!self.paused, ERR_PAUSED);
     }
     fn coll(&self, symbol: &str) -> Option<CollateralConfig> {
-        self.collaterals.get(symbol).map(|VCollateral::V1(c)| c.clone())
+        self.collaterals.get(symbol).map(|VCollateral::V2(c)| c.clone())
     }
     fn coll_or_panic(&self, symbol: &str) -> CollateralConfig {
         self.coll(symbol).unwrap_or_else(|| env::panic_str(ERR_NO_COLLATERAL))
     }
     fn put_coll(&mut self, c: CollateralConfig) {
-        self.collaterals.insert(c.symbol.clone(), VCollateral::V1(c));
+        self.collaterals.insert(c.symbol.clone(), VCollateral::V2(c));
     }
     fn quote(&self, id: u64) -> Option<Quote> {
         self.quotes.get(&id).map(|VQuote::V1(q)| q.clone())
@@ -182,13 +217,13 @@ impl Nectar {
         self.quotes.insert(q.quote_id.0, VQuote::V1(q));
     }
     fn position(&self, id: u64) -> Option<Position> {
-        self.positions.get(&id).map(|VPosition::V1(p)| p.clone())
+        self.positions.get(&id).map(|VPosition::V2(p)| p.clone())
     }
     fn position_or_panic(&self, id: u64) -> Position {
         self.position(id).unwrap_or_else(|| env::panic_str(ERR_NO_POSITION))
     }
     fn put_position(&mut self, p: Position) {
-        self.positions.insert(p.position_id.0, VPosition::V1(p));
+        self.positions.insert(p.position_id.0, VPosition::V2(p));
     }
     fn live_ids(&self, symbol: &str) -> Vec<u64> {
         self.quotes_by_collateral.get(symbol).cloned().unwrap_or_default()
@@ -202,8 +237,42 @@ impl Nectar {
         }
     }
 
-    fn max_age_ns(&self, c: &CollateralConfig) -> u64 {
-        if c.market_session_open { self.max_age_ns_session } else { self.max_age_ns_closed }
+    /// A2 (PRD §4.7), fails closed: `(open, reason)`. Precedence: no_calendar, outside_hours, stale_price,
+    /// forced_closed. Nothing the owner sets can open a session outside a window or with a stale price.
+    pub(crate) fn session_state(&self, c: &CollateralConfig) -> (bool, &'static str) {
+        let windows = match self.session_calendar.get() {
+            Some(w) if !w.is_empty() => w,
+            _ => return (false, "no_calendar"),
+        };
+        let now = env::block_timestamp();
+        if !math::in_session_window(windows, now) {
+            return (false, "outside_hours");
+        }
+        if c.oracle_updated_ns.0 == 0 || now.saturating_sub(c.oracle_updated_ns.0) > SESSION_MAX_PRICE_AGE_NS {
+            return (false, "stale_price");
+        }
+        if c.forced_closed {
+            return (false, "forced_closed");
+        }
+        (true, "open")
+    }
+    pub(crate) fn session_open(&self, c: &CollateralConfig) -> bool {
+        self.session_state(c).0
+    }
+    /// A3: M used in valuation (ignored for TokenIncludesMultiplier).
+    pub(crate) fn eff_multiplier(c: &CollateralConfig) -> u128 {
+        match c.price_kind {
+            PriceKind::Underlying => c.multiplier_e18.0,
+            PriceKind::TokenIncludesMultiplier => math::E18,
+        }
+    }
+    /// A3: `V = units·M/1e18·price/10^d` of `units` raw token units.
+    pub(crate) fn value_of(units: u128, c: &CollateralConfig) -> MathResult<u128> {
+        math::value_m_usd_e6(units, Self::eff_multiplier(c), c.oracle_price_usd_e6.0, c.decimals)
+    }
+
+    pub(crate) fn max_age_ns(&self, c: &CollateralConfig) -> u64 {
+        if self.session_open(c) { self.max_age_ns_session } else { self.max_age_ns_closed }
     }
     fn oracle_fresh(&self, c: &CollateralConfig) -> bool {
         if c.oracle_price_usd_e6.0 == 0 || c.oracle_updated_ns.0 == 0 {
@@ -212,14 +281,16 @@ impl Nectar {
         let now = env::block_timestamp();
         now.saturating_sub(c.oracle_updated_ns.0) <= self.max_age_ns(c)
     }
-    fn limit_params(c: &CollateralConfig) -> LimitParams {
+    fn limit_params(&self, c: &CollateralConfig) -> LimitParams {
         LimitParams {
             decimals: c.decimals,
+            m_e18: Self::eff_multiplier(c),
+            total_debt_usd_e6: c.total_debt_usd_e6.0,
             price_usd_e6: c.oracle_price_usd_e6.0,
             q_usd_e6: c.active_committed_q_usd_e6.0,
             r_usd_e6: c.nectar_reserve_usd_e6.0,
             d_usd_e6: c.verified_dex_depth_usd_e6.0,
-            session_open: c.market_session_open,
+            session_open: self.session_open(c),
             base_ltv_bps: c.base_ltv_bps,
             max_nectar_ltv_bps: c.max_nectar_ltv_bps,
             base_haircut_bps: c.base_haircut_bps,
@@ -245,7 +316,23 @@ impl Nectar {
 
     /// `token.ft_transfer(receiver, amount)` with 1 yocto, then `on_payout` (rollback on failure).
     fn transfer(token: &AccountId, receiver: &AccountId, amount: u128, payout: Payout) -> Promise {
-        let args = json!({ "receiver_id": receiver, "amount": U128(amount) }).to_string();
+        Self::transfer_memo(token, receiver, amount, None, payout)
+    }
+
+    /// `transfer` with an optional NEP-141 `memo` (A4 `pay_to.memo`).
+    pub(crate) fn transfer_memo(
+        token: &AccountId,
+        receiver: &AccountId,
+        amount: u128,
+        memo: Option<&str>,
+        payout: Payout,
+    ) -> Promise {
+        let args = match memo {
+            Some(m) => json!({ "receiver_id": receiver, "amount": U128(amount), "memo": m }),
+            None => json!({ "receiver_id": receiver, "amount": U128(amount) }),
+        }
+        .to_string();
+
         let cb = json!({ "payout": payout, "account_id": receiver, "amount": U128(amount) }).to_string();
         Promise::new(token.clone())
             .function_call("ft_transfer", args.into_bytes(), ONE_YOCTO, GAS_FT_TRANSFER)
@@ -369,6 +456,7 @@ impl Nectar {
         Ok(0)
     }
 
+    /// A1-A5: both limits, multiplier, `ca_pending`, `pay_to`, referrer + origination fee.
     #[allow(clippy::too_many_arguments)]
     fn on_lock_and_borrow(
         &mut self,
@@ -379,11 +467,19 @@ impl Nectar {
         borrow: u128,
         pre_liq_ltv_bps: u16,
         remote_path: Option<String>,
+        pay_to: Option<PayTo>,
+        referrer: Option<AccountId>,
     ) -> Result<u128, &'static str> {
         if collateral != token_symbol {
             return Err("collateral does not match token");
         }
+        if referrer.as_ref() == Some(sender) {
+            return Err(ERR_REFERRER_IS_BORROWER);
+        }
         let mut c = self.coll(&collateral).ok_or(ERR_NO_COLLATERAL)?;
+        if c.ca_pending {
+            return Err(ERR_CA_PENDING);
+        }
         if !self.oracle_fresh(&c) {
             return Err("oracle stale");
         }
@@ -394,13 +490,22 @@ impl Nectar {
             return Err("borrow is zero");
         }
         Self::validate_string(&remote_path)?;
-        let (premium, split) = self.check_borrow(&c, units, borrow, Some(pre_liq_ltv_bps))?;
-        let payout = math::sub(borrow, premium)?;
+        Self::validate_string(&pay_to.as_ref().and_then(|p| p.memo.clone()))?;
+        let referrer = referrer.filter(|r| self.referrers.contains(r)); // unregistered -> treasury
+        let t = self.check_borrow(&c, units, borrow, Some(pre_liq_ltv_bps), referrer.is_some())?;
         let available = math::sub(self.available_usd_e6, borrow)?;
         let utilised = math::add(self.utilised_usd_e6, borrow)?;
-        let treasury = math::add(self.treasury_usd_e6, split.treasury_usd_e6)?;
-        let lenders = math::add(self.lenders_fees_usd_e6, split.lenders_usd_e6)?;
-        let acc = math::add(c.acc_fee_per_dollar_e18.0, split.acc_increment_e18)?;
+        let treasury = math::add(
+            math::add(self.treasury_usd_e6, t.split.treasury_usd_e6)?,
+            math::sub(t.origination, t.referrer_share)?,
+        )?;
+        let lenders = math::add(self.lenders_fees_usd_e6, t.split.lenders_usd_e6)?;
+        let acc = math::add(c.acc_fee_per_dollar_e18.0, t.split.acc_increment_e18)?;
+        let total_debt = math::add(c.total_debt_usd_e6.0, borrow)?;
+        let ref_claim = match &referrer {
+            Some(r) if t.referrer_share > 0 => Some(math::add(self.claimable(r), t.referrer_share)?),
+            _ => None,
+        };
         let id = self.next_position_id;
         let next = id.checked_add(1).ok_or(math::ERR_OVERFLOW)?;
         // effects
@@ -410,6 +515,8 @@ impl Nectar {
         self.lenders_fees_usd_e6 = lenders;
         self.next_position_id = next;
         c.acc_fee_per_dollar_e18 = U128(acc);
+        c.total_debt_usd_e6 = U128(total_debt);
+        let entry_m = c.multiplier_e18;
         let usdc = self.usdc_token.clone();
         self.put_coll(c);
         self.put_position(Position {
@@ -418,36 +525,65 @@ impl Nectar {
             collateral: collateral.clone(),
             units: U128(units),
             debt_usd_e6: U128(borrow),
-            premium_usd_e6: U128(premium),
+            premium_usd_e6: U128(t.premium),
             pre_liq_ltv_bps,
             opened_ns: U64(env::block_timestamp()),
             remote_path,
             nonce: U64(id),
             status: PositionStatus::Open,
+            entry_multiplier_e18: entry_m,
         });
         emit(
             "position_opened",
             json!({ "position_id": U64(id), "borrower": sender, "collateral": collateral,
-                    "units": U128(units), "debt_usd_e6": U128(borrow), "premium_usd_e6": U128(premium) }),
+                    "units": U128(units), "debt_usd_e6": U128(borrow), "premium_usd_e6": U128(t.premium),
+                    "origination_fee_usd_e6": U128(t.origination), "net_proceeds_usd_e6": U128(t.net),
+                    "pay_to": pay_to.as_ref().map(|p| &p.receiver_id), "referrer": referrer }),
         );
+        if let (Some(r), Some(v)) = (&referrer, ref_claim) {
+            self.claimable_usdc.insert(r.clone(), v);
+            emit(
+                "referrer_paid",
+                json!({ "referrer": r, "position_id": U64(id), "amount_usd_e6": U128(t.referrer_share) }),
+            );
+        }
         // interaction
-        if payout > 0 {
-            Self::transfer(&usdc, sender, payout, Payout::BorrowProceeds { position_id: U64(id) }).detach();
+        if t.net > 0 {
+            match pay_to {
+                Some(p) => Self::transfer_memo(
+                    &usdc,
+                    &p.receiver_id,
+                    t.net,
+                    p.memo.as_deref(),
+                    Payout::PayTo { position_id: U64(id), borrower: sender.clone() },
+                )
+                .detach(),
+                None => Self::transfer(&usdc, sender, t.net, Payout::BorrowProceeds { position_id: U64(id) }).detach(),
+            }
         }
         Ok(0)
     }
 
-    /// Shared by `LockCollateralAndBorrow` and `preview_borrow`. Returns (premium, split).
+    pub(crate) fn claimable(&self, a: &AccountId) -> u128 {
+        self.claimable_usdc.get(a).copied().unwrap_or(0)
+    }
+
+    /// Shared by `LockCollateralAndBorrow` and `preview_borrow`: the two-sided limit (A1), liquidity,
+    /// pre-liq, then the fee stack (premium, origination, referrer share) and net proceeds.
     fn check_borrow(
         &self,
         c: &CollateralConfig,
         units: u128,
         borrow: u128,
         pre_liq_ltv_bps: Option<u16>,
-    ) -> Result<(u128, math::PremiumSplit), &'static str> {
-        let l = math::limit(units, &Self::limit_params(c))?;
-        if borrow > l.b_c_usd_e6 {
+        referrer_registered: bool,
+    ) -> Result<BorrowTerms, &'static str> {
+        let l = math::limit(units, &self.limit_params(c))?;
+        if borrow > l.ltv_cap_usd_e6 {
             return Err("borrow above B_c");
+        }
+        if math::add(c.total_debt_usd_e6.0, borrow)? > l.capacity_usd_e6 {
+            return Err(ERR_AGGREGATE_LIMIT);
         }
         if borrow > self.available_usd_e6 {
             return Err("insufficient pool liquidity");
@@ -464,7 +600,10 @@ impl Nectar {
             self.fee_split.lenders_bps,
             c.active_committed_q_usd_e6.0,
         )?;
-        Ok((premium, split))
+        let origination = math::origination_fee(borrow, self.origination_fee_bps)?;
+        let referrer_share = if referrer_registered { origination / 2 } else { 0 };
+        let net = math::sub(math::sub(borrow, premium)?, origination).map_err(|_| "fees exceed borrow")?;
+        Ok(BorrowTerms { premium, split, origination, referrer_share, net })
     }
 
     fn on_repay(&mut self, amount: u128, position_id: u64) -> Result<u128, &'static str> {
@@ -480,10 +619,14 @@ impl Nectar {
         let debt = math::sub(p.debt_usd_e6.0, applied)?;
         let utilised = math::sub(self.utilised_usd_e6, applied)?;
         let available = math::add(self.available_usd_e6, applied)?;
-        let token = self.coll(&p.collateral).ok_or(ERR_NO_COLLATERAL)?.token;
+        let mut c = self.coll(&p.collateral).ok_or(ERR_NO_COLLATERAL)?;
+        let total_debt = math::sub(c.total_debt_usd_e6.0, applied)?;
+        let token = c.token.clone();
         // effects
         self.utilised_usd_e6 = utilised;
         self.available_usd_e6 = available;
+        c.total_debt_usd_e6 = U128(total_debt);
+        self.put_coll(c);
         p.debt_usd_e6 = U128(debt);
         emit(
             "repaid",
@@ -508,7 +651,7 @@ impl Nectar {
     }
 
     pub(crate) fn is_triggerable(&self, p: &Position, c: &CollateralConfig) -> bool {
-        let value = ok(math::value_usd_e6(p.units.0, c.oracle_price_usd_e6.0, c.decimals));
+        let value = ok(Self::value_of(p.units.0, c));
         ok(math::triggerable(p.debt_usd_e6.0, value, p.pre_liq_ltv_bps))
     }
 
@@ -539,6 +682,7 @@ impl Nectar {
         keeper: &AccountId,
     ) -> Result<(), &'static str> {
         let price = c.oracle_price_usd_e6.0;
+        let m = Self::eff_multiplier(&c);
         let acc = c.acc_fee_per_dollar_e18.0;
         let mut debt = p.debt_usd_e6.0;
         let mut units = p.units.0;
@@ -566,7 +710,7 @@ impl Nectar {
                 continue; // one remote leg per settlement call; the keeper re-triggers after the relay
             }
             let Some(leg) =
-                math::settle_leg(debt, q.remaining_usd_e6.0, units, price, c.decimals, disc, self.keeper_fee_bps)?
+                math::settle_leg_m(debt, q.remaining_usd_e6.0, units, m, price, c.decimals, disc, self.keeper_fee_bps)?
             else {
                 continue;
             };
@@ -604,6 +748,8 @@ impl Nectar {
             return Err("no quote capacity");
         }
         let pool_repay = math::sub(total_repay, remote.as_ref().map_or(0, |r| r.repay_usd_e6))?;
+        // A1: all debt repaid by this call leaves the aggregate (the remote leg's too; `rollback_leg` re-adds it).
+        let total_debt = math::sub(c.total_debt_usd_e6.0, total_repay)?;
         let utilised = math::sub(self.utilised_usd_e6, pool_repay)?;
         let available = math::add(self.available_usd_e6, pool_repay)?;
         p.debt_usd_e6 = U128(debt);
@@ -646,7 +792,9 @@ impl Nectar {
         self.available_usd_e6 = available;
         self.gas_reserve_yocto = reserve;
         c.active_committed_q_usd_e6 = U128(q_c);
+        c.total_debt_usd_e6 = U128(total_debt);
         let token = c.token.clone();
+
         let borrower = p.borrower.clone();
         self.put_coll(c);
         self.put_position(p);
@@ -742,6 +890,10 @@ impl Nectar {
             vol_bps: LookupMap::new(StorageKey::VolBps),
             oracle_sources: LookupMap::new(StorageKey::OracleSources),
             max_conf_bps: DEFAULT_MAX_CONF_BPS,
+            session_calendar: LazyOption::new(StorageKey::SessionCalendar, None),
+            referrers: LookupSet::new(StorageKey::Referrers),
+            origination_fee_bps: DEFAULT_ORIGINATION_FEE_BPS,
+            claimable_usdc: LookupMap::new(StorageKey::ClaimableUsdc),
         }
     }
 
@@ -787,7 +939,14 @@ impl Nectar {
             (TokenMsg::TopUpQuote { quote_id }, None) => self.on_top_up(&sender_id, amount, quote_id.0),
             (TokenMsg::Repay { position_id }, None) => self.on_repay(amount, position_id.0),
             (
-                TokenMsg::LockCollateralAndBorrow { collateral, borrow_usd_e6, pre_liq_ltv_bps, remote_path },
+                TokenMsg::LockCollateralAndBorrow {
+                    collateral,
+                    borrow_usd_e6,
+                    pre_liq_ltv_bps,
+                    remote_path,
+                    pay_to,
+                    referrer,
+                },
                 Some(sym),
             ) => self.on_lock_and_borrow(
                 &sender_id,
@@ -797,6 +956,8 @@ impl Nectar {
                 borrow_usd_e6.0,
                 pre_liq_ltv_bps,
                 remote_path,
+                pay_to,
+                referrer,
             ),
             _ => Err("msg not valid for this token"),
         };
@@ -836,6 +997,9 @@ impl Nectar {
                 if old.token != i.token {
                     self.token_to_symbol.remove(&old.token);
                 }
+                if let Some(k) = i.price_kind {
+                    require!(k == old.price_kind || old.total_debt_usd_e6.0 == 0, "price_kind change with open debt");
+                }
                 CollateralConfig {
                     symbol: symbol.clone(),
                     token: i.token.clone(),
@@ -848,10 +1012,10 @@ impl Nectar {
                     limit_premium_bps: i.limit_premium_bps,
                     pre_liq_min_bps: i.pre_liq_min_bps,
                     pre_liq_max_bps: i.pre_liq_max_bps,
-                    market_session_open: i.market_session_open,
                     verified_dex_depth_usd_e6: i.verified_dex_depth_usd_e6,
                     nectar_reserve_usd_e6: i.nectar_reserve_usd_e6,
                     remote_chain: i.remote_chain,
+                    price_kind: i.price_kind.unwrap_or(old.price_kind),
                     ..old
                 }
             }
@@ -867,7 +1031,6 @@ impl Nectar {
                 limit_premium_bps: i.limit_premium_bps,
                 pre_liq_min_bps: i.pre_liq_min_bps,
                 pre_liq_max_bps: i.pre_liq_max_bps,
-                market_session_open: i.market_session_open,
                 oracle_price_usd_e6: U128(0),
                 oracle_updated_ns: U64(0),
                 verified_dex_depth_usd_e6: i.verified_dex_depth_usd_e6,
@@ -875,6 +1038,16 @@ impl Nectar {
                 active_committed_q_usd_e6: U128(0),
                 acc_fee_per_dollar_e18: U128(0),
                 remote_chain: i.remote_chain,
+                total_debt_usd_e6: U128(0),
+                multiplier_e18: U128(math::E18),
+                multiplier_updated_ns: U64(env::block_timestamp()),
+                price_kind: i.price_kind.unwrap_or_default(),
+                ca_pending: false,
+                ca_effective_ns: U64(0),
+                ca_multiplier_e18: U128(0),
+                forced_closed: false,
+                weekend_ref_price_e6: U128(0),
+                weekend_ref_updated_ns: U64(0),
             },
         };
         self.token_to_symbol.insert(i.token, symbol.clone());
@@ -894,12 +1067,6 @@ impl Nectar {
         self.fee_split = FeeSplit { buyers_bps, lenders_bps, treasury_bps };
     }
 
-    pub fn set_session(&mut self, symbol: String, open: bool) {
-        self.assert_owner();
-        let mut c = self.coll_or_panic(&symbol);
-        c.market_session_open = open;
-        self.put_coll(c);
-    }
 
     pub fn set_dex_depth(&mut self, symbol: String, depth_usd_e6: U128) {
         self.assert_owner();
@@ -1116,6 +1283,9 @@ impl Nectar {
                 p.debt_usd_e6 = U128(ok(math::sub(p.debt_usd_e6.0, applied)));
                 self.utilised_usd_e6 = ok(math::sub(self.utilised_usd_e6, applied));
                 self.available_usd_e6 = ok(math::add(self.available_usd_e6, applied));
+                let mut c = self.coll_or_panic(&p.collateral);
+                c.total_debt_usd_e6 = U128(ok(math::sub(c.total_debt_usd_e6.0, applied)));
+                self.put_coll(c);
                 let surplus = ok(math::sub(amt, applied));
                 self.treasury_usd_e6 = ok(math::add(self.treasury_usd_e6, surplus));
                 emit(
@@ -1150,6 +1320,20 @@ impl Nectar {
                 q.claimable_fees_usd_e6 = U128(ok(math::add(q.claimable_fees_usd_e6.0, amt)));
                 self.put_quote(q);
             }
+            Payout::PayTo { position_id, borrower } => {
+                // A4: proceeds stay in the contract as the borrower's claimable USDC; the debt stands.
+                let v = ok(math::add(self.claimable(borrower), amt));
+                self.claimable_usdc.insert(borrower.clone(), v);
+                emit(
+                    "pay_to_failed",
+                    json!({ "position_id": position_id, "borrower": borrower, "receiver_id": account_id,
+                            "amount_usd_e6": amount }),
+                );
+            }
+            Payout::Claimable => {
+                let v = ok(math::add(self.claimable(&account_id), amt));
+                self.claimable_usdc.insert(account_id.clone(), v);
+            }
         }
         emit("payout_failed", json!({ "payout": payout, "account": account_id, "amount": amount }));
         false
@@ -1179,7 +1363,13 @@ impl Nectar {
             next_position_id: U64(self.next_position_id),
             max_quotes_per_asset: MAX_QUOTES_PER_ASSET as u32,
             max_quotes_per_settlement: MAX_QUOTES_PER_SETTLEMENT as u32,
+            origination_fee_bps: self.origination_fee_bps,
         }
+    }
+
+    /// Layout version: 2 = V2 root (`new`).
+    pub fn get_state_version(&self) -> u8 {
+        env::storage_read(STATE_VERSION_KEY).and_then(|v| v.first().copied()).unwrap_or(0)
     }
 
     pub fn get_collateral(&self, symbol: String) -> Option<CollateralConfig> {
@@ -1189,25 +1379,28 @@ impl Nectar {
     pub fn list_collaterals(&self, from_index: Option<u32>, limit: Option<u32>) -> Vec<CollateralConfig> {
         let from = from_index.unwrap_or(0) as usize;
         let lim = limit.unwrap_or(MAX_PAGE).min(MAX_PAGE) as usize;
-        self.collaterals.values().skip(from).take(lim).map(|VCollateral::V1(c)| c.clone()).collect()
+        self.collaterals.values().skip(from).take(lim).map(|VCollateral::V2(c)| c.clone()).collect()
     }
 
     pub fn get_exit_capacity(&self, symbol: String) -> ExitCapacityView {
         let c = self.coll_or_panic(&symbol);
-        let (h, d_eff, cap) = ok(math::capacity(&Self::limit_params(&c)));
+        let (session_open, session_reason) = self.session_state(&c);
+        let (h, d_eff, cap) = ok(math::capacity(&self.limit_params(&c)));
         let price = c.oracle_price_usd_e6.0;
         let age_ns = env::block_timestamp().saturating_sub(c.oracle_updated_ns.0);
+        // per whole token unit (10^d raw units), valued with the multiplier (A3)
         let per_unit = if price == 0 {
             None
         } else {
-            Some(U128(ok(math::mul_div_floor(price, c.max_nectar_ltv_bps as u128, BPS))))
+            let one = ok(Self::value_of(ok(math::pow10(c.decimals)), &c));
+            Some(U128(ok(math::mul_div_floor(one, c.max_nectar_ltv_bps as u128, BPS))))
         };
         ExitCapacityView {
             q_usd_e6: c.active_committed_q_usd_e6,
             r_usd_e6: c.nectar_reserve_usd_e6,
             d_usd_e6: U128(d_eff),
             haircut_bps: h,
-            session_open: c.market_session_open,
+            session_open,
             oracle_price_usd_e6: c.oracle_price_usd_e6,
             oracle_age_s: U64(age_ns / 1_000_000_000),
             oracle_fresh: self.oracle_fresh(&c),
@@ -1215,6 +1408,15 @@ impl Nectar {
             limit_bps_effective: if cap > 0 { c.max_nectar_ltv_bps } else { 0 },
             capacity_usd_e6: U128(cap),
             oracle_source: self.oracle_sources.get(&symbol).cloned().unwrap_or_default(),
+            session_reason: session_reason.to_string(),
+            total_debt_usd_e6: c.total_debt_usd_e6,
+            aggregate_capacity_usd_e6: U128(cap),
+            aggregate_headroom_usd_e6: U128(cap.saturating_sub(c.total_debt_usd_e6.0)),
+            multiplier_e18: c.multiplier_e18,
+            price_kind: c.price_kind,
+            ca_pending: c.ca_pending,
+            ca_effective_ns: c.ca_effective_ns,
+            forced_closed: c.forced_closed,
         }
     }
 
@@ -1249,7 +1451,7 @@ impl Nectar {
     pub fn get_health(&self, position_id: U64) -> HealthView {
         let p = self.position_or_panic(position_id.0);
         let c = self.coll_or_panic(&p.collateral);
-        let value = ok(math::value_usd_e6(p.units.0, c.oracle_price_usd_e6.0, c.decimals));
+        let value = ok(Self::value_of(p.units.0, &c));
         let fresh = self.oracle_fresh(&c);
         let trig = ok(math::triggerable(p.debt_usd_e6.0, value, p.pre_liq_ltv_bps));
         HealthView {
@@ -1272,7 +1474,16 @@ impl Nectar {
     }
 
     /// Same checks as `LockCollateralAndBorrow` except `pre_liq_ltv_bps` (not an input here).
-    pub fn preview_borrow(&self, symbol: String, units: U128, borrow_usd_e6: U128) -> PreviewBorrowView {
+    /// v2: optional `referrer` (fee stack) and `borrower` (only to report `referrer_is_borrower`; a view
+    /// has no predecessor).
+    pub fn preview_borrow(
+        &self,
+        symbol: String,
+        units: U128,
+        borrow_usd_e6: U128,
+        referrer: Option<AccountId>,
+        borrower: Option<AccountId>,
+    ) -> PreviewBorrowView {
         let c = match self.coll(&symbol) {
             Some(c) => c,
             None => {
@@ -1282,19 +1493,35 @@ impl Nectar {
                     premium_usd_e6: U128(0),
                     ok: false,
                     reason: Some(ERR_NO_COLLATERAL.to_string()),
+                    origination_fee_usd_e6: U128(0),
+                    referrer_share_usd_e6: U128(0),
+                    total_fees_usd_e6: U128(0),
+                    net_proceeds_usd_e6: U128(0),
+                    aggregate_headroom_usd_e6: U128(0),
+                    multiplier_e18: U128(0),
+                    session_open: false,
                 };
             }
         };
-        let l = ok(math::limit(units.0, &Self::limit_params(&c)));
-        let premium = ok(math::premium_usd_e6(borrow_usd_e6.0, l.static_limit_usd_e6, c.limit_premium_bps));
+        let borrow = borrow_usd_e6.0;
+        let registered = referrer.as_ref().is_some_and(|r| self.referrers.contains(r));
+        let l = ok(math::limit(units.0, &self.limit_params(&c)));
+        let premium = ok(math::premium_usd_e6(borrow, l.static_limit_usd_e6, c.limit_premium_bps));
+        let origination = ok(math::origination_fee(borrow, self.origination_fee_bps));
+        let share = if registered { origination / 2 } else { 0 };
+        let total_fees = ok(math::add(premium, origination));
         let reason: Option<&str> = if self.paused {
             Some(ERR_PAUSED)
+        } else if referrer.is_some() && referrer == borrower {
+            Some(ERR_REFERRER_IS_BORROWER)
+        } else if c.ca_pending {
+            Some(ERR_CA_PENDING)
         } else if !self.oracle_fresh(&c) {
             Some("oracle stale")
-        } else if borrow_usd_e6.0 == 0 {
+        } else if borrow == 0 {
             Some("borrow is zero")
         } else {
-            self.check_borrow(&c, units.0, borrow_usd_e6.0, None).err()
+            self.check_borrow(&c, units.0, borrow, None, registered).err()
         };
         PreviewBorrowView {
             b_c_usd_e6: U128(l.b_c_usd_e6),
@@ -1302,8 +1529,16 @@ impl Nectar {
             premium_usd_e6: U128(premium),
             ok: reason.is_none(),
             reason: reason.map(str::to_string),
+            origination_fee_usd_e6: U128(origination),
+            referrer_share_usd_e6: U128(share),
+            total_fees_usd_e6: U128(total_fees),
+            net_proceeds_usd_e6: U128(borrow.saturating_sub(total_fees)),
+            aggregate_headroom_usd_e6: U128(l.headroom_usd_e6),
+            multiplier_e18: c.multiplier_e18,
+            session_open: self.session_open(&c),
         }
     }
+
 
     /// Units whose ft_transfer to `account_id` failed and are held for them (additive view).
     pub fn get_owed_collateral(&self, account_id: AccountId, symbol: String) -> U128 {

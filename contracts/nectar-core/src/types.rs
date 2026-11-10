@@ -1,4 +1,4 @@
-//! Stored records (borsh, versioned) and JSON inputs/views (interface-p0.md).
+//! Stored records (borsh, versioned) and JSON inputs/views (interface-p0.md; v2 deltas: interface-v7.md §A).
 
 use near_sdk::json_types::{I64, U64, U128};
 use near_sdk::{AccountId, near};
@@ -34,11 +34,24 @@ pub struct CollateralInput {
     pub limit_premium_bps: u16,
     pub pre_liq_min_bps: u16,
     pub pre_liq_max_bps: u16,
-    pub market_session_open: bool,
     pub verified_dex_depth_usd_e6: U128,
     pub nectar_reserve_usd_e6: U128,
     #[serde(default)]
     pub remote_chain: Option<RemoteChain>,
+    /// v2 (A3): None keeps the stored kind (Underlying for a new symbol).
+    #[serde(default)]
+    pub price_kind: Option<PriceKind>,
+}
+
+/// v2 (A3, PRD §4.6): how the oracle price relates to one token.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Default)]
+pub enum PriceKind {
+    /// Price of the underlying share: V = units·M/1e18·price/10^d.
+    #[default]
+    Underlying,
+    /// Price of one token (already includes M): M is treated as 1e18.
+    TokenIncludesMultiplier,
 }
 
 #[near(serializers = [borsh, json])]
@@ -55,7 +68,6 @@ pub struct CollateralConfig {
     pub limit_premium_bps: u16,
     pub pre_liq_min_bps: u16,
     pub pre_liq_max_bps: u16,
-    pub market_session_open: bool,
     pub oracle_price_usd_e6: U128,
     pub oracle_updated_ns: U64,
     pub verified_dex_depth_usd_e6: U128,
@@ -63,11 +75,27 @@ pub struct CollateralConfig {
     pub active_committed_q_usd_e6: U128,
     pub acc_fee_per_dollar_e18: U128,
     pub remote_chain: Option<RemoteChain>,
+    // ---- v2 (interface-v7.md A1-A3)
+    /// A1: sum of open debt in this asset (+ borrow, - repay, - debt repaid at settlement).
+    pub total_debt_usd_e6: U128,
+    /// A3: corporate-action multiplier, WAD.
+    pub multiplier_e18: U128,
+    pub multiplier_updated_ns: U64,
+    pub price_kind: PriceKind,
+    pub ca_pending: bool,
+    pub ca_effective_ns: U64,
+    pub ca_multiplier_e18: U128,
+    /// A2: owner force-close (can never open a session).
+    pub forced_closed: bool,
+    /// Reserved (PRD §4.7 weekend reference price); present, unused in P0.
+    pub weekend_ref_price_e6: U128,
+    pub weekend_ref_updated_ns: U64,
 }
 
+/// v2 is a fresh deploy (`nectar-core-v2`, PRD §6.11): discriminant 0 holds the v2 layout.
 #[near(serializers = [borsh])]
 pub enum VCollateral {
-    V1(CollateralConfig),
+    V2(CollateralConfig),
 }
 
 #[near(serializers = [borsh, json])]
@@ -130,11 +158,22 @@ pub struct Position {
     pub remote_path: Option<String>,
     pub nonce: U64,
     pub status: PositionStatus,
+    /// v2 (A3): multiplier at open, display only (limits use the current M).
+    pub entry_multiplier_e18: U128,
 }
 
 #[near(serializers = [borsh])]
 pub enum VPosition {
-    V1(Position),
+    V2(Position),
+}
+
+/// v2 (A4): where net borrow proceeds go instead of the borrower.
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PayTo {
+    pub receiver_id: AccountId,
+    #[serde(default)]
+    pub memo: Option<String>,
 }
 
 /// `ft_on_transfer` msg (serde externally tagged).
@@ -160,6 +199,10 @@ pub enum TokenMsg {
         pre_liq_ltv_bps: u16,
         #[serde(default)]
         remote_path: Option<String>,
+        #[serde(default)]
+        pay_to: Option<PayTo>,
+        #[serde(default)]
+        referrer: Option<AccountId>,
     },
     Repay {
         position_id: U64,
@@ -176,6 +219,10 @@ pub enum Payout {
     SettlementKeeper { position_id: U64 },
     QuoteWithdrawal { quote_id: U64, principal_usd_e6: U128, fees_usd_e6: U128 },
     Fees { quote_id: U64 },
+    /// v2 (A4): net proceeds sent to `pay_to.receiver_id`; failure credits `claimable_usdc[borrower]`.
+    PayTo { position_id: U64, borrower: AccountId },
+    /// v2 (A4): `withdraw_claimable`; failure restores the claimable balance.
+    Claimable,
 }
 
 // ---------- views ----------
@@ -200,6 +247,8 @@ pub struct ConfigView {
     pub next_position_id: U64,
     pub max_quotes_per_asset: u32,
     pub max_quotes_per_settlement: u32,
+    /// v2 (A5)
+    pub origination_fee_bps: u16,
 }
 
 #[near(serializers = [json])]
@@ -222,6 +271,19 @@ pub struct ExitCapacityView {
     pub capacity_usd_e6: U128,
     /// P1 (interface-p1.md): price source for this symbol.
     pub oracle_source: OracleSource,
+    // ---- v2 additions (interface-v7.md A6)
+    /// "open" | "no_calendar" | "outside_hours" | "stale_price" | "forced_closed"
+    pub session_reason: String,
+    pub total_debt_usd_e6: U128,
+    /// (1e4 - h)(Q + R + D)/1e4 (= capacity_usd_e6).
+    pub aggregate_capacity_usd_e6: U128,
+    /// aggregate capacity - total debt (floored at 0).
+    pub aggregate_headroom_usd_e6: U128,
+    pub multiplier_e18: U128,
+    pub price_kind: PriceKind,
+    pub ca_pending: bool,
+    pub ca_effective_ns: U64,
+    pub forced_closed: bool,
 }
 
 #[near(serializers = [json])]
@@ -247,11 +309,22 @@ pub struct PoolView {
 #[near(serializers = [json])]
 #[derive(Clone, Debug)]
 pub struct PreviewBorrowView {
+    /// v2: min(LTV cap, aggregate headroom).
     pub b_c_usd_e6: U128,
     pub static_limit_usd_e6: U128,
     pub premium_usd_e6: U128,
     pub ok: bool,
     pub reason: Option<String>,
+    // ---- v2 additions (interface-v7.md A6)
+    pub origination_fee_usd_e6: U128,
+    pub referrer_share_usd_e6: U128,
+    /// premium + origination
+    pub total_fees_usd_e6: U128,
+    /// borrow - premium - origination (0 if negative)
+    pub net_proceeds_usd_e6: U128,
+    pub aggregate_headroom_usd_e6: U128,
+    pub multiplier_e18: U128,
+    pub session_open: bool,
 }
 
 // ---------------------------------------------------------------- P1 (interface-p1.md, state V1)

@@ -111,7 +111,7 @@ async fn setup() -> anyhow::Result<Env> {
             "symbol": "NVDAx", "token": nvdax.id(), "decimals": 6, "price_feed_id": "TODO-G5",
             "base_ltv_bps": 4000, "max_nectar_ltv_bps": 7000, "base_haircut_bps": 1000,
             "weekend_haircut_bps": 2500, "limit_premium_bps": 300, "pre_liq_min_bps": 6500,
-            "pre_liq_max_bps": 8000, "market_session_open": false,
+            "pre_liq_max_bps": 8000,
             "verified_dex_depth_usd_e6": "0", "nectar_reserve_usd_e6": "0", "remote_chain": null } }))
         .transact()
         .await?;
@@ -191,7 +191,7 @@ async fn demo_flow_matches_model() -> anyhow::Result<()> {
     let e = setup().await?;
     let rows = model();
     let v: String = e.core.view("contract_version").await?.json()?;
-    assert!(v.starts_with("nectar-core"), "F-027: wasm runs on the sandbox VM ({v})");
+    assert_eq!(v, "2.0.0-v7", "F-027: wasm runs on the sandbox VM ({v})");
 
     let lender = user(&e, 50_000_000_000, 0).await?;
     let buyer1 = user(&e, 10_000_000_000, 0).await?;
@@ -212,13 +212,16 @@ async fn demo_flow_matches_model() -> anyhow::Result<()> {
     gas("ft_transfer_call:LockCollateralAndBorrow", &r);
     assert!(r.is_success(), "{:?}", r.failures());
     assert_eq!(bal(&e.nvdax, borrower.id()).await?, 0, "collateral locked");
-    assert_eq!(bal(&e.usdc, borrower.id()).await?, borrow - premium, "proceeds net of premium");
+    let net = m(&rows, "demo_borrow", "net_proceeds_usd_e6");
+    let orig = m(&rows, "demo_borrow", "origination_fee_usd_e6");
+    assert_eq!(net, borrow - premium - orig);
+    assert_eq!(bal(&e.usdc, borrower.id()).await?, net, "proceeds net of premium and origination (v2 A5)");
     let pos = view(&e.core, "get_position", json!({ "position_id": "0" })).await?;
     assert_eq!(pos["position_id"], "0");
     assert_eq!(pos["status"], "Open");
     assert_eq!(pos["debt_usd_e6"], borrow.to_string());
     let pool = view(&e.core, "get_pool", json!({})).await?;
-    assert_eq!(pool["treasury_usd_e6"], m(&rows, "demo_borrow", "treasury_fee_usd_e6").to_string());
+    assert_eq!(pool["treasury_usd_e6"], (m(&rows, "demo_borrow", "treasury_fee_usd_e6") + orig).to_string());
 
     price(&e.owner, &e.core, 155_000_000).await?;
     let h = view(&e.core, "get_health", json!({ "position_id": "0" })).await?;
@@ -348,19 +351,20 @@ async fn topup_exit_and_repay() -> anyhow::Result<()> {
     let r = ft_call(&e.usdc, &borrower, e.core.id(), 1_000_000_000, r#"{"Repay":{"position_id":"0"}}"#).await?;
     gas("ft_transfer_call:Repay(partial)", &r);
     assert!(r.is_success());
-    let usdc_before = bal(&e.usdc, borrower.id()).await?; // 5,000 proceeds (no premium below static) - 1,000 repaid + 1,000 minted
-    assert_eq!(usdc_before, 5_000_000_000);
+    // 5,000 - 15 origination (no premium below static) - 1,000 repaid + 1,000 minted
+    let usdc_before = bal(&e.usdc, borrower.id()).await?;
+    assert_eq!(usdc_before, 4_985_000_000);
     // repay the exact remainder: position closes, collateral released
     let r = ft_call(&e.usdc, &borrower, e.core.id(), 4_000_000_000, r#"{"Repay":{"position_id":"0"}}"#).await?;
     assert!(r.is_success());
-    assert_eq!(bal(&e.usdc, borrower.id()).await?, 1_000_000_000);
+    assert_eq!(bal(&e.usdc, borrower.id()).await?, 985_000_000);
     e.owner.call(e.usdc.id(), "mint").args_json(json!({ "account_id": borrower.id(), "amount": "7" })).transact().await?.into_result()?;
     let pos = view(&e.core, "get_position", json!({ "position_id": "0" })).await?;
     assert_eq!(pos["status"], "Closed");
     assert_eq!(bal(&e.nvdax, borrower.id()).await?, UNITS, "collateral released on full repay");
     let r = ft_call(&e.usdc, &borrower, e.core.id(), 7, r#"{"Repay":{"position_id":"0"}}"#).await?;
     gas("ft_transfer_call:Repay(refund)", &r);
-    assert_eq!(bal(&e.usdc, borrower.id()).await?, 1_000_000_007, "closed position: unused returned via ft_resolve_transfer");
+    assert_eq!(bal(&e.usdc, borrower.id()).await?, 985_000_007, "closed position: unused returned via ft_resolve_transfer");
 
     // exit
     let r = buyer
@@ -499,7 +503,7 @@ async fn owner_setters_and_ft_gas() -> anyhow::Result<()> {
     let new_keeper = e.worker.dev_create_account().await?;
     owner_call(&e, "set_keeper", json!({ "keeper": new_keeper.id() })).await?;
     owner_call(&e, "set_fee_split", json!({ "buyers_bps": 6000, "lenders_bps": 3000, "treasury_bps": 1000 })).await?;
-    owner_call(&e, "set_session", json!({ "symbol": "NVDAx", "open": true })).await?;
+    owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": true })).await?;
     owner_call(&e, "set_dex_depth", json!({ "symbol": "NVDAx", "depth_usd_e6": "2500000000" })).await?;
     owner_call(&e, "set_reserve", json!({ "symbol": "NVDAx", "reserve_usd_e6": "1000000000" })).await?;
     // 300 is outside the oracle band from 180: update_owner_price refuses, propose/apply overrides
@@ -510,7 +514,8 @@ async fn owner_setters_and_ft_gas() -> anyhow::Result<()> {
     assert_eq!(cfg["keeper"], new_keeper.id().to_string());
     assert_eq!(cfg["fee_split"]["buyers_bps"], 6000);
     let c = view(&e.core, "get_collateral", json!({ "symbol": "NVDAx" })).await?;
-    assert_eq!(c["market_session_open"], true);
+    assert_eq!(c["forced_closed"], true);
+
     assert_eq!(c["verified_dex_depth_usd_e6"], "2500000000");
     assert_eq!(c["nectar_reserve_usd_e6"], "1000000000");
     assert_eq!(c["oracle_price_usd_e6"], "300000000");
