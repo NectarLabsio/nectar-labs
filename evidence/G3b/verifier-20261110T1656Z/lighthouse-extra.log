@@ -1,0 +1,8 @@
+
+| route | dark | light |
+| --- | --- | --- |
+| /shield | 98 | 98 |
+| /reserve | 100 | 100 |
+| /notes | 100 | 100 |
+
+reports: /private/tmp/verify-G3b-20261110T165651Z/evidence/G3b/lighthouse

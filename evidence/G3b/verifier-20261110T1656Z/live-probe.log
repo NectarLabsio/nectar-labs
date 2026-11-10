@@ -1,0 +1,44 @@
+== / (5939 chars)
+  version: 
+  session: Weekend | IN SESSION | WEEKEND | weekend | SESSION Weekend parameters haircut 25 | session, DEX depth counts for nothing
+  quotes: 0 Committed quotes
+  notes: 
+  reserve: Reserve Rc $10
+== /feed (2437 chars)
+  version: v2
+  session: in session | weekend | Weekend | session hc haircut 25 % (2500 bps) (1 | session hc base haircut in session, w | SESSION ORACLE EFFECTIVE LIMIT ↕ NVDA
+  quotes: 
+  notes: 
+  reserve: Reserve $10
+  quote rows: 1
+  excerpt: NECTAR FEED Exit capacity by market Committed quotes, the Nectar Reserve and verified DEX depth per collateral, and the limit they support. Read from nectar-core on NEAR testnet. CRAMÉR LIMIT (PRD §4.2) Bc = min( LTVc · Vc , (1 − hc) · (Qc + Rc + Dc) ) NVDAx: (1 − 25 %) · ($16,107 + $10 + $0) = $12,087 · LTV cap 70 % of Vc · effective limit 70 % Config: LTV 70 %, haircut 10 % in session / 25 % weekend, base 40 %. NVDAX · LIVE TERMS Weekend parameters stale price (> 15 min) Qc committed quotes $16,107 Rc Nectar Reserve $10 Dc verified DEX depth $0 · counts 0 outside the session hc haircut 25 % (2500 bps) (1 − hc)(Qc + Rc + Dc) $12,087 Total debt in NVDAx $9,199 Aggregate headroom $2,888 Aggre
+== /notes (381 chars)
+  version: 
+  session: 
+  quotes: 
+  notes: 
+  reserve: 
+== /reserve (1146 chars)
+  version: 
+  session: 
+  quotes: 
+  notes: 
+  reserve: 
+== /borrow (1326 chars)
+  version: 
+  session: session Weekend parameters stale pric
+  quotes: 
+  notes: 
+  reserve: 
+== /feed
+· LIVE TERMS Weekend parameters stale price (> 15 min) Qc committed quotes $16,107 Rc Nectar Reserve $10 Dc verified DEX depth $0 · counts 0 outside the session hc haircut 25 % (2500 bps) (1 − hc)(Qc + Rc + Dc) $12,087 Total debt in NVDAx $9,199 Aggregate headroom $2,888 Aggregate rule: total debtc + borrow ≤ (1 − hc) · (Qc + Rc + Dc). Every position in the asset shares one capacity. Vc collateral units × oracle price (× multiplier on v2) LTVc max_nectar_ltv_bps (owner-set ceiling) Qc committed quotes: live Pappus quote remainders for the asset Rc Nectar Reserve (0 until the Reserve ships) Dc verified DEX depth; 0 outside the market session hc base haircut in session, weekend haircut otherwise Settlement pricing: OutLayer quoter · nectar.testnet/nectar-quoter @ 5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9 Exit capacity per collateral ASSET ↕ AT STAKE ↕ COMMITTED Q ↕ NECTAR RESERVE R VERIFIED DEX DEPTH D EXIT GAP ↕ UPLIFT ↕ HAIRCUT SESSION ORACLE EFFECTIVE LIMIT ↕ NVDAx mock $15,450 $16,107 $10 $0 $0 +30 % · $4,635 25 % Weekend parameters stale price (> 15 min) owner · 968s · no conf 70 % Borrow Exit gap = collateral at stake − (Q + R + D). Uplift (limit uplift) = effective limit − static base LTV. Weekend parameters: D counts 0 and the weekend haircut applies. Owner oracle on testnet unless a Pyth source is set (disclosed); mock collateral. 1Click reference depth ! 1Click data unavailable The Feed API did not return 1Click samples: Feed API not configured (NEXT_PUBLIC_FEED_URL). No depth or route status is shown. Retry Dry quotes only (dry: true, no deposit) at 0.5×, 1× and 2× of the reference notional. Impact = 1 − rate(n) / rate(0.5×) from amountOut; worst case uses minAmountOut. Reference pairs, not the mock collateral. Settlement history i Indexe
+== /notes
+Skip to content Testnet demo · mock collateral (NVDAx) · unaudited Nectar Labs home Feed Borrow Shields Post a quote Reserve Notes Console Agents Keepers ◐ theme Connect wallet POSITION NOTES Your Notes Every quote and every loan is a transferable Note: a live card drawn by the contract from its current figures. Whoever holds a Note holds the quote or the loan behind it. Testnet, mock collateral. i Connect a wallet Connect a NEAR testnet wallet to see your Notes. Meteor and other testnet wallets. The app never asks for a full-access key. Connect wallet Nectar Labs home Committed liquidity, verifiable settlement. A Nectar Network product · testnet · mock collateral PRODUCTS Nectar Labs Nectar Feed Keepers Post a quote PROTOCOLS NEAR Solana Chain Signatures OutLayer NEAR Intents BUILD Docs SDK Feed MCP Status RESOURCES Whitepaper Security Brand assets Evidence COMPANY Talk to us kunal@nectarnetwork.fun LEGAL Privacy Cookies Terms Disclaimers © 2026 Nectar Network · MIT License · Unaudited testnet software Cookie settings ◐ theme Cookies and storage This site stores your theme, this choice and your wallet session in your browser. Analytics load only if you accept, and only on the production site. Wallet addresses are never joined to IPs. Accept analytics Decline
+== /reserve
+Skip to content Testnet demo · mock collateral (NVDAx) · unaudited Nectar Labs home Feed Borrow Shields Post a quote Reserve Notes Console Agents Keepers ◐ theme Connect wallet NECTAR RESERVE Back every quote from $10 The Reserve is a pooled buyer of last resort: it earns a share of every limit premium in proportion to its size, and fills a settlement only after all committed quotes, at a deeper discount. Returns shown are realised, never promised. Testnet, mock collateral. NVDAX RESERVE · MOCK R_c (counts toward limits) $10.00 In notice $0.00 Total USDC $10.00 Share price $1.00 per share Collateral held 0.00 NVDAx Reserve discount 600 bps Exit notice 7 days Fees, trailing 7 days $0.00 Realised fee APR (trailing 7 days) 0.06 % Fees only (seized collateral is not counted), measured over the last 7 days. A historical figure, never a promised rate. DEPOSIT i Connect a wallet Connect a NEAR testnet wallet to join the Reserve. Meteor and other testnet wallets. The app never asks for a full-access key. Connect wallet YOUR RESERVE NOTES Connect a wallet to see your Reserve Notes. i How the Reserve fills Committed quotes fill first, in order of discount. Only a shortfall after every quote reaches the Reserve, at its discount, and only for collateral held on NEAR. Late depositors get nothing from earlier fills. Nectar Labs home Committed liquidity, verifiable settlement. A Nectar Networ
+== /
+ quote NEAR testnet · mock collateral (NVDAx) · every transaction previewed as its exact msg, gas and fees · unaudited NVDAX · MOCK COLLATERAL · NEAR TESTNET Weekend parameters stale price (> 15 min) IN SESSION $14,505 haircut 10 % · verified DEX depth $0 counts WEEKEND PARAMETERS $12,087 haircut 25 % · DEX depth counts 0 Committed quotes Qc $16,107 Nectar Reserve Rc $10 Per-position ceiling 70 % LTV (static 40 %) Headroom after total debt $2,888 Applied now weekend parameters Capacity = (1 − h)(Q + R + D
+console errors: [
+  'Failed to load resource: the server responded with a status of 503 (Service Unavailable)',
+  'Failed to load resource: the server responded with a status of 503 (Service Unavailable)'
+]

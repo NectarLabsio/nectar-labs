@@ -1,0 +1,8 @@
+home-dark 33
+home-light 242
+shield-dark 33
+shield-light 243
+reserve-dark 32
+reserve-light 244
+notes-dark 32
+notes-light 244

@@ -19,6 +19,8 @@
 | G2b testnet deploy v2 | PASS (re-run after WO-16b; prior FAIL block kept) | 2026-11-10T16:45Z–16:52Z | 91db9ea | evidence/G2b/verifier-rerun-20261110T1645Z/ (pnpm i exit 0; pnpm verify exit 0: keeper 168/0, feed 57/0, x402 9/0, sdk 77/0 + lint/typecheck; demo:testnet exit 0; code_hash 3W5bif…31ey unchanged, contract_version 2.0.0-v7; live state 3 quotes / 4 positions (#2,#3 Closed = G7 v2, expected); see §G2b) |
 | G2b (first run) | FAIL — superseded by re-run above | 2026-11-10T16:34Z–16:45Z | 1c4cdb3 | evidence/G2b/verifier-20261110T163415Z/ (rebuild sha256 252a6abe… == view_code == code_hash 3W5bif…; keeper-v2 one FC key, 5 methods; views OK; calendar 287; demo:testnet exit 0; live state drifted to 3 quotes / 3 positions during run (concurrent G7 v2 work); nearblocks 403; see §G2b) |
 | G14 x402 | PASS (1–2 hold; F-328 keys hold) | 2026-11-10T16:48Z–16:52Z | 91db9ea (clone; tests) / 6ba1b09 (summary) | evidence/G14/verifier-20261110T1645Z/ (borrow tx GcHF… agent1 → nvdax-mock ft_transfer_call → v2 position_opened #4 $10, fee $0.03; relay tx 5VL1… signer x402-relayer, Delegate by agent1 (pk 3zyEty…) → usdc-mock ft_transfer 10000 → nectar.testnet, 0 failed receipts; no ft_transfer event log (mock-ft emits none) — transfer proven by the receipt; agent1 + x402-relayer each 1 FullAccess key; x402 test 9/0; rpc.testnet.near.org returned -429 deprecation, fastnear used; see §G14) |
+| G3b web E2E (v2) | FAIL — e2e 214/14/18 (7 flags-off/v1 specs × 2 projects); LH 20/20 ≥ 90; live v2 data OK | 2026-11-10T16:56Z–17:25Z | 2bf99e1 | evidence/G3b/verifier-20261110T1656Z/ (failing specs listed in §G3b; write spec skipped, no key; /notes list needs wallet) |
+| v7 module runs | PASS (Profit-Lock state only; self_settled tx hash not recorded) | 2026-11-10T17:20Z | 2bf99e1 | §v7 module runs (pos 0 Closed, quote 1 −$4,522.50; reserve r 10,000,000, r-NVDAx-0 → buyer2; shield pos 5 Weekend 15 bps) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -31,6 +33,51 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G3b
+
+### G3b — web E2E against nectar-core-v2 — FAIL — 2026-11-10T16:56Z–17:25Z — commit 2bf99e1
+Fresh clone /tmp/verify-G3b-20261110T165651Z (git clone /Volumes/T7/nectar-labs), no secrets. config.yaml: core nectar-core-v2.nectar.testnet; features on = weekend_guard, shields, profit_lock, notes, reserve, agent_skill, x402, solana_remote (multiplier, pay_to, referrals, base off).
+$ pnpm i                                   → exit 0 (pnpm 10.34.9; ignored build scripts core-js, secp256k1)
+$ pnpm --filter web build                  → exit 0 (26 routes incl. /shield /reserve /notes /note/[id]; 2 Turbopack "dynamic fs tracing" warnings)
+$ PW_CHANNEL=chrome pnpm --filter web e2e  → exit 1: 214 passed / 14 failed / 18 skipped (10.0 m, 1 worker, retries 1)
+  Failed (each on desktop AND phone, failed on retry too):
+  e2e/agents-console.spec.ts:48  /agents › … x402 not run yet …     getByTestId('agents-x402').getByText('not run on testnet yet') not found
+  e2e/notes.spec.ts:147          /notes › flags off: honest disabled states, no nav links   'Position Notes are not enabled on this deployment' not found
+  e2e/shields.spec.ts:175        /shield › flags off: honest disabled state, no Shields nav link   'Shields are not enabled on this deployment' not found
+  e2e/shields.spec.ts:242        /quote/new voluntary fills › flag off: no checkbox      getByTestId('voluntary-fills') count expected 0, got 1
+  e2e/v7.spec.ts:33              landing v7 › … no module sections while flags are off …  locator('[data-feature]') expected 0, got 8
+  e2e/v7.spec.ts:64              v1 path (live contract) › feed equation card … no v2 aggregate rows   eq-total-debt expected 0, got 1
+  e2e/v7.spec.ts:78              v1 path (live contract) › borrow: fee stack …           expected "the v1 contract charges none", got "Limit premium … $0.00 Origination (30 bps) $0.03 Total fees $0.03"
+  Cause (observed, not fixed): these specs assert flags-off / v1-contract behaviour; the committed config now enables the flags and points at v2, so the app shows the v7 UI and the specs fail. No test was edited.
+  Skipped 18: testnet write spec ×2 (NECTAR_E2E_BORROWER_KEY / NEXT_PUBLIC_E2E_KEY_ADAPTER unset, as expected); notes screenshots ×4, remote screenshots ×12 (capture-only specs).
+  No horizontal scroll at 400 px: shell.spec.ts "/<route> renders …, no horizontal scroll, axe clean" + notes/shield h-scroll checks all passed (desktop + phone 400×860).
+$ LH_START=1 pnpm --filter web lighthouse  → exit 0. Script routes: / 100/100, /feed 100/100, /borrow 98/98, /quote/new 100/100, /console 98/98, /agents 100/100, /keepers 100/100 (dark/light)
+  /shield /reserve /notes are not in the script's ROUTES; verifier ran an unmodified copy with only ROUTES/outDir changed (evidence lh-g3b-extra.mjs, untracked in clone):
+  /shield 98/98, /reserve 100/100, /notes 100/100. All 20 ≥ 90. Only failing audit anywhere: heading-order (/borrow, /console, /shield).
+  Theme proof (LH full-page screenshot mean brightness, dark/light): home 33/242, shield 33/243, reserve 32/244, notes 32/244.
+Live testnet render (next start on :3100, Chrome, 17:13Z–17:22Z; RPC https://test.rpc.fastnear.com):
+  contract_version (RPC) "2.0.0-v7", get_state_version 2; GET /api/health {"core":"nectar-core-v2.nectar.testnet","version":"2.0.0-v7"}. Pages show "v2" on /feed; the 2.0.0-v7 string itself appears only via /api/health.
+  4 quotes: list_quotes {"symbol":"NVDAx"} → ids 0–3, remaining 5,000 + 5,477.50 + 629.56 + 5,000 = $16,107.06; /feed, / show "Qc committed quotes $16,107" (aggregate; no per-quote list on /feed).
+  Reserve: /reserve "R_c (counts toward limits) $10.00", share price $1.00, discount 600 bps; /feed and / show "Rc $10".
+  Session badge: renders "Weekend parameters · stale price (> 15 min)" on /, /feed, /borrow; matches get_exit_capacity at 17:2xZ (session_open false, session_reason "stale_price", haircut 2500, oracle_age_s 1046).
+  Notes: /notes shows "Connect a wallet to see your Notes" (no wallet in a stranger run, so the list itself is NOT verified in UI); /note/r-NVDAx-0, /note/q-1, /note/p-5 → HTTP 200 with the Note titles; chain nft_total_supply 11.
+  Observations: /api/feed is prerendered (revalidate 10 s) and on first hit returned the build-time snapshot (session_open true, oracle_age 113 s) while the chain said stale_price; browser console 2× HTTP 503 on /feed (1Click panel: "Feed API not configured (NEXT_PUBLIC_FEED_URL)").
+Screenshot: evidence/G3b/verifier-20261110T1656Z/feed-live-desktop-dark.png
+Evidence: evidence/G3b/verifier-20261110T1656Z/ (build.log, e2e.log, lighthouse-script.log, lighthouse-extra.log, lighthouse-scores.tsv, theme-brightness.txt, live-probe.log, probe scripts). LH JSON reports not committed (3.9 MB).
+Explorer links: none opened (G3b has no explorer criterion; nearblocks returns 403 to WebFetch, see §G2).
+Verdict: FAIL — the gate's e2e command exits 1 (14 failures, 7 specs × 2 projects). Lighthouse 20/20 ≥ 90, both themes, 400 px no-scroll, and live v2 data (version, Q_c from 4 quotes, R_c $10, session badge) PASS. Open: Notes list needs a wallet; heading-order on 3 routes.
+
+## v7 module runs
+
+### v7 module runs — read-only chain check of evidence/v7-modules/summary.md — PASS (Profit-Lock event not chain-confirmed) — 2026-11-10T17:20Z — commit 2bf99e1
+RPC https://test.rpc.fastnear.com, account nectar-core-v2.nectar.testnet, finality final.
+Profit-Lock — PASS (state): get_position {"position_id":"0"} → status "Closed", units 0, debt 0. list_quotes NVDAx → quote 1 committed 10,000,000,000 / remaining 5,477,500,000 = 10,000 − 4,522.50 ✓.
+  self_settled event: present only in the repo log (evidence/v7-modules/profitlock-20261110T165420Z.log EVENT_JSON {position_id 0, debt_repaid 4,500,000,000, fee 22,500,000, fill 4,522,500,000, units_repaid 30,923,077}); the log records no tx hash (only signer key + signature), so the event could not be fetched from chain. Open item.
+Reserve — PASS: get_reserve {"symbol":"NVDAx"} → r_usd_e6 "10000000", shares 10,000,000, discount_bps 600, notice 604800 s. nft_token {"token_id":"r-NVDAx-0"} → owner_id "buyer2.nectar.testnet", title "Reserve Note r-NVDAx-0".
+Shield — PASS: get_shield {"position_id":"5"} → kind "Weekend", fee_bps 15, fee_usd_e6 283500, window_end_ns "1794407400000000000", active true.
+Notes — PASS: nft_total_supply "11"; nft_tokens lists q-0…q-3, p-0…p-4, r-NVDAx-0 (+ p-5 via /note/p-5 page 200).
+Evidence: commands and outputs in this block; G3b live-probe.log.
 
 ## G14
 

@@ -1,0 +1,1246 @@
+
+> web@0.1.0 e2e /private/tmp/verify-G3b-20261110T165651Z/apps/web
+> playwright test
+
+
+Running 246 tests using 1 worker
+
+  ✘    1 [desktop] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 (5.7s)
+  ✘    2 [desktop] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 (retry #1) (5.5s)
+  ✓    3 [desktop] › e2e/agents-console.spec.ts:77:3 › /agents › v1 contract: referral stats explain that v2 is needed (451ms)
+  ✓    4 [desktop] › e2e/agents-console.spec.ts:85:3 › /console v7 controls (v2) › owner: multiplier, corporate action, session, referrers, remote — each write opens the sign modal (6.1s)
+  ✓    5 [desktop] › e2e/agents-console.spec.ts:175:3 › /console v7 controls (v2) › non-owner: read-only, apply works for anyone once effective (1.6s)
+  ✓    6 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (558ms)
+  ✓    7 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (383ms)
+[WebServer] ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3100". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+  ✓    8 [desktop] › e2e/notes.spec.ts:106:3 › /notes (mocked v2, notes on) › grid of live SVG thumbnails as <img> data URIs; type chips filter; nav link; a11y; no h-scroll (823ms)
+  ✓    9 [desktop] › e2e/notes.spec.ts:130:3 › /notes (mocked v2, notes on) › pages of 20 (474ms)
+  ✓   10 [desktop] › e2e/notes.spec.ts:141:3 › /notes (mocked v2, notes on) › empty account (325ms)
+  ✘   11 [desktop] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links (20.3s)
+  ✘   12 [desktop] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links (retry #1) (20.5s)
+  ✓   13 [desktop] › e2e/notes.spec.ts:162:3 › /note/[id] (mocked v2) › loan note: svg, owner, history fallback, share link; transfer → sign modal (nft_transfer, 1 yocto, 50 TGas) → recorded (791ms)
+  ✓   14 [desktop] › e2e/notes.spec.ts:194:3 › /note/[id] (mocked v2) › locked note: transfer disabled with the reason (230ms)
+  ✓   15 [desktop] › e2e/notes.spec.ts:202:3 › /note/[id] (mocked v2) › not the owner: transfer disabled, no recipient card (227ms)
+  ✓   16 [desktop] › e2e/notes.spec.ts:209:3 › /note/[id] (mocked v2) › quote note owned by the viewer: set_quote_remote_recipient with no deposit (558ms)
+  ✓   17 [desktop] › e2e/notes.spec.ts:226:3 › /note/[id] (mocked v2) › an SVG that fails the allow-list is not rendered; a bad id is refused (281ms)
+  ✓   18 [desktop] › e2e/notes.spec.ts:235:3 › /note/[id] (mocked v2) › position and quote pages link their Notes (285ms)
+  ✓   19 [desktop] › e2e/notes.spec.ts:246:3 › /reserve (mocked v2 views, contract shapes) › R_c, realised fee APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice (757ms)
+  ✓   20 [desktop] › e2e/notes.spec.ts:285:3 › /reserve states (contract shapes) › disabled Reserve (discount_bps 0) refuses deposits before the wallet; empty pool shows no APR (219ms)
+  -   21 [desktop] › e2e/notes.spec.ts:302:5 › notes screenshots › capture dark
+  -   22 [desktop] › e2e/notes.spec.ts:302:5 › notes screenshots › capture light
+  ✓   23 [desktop] › e2e/oneclick.spec.ts:14:3 › 1Click reference depth on /feed › renders pair samples, signature status and NVDAx route status from the API (254ms)
+  ✓   24 [desktop] › e2e/oneclick.spec.ts:32:3 › 1Click reference depth on /feed › shows '1Click data unavailable' and no route badge when the API is unreachable (227ms)
+  ✓   25 [desktop] › e2e/oneclick.spec.ts:42:3 › 1Click reference depth on /feed › empty pair list is stated, not faked (221ms)
+  ✓   26 [desktop] › e2e/p1.spec.ts:10:3 › P1 read-only surfaces › quote form offers 7 d / 30 d notice presets (2.0s)
+  ✓   27 [desktop] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (1.6s)
+  ✓   28 [desktop] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview (2.0s)
+  ✓   29 [desktop] › e2e/p1.spec.ts:41:3 › P1 read-only surfaces › keepers page shows triggers section and run-a-keeper snippet (200ms)
+  ✓   30 [desktop] › e2e/p1.spec.ts:47:3 › P1 read-only surfaces › indexer proxy only passes documented paths (86ms)
+  ✓   31 [desktop] › e2e/remote.spec.ts:105:3 › Solana remote borrow (mocked) › reserve → Phantom deposit → waiting for attested deposit → OutLayer confirm failed (988ms)
+  ✓   32 [desktop] › e2e/remote.spec.ts:139:3 › Solana remote borrow (mocked) › no Phantom (223ms)
+  ✓   33 [desktop] › e2e/remote.spec.ts:145:3 › Solana remote borrow (mocked) › wrong cluster (249ms)
+  ✓   34 [desktop] › e2e/remote.spec.ts:152:3 › Solana remote borrow (mocked) › no SOL (254ms)
+  ✓   35 [desktop] › e2e/remote.spec.ts:159:3 › Solana remote borrow (mocked) › reservation expired (186ms)
+  ✓   36 [desktop] › e2e/remote.spec.ts:165:3 › Solana remote borrow (mocked) › open, keeper-attested, repaid → request release (633ms)
+  ✓   37 [desktop] › e2e/remote.spec.ts:180:3 › Solana remote borrow (mocked) › releasing → Withdraw on Solana sends [ed25519 verify, release] (360ms)
+  ✓   38 [desktop] › e2e/remote.spec.ts:206:3 › Solana remote borrow (mocked) › flag off (no E2E override): no chain selector (172ms)
+  -   39 [desktop] › e2e/remote.spec.ts:223:7 › remote screenshots › borrow-remote-awaiting dark
+  -   40 [desktop] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-releasing dark
+  -   41 [desktop] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-open-keeper dark
+  -   42 [desktop] › e2e/remote.spec.ts:223:7 › remote screenshots › borrow-remote-awaiting light
+  -   43 [desktop] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-releasing light
+  -   44 [desktop] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-open-keeper light
+  ✓   45 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / dark (3.0s)
+  ✓   46 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (2.1s)
+  ✓   47 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (1.8s)
+  ✓   48 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (2.8s)
+  ✓   49 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (1.8s)
+  ✓   50 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (1.9s)
+  ✓   51 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (1.6s)
+  ✓   52 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark (3.8s)
+  ✓   53 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /agents dark (1.9s)
+  ✓   54 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (2.3s)
+  ✓   55 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (1.8s)
+  ✓   56 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark (1.8s)
+  ✓   57 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (1.6s)
+  ✓   58 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (1.6s)
+  ✓   59 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (1.6s)
+  ✓   60 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / light (2.1s)
+  ✓   61 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed light (2.1s)
+  ✓   62 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (1.7s)
+  ✓   63 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield light (3.2s)
+  ✓   64 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (1.9s)
+  ✓   65 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (1.7s)
+  ✓   66 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (1.6s)
+  ✓   67 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light (3.0s)
+  ✓   68 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /agents light (1.9s)
+  ✓   69 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (2.0s)
+  ✓   70 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light (1.7s)
+  ✓   71 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light (1.6s)
+  ✓   72 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (1.7s)
+  ✓   73 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (1.7s)
+  ✓   74 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light (1.7s)
+  ✓   75 [desktop] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean (518ms)
+  ✓   76 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (453ms)
+  ✓   77 [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean (460ms)
+  ✓   78 [desktop] › e2e/shell.spec.ts:8:5 › /shield renders in dark, no horizontal scroll, axe clean (456ms)
+  ✓   79 [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean (433ms)
+  ✓   80 [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (440ms)
+  ✓   81 [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean (438ms)
+  ✓   82 [desktop] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean (447ms)
+  ✓   83 [desktop] › e2e/shell.spec.ts:8:5 › /agents renders in dark, no horizontal scroll, axe clean (487ms)
+  ✓   84 [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean (541ms)
+  ✓   85 [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean (557ms)
+  ✓   86 [desktop] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean (504ms)
+  ✓   87 [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (564ms)
+  ✓   88 [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (587ms)
+  ✓   89 [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean (450ms)
+  ✓   90 [desktop] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean (515ms)
+  ✓   91 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (475ms)
+  ✓   92 [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean (438ms)
+  ✓   93 [desktop] › e2e/shell.spec.ts:8:5 › /shield renders in light, no horizontal scroll, axe clean (437ms)
+  ✓   94 [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean (431ms)
+  ✓   95 [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean (437ms)
+  ✓   96 [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean (440ms)
+  ✓   97 [desktop] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean (466ms)
+  ✓   98 [desktop] › e2e/shell.spec.ts:8:5 › /agents renders in light, no horizontal scroll, axe clean (472ms)
+  ✓   99 [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean (445ms)
+  ✓  100 [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean (442ms)
+  ✓  101 [desktop] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean (440ms)
+  ✓  102 [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (472ms)
+  ✓  103 [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean (437ms)
+  ✓  104 [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean (470ms)
+  ✓  105 [desktop] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off (218ms)
+  ✓  106 [desktop] › e2e/shell.spec.ts:37:1 › theme toggle switches data-theme (219ms)
+  ✓  107 [desktop] › e2e/shields.spec.ts:106:3 › /shield (mocked v2, shields on) › weekend and event cards: fee, countdown, weekend limit, backing, opens left, faucet beside the dry quote; copy rules (523ms)
+  ✓  108 [desktop] › e2e/shields.spec.ts:136:3 › /shield (mocked v2, shields on) › open a Weekend Shield: sign modal shows the shield msg, 250 TGas, 1 yocto, fee stack; then the mock wallet records it (681ms)
+  ✓  109 [desktop] › e2e/shields.spec.ts:165:3 › /shield (mocked v2, shields on) › daily limit reached disables both cards with the reason (231ms)
+  ✘  110 [desktop] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (20.2s)
+  ✘  111 [desktop] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (retry #1) (20.4s)
+  ✓  112 [desktop] › e2e/shields.spec.ts:185:3 › Profit-Lock on /position/[id] (mocked v2) › preview → sign modal (self_settle, 1 yocto, 300 TGas) → recorded (836ms)
+  ✓  113 [desktop] › e2e/shields.spec.ts:215:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: health < 1 (251ms)
+  ✓  114 [desktop] › e2e/shields.spec.ts:215:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: corporate action pending (269ms)
+  ✓  115 [desktop] › e2e/shields.spec.ts:215:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: no opted-in capacity (275ms)
+  ✓  116 [desktop] › e2e/shields.spec.ts:226:3 › /quote/new voluntary fills (mocked v2) › checkbox adds accepts_voluntary_fills to the FundPappusQuote msg (1.0s)
+  ✘  117 [desktop] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox (5.3s)
+  ✘  118 [desktop] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox (retry #1) (5.5s)
+  ✓  119 [desktop] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (2.2s)
+  ✓  120 [desktop] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (533ms)
+  -  121 [desktop] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✘  122 [desktop] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules (5.4s)
+  ✘  123 [desktop] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules (retry #1) (5.6s)
+  ✓  124 [desktop] › e2e/v7.spec.ts:50:3 › landing v7 › live card shows in-session vs weekend parameters from testnet (1.7s)
+  ✘  125 [desktop] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (7.4s)
+  ✘  126 [desktop] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (retry #1) (7.0s)
+  ✘  127 [desktop] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= (8.0s)
+  ✘  128 [desktop] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= (retry #1) (8.1s)
+  ✓  129 [desktop] › e2e/v7.spec.ts:100:3 › v2 path (mocked view fixture) › feed shows total debt, aggregate headroom and the contract's session reason (591ms)
+  ✓  130 [desktop] › e2e/v7.spec.ts:112:3 › v2 path (mocked view fixture) › borrow uses the contract fee stack; pay_to and referrer stay hidden while their flags are off (465ms)
+  ✘  131 [phone] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 (5.7s)
+  ✘  132 [phone] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 (retry #1) (5.8s)
+  ✓  133 [phone] › e2e/agents-console.spec.ts:77:3 › /agents › v1 contract: referral stats explain that v2 is needed (549ms)
+  ✓  134 [phone] › e2e/agents-console.spec.ts:85:3 › /console v7 controls (v2) › owner: multiplier, corporate action, session, referrers, remote — each write opens the sign modal (14.2s)
+  ✓  135 [phone] › e2e/agents-console.spec.ts:175:3 › /console v7 controls (v2) › non-owner: read-only, apply works for anyone once effective (1.9s)
+  ✓  136 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (685ms)
+  ✓  137 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (613ms)
+  ✓  138 [phone] › e2e/notes.spec.ts:106:3 › /notes (mocked v2, notes on) › grid of live SVG thumbnails as <img> data URIs; type chips filter; nav link; a11y; no h-scroll (1.2s)
+  ✓  139 [phone] › e2e/notes.spec.ts:130:3 › /notes (mocked v2, notes on) › pages of 20 (598ms)
+  ✓  140 [phone] › e2e/notes.spec.ts:141:3 › /notes (mocked v2, notes on) › empty account (414ms)
+  ✘  141 [phone] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links (20.4s)
+  ✘  142 [phone] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links (retry #1) (20.8s)
+  ✓  143 [phone] › e2e/notes.spec.ts:162:3 › /note/[id] (mocked v2) › loan note: svg, owner, history fallback, share link; transfer → sign modal (nft_transfer, 1 yocto, 50 TGas) → recorded (1.8s)
+  ✓  144 [phone] › e2e/notes.spec.ts:194:3 › /note/[id] (mocked v2) › locked note: transfer disabled with the reason (663ms)
+  ✓  145 [phone] › e2e/notes.spec.ts:202:3 › /note/[id] (mocked v2) › not the owner: transfer disabled, no recipient card (471ms)
+  ✓  146 [phone] › e2e/notes.spec.ts:209:3 › /note/[id] (mocked v2) › quote note owned by the viewer: set_quote_remote_recipient with no deposit (1.5s)
+  ✓  147 [phone] › e2e/notes.spec.ts:226:3 › /note/[id] (mocked v2) › an SVG that fails the allow-list is not rendered; a bad id is refused (1.4s)
+  ✓  148 [phone] › e2e/notes.spec.ts:235:3 › /note/[id] (mocked v2) › position and quote pages link their Notes (2.0s)
+  ✓  149 [phone] › e2e/notes.spec.ts:246:3 › /reserve (mocked v2 views, contract shapes) › R_c, realised fee APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice (2.6s)
+  ✓  150 [phone] › e2e/notes.spec.ts:285:3 › /reserve states (contract shapes) › disabled Reserve (discount_bps 0) refuses deposits before the wallet; empty pool shows no APR (767ms)
+  -  151 [phone] › e2e/notes.spec.ts:302:5 › notes screenshots › capture dark
+  -  152 [phone] › e2e/notes.spec.ts:302:5 › notes screenshots › capture light
+  ✓  153 [phone] › e2e/oneclick.spec.ts:14:3 › 1Click reference depth on /feed › renders pair samples, signature status and NVDAx route status from the API (753ms)
+  ✓  154 [phone] › e2e/oneclick.spec.ts:32:3 › 1Click reference depth on /feed › shows '1Click data unavailable' and no route badge when the API is unreachable (647ms)
+  ✓  155 [phone] › e2e/oneclick.spec.ts:42:3 › 1Click reference depth on /feed › empty pair list is stated, not faked (677ms)
+  ✓  156 [phone] › e2e/p1.spec.ts:10:3 › P1 read-only surfaces › quote form offers 7 d / 30 d notice presets (2.1s)
+  ✓  157 [phone] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (2.6s)
+  ✓  158 [phone] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview (2.7s)
+  ✓  159 [phone] › e2e/p1.spec.ts:41:3 › P1 read-only surfaces › keepers page shows triggers section and run-a-keeper snippet (476ms)
+  ✓  160 [phone] › e2e/p1.spec.ts:47:3 › P1 read-only surfaces › indexer proxy only passes documented paths (284ms)
+  ✓  161 [phone] › e2e/remote.spec.ts:105:3 › Solana remote borrow (mocked) › reserve → Phantom deposit → waiting for attested deposit → OutLayer confirm failed (11.2s)
+  ✓  162 [phone] › e2e/remote.spec.ts:139:3 › Solana remote borrow (mocked) › no Phantom (785ms)
+  ✓  163 [phone] › e2e/remote.spec.ts:145:3 › Solana remote borrow (mocked) › wrong cluster (853ms)
+  ✓  164 [phone] › e2e/remote.spec.ts:152:3 › Solana remote borrow (mocked) › no SOL (623ms)
+  ✓  165 [phone] › e2e/remote.spec.ts:159:3 › Solana remote borrow (mocked) › reservation expired (516ms)
+  ✓  166 [phone] › e2e/remote.spec.ts:165:3 › Solana remote borrow (mocked) › open, keeper-attested, repaid → request release (1.7s)
+  ✓  167 [phone] › e2e/remote.spec.ts:180:3 › Solana remote borrow (mocked) › releasing → Withdraw on Solana sends [ed25519 verify, release] (1.3s)
+  ✓  168 [phone] › e2e/remote.spec.ts:206:3 › Solana remote borrow (mocked) › flag off (no E2E override): no chain selector (635ms)
+  -  169 [phone] › e2e/remote.spec.ts:223:7 › remote screenshots › borrow-remote-awaiting dark
+  -  170 [phone] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-releasing dark
+  -  171 [phone] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-open-keeper dark
+  -  172 [phone] › e2e/remote.spec.ts:223:7 › remote screenshots › borrow-remote-awaiting light
+  -  173 [phone] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-releasing light
+  -  174 [phone] › e2e/remote.spec.ts:223:7 › remote screenshots › position-remote-open-keeper light
+  ✓  175 [phone] › e2e/screens.spec.ts:12:5 › screenshot / dark (4.4s)
+  ✓  176 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (3.6s)
+  ✓  177 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (2.5s)
+  ✓  178 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (3.2s)
+  ✓  179 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (2.6s)
+  ✓  180 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (2.5s)
+  ✓  181 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (2.2s)
+  ✓  182 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console dark (3.4s)
+  ✓  183 [phone] › e2e/screens.spec.ts:12:5 › screenshot /agents dark (2.5s)
+  ✓  184 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (2.4s)
+  ✓  185 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (1.9s)
+  ✓  186 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security dark (1.8s)
+  ✓  187 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (2.1s)
+  ✓  188 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (2.2s)
+  ✓  189 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (2.0s)
+  ✓  190 [phone] › e2e/screens.spec.ts:12:5 › screenshot / light (2.7s)
+  ✓  191 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed light (3.1s)
+  ✓  192 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (1.9s)
+  ✓  193 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield light (4.2s)
+  ✓  194 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (2.0s)
+  ✓  195 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (2.5s)
+  ✓  196 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (1.9s)
+  ✓  197 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console light (3.9s)
+  ✓  198 [phone] › e2e/screens.spec.ts:12:5 › screenshot /agents light (2.5s)
+  ✓  199 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (2.9s)
+  ✓  200 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk light (2.1s)
+  ✓  201 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security light (1.8s)
+  ✓  202 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (2.1s)
+  ✓  203 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (2.1s)
+  ✓  204 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light (2.5s)
+  ✓  205 [phone] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean (849ms)
+  ✓  206 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (819ms)
+  ✓  207 [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean (777ms)
+  ✓  208 [phone] › e2e/shell.spec.ts:8:5 › /shield renders in dark, no horizontal scroll, axe clean (778ms)
+  ✓  209 [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean (771ms)
+  ✓  210 [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (750ms)
+  ✓  211 [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean (788ms)
+  ✓  212 [phone] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean (778ms)
+  ✓  213 [phone] › e2e/shell.spec.ts:8:5 › /agents renders in dark, no horizontal scroll, axe clean (889ms)
+  ✓  214 [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean (757ms)
+  ✓  215 [phone] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean (724ms)
+  ✓  216 [phone] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean (756ms)
+  ✓  217 [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (786ms)
+  ✓  218 [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (740ms)
+  ✓  219 [phone] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean (891ms)
+  ✓  220 [phone] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean (1.2s)
+  ✓  221 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (1.2s)
+  ✓  222 [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean (1.1s)
+  ✓  223 [phone] › e2e/shell.spec.ts:8:5 › /shield renders in light, no horizontal scroll, axe clean (809ms)
+  ✓  224 [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean (700ms)
+  ✓  225 [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean (654ms)
+  ✓  226 [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean (667ms)
+  ✓  227 [phone] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean (694ms)
+  ✓  228 [phone] › e2e/shell.spec.ts:8:5 › /agents renders in light, no horizontal scroll, axe clean (948ms)
+  ✓  229 [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean (1.3s)
+  ✓  230 [phone] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean (729ms)
+  ✓  231 [phone] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean (602ms)
+  ✓  232 [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (565ms)
+  ✓  233 [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean (502ms)
+  ✓  234 [phone] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean (490ms)
+  ✓  235 [phone] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off (248ms)
+  ✓  236 [phone] › e2e/shell.spec.ts:37:1 › theme toggle switches data-theme (248ms)
+  ✓  237 [phone] › e2e/shields.spec.ts:106:3 › /shield (mocked v2, shields on) › weekend and event cards: fee, countdown, weekend limit, backing, opens left, faucet beside the dry quote; copy rules (627ms)
+  ✓  238 [phone] › e2e/shields.spec.ts:136:3 › /shield (mocked v2, shields on) › open a Weekend Shield: sign modal shows the shield msg, 250 TGas, 1 yocto, fee stack; then the mock wallet records it (1.3s)
+  ✓  239 [phone] › e2e/shields.spec.ts:165:3 › /shield (mocked v2, shields on) › daily limit reached disables both cards with the reason (197ms)
+  ✘  240 [phone] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (20.2s)
+  ✘  241 [phone] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (retry #1) (20.3s)
+  ✓  242 [phone] › e2e/shields.spec.ts:185:3 › Profit-Lock on /position/[id] (mocked v2) › preview → sign modal (self_settle, 1 yocto, 300 TGas) → recorded (689ms)
+  ✓  243 [phone] › e2e/shields.spec.ts:215:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: health < 1 (176ms)
+  ✓  244 [phone] › e2e/shields.spec.ts:215:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: corporate action pending (203ms)
+  ✓  245 [phone] › e2e/shields.spec.ts:215:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: no opted-in capacity (206ms)
+  ✓  246 [phone] › e2e/shields.spec.ts:226:3 › /quote/new voluntary fills (mocked v2) › checkbox adds accepts_voluntary_fills to the FundPappusQuote msg (570ms)
+  ✘  247 [phone] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox (5.2s)
+  ✘  248 [phone] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox (retry #1) (5.3s)
+  ✓  249 [phone] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (2.6s)
+  ✓  250 [phone] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (356ms)
+  -  251 [phone] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✘  252 [phone] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules (5.3s)
+  ✘  253 [phone] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules (retry #1) (5.4s)
+  ✓  254 [phone] › e2e/v7.spec.ts:50:3 › landing v7 › live card shows in-session vs weekend parameters from testnet (1.6s)
+  ✘  255 [phone] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (7.7s)
+  ✘  256 [phone] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (retry #1) (7.2s)
+  ✘  257 [phone] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= (8.0s)
+  ✘  258 [phone] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= (retry #1) (7.6s)
+  ✓  259 [phone] › e2e/v7.spec.ts:100:3 › v2 path (mocked view fixture) › feed shows total debt, aggregate headroom and the contract's session reason (383ms)
+  ✓  260 [phone] › e2e/v7.spec.ts:112:3 › v2 path (mocked view fixture) › borrow uses the contract fee stack; pay_to and referrer stay hidden while their flags are off (288ms)
+
+
+  1) [desktop] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true }) with timeout 5000ms
+      - waiting for getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+
+
+      59 |     await expect(page.getByTestId("example-call")).toContainText('"deposit": "1"');
+      60 |     const x = page.getByTestId("agents-x402");
+    > 61 |     await expect(x.getByText("not run on testnet yet", { exact: true })).toBeVisible();
+         |                                                                          ^
+      62 |     await expect(x.getByText("Not run on testnet yet", { exact: true })).toBeVisible();
+      63 |     await expect(x).toContainText("0.01 mock USDC");
+      64 |     const ref = page.getByTestId("agents-referrals");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/agents-console.spec.ts:61:74
+
+    Error Context: test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true }) with timeout 5000ms
+      - waiting for getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+
+
+      59 |     await expect(page.getByTestId("example-call")).toContainText('"deposit": "1"');
+      60 |     const x = page.getByTestId("agents-x402");
+    > 61 |     await expect(x.getByText("not run on testnet yet", { exact: true })).toBeVisible();
+         |                                                                          ^
+      62 |     await expect(x.getByText("Not run on testnet yet", { exact: true })).toBeVisible();
+      63 |     await expect(x).toContainText("0.01 mock USDC");
+      64 |     const ref = page.getByTestId("agents-referrals");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/agents-console.spec.ts:61:74
+
+    Error Context: test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Position Notes are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Position Notes are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Position Notes are not enabled on this deployment')
+
+
+      148 |     await setup(page, { features: [] });
+      149 |     await page.goto("/notes");
+    > 150 |     await expect(page.getByText("Position Notes are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                       ^
+      151 |     await expect(page.locator("a[href=\"/notes\"]")).toHaveCount(0);
+      152 |     await expect(page.locator("a[href=\"/reserve\"]")).toHaveCount(0);
+      153 |     await page.goto("/reserve");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/notes.spec.ts:150:87
+
+    Error Context: test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Position Notes are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Position Notes are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Position Notes are not enabled on this deployment')
+
+
+      148 |     await setup(page, { features: [] });
+      149 |     await page.goto("/notes");
+    > 150 |     await expect(page.getByText("Position Notes are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                       ^
+      151 |     await expect(page.locator("a[href=\"/notes\"]")).toHaveCount(0);
+      152 |     await expect(page.locator("a[href=\"/reserve\"]")).toHaveCount(0);
+      153 |     await page.goto("/reserve");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/notes.spec.ts:150:87
+
+    Error Context: test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Shields are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Shields are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Shields are not enabled on this deployment')
+
+
+      176 |     await setup(page, { features: [] });
+      177 |     await page.goto("/shield");
+    > 178 |     await expect(page.getByText("Shields are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                ^
+      179 |     await expect(page.getByTestId("shield-weekend")).toHaveCount(0);
+      180 |     await expect(page.locator("a[href=\"/shield\"]")).toHaveCount(0);
+      181 |   });
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:178:80
+
+    Error Context: test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Shields are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Shields are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Shields are not enabled on this deployment')
+
+
+      176 |     await setup(page, { features: [] });
+      177 |     await page.goto("/shield");
+    > 178 |     await expect(page.getByText("Shields are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                ^
+      179 |     await expect(page.getByTestId("shield-weekend")).toHaveCount(0);
+      180 |     await expect(page.locator("a[href=\"/shield\"]")).toHaveCount(0);
+      181 |   });
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:178:80
+
+    Error Context: test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('voluntary-fills')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('voluntary-fills') with timeout 5000ms
+      - waiting for getByTestId('voluntary-fills')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      244 |     await page.goto("/quote/new");
+      245 |     await expect(page.getByRole("button", { name: "Fund quote" })).toBeVisible({ timeout: 20_000 });
+    > 246 |     await expect(page.getByTestId("voluntary-fills")).toHaveCount(0);
+          |                                                       ^
+      247 |   });
+      248 | });
+      249 |
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:246:55
+
+    Error Context: test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('voluntary-fills')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('voluntary-fills') with timeout 5000ms
+      - waiting for getByTestId('voluntary-fills')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      244 |     await page.goto("/quote/new");
+      245 |     await expect(page.getByRole("button", { name: "Fund quote" })).toBeVisible({ timeout: 20_000 });
+    > 246 |     await expect(page.getByTestId("voluntary-fills")).toHaveCount(0);
+          |                                                       ^
+      247 |   });
+      248 | });
+      249 |
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:246:55
+
+    Error Context: test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [desktop] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-feature]')
+    Expected: 0
+    Received: 8
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('[data-feature]') with timeout 5000ms
+      - waiting for locator('[data-feature]')
+        14 × locator resolved to 8 elements
+           - unexpected value "8"
+
+
+      39 |     await expect(page.locator("#faq")).toBeVisible();
+      40 |     await expect(page.locator("footer")).toBeVisible();
+    > 41 |     await expect(page.locator("[data-feature]")).toHaveCount(0);
+         |                                                  ^
+      42 |     const text = (await page.locator("body").innerText()).toLowerCase();
+      43 |     expect(text).not.toContain("insurance");
+      44 |     expect(text).not.toContain("without liquidations");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:41:50
+
+    Error Context: test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-feature]')
+    Expected: 0
+    Received: 8
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('[data-feature]') with timeout 5000ms
+      - waiting for locator('[data-feature]')
+        14 × locator resolved to 8 elements
+           - unexpected value "8"
+
+
+      39 |     await expect(page.locator("#faq")).toBeVisible();
+      40 |     await expect(page.locator("footer")).toBeVisible();
+    > 41 |     await expect(page.locator("[data-feature]")).toHaveCount(0);
+         |                                                  ^
+      42 |     const text = (await page.locator("body").innerText()).toLowerCase();
+      43 |     expect(text).not.toContain("insurance");
+      44 |     expect(text).not.toContain("without liquidations");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:41:50
+
+    Error Context: test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [desktop] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('equation-card').getByTestId('eq-total-debt')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('equation-card').getByTestId('eq-total-debt') with timeout 5000ms
+      - waiting for getByTestId('equation-card').getByTestId('eq-total-debt')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      69 |     await expect(card).toContainText("verified DEX depth");
+      70 |     await expect(card.getByTestId("eq-h")).toContainText("bps");
+    > 71 |     await expect(card.getByTestId("eq-total-debt")).toHaveCount(0);
+         |                                                     ^
+      72 |     await expect(page.getByRole("columnheader", { name: /Uplift/ })).toHaveCount(1);
+      73 |     const badge = page.getByRole("table", { name: /exit capacity/i }).getByTestId("session-badge").first();
+      74 |     await expect(badge).toContainText(/In session|Weekend parameters/);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:71:53
+
+    Error Context: test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('equation-card').getByTestId('eq-total-debt')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('equation-card').getByTestId('eq-total-debt') with timeout 5000ms
+      - waiting for getByTestId('equation-card').getByTestId('eq-total-debt')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      69 |     await expect(card).toContainText("verified DEX depth");
+      70 |     await expect(card.getByTestId("eq-h")).toContainText("bps");
+    > 71 |     await expect(card.getByTestId("eq-total-debt")).toHaveCount(0);
+         |                                                     ^
+      72 |     await expect(page.getByRole("columnheader", { name: /Uplift/ })).toHaveCount(1);
+      73 |     const badge = page.getByRole("table", { name: /exit capacity/i }).getByTestId("session-badge").first();
+      74 |     await expect(badge).toContainText(/In session|Weekend parameters/);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:71:53
+
+    Error Context: test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [desktop] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('preview-fees')
+    Expected substring: "the v1 contract charges none"
+    Received string:    "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByTestId('preview-fees') with timeout 5000ms
+      - waiting for getByTestId('preview-fees')
+        14 × locator resolved to <div class="stack-sm feestack" data-testid="preview-fees">…</div>
+           - unexpected value "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+
+
+      83 |     await expect(fees).toBeVisible({ timeout: 20_000 });
+      84 |     await expect(fees).toContainText("Limit premium");
+    > 85 |     await expect(fees).toContainText("the v1 contract charges none");
+         |                        ^
+      86 |     await expect(page.getByTestId("preview-fees-total")).toContainText("$");
+      87 |     await expect(page.getByTestId("pay-to")).toHaveCount(0);
+      88 |     await expect(page.getByTestId("referrer")).toHaveCount(0);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:85:24
+
+    Error Context: test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('preview-fees')
+    Expected substring: "the v1 contract charges none"
+    Received string:    "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByTestId('preview-fees') with timeout 5000ms
+      - waiting for getByTestId('preview-fees')
+        14 × locator resolved to <div class="stack-sm feestack" data-testid="preview-fees">…</div>
+           - unexpected value "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+
+
+      83 |     await expect(fees).toBeVisible({ timeout: 20_000 });
+      84 |     await expect(fees).toContainText("Limit premium");
+    > 85 |     await expect(fees).toContainText("the v1 contract charges none");
+         |                        ^
+      86 |     await expect(page.getByTestId("preview-fees-total")).toContainText("$");
+      87 |     await expect(page.getByTestId("pay-to")).toHaveCount(0);
+      88 |     await expect(page.getByTestId("referrer")).toHaveCount(0);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:85:24
+
+    Error Context: test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [phone] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true }) with timeout 5000ms
+      - waiting for getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+
+
+      59 |     await expect(page.getByTestId("example-call")).toContainText('"deposit": "1"');
+      60 |     const x = page.getByTestId("agents-x402");
+    > 61 |     await expect(x.getByText("not run on testnet yet", { exact: true })).toBeVisible();
+         |                                                                          ^
+      62 |     await expect(x.getByText("Not run on testnet yet", { exact: true })).toBeVisible();
+      63 |     await expect(x).toContainText("0.01 mock USDC");
+      64 |     const ref = page.getByTestId("agents-referrals");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/agents-console.spec.ts:61:74
+
+    Error Context: test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true }) with timeout 5000ms
+      - waiting for getByTestId('agents-x402').getByText('not run on testnet yet', { exact: true })
+
+
+      59 |     await expect(page.getByTestId("example-call")).toContainText('"deposit": "1"');
+      60 |     const x = page.getByTestId("agents-x402");
+    > 61 |     await expect(x.getByText("not run on testnet yet", { exact: true })).toBeVisible();
+         |                                                                          ^
+      62 |     await expect(x.getByText("Not run on testnet yet", { exact: true })).toBeVisible();
+      63 |     await expect(x).toContainText("0.01 mock USDC");
+      64 |     const ref = page.getByTestId("agents-referrals");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/agents-console.spec.ts:61:74
+
+    Error Context: test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/agents-console--agents-ins-9d5f4-un-yet-referral-stats-on-v2-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [phone] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Position Notes are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Position Notes are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Position Notes are not enabled on this deployment')
+
+
+      148 |     await setup(page, { features: [] });
+      149 |     await page.goto("/notes");
+    > 150 |     await expect(page.getByText("Position Notes are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                       ^
+      151 |     await expect(page.locator("a[href=\"/notes\"]")).toHaveCount(0);
+      152 |     await expect(page.locator("a[href=\"/reserve\"]")).toHaveCount(0);
+      153 |     await page.goto("/reserve");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/notes.spec.ts:150:87
+
+    Error Context: test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Position Notes are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Position Notes are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Position Notes are not enabled on this deployment')
+
+
+      148 |     await setup(page, { features: [] });
+      149 |     await page.goto("/notes");
+    > 150 |     await expect(page.getByText("Position Notes are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                       ^
+      151 |     await expect(page.locator("a[href=\"/notes\"]")).toHaveCount(0);
+      152 |     await expect(page.locator("a[href=\"/reserve\"]")).toHaveCount(0);
+      153 |     await page.goto("/reserve");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/notes.spec.ts:150:87
+
+    Error Context: test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/notes--notes-mocked-v2-not-eb6ee-isabled-states-no-nav-links-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [phone] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Shields are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Shields are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Shields are not enabled on this deployment')
+
+
+      176 |     await setup(page, { features: [] });
+      177 |     await page.goto("/shield");
+    > 178 |     await expect(page.getByText("Shields are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                ^
+      179 |     await expect(page.getByTestId("shield-weekend")).toHaveCount(0);
+      180 |     await expect(page.locator("a[href=\"/shield\"]")).toHaveCount(0);
+      181 |   });
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:178:80
+
+    Error Context: test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Shields are not enabled on this deployment')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Shields are not enabled on this deployment') with timeout 20000ms
+      - waiting for getByText('Shields are not enabled on this deployment')
+
+
+      176 |     await setup(page, { features: [] });
+      177 |     await page.goto("/shield");
+    > 178 |     await expect(page.getByText("Shields are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
+          |                                                                                ^
+      179 |     await expect(page.getByTestId("shield-weekend")).toHaveCount(0);
+      180 |     await expect(page.locator("a[href=\"/shield\"]")).toHaveCount(0);
+      181 |   });
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:178:80
+
+    Error Context: test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--shield-mocked-v2--0f3a6-d-state-no-Shields-nav-link-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [phone] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('voluntary-fills')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('voluntary-fills') with timeout 5000ms
+      - waiting for getByTestId('voluntary-fills')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      244 |     await page.goto("/quote/new");
+      245 |     await expect(page.getByRole("button", { name: "Fund quote" })).toBeVisible({ timeout: 20_000 });
+    > 246 |     await expect(page.getByTestId("voluntary-fills")).toHaveCount(0);
+          |                                                       ^
+      247 |   });
+      248 | });
+      249 |
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:246:55
+
+    Error Context: test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('voluntary-fills')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('voluntary-fills') with timeout 5000ms
+      - waiting for getByTestId('voluntary-fills')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      244 |     await page.goto("/quote/new");
+      245 |     await expect(page.getByRole("button", { name: "Fund quote" })).toBeVisible({ timeout: 20_000 });
+    > 246 |     await expect(page.getByTestId("voluntary-fills")).toHaveCount(0);
+          |                                                       ^
+      247 |   });
+      248 | });
+      249 |
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/shields.spec.ts:246:55
+
+    Error Context: test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/shields--quote-new-volunta-843ae-ked-v2-flag-off-no-checkbox-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [phone] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-feature]')
+    Expected: 0
+    Received: 8
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('[data-feature]') with timeout 5000ms
+      - waiting for locator('[data-feature]')
+        14 × locator resolved to 8 elements
+           - unexpected value "8"
+
+
+      39 |     await expect(page.locator("#faq")).toBeVisible();
+      40 |     await expect(page.locator("footer")).toBeVisible();
+    > 41 |     await expect(page.locator("[data-feature]")).toHaveCount(0);
+         |                                                  ^
+      42 |     const text = (await page.locator("body").innerText()).toLowerCase();
+      43 |     expect(text).not.toContain("insurance");
+      44 |     expect(text).not.toContain("without liquidations");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:41:50
+
+    Error Context: test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('[data-feature]')
+    Expected: 0
+    Received: 8
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" locator('[data-feature]') with timeout 5000ms
+      - waiting for locator('[data-feature]')
+        14 × locator resolved to 8 elements
+           - unexpected value "8"
+
+
+      39 |     await expect(page.locator("#faq")).toBeVisible();
+      40 |     await expect(page.locator("footer")).toBeVisible();
+    > 41 |     await expect(page.locator("[data-feature]")).toHaveCount(0);
+         |                                                  ^
+      42 |     const text = (await page.locator("body").innerText()).toLowerCase();
+      43 |     expect(text).not.toContain("insurance");
+      44 |     expect(text).not.toContain("without liquidations");
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:41:50
+
+    Error Context: test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-landing-v7-hero-live-ca-bd442-le-flags-are-off-copy-rules-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [phone] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('equation-card').getByTestId('eq-total-debt')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('equation-card').getByTestId('eq-total-debt') with timeout 5000ms
+      - waiting for getByTestId('equation-card').getByTestId('eq-total-debt')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      69 |     await expect(card).toContainText("verified DEX depth");
+      70 |     await expect(card.getByTestId("eq-h")).toContainText("bps");
+    > 71 |     await expect(card.getByTestId("eq-total-debt")).toHaveCount(0);
+         |                                                     ^
+      72 |     await expect(page.getByRole("columnheader", { name: /Uplift/ })).toHaveCount(1);
+      73 |     const badge = page.getByRole("table", { name: /exit capacity/i }).getByTestId("session-badge").first();
+      74 |     await expect(badge).toContainText(/In session|Weekend parameters/);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:71:53
+
+    Error Context: test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('equation-card').getByTestId('eq-total-debt')
+    Expected: 0
+    Received: 1
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCount" getByTestId('equation-card').getByTestId('eq-total-debt') with timeout 5000ms
+      - waiting for getByTestId('equation-card').getByTestId('eq-total-debt')
+        14 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      69 |     await expect(card).toContainText("verified DEX depth");
+      70 |     await expect(card.getByTestId("eq-h")).toContainText("bps");
+    > 71 |     await expect(card.getByTestId("eq-total-debt")).toHaveCount(0);
+         |                                                     ^
+      72 |     await expect(page.getByRole("columnheader", { name: /Uplift/ })).toHaveCount(1);
+      73 |     const badge = page.getByRole("table", { name: /exit capacity/i }).getByTestId("session-badge").first();
+      74 |     await expect(badge).toContainText(/In session|Weekend parameters/);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:71:53
+
+    Error Context: test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-f-7707a--badge-no-v2-aggregate-rows-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [phone] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('preview-fees')
+    Expected substring: "the v1 contract charges none"
+    Received string:    "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByTestId('preview-fees') with timeout 5000ms
+      - waiting for getByTestId('preview-fees')
+        14 × locator resolved to <div class="stack-sm feestack" data-testid="preview-fees">…</div>
+           - unexpected value "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+
+
+      83 |     await expect(fees).toBeVisible({ timeout: 20_000 });
+      84 |     await expect(fees).toContainText("Limit premium");
+    > 85 |     await expect(fees).toContainText("the v1 contract charges none");
+         |                        ^
+      86 |     await expect(page.getByTestId("preview-fees-total")).toContainText("$");
+      87 |     await expect(page.getByTestId("pay-to")).toHaveCount(0);
+      88 |     await expect(page.getByTestId("referrer")).toHaveCount(0);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:85:24
+
+    Error Context: test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByTestId('preview-fees')
+    Expected substring: "the v1 contract charges none"
+    Received string:    "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" getByTestId('preview-fees') with timeout 5000ms
+      - waiting for getByTestId('preview-fees')
+        14 × locator resolved to <div class="stack-sm feestack" data-testid="preview-fees">…</div>
+           - unexpected value "FeesLimit premium (300 bps above the static limit)$0.00Origination (30 bps of the borrow)$0.03Total fees$0.03Deducted from proceeds: you receive $9.97."
+
+
+      83 |     await expect(fees).toBeVisible({ timeout: 20_000 });
+      84 |     await expect(fees).toContainText("Limit premium");
+    > 85 |     await expect(fees).toContainText("the v1 contract charges none");
+         |                        ^
+      86 |     await expect(page.getByTestId("preview-fees-total")).toContainText("$");
+      87 |     await expect(page.getByTestId("pay-to")).toHaveCount(0);
+      88 |     await expect(page.getByTestId("referrer")).toHaveCount(0);
+        at /private/tmp/verify-G3b-20261110T165651Z/apps/web/e2e/v7.spec.ts:85:24
+
+    Error Context: test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/v7-v1-path-live-contract-b-00d46--v7-controls-even-with-ref--phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14 failed
+    [desktop] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 
+    [desktop] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links 
+    [desktop] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link 
+    [desktop] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox 
+    [desktop] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules 
+    [desktop] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows 
+    [desktop] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= 
+    [phone] › e2e/agents-console.spec.ts:48:3 › /agents › install snippets, labelled example, x402 not run yet, referral stats on v2 
+    [phone] › e2e/notes.spec.ts:147:3 › /notes (mocked v2, notes on) › flags off: honest disabled states, no nav links 
+    [phone] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link 
+    [phone] › e2e/shields.spec.ts:242:3 › /quote/new voluntary fills (mocked v2) › flag off: no checkbox 
+    [phone] › e2e/v7.spec.ts:33:3 › landing v7 › hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules 
+    [phone] › e2e/v7.spec.ts:64:3 › v1 path (live contract) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows 
+    [phone] › e2e/v7.spec.ts:78:3 › v1 path (live contract) › borrow: fee stack with total, no v7 controls even with ?ref= 
+  18 skipped
+  214 passed (10.0m)
+/private/tmp/verify-G3b-20261110T165651Z/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 e2e: `playwright test`
+Exit status 1

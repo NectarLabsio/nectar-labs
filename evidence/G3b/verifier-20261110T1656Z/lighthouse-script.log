@@ -1,0 +1,16 @@
+
+> web@0.1.0 lighthouse /private/tmp/verify-G3b-20261110T165651Z/apps/web
+> node scripts/lighthouse.mjs
+
+
+| route | dark | light |
+| --- | --- | --- |
+| / | 100 | 100 |
+| /feed | 100 | 100 |
+| /borrow | 98 | 98 |
+| /quote/new | 100 | 100 |
+| /console | 98 | 98 |
+| /agents | 100 | 100 |
+| /keepers | 100 | 100 |
+
+reports: /private/tmp/verify-G3b-20261110T165651Z/evidence/G3/lighthouse
