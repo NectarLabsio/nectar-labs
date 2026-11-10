@@ -1,0 +1,69 @@
+=== cargo test -p nectar-core --test sandbox -- --nocapture
+     Running tests/sandbox.rs (target/debug/deps/sandbox-c95f0e5bcc57e6fe)
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,new,2083997862402
+GAS,upsert_collateral,2612132704581
+GAS,new,2083997862402
+GAS,update_owner_price,2387015826994
+GAS,new,2083997862402
+GAS,new,2083997862402
+GAS,new,2083997862402
+GAS,upsert_collateral,2612132704581
+GAS,upsert_collateral,2612132704581
+GAS,fund_gas_reserve,2056376297300
+GAS,upsert_collateral,2612132704581
+GAS,upsert_collateral,2612132704581
+GAS,update_owner_price,2387015826994
+GAS,update_owner_price,2387015826994
+GAS,set_quote_params,2076905348822
+GAS,update_owner_price,2387015826994
+GAS,update_owner_price,2387015826994
+GAS,fund_gas_reserve,2056376297300
+GAS,fund_gas_reserve,2056376297300
+GAS,fund_gas_reserve,2056376297300
+GAS,fund_gas_reserve,2056376297300
+GAS,set_keeper,2073913568864
+GAS,set_fee_split,2074292225177
+GAS,ft_transfer_call:invalid,6700947044812
+GAS,force_session_closed,2375481165553
+GAS,set_dex_depth,2309118453826
+GAS,mock-ft:new,1534716222610
+GAS,set_reserve,2309164413538
+GAS,propose_price,2339723305827
+GAS,set_oracle_params,2076909022937
+GAS,apply_price,2534436850677
+GAS,ft_transfer_call:SupplyLendingLiquidity,6597034781664
+GAS,ft_transfer_call:TopUpQuote,6962658646753
+GAS,ft_transfer_call:FundPappusQuote,7087569845415
+GAS,mock-ft:mint,1733165696679
+GAS,pause,2100667553948
+GAS,mock-ft:storage_deposit,1732887497245
+GAS,ft_transfer_call:Repay(partial),6903925411433
+GAS,ft_transfer_call:LockCollateralAndBorrow,11859669969784
+GAS,mock-ft:ft_transfer,2002711471160
+test owner_setters_and_ft_gas ... ok
+GAS,update_owner_price,2387442837358
+GAS,unpause,2101486576196
+GAS,update_owner_price,2387442837358
+test refunds_and_guards ... ok
+GAS,ft_transfer_call:Repay(refund),6839688663155
+GAS,initiate_quote_withdrawal,2578447466979
+GAS,complete_quote_withdrawal,7311137168606
+test topup_exit_and_repay ... ok
+GAS,trigger_preliquidation(2 legs),21650216288881
+GAS,claim_fees,7208788383807
+test demo_flow_matches_model ... ok
+GAS,update_owner_price,2387442837358
+GAS,update_owner_price,2387442837358
+GAS,trigger_preliquidation(8 legs),50558209977343
+test preliq_eight_buyers_gas ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 42.03s

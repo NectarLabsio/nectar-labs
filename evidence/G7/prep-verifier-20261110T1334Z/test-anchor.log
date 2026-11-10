@@ -1,0 +1,618 @@
+
+> @nectar/solana@ test:anchor /private/tmp/verify-v7-20261110T133401Z/solana
+> pnpm run wallet:local && anchor test
+
+
+> @nectar/solana@ wallet:local /private/tmp/verify-v7-20261110T133401Z/solana
+> mkdir -p .localnet && (test -f .localnet/wallet.json || solana-keygen new --no-bip39-passphrase --silent -o .localnet/wallet.json)
+
+Wrote new keypair to .localnet/wallet.json
+info: uninstalling toolchain solana
+info: toolchain solana uninstalled
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling version_check v0.9.5
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling syn v1.0.109
+   Compiling hashbrown v0.16.1
+   Compiling equivalent v1.0.3
+   Compiling winnow v1.0.5
+   Compiling toml_datetime v1.0.1+spec-1.1.0
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling subtle v2.6.1
+   Compiling solana-define-syscall v2.3.0
+   Compiling cfg_aliases v0.2.2
+   Compiling borsh v1.8.1
+   Compiling once_cell v1.21.4
+   Compiling autocfg v1.5.1
+   Compiling five8_core v0.1.2
+   Compiling zerocopy v0.8.63
+   Compiling generic-array v0.14.7
+   Compiling ahash v0.8.12
+   Compiling zmij v1.0.23
+   Compiling indexmap v2.13.1
+   Compiling five8 v0.2.1
+   Compiling solana-sanitize v2.2.1
+   Compiling solana-atomic-u64 v2.2.1
+   Compiling serde_json v1.0.154
+   Compiling five8_const v0.1.4
+   Compiling syn v3.0.10
+   Compiling block-buffer v0.10.4
+   Compiling toml_parser v1.0.10+spec-1.1.0
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling num-traits v0.2.19
+   Compiling sha2 v0.10.9
+   Compiling syn v2.0.119
+   Compiling toml_edit v0.25.5+spec-1.1.0
+   Compiling proc-macro-crate v3.5.0
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling solana-msg v2.2.1
+   Compiling bs58 v0.5.1
+   Compiling libc v0.2.191
+   Compiling solana-decode-error v2.3.0
+   Compiling thiserror v1.0.69
+   Compiling solana-program-memory v2.3.1
+   Compiling thiserror v2.0.21
+   Compiling keccak v0.1.6
+   Compiling anyhow v1.0.104
+   Compiling rand_core v0.6.4
+   Compiling byteorder v1.5.0
+   Compiling solana-program-option v2.2.1
+   Compiling base64 v0.22.1
+   Compiling unicode-segmentation v1.12.0
+   Compiling cpufeatures v0.2.17
+   Compiling heck v0.3.3
+   Compiling feature-probe v0.1.1
+   Compiling bv v0.11.1
+   Compiling log v0.4.35
+   Compiling arrayref v0.3.9
+   Compiling find-msvc-tools v0.1.15
+   Compiling shlex v2.0.1
+   Compiling lazy_static v1.5.1
+   Compiling borsh-derive-internal v0.10.4
+   Compiling borsh-schema-derive-internal v0.10.4
+   Compiling cc v1.11.1
+   Compiling serde_bytes v0.11.19
+   Compiling rustversion v1.0.23
+   Compiling constant_time_eq v0.3.1
+   Compiling arrayvec v0.7.8
+   Compiling memoffset v0.9.1
+   Compiling hashbrown v0.13.2
+   Compiling sha3 v0.10.9
+   Compiling solana-native-token v2.3.0
+   Compiling solana-big-mod-exp v2.2.1
+   Compiling getrandom v0.2.17
+   Compiling solana-security-txt v1.1.3
+   Compiling base64 v0.21.7
+   Compiling blake3 v1.8.2
+   Compiling serde_derive v1.0.229
+   Compiling bytemuck_derive v1.12.1
+   Compiling borsh-derive v1.8.1
+   Compiling thiserror-impl v2.0.21
+   Compiling anchor-derive-space v0.32.1
+   Compiling thiserror-impl v1.0.69
+   Compiling solana-sdk-macro v2.2.1
+   Compiling num-derive v0.4.2
+   Compiling zeroize_derive v1.4.3
+   Compiling spl-program-error-derive v0.5.0
+   Compiling num_enum_derive v0.7.6
+   Compiling bytemuck v1.25.2
+   Compiling zeroize v1.8.2
+   Compiling solana-secp256k1-recover v2.2.1
+   Compiling solana-curve25519 v2.3.13
+   Compiling merlin v3.0.0
+   Compiling num_enum v0.7.6
+   Compiling spl-discriminator-syn v0.2.1
+   Compiling spl-discriminator-derive v0.2.0
+   Compiling toml v0.5.11
+   Compiling anchor-syn v0.32.1
+   Compiling anchor-lang-idl-spec v0.1.0
+   Compiling bincode v1.3.3
+   Compiling solana-fee-calculator v2.2.1
+   Compiling solana-short-vec v2.2.1
+   Compiling solana-serde-varint v2.2.2
+   Compiling proc-macro-crate v0.1.5
+   Compiling anchor-lang-idl v0.1.4
+   Compiling solana-hash v2.3.0
+   Compiling solana-sha256-hasher v2.3.0
+   Compiling solana-blake3-hasher v2.2.1
+   Compiling solana-keccak-hasher v2.2.1
+   Compiling borsh-derive v0.10.4
+   Compiling borsh v0.10.4
+   Compiling solana-pubkey v2.4.0
+   Compiling solana-borsh v2.2.1
+   Compiling solana-instruction v2.3.3
+   Compiling solana-sdk-ids v2.2.1
+   Compiling solana-nonce v2.2.1
+   Compiling solana-sysvar-id v2.2.1
+   Compiling solana-clock v2.2.3
+   Compiling solana-rent v2.2.1
+   Compiling solana-slot-hashes v2.2.1
+   Compiling solana-slot-history v2.2.1
+   Compiling solana-last-restart-slot v2.2.1
+   Compiling solana-epoch-schedule v2.2.1
+   Compiling solana-epoch-rewards v2.2.1
+   Compiling solana-program-error v2.2.2
+   Compiling solana-system-interface v1.0.0
+   Compiling solana-stable-layout v2.2.1
+   Compiling solana-serialize-utils v2.2.1
+   Compiling solana-bincode v2.2.1
+   Compiling solana-transaction-error v2.2.1
+   Compiling solana-loader-v2-interface v2.2.1
+   Compiling solana-address-lookup-table-interface v2.2.2
+   Compiling spl-associated-token-account-client v2.0.0
+   Compiling solana-account-info v2.3.0
+   Compiling solana-program-pack v2.2.1
+   Compiling solana-zk-sdk v2.3.13
+   Compiling spl-discriminator v0.4.1
+   Compiling spl-program-error v0.7.0
+   Compiling solana-cpi v2.2.1
+   Compiling solana-program-entrypoint v2.3.0
+   Compiling solana-instructions-sysvar v2.2.2
+   Compiling solana-account v2.2.1
+   Compiling solana-stake-interface v1.2.1
+   Compiling spl-memo v6.0.0
+   Compiling solana-feature-gate-interface v2.2.2
+   Compiling solana-vote-interface v2.2.6
+   Compiling solana-loader-v4-interface v2.2.1
+   Compiling solana-message v2.4.0
+   Compiling solana-loader-v3-interface v5.0.0
+   Compiling solana-loader-v3-interface v3.0.0
+   Compiling solana-invoke v0.4.0
+   Compiling spl-pod v0.5.1
+   Compiling spl-token-confidential-transfer-ciphertext-arithmetic v0.3.1
+   Compiling spl-type-length-value v0.8.0
+   Compiling spl-token-confidential-transfer-proof-extraction v0.3.0
+   Compiling spl-token-group-interface v0.6.0
+   Compiling solana-sysvar v2.3.0
+   Compiling spl-tlv-account-resolution v0.10.0
+   Compiling spl-token-metadata-interface v0.7.0
+   Compiling spl-transfer-hook-interface v0.10.0
+   Compiling spl-elgamal-registry v0.2.0
+   Compiling spl-token v8.0.0
+   Compiling spl-token-2022 v8.0.1
+   Compiling solana-program v2.3.0
+   Compiling anchor-attribute-event v0.32.1
+   Compiling anchor-derive-serde v0.32.1
+   Compiling anchor-attribute-error v0.32.1
+   Compiling anchor-attribute-constant v0.32.1
+   Compiling anchor-attribute-access-control v0.32.1
+   Compiling anchor-derive-accounts v0.32.1
+   Compiling anchor-attribute-account v0.32.1
+   Compiling spl-associated-token-account v7.0.0
+   Compiling anchor-attribute-program v0.32.1
+   Compiling anchor-lang v0.32.1
+   Compiling anchor-spl v0.32.1
+   Compiling nectar_vault v0.1.0 (/private/tmp/verify-v7-20261110T133401Z/solana/programs/nectar_vault)
+    Finished `release` profile [optimized] target(s) in 5m 08s
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling libc v0.2.191
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling equivalent v1.0.3
+   Compiling hashbrown v0.16.1
+   Compiling subtle v2.6.1
+   Compiling syn v1.0.109
+   Compiling zerocopy v0.8.63
+   Compiling generic-array v0.14.7
+   Compiling winnow v1.0.5
+   Compiling indexmap v2.13.1
+   Compiling toml_datetime v1.0.1+spec-1.1.0
+   Compiling autocfg v1.5.1
+   Compiling cfg_aliases v0.2.2
+   Compiling borsh v1.8.1
+   Compiling once_cell v1.21.4
+   Compiling five8_core v0.1.2
+   Compiling num-traits v0.2.19
+   Compiling five8 v0.2.1
+   Compiling ahash v0.8.12
+   Compiling toml_parser v1.0.10+spec-1.1.0
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+   Compiling toml_edit v0.25.5+spec-1.1.0
+   Compiling proc-macro-crate v3.5.0
+   Compiling cpufeatures v0.2.17
+   Compiling getrandom v0.2.17
+   Compiling block-buffer v0.10.4
+   Compiling rand_core v0.6.4
+   Compiling semver v1.0.28
+   Compiling solana-sanitize v2.2.1
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling rustc_version v0.4.1
+   Compiling memchr v2.8.3
+   Compiling solana-atomic-u64 v2.2.1
+   Compiling zmij v1.0.23
+   Compiling sha2 v0.10.9
+   Compiling curve25519-dalek v4.1.3
+   Compiling serde_json v1.0.154
+   Compiling itoa v1.0.19
+   Compiling five8_const v0.1.4
+   Compiling bs58 v0.5.1
+   Compiling solana-msg v2.2.1
+   Compiling lazy_static v1.5.1
+   Compiling thiserror v1.0.69
+   Compiling thiserror v2.0.21
+   Compiling solana-decode-error v2.3.0
+   Compiling solana-program-memory v2.3.1
+   Compiling opaque-debug v0.3.1
+   Compiling keccak v0.1.6
+   Compiling inout v0.1.4
+   Compiling base64 v0.22.1
+   Compiling cipher v0.4.4
+   Compiling sha3 v0.10.9
+   Compiling serde_derive v1.0.229
+   Compiling borsh-derive v1.8.1
+   Compiling bytemuck_derive v1.12.1
+   Compiling borsh-derive-internal v0.10.4
+   Compiling borsh-schema-derive-internal v0.10.4
+   Compiling thiserror-impl v2.0.21
+   Compiling percent-encoding v2.3.2
+   Compiling fnv v1.0.7
+   Compiling uriparse v0.6.4
+   Compiling qstring v0.7.2
+   Compiling universal-hash v0.5.1
+   Compiling derivation-path v0.2.0
+   Compiling bytemuck v1.25.2
+   Compiling zeroize_derive v1.4.3
+   Compiling thiserror-impl v1.0.69
+   Compiling solana-sdk-macro v2.2.1
+   Compiling num-derive v0.4.2
+   Compiling zeroize v1.8.2
+   Compiling anyhow v1.0.104
+   Compiling solana-derivation-path v2.2.1
+   Compiling polyval v0.6.2
+   Compiling ctr v0.9.2
+   Compiling aes v0.8.4
+   Compiling pbkdf2 v0.11.0
+   Compiling hmac v0.12.1
+   Compiling aead v0.5.2
+   Compiling solana-signature v2.3.0
+   Compiling either v1.19.0
+   Compiling byteorder v1.5.0
+   Compiling solana-seed-phrase v2.2.1
+   Compiling aes-gcm-siv v0.11.1
+   Compiling merlin v3.0.0
+   Compiling itertools v0.12.1
+   Compiling solana-seed-derivable v2.2.1
+   Compiling winnow v0.7.15
+   Compiling solana-program-option v2.2.1
+   Compiling toml_write v0.1.2
+   Compiling unicode-segmentation v1.12.0
+   Compiling crunchy v0.2.4
+   Compiling feature-probe v0.1.1
+   Compiling arrayref v0.3.9
+   Compiling bv v0.11.1
+   Compiling log v0.4.35
+   Compiling spl-discriminator-syn v0.2.1
+   Compiling heck v0.3.3
+   Compiling digest v0.9.0
+   Compiling shlex v2.0.1
+   Compiling bitflags v2.13.2
+   Compiling hashbrown v0.13.2
+   Compiling ppv-lite86 v0.2.21
+   Compiling getrandom v0.1.16
+   Compiling find-msvc-tools v0.1.15
+   Compiling rand_chacha v0.3.1
+   Compiling cc v1.11.1
+   Compiling rand v0.8.8
+   Compiling libsecp256k1-core v0.2.2
+   Compiling spl-discriminator-derive v0.2.0
+   Compiling serde_bytes v0.11.19
+   Compiling arrayvec v0.7.8
+   Compiling constant_time_eq v0.3.1
+   Compiling rustversion v1.0.23
+   Compiling spl-program-error-derive v0.5.0
+   Compiling block-buffer v0.9.0
+   Compiling sha2 v0.9.9
+   Compiling num_enum_derive v0.7.6
+   Compiling libsecp256k1-gen-ecmult v0.2.1
+   Compiling libsecp256k1-gen-genmult v0.2.1
+   Compiling num-integer v0.1.47
+   Compiling libsecp256k1 v0.6.0
+   Compiling aho-corasick v1.1.5
+   Compiling memoffset v0.9.1
+   Compiling regex-syntax v0.8.11
+   Compiling base64 v0.12.3
+   Compiling toml v0.5.11
+   Compiling solana-hash v2.3.0
+   Compiling solana-sha256-hasher v2.3.0
+   Compiling bincode v1.3.3
+   Compiling serde_spanned v0.6.9
+   Compiling toml_datetime v0.6.11
+   Compiling solana-fee-calculator v2.2.1
+   Compiling blake3 v1.8.2
+   Compiling rand_core v0.5.1
+   Compiling toml_edit v0.22.27
+   Compiling rand_chacha v0.2.2
+   Compiling solana-short-vec v2.2.1
+   Compiling rand v0.7.3
+   Compiling solana-curve25519 v2.3.13
+   Compiling proc-macro-crate v0.1.5
+   Compiling anchor-lang-idl-spec v0.1.0
+   Compiling num_enum v0.7.6
+   Compiling solana-keccak-hasher v2.2.1
+   Compiling borsh-derive v0.10.4
+   Compiling solana-serde-varint v2.2.2
+   Compiling borsh v0.10.4
+   Compiling num-bigint v0.4.8
+   Compiling solana-native-token v2.3.0
+   Compiling solana-define-syscall v2.3.0
+   Compiling solana-security-txt v1.1.3
+   Compiling anchor-derive-space v0.32.1
+   Compiling base64 v0.21.7
+   Compiling regex-automata v0.4.18
+   Compiling anchor-lang-idl v0.1.4
+   Compiling toml v0.8.23
+   Compiling solana-big-mod-exp v2.2.1
+   Compiling solana-pubkey v2.4.0
+   Compiling solana-borsh v2.2.1
+   Compiling cargo_toml v0.19.2
+   Compiling solana-instruction v2.3.3
+   Compiling solana-sdk-ids v2.2.1
+   Compiling solana-nonce v2.2.1
+   Compiling solana-sysvar-id v2.2.1
+   Compiling solana-clock v2.2.3
+   Compiling solana-slot-hashes v2.2.1
+   Compiling solana-rent v2.2.1
+   Compiling solana-program-error v2.2.2
+   Compiling solana-transaction-error v2.2.1
+   Compiling solana-system-interface v1.0.0
+   Compiling solana-signer v2.2.1
+   Compiling solana-account-info v2.3.0
+   Compiling solana-serialize-utils v2.2.1
+   Compiling spl-discriminator v0.4.1
+   Compiling solana-program-entrypoint v2.3.0
+   Compiling solana-cpi v2.2.1
+   Compiling solana-instructions-sysvar v2.2.2
+   Compiling solana-slot-history v2.2.1
+   Compiling solana-zk-sdk v2.3.13
+   Compiling solana-last-restart-slot v2.2.1
+   Compiling solana-epoch-rewards v2.2.1
+   Compiling solana-epoch-schedule v2.2.1
+   Compiling solana-stake-interface v1.2.1
+   Compiling solana-program-pack v2.2.1
+   Compiling solana-account v2.2.1
+   Compiling spl-program-error v0.7.0
+   Compiling solana-stable-layout v2.2.1
+   Compiling solana-bincode v2.2.1
+   Compiling solana-feature-gate-interface v2.2.2
+   Compiling solana-address-lookup-table-interface v2.2.2
+   Compiling solana-loader-v4-interface v2.2.1
+   Compiling solana-message v2.4.0
+   Compiling solana-blake3-hasher v2.2.1
+   Compiling solana-vote-interface v2.2.6
+   Compiling solana-loader-v3-interface v5.0.0
+   Compiling spl-memo v6.0.0
+   Compiling solana-loader-v2-interface v2.2.1
+   Compiling solana-invoke v0.4.0
+   Compiling solana-loader-v3-interface v3.0.0
+   Compiling spl-associated-token-account-client v2.0.0
+   Compiling solana-sysvar v2.3.0
+   Compiling regex v1.13.1
+   Compiling anchor-syn v0.32.1
+   Compiling spl-token v8.0.0
+   Compiling solana-secp256k1-recover v2.2.1
+   Compiling solana-example-mocks v2.2.1
+   Compiling solana-program v2.3.0
+   Compiling spl-pod v0.5.1
+   Compiling spl-token-confidential-transfer-proof-generation v0.4.1
+   Compiling spl-token-confidential-transfer-ciphertext-arithmetic v0.3.1
+   Compiling spl-type-length-value v0.8.0
+   Compiling spl-token-confidential-transfer-proof-extraction v0.3.0
+   Compiling spl-token-group-interface v0.6.0
+   Compiling spl-elgamal-registry v0.2.0
+   Compiling spl-tlv-account-resolution v0.10.0
+   Compiling spl-token-metadata-interface v0.7.0
+   Compiling spl-transfer-hook-interface v0.10.0
+   Compiling spl-token-2022 v8.0.1
+   Compiling anchor-attribute-event v0.32.1
+   Compiling anchor-attribute-constant v0.32.1
+   Compiling anchor-attribute-access-control v0.32.1
+   Compiling anchor-derive-serde v0.32.1
+   Compiling anchor-derive-accounts v0.32.1
+   Compiling anchor-attribute-error v0.32.1
+   Compiling anchor-attribute-account v0.32.1
+   Compiling anchor-attribute-program v0.32.1
+   Compiling anchor-lang v0.32.1
+   Compiling spl-associated-token-account v7.0.0
+   Compiling anchor-spl v0.32.1
+   Compiling nectar_vault v0.1.0 (/private/tmp/verify-v7-20261110T133401Z/solana/programs/nectar_vault)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 55.76s
+     Running unittests src/lib.rs (/private/tmp/verify-v7-20261110T133401Z/solana/target/debug/deps/nectar_vault-c2d8d5daa005ef27)
+
+Found a 'test' script in the Anchor.toml. Running it as a test suite!
+
+Running test suite: "/private/tmp/verify-v7-20261110T133401Z/solana/Anchor.toml"
+
+
+> @nectar/solana@ test:ts /private/tmp/verify-v7-20261110T133401Z/solana
+> node --disable-warning=ExperimentalWarning --test --test-concurrency=1 "tests/**/*.test.ts"
+
+TAP version 13
+# Subtest: client: kind 0 preimage equals every v1 vector byte for byte
+ok 1 - client: kind 0 preimage equals every v1 vector byte for byte
+  ---
+  duration_ms: 0.721416
+  type: 'test'
+  ...
+# Subtest: client: the vector test key reproduces the v1 signatures (deterministic Ed25519)
+ok 2 - client: the vector test key reproduces the v1 signatures (deterministic Ed25519)
+  ---
+  duration_ms: 43.772333
+  type: 'test'
+  ...
+# Subtest: client: kind suffixes and release format
+ok 3 - client: kind suffixes and release format
+  ---
+  duration_ms: 0.158542
+  type: 'test'
+  ...
+# Subtest: client: hand-built Ed25519 data equals web3.js Ed25519Program output (F-082 layout)
+ok 4 - client: hand-built Ed25519 data equals web3.js Ed25519Program output (F-082 layout)
+  ---
+  duration_ms: 1.221875
+  type: 'test'
+  ...
+# bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+# Subtest: nectar_vault happy paths
+    # Subtest: init_vault + open_position record the vault, authority and depositor
+    ok 1 - init_vault + open_position record the vault, authority and depositor
+      ---
+      duration_ms: 12.449792
+      type: 'test'
+      ...
+# \# settle kind 0: 73027 CU, tx 1063 bytes (limit 1232), msg 227 bytes
+    # Subtest: settle kind 0: v1 demo_leg vector fields rebuilt on-chain; seize to recipient ATA, remainder to depositor
+    ok 2 - settle kind 0: v1 demo_leg vector fields rebuilt on-chain; seize to recipient ATA, remainder to depositor
+      ---
+      duration_ms: 1095.371708
+      type: 'test'
+      ...
+    # Subtest: settle kind 1 (PRELIQ)
+    ok 3 - settle kind 1 (PRELIQ)
+      ---
+      duration_ms: 1133.005042
+      type: 'test'
+      ...
+    # Subtest: settle kind 2 (SELF) with recipient = depositor
+    ok 4 - settle kind 2 (SELF) with recipient = depositor
+      ---
+      duration_ms: 940.487208
+      type: 'test'
+      ...
+# \# release: 34831 CU
+    # Subtest: release after open pays all units to the depositor and closes the position
+    ok 5 - release after open pays all units to the depositor and closes the position
+      ---
+      duration_ms: 1127.541541
+      type: 'test'
+      ...
+    1..5
+ok 5 - nectar_vault happy paths
+  ---
+  duration_ms: 7484.7455
+  type: 'suite'
+  ...
+# Subtest: nectar_vault negative paths
+    # Subtest: wrong message: signed seize_units differs from the instruction args
+    ok 1 - wrong message: signed seize_units differs from the instruction args
+      ---
+      duration_ms: 11.526375
+      type: 'test'
+      ...
+    # Subtest: missing verify instruction
+    ok 2 - missing verify instruction
+      ---
+      duration_ms: 7.411958
+      type: 'test'
+      ...
+    # Subtest: verify instruction not immediately preceding settle
+    ok 3 - verify instruction not immediately preceding settle
+      ---
+      duration_ms: 9.831583
+      type: 'test'
+      ...
+    # Subtest: wrong authority: valid signature by another key
+    ok 4 - wrong authority: valid signature by another key
+      ---
+      duration_ms: 10.389375
+      type: 'test'
+      ...
+    # Subtest: replayed nonce: nonce 0 (used by the kind 0 settle) on another position, and the identical settle replayed
+    ok 5 - replayed nonce: nonce 0 (used by the kind 0 settle) on another position, and the identical settle replayed
+      ---
+      duration_ms: 18.979959
+      type: 'test'
+      ...
+    # Subtest: expired
+    ok 6 - expired
+      ---
+      duration_ms: 10.038791
+      type: 'test'
+      ...
+    # Subtest: release presented with a settlement signature
+    ok 7 - release presented with a settlement signature
+      ---
+      duration_ms: 9.449125
+      type: 'test'
+      ...
+    # Subtest: release replayed: same release again, and a fresh release reusing its nonce
+    ok 8 - release replayed: same release again, and a fresh release reusing its nonce
+      ---
+      duration_ms: 15.747375
+      type: 'test'
+      ...
+    # Subtest: settle presented with a release signature
+    ok 9 - settle presented with a release signature
+      ---
+      duration_ms: 8.465958
+      type: 'test'
+      ...
+    # Subtest: kind mismatch: a kind 1 signature presented as kind 0
+    ok 10 - kind mismatch: a kind 1 signature presented as kind 0
+      ---
+      duration_ms: 9.602041
+      type: 'test'
+      ...
+    # Subtest: unknown kind 3
+    ok 11 - unknown kind 3
+      ---
+      duration_ms: 9.551459
+      type: 'test'
+      ...
+    # Subtest: tampered signature: the Ed25519 program itself rejects the transaction
+    ok 12 - tampered signature: the Ed25519 program itself rejects the transaction
+      ---
+      duration_ms: 8.889208
+      type: 'test'
+      ...
+    # Subtest: verify instruction whose message offset points at another instruction index
+    ok 13 - verify instruction whose message offset points at another instruction index
+      ---
+      duration_ms: 12.719041
+      type: 'test'
+      ...
+    # Subtest: seize_units above the position amount
+    ok 14 - seize_units above the position amount
+      ---
+      duration_ms: 17.6125
+      type: 'test'
+      ...
+    # Subtest: recipient account differs from the signed recipient
+    ok 15 - recipient account differs from the signed recipient
+      ---
+      duration_ms: 11.686292
+      type: 'test'
+      ...
+    # Subtest: victim position is untouched after every rejected attempt
+    ok 16 - victim position is untouched after every rejected attempt
+      ---
+      duration_ms: 10.758042
+      type: 'test'
+      ...
+    1..16
+ok 6 - nectar_vault negative paths
+  ---
+  duration_ms: 183.573709
+  type: 'suite'
+  ...
+1..6
+# tests 25
+# suites 2
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9219.927625

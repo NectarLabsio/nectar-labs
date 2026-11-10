@@ -1,0 +1,7 @@
+EXIT 0 :: cargo test -p nectar-core
+EXIT 0 :: cargo test -p nectar-core --test sandbox -- --nocapture
+EXIT 0 :: cargo test -p nectar-core --test sandbox_p1 -- --nocapture
+EXIT 0 :: cargo test -p nectar-core --test sandbox_p2 -- --nocapture
+EXIT 0 :: cargo test -p nectar-core --test sandbox_v7 -- --nocapture
+EXIT 0 :: cargo test -p mock-ft
+EXIT 0 :: python3 contracts/nectar-core/tests/model.py --check

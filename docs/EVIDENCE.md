@@ -11,6 +11,9 @@
 | G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at 578b006: 3-size live dry quotes verify, impact from base units, no amountIn/OutUsd use; GET /api/oneclick fixture + live match shape; /feed panel and NVDAx route status come from the API; web e2e 128 passed / 0 failed; see §G6) |
 | G7 Solana + signer | PARTIAL: NEAR side verified; Solana leg not built | 2026-11-09T23:57Z | 97382fd | evidence/G7/verifier-20261109T2357Z/ (both gates.md commands fail: anchor absent, solana/ empty, no keeper test:settle-devnet script = H-TOOLCHAIN-SOLANA; NEAR side: trigger tx FCtApD2… → v1.signer-prod.testnet sign (payload_v2 Eddsa, domain_id 1) → SignatureResponse Ed25519 → settlement_signed; preimage event == get_pending_settlement; Ed25519 sig valid vs derived_public_key == config authority; tampered preimage → invalid; rebuild code hash == on-chain CFTfzY4…; cargo test 210/0 incl. sandbox_p2 3/0 + golden vectors; program id PLACEHOLDER, recipient throwaway, #6 stays Settling; see §G7) |
 | G8 copilot | PASS (fixture) (re-run; earlier FAIL 2b49f42 was docs wording) | 2026-11-09T23:56Z | df4706f | evidence/G8/verifier-20261109T235453Z/ (fixture 10 pass / 0 fail / 1 skip = live; --live without key exit 1; e2e copilot 4/4 with exact "Key missing" banner; README/docs-site say built, no live answer verified, fixture = Phala sample + throwaway key; panel says browser vs server checks; live round trip not performed: H7 key absent, /v1/models HTTP 500) |
+| G1 (v7 additions) | PASS | 2026-11-10T13:34Z–14:05Z | 09c4316 | evidence/G1/verifier-v7-20261110T1334Z/ (unit 318/0, sandbox 5/0, sandbox_p1 5/0, sandbox_p2 3/0, sandbox_v7 4/0, mock-ft 17/0, model.csv OK 87 rows; all 9 v7.rs methods gas-measured, max 8.93 Tgas; 10 owner setters (2 remote.rs, 8 p1/p2) lack a gas row, G11 scope, see §G1) |
+| G10 v7 facts + toolchain | PASS with open items (F-351, F-352, F-353) | 2026-11-10T13:44Z | 09c4316 | evidence/G10/verifier-20261110T1334Z/g10.log (FACTS F-328/329/337/338/339/340–361 present; calendar source+retrieved; solana 2.3.0 / anchor 0.32.1 / forge 1.9.0 == F-340/F-341/F-343; live derived_public_key == F-338) |
+| G7 prep (not G7) | RECORDED: vault deployed + 25 anchor tests | 2026-11-10T13:44Z | 09c4316 | evidence/G7/prep-verifier-20261110T1334Z/ (program ENZa… on devnet, vault PDA HGSF… owned by it; test:unit 7/0, test:anchor 25/0; G7 stays pending: needs v2 on testnet) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -23,6 +26,26 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G10
+
+### G10 — v7 facts + toolchain — PASS with open items — 2026-11-10T13:44Z — commit 09c4316
+Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-v7-20261110T133401Z (HEAD 09c4316). No secrets. Read-only.
+FACTS rows present (docs/FACTS.md:212–242): F-328, F-329 (x402), F-336 (superseded → F-353), F-337 (near-contract-standards 5.30.1),
+  F-338 (derived_public_key, live), F-339 (keccak256_array), F-340…F-361 all present, dated 2026-11-10.
+packages/config/nyse-calendar.json: "source": "https://www.nyse.com/markets/hours-calendars", "source_resolved": ".../trade/hours-calendars",
+  "retrieved": "2026-11-10T11:45:14Z" (matches F-342).
+$ solana --version  → solana-cli 2.3.0 (src:a2e21dda; feat:3640012085, client:Agave)   == F-340/F-341
+$ anchor --version  → anchor-cli 0.32.1 (also printed "info: uninstalling toolchain solana" — avm side effect)   == F-340
+$ forge --version   → forge Version: 1.9.0 (6056c58, built 2026-11-02)   == F-343
+$ near contract call-function as-read-only v1.signer-prod.testnet derived_public_key json-args
+    '{"path":"solana-devnet/pos/0","predecessor":"nectar-core-v2.nectar.testnet","domain_id":1}' network-config testnet now
+  → "ed25519:2fhY3GjCcp4LU75uiiChUqQg9fS6xCtptLYZUdKJibpN"   == F-338 (exact match)
+Code use of open items: grep of *.rs/*.ts/*.tsx/*.mjs/*.sol/*.yaml/*.json (excluding docs/, evidence/, lockfile) for
+  8021 / ref-finance / rhea / burrow / ScaledUiAmount → only services/feed/test/fixtures/oneclick-tokens.json (1Click token list fixture).
+  No product code depends on F-351/F-352/F-353.
+Explorer: none opened (G10 is facts + read-only RPC).
+Result: PASS with open items F-351 (ERC-8021 format, G12/G13 scope), F-352 (xStocks multiplier, G11), F-353 (Rhea ids). None used in code.
 
 ## G9
 
@@ -61,6 +84,22 @@ Guesses / confusion a stranger hits:
 Rehearsal verdict: quick start PASS in time; gitleaks clean; claims backed. Final G9 is not yet passable: 11 handoff blockers above, plus the Feed env gap if `agents` is to be claimed.
 
 ## G7
+
+### G7 prep — vault deployed + 25 anchor tests — RECORDED (not a G7 PASS) — 2026-11-10T13:44Z — commit 09c4316
+Clone as §G10; PATH += ~/.avm/bin ~/.local/share/solana/install/active_release/bin; SDKROOT=.../MacOSX26.5.sdk (solana/deploy.md:13).
+$ solana program show ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW --url devnet
+  Owner: BPFLoaderUpgradeab1e11111111111111111111111 · ProgramData 55ZD9n58bZKC9PfVcsiuRMoDyGVkJSPQX2AtTvUL1vzR
+  Authority: 3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS · Last Deployed In Slot 520746382 · Data Length 397240 · 2.01885804 SOL
+$ solana account HGSFKMWWnXeHJtPyaCEysWb5vHvQZJLvTkeB6YntEbeX --url devnet
+  Owner: ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW · 95 bytes · data contains "NVDAx" · 0.00113284 SOL
+  (vault holds no authority key; per deploy.md:40-41 positions carry their own authority, so the derived-key == authority check is G7.)
+declare_id! in programs/nectar_vault/src/lib.rs == ENZa… == Anchor.toml [programs.devnet]; [programs.localnet] = GdCVqcg2….
+$ (solana) pnpm install --ignore-workspace → exit 0
+$ pnpm run test:unit → 7 passed; 0 failed, exit 0  (first attempt without SDKROOT failed at link: verifier omission, documented in deploy.md)
+$ pnpm run test:anchor → exit 0: # tests 25 · # pass 25 · # fail 0 (4 client + 5 happy paths + 16 negative paths incl. wrong authority,
+  replayed nonce, expired, tampered signature, verify ix offset, recipient mismatch)
+Explorer: none opened (Solana explorer not fetched; RPC output above).
+Result: RECORDED as "G7 prep: vault deployed + 25 anchor tests". G7 itself stays pending (needs nectar-core-v2 on testnet).
 
 ### G7 — Solana + signer — PARTIAL: NEAR side verified; Solana leg not built — 2026-11-09T23:57Z — commit 97382fd
 Fresh clone /tmp/verify-G7-1794268628 at main 97382fd. PATH += ~/.cargo/bin ~/.local/bin, SDKROOT per gates.md host notes.
@@ -547,6 +586,37 @@ so the name suggests an e18 scale that the value does not have. relay_settlement
 that does not exist in the deployed default build.
 
 ## G1
+
+### G1 (v7 additions) — contract tests — PASS — 2026-11-10T13:34Z–14:05Z — commit 09c4316
+Clone as §G10; SDKROOT=.../MacOSX26.5.sdk. All exit codes via bash -c (evidence/G1/verifier-v7-20261110T1334Z/summary.txt).
+$ cargo test -p nectar-core                          → exit 0: unit 318/0 (incl. model_csv_vectors_match_contract_math), sandbox 5/0,
+                                                         sandbox_p1 5/0, sandbox_p2 3/0, sandbox_v7 4/0
+$ cargo test -p nectar-core --test sandbox -- --nocapture     → 5 passed; 0 failed
+$ cargo test -p nectar-core --test sandbox_p1 -- --nocapture  → 5 passed; 0 failed
+$ cargo test -p nectar-core --test sandbox_p2 -- --nocapture  → 3 passed; 0 failed
+$ cargo test -p nectar-core --test sandbox_v7 -- --nocapture  → 4 passed; 0 failed (146.68 s)
+$ cargo test -p mock-ft                              → 17 passed; 0 failed
+$ python3 contracts/nectar-core/tests/model.py --check → model.csv OK (87 rows)
+v7 criteria (sandbox_v7, against real mock-ft wasm):
+  aggregate debt — aggregate_debt_two_borrowers_repay_settle ok (reason aggregate_limit, full refund, headroom, 1-over refused)
+  weekend > 900 s — weekend_guard_calendar_stale_and_forced ok (+905 s → stale_price, haircut 2500, D=0; force false cannot reopen);
+    unit price_older_than_900s_flips_to_weekend_parameters asserts exactly 900 s is still fresh
+  multiplier bounds + announcement + split — multiplier_bounds_announce_and_split ok (+5.01 % and decrease refused, < 1 h announce
+    refused, borrow refused while pending, 2-for-1 split leaves V and LTV unchanged)
+  pay_to → claimable, referrer ≠ borrower — pay_to_claimable_and_referrers ok (pay_to_failed → get_claimable → withdraw_claimable;
+    referrer_is_borrower refused with full refund)
+Gas, v7.rs methods (max Tgas): set_session_calendar 8.93 · withdraw_claimable 7.13 · apply_corporate_action 2.49 · set_multiplier 2.43 ·
+  announce_corporate_action 2.42 · force_session_closed 2.38 · register_referrer 2.25 · unregister_referrer 2.24 · set_origination_fee_bps 2.13
+  (9/9). v2 borrow paths: LockCollateralAndBorrow(referrer) 12.34 · (pay_to failed) 12.21 · trigger_preliquidation(v2) 16.96; max overall
+  trigger_preliquidation 50.56 (sandbox). remote.rs (sandbox_p2 totals): trigger+sign(remote) 17.94 · request_remote_release+sign 16.88 ·
+  confirm_remote_deposit+vault_read+payout 12.96 · reserve_remote_position+derived_public_key 8.68 · keeper_attest_deposit+payout 7.88 ·
+  relay_settlement_result 2.75 · relay_release_result 2.72 · expire_remote_reservation 2.38. All < 100 Tgas.
+Not separately gas-labelled (G11 scope, not a G1(v7) criterion): remote.rs set_allow_keeper_deposit_attestation, set_vault_read_config;
+  p1/p2 owner setters (set_max_conf_bps, set_oracle_source, set_outlayer_account, set_quoter_pin, set_quoter_secrets_ref, set_vol_bps,
+  set_remote_chain, set_signer_config — default = ["p1","p2"] now, so these are in the default build). Private callbacks excepted.
+  Full list: method-coverage.txt (its 0.00 rows are sandbox_p2's 4-field format; real totals in gas-sandbox_p2-totals.csv).
+Explorer: none (local).
+Result: PASS on every G1 v7 addition. Note for G11: 10 owner setters lack a gas row.
 
 ### G1 — contract tests — PASS — 2026-11-09T20:43Z — commit b721641
 Re-run after GATE_FAIL_G1 (WO-2b merged at 0b3d9ac). Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-G1b-1794256819

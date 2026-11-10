@@ -1,0 +1,9 @@
+sandbox_p2,confirm_remote_deposit(rejected),7.66
+sandbox_p2,confirm_remote_deposit+vault_read+payout,12.96
+sandbox_p2,expire_remote_reservation,2.38
+sandbox_p2,keeper_attest_deposit+payout,7.88
+sandbox_p2,relay_release_result,2.72
+sandbox_p2,relay_settlement_result,2.75
+sandbox_p2,request_remote_release+sign,16.88
+sandbox_p2,reserve_remote_position+derived_public_key,8.68
+sandbox_p2,trigger+sign(remote position),17.94

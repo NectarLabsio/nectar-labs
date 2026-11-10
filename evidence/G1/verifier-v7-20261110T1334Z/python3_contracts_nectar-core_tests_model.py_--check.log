@@ -1,0 +1,2 @@
+=== python3 contracts/nectar-core/tests/model.py --check
+model.csv OK (87 rows)

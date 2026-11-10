@@ -1,0 +1,19 @@
+# G7 prep read-only, 2026-11-10T13:44:33Z
+$ solana program show ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW --url devnet
+
+Program Id: ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+Owner: BPFLoaderUpgradeab1e11111111111111111111111
+ProgramData Address: 55ZD9n58bZKC9PfVcsiuRMoDyGVkJSPQX2AtTvUL1vzR
+Authority: 3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS
+Last Deployed In Slot: 520746382
+Data Length: 397240 (0x60fb8) bytes
+Balance: 2.01885804 SOL
+
+$ solana account HGSFKMWWnXeHJtPyaCEysWb5vHvQZJLvTkeB6YntEbeX --url devnet
+
+Balance: 0.00113284 SOL
+Owner: ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+Executable: false
+Rent Epoch: 18446744073709551615
+Length: 95 (0x5f) bytes
+(account hex dump omitted: generic-api-key false positive in pre-commit scanner; decoded: discriminator, version, "NVDAx", two 32-byte keys)

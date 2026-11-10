@@ -1,0 +1,56 @@
+=== cargo test -p nectar-core --test sandbox_v7 -- --nocapture
+     Running tests/sandbox_v7.rs (target/debug/deps/sandbox_v7-b45523478b510160)
+GAS,upsert_collateral,2612132704581
+GAS,upsert_collateral,2612132704581
+GAS,update_owner_price,2387015826994
+GAS,upsert_collateral,2612132704581
+GAS,upsert_collateral,2612132704581
+GAS,update_owner_price,2387015826994
+GAS,update_owner_price,2387015826994
+GAS,update_owner_price,2387015826994
+GAS,mock-ft:set_registration_required,1662612968554
+GAS,set_dex_depth,2309118453826
+GAS,set_session_calendar,8929574739212
+GAS,set_session_calendar,2617107976670
+GAS,update_owner_price,2387442837358
+GAS,borrow(pre-split),11867514430919
+GAS,force_session_closed,2375481165553
+GAS,set_multiplier,2425005366559
+GAS,force_session_closed,2375914067911
+GAS,ft_transfer_call:LockCollateralAndBorrow(pay_to failed),12214361127207
+GAS,ft_transfer_call:LockCollateralAndBorrow(v2),11888603105070
+GAS,withdraw_claimable,7128150321974
+GAS,borrow(aggregate_limit),7037722068961
+GAS,announce_corporate_action,2419582912000
+GAS,borrow(headroom),11891597058194
+GAS,borrow(ca_pending),6972741039914
+GAS,borrow(1 over),7033547994751
+GAS,mock-ft:update_multiplier,1758184373590
+GAS,register_referrer,2243926108718
+GAS,borrow(after repay),11911889907331
+GAS,register_referrer,2246206108718
+GAS,update_owner_price,2387442837358
+GAS,update_owner_price,2387442837358
+GAS,borrow(referrer_is_borrower),6885284227824
+GAS,update_owner_price,2387442837358
+GAS,ft_transfer_call:LockCollateralAndBorrow(referrer),12338474516543
+GAS,trigger_preliquidation(v2),16963187210973
+test aggregate_debt_two_borrowers_repay_settle ... ok
+GAS,unregister_referrer,2241289011488
+GAS,borrow(unregistered referrer),12066761647737
+GAS,set_origination_fee_bps,2126151617135
+test pay_to_claimable_and_referrers ... ok
+test multiplier_bounds_announce_and_split has been running for over 60 seconds
+test weekend_guard_calendar_stale_and_forced has been running for over 60 seconds
+GAS,force_session_closed,2375914067911
+GAS,borrow(weekend over),7015073714607
+GAS,borrow(weekend),11898008014084
+GAS,set_session_calendar,2272861517006
+GAS,update_owner_price,2387442837358
+GAS,force_session_closed,2375914067911
+test weekend_guard_calendar_stale_and_forced ... ok
+GAS,update_owner_price,2387442837358
+GAS,apply_corporate_action,2488450324053
+GAS,borrow(post-split),11896804473020
+test multiplier_bounds_announce_and_split ... ok
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 146.68s

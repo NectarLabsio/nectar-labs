@@ -1,0 +1,20 @@
+# G10 toolchain + live view, 2026-11-10T13:44:24Z, clone /tmp/verify-v7-20261110T133401Z @ 09c4316
+$ solana --version
+solana-cli 2.3.0 (src:a2e21dda; feat:3640012085, client:Agave)
+$ anchor --version
+info: uninstalling toolchain solana
+info: toolchain solana uninstalled
+anchor-cli 0.32.1
+$ forge --version
+forge Version: 1.9.0
+$ near --version
+near-cli-rs 0.31.1
+$ near contract call-function as-read-only v1.signer-prod.testnet derived_public_key json-args {"path":"solana-devnet/pos/0","predecessor":"nectar-core-v2.nectar.testnet","domain_id":1} network-config testnet now
+"ed25519:2fhY3GjCcp4LU75uiiChUqQg9fS6xCtptLYZUdKJibpN"
+FACTS F-338 expects: ed25519:2fhY3GjCcp4LU75uiiChUqQg9fS6xCtptLYZUdKJibpN
+$ head packages/config/nyse-calendar.json
+{
+  "source": "https://www.nyse.com/markets/hours-calendars",
+  "source_resolved": "https://www.nyse.com/trade/hours-calendars",
+  "retrieved": "2026-11-10T11:45:14Z",
+  "timezone": "America/New_York",

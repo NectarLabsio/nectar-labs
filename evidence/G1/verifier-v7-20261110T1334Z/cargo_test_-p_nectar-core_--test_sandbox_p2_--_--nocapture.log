@@ -1,0 +1,79 @@
+=== cargo test -p nectar-core --test sandbox_p2 -- --nocapture
+     Running tests/sandbox_p2.rs (target/debug/deps/sandbox_p2-b640d27cb29329c0)
+GAS,reserve_remote_position+derived_public_key,total,8677753547499
+GAS,reserve_remote_position+derived_public_key,dev-20261110135227-87232098899333.test.near,3178541853948
+GAS,reserve_remote_position+derived_public_key,dev-20261110135233-15098490840889.test.near,2552076590898
+GAS,reserve_remote_position+derived_public_key,dev-20261110135235-23417450124376.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,dev-20261110135227-87232098899333.test.near,2187083799283
+GAS,reserve_remote_position+derived_public_key,dev-20261110135235-23417450124376.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,total,12962927865688
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135227-87232098899333.test.near,3136010447875
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135233-15098490840889.test.near,1562949579157
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135227-87232098899333.test.near,3565156624357
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135225-73313588215095.test.near,1695250955234
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135227-87232098899333.test.near,1800815476750
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,total,8680696545711
+GAS,reserve_remote_position+derived_public_key,dev-20261110135230-46740882955176.test.near,3178541853948
+GAS,reserve_remote_position+derived_public_key,dev-20261110135236-21966315568074.test.near,2552353036914
+GAS,reserve_remote_position+derived_public_key,dev-20261110135238-48817733311971.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,dev-20261110135230-46740882955176.test.near,2189750351479
+GAS,reserve_remote_position+derived_public_key,dev-20261110135238-48817733311971.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,total,12958422167584
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135230-46740882955176.test.near,3136010447875
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135236-21966315568074.test.near,1567509579157
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-68445943404422.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135230-46740882955176.test.near,3565156624357
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135225-32254827294134.test.near,1686185257130
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-68445943404422.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135230-46740882955176.test.near,1800815476750
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-68445943404422.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110135202-68445943404422.test.near,223182562500
+GAS,request_remote_release+sign,total,16878537992785
+GAS,request_remote_release+sign,dev-20261110135227-87232098899333.test.near,3562808660966
+GAS,request_remote_release+sign,dev-20261110135233-15098490840889.test.near,2656498175803
+GAS,request_remote_release+sign,dev-20261110135233-15098490840889.test.near,1408049977145
+GAS,request_remote_release+sign,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110135233-15098490840889.test.near,5354098773825
+GAS,request_remote_release+sign,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110135227-87232098899333.test.near,2471155060231
+GAS,request_remote_release+sign,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110135202-81805137591339.test.near,223182562500
+GAS,relay_release_result,total,2719166582584
+GAS,relay_release_result,dev-20261110135227-87232098899333.test.near,2404145260194
+test remote_repay_then_release_signed_and_replay_refused ... ok
+GAS,confirm_remote_deposit(rejected),total,7659093449599
+GAS,confirm_remote_deposit(rejected),dev-20261110135227-92330021921329.test.near,3136020320947
+GAS,confirm_remote_deposit(rejected),dev-20261110135233-54605178311355.test.near,1596656406593
+GAS,confirm_remote_deposit(rejected),dev-20261110135202-62231450655850.test.near,223182562500
+GAS,confirm_remote_deposit(rejected),dev-20261110135227-92330021921329.test.near,2170037064744
+GAS,confirm_remote_deposit(rejected),dev-20261110135202-62231450655850.test.near,223182562500
+GAS,keeper_attest_deposit+payout,total,7884083485479
+GAS,keeper_attest_deposit+payout,dev-20261110135227-92330021921329.test.near,3624103369210
+GAS,keeper_attest_deposit+payout,dev-20261110135225-11978461819391.test.near,1695250955234
+GAS,keeper_attest_deposit+payout,dev-20261110135202-62231450655850.test.near,223182562500
+GAS,keeper_attest_deposit+payout,dev-20261110135227-92330021921329.test.near,1800815476750
+GAS,keeper_attest_deposit+payout,dev-20261110135202-62231450655850.test.near,223182562500
+GAS,trigger+sign(remote position),total,17938723835043
+GAS,trigger+sign(remote position),dev-20261110135230-46740882955176.test.near,4543609496290
+GAS,trigger+sign(remote position),dev-20261110135236-21966315568074.test.near,2697382037785
+GAS,trigger+sign(remote position),dev-20261110135236-21966315568074.test.near,1406821723195
+GAS,trigger+sign(remote position),dev-20261110135202-68445943404422.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110135236-21966315568074.test.near,5384823640409
+GAS,trigger+sign(remote position),dev-20261110135202-68445943404422.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110135202-68445943404422.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110135230-46740882955176.test.near,2480159592549
+GAS,trigger+sign(remote position),dev-20261110135202-68445943404422.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110135202-68445943404422.test.near,223182562500
+GAS,relay_settlement_result,total,2749229936777
+GAS,relay_settlement_result,dev-20261110135230-46740882955176.test.near,2434065563242
+test remote_reserve_confirm_borrow_settle_signed_with_position_path ... ok
+test remote_refusals_attestation_and_expiry has been running for over 60 seconds
+GAS,expire_remote_reservation,total,2383269245599
+GAS,expire_remote_reservation,dev-20261110135227-92330021921329.test.near,2073111662139
+test remote_refusals_attestation_and_expiry ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 102.94s
