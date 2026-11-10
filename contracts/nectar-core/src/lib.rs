@@ -19,6 +19,7 @@ pub mod math;
 pub mod types;
 mod shields;
 mod v7;
+pub mod notes;
 
 #[cfg(feature = "p2")]
 mod jobs;
@@ -39,10 +40,12 @@ mod tests_p2;
 mod tests_v7;
 #[cfg(all(test, feature = "p2"))]
 mod tests_v7b;
+#[cfg(all(test, feature = "p2"))]
+mod tests_notes;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
-use near_sdk::store::{IterableMap, LazyOption, LookupMap, LookupSet};
+use near_sdk::store::{IterableMap, LazyOption, LookupMap, LookupSet, Vector};
 use near_sdk::{
     AccountId, BorshStorageKey, Gas, NearToken, PanicOnDefault, Promise, PromiseOrValue, assert_one_yocto, env,
     is_promise_success, near, require,
@@ -141,6 +144,12 @@ enum StorageKey {
     ClaimableUsdc,
     // v2 WO-23a
     ShieldOpens,
+    // v2 WO-22 Position Notes
+    NoteIds,
+    NoteIndex,
+    NotesByOwner,
+    NoteCount,
+    NoteQuoteRefs,
 }
 
 // Defaults for the V1 fields (packages/config/config.yaml outlayer.*, oracle.max_conf_bps; F-046).
@@ -215,6 +224,8 @@ pub struct Nectar {
     claimable_usdc: LookupMap<AccountId, u128>,
     /// WO-23a §4.9: account -> (UTC day, Shield opens that day).
     shield_opens: LookupMap<AccountId, (u32, u8)>,
+    /// WO-22 (PRD §6.11): NEP-171 Position Notes (src/notes.rs).
+    notes: notes::Notes,
 }
 
 // ---------------------------------------------------------------- internal helpers
@@ -455,6 +466,7 @@ impl Nectar {
                     "amount_usd_e6": U128(amount), "max_discount_bps": max_discount_bps,
                     "accepts_voluntary_fills": accepts_voluntary_fills }),
         );
+        self.mint_note(notes::quote_note_id(id), sender);
         Ok(0)
     }
 
@@ -562,6 +574,7 @@ impl Nectar {
             shield,
         });
         self.emit_opened(id, sender, &collateral, units, borrow, &t, pay_to.as_ref(), &referrer, false);
+        self.mint_note(notes::position_note_id(id), sender);
         // interaction
         self.pay_proceeds(id, sender, t.net, pay_to);
         Ok(0)
@@ -937,6 +950,13 @@ impl Nectar {
             origination_fee_bps: DEFAULT_ORIGINATION_FEE_BPS,
             claimable_usdc: LookupMap::new(StorageKey::ClaimableUsdc),
             shield_opens: LookupMap::new(StorageKey::ShieldOpens),
+            notes: notes::Notes {
+                ids: Vector::new(StorageKey::NoteIds),
+                index: LookupMap::new(StorageKey::NoteIndex),
+                by_owner: LookupMap::new(StorageKey::NotesByOwner),
+                count: LookupMap::new(StorageKey::NoteCount),
+                quote_refs: LookupMap::new(StorageKey::NoteQuoteRefs),
+            },
         }
     }
 

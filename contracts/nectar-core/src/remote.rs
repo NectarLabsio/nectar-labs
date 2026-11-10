@@ -233,6 +233,7 @@ impl Nectar {
                 let shield = p.shield;
                 self.put_position(p);
                 self.emit_opened(id, &borrower, &collateral, units, borrow, &t, pay_to.as_ref(), &referrer, true);
+                self.mint_note(crate::notes::position_note_id(id), &borrower);
                 if let Some(s) = &shield {
                     self.emit_shield_opened(id, &borrower, &collateral, s, t.premium, true);
                 }

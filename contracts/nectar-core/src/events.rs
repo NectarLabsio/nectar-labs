@@ -17,7 +17,12 @@ struct Envelope<'a> {
 }
 
 pub fn emit(event: &str, data: Value) {
-    let env_json = Envelope { standard: STANDARD, version: VERSION, event, data: [data] };
+    emit_standard(STANDARD, VERSION, event, data);
+}
+
+/// Any NEP-297 standard, e.g. `nep171` 1.0.0 `nft_mint` / `nft_transfer` (WO-22, F-337).
+pub fn emit_standard(standard: &str, version: &str, event: &str, data: Value) {
+    let env_json = Envelope { standard, version, event, data: [data] };
     let s = serde_json::to_string(&env_json).unwrap_or_else(|_| env::panic_str("event encode"));
     env::log_str(&format!("EVENT_JSON:{s}"));
 }

@@ -14,6 +14,10 @@ use near_workspaces::result::ExecutionFinalResult;
 use near_workspaces::types::{Gas, NearToken};
 use near_workspaces::{Account, AccountId, Contract, Worker};
 
+// WO-22 Position Notes + G11 setter gas rows (a subdirectory, so cargo does not build it as its own test target).
+#[path = "v7/notes.rs"]
+mod notes;
+
 const UNITS: u128 = 100_000_000;
 const E18: u128 = 1_000_000_000_000_000_000;
 const SEC: u64 = 1_000_000_000;
@@ -25,7 +29,7 @@ fn root() -> PathBuf {
 fn wasm(name: &str) -> Vec<u8> {
     static BUILT: OnceLock<()> = OnceLock::new();
     BUILT.get_or_init(|| {
-        for c in ["nectar-core", "mock-ft"] {
+        for c in ["nectar-core", "mock-ft", "test-stubs"] {
             let st = Command::new("cargo")
                 .args(["near", "build", "non-reproducible-wasm"])
                 .current_dir(root().join("contracts").join(c))

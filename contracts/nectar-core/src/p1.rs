@@ -288,6 +288,9 @@ impl Nectar {
         self.gas_reserve_yocto = math::sub(self.gas_reserve_yocto, deposit)?;
         p.status = PositionStatus::Settling;
         self.put_position(p);
+        // WO-22: the candidate quotes' Notes stay put until this settlement ends.
+        let cand_ids: Vec<u64> = cands.iter().map(|(_, id)| *id).collect();
+        self.note_refs_add(position_id.0, &cand_ids);
         emit(
             "quoter_requested",
             json!({ "position_id": position_id, "input_sha256": sha, "deposit_yocto": U128(deposit),
