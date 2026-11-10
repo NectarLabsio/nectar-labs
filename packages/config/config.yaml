@@ -85,17 +85,17 @@ v7:
   remote_path_prefix: {solana: "solana-devnet/pos/", base: "base-sepolia/pos/"}
   reservation_expiry_s: 1800
 features:
-  weekend_guard: false
+  weekend_guard: true
   multiplier: false
   pay_to: false
   referrals: false
-  shields: false
-  profit_lock: false
-  notes: false
-  reserve: false
-  agent_skill: false
-  x402: false
-  solana_remote: false
+  shields: true
+  profit_lock: true
+  notes: true
+  reserve: true
+  agent_skill: true
+  x402: true
+  solana_remote: true
   base: false
 base:
   chain_id: 84532 # Base mainnet 8453 is blocked (guard, H-GUARD-V7)
