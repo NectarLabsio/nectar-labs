@@ -1,0 +1,39 @@
+# pnpm verify (exit 1) — failing subtests (full log 1246 lines, trimmed)
+services/feed test:     not ok 2 - reads config.yaml with no env; env overrides; TODO-* is unset
+services/feed test:       ---
+services/feed test:       duration_ms: 6.894958
+services/feed test:       type: 'test'
+services/feed test:       location: '/private/tmp/verify-G2b-20261110T163415Z/services/feed/test/defaults.test.ts:19:3'
+services/feed test:       failureType: 'testCodeFailure'
+services/feed test:       error: |-
+services/feed test:         Expected values to be strictly equal:
+services/feed test:         + actual - expected
+services/feed test:         
+services/feed test:         + 'nectar-core-v2.nectar.testnet'
+services/feed test:         - 'nectar-core.nectar.testnet'
+services/feed test:                       ^
+services/feed test:         
+services/keeper test:     # Subtest: treats TODO-* ids as unset and falls back to config.yaml
+services/keeper test:     not ok 1 - treats TODO-* ids as unset and falls back to config.yaml
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.08775
+services/keeper test:       type: 'test'
+services/keeper test:       location: '/private/tmp/verify-G2b-20261110T163415Z/services/keeper/test/keyfile.test.ts:40:3'
+services/keeper test:       failureType: 'testCodeFailure'
+services/keeper test:       error: |-
+services/keeper test:         Expected values to be strictly equal:
+services/keeper test:         + actual - expected
+services/keeper test:         
+services/keeper test:         + 'nectar-core-v2.nectar.testnet'
+services/keeper test:         - 'nectar-core.nectar.testnet'
+services/keeper test:                       ^
+services/keeper test:         
+1231:services/keeper test: # tests 168
+1233:services/keeper test: # pass 167
+1234:services/keeper test: # fail 1
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  keeper@0.1.0 test: `node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"`
+Exit status 1
+ ELIFECYCLE  Test failed. See above for more details.
+ ELIFECYCLE  Command failed with exit code 1.
+ ELIFECYCLE  Command failed with exit code 1.
+EXIT 1

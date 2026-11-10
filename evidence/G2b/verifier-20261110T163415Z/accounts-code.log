@@ -1,0 +1,12 @@
+accounts (view_account, final):
+nectar-core-v2 code_hash 3W5bifwgurTNyZwHsseLU8NmJxaW5Dt2221CfhvQ31ey storage 743639
+keeper-v2 code_hash 1111… (no code) ; usdc-mock/nvdax-mock code_hash 55hvEqmBmZNjhmhiUagzZrx9f5rLzxC5iuHtfvG3pKA
+view_code nectar-core-v2: 734784 B sha256 252a6abe1803b2628b0adadb7b5ec120853ddbd8e1f698dddf4f629a29e8937a base58 3W5bifwgurTNyZwHsseLU8NmJxaW5Dt2221CfhvQ31ey
+rebuild target/near/nectar_core/nectar_core.wasm: 734784 B sha256 252a6abe1803b2628b0adadb7b5ec120853ddbd8e1f698dddf4f629a29e8937a (identical)
+    Finished cargo near build in 37s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+EXIT 0
+keeper-v2 keys:
+ed25519:7GknDBk6wX5StJYG2XSK4g9TeYMauyYxbAHHJbdzYBPh FunctionCall receiver nectar-core-v2.nectar.testnet allowance 0.4 NEAR methods [trigger_preliquidation,relay_settlement_result,confirm_remote_deposit,keeper_attest_deposit,relay_release_result]
+WebFetch https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet -> HTTP 403

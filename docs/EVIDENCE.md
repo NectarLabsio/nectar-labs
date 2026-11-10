@@ -15,6 +15,7 @@
 | G10 v7 facts + toolchain | PASS with open items (F-351, F-352, F-353) | 2026-11-10T13:44Z | 09c4316 | evidence/G10/verifier-20261110T1334Z/g10.log (FACTS F-328/329/337/338/339/340–361 present; calendar source+retrieved; solana 2.3.0 / anchor 0.32.1 / forge 1.9.0 == F-340/F-341/F-343; live derived_public_key == F-338) |
 | G7 prep (not G7) | RECORDED: vault deployed + 25 anchor tests | 2026-11-10T13:44Z | 09c4316 | evidence/G7/prep-verifier-20261110T1334Z/ (program ENZa… on devnet, vault PDA HGSF… owned by it; test:unit 7/0, test:anchor 25/0; G7 stays pending: needs v2 on testnet) |
 | G11 v7 contract | PASS with open item (F-352) — re-run after WO-23c; prior FAIL block kept | 2026-11-10T15:47Z–16:12Z | 53f1e63 | evidence/G11/verifier-rerun-20261110T1547Z/ (unit 453/0 incl. tests_p2::deposit_forged_authority_refused, sandbox 5+5+4+2+9+4 = 29/0, mock-ft 17/0, model --v7 OK 132 rows; 81 v7_* + 103 tests_v7/v7b; wasm 734784 B sha256 252a6abe… (unchanged); set_shield_params 2.67 / set_job_config 2.57 Tgas; every non-private change method gas-measured, max 68.94 Tgas; see §G11) |
+| G2b testnet deploy v2 | FAIL (pnpm verify exit 1: 2 unit tests hard-code v1 core id); deploy/code/keys/views all hold | 2026-11-10T16:34Z–16:45Z | 1c4cdb3 | evidence/G2b/verifier-20261110T163415Z/ (rebuild sha256 252a6abe… == view_code == code_hash 3W5bif…; keeper-v2 one FC key, 5 methods; views OK; calendar 287; demo:testnet exit 0; live state drifted to 3 quotes / 3 positions during run (concurrent G7 v2 work); nearblocks 403; see §G2b) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -27,6 +28,42 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G2b
+
+### G2b — testnet deploy v2 (nectar-core-v2) — FAIL — 2026-11-10T16:34Z–16:45Z — commit 1c4cdb3
+Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-G2b-20261110T163415Z (HEAD 1c4cdb3); public RPC https://rpc.testnet.near.org, read-only;
+  no secrets, no transactions. Logs: evidence/G2b/verifier-20261110T163415Z/ (accounts-code.log, views.log, demo.log, verify.log, pnpm-i.log).
+1. Accounts (view_account, final, block ~277092673): nectar-core-v2 code_hash 3W5bifwgurTNyZwHsseLU8NmJxaW5Dt2221CfhvQ31ey (== expected);
+   keeper-v2 exists, no code; usdc-mock + nvdax-mock exist, code_hash 55hvEq… . view_code → 734784 B, sha256 252a6abe1803b262…29e8937a,
+   base58(sha256) = 3W5bif…31ey. $ (contracts/nectar-core) SDKROOT=…/MacOSX26.5.sdk cargo near build non-reproducible-wasm → exit 0 (37 s);
+   target/near/nectar_core/nectar_core.wasm 734784 B sha256 252a6abe… — byte-identical to deployed code. HOLDS.
+2. keeper-v2 view_access_key_list → exactly 1 key ed25519:7GknDB…, FunctionCall, receiver nectar-core-v2.nectar.testnet, allowance 0.4 NEAR,
+   methods [trigger_preliquidation, relay_settlement_result, confirm_remote_deposit, keeper_attest_deposit, relay_release_result]; no full-access key. HOLDS (D-019).
+3. Views (call_function, final): contract_version "2.0.0-v7" · get_config (keeper keeper-v2, usdc usdc-mock, paused false) · get_pool
+   (available $36,500 / utilised $13,500 at first read) · get_collateral NVDAx + list_collaterals (1: NVDAx, remote_chain solana-devnet ENZa…, domain 1)
+   · get_exit_capacity NVDAx first read: session_open true, reason "open", Q $15,000, R $0, D $0, total debt $13,500, aggregate capacity $13,500,
+     headroom $0, oracle Owner $180 (age 161 s, fresh false); second read: Q $16,000, headroom $900, oracle fresh
+   · list_quotes first read: #0 $5,000 @400 buyer2 voluntary=false; #1 $10,000 @250 buyer1 voluntary=true (next_quote_id 2)
+   · list_positions first read: #0 $4,500 Open; #1 $9,000 Open (next_position_id 2)
+   · get_session_calendar: page cap 100 → 100+100+87 = 287 windows (first [1794321000…,1794344400…], last [1807018200…,1807041600…])
+   · get_fee_stack (premium 300, origination 30, keeper 50, split 7000/2000/1000) · get_reserve NVDAx (empty, discount 600, share price 1.000000)
+   · nft_tokens: q-0 buyer2, p-0 borrower1, q-1 buyer1, p-1 borrower1 (+ q-2 after drift) · nft_token_svg p-1: 1280 B, xmllint --noout OK
+   · get_quoter_config version_key 5d90edb8840bb292…0f891fc9, enabled · get_remote_config vault_read_version_key 5d90edb8… (same), keeper deposit attestation allowed.
+   NOTE drift: within ~4 min of the first reads, quote #2 ($1,000 @300 buyer1, Solana recipient) and position #2 (remote_path solana-devnet/pos/2) appeared
+   (next ids 3/3; untracked evidence/G7/v2-*.log in the main worktree at 16:35–16:38Z = concurrent G7 v2 run). Expected 2/2 seed state held at first read.
+4. $ pnpm i → exit 0 (4.8 s). $ pnpm demo:testnet → exit 0, reads v2: "account nectar-core-v2.nectar.testnet version 2.0.0-v7", Q_c $16,000,
+   quotes #0–#2, positions #0–#2 (#2 debt $370.44), explorer links for core-v2/usdc-mock/nvdax-mock.
+   $ pnpm verify → exit 1 (ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL), so scripts/50-verify.sh never runs inside verify:
+     services/feed test/defaults.test.ts:21 "reads config.yaml with no env…" expected 'nectar-core.nectar.testnet', actual 'nectar-core-v2.nectar.testnet'
+     services/keeper test/keyfile.test.ts:43 "treats TODO-* ids as unset and falls back to config.yaml" — same assertion
+     (both tests hard-code the v1 core id; config.yaml now points at v2). Other suites in the log ran green.
+5. Explorer links (WebFetch tried on the first; HTTP 403, same as G2 v1 — human browser check still open):
+   https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet (403) · https://testnet.nearblocks.io/address/keeper-v2.nectar.testnet
+   · https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet · https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet (not opened)
+Verdict: FAIL — reason: `pnpm verify` exits 1 (2 stale v1-id assertions in services/feed + services/keeper tests). Criteria 1–3 and demo:testnet hold.
+  Observations (not failure reasons): config.yaml line 79–80 comments still say "TODO-G2b (not created yet; needs H-NEAR-FAUCET)" though v2 exists;
+  live state moves under concurrent G7 work, so later checks will see ≥ 3 quotes/positions.
 
 ## G11
 
