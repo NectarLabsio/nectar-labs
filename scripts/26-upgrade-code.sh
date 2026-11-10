@@ -3,7 +3,7 @@
 # upgrade test in tests/sandbox_p1.rs). Top-up is computed from the storage gap (1E19 yocto/byte, F-014/F-176) plus a margin.
 source "$(dirname "$0")/_lib.sh"; guard_mainnet
 OWNER=$(cfg .accounts.owner); CORE=$(cfg .accounts.core)
-WASM="$ROOT/target/near/nectar_core/nectar_core.wasm"; RPC="${NEAR_RPC_URL:-https://rpc.testnet.near.org}"
+WASM="$ROOT/target/near/nectar_core/nectar_core.wasm"; RPC="${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}"
 acct() { curl -s "$RPC" -H 'content-type: application/json' -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"query\",\"params\":{\"request_type\":\"view_account\",\"finality\":\"final\",\"account_id\":\"$1\"}}"; }
 view() { curl -s "$RPC" -H 'content-type: application/json' -d "$(jq -cn --arg a "$CORE" --arg m "$1" --arg b "$(printf '%s' "${2:-{\}}" | base64)" \
   '{jsonrpc:"2.0",id:1,method:"query",params:{request_type:"call_function",finality:"final",account_id:$a,method_name:$m,args_base64:$b}}')" | jq -c '.result.result | implode | fromjson'; }

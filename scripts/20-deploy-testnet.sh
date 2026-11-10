@@ -7,7 +7,7 @@ source "$(dirname "$0")/_lib.sh"; guard_mainnet
 PARENT="${PARENT:-nectar.testnet}"; CORE="nectar-core.$PARENT"; USDC="usdc-mock.$PARENT"; NVDAX="nvdax-mock.$PARENT"
 W="$ROOT/target/near"
 [ -f "$W/nectar_core/nectar_core.wasm" ] && [ -f "$W/mock_ft/mock_ft.wasm" ] || { echo "run scripts/10-build.sh first" >&2; exit 2; }
-code_hash() { curl -s "${NEAR_RPC_URL:-https://rpc.testnet.near.org}" -H 'content-type: application/json' \
+code_hash() { curl -s "${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}" -H 'content-type: application/json' \
   -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"query\",\"params\":{\"request_type\":\"view_account\",\"finality\":\"final\",\"account_id\":\"$1\"}}" | jq -r '.result.code_hash // "none"'; }
 EMPTY=11111111111111111111111111111111
 

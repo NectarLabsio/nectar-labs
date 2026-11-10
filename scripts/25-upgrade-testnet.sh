@@ -6,7 +6,7 @@ source "$(dirname "$0")/_lib.sh"; guard_mainnet
 OWNER=$(cfg .accounts.owner); CORE=$(cfg .accounts.core)
 P0_CODE_HASH="8FtHHN134KPuXtA6VyyYgH57166gdixvA5tFiXXyf2gV"   # G1/G2-verified P0 build (F-140)
 WASM="$ROOT/target/near/nectar_core/nectar_core.wasm"
-RPC="${NEAR_RPC_URL:-https://rpc.testnet.near.org}"
+RPC="${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}"
 acct() { curl -s "$RPC" -H 'content-type: application/json' -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"query\",\"params\":{\"request_type\":\"view_account\",\"finality\":\"final\",\"account_id\":\"$1\"}}"; }
 view() { curl -s "$RPC" -H 'content-type: application/json' -d "$(jq -cn --arg a "$CORE" --arg m "$1" --arg b "$(printf '%s' "${2:-{\}}" | base64)" \
   '{jsonrpc:"2.0",id:1,method:"query",params:{request_type:"call_function",finality:"final",account_id:$a,method_name:$m,args_base64:$b}}')" | jq -c '.result.result | implode | fromjson'; }

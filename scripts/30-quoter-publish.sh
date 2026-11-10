@@ -12,7 +12,7 @@ SHA=$(shasum -a 256 "$WASM" | cut -d' ' -f1)
 SERVED=$(mktemp -t nectar-quoter); trap 'rm -f "$SERVED"' EXIT
 URL="https://test.fastfs.io/$OWNER/$OUTLAYER/$SHA.wasm"
 echo "wasm=$WASM sha256=$SHA size=$(wc -c <"$WASM" | tr -d ' ')"
-rpc_view() { curl -s "${NEAR_RPC_URL:-https://rpc.testnet.near.org}" -H 'content-type: application/json' -d "$(jq -cn --arg a "$1" --arg m "$2" --arg b "$(printf '%s' "$3" | base64)" \
+rpc_view() { curl -s "${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}" -H 'content-type: application/json' -d "$(jq -cn --arg a "$1" --arg m "$2" --arg b "$(printf '%s' "$3" | base64)" \
   '{jsonrpc:"2.0",id:1,method:"query",params:{request_type:"call_function",finality:"final",account_id:$a,method_name:$m,args_base64:$b}}')"; }
 
 case "${1:-}" in

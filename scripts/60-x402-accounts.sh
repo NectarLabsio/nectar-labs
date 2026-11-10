@@ -5,7 +5,7 @@
 source "$(dirname "$0")/_lib.sh"; guard_mainnet
 OWNER=$(cfg .accounts.owner); USDC=$(cfg .accounts.usdc_mock); NVDAX=$(cfg .accounts.nvdax_mock)
 RELAYER=$(cfg .v7.x402_relayer); AGENT=$(cfg .v7.agent1)
-RPC="${NEAR_RPC_URL:-https://rpc.testnet.near.org}"
+RPC="${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}"
 exists() { curl -s "$RPC" -H 'content-type: application/json' -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"query\",\"params\":{\"request_type\":\"view_account\",\"finality\":\"final\",\"account_id\":\"$1\"}}" | jq -e '.result.amount' >/dev/null; }
 genkey() { # file account
   [ -f "$1" ] && return; ( umask 077; node -e '

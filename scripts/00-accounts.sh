@@ -7,7 +7,7 @@
 source "$(dirname "$0")/_lib.sh"; guard_mainnet
 PARENT="${PARENT:-nectar.testnet}"
 MODE="${1:-light}"
-RPC="${NEAR_RPC_URL:-https://rpc.testnet.near.org}"
+RPC="${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}"
 # name:amount — contract amounts cover wasm storage (1E19 yocto/byte, F-014) + state headroom
 LIGHT=(keeper:0.5 buyer1:0.5 buyer2:0.5 borrower1:0.5)
 CONTRACTS=(usdc-mock:${MOCK_FT_NEAR:-2} nvdax-mock:${MOCK_FT_NEAR:-2} nectar-core:${CORE_NEAR:-4})

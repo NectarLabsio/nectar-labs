@@ -39,7 +39,7 @@ near contract call-function as-transaction "$CORE" trigger_preliquidation json-a
   attached-deposit '0 NEAR' sign-as "$KEEPER" network-config testnet sign-with-access-key-file "$KEEPER_KEY" send </dev/null
 sleep 30; health
 log "6: off-chain verification of the MPC signature against the vault authority"
-PEND=$(curl -s "${NEAR_RPC_URL:-https://rpc.testnet.near.org}" -H 'content-type: application/json' -d "$(jq -cn --arg a "$CORE" --arg b "$(printf '{"position_id":"%s"}' "$P" | base64)" \
+PEND=$(curl -s "${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}" -H 'content-type: application/json' -d "$(jq -cn --arg a "$CORE" --arg b "$(printf '{"position_id":"%s"}' "$P" | base64)" \
   '{jsonrpc:"2.0",id:1,method:"query",params:{request_type:"call_function",finality:"final",account_id:$a,method_name:"get_pending_settlement",args_base64:$b}}')" | jq -c '.result.result | implode | fromjson')
 echo "pending=$PEND"
 node "$ROOT/scripts/verify-ed25519.mjs" "$AUTH" "$PEND"
