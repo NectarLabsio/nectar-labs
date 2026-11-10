@@ -1,0 +1,38 @@
+# pnpm i exit 0 (tail)
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 4.5s using pnpm v10.34.9
+# pnpm verify exit 0 — test summaries
+54:services/feed test: # Subtest: repo config defaults
+62:services/feed test:     ok 2 - reads config.yaml with no env; env overrides; TODO-* is unset
+68:services/feed test: ok 1 - repo config defaults
+784:services/keeper test:     ok 6 - reads v1 views: no multiplier / total debt ⇒ defaults; session from market_session_open; missing ⇒ closed
+896:services/keeper test:     ok 1 - treats TODO-* ids as unset and falls back to config.yaml
+902:services/keeper test:     ok 2 - still requires KEEPER_KEY_PATH (no default key)
+908:services/keeper test:     ok 3 - parses ids, defaults and the key path
+914:services/keeper test: ok 7 - config
+939:services/keeper test:     ok 4 - enabled config has the documented defaults and normalised ids
+957:services/keeper test: ok 8 - oracle updater config (gating)
+970:services/keeper test:     ok 2 - fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+1309:services/keeper test: # tests 168
+1311:services/keeper test: # pass 168
+1312:services/keeper test: # fail 0
+1426:services/feed test:     ok 4 - sizes are 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD (default $1,000)
+1644:services/feed test: # tests 57
+1646:services/feed test: # pass 57
+1647:services/feed test: # fail 0
+1686:services/x402 test:     ok 1 - config refuses mainnet hints and non-testnet network ids
+1698:services/x402 test:     ok 3 - loadConfig: usdc-mock asset, 0.01 USDC, near:testnet from config.yaml
+# tail
+#2  remaining $629.56  max discount 300 bps  live
+
+== positions ==
+#0  Open  debt $4,500.00  ltv 3000 bps / pre-liq 7500 bps
+#1  Open  debt $9,000.00  ltv 6000 bps / pre-liq 7500 bps
+#2  Closed  debt $0.00
+#3  Closed  debt $0.00
+
+== explorer ==
+https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet
+https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet
+https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet

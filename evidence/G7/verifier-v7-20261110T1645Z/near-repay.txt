@@ -1,0 +1,7 @@
+== 54eukmJTtQ2PpvYvYxaGeU8Z4gZwg5dpamFFuqWZiMpA
+signer=borrower1.nectar.testnet recv=usdc-mock.nectar.testnet method=ft_transfer_call err=-
+repaid [{"position_id":"2","amount_usd_e6":"370440000","remaining_debt_usd_e6":"0"}]
+== DKH57jdPdrh2zKBwLP2jKMKxhwWvpNFMaxSXSeTKLHtt
+signer=borrower1.nectar.testnet recv=nectar-core-v2.nectar.testnet method=request_remote_release err=-
+remote_release_requested [{"position_id":"2","nonce":"0","expires":"1794332328","message":"NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=2|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=0|expires=1794332328","recipient":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","path":"solana-devnet/pos/2"}]
+remote_release_signed [{"position_id":"2","nonce":"0","expires":"1794332328","message":"NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=2|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=0|expires=1794332328","signature_hex":"813709fd06378795307df9ab2afd1cdb8fb9529cec1e1c05f679fee40cc60310592c4505ff4c1824d37457cfbf2e93a6c704d3c4140830e836e3edae489d660f","recipient":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","path":"solana-devnet/pos/2","pubkey":"ed25519:HRf3veyfWvAccxvAgkDvp9eCKTuCpfobLVMJ9TVstarz"}]

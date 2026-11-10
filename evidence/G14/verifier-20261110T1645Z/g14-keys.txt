@@ -1,0 +1,2 @@
+agent1 keys: [{"public_key":"ed25519:3zyEtyWb2BJzYZdTEsQeBNhnoqrNFw6KeQLjJQE925hm","perm":"FullAccess"}]
+x402-relayer keys: [{"public_key":"ed25519:GVaHZ4FfWf3DnJXLXfnjXN3rDCjiTSfd1KT4GCdmWuXR","perm":"FullAccess"}]

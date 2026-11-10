@@ -1,0 +1,8 @@
+## settle pos 3
+{"authority":"ed25519:APU8mbdwRLFR884iW2om4pQmP126ueKXCWL2B4JrYXCw","preimage":"NECTAR_SETTLE_V1|chain=solana-devnet|program=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=3|quote=2|repay_e6=370440000|seize_units=2545980|recipient=FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q|nonce=1|expires=1794332496|kind=PRELIQ","signature_valid":true}
+## release pos 2 (message -> preimage)
+{"authority":"ed25519:HRf3veyfWvAccxvAgkDvp9eCKTuCpfobLVMJ9TVstarz","preimage":"NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=2|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=0|expires=1794332328","signature_valid":true}
+## neg: pos 2 sig vs pos 3 key
+{"signature_valid":false}
+## neg: tampered settle preimage
+{"signature_valid":false}

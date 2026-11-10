@@ -1,0 +1,14 @@
+== GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt
+{"err":null,"signer":"agent1.nectar.testnet","recv":"nvdax-mock.nectar.testnet","status":"SuccessValue","actions":["FunctionCall"]}
+{"method_name":"ft_transfer_call","args":"{\"receiver_id\":\"nectar-core-v2.nectar.testnet\",\"amount\":\"1000000\",\"msg\":\"{\\\"LockCollateralAndBorrow\\\":{\\\"collateral\\\":\\\"NVDAx\\\",\\\"borrow_usd_e6\\\":\\\"10000000\\\",\\\"pre_liq_ltv_bps\\\":8000}}\"}"}
+nectar-core-v2.nectar.testnet position_opened [{"position_id":"4","borrower":"agent1.nectar.testnet","collateral":"NVDAx","units":"1000000","debt_usd_e6":"10000000","premium_usd_e6":"0","origination_fee_usd_e6":"30000","net_proceeds_usd_e6":"9970000","pay_to":null,"referrer":null,"remote":false}]
+nectar-core-v2.nectar.testnet nft_mint [{"owner_id":"agent1.nectar.testnet","token_ids":["p-4"]}]
+failed receipts: 0
+== 5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx
+{"err":null,"signer":"x402-relayer.nectar.testnet","recv":"agent1.nectar.testnet","status":"SuccessValue","actions":["Delegate"]}
+{"sender":"agent1.nectar.testnet","recv":"usdc-mock.nectar.testnet","acts":[{"method_name":"ft_transfer","args":"{\"receiver_id\":\"nectar.testnet\",\"amount\":\"10000\"}"}],"pk":"ed25519:3zyEtyWb2BJzYZdTEsQeBNhnoqrNFw6KeQLjJQE925hm"}
+failed receipts: 0
+{"ex":"agent1.nectar.testnet","logs":[],"status":"SuccessValue"}
+{"ex":"usdc-mock.nectar.testnet","logs":[],"status":"SuccessValue"}
+{"ex":"x402-relayer.nectar.testnet","logs":[],"status":"SuccessValue"}
+{"ex":"x402-relayer.nectar.testnet","logs":[],"status":"SuccessValue"}

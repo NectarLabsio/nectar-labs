@@ -9,13 +9,16 @@
 | G4 OutLayer | PASS | 2026-11-09T22:10Z | d87eef6 | evidence/G4/verifier-20261109T2210Z/ (attestation via testnet-api.outlayer.ai/attestations/by-request/15114, TDX quote present, not verified; gates.md get_settlement view missing, criterion checked from events; fills = max until WO-10b) |
 | G5 oracle | FALLBACK (disclosed) | 2026-11-09T22:55Z | 706d940 | evidence/G5/verifier-20261109T2254Z/ (no live Pyth price: pyth-oracle.testnet NVDA → null, Hermes 401, H13 key absent; nectar-core source = Owner; Pyth defences tested: unit 157/0 + sandbox 5/0 + sandbox_p1 4/0; gates.md filter `oracle_rejects` matches 0 tests; README $180 vs on-chain $112; see §G5) |
 | G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at 578b006: 3-size live dry quotes verify, impact from base units, no amountIn/OutUsd use; GET /api/oneclick fixture + live match shape; /feed panel and NVDAx route status come from the API; web e2e 128 passed / 0 failed; see §G6) |
-| G7 Solana + signer | PARTIAL: NEAR side verified; Solana leg not built | 2026-11-09T23:57Z | 97382fd | evidence/G7/verifier-20261109T2357Z/ (both gates.md commands fail: anchor absent, solana/ empty, no keeper test:settle-devnet script = H-TOOLCHAIN-SOLANA; NEAR side: trigger tx FCtApD2… → v1.signer-prod.testnet sign (payload_v2 Eddsa, domain_id 1) → SignatureResponse Ed25519 → settlement_signed; preimage event == get_pending_settlement; Ed25519 sig valid vs derived_public_key == config authority; tampered preimage → invalid; rebuild code hash == on-chain CFTfzY4…; cargo test 210/0 incl. sandbox_p2 3/0 + golden vectors; program id PLACEHOLDER, recipient throwaway, #6 stays Settling; see §G7) |
+| G7 Solana + signer (v7) | PASS — release + settle round trip verified from both chains (read-only) | 2026-11-10T16:45Z–16:52Z | 91db9ea | evidence/G7/verifier-v7-20261110T1645Z/ (a) pos 2/3 stored authority == live derived_public_key (HRf3…/APU8…); (b) confirm txs 8XXv…/8hNq… source outlayer, trigger HrpQ… execution_completed + quoter_result + settlement_signed, 0 failed receipts; (c) devnet 5fTi… (Release) + 3cdc… (Settle) finalized err null, ix0 Ed25519SigVerify (pubkey = authority, msg = NEAR preimage) → ix1 ENZa…; PDAs FDUb…/E26i… null; recipient 2.54598, depositor 7.45402; (d) both sigs valid off-chain, 2 negative controls false; explorers: nearblocks 403, solana explorer 429; see §G7) |
+| G7 Solana + signer (v6) | PARTIAL — superseded by G7 (v7) above | 2026-11-09T23:57Z | 97382fd | evidence/G7/verifier-20261109T2357Z/ (both gates.md commands fail: anchor absent, solana/ empty, no keeper test:settle-devnet script = H-TOOLCHAIN-SOLANA; NEAR side: trigger tx FCtApD2… → v1.signer-prod.testnet sign (payload_v2 Eddsa, domain_id 1) → SignatureResponse Ed25519 → settlement_signed; preimage event == get_pending_settlement; Ed25519 sig valid vs derived_public_key == config authority; tampered preimage → invalid; rebuild code hash == on-chain CFTfzY4…; cargo test 210/0 incl. sandbox_p2 3/0 + golden vectors; program id PLACEHOLDER, recipient throwaway, #6 stays Settling; see §G7) |
 | G8 copilot | PASS (fixture) (re-run; earlier FAIL 2b49f42 was docs wording) | 2026-11-09T23:56Z | df4706f | evidence/G8/verifier-20261109T235453Z/ (fixture 10 pass / 0 fail / 1 skip = live; --live without key exit 1; e2e copilot 4/4 with exact "Key missing" banner; README/docs-site say built, no live answer verified, fixture = Phala sample + throwaway key; panel says browser vs server checks; live round trip not performed: H7 key absent, /v1/models HTTP 500) |
 | G1 (v7 additions) | PASS | 2026-11-10T13:34Z–14:05Z | 09c4316 | evidence/G1/verifier-v7-20261110T1334Z/ (unit 318/0, sandbox 5/0, sandbox_p1 5/0, sandbox_p2 3/0, sandbox_v7 4/0, mock-ft 17/0, model.csv OK 87 rows; all 9 v7.rs methods gas-measured, max 8.93 Tgas; 10 owner setters (2 remote.rs, 8 p1/p2) lack a gas row, G11 scope, see §G1) |
 | G10 v7 facts + toolchain | PASS with open items (F-351, F-352, F-353) | 2026-11-10T13:44Z | 09c4316 | evidence/G10/verifier-20261110T1334Z/g10.log (FACTS F-328/329/337/338/339/340–361 present; calendar source+retrieved; solana 2.3.0 / anchor 0.32.1 / forge 1.9.0 == F-340/F-341/F-343; live derived_public_key == F-338) |
 | G7 prep (not G7) | RECORDED: vault deployed + 25 anchor tests | 2026-11-10T13:44Z | 09c4316 | evidence/G7/prep-verifier-20261110T1334Z/ (program ENZa… on devnet, vault PDA HGSF… owned by it; test:unit 7/0, test:anchor 25/0; G7 stays pending: needs v2 on testnet) |
 | G11 v7 contract | PASS with open item (F-352) — re-run after WO-23c; prior FAIL block kept | 2026-11-10T15:47Z–16:12Z | 53f1e63 | evidence/G11/verifier-rerun-20261110T1547Z/ (unit 453/0 incl. tests_p2::deposit_forged_authority_refused, sandbox 5+5+4+2+9+4 = 29/0, mock-ft 17/0, model --v7 OK 132 rows; 81 v7_* + 103 tests_v7/v7b; wasm 734784 B sha256 252a6abe… (unchanged); set_shield_params 2.67 / set_job_config 2.57 Tgas; every non-private change method gas-measured, max 68.94 Tgas; see §G11) |
-| G2b testnet deploy v2 | FAIL (pnpm verify exit 1: 2 unit tests hard-code v1 core id); deploy/code/keys/views all hold | 2026-11-10T16:34Z–16:45Z | 1c4cdb3 | evidence/G2b/verifier-20261110T163415Z/ (rebuild sha256 252a6abe… == view_code == code_hash 3W5bif…; keeper-v2 one FC key, 5 methods; views OK; calendar 287; demo:testnet exit 0; live state drifted to 3 quotes / 3 positions during run (concurrent G7 v2 work); nearblocks 403; see §G2b) |
+| G2b testnet deploy v2 | PASS (re-run after WO-16b; prior FAIL block kept) | 2026-11-10T16:45Z–16:52Z | 91db9ea | evidence/G2b/verifier-rerun-20261110T1645Z/ (pnpm i exit 0; pnpm verify exit 0: keeper 168/0, feed 57/0, x402 9/0, sdk 77/0 + lint/typecheck; demo:testnet exit 0; code_hash 3W5bif…31ey unchanged, contract_version 2.0.0-v7; live state 3 quotes / 4 positions (#2,#3 Closed = G7 v2, expected); see §G2b) |
+| G2b (first run) | FAIL — superseded by re-run above | 2026-11-10T16:34Z–16:45Z | 1c4cdb3 | evidence/G2b/verifier-20261110T163415Z/ (rebuild sha256 252a6abe… == view_code == code_hash 3W5bif…; keeper-v2 one FC key, 5 methods; views OK; calendar 287; demo:testnet exit 0; live state drifted to 3 quotes / 3 positions during run (concurrent G7 v2 work); nearblocks 403; see §G2b) |
+| G14 x402 | PASS (1–2 hold; F-328 keys hold) | 2026-11-10T16:48Z–16:52Z | 91db9ea (clone; tests) / 6ba1b09 (summary) | evidence/G14/verifier-20261110T1645Z/ (borrow tx GcHF… agent1 → nvdax-mock ft_transfer_call → v2 position_opened #4 $10, fee $0.03; relay tx 5VL1… signer x402-relayer, Delegate by agent1 (pk 3zyEty…) → usdc-mock ft_transfer 10000 → nectar.testnet, 0 failed receipts; no ft_transfer event log (mock-ft emits none) — transfer proven by the receipt; agent1 + x402-relayer each 1 FullAccess key; x402 test 9/0; rpc.testnet.near.org returned -429 deprecation, fastnear used; see §G14) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -29,7 +32,54 @@ Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
 
+## G14
+
+### G14 — x402 paid call — PASS — 2026-11-10T16:48Z–16:52Z — clone 91db9ea (tests), summary at 6ba1b09
+Verified evidence/G14/summary.md against the chain, read-only. rpc.testnet.near.org answered `-429 "THIS ENDPOINT IS DEPRECATED"`, so
+the reads used https://rpc.testnet.fastnear.com (the repo's other configured RPC). Logs: evidence/G14/verifier-20261110T1645Z/.
+```
+$ pnpm --filter x402 test → exit 0  # tests 9 # pass 9 # fail 0
+$ EXPERIMENTAL_tx_status GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt sender agent1.nectar.testnet
+  signer agent1 → nvdax-mock ft_transfer_call {receiver nectar-core-v2, amount 1000000, LockCollateralAndBorrow NVDAx borrow 10000000, pre_liq 8000}
+  status SuccessValue, 0 failed receipts
+  nectar-core-v2 position_opened {position_id 4, borrower agent1, units 1000000, debt_usd_e6 10000000, origination_fee 30000, net 9970000, remote false}
+  nectar-core-v2 nft_mint p-4
+$ EXPERIMENTAL_tx_status 5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx sender x402-relayer.nectar.testnet
+  signer x402-relayer → receiver agent1, actions [Delegate]; status SuccessValue, 0 failed receipts
+  delegate_action sender agent1, pk ed25519:3zyEtyWb… (agent1's key), receiver usdc-mock: ft_transfer {receiver nectar.testnet, amount 10000}
+  receipts: agent1 (Delegate) → usdc-mock FunctionCall (pred agent1) SuccessValue → relayer gas refunds
+$ view_access_key_list agent1        → [ed25519:3zyEtyWb2BJzYZdTEsQeBNhnoqrNFw6KeQLjJQE925hm FullAccess]
+$ view_access_key_list x402-relayer  → [ed25519:GVaHZ4FfWf3DnJXLXfnjXN3rDCjiTSfd1KT4GCdmWuXR FullAccess]
+```
+Discrepancy (not a fail): no `ft_transfer` EVENT_JSON in the relay tx — contracts/mock-ft emits no NEP-141 event logs at all; the transfer is
+proven by the successful usdc-mock `ft_transfer` receipt with the decoded args. The 402 → 200 HTTP leg is off-chain (summary/server log only; not re-run).
+**PASS** — (1) borrow tx opened position #4 for $10; (2) relay tx carries agent1's SignedDelegate paying 10000 usdc-mock e6 to nectar.testnet; (3) one FullAccess key each.
+
 ## G2b
+
+### G2b — testnet deploy v2 — RE-RUN — PASS — 2026-11-10T16:45Z–16:52Z — commit 91db9ea
+Fresh clone /tmp/verify-G2b-G7-20261110T164524Z (main 91db9ea, includes WO-16b 12e8347). No secrets. Logs: evidence/G2b/verifier-rerun-20261110T1645Z/.
+```
+$ pnpm i                 → exit 0 (Done in 4.5s, pnpm 10.34.9)
+$ pnpm verify            → exit 0   (= verify:quick [lint, typecheck, pnpm -r test] + scripts/50-verify.sh)
+  services/keeper  # tests 168 # pass 168 # fail 0
+  services/feed    # tests 57  # pass 57  # fail 0    (incl. "repo config defaults" — the GATE_FAIL_G2b test, now green)
+  services/x402    # tests 9   # pass 9   # fail 0
+  packages/sdk     Test Files 6 passed, Tests 77 passed
+$ pnpm demo:testnet      → exit 0
+  account nectar-core-v2.nectar.testnet  version 2.0.0-v7
+  Q_c $15,629.56  R_c $0.00  D_c $0.00  haircut 1000 bps  session open
+  oracle $150.00 (age 306s, STALE)  effective limit 7000 bps
+  pool available $36,500.00 utilised $13,500.00 treasury $49.04
+  quotes #0 $5,000 400 bps · #1 $10,000 250 bps · #2 $629.56 300 bps (all live)
+  positions #0 Open $4,500 · #1 Open $9,000 · #2 Closed · #3 Closed
+$ view_account nectar-core-v2 (final, block 277093894) → code_hash 3W5bifwgurTNyZwHsseLU8NmJxaW5Dt2221CfhvQ31ey (== first run)
+$ contract_version {} → "2.0.0-v7"
+```
+Note: oracle shows STALE (age > max) at read time — the owner price push from the G7 demo is aging; display-only, not a G2b criterion.
+State drift vs first run is the deliberate G7 work (positions #2/#3 Closed, quote #2 drawn). Explorer: not re-opened (403 in first run).
+**PASS** — the only first-run failure (`pnpm verify` exit 1) is fixed; code hash and version unchanged.
+
 
 ### G2b — testnet deploy v2 (nectar-core-v2) — FAIL — 2026-11-10T16:34Z–16:45Z — commit 1c4cdb3
 Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-G2b-20261110T163415Z (HEAD 1c4cdb3); public RPC https://rpc.testnet.near.org, read-only;
@@ -202,6 +252,41 @@ Guesses / confusion a stranger hits:
 Rehearsal verdict: quick start PASS in time; gitleaks clean; claims backed. Final G9 is not yet passable: 11 handoff blockers above, plus the Feed env gap if `agents` is to be claimed.
 
 ## G7
+
+### G7 — Solana + signer (v7) — PASS — 2026-11-10T16:45Z–16:52Z — commit 91db9ea
+Every claim in evidence/G7/v2-roundtrip-summary.md re-derived from public RPC (NEAR rpc.testnet.near.org, Solana api.devnet.solana.com, finalized),
+read-only, no transactions sent. Logs: evidence/G7/verifier-v7-20261110T1645Z/.
+```
+(a) get_position 2 → remote.authority ed25519:HRf3veyfWvAccxvAgkDvp9eCKTuCpfobLVMJ9TVstarz, status Closed, source outlayer, deposit_ref 520805167
+    v1.signer-prod.testnet derived_public_key {path solana-devnet/pos/2, predecessor nectar-core-v2.nectar.testnet, domain_id 1} → HRf3…tarz  MATCH
+    get_position 3 → ed25519:APU8mbdwRLFR884iW2om4pQmP126ueKXCWL2B4JrYXCw, Closed, outlayer, 520805657; derived (pos/3) → APU8…YXCw  MATCH
+(b) 8XXvnBVN… (keeper-v2 confirm_remote_deposit) → outlayer execution_requested 16443 / execution_completed → remote_deposit_confirmed {pos 2, source outlayer} → position_opened
+    8hNqxAdC… (keeper-v2 confirm_remote_deposit) → outlayer 16449 completed → remote_deposit_confirmed {pos 3, source outlayer} → position_opened
+    54eukmJT… (borrower1 ft_transfer_call) → repaid {pos 2, 370440000, remaining 0}
+    DKH57jdP… (borrower1 request_remote_release) → remote_release_signed {pos 2, nonce 0, sig 813709fd…, pubkey HRf3…}
+    7biCvPbA… (keeper-v2 relay_release_result) → remote_release_relayed {pos 2, solana_tx_sig 5fTihnbJ…}
+    HrpQsuMW… (keeper-v2 trigger_preliquidation) → preliq_triggered → quoter_requested → outlayer 16453 execution_completed (wasm 5d90edb8…)
+      → quoter_result fills [q1 250, q2 300, q0 400] → settlement_sign_requested → v1.signer-prod receipts Success → settlement_signed {pos 3, quote 2, nonce 1}
+    all six: status SuccessValue, 0 failed receipts
+(c) 5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv  slot 520805448 err null
+      ix0 Ed25519SigVerify111… (pubkey HRf3…tarz, sig 813709fd…, msg NECTAR_RELEASE_V1|…|pos=2|…|nonce=0|expires=1794332328)  ix1 ENZaNF… "Instruction: Release"
+    3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6  slot 520806179 err null   (== get_pending_settlement(3).solana_tx_sig, status Relayed)
+      ix0 Ed25519SigVerify111… (pubkey APU8…YXCw, sig 2ffb74b9…, msg == stored preimage …|pos=3|quote=2|seize_units=2545980|…|kind=PRELIQ)  ix1 ENZaNF… "Instruction: Settle"
+    getAccountInfo FDUbeLRb… (pos 2 PDA, in release tx keys) → null; E26iv84F… (pos 3 PDA, in settle tx keys) → null   (closed)
+    getTokenAccountsByOwner FtWQZk7K… mint 3Ve8GiDB… → ATA GARN7FTb… 2.54598 (raw 2545980); depositor 2s7mn… 7.45402
+(d) node scripts/verify-ed25519.mjs ed25519:APU8… '<get_pending_settlement 3>'           → signature_valid true
+    node scripts/verify-ed25519.mjs ed25519:HRf3… '{preimage:<release message>, signature_hex}' → signature_valid true
+    negative: release sig vs pos-3 key → false; settle preimage with seize_units+1 → false
+```
+Explorer links (WebFetch): https://explorer.solana.com/tx/3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6?cluster=devnet → HTTP 429;
+https://testnet.nearblocks.io/txns/HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u → HTTP 403. Not opened (listed for judges):
+https://explorer.solana.com/tx/5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv?cluster=devnet,
+https://explorer.solana.com/address/ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW?cluster=devnet, https://testnet.nearblocks.io/txns/8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3,
+https://testnet.nearblocks.io/txns/8hNqxAdC61nAwmTWeUbK5auA4CbB35ppkPcnNX7PYe5C, https://testnet.nearblocks.io/txns/7biCvPbApT6RU7hoxUcKGeMxNX2aG6PWEv79KzPxsz2e.
+Chain data came from RPC; a human browser check of the explorer pages is still open.
+Notes: the price drop 180 → 150 that triggered pre-liquidation is an owner-oracle demo control (disclosed in the summary). Positions #2/#3 are the only remote positions checked.
+**PASS** — (a), (b), (c) hold from chain data; (d) both signatures valid off-chain with negative controls.
+
 
 ### G7 prep — vault deployed + 25 anchor tests — RECORDED (not a G7 PASS) — 2026-11-10T13:44Z — commit 09c4316
 Clone as §G10; PATH += ~/.avm/bin ~/.local/share/solana/install/active_release/bin; SDKROOT=.../MacOSX26.5.sdk (solana/deploy.md:13).

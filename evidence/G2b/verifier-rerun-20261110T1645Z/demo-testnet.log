@@ -1,0 +1,30 @@
+
+> nectar-labs@ demo:testnet /private/tmp/verify-G2b-G7-20261110T164524Z
+> bash scripts/50-verify.sh
+
+
+== contract ==
+account  nectar-core-v2.nectar.testnet   version 2.0.0-v7
+
+== exit capacity NVDAx ==
+Q_c $15,629.56  R_c $0.00  D_c $0.00  haircut 1000 bps  session open
+oracle $150.00 (age 306s, STALE)  effective limit 7000 bps
+
+== pool ==
+available $36,500.00  utilised $13,500.00  treasury $49.04
+
+== quotes ==
+#0  remaining $5,000.00  max discount 400 bps  live
+#1  remaining $10,000.00  max discount 250 bps  live
+#2  remaining $629.56  max discount 300 bps  live
+
+== positions ==
+#0  Open  debt $4,500.00  ltv 3000 bps / pre-liq 7500 bps
+#1  Open  debt $9,000.00  ltv 6000 bps / pre-liq 7500 bps
+#2  Closed  debt $0.00
+#3  Closed  debt $0.00
+
+== explorer ==
+https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet
+https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet
+https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet

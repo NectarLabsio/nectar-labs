@@ -1,0 +1,23 @@
+== 5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv
+slot=520805448 err=null blockTime=1794328741
+ix0 Ed25519SigVerify111111111111111111111111111 accts=0
+ix1 ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW accts=12
+Program ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW invoke [1]
+Program log: Instruction: Release
+Program 11111111111111111111111111111111 success
+Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success
+Program ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW success
+== 3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6
+slot=520806179 err=null blockTime=1794328917
+ix0 Ed25519SigVerify111111111111111111111111111 accts=0
+ix1 ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW accts=14
+Program ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW invoke [1]
+Program log: Instruction: Settle
+Program log: Create
+Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success
+Program 11111111111111111111111111111111 success
+Program log: Initialize the associated token account
+Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success
+Program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA success
+Program ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL success
+Program 11111111111111111111111111111111 success
