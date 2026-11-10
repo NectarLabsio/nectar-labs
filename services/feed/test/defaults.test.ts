@@ -2,12 +2,16 @@
 
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { mkdtempSync } from 'node:fs';
+import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 import { flattenYaml, loadRepoIds } from '../src/repo-config.ts';
+
+// Expected ids come from the same config.yaml the loader reads (D-018: v1 -> v2 is a config change), never a literal.
+const CFG = flattenYaml(readFileSync(fileURLToPath(new URL('../../../packages/config/config.yaml', import.meta.url)), 'utf8'));
+const CORE = CFG.get('accounts.core');
 
 describe('repo config defaults', () => {
   it('flattens nested scalars and strips comments', () => {
@@ -18,12 +22,13 @@ describe('repo config defaults', () => {
   });
   it('reads config.yaml with no env; env overrides; TODO-* is unset', () => {
     const ids = loadRepoIds({});
-    assert.equal(ids.core, 'nectar-core.nectar.testnet');
+    assert.match(CORE ?? '', /^[a-z0-9-]+(\.[a-z0-9-]+)*\.testnet$/);
+    assert.equal(ids.core, CORE);
     assert.equal(ids.usdcMock, 'usdc-mock.nectar.testnet');
     assert.equal(ids.nvdaxMock, 'nvdax-mock.nectar.testnet');
     assert.equal(ids.nvdaxToken, 'nvdax-mock.nectar.testnet');
     assert.equal(loadRepoIds({ CORE_ACCOUNT_ID: 'other.testnet' }).core, 'other.testnet');
-    assert.equal(loadRepoIds({ CORE_ACCOUNT_ID: 'TODO-G2' }).core, 'nectar-core.nectar.testnet');
+    assert.equal(loadRepoIds({ CORE_ACCOUNT_ID: 'TODO-G2' }).core, CORE);
     assert.equal(loadRepoIds({ NECTAR_CONFIG_PATH: '/nonexistent/config.yaml' }).core, null);
   });
 });
