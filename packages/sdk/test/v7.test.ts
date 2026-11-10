@@ -28,6 +28,7 @@ import {
   type ExitCapacity,
 } from "../src/index";
 import { loadPublicConfig } from "../src/config-node";
+import { FEATURE_NAMES } from "../src/v7";
 
 const v1Cap: ExitCapacity = {
   q_usd_e6: "3850000000",
@@ -152,15 +153,29 @@ describe("aggregate capacity (§A1)", () => {
 });
 
 describe("features", () => {
-  it("parses config flags (all false today) and needs v2", () => {
-    const cfg = loadPublicConfig();
-    expect(Object.values(cfg.features).every((v) => v === false)).toBe(true);
-    const f = parseFeatures({ pay_to: true, bogus: true, referrals: "yes" });
+  it("parses flags: only literal true is on, unknown flags ignored, missing → false", () => {
+    const f = parseFeatures({ pay_to: true, bogus: true, referrals: "yes", notes: 1, shields: false });
     expect(f.pay_to).toBe(true);
     expect(f.referrals).toBe(false);
+    expect(f.notes).toBe(false);
+    expect(f.shields).toBe(false);
+    expect(f.multiplier).toBe(false);
+    expect("bogus" in f).toBe(false);
+    expect(Object.keys(f).sort()).toEqual([...FEATURE_NAMES].sort());
+    expect(Object.values(parseFeatures(undefined)).every((v) => v === false)).toBe(true);
+    expect(Object.values(parseFeatures("on")).every((v) => v === false)).toBe(true);
+  });
+  it("featureOn needs a v2 contract", () => {
+    const f = parseFeatures({ pay_to: true });
     expect(featureOn(f, "v2", "pay_to")).toBe(true);
+    expect(featureOn(f, "v2", "referrals")).toBe(false);
     expect(featureOn(f, "v1", "pay_to")).toBe(false);
     expect(featureOn(f, null, "pay_to")).toBe(false);
+  });
+  it("live config.yaml features parse to booleans (values not pinned)", () => {
+    const cfg = loadPublicConfig();
+    expect(Object.keys(cfg.features).sort()).toEqual([...FEATURE_NAMES].sort());
+    for (const v of Object.values(cfg.features)) expect(typeof v).toBe("boolean");
   });
 });
 

@@ -37,6 +37,7 @@ import {
   vaultPda,
   vaultTokensPda,
 } from "../src/index";
+import { parseConfig, toPublicConfig } from "../src/config";
 import { loadPublicConfig } from "../src/config-node";
 
 interface Vectors {
@@ -243,12 +244,30 @@ describe("NEAR remote lifecycle builders (interface-v7 §B)", () => {
     expect(formatCountdown(1740)).toBe("29:00");
     expect(formatLamports(1_746_960n)).toBe("0.00174696 SOL");
   });
-  it("config: Solana vault ids are null while TODO-G7", () => {
+  it("config: Solana vault ids — TODO → null, vault_program wins over program_id, defaults", () => {
+    const base = (solana: string) =>
+      toPublicConfig(parseConfig(`network: testnet\naccounts: { owner: o.testnet, core: TODO-G2, usdc_mock: u.testnet, nvdax_mock: n.testnet, keeper: k.testnet, demo: {} }\ncollateral: {}\noracle: { source: x }\n${solana}`));
+    const pending = base("solana: { vault_program: TODO-G7, program_id: TODO-G7, mint: TODO-G7 }").solana;
+    expect(pending).toEqual({ cluster: "devnet", vaultProgram: null, mint: null, decimals: 6 });
+    const set = base("solana: { vault_program: VaultProg111, program_id: OldProg111, mint: Mint111, mint_decimals: 9 }").solana;
+    expect(set).toEqual({ cluster: "devnet", vaultProgram: "VaultProg111", mint: "Mint111", decimals: 9 });
+    expect(base("solana: { program_id: OldProg111 }").solana.vaultProgram).toBe("OldProg111");
+    expect(base("solana: { vault_program: '' }").solana.vaultProgram).toBeNull();
+    const none = base("");
+    expect(none.solana).toEqual({ cluster: "devnet", vaultProgram: null, mint: null, decimals: 6 });
+    expect(none.v7.reservation_expiry_s).toBe(1800);
+    expect(none.v7.remote_path_prefix).toBe("solana-devnet/pos/");
+    expect(none.core).toBeNull();
+    expect(none.pending).toContain("accounts.core");
+    expect(none.features.solana_remote).toBe(false);
+  });
+  it("config: live config.yaml solana block parses with correct types (values not pinned)", () => {
     const c = loadPublicConfig();
     expect(c.solana.cluster).toBe("devnet");
-    expect(c.solana.decimals).toBe(6);
-    expect(c.v7.reservation_expiry_s).toBe(1800);
-    expect(c.v7.remote_path_prefix).toBe("solana-devnet/pos/");
-    expect(c.features.solana_remote).toBe(false);
+    expect(typeof c.solana.decimals).toBe("number");
+    for (const v of [c.solana.vaultProgram, c.solana.mint]) expect(v === null || (typeof v === "string" && !v.startsWith("TODO-"))).toBe(true);
+    expect(typeof c.v7.reservation_expiry_s).toBe("number");
+    expect(typeof c.v7.remote_path_prefix).toBe("string");
+    expect(typeof c.features.solana_remote).toBe("boolean");
   });
 });
