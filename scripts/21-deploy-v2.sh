@@ -82,6 +82,8 @@ owner_call set_signer_config "$(jq -cn --arg a "$(cfg .signer.account)" '{accoun
 VAULT=$(cfg .solana.vault_program)
 [ "$VAULT" != "TODO-G7" ] && owner_call set_remote_chain "$(jq -cn --arg v "$VAULT" '{symbol:"NVDAx", remote_chain:{chain_id:"solana-devnet", vault_program:$v, mpc_domain_id:1}}')"
 owner_call set_allow_keeper_deposit_attestation '{"allow":true}'
+# Nectar Reserve (WO-23b, D-024): discount above every demo quote ceiling (250/400 bps), notice pinned to the PRD's 7 days.
+owner_call set_reserve_params '{"symbol":"NVDAx","discount_bps":600,"notice_ns":"604800000000000"}'
 owner_call fund_gas_reserve '{}' '30 Tgas' "$GAS_RESERVE_NEAR NEAR"
 # Quoter pin + vault_read job config are set by scripts/30-quoter-publish.sh pin (after WO-24 publishes a new version_key).
 
