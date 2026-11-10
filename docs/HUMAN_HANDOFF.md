@@ -13,7 +13,7 @@ default applied, disclosed in README).
 ## H-TOOLCHAIN — pinned P0 toolchain                status: DONE 2026-11-10   (Kunal asked; installed by Claude Code)
 Installed: Rust 1.95.0, near-cli-rs 0.31.1, cargo-near 0.23.0, gitleaks 8.30.1, yq v4.54.3, pnpm 10.34.9. Log: evidence/G0/toolchain.log.
 
-## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1   status: IN PROGRESS 2026-11-10 (Kunal asked; solana-cli 4.3.2 installed; Anchor via avm installing)   needed by: P2 / G7 (not P0)
+## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1   status: DONE 2026-11-10 (Kunal asked; installed by Claude Code: anchor-cli 0.32.1 via avm, active solana-cli 2.3.0 = Anchor CI pin C-017; Anza stable 4.3.2 also present; logs evidence/G0/toolchain-*)   needed by: P2 / G7 (not P0)
 Why a human: the auto-mode classifier refused `scripts/01-toolchain.sh --with-solana` (Anza installer + `cargo install avm`).
 What Kunal does (≈10 min, mostly compile): `cd /Volumes/T7/nectar-labs && bash scripts/01-toolchain.sh --with-solana 2>&1 | tee evidence/G0/toolchain-solana.log`,
   or add `"Bash(bash scripts/01-toolchain.sh*)"` to `permissions.allow` in `.claude/settings.json`. Reply `H-TOOLCHAIN-SOLANA done`.

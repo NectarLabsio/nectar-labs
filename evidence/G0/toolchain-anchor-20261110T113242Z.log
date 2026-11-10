@@ -214,3 +214,9 @@ The latest cargo build-sbf platform-tools (v1.58) is not installed. Run `cargo b
 Anchor v0.32.1 does not have signed releases, skipping checks
 Now using anchor version 0.32.1.
 Now using anchor version 0.32.1.
+  ✨ 2.3.0 initialized
+Downloading https://github.com/anza-xyz/platform-tools/releases/download/v1.51.1/platform-tools-osx-aarch64.tar.bz2
+Extracting /Users/lemmalabs/.cache/solana/v1.51.1/platform-tools.partial/platform-tools-osx-aarch64.tar.bz2
+Installed platform-tools v1.51.1 to /Users/lemmalabs/.cache/solana/v1.51.1/platform-tools
+anchor-cli 0.32.1
+solana-cli 2.3.0 (src:a2e21dda; feat:3640012085, client:Agave)
