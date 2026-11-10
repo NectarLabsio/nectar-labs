@@ -71,7 +71,7 @@ export function loadUpdaterConfig(env: NodeJS.ProcessEnv = process.env): Updater
       maxFeeYocto: BigInt(maxFee),
       gasTgas: n('ORACLE_UPDATER_GAS_TGAS', 150, 10, 300),
       intervalMs: n('ORACLE_UPDATER_INTERVAL_MS', 30_000, 1_000, 3_600_000),
-      rpcUrl: pick('NEAR_RPC_URL', 'https://rpc.testnet.near.org'),
+      rpcUrl: pick('NEAR_RPC_URL', 'https://test.rpc.fastnear.com'),
       accountId: env.ORACLE_UPDATER_ACCOUNT_ID as string,
       keyPath: expandHome(env.ORACLE_UPDATER_KEY_PATH as string),
       apiKeyPath: expandHome(env.PYTH_API_KEY_PATH as string),

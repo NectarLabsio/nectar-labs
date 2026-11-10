@@ -25,7 +25,7 @@ const home = (p: string): string => (p.startsWith('~/') ? resolve(homedir(), p.s
 
 function main(): void {
   const log = createLogger('feed');
-  const rpc = unset(env.NEAR_RPC_URL) ? 'https://rpc.testnet.near.org' : (env.NEAR_RPC_URL as string);
+  const rpc = unset(env.NEAR_RPC_URL) ? 'https://test.rpc.fastnear.com' : (env.NEAR_RPC_URL as string);
   const pollMs = Number(env.FEED_POLL_MS ?? 10_000);
   const port = Number(env.FEED_PORT ?? 8788);
   const host = unset(env.FEED_HOST) ? '127.0.0.1' : (env.FEED_HOST as string);

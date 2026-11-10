@@ -11,7 +11,7 @@ export const NETWORK = 'near:testnet' as const;
 /** 0.01 mock USDC (6 decimals) in smallest units. */
 export const PRICE_AMOUNT = '10000';
 export const ROUTE = 'GET /api/feed/export.csv';
-export const DEFAULT_RPC = 'https://rpc.testnet.fastnear.com';
+export const DEFAULT_RPC = 'https://test.rpc.fastnear.com';
 
 const DEFAULT_CONFIG = fileURLToPath(new URL('../../../packages/config/config.yaml', import.meta.url));
 const placeholder = (v: string | undefined): boolean => v === undefined || v.trim() === '' || v.startsWith('TODO-') || v === 'null';
