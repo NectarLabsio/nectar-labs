@@ -82,6 +82,7 @@ emits `pay_to_failed`. `withdraw_claimable()` (1 yocto) pays all of the caller's
   `seize_units` to the recipient's ATA and the remainder to the depositor, and closes the position.
 - `release(position_id, nonce: u64, expires: i64)`: the same verification over the rebuilt `NECTAR_RELEASE_V1` with `recipient = position.depositor`. It pays all
   units to the depositor and closes the position. **`cancel_position` does not exist.**
+- **v2 switch (WO-20 accepted):** point `accounts.core` at `nectar-core-v2.nectar.testnet`; web/sdk detect v2 via `contract_version()`. Unconfirmed until G1b: v2 event field names other than `referrer_paid`, pay_to memo cap 256 chars.
 - Program id: base58, written to `packages/config/config.yaml` `solana.vault_program` by the deploy script.
 ### Keeper (WO-16, after WO-14 merges; delta after WO-21)
 On `settlement_signed` / `remote_release_signed` it builds `[Ed25519 verify ix (F-082 bytes by hand, F-186), settle|release ix]`, sends it to devnet with the
