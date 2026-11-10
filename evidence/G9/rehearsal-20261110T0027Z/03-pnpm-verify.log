@@ -1,0 +1,1104 @@
+
+> nectar-labs@ verify /private/tmp/verify-G9pre-1794270192
+> pnpm verify:quick && bash scripts/50-verify.sh
+
+
+> nectar-labs@ verify:quick /private/tmp/verify-G9pre-1794270192
+> pnpm lint && pnpm typecheck && pnpm test
+
+
+> nectar-labs@ lint /private/tmp/verify-G9pre-1794270192
+> pnpm -r --if-present lint
+
+Scope: 6 of 7 workspace projects
+packages/ui lint$ node scripts/check-no-literal-colors.mjs
+packages/ui lint: no literal colors outside tokens.css
+packages/ui lint: Done
+apps/web lint$ node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs
+apps/web lint: no literal colors outside tokens.css
+apps/web lint: no hackathon branding in UI sources
+apps/web lint: Done
+
+> nectar-labs@ typecheck /private/tmp/verify-G9pre-1794270192
+> pnpm -r --if-present typecheck
+
+Scope: 6 of 7 workspace projects
+apps/docs-site typecheck$ tsc
+packages/sdk typecheck$ tsc --noEmit -p tsconfig.json
+packages/ui typecheck$ tsc --noEmit -p tsconfig.json
+services/feed typecheck$ tsc --noEmit -p tsconfig.json
+packages/sdk typecheck: Done
+services/keeper typecheck$ tsc --noEmit -p tsconfig.json
+apps/docs-site typecheck: Done
+packages/ui typecheck: Done
+services/feed typecheck: Done
+services/keeper typecheck: Done
+apps/web typecheck$ next typegen && tsc --noEmit -p tsconfig.json
+apps/web typecheck: Generating route types...
+apps/web typecheck: ✓ Types generated successfully
+apps/web typecheck: Done
+
+> nectar-labs@ test /private/tmp/verify-G9pre-1794270192
+> pnpm -r --if-present test
+
+Scope: 6 of 7 workspace projects
+packages/sdk test$ vitest run
+services/feed test$ node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+services/keeper test$ node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+services/feed test: TAP version 13
+services/keeper test: TAP version 13
+services/keeper test: # Subtest: health maths vs contracts/nectar-core/tests/model.csv
+services/keeper test:     # Subtest: CSV has limit rows and the health + limit columns
+services/keeper test:     ok 1 - CSV has limit rows and the health + limit columns
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.869709
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: demo_borrow
+services/keeper test:     ok 2 - health: demo_borrow
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.708917
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: demo_borrow
+services/keeper test:     ok 3 - limit: demo_borrow
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.262125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: demo_price_155
+services/keeper test:     ok 4 - health: demo_price_155
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.283625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: demo_price_155
+services/keeper test:     ok 5 - limit: demo_price_155
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.320042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: demo_price_140
+services/keeper test:     ok 6 - health: demo_price_140
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.199542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: demo_price_140
+services/keeper test:     ok 7 - limit: demo_price_140
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.158209
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: open_session_counts_depth
+services/keeper test:     ok 8 - health: open_session_counts_depth
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.356208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: open_session_counts_depth
+services/keeper test:     ok 9 - limit: open_session_counts_depth
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.426709
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: zero_capacity
+services/keeper test:     ok 10 - health: zero_capacity
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.889708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: zero_capacity
+services/keeper test:     ok 11 - limit: zero_capacity
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.216666
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: reserve_only_no_quotes
+services/keeper test:     ok 12 - health: reserve_only_no_quotes
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.080917
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: reserve_only_no_quotes
+services/keeper test:     ok 13 - limit: reserve_only_no_quotes
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.09075
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: below_static_no_premium
+services/keeper test:     ok 14 - health: below_static_no_premium
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.065083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: below_static_no_premium
+services/keeper test:     ok 15 - limit: below_static_no_premium
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.0575
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: above_pre_liq
+services/keeper test:     ok 16 - health: above_pre_liq
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.057208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: above_pre_liq
+services/keeper test:     ok 17 - limit: above_pre_liq
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.059625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: value_zero
+services/keeper test:     ok 18 - health: value_zero
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.146917
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: value_zero
+services/keeper test:     ok 19 - limit: value_zero
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.053709
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_00
+services/keeper test:     ok 20 - health: grid_limit_00
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.046542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_00
+services/keeper test:     ok 21 - limit: grid_limit_00
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.050208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_01
+services/keeper test:     ok 22 - health: grid_limit_01
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.040083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_01
+services/keeper test:     ok 23 - limit: grid_limit_01
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.047542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_02
+services/keeper test:     ok 24 - health: grid_limit_02
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.037791
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_02
+services/keeper test:     ok 25 - limit: grid_limit_02
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.047416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_03
+services/keeper test:     ok 26 - health: grid_limit_03
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.038042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_03
+services/keeper test:     ok 27 - limit: grid_limit_03
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.124333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_04
+services/keeper test:     ok 28 - health: grid_limit_04
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.07725
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_04
+services/keeper test:     ok 29 - limit: grid_limit_04
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.059459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_05
+services/keeper test:     ok 30 - health: grid_limit_05
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.044042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_05
+services/keeper test:     ok 31 - limit: grid_limit_05
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.0465
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_06
+services/keeper test:     ok 32 - health: grid_limit_06
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.04525
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_06
+services/keeper test:     ok 33 - limit: grid_limit_06
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.041208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_07
+services/keeper test:     ok 34 - health: grid_limit_07
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.036833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_07
+services/keeper test:     ok 35 - limit: grid_limit_07
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.167833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_08
+services/keeper test:     ok 36 - health: grid_limit_08
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.045209
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_08
+services/keeper test:     ok 37 - limit: grid_limit_08
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.049084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_09
+services/keeper test:     ok 38 - health: grid_limit_09
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.16275
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_09
+services/keeper test:     ok 39 - limit: grid_limit_09
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.112459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_10
+services/keeper test:     ok 40 - health: grid_limit_10
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.054459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_10
+services/keeper test:     ok 41 - limit: grid_limit_10
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.045875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_11
+services/keeper test:     ok 42 - health: grid_limit_11
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.045083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_11
+services/keeper test:     ok 43 - limit: grid_limit_11
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.041208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_12
+services/keeper test:     ok 44 - health: grid_limit_12
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.039209
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_12
+services/keeper test:     ok 45 - limit: grid_limit_12
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.064292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_13
+services/keeper test:     ok 46 - health: grid_limit_13
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.043041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_13
+services/keeper test:     ok 47 - limit: grid_limit_13
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.045416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_14
+services/keeper test:     ok 48 - health: grid_limit_14
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.0415
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_14
+services/keeper test:     ok 49 - limit: grid_limit_14
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.045541
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_15
+services/keeper test:     ok 50 - health: grid_limit_15
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.038584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_15
+services/keeper test:     ok 51 - limit: grid_limit_15
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.125625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_16
+services/keeper test:     ok 52 - health: grid_limit_16
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.098125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_16
+services/keeper test:     ok 53 - limit: grid_limit_16
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.153458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_17
+services/keeper test:     ok 54 - health: grid_limit_17
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.071958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_17
+services/keeper test:     ok 55 - limit: grid_limit_17
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.110167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_18
+services/keeper test:     ok 56 - health: grid_limit_18
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.066833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_18
+services/keeper test:     ok 57 - limit: grid_limit_18
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.059542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_19
+services/keeper test:     ok 58 - health: grid_limit_19
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.056083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_19
+services/keeper test:     ok 59 - limit: grid_limit_19
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.056709
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_20
+services/keeper test:     ok 60 - health: grid_limit_20
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.049041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_20
+services/keeper test:     ok 61 - limit: grid_limit_20
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.052083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_21
+services/keeper test:     ok 62 - health: grid_limit_21
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.058708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_21
+services/keeper test:     ok 63 - limit: grid_limit_21
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_22
+services/keeper test:     ok 64 - health: grid_limit_22
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.04675
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_22
+services/keeper test:     ok 65 - limit: grid_limit_22
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.120708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_23
+services/keeper test:     ok 66 - health: grid_limit_23
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.093833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_23
+services/keeper test:     ok 67 - limit: grid_limit_23
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.066792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: every limit row was checked
+services/keeper test:     ok 68 - every limit row was checked
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.136208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..68
+services/keeper test: ok 1 - health maths vs contracts/nectar-core/tests/model.csv
+services/keeper test:   ---
+services/keeper test:   duration_ms: 13.465084
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: health maths edge cases
+services/keeper test:     # Subtest: V == 0 with debt is infinitely leveraged and breached
+services/keeper test:     ok 1 - V == 0 with debt is infinitely leveraged and breached
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.178292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: rejects negatives and bad divisors
+services/keeper test:     ok 2 - rejects negatives and bad divisors
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.492167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: closed session forces D_c = 0 and uses the weekend haircut
+services/keeper test:     ok 3 - closed session forces D_c = 0 and uses the weekend haircut
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.114125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 2 - health maths edge cases
+services/keeper test:   ---
+services/keeper test:   duration_ms: 0.92725
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/feed test: # Subtest: NEP-297 parsing
+services/feed test:     # Subtest: accepts nectar events and rejects everything else with a reason
+services/feed test:     ok 1 - accepts nectar events and rejects everything else with a reason
+services/feed test:       ---
+services/feed test:       duration_ms: 2.026541
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 1 - NEP-297 parsing
+services/feed test:   ---
+services/feed test:   duration_ms: 3.186625
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: indexer store
+services/feed test:     # Subtest: ingests logs idempotently (restart / replay safe)
+services/feed test:     ok 1 - ingests logs idempotently (restart / replay safe)
+services/feed test:       ---
+services/feed test:       duration_ms: 2.909
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: view polling writes snapshots, quotes and Open→Settling transitions
+services/feed test:     ok 2 - view polling writes snapshots, quotes and Open→Settling transitions
+services/feed test:       ---
+services/feed test:       duration_ms: 3.121125
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: backs off on RPC failure and records the error
+services/feed test:     ok 3 - backs off on RPC failure and records the error
+services/feed test:       ---
+services/feed test:       duration_ms: 2.807375
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: tx-status source feeds receipt logs once per tx
+services/feed test:     ok 4 - tx-status source feeds receipt logs once per tx
+services/feed test:       ---
+services/feed test:       duration_ms: 1.363083
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 2 - indexer store
+services/feed test:   ---
+services/feed test:   duration_ms: 10.740042
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/keeper test: # Subtest: testnet integration (read-only)
+services/keeper test: ok 3 - testnet integration (read-only) # SKIP set NECTAR_IT=1 and CORE_ACCOUNT_ID (TODO-G2)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 0.516167
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/feed test: # Subtest: REST API
+services/feed test:     # Subtest: serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+services/feed test:     ok 1 - serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+services/feed test:       ---
+services/feed test:       duration_ms: 105.261209
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: healthz is 503 when the indexer has not polled recently
+services/feed test:     ok 2 - healthz is 503 when the indexer has not polled recently
+services/feed test:       ---
+services/feed test:       duration_ms: 2.812167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: openapi.yaml documents exactly the served routes
+services/feed test:     ok 3 - openapi.yaml documents exactly the served routes
+services/feed test:       ---
+services/feed test:       duration_ms: 1.059708
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..3
+services/feed test: ok 3 - REST API
+services/feed test:   ---
+services/feed test:   duration_ms: 109.916958
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/keeper test: # Subtest: keeper loop
+services/keeper test:     # Subtest: triggers only Open + triggerable + fresh positions, paging through list_positions
+services/keeper test:     ok 1 - triggers only Open + triggerable + fresh positions, paging through list_positions
+services/keeper test:       ---
+services/keeper test:       duration_ms: 9.312458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: backs off per position after a failed call, persisted across restart
+services/keeper test:     ok 2 - backs off per position after a failed call, persisted across restart
+services/keeper test:       ---
+services/keeper test:       duration_ms: 10.01825
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: marks runs interrupted by a crash as failed on restart
+services/keeper test:     ok 3 - marks runs interrupted by a crash as failed on restart
+services/keeper test:       ---
+services/keeper test:       duration_ms: 8.752833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: logs health_mismatch when contract verdict disagrees with local maths, and still follows the contract
+services/keeper test:     ok 4 - logs health_mismatch when contract verdict disagrees with local maths, and still follows the contract
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.261333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: RPC outage: tick fails, consecutive errors grow, delay backs off, healthz degrades
+services/keeper test:     ok 5 - RPC outage: tick fails, consecutive errors grow, delay backs off, healthz degrades
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.298542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: logs JSON lines with no address fields
+services/keeper test:     ok 6 - logs JSON lines with no address fields
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.208875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..6
+services/keeper test: ok 4 - keeper loop
+services/keeper test:   ---
+services/keeper test:   duration_ms: 38.265625
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: backoff and method allowlist
+services/keeper test:     # Subtest: doubles up to the cap; jitter only shortens
+services/keeper test:     ok 1 - doubles up to the cap; jitter only shortens
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.017834
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: the writer refuses any method outside the function-call key scope
+services/keeper test:     ok 2 - the writer refuses any method outside the function-call key scope
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.593833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..2
+services/keeper test: ok 5 - backoff and method allowlist
+services/keeper test:   ---
+services/keeper test:   duration_ms: 2.135375
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: key file
+services/keeper test:     # Subtest: loads a 0600 near-cli credentials file
+services/keeper test:     ok 1 - loads a 0600 near-cli credentials file
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.793542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses group/world-readable files
+services/keeper test:     ok 2 - refuses group/world-readable files
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.8735
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses missing, non-JSON, keyless and wrong-account files without echoing contents
+services/keeper test:     ok 3 - refuses missing, non-JSON, keyless and wrong-account files without echoing contents
+services/keeper test:       ---
+services/keeper test:       duration_ms: 90.2915
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 6 - key file
+services/keeper test:   ---
+services/keeper test:   duration_ms: 94.269834
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: config
+services/keeper test:     # Subtest: treats TODO-G2 ids as unset
+services/keeper test:     ok 1 - treats TODO-G2 ids as unset
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.355875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: parses ids, defaults and the key path
+services/keeper test:     ok 2 - parses ids, defaults and the key path
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.441083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..2
+services/keeper test: ok 7 - config
+services/keeper test:   ---
+services/keeper test:   duration_ms: 1.001458
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle updater config (gating)
+services/keeper test:     # Subtest: is disabled without PYTH_API_KEY_PATH
+services/keeper test:     ok 1 - is disabled without PYTH_API_KEY_PATH
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.029208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: is disabled without the updater account or key path, or with TODO placeholders
+services/keeper test:     ok 2 - is disabled without the updater account or key path, or with TODO placeholders
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.334083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: is disabled without feed ids, with a malformed id, or when reusing the keeper account
+services/keeper test:     ok 3 - is disabled without feed ids, with a malformed id, or when reusing the keeper account
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.605
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: enabled config has the documented defaults and normalised ids
+services/keeper test:     ok 4 - enabled config has the documented defaults and normalised ids
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.767042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: createOracleUpdater refuses a world-readable API key file
+services/keeper test:     ok 5 - createOracleUpdater refuses a world-readable API key file
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.311084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: createOracleUpdater builds an updater when everything is present (no network)
+services/keeper test:     ok 6 - createOracleUpdater builds an updater when everything is present (no network)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.61475
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..6
+services/keeper test: ok 8 - oracle updater config (gating)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 18.519792
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle updater run (fixture)
+services/keeper test:     # Subtest: parses the Hermes hex update
+services/keeper test:     ok 1 - parses the Hermes hex update
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.887333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+services/keeper test:     ok 2 - fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.435333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: honours a custom header and raw scheme
+services/keeper test:     ok 3 - honours a custom header and raw scheme
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.096083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: 401 → logged failure with status, no push, key never logged, backoff grows
+services/keeper test:     ok 4 - 401 → logged failure with status, no push, key never logged, backoff grows
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.217667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: non-200 bodies echoing the key are redacted
+services/keeper test:     ok 5 - non-200 bodies echoing the key are redacted
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.803958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses a fee above the cap and a non-U128 fee
+services/keeper test:     ok 6 - refuses a fee above the cap and a non-U128 fee
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.114916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a failed update_price_feeds surfaces as an error
+services/keeper test:     ok 7 - a failed update_price_feeds surfaces as an error
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.636166
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: redact ignores tiny secrets
+services/keeper test:     ok 8 - redact ignores tiny secrets
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.091916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..8
+services/keeper test: ok 9 - oracle updater run (fixture)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 14.094791
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: startup full-access refusal
+services/keeper test:     # Subtest: refuses a FullAccess key with a clear message
+services/keeper test:     ok 1 - refuses a FullAccess key with a clear message
+services/keeper test:       ---
+services/keeper test:       duration_ms: 13.310542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: accepts function-call keys (limited and unlimited)
+services/keeper test:     ok 2 - accepts function-call keys (limited and unlimited)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.430542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: does not refuse when the key cannot be read (RPC down); healthz reports it
+services/keeper test:     ok 3 - does not refuse when the key cannot be read (RPC down); healthz reports it
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.816416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 10 - startup full-access refusal
+services/keeper test:   ---
+services/keeper test:   duration_ms: 32.989375
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: 1..10
+services/keeper test: # tests 101
+services/keeper test: # suites 10
+services/keeper test: # pass 101
+services/keeper test: # fail 0
+services/keeper test: # cancelled 0
+services/keeper test: # skipped 0
+services/keeper test: # todo 0
+services/keeper test: # duration_ms 507.882125
+services/keeper test: Done
+services/feed test: # Subtest: Feed MCP (in-memory transport)
+services/feed test:     # Subtest: lists exactly the four read-only tools
+services/feed test:     ok 1 - lists exactly the four read-only tools
+services/feed test:       ---
+services/feed test:       duration_ms: 28.080458
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+services/feed test:     ok 2 - get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+services/feed test:       ---
+services/feed test:       duration_ms: 8.790875
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: list_quotes never returns buyer identities
+services/feed test:     ok 3 - list_quotes never returns buyer identities
+services/feed test:       ---
+services/feed test:       duration_ms: 7.055291
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: preview_borrow relays the contract view; refuses without live views
+services/feed test:     ok 4 - preview_borrow relays the contract view; refuses without live views
+services/feed test:       ---
+services/feed test:       duration_ms: 11.903417
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: explain_limit renders the D-009 formula with live numbers and the contract check
+services/feed test:     ok 5 - explain_limit renders the D-009 formula with live numbers and the contract check
+services/feed test:       ---
+services/feed test:       duration_ms: 24.394375
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: DB-only mode serves from the Feed store; unknown symbol is a tool error
+services/feed test:     ok 6 - DB-only mode serves from the Feed store; unknown symbol is a tool error
+services/feed test:       ---
+services/feed test:       duration_ms: 3.859541
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: usd() formats e6 amounts
+services/feed test:     ok 7 - usd() formats e6 amounts
+services/feed test:       ---
+services/feed test:       duration_ms: 0.255416
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..7
+services/feed test: ok 4 - Feed MCP (in-memory transport)
+services/feed test:   ---
+services/feed test:   duration_ms: 85.810084
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: Feed MCP (Streamable HTTP, stateless)
+services/feed test:     # Subtest: serves tools/list and tools/call over POST /mcp
+services/feed test:     ok 1 - serves tools/list and tools/call over POST /mcp
+services/feed test:       ---
+services/feed test:       duration_ms: 89.030125
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 5 - Feed MCP (Streamable HTTP, stateless)
+services/feed test:   ---
+services/feed test:   duration_ms: 89.495875
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: neardata block shape (captured fixture)
+services/feed test:     # Subtest: reads the height and extracts only nectar-core receipts
+services/feed test:     ok 1 - reads the height and extracts only nectar-core receipts
+services/feed test:       ---
+services/feed test:       duration_ms: 1.551416
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: skips failed receipts
+services/feed test:     ok 2 - skips failed receipts
+services/feed test:       ---
+services/feed test:       duration_ms: 0.78025
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 6 - neardata block shape (captured fixture)
+services/feed test:   ---
+services/feed test:   duration_ms: 4.799042
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: NeardataSource
+services/feed test:     # Subtest: ingests the event, advances the cursor, and is idempotent on replay
+services/feed test:     ok 1 - ingests the event, advances the cursor, and is idempotent on replay
+services/feed test:       ---
+services/feed test:       duration_ms: 3.452292
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: starts at the final block without a cursor or start height, and caps blocks per poll
+services/feed test:     ok 2 - starts at the final block without a cursor or start height, and caps blocks per poll
+services/feed test:       ---
+services/feed test:       duration_ms: 4.834292
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: rejects a block whose height does not match the request
+services/feed test:     ok 3 - rejects a block whose height does not match the request
+services/feed test:       ---
+services/feed test:       duration_ms: 3.048
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: a Neardata outage is a poll error with backoff, not a crash
+services/feed test:     ok 4 - a Neardata outage is a poll error with backoff, not a crash
+services/feed test:       ---
+services/feed test:       duration_ms: 1.2595
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 7 - NeardataSource
+services/feed test:   ---
+services/feed test:   duration_ms: 13.437958
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click recorded fixtures (F-062)
+services/feed test:     # Subtest: the recorded live dry quotes verify with the SDK manager key
+services/feed test:     ok 1 - the recorded live dry quotes verify with the SDK manager key
+services/feed test:       ---
+services/feed test:       duration_ms: 68.446167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: any tampering breaks the signature
+services/feed test:     ok 2 - any tampering breaks the signature
+services/feed test:       ---
+services/feed test:       duration_ms: 6.912834
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: the token list has no NVDA route (F-063)
+services/feed test:     ok 3 - the token list has no NVDA route (F-063)
+services/feed test:       ---
+services/feed test:       duration_ms: 0.534167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..3
+services/feed test: ok 8 - 1Click recorded fixtures (F-062)
+services/feed test:   ---
+services/feed test:   duration_ms: 77.056458
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click helpers
+services/feed test:     # Subtest: toE6 parses decimal strings without floats
+services/feed test:     ok 1 - toE6 parses decimal strings without floats
+services/feed test:       ---
+services/feed test:       duration_ms: 0.719917
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: unitsForUsd sizes the notional in base units
+services/feed test:     ok 2 - unitsForUsd sizes the notional in base units
+services/feed test:       ---
+services/feed test:       duration_ms: 0.202916
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: buildDryQuote always sets dry:true and INTENTS rails
+services/feed test:     ok 3 - buildDryQuote always sets dry:true and INTENTS rails
+services/feed test:       ---
+services/feed test:       duration_ms: 1.643541
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: sizes are 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD (default $1,000)
+services/feed test:     ok 4 - sizes are 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD (default $1,000)
+services/feed test:       ---
+services/feed test:       duration_ms: 1.180792
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 9 - 1Click helpers
+services/feed test:   ---
+services/feed test:   duration_ms: 4.722042
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click impact math (base units, C-014)
+services/feed test:     # Subtest: rate_e6 handles decimals 24 in / 6 out
+services/feed test:     ok 1 - rate_e6 handles decimals 24 in / 6 out
+services/feed test:       ---
+services/feed test:       duration_ms: 0.458542
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: rate_e6 handles decimals 6 in / 24 out (inverse direction)
+services/feed test:     ok 2 - rate_e6 handles decimals 6 in / 24 out (inverse direction)
+services/feed test:       ---
+services/feed test:       duration_ms: 0.494792
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: impact_bps floors, is 0 for the reference and for better rates
+services/feed test:     ok 3 - impact_bps floors, is 0 for the reference and for better rates
+services/feed test:       ---
+services/feed test:       duration_ms: 0.409166
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..3
+services/feed test: ok 10 - 1Click impact math (base units, C-014)
+services/feed test:   ---
+services/feed test:   duration_ms: 1.665208
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click client is dry-only (Q-007)
+services/feed test:     # Subtest: refuses a non-dry body before any network call
+services/feed test:     ok 1 - refuses a non-dry body before any network call
+services/feed test:       ---
+services/feed test:       duration_ms: 0.879958
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 11 - 1Click client is dry-only (Q-007)
+services/feed test:   ---
+services/feed test:   duration_ms: 0.986417
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click sampler (3 sizes)
+services/feed test:     # Subtest: NVDAx: no_route from the token list, no quote sent; ref pair: verified 3-size set from base units
+services/feed test:     ok 1 - NVDAx: no_route from the token list, no quote sent; ref pair: verified 3-size set from base units
+services/feed test:       ---
+services/feed test:       duration_ms: 67.098667
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: NVDAx becomes "route" (and is sampled) as soon as the token list carries it
+services/feed test:     ok 2 - NVDAx becomes "route" (and is sampled) as soon as the token list carries it
+services/feed test:       ---
+services/feed test:       duration_ms: 21.745333
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: drops the whole set when one of the three signatures does not verify
+services/feed test:     ok 3 - drops the whole set when one of the three signatures does not verify
+services/feed test:       ---
+services/feed test:       duration_ms: 22.884458
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: drops a set whose response does not echo the request (validly signed but for another amount)
+services/feed test:     ok 4 - drops a set whose response does not echo the request (validly signed but for another amount)
+services/feed test:       ---
+services/feed test:       duration_ms: 21.868041
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 12 - 1Click sampler (3 sizes)
+services/feed test:   ---
+services/feed test:   duration_ms: 134.043042
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: FEED_FIXTURES=1: GET /api/oneclick from recorded fixtures
+services/feed test:     # Subtest: serves the documented shape with verified pairs and NVDAx no_route
+services/feed test:     ok 1 - serves the documented shape with verified pairs and NVDAx no_route
+services/feed test:       ---
+services/feed test:       duration_ms: 24.056375
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 13 - FEED_FIXTURES=1: GET /api/oneclick from recorded fixtures
+services/feed test:   ---
+services/feed test:   duration_ms: 24.161834
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click live (NECTAR_IT=1; read-only, dry only)
+services/feed test: ok 14 - 1Click live (NECTAR_IT=1; read-only, dry only) # SKIP
+services/feed test:   ---
+services/feed test:   duration_ms: 0.074041
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: 1..14
+services/feed test: # tests 38
+services/feed test: # suites 14
+services/feed test: # pass 38
+services/feed test: # fail 0
+services/feed test: # cancelled 0
+services/feed test: # skipped 0
+services/feed test: # todo 0
+services/feed test: # duration_ms 791.124958
+services/feed test: Done
+packages/sdk test:  RUN  v5.1.0 /private/tmp/verify-G9pre-1794270192/packages/sdk
+packages/sdk test:  Test Files  2 passed (2)
+packages/sdk test:       Tests  18 passed (18)
+packages/sdk test:    Start at  05:54:21
+packages/sdk test:    Duration  374ms (import 48%, transform 42%, tests 8%, worker 2%)
+packages/sdk test: Done
+
+== contract ==
+account  nectar-core.nectar.testnet   version nectar-core 0.1.0 p2
+
+== exit capacity NVDAx ==
+Q_c $3,850.00  R_c $0.00  D_c $0.00  haircut 2500 bps  session closed
+oracle $89.00 (age 2127s, fresh)  effective limit 7000 bps
+
+== pool ==
+available $49,990.00  utilised $10.00  treasury $13.87
+
+== quotes ==
+#1  remaining $2,555.00  max discount 400 bps  live
+#2  remaining $1,000.00  max discount 300 bps  live
+#3  remaining $295.00  max discount 100 bps  live
+
+== positions ==
+#0  Closed  debt $0.00
+#1  Open  debt $10.00  ltv 1124 bps / pre-liq 7250 bps
+#2  Closed  debt $0.00
+#3  Closed  debt $0.00
+#4  Closed  debt $0.00
+#5  Closed  debt $0.00
+#6  Settling  debt $0.00
+
+== explorer ==
+https://testnet.nearblocks.io/address/nectar-core.nectar.testnet
+https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet
+https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet

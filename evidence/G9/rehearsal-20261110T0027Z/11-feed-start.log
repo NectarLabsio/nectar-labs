@@ -1,0 +1,7 @@
+
+> feed@0.1.0 start /private/tmp/verify-G9pre-1794270192/services/feed
+> node --disable-warning=ExperimentalWarning src/main.ts
+
+{"ts":"2026-11-10T00:27:40.454Z","level":"warn","service":"feed","msg":"polling_disabled","reason":"CORE_ACCOUNT_ID unset (TODO-G2)"}
+{"ts":"2026-11-10T00:27:40.474Z","level":"info","service":"feed","msg":"feed_started","port":8788,"mcp_port":"8789","oneclick":true,"fixtures":false,"sources":"none","poll_ms":10000}
+{"ts":"2026-11-10T00:27:43.051Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}

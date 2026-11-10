@@ -24,6 +24,42 @@ Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
 
+## G9
+
+### G9 rehearsal (pre-check) — NOT the G9 gate (G9 row stays pending) — 2026-11-10T00:23Z–00:28Z — commit 5cd7364
+Fresh clone `/tmp/verify-G9pre-1794270192` of the local repo (main HEAD 5cd7364). PATH per gates.md host notes. No keys. Logs: evidence/G9/rehearsal-20261110T0027Z/
+```
+$ pnpm i                         exit 0   9 s   (pnpm store already warm on this host; a cold machine will be slower)
+$ pnpm demo:testnet              exit 0  22 s   p2 contract; Q_c $3,850; oracle $89 Owner; quotes #1-#3; positions #0-#6 (#1 Open $10, #6 Settling)
+$ pnpm verify                    exit 0  39 s   lint+typecheck+test: keeper 101/0, feed 38/0, sdk 18/0; then demo views again
+$ pnpm --filter docs-site build  exit 0  22 s   no warnings, no broken links
+$ pnpm --filter web dev          ready 4 s; GET / 200 (50 KB), GET /feed 200 (24 KB); "testnet" + "mock collateral" present, "hackathon" absent; stopped
+$ pnpm --filter docs-site start  ready 10 s; GET / 200; "hackathon" absent; stopped
+$ gitleaks detect --log-opts=--all   exit 0; 123 commits (all non-merge), 9.46 MB, "no leaks found" (.gitleaks.toml = defaults + narrow 64-hex content-hash allowlist)
+Quick start wall clock from clone start: 154 s. Whole rehearsal incl. checks: 285 s (target < 900 s)
+```
+Spot checks (evidence/G9/rehearsal-20261110T0027Z/08-spotchecks.log):
+1. RPC view_account nectar-core.nectar.testnet → code_hash `CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t` = README. usdc-mock / nvdax-mock / v1.signer-prod.testnet exist (have code).
+2. RPC view_access_key_list keeper.nectar.testnet → one FunctionCall key, receiver nectar-core, methods [trigger_preliquidation, relay_settlement_result], no full-access key = README (D-012).
+3. RPC EXPERIMENTAL_tx_status FCtApD2L…MHhe → SuccessValue, keeper → nectar-core `trigger_preliquidation`, receipts touch outlayer.testnet + v1.signer-prod.testnet, log `settlement_signed` position 6 = README.
+4. GET testnet-api.outlayer.ai/attestations/by-request/15148 → HTTP 200, request_id 15148, caller keeper.nectar.testnet, project nectar.testnet/nectar-quoter, wasm_hash 3ce17749…6cc2 = README version_key. (159 bps itself is backed by EVIDENCE §G4 / F-179, not visible in the attestation, which carries only output_hash.)
+5. Explorer: WebFetch https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe → HTTP 403; curl to the nectar-core address page → 403. Proven by RPC instead (items 1-3).
+README figures: $50,000 pool, $11,250 / $7,200 limits, quotes #0/#1 → evidence/G2/demo-testnet-20261109T2049Z.log + EVIDENCE §G2 model check. Upgrade log, G2–G8 evidence paths in the table: all exist. No README claim found without a backing.
+EVIDENCE table: G0–G8 each have a status, UTC, commit and evidence path. They agree with the README banner and the README Evidence section (G0–G4, G6 PASS; G5 FALLBACK; G7 PARTIAL; G8 PASS fixture; G9 pending).
+HUMAN_HANDOFF OPEN items: H-TOOLCHAIN-SOLANA, H-EXPLORER, H13, H-NEAR-FAUCET, H4, H5, H7, H8, H9, H10, H11, H12, H2, H1, H3, H14 (H6 not in scope; H-TOOLCHAIN DONE).
+Final-G9 blockers (OPEN, not in H1/H2/H3/H10/H11): H-TOOLCHAIN-SOLANA, H-EXPLORER, H13, H-NEAR-FAUCET, H4, H5, H7, H8, H9, H12, H14. They must each be DONE, DEFAULTED or explicitly cut before the final G9.
+Feed MCP (decides `agents`): runnable YES. stdio (`pnpm --filter feed mcp`) and HTTP (`pnpm --filter feed start`, :8789/mcp) both answer initialize (nectar-feed 0.2.0, protocol 2025-06-18) and tools/list = get_exit_capacity, preview_borrow, list_quotes, explain_limit (09/10/12 logs).
+With CORE_ACCOUNT_ID=nectar-core.nectar.testnet the tools return live views (Q_c 3850000000, oracle Owner $89, quotes #1-#3).
+As the root README literally says (no env): polling disabled ("CORE_ACCOUNT_ID unset (TODO-G2)"), /healthz 503, get_exit_capacity → isError "no data for NVDAx", list_quotes → []. Only services/feed/README names CORE_ACCOUNT_ID.
+Guesses / confusion a stranger hits:
+- Quick start lists `git clone <repo-url>` (TODO-H2) and `docs-site start`; it does not list `pnpm verify` or `docs-site build` (gates.md does). Ran both anyway.
+- Root README `pnpm --filter feed start` gives an empty Feed/MCP unless you know CORE_ACCOUNT_ID; the stale "TODO-G2" in services/feed/src/main.ts log text points at a gate that already passed.
+- `pnpm --filter feed mcp` prints the pnpm banner on stdout before the JSON-RPC stream; a strict stdio client may reject it (registration snippets use `node … mcp-stdio.ts` directly, which avoids this).
+- services/feed/README still carries "TODO-FACTS: … claude mcp add flags … Verify them before G9".
+- `pnpm --filter web dev` writes an untracked apps/web/AGENTS.md into the clone (Next.js agentRules default).
+- Feed uses ~/.nectar/feed.sqlite by default; this rehearsal set FEED_DB_PATH to a scratch dir to leave the host alone.
+Rehearsal verdict: quick start PASS in time; gitleaks clean; claims backed. Final G9 is not yet passable: 11 handoff blockers above, plus the Feed env gap if `agents` is to be claimed.
+
 ## G7
 
 ### G7 — Solana + signer — PARTIAL: NEAR side verified; Solana leg not built — 2026-11-09T23:57Z — commit 97382fd

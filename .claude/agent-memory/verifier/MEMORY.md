@@ -5,3 +5,4 @@
 - [G6 1Click recipe](reference_g6_oneclick.md) — feed (not keeper) commands; C-014 amountOutUsd trap; web badge static
 - [G8 copilot recipe](reference_g8_copilot.md) — fixture is Phala sample + throwaway key; loose Key-missing spec; README overclaim trap
 - [G7 signer recipe](reference_g7_signer.md) — tx_status sign-args decode, neg control, code hash; gates.md G7 cmds absent pre-Solana
+- [G9 rehearsal recipe](reference_g9_rehearsal.md) — fresh-clone steps, Feed CORE_ACCOUNT_ID trap, docs-server kill, handoff blocker rule

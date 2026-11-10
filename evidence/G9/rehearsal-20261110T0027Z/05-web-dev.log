@@ -1,0 +1,19 @@
+
+> web@0.1.0 dev /private/tmp/verify-G9pre-1794270192/apps/web
+> next dev -p 3100
+
+▲ Next.js 16.4.5 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://192.168.1.7:3100
+✓ Ready in 481ms
+✓ Running next.config.ts took 54ms
+- Experiments (use with caution):
+  ⨯ turbopackFileSystemCacheForBuild
+  ⨯ turbopackFileSystemCacheForDev
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3100". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 577ms (next.js: 213ms, application-code: 363ms)
+ GET / 200 in 63ms (next.js: 1.3ms, application-code: 62ms)
+ GET /feed 200 in 69ms (next.js: 9ms, application-code: 61ms)
+[?25h

@@ -1,0 +1,13 @@
+[non-json stdout] 
+[non-json stdout] > feed@0.1.0 mcp /private/tmp/verify-G9pre-1794270192/services/feed
+[non-json stdout] > node --disable-warning=ExperimentalWarning src/mcp-stdio.ts
+[non-json stdout] 
+server: {"name":"nectar-feed","version":"0.2.0"} proto 2025-06-18
+tools: get_exit_capacity, preview_borrow, list_quotes, explain_limit
+  schema get_exit_capacity {"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral symbol, e.g. NVDAx"}}
+  schema preview_borrow {"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral symbol, e.g. NVDAx"},"units":{"type":"string","patte
+  schema list_quotes {"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral symbol, e.g. NVDAx"},"limit":{"type":"integer","mini
+  schema explain_limit {"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral symbol, e.g. NVDAx"},"units":{"type":"string","patte
+get_exit_capacity: {"content":[{"type":"text","text":"no data for NVDAx"}],"isError":true}
+list_quotes: {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"feed-db\",\n  \"quotes\": []\n}"}]}
+stderr tail: {"ts":"2026-11-10T00:27:17.485Z","level":"info","service":"feed-mcp","msg":"mcp_stdio_ready","live_views":false} | 

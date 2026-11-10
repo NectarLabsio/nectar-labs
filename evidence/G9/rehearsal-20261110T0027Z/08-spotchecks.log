@@ -1,0 +1,22 @@
+== 1 view_account nectar-core (code_hash)
+{"code_hash":"CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t","block_height":276993719}
+== view_account usdc-mock.nectar.testnet
+"3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF"
+== view_account nvdax-mock.nectar.testnet
+"3iUhtF1eC3hiRiasN37tDb6VGzAsvEDXs7czbnYJcXsF"
+== view_account v1.signer-prod.testnet
+"CpGX8ywXJwvWPgZFDDCTCuPJBHF7BATT51gSfc3APERJ"
+== 2 keeper access keys
+{"FunctionCall":{"allowance":"983425205239211600000000","method_names":["trigger_preliquidation","relay_settlement_result"],"receiver_id":"nectar-core.nectar.testnet"}}
+== 3 tx FCtApD2L... status (sender keeper.nectar.testnet)
+{"err":null,"signer":"keeper.nectar.testnet","recv":"nectar-core.nectar.testnet","method":"trigger_preliquidation","status":["SuccessValue"]}
+EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settlement_signed","data":[{"position_id":"6","quote_id":"3","nonce":"0","preimage":"NECTAR_SETTLE_V1
+keeper.nectar.testnet,nectar-core.nectar.testnet,nvdax-mock.nectar.testnet,outlayer.testnet,v1.signer-prod.testnet
+== 4 OutLayer attestation 15148
+HTTP 200 7501B
+{"id":25818,"task_id":30256,"task_type":"execute","worker_measurement":"b1773e4dd9db7e54c2564f15913872cb6a8acd6ce6d4e28dc4008c6b90f6dfec43eae5021d3055a1917fe7360d73dcc9","request_id":15148,"caller_account_id":"keeper.nectar.testnet","transaction_hash":"BQscYSpn4qMzwD9fDehHbqc84gcpzs1vuK18yzVCvhBb","block_height":276983419,"build_target":"wasm32-wasip2","wasm_hash":"3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2","executed_wasm_sha256":"3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2","input_hash":"c03a2bf9273eaf14a0b3980a669a83aa0a604a16c514b41b74ebd735be3e4826","output_hash":"5edc66c5b0b6afe3536a6e8700edf0043fb2e2aee30af7d4d2891cf2e8ffbd3b","project_id":"nectar.testnet/nectar-quoter","secrets_ref":"nectar.testnet/mm-demo","attached_usd":"0","timestamp":1794264381}
+
+   1 159
+   2 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
+== 5 nearblocks GET
+HTTP 403

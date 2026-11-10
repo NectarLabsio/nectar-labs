@@ -1,0 +1,9 @@
+
+> docs-site@0.1.0 start /private/tmp/verify-G9pre-1794270192/apps/docs-site
+> docusaurus start --no-open
+
+[INFO] Starting the development server...
+[SUCCESS] Docusaurus website is running at: http://localhost:3000/
+[webpackbar] ℹ Compiling Client
+[webpackbar] ✔ Client: Compiled successfully in 7.10s
+client (webpack 5.112.2) compiled successfully

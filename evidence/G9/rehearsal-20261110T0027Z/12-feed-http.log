@@ -1,0 +1,18 @@
+== MCP HTTP initialize
+HTTP/1.1 200 OK
+content-type: text/event-stream
+x-accel-buffering: no
+content-length: 189
+Date: Tue, 10 Nov 2026 00:27:40 GMT
+
+event: message
+data: {"result":{"protocolVersion":"2025-06-18","capabilities":{"tools":{"listChanged":true}},"serverInfo":{"name":"nectar-feed","version":"0.2.0"}},"jsonrpc":"2.0","id":1}
+
+
+initialized 202
+== MCP HTTP tools/list
+"name":"get_exit_capacity" "name":"preview_borrow" "name":"list_quotes" "name":"explain_limit" 
+== REST
+/healthz 503 {"ok":false,"last_block_seen":null,"last_poll_at":null,"last_error":null,"source":"none","events_indexed":0}
+/v1/exit-capacity/NVDAx 404 {"error":"not found"}
+/api/oneclick 200 {"as_of":"2026-11-10T00:27:40.815Z","pairs":[],"assets":[]}
