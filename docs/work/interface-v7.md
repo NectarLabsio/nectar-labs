@@ -94,3 +94,20 @@ Token ids `q-<quote_id>`, `p-<position_id>` (`r-<collateral>-<n>` reserved for W
 Views: NEP-171 `nft_token`, NEP-181 `nft_tokens` / `nft_tokens_for_owner` / `nft_total_supply` (pages capped at 20), `nft_token_svg(token_id) -> String`,
 `nft_transfer_locked(token_id) -> bool`. Calls: `nft_transfer`, `nft_transfer_call`, `set_quote_remote_recipient(quote_id, recipient?)` (Note owner;
 refused while locked). Events: NEP-297 standard "nep171" `nft_mint` / `nft_transfer`; nectar `quote_remote_recipient_cleared` / `_set`.
+
+## D. Base spoke (P2b, D-026)
+- Remote chain `{chain_id:"base-sepolia", vault_program:<0x vault address>, mpc_domain_id:0}` per collateral (a second remote chain per symbol is a list
+  or a separate symbol `NVDAx-base`; contract agent picks the smaller change and reports it). Path `base-sepolia/pos/<id>`. Authority = 0x address =
+  last 20 bytes of keccak256(x‖y) of `derived_public_key(path, predecessor core, domain_id 0)` (`secp256k1:<b58 64 B>`, F-338/F-339).
+- EIP-712 domain `{name:"NectarVault", version:"1", chainId:84532, verifyingContract:<vault>}`. Types:
+  `Settle(uint64 positionId,uint64 quoteId,uint256 repayE6,uint256 seizeRaw,address recipient,uint64 nonce,uint64 expires,uint8 kind)` (kind 1 PRELIQ, 2 SELF)
+  `Release(uint64 positionId,address recipient,uint64 nonce,uint64 expires)`. Digest built on-chain in nectar-core with `env::keccak256_array` (F-339);
+  `sign({path, payload_v2:{Ecdsa:<64 hex digest>}, domain_id:0})`, 1 yocto (F-330/F-331). Response `{scheme:"Secp256k1", big_r:{affine_point:<66 hex>},
+  s:{scalar:<64 hex>}, recovery_id}` (F-332) → stored; r = affine_point[2..66] (x), v = 27 + recovery_id. Pending views return `{digest, r, s, v, typed fields}`.
+- Quote recipient: a `0x…` 40-hex `buyer_remote_recipient` can fill Base positions; a base58 one fills Solana positions.
+- `NectarVaultBase.sol`: `openPosition(uint64 id, address authority, uint256 amount)` (depositor = msg.sender, `transferFrom`), `settle(Settle, uint8 v,
+  bytes32 r, bytes32 s)`, `release(Release, uint8 v, bytes32 r, bytes32 s)`; checks `ecrecover(digest) == positions[id].authority`, nonce unused, not expired,
+  low-s (reject s > n/2 unless the contract normalises; test both), and `PolicyRegistry.isAuthorized(policyId, recipient)` before the transfer; view
+  `positions(id) → (authority, depositor, amount, status)` for vault_read.
+- Keeper: viem on 84532 (RPC from config `base.rpc_url`), Foundry keystore account (never --private-key), relays settle/release, then `relay_settlement_result`
+  / `relay_release_result`; ERC-8021 suffix appended only when `BASE_BUILDER_CODE` is set (H19).
