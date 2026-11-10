@@ -8,3 +8,5 @@ v7 module runs verified on chain (PASS).
 **Fix (web, WO-26f):** e2e specs must not depend on the live config's flag values: drive flag state through the existing localhost-only e2e override
 (`window.__NECTAR_E2E_MOCK__`) and test both flag-off and flag-on paths explicitly; `/api/feed` revalidates (no build-time snapshot served as live);
 `/feed` degrades cleanly without a Feed URL (panel says "Feed indexer not configured", no 503 noise). Then the verifier re-runs G3b.
+
+**RESOLVED (pending verifier re-run):** WO-26f 201c9cf — specs pin flags per test (both paths), /api/feed reads live with age/stale, /feed degrades without a Feed URL.
