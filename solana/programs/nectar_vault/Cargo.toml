@@ -1,0 +1,30 @@
+[package]
+name = "nectar_vault"
+version = "0.1.0"
+description = "Nectar Labs Solana collateral vault: settle/release only on a NEAR Chain Signatures Ed25519 signature"
+edition = "2021"
+# platform-tools v1.48 ships cargo/rustc 1.84: resolve deps that still build there (no edition2024 crates).
+rust-version = "1.84"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "nectar_vault"
+
+[features]
+default = []
+cpi = ["no-entrypoint"]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
+custom-heap = []
+custom-panic = []
+anchor-debug = []
+
+[dependencies]
+anchor-lang = { version = "=0.32.1", features = ["init-if-needed"] }
+anchor-spl = "=0.32.1"
+solana-instructions-sysvar = "2"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
