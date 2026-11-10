@@ -32,15 +32,25 @@ quote #1 for $5,000 at 400 bps, and position #0 with 100 mock NVDAx and $11,250 
 ## Quick start (5 commands, no keys needed)
 ```
 git clone <repo-url> nectar-labs && cd nectar-labs   # repo URL TODO-H2 (private until published)
-pnpm i
-pnpm demo:testnet            # read-only views against the testnet contract
+pnpm i                       # warm store: 9 s in the rehearsal; a cold machine takes longer
+pnpm demo:testnet            # read-only nectar-core views over public testnet RPC
+pnpm verify                  # lint + typecheck + unit tests, then the testnet views again
 pnpm --filter web dev        # web app on http://localhost:3100
-pnpm --filter docs-site start  # docs on http://localhost:3000
 ```
-What works today (2026-11-10): all five commands (the repo URL in the first one is TODO-H2).
-`pnpm demo:testnet` works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml`
+Optional:
+```
+pnpm --filter docs-site build   # static docs build (broken links fail the build)
+pnpm --filter docs-site start   # docs dev server on http://localhost:3000
+pnpm --filter feed start        # Feed REST on :8788, MCP over HTTP at http://127.0.0.1:8789/mcp; no env needed
+pnpm --filter feed mcp          # Feed MCP over stdio (read-only tools; see services/feed/README.md)
+```
+What works today (2026-11-10): all five commands (the repo URL in the first one is TODO-H2). Rehearsal timings are in
+[docs/EVIDENCE.md](docs/EVIDENCE.md): `pnpm i` 9 s on a warm pnpm store (a cold machine is slower), `pnpm verify` 39 s.
+`pnpm demo:testnet` runs `scripts/50-verify.sh`, which runs `scripts/demo-testnet.mjs`: it reads the ids from `config.yaml`
 and calls nectar-core views over public testnet RPC (no keys, no near CLI; override the RPC with `NEAR_RPC_URL`).
-`pnpm --filter web dev` starts the web app on port 3100 (G3 PASS). Optional: `pnpm --filter feed start` runs the Feed (REST on :8788, MCP on :8789); see the docs-site page "Feed MCP". Node ≥ 22.22.2, pnpm 10.34.9.
+`pnpm --filter web dev` starts the web app on port 3100 (G3 PASS). Without `CORE_ACCOUNT_ID` the Feed does not poll the
+contract and its MCP tools read the local Feed SQLite store; registering the MCP server with a client is described in
+services/feed/README.md and the docs-site page "Feed MCP". Node ≥ 22.22.2, pnpm 10.34.9.
 
 ## 60-second architecture
 ![architecture](docs/img/architecture.svg)
