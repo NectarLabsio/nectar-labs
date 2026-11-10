@@ -18,9 +18,14 @@ name = "nectar_quoter"
 path = "src/main.rs"
 
 [dependencies]
-# Only these two (WO-9): JSON parsing and the stdin binding hash. No HTTP in P1 (D-014).
+# JSON parsing and sha256 (stdin binding hash, Solana PDA derivation). No Solana/EVM SDKs (WO-24: wasm size).
 serde_json = { version = "1", default-features = false, features = ["std"] }
 sha2 = { version = "0.10", default-features = false }
+
+# WO-24 jobs: outbound HTTP on wasm32-wasip2 only (F-043). `wasi` 0.13 is the binding crate under `wasi-http-client` 0.2
+# (the crate F-043 names); we call `wasi:http/outgoing-handler` directly to avoid its `url`/`idna` tables.
+[target.'cfg(all(target_os = "wasi", target_env = "p2"))'.dependencies]
+wasi = { version = "0.13", default-features = false }
 
 [profile.release]
 opt-level = "s"

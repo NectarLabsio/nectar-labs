@@ -9,6 +9,16 @@
 //! * stdout: one JSON line ≤ 900 bytes (F-043); any input error → `{"v":1,"error":"<short>"}` (exit 0).
 //!
 //! No clock, no randomness, no floats, no I/O here: `run` is a function of (stdin bytes, secret lookup).
+//!
+//! v7 (WO-24): a stdin object with a `job` field is routed to src/jobs.rs (`vault_read`, `calendar`,
+//! `multiplier`); without `job` the quote job above runs byte-for-byte as before. Jobs that read a chain get
+//! their I/O through the `http` callback of `run_with` (wasi:http in src/http.rs on wasm32-wasip2).
+
+pub mod calendar;
+#[cfg(all(target_os = "wasi", target_env = "p2"))]
+pub mod http;
+pub mod jobs;
+pub mod solana;
 
 use serde_json::{Map, Value};
 use sha2::{Digest, Sha256};
@@ -42,8 +52,24 @@ pub struct Input {
     pub quotes: Vec<Quote>,
 }
 
-/// Entry point used by `main` and the tests. `secret` looks up an env var by name.
+/// Entry point used by the quote-job tests. `secret` looks up an env var by name. No HTTP: a job that needs it
+/// answers `{"v":1,"error":"http_unavailable"}`.
 pub fn run<F: Fn(&str) -> Option<String>>(stdin: &[u8], secret: F) -> String {
+    run_with(stdin, secret, &mut |_: &str, _: &[u8]| Err("http_unavailable"))
+}
+
+/// Entry point used by `main`: a `job` field ⇒ src/jobs.rs, otherwise the quote job (unchanged).
+pub fn run_with<F: Fn(&str) -> Option<String>>(stdin: &[u8], secret: F, http: &mut jobs::Http<'_>) -> String {
+    if stdin.len() <= MAX_STDIN_BYTES
+        && let Ok(Value::Object(obj)) = serde_json::from_slice::<Value>(stdin)
+        && obj.contains_key("job")
+    {
+        return jobs::dispatch(&obj, http);
+    }
+    run_quote(stdin, secret)
+}
+
+fn run_quote<F: Fn(&str) -> Option<String>>(stdin: &[u8], secret: F) -> String {
     match parse_input(stdin) {
         Ok(input) => render(&input, &hex_sha256(stdin), &secret),
         Err(code) => error_json(code),
