@@ -52,7 +52,7 @@ export default function ConsolePage() {
         <p className="lead">Live parameters for {sym}. Owner actions go through the same sign preview as every other write.</p>
       </div>
       <Gate>
-        {data.error ? <RpcErrorBanner error={data.error} onRetry={data.reload} /> : data.loading || !d ? <LoadingBlock /> : (
+        {data.error ? <RpcErrorBanner error={data.error} onRetry={data.reload} /> : !d ? <LoadingBlock /> : (
           <div className="grid-2">
             <Card label={`${sym} · mock`} live>
               <div className="kvs">

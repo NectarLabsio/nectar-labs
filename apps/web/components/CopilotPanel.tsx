@@ -48,7 +48,7 @@ export function CopilotPanel() {
 
   const configured = status !== null && "configured" in status && status.configured;
   return (
-    <Card label="Risk copilot" title="Risk context from your notes" className="copilot">
+    <Card label="Risk copilot" title="Risk context from your notes" titleLevel={2} className="copilot">
       <div className="stack">
         <p className="small dim">
           Paste corporate-action or risk notes. The model summarises them without prices or amounts. Answers come from NEAR AI Cloud and are shown only if every

@@ -1,19 +1,45 @@
-import { NectarViews } from "@nectar/sdk";
+import { NectarViews, type ExitCapacity } from "@nectar/sdk";
 import { getPublicConfig } from "@/lib/config.server";
 import { RPC_URL } from "@/lib/env";
 
-export const revalidate = 10;
+// Read on every request (never prerendered): a build-time snapshot must not be served as the chain's current state (G3b).
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-/** GET /api/feed — exit capacity per collateral from on-chain views (indexer history comes later). */
+/** Reads newer than this are reused; anything older is re-read from the chain. */
+const FRESH_MS = 5_000;
+
+interface Snapshot {
+  core: string;
+  assets: Array<{ symbol: string; capacity: ExitCapacity }>;
+  at: number;
+}
+let last: Snapshot | null = null;
+
+function body(s: Snapshot, now: number, extra: Record<string, unknown> = {}) {
+  const age_s = Math.max(0, Math.floor((now - s.at) / 1000));
+  return { deployed: true, core: s.core, as_of: new Date(s.at).toISOString(), age_s, stale: now - s.at > FRESH_MS, assets: s.assets, ...extra };
+}
+
+/**
+ * GET /api/feed — exit capacity per collateral from on-chain views (indexer history comes later). Every answer carries
+ * `as_of` and `age_s`; when the RPC fails, the last good read is returned with `stale: true` and the error, never as fresh.
+ */
 export async function GET() {
   const c = getPublicConfig();
-  if (!c.core) return Response.json({ deployed: false, pending: c.pending, assets: [] });
+  const headers = { "cache-control": "no-store" };
+  if (!c.core) return Response.json({ deployed: false, pending: c.pending, assets: [] }, { headers });
+  const now = Date.now();
+  if (last && last.core === c.core && now - last.at <= FRESH_MS) return Response.json(body(last, now), { headers });
   try {
     const v = NectarViews.fromRpc(c.core, RPC_URL);
     const cs = await v.listCollaterals(0, 50);
     const assets = await Promise.all(cs.map(async (col) => ({ symbol: col.symbol, capacity: await v.getExitCapacity(col.symbol) })));
-    return Response.json({ deployed: true, core: c.core, assets });
+    last = { core: c.core, assets, at: Date.now() };
+    return Response.json(body(last, Date.now()), { headers });
   } catch (e) {
-    return Response.json({ deployed: true, error: e instanceof Error ? e.message : String(e) }, { status: 502 });
+    const error = e instanceof Error ? e.message : String(e);
+    if (last && last.core === c.core) return Response.json(body(last, Date.now(), { error }), { status: 200, headers });
+    return Response.json({ deployed: true, error }, { status: 502, headers });
   }
 }

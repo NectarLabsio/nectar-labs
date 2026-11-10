@@ -65,7 +65,7 @@ export function ConsoleV7({ core, sym, cap, isOwner, onDone }: { core: string; s
   const refView = useView<boolean | null>(refOk ? (v) => optionalView(v.isReferrer(ref.trim())) : null, [ref, refOk]);
 
   if (data.error) return <div className="stack"><RpcErrorBanner error={data.error} onRetry={data.reload} /></div>;
-  if (data.loading || !data.data) return <Card label="v7 owner controls"><LoadingBlock /></Card>;
+  if (!data.data) return <Card label="v7 owner controls"><LoadingBlock /></Card>;
   const { coll, calendar, remote } = data.data;
   const now = nowNs();
   const m = BigInt(cap.multiplier_e18 ?? coll?.multiplier_e18 ?? E18.toString());

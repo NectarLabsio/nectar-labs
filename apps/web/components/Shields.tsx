@@ -146,7 +146,7 @@ export function ShieldCard(p: ShieldCardProps) {
   };
 
   return (
-    <Card className="shield-card" label="Shield preset" title={`${p.kind} Shield`} data-testid={id} actions={opensLeft !== null ? <Badge kind={opensLeft > 0 ? "info" : "warn"}>{opensLeft} of {MAX_SHIELD_OPENS_PER_DAY} opens left today</Badge> : <Badge kind="neutral">{MAX_SHIELD_OPENS_PER_DAY} opens per day</Badge>}>
+    <Card className="shield-card" label="Shield preset" title={`${p.kind} Shield`} titleLevel={2} data-testid={id} actions={opensLeft !== null ? <Badge kind={opensLeft > 0 ? "info" : "warn"}>{opensLeft} of {MAX_SHIELD_OPENS_PER_DAY} opens left today</Badge> : <Badge kind="neutral">{MAX_SHIELD_OPENS_PER_DAY} opens per day</Badge>}>
       <div className="stack">
         <div>
           <div className="big num" data-testid={`${id}-fee-bps`}>{feeBps !== null ? `${feeBps} bps` : "—"}</div>

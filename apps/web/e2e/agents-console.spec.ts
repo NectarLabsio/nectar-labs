@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
-import { config, noHorizontalScroll, prime } from "./helpers";
+import { ALL_FEATURES, config, noHorizontalScroll, pinFlags, prime, type Flag } from "./helpers";
 
 // WO-26a: /agents and the /console v7 owner controls against mocked nectar-core v2 views (e2e/fixtures/v2-views.json).
 // The NEAR "wallet" is the localhost-only E2E mock (lib/wallet/e2e-mock.ts): it records intents and never signs anything.
@@ -11,13 +11,15 @@ const FIXTURE = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/v
 const CORE = config.accounts.core;
 const OWNER = "nectar.testnet";
 
-async function setup(page: Page, opts: { account?: string; views?: Record<string, unknown> } = {}) {
+/** Flag state is pinned per test (default: every flag off), never read from config.yaml. */
+async function setup(page: Page, opts: { account?: string; views?: Record<string, unknown>; features?: readonly Flag[] } = {}) {
   await prime(page, "dark");
   if (opts.account) {
     await page.addInitScript((acct) => {
       window.__NECTAR_E2E_MOCK__ = { near: { accountId: acct } };
     }, opts.account);
   }
+  await pinFlags(page, opts.features ?? []);
   const views = { ...FIXTURE, ...(opts.views ?? {}) };
   await page.route("**/*fastnear.com/**", async (route) => {
     const req = route.request();
@@ -45,8 +47,8 @@ async function axeClean(page: Page) {
 const calls = (page: Page) => page.evaluate(() => window.__NECTAR_E2E_CALLS__ ?? []);
 
 test.describe("/agents", () => {
-  test("install snippets, labelled example, x402 not run yet, referral stats on v2", async ({ page }) => {
-    await setup(page, { account: "agent1.nectar.testnet" });
+  test("flags off: install snippets, labelled example, x402 not run yet, referral stats on v2", async ({ page }) => {
+    await setup(page, { account: "agent1.nectar.testnet", features: [] });
     await page.goto("/agents");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Let an agent open the loan");
     await expect(page.getByTestId("mcp-stdio-cmd")).toContainText("pnpm -s --filter feed mcp");
@@ -65,12 +67,28 @@ test.describe("/agents", () => {
     await expect(ref.getByLabel("Referrer account")).toHaveValue("agent1.nectar.testnet", { timeout: 20_000 });
     await expect(ref.getByTestId("ref-registered")).toHaveText("registered", { timeout: 20_000 });
     await expect(ref.getByTestId("ref-claimable")).toHaveText("$0.15 mock USDC");
-    // features.referrals / pay_to are false: no withdraw control yet.
+    // features.referrals / pay_to pinned off: no withdraw control.
     await expect(ref.getByRole("button", { name: "Withdraw claimable USDC" })).toHaveCount(0);
     const text = (await page.locator("main").innerText()).toLowerCase();
     expect(text).not.toMatch(/\blive\b/);
     expect(text).not.toContain("hackathon");
     expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
+    await axeClean(page);
+  });
+
+  test("flags on: x402 marked testnet (no 'not run' notice), withdraw control on v2", async ({ page }) => {
+    await setup(page, { account: "agent1.nectar.testnet", features: ALL_FEATURES });
+    await page.goto("/agents");
+    const x = page.getByTestId("agents-x402");
+    await expect(x.getByText("testnet", { exact: true })).toBeVisible();
+    await expect(x.getByText("Not run on testnet yet", { exact: true })).toHaveCount(0);
+    await expect(x.getByText("not run on testnet yet", { exact: true })).toHaveCount(0);
+    const ref = page.getByTestId("agents-referrals");
+    await expect(ref.getByTestId("ref-registered")).toHaveText("registered", { timeout: 20_000 });
+    await expect(ref.getByRole("button", { name: "Withdraw claimable USDC" })).toBeVisible();
+    const text = (await page.locator("main").innerText()).toLowerCase();
+    expect(text).not.toMatch(/\blive\b/);
+    expect(text).not.toContain("hackathon");
     await axeClean(page);
   });
 

@@ -1,6 +1,6 @@
 // E2E-only overrides, honoured only when the page is served from localhost (Playwright's `next start`), never on a deployed host.
-// Playwright sets window.__NECTAR_E2E_MOCK__ with addInitScript so the remote (Solana) flow can run against mocked views
-// while config.yaml still has `features.solana_remote: false` and the vault ids are TODO-G7. The contract stays authoritative:
+// Playwright sets window.__NECTAR_E2E_MOCK__ with addInitScript so each spec pins its own flag state (both flag-on and flag-off
+// paths) and the remote (Solana) flow can run against mocked vault ids, independent of config.yaml. The contract stays authoritative:
 // a v7 control still needs a v2 contract (featureOn), and nothing here can sign for a real account.
 import type { FeatureName } from "@nectar/sdk";
 
@@ -12,6 +12,7 @@ export interface E2EMockOutcome {
 }
 
 export interface E2EMock {
+  /** When set: exactly these `features.*` are on and every other flag is off, whatever config.yaml says. Unset: config.yaml. */
   features?: FeatureName[];
   solana?: { vaultProgram?: string; mint?: string };
   /** A NEAR "wallet" that records intents in window.__NECTAR_E2E_CALLS__ and returns canned outcomes per method. */

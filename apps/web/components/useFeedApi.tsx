@@ -1,6 +1,20 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Banner, Button } from "@nectar/ui";
+import { docsHref } from "@/lib/env";
+
+/** The Feed API docs page (how to run services/feed and set NEXT_PUBLIC_FEED_URL). */
+export const FEED_DOCS = docsHref("integrate/feed-rest");
+
+/** Shown wherever indexer data would appear while NEXT_PUBLIC_FEED_URL is unset. */
+export function FeedUnconfigured({ what }: { what: string }) {
+  return (
+    <Banner tone="info" title="Feed indexer not configured">
+      {what} come from the Feed API (<code>services/feed</code>), which this deployment does not run. Set <code>NEXT_PUBLIC_FEED_URL</code> and run{" "}
+      <code>pnpm --filter feed start</code>; see the <a className="link" href={FEED_DOCS}>Feed API docs</a>.
+    </Banner>
+  );
+}
 
 export interface FeedApiState<T> {
   data: T | undefined;
@@ -25,12 +39,16 @@ export function useFeedApi<T>(path: string): FeedApiState<T> {
       .then(async (r) => {
         const body = (await r.json()) as T & { error?: string; configured?: boolean };
         if (!live) return;
-        if (r.ok) {
+        if (body.configured === false) {
+          setData(undefined);
+          setUnconfigured(true);
+          setError(body.error ?? "Feed indexer not configured");
+        } else if (r.ok) {
           setData(body);
           setError(null);
           setUnconfigured(false);
         } else {
-          setUnconfigured(body.configured === false);
+          setUnconfigured(false);
           setError(body.error ?? `HTTP ${r.status}`);
         }
       })
@@ -51,9 +69,7 @@ export function useFeedApi<T>(path: string): FeedApiState<T> {
 export function FeedApiNotice({ state, what }: { state: Pick<FeedApiState<unknown>, "error" | "unconfigured" | "reload">; what: string }) {
   if (!state.error) return null;
   return state.unconfigured ? (
-    <Banner tone="info" title="Indexer not connected">
-      {what} come from the Feed API (<code>services/feed</code>). Set <code>NEXT_PUBLIC_FEED_URL</code> and run <code>pnpm --filter feed start</code>.
-    </Banner>
+    <FeedUnconfigured what={what} />
   ) : (
     <Banner tone="warn" title="Feed API unavailable" actions={<Button size="sm" onClick={state.reload}>Retry</Button>}>
       {what} could not be loaded: <span className="mono">{state.error}</span>

@@ -5,8 +5,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { config, noHorizontalScroll, prime } from "./helpers";
 
 // WO-26c: /notes, /note/[id], Note links and /reserve against mocked v2 views (fixtures/notes.json, built from the contract SVG
-// template by scripts/build-notes-fixture.ts) and the localhost-only E2E mock wallet. features.notes / features.reserve are false
-// in config.yaml; window.__NECTAR_E2E_MOCK__ turns them on for these specs only. Reserve views use the merged WO-23b shapes (types.rs). Nothing signs on testnet.
+// template by scripts/build-notes-fixture.ts) and the localhost-only E2E mock wallet. window.__NECTAR_E2E_MOCK__ pins the flag
+// state per test (default notes + reserve on, everything else off; `features: []` = all off), independent of config.yaml. Reserve views use the merged WO-23b shapes (types.rs). Nothing signs on testnet.
 
 const V2 = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/v2-views.json"), "utf8")) as Record<string, unknown>;
 interface NotesFx {
