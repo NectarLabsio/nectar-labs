@@ -75,6 +75,24 @@ pub fn in_session_window(windows: &[(u64, u64)], now: u64) -> bool {
     idx > 0 && now < windows[idx - 1].1
 }
 
+/// WO-23a (§4.9): open of the first calendar window that opens after `now` (None if the list has none).
+pub fn next_window_open(windows: &[(u64, u64)], now: u64) -> Option<u64> {
+    let idx = windows.partition_point(|w| w.0 <= now);
+    windows.get(idx).map(|w| w.0)
+}
+
+/// WO-23a (§4.9): flat Shield fee on the full borrow, rounded up (replaces the limit premium).
+pub fn shield_fee(borrow: u128, fee_bps: u16) -> MathResult<u128> {
+    mul_div_ceil(borrow, fee_bps as u128, BPS)
+}
+
+/// WO-23a (§4.10): Profit-Lock `(fee, fill)` for `debt`: fee = ceil(debt * f_pl / 1e4), fill = debt + fee (the USDC
+/// committed buyers pay; units are then `seize_units_m(fill, M, P, d, δ, 0)`, rounded up = against the borrower).
+pub fn profit_lock_fill(debt: u128, fee_bps: u16) -> MathResult<(u128, u128)> {
+    let fee = mul_div_ceil(debt, fee_bps as u128, BPS)?;
+    Ok((fee, add(debt, fee)?))
+}
+
 /// v2 (A2): sorted, non-overlapping, each `open < close`.
 pub fn valid_calendar(windows: &[(u64, u64)]) -> bool {
     windows.iter().all(|w| w.0 < w.1) && windows.windows(2).all(|p| p[0].1 <= p[1].0)

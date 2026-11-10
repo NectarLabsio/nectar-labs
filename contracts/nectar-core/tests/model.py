@@ -61,7 +61,10 @@ COLUMNS = [
     # v2 (appended so v1 columns keep their positions)
     "multiplier_e18", "total_debt_usd_e6", "origination_fee_bps",
     "aggregate_headroom_usd_e6", "origination_fee_usd_e6", "net_proceeds_usd_e6",
+    # WO-23a (appended): Shields (kind=shield) and Profit-Lock (kind=self)
+    "shield_fee_bps", "pl_fee_bps", "pl_fee_usd_e6", "fill_usd_e6", "units_kept",
 ]
+PROFIT_LOCK_BPS = 50  # contract constant (PRD §4.10)
 ORIGINATION_BPS = 30  # contract default (interface-v7.md A5)
 
 
@@ -162,6 +165,43 @@ def nv(case, units, price, q, r, d, session_open, borrow, pre_liq=7500, debt=Non
                      SPLIT["lenders_bps"], borrow, pre_liq, borrow if debt is None else debt, m, total_debt)
 
 
+def shield_row(case, units, price, q, d, session_open, borrow, fee_bps, total_debt=0):
+    """WO-23a §4.9: sized with the session closed (h = weekend, D = 0) whatever the real session is; the flat
+    shield fee ceil(borrow * fee_bps / 1e4) replaces the limit premium, same split; session_open records reality."""
+    row = limit_row(case, units, NVDAX["dec"], price, q, 0, d, False, NVDAX["base_ltv"], NVDAX["max_ltv"],
+                    NVDAX["base_h"], NVDAX["weekend_h"], NVDAX["prem_bps"], SPLIT["buyers_bps"], SPLIT["lenders_bps"],
+                    borrow, 7500, borrow, E18, total_debt)
+    fee = ceil_div(borrow * fee_bps, BPS)
+    buyers = fee * SPLIT["buyers_bps"] // BPS
+    lenders = fee * SPLIT["lenders_bps"] // BPS
+    acc = 0 if q == 0 else buyers * E18 // q
+    if q == 0:
+        buyers = 0
+    row.update({
+        "kind": "shield", "session_open": int(session_open), "shield_fee_bps": fee_bps, "premium_usd_e6": fee,
+        "buyers_fee_usd_e6": buyers, "lenders_fee_usd_e6": lenders, "treasury_fee_usd_e6": fee - buyers - lenders,
+        "acc_increment_e18": acc,
+        "net_proceeds_usd_e6": max(0, borrow - fee - row["origination_fee_usd_e6"]),
+    })
+    return row
+
+
+def self_row(case, units, price, debt, remaining, disc, m=E18, pl_bps=PROFIT_LOCK_BPS, dec=6):
+    """WO-23a §4.10: fee = ceil(debt * f_pl / 1e4); fill = debt + fee paid by one opted-in quote;
+    Q_repaid = seize(fill, disc, keeper 0) raw units (rounded up); kept = units - Q_repaid. Empty when the quote
+    cannot cover the fill or the units cannot cover Q_repaid."""
+    fee = ceil_div(debt * pl_bps, BPS)
+    fill = debt + fee
+    row = {"case": case, "kind": "self", "units": units, "decimals": dec, "price_usd_e6": price, "debt_usd_e6": debt,
+           "quote_remaining_usd_e6": remaining, "disc_bps": disc, "multiplier_e18": m, "pl_fee_bps": pl_bps,
+           "pl_fee_usd_e6": fee, "fill_usd_e6": fill}
+    if remaining >= fill:
+        b, _ = seize(fill, price, dec, disc, 0, m)
+        if b <= units:
+            row.update({"repay_usd_e6": debt, "buyer_units": b, "units_kept": units - b})
+    return row
+
+
 def rows():
     out = []
     # --- sandbox demo scenario (tests/sandbox.rs) ---
@@ -241,6 +281,27 @@ def rows():
         m = E18 // 2 + rnd(5 * E18 // 2)
         out.append(leg_row("grid_mult_leg_%02d" % i, rnd(500_000_000), 6, 1_000_000 + rnd(500_000_000),
                            rnd(20_000_000_000), rnd(20_000_000_000), rnd(2000), rnd(200), m=m))
+
+    # --- WO-23a Shields (tests/sandbox_v7b.rs: in session, D = 5k, Q = 15k) ---
+    out.append(shield_row("shield_weekend_10k", units, 180_000_000, q, 5_000_000_000, True, 10_000_000_000, 15))
+    out.append(shield_row("shield_weekend_over", units, 180_000_000, q, 5_000_000_000, True, 11_251_000_000, 15))
+    out.append(shield_row("shield_min_5usd", 1_000_000, 180_000_000, q, 5_000_000_000, True, 5_000_000, 15,
+                          total_debt=10_000_000_000))
+    out.append(shield_row("shield_event_1k", units, 180_000_000, q, 5_000_000_000, True, 1_000_000_000, 25))
+    for i in range(8):
+        out.append(shield_row("grid_shield_%02d" % i, 1 + rnd(1_000_000_000), 1_000_000 + rnd(1_000_000_000),
+                              rnd(50_000_000_000), rnd(5_000_000_000), rnd(2) == 1, rnd(20_000_000_000),
+                              rnd(1001)))
+
+    # --- WO-23a Profit-Lock (tests/sandbox_v7b.rs NEAR leg; tests/sandbox_p2.rs remote |kind=SELF) ---
+    out.append(self_row("self_near_10k", units, 180_000_000, 10_000_000_000, 12_000_000_000, 200))
+    out.append(self_row("self_remote_11250", units, 180_000_000, 11_250_000_000, 12_000_000_000, 200))
+    out.append(self_row("self_no_capacity", units, 180_000_000, 10_000_000_000, 10_049_999_999, 200))
+    out.append(self_row("self_split_m2", units, 90_000_000, 10_000_000_000, 12_000_000_000, 200, m=2 * E18))
+    for i in range(12):
+        m = E18 // 2 + rnd(5 * E18 // 2)
+        out.append(self_row("grid_self_%02d" % i, rnd(500_000_000), 1_000_000 + rnd(500_000_000),
+                            rnd(20_000_000_000), rnd(25_000_000_000), rnd(2000), m=m))
     return out
 
 

@@ -50,7 +50,9 @@ pub const MAX_DERIVED_KEY_LEN: usize = 256;
 pub const MAX_VAULT_READ_LEN: usize = 1024;
 pub const SOURCE_OUTLAYER: &str = "outlayer";
 pub const SOURCE_KEEPER: &str = "keeper";
-const U64_MAX: u128 = u64::MAX as u128;
+pub(crate) const U64_MAX: u128 = u64::MAX as u128;
+/// WO-23a (WO-21 open question 3): 0.05 NEAR held per reservation against spam, refunded to the borrower.
+pub const RESERVE_DEPOSIT_YOCTO: u128 = 50_000_000_000_000_000_000_000;
 
 fn release_key(position_id: u64) -> Vec<u8> {
     let mut k = RELEASE_PREFIX.to_vec();
@@ -104,6 +106,10 @@ pub fn parse_vault_read(raw: &[u8], position_id: u64) -> Result<VaultRead, &'sta
     if u128_of(&v["position_id"]) != Some(u128::from(position_id)) {
         return Err("position_mismatch");
     }
+    // WO-24: `{"position_id":"<id>","found":false}` when the vault has no position PDA yet.
+    if v.get("found").and_then(Value::as_bool) == Some(false) {
+        return Err("not_found");
+    }
     let units = u128_of(&v["units"]).ok_or("bad_units")?;
     let authority = v["authority"].as_str().ok_or("bad_authority")?.to_string();
     let depositor = v["depositor"].as_str().ok_or("bad_depositor")?.to_string();
@@ -141,6 +147,25 @@ impl Nectar {
         p.remote.clone().unwrap_or_else(|| env::panic_str("not a remote position"))
     }
 
+    /// Effect half of the reservation-deposit refund: zeroes the held deposit and returns what to send.
+    /// The caller writes the position, then calls `send_reservation_refund` (CEI).
+    pub(crate) fn take_reservation_deposit(r: &mut RemoteInfo) -> u128 {
+        let amt = r.deposit_yocto.0;
+        r.deposit_yocto = U128(0);
+        amt
+    }
+    pub(crate) fn send_reservation_refund(position_id: u64, borrower: &AccountId, amount: u128, reason: &str) {
+        if amount == 0 {
+            return;
+        }
+        emit(
+            "reservation_deposit_refunded",
+            json!({ "position_id": U64(position_id), "account_id": borrower, "amount_yocto": U128(amount),
+                    "reason": reason }),
+        );
+        Promise::new(borrower.clone()).transfer(NearToken::from_yoctonear(amount)).detach();
+    }
+
     /// A deposit is proven (attested read or keeper attestation): record it, then pay the loan if both limits
     /// still hold with a fresh price. Never panics on business failures (callback path).
     pub(crate) fn accept_deposit(&mut self, mut p: Position, units: u128, depositor: String, source: &str, deposit_ref: String) {
@@ -156,6 +181,8 @@ impl Nectar {
         let borrow = r.borrow_usd_e6.0;
         let c = self.coll_or_panic(&p.collateral);
         let referrer = r.referrer.clone().filter(|x| self.referrers.contains(x));
+        // WO-23a: a proven deposit (funded or refused) returns the reservation deposit.
+        let refund = Self::take_reservation_deposit(&mut r);
         let refusal = if late {
             Some("reservation_expired")
         } else if self.paused {
@@ -164,12 +191,21 @@ impl Nectar {
             Some(ERR_CA_PENDING)
         } else if !self.oracle_fresh(&c) {
             Some("oracle stale")
+        } else if p.shield.is_some_and(|s| now >= s.window_end_ns.0) {
+            Some("shield_window_over")
         } else {
             None
         };
         let terms = match refusal {
             Some(e) => Err(e),
-            None => self.check_borrow(&c, units, borrow, Some(p.pre_liq_ltv_bps), referrer.is_some()),
+            None => self.check_borrow(
+                &c,
+                units,
+                borrow,
+                Some(p.pre_liq_ltv_bps),
+                referrer.is_some(),
+                p.shield.map(|s| s.fee_bps),
+            ),
         };
         let entry_m = c.multiplier_e18;
         let booked = match terms {
@@ -194,9 +230,14 @@ impl Nectar {
                 p.remote = Some(r);
                 let borrower = p.borrower.clone();
                 let collateral = p.collateral.clone();
+                let shield = p.shield;
                 self.put_position(p);
                 self.emit_opened(id, &borrower, &collateral, units, borrow, &t, pay_to.as_ref(), &referrer, true);
+                if let Some(s) = &shield {
+                    self.emit_shield_opened(id, &borrower, &collateral, s, t.premium, true);
+                }
                 self.pay_proceeds(id, &borrower, t.net, pay_to);
+                Self::send_reservation_refund(id, &borrower, refund, "confirmed");
             }
             Err(reason) => {
                 // The collateral is in the vault under our key: it stays releasable (debt 0). Before expiry the
@@ -207,7 +248,9 @@ impl Nectar {
                 }
                 emit("remote_loan_refused", json!({ "position_id": U64(id), "reason": reason }));
                 p.remote = Some(r);
+                let borrower = p.borrower.clone();
                 self.put_position(p);
+                Self::send_reservation_refund(id, &borrower, refund, "loan_refused");
             }
         }
     }
@@ -291,6 +334,8 @@ impl Nectar {
                 buyer_units: leg.buyer_units,
                 keeper_units: 0,
                 recipient: rcpt,
+                kind: chainsig::KIND_PRELIQ,
+                fee_usd_e6: 0,
             },
         )?;
         if q.remaining_usd_e6.0 == 0 {
@@ -306,13 +351,94 @@ impl Nectar {
         Self::schedule_sign(call);
         Ok(())
     }
+
+    /// WO-23a Profit-Lock on a remote position: one opted-in quote with a Solana recipient pays `debt + fee`; the
+    /// vault pays `units_repaid` to it and the rest to the depositor. Preimage `repay_e6` = the debt repaid,
+    /// `|kind=SELF`, the position's path. Debt leaves the aggregate now; the pool (debt) and the treasury (fee) are
+    /// credited when the signature arrives, and a sign failure rolls the leg back. `Err` = nothing written.
+    pub(crate) fn self_settle_remote(
+        &mut self,
+        position_id: U64,
+        mut p: Position,
+        mut c: CollateralConfig,
+        plan: crate::shields::SelfPlan,
+    ) -> Result<(), &'static str> {
+        let r = p.remote.clone().ok_or("not a remote position")?;
+        if r.domain_id != chainsig::ED25519_DOMAIN_ID {
+            return Err("remote settle: domain not supported");
+        }
+        let s = self.signer_config().ok_or("no signer config")?;
+        if self.settle_in_flight(position_id.0) {
+            return Err("remote settlement in flight");
+        }
+        let &(qid, _, fill, units) = plan.legs.first().ok_or(crate::shields::ERR_NO_VOLUNTARY)?;
+        let rcpt = plan.recipient.clone().ok_or(crate::shields::ERR_NO_VOLUNTARY)?;
+        if plan.debt > U64_MAX || units > U64_MAX {
+            return Err("amount exceeds u64");
+        }
+        let reserve = math::sub(self.gas_reserve_yocto, 1).map_err(|_| "gas reserve empty")?;
+        Self::check_sign_gas(&s)?;
+        let acc = c.acc_fee_per_dollar_e18.0;
+        let mut q = self.quote(qid).ok_or("unknown quote")?;
+        Self::checkpoint_fees(&mut q, acc)?;
+        let q_c = if q.exiting() {
+            c.active_committed_q_usd_e6.0
+        } else {
+            math::sub(c.active_committed_q_usd_e6.0, fill)?
+        };
+        q.remaining_usd_e6 = U128(math::sub(q.remaining_usd_e6.0, fill)?);
+        Self::reset_fee_debt(&mut q, acc)?;
+        let total_debt = math::sub(c.total_debt_usd_e6.0, plan.debt)?;
+        let filled = math::add(plan.used_today, plan.fill)?;
+        p.debt_usd_e6 = U128(0);
+        p.units = U128(math::sub(p.units.0, units)?);
+        p.status = PositionStatus::Settling;
+        if let Some(pr) = p.remote.as_mut() {
+            pr.status = RemoteStatus::Settling;
+        }
+        // effects (record_remote_leg writes nothing on Err)
+        let call = self.record_remote_leg(
+            &mut p,
+            &r,
+            &s,
+            RemoteLeg {
+                quote_id: qid,
+                repay_usd_e6: plan.debt,
+                buyer_units: units,
+                keeper_units: 0,
+                recipient: rcpt,
+                kind: chainsig::KIND_SELF,
+                fee_usd_e6: plan.fee,
+            },
+        )?;
+        if q.remaining_usd_e6.0 == 0 {
+            self.remove_live(&p.collateral, qid);
+        }
+        self.put_quote(q);
+        self.gas_reserve_yocto = reserve;
+        c.active_committed_q_usd_e6 = U128(q_c);
+        c.total_debt_usd_e6 = U128(total_debt);
+        c.voluntary_day = plan.day;
+        c.voluntary_filled_today_e6 = U128(filled);
+        self.put_coll(c);
+        let borrower = p.borrower.clone();
+        self.put_position(p);
+        self.emit_self_settled(position_id, &borrower, &plan, true);
+        // interaction
+        Self::schedule_sign(call);
+        Ok(())
+    }
 }
 
 #[near]
 impl Nectar {
     // ------------------------------------------------------------ 1. reserve
-    /// Borrower, no deposit. Reserves a remote position (`AwaitingDeposit`) and asks the signer for the
-    /// position's vault authority. Limits run at confirmation, not here (a reservation locks no pool funds).
+    /// Borrower, attaches `RESERVE_DEPOSIT_YOCTO` (0.05 NEAR; less is refused, the whole attachment is held and
+    /// refunded on confirm, refused loan, failed authority or expiry). Reserves a remote position
+    /// (`AwaitingDeposit`) and asks the signer for the position's vault authority. Limits run at confirmation,
+    /// not here (a reservation locks no pool funds). A `shield` is validated and counted here (§4.9).
+    #[payable]
+    #[allow(clippy::too_many_arguments)]
     pub fn reserve_remote_position(
         &mut self,
         collateral: String,
@@ -321,6 +447,7 @@ impl Nectar {
         pre_liq_ltv_bps: u16,
         pay_to: Option<PayTo>,
         referrer: Option<AccountId>,
+        shield: Option<ShieldInput>,
     ) -> U64 {
         self.assert_not_paused();
         let borrower = env::predecessor_account_id();
@@ -343,6 +470,9 @@ impl Nectar {
             Self::gas_left() >= GAS_DERIVE_KEY.as_gas() + GAS_ON_AUTHORITY.as_gas() + GAS_CREATE_RECEIPTS.as_gas(),
             "attach more gas"
         );
+        let shield = shield.map(|s| self.validate_shield(&c, &s, borrow_usd_e6.0, &borrower).unwrap_or_else(|e| env::panic_str(e)));
+        let deposit = env::attached_deposit().as_yoctonear();
+        require!(deposit >= RESERVE_DEPOSIT_YOCTO, "attach the reservation deposit (0.05 NEAR)");
         let id = self.next_position_id;
         let next = id.checked_add(1).unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
         let path = chainsig::position_path(&rc.chain_id, id);
@@ -353,6 +483,9 @@ impl Nectar {
             .unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
         // effects
         self.next_position_id = next;
+        if shield.is_some() {
+            self.note_shield_open(&borrower);
+        }
         self.put_position(Position {
             position_id: U64(id),
             borrower: borrower.clone(),
@@ -386,13 +519,16 @@ impl Nectar {
                 deposit_ref: None,
                 confirming: false,
                 last_confirm_ns: U64(0),
+                deposit_yocto: U128(deposit),
             }),
+            shield,
         });
         emit(
             "remote_reserved",
             json!({ "position_id": U64(id), "borrower": borrower, "collateral": collateral, "chain": rc.chain_id,
                     "vault_program": rc.vault_program, "path": path, "domain_id": rc.mpc_domain_id,
-                    "units": units, "borrow_usd_e6": borrow_usd_e6, "expires_ns": U64(expires_ns) }),
+                    "units": units, "borrow_usd_e6": borrow_usd_e6, "expires_ns": U64(expires_ns),
+                    "deposit_yocto": U128(deposit), "shield": shield }),
         );
         // interaction (F-338: always pass predecessor and domain_id)
         let args = json!({ "path": path, "predecessor": env::current_account_id(), "domain_id": rc.mpc_domain_id });
@@ -427,6 +563,7 @@ impl Nectar {
                 Err(_) => Err("failed"),
             }
         };
+        let mut refund = 0;
         match res {
             Ok(a) => {
                 emit(
@@ -438,11 +575,14 @@ impl Nectar {
             Err(reason) => {
                 r.status = RemoteStatus::Expired;
                 p.status = PositionStatus::Closed;
+                refund = Self::take_reservation_deposit(&mut r);
                 emit("remote_reservation_failed", json!({ "position_id": position_id, "reason": reason }));
             }
         }
         p.remote = Some(r);
+        let borrower = p.borrower.clone();
         self.put_position(p);
+        Self::send_reservation_refund(position_id.0, &borrower, refund, "authority_failed");
     }
 
     /// Anyone, once the reservation is 30 min old without a recorded deposit.
@@ -455,9 +595,13 @@ impl Nectar {
         require!(r.depositor.is_none(), "deposit recorded: request_remote_release");
         r.status = RemoteStatus::Expired;
         p.status = PositionStatus::Closed;
+        let refund = Self::take_reservation_deposit(&mut r);
         p.remote = Some(r);
+        let borrower = p.borrower.clone();
         self.put_position(p);
         emit("remote_reservation_expired", json!({ "position_id": position_id }));
+        // interaction: the deposit goes back to the borrower, whoever expires it
+        Self::send_reservation_refund(position_id.0, &borrower, refund, "expired");
     }
 
     // ------------------------------------------------------------ 2. confirm
@@ -763,6 +907,7 @@ impl Nectar {
             vault_read_deposit_yocto: v.as_ref().map(|c| U128(c.deposit_yocto)),
             vault_read_gas_tgas: v.as_ref().map(|c| c.gas_tgas),
             reservation_expiry_s: RESERVATION_EXPIRY_S,
+            reserve_deposit_yocto: U128(RESERVE_DEPOSIT_YOCTO),
         }
     }
 }

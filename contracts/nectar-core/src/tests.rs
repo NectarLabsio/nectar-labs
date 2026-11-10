@@ -1003,7 +1003,7 @@ fn preview_borrow_view() {
     let mut c = setup();
     ft(&mut c, usdc(), lender(), 50_000_000_000, r#""SupplyLendingLiquidity""#);
     fund(&mut c, buyer1(), 15_000_000_000, 250);
-    let ok = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_000), None, None);
+    let ok = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_000), None, None, None);
     assert!(ok.ok);
     assert_eq!(ok.b_c_usd_e6, U128(11_250_000_000));
     assert_eq!(ok.static_limit_usd_e6, U128(7_200_000_000));
@@ -1015,15 +1015,15 @@ fn preview_borrow_view() {
     assert_eq!(ok.aggregate_headroom_usd_e6, U128(11_250_000_000));
     assert_eq!(ok.multiplier_e18, U128(math::E18));
     assert!(!ok.session_open);
-    let over = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_001), None, None);
+    let over = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(11_250_000_001), None, None, None);
     assert!(!over.ok);
     assert_eq!(over.reason.as_deref(), Some("aggregate_limit"));
-    let over_ltv = c.preview_borrow("NVDAx".into(), U128(40_000_000), U128(5_040_000_001), None, None);
+    let over_ltv = c.preview_borrow("NVDAx".into(), U128(40_000_000), U128(5_040_000_001), None, None, None);
     assert_eq!(over_ltv.reason.as_deref(), Some("borrow above B_c"));
-    let unk = c.preview_borrow("NOPE".into(), U128(1), U128(1), None, None);
+    let unk = c.preview_borrow("NOPE".into(), U128(1), U128(1), None, None, None);
     assert_eq!(unk.reason.as_deref(), Some("unknown collateral"));
     set_ctx(owner(), 0, T0 + 86_401 * SEC);
-    let stale = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(1), None, None);
+    let stale = c.preview_borrow("NVDAx".into(), U128(NVDAX_UNITS), U128(1), None, None, None);
     assert_eq!(stale.reason.as_deref(), Some("oracle stale"));
 }
 
@@ -1120,6 +1120,58 @@ fn model_csv_vectors_match_contract_math() {
                     assert_eq!(leg.repay_usd_e6, u("repay_usd_e6"), "{case}");
                     assert_eq!(leg.buyer_units, u("buyer_units"), "{case}");
                     assert_eq!(leg.keeper_units, u("keeper_units"), "{case}");
+                }
+            }
+            // WO-23a §4.9: sized with the session closed whatever `session_open` says; flat fee replaces the premium.
+            "shield" => {
+                let p = math::LimitParams {
+                    decimals: u("decimals") as u8,
+                    m_e18: u("multiplier_e18"),
+                    total_debt_usd_e6: u("total_debt_usd_e6"),
+                    price_usd_e6: u("price_usd_e6"),
+                    q_usd_e6: u("q_usd_e6"),
+                    r_usd_e6: u("r_usd_e6"),
+                    d_usd_e6: u("d_usd_e6"),
+                    session_open: false,
+                    base_ltv_bps: u("base_ltv_bps") as u16,
+                    max_nectar_ltv_bps: u("max_nectar_ltv_bps") as u16,
+                    base_haircut_bps: u("base_haircut_bps") as u16,
+                    weekend_haircut_bps: u("weekend_haircut_bps") as u16,
+                };
+                let l = math::limit(u("units"), &p).unwrap();
+                assert_eq!(l.capacity_usd_e6, u("capacity_usd_e6"), "{case}");
+                assert_eq!(l.haircut_bps as u128, u("haircut_bps"), "{case}");
+                assert_eq!(l.b_c_usd_e6, u("b_c_usd_e6"), "{case}");
+                let borrow = u("borrow_usd_e6");
+                let ok = borrow > 0
+                    && borrow <= l.ltv_cap_usd_e6
+                    && u("total_debt_usd_e6") + borrow <= l.capacity_usd_e6
+                    && !math::triggerable(borrow, l.value_usd_e6, u("pre_liq_ltv_bps") as u16).unwrap();
+                assert_eq!(ok as u128, u("borrow_ok"), "{case}");
+                let fee = math::shield_fee(borrow, u("shield_fee_bps") as u16).unwrap();
+                assert_eq!(fee, u("premium_usd_e6"), "{case}");
+                let s = math::split_premium(fee, u("buyers_bps") as u16, u("lenders_bps") as u16, u("q_usd_e6")).unwrap();
+                assert_eq!(s.buyers_usd_e6, u("buyers_fee_usd_e6"), "{case}");
+                assert_eq!(s.treasury_usd_e6, u("treasury_fee_usd_e6"), "{case}");
+                let orig = math::origination_fee(borrow, u("origination_fee_bps") as u16).unwrap();
+                assert_eq!(borrow.saturating_sub(fee + orig), u("net_proceeds_usd_e6"), "{case}");
+            }
+            // WO-23a §4.10: one opted-in quote fills debt + fee.
+            "self" => {
+                let (fee, fill) = math::profit_lock_fill(u("debt_usd_e6"), u("pl_fee_bps") as u16).unwrap();
+                assert_eq!((fee, fill), (u("pl_fee_usd_e6"), u("fill_usd_e6")), "{case}");
+                if !get("buyer_units").is_empty() {
+                    let (b, _) = math::seize_units_m(
+                        fill,
+                        u("multiplier_e18"),
+                        u("price_usd_e6"),
+                        u("decimals") as u8,
+                        u("disc_bps") as u16,
+                        0,
+                    )
+                    .unwrap();
+                    assert_eq!(b, u("buyer_units"), "{case}");
+                    assert_eq!(u("units") - b, u("units_kept"), "{case}");
                 }
             }
             k => panic!("unknown kind {k}"),

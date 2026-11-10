@@ -141,8 +141,8 @@ fn base(chain: bool) -> Nectar {
 }
 
 fn reserve(c: &mut Nectar, ts: u64) -> u64 {
-    set_ctx(borrower(), 0, ts);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None).0
+    set_ctx(borrower(), crate::remote::RESERVE_DEPOSIT_YOCTO, ts);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None).0
 }
 
 fn authority_cb(c: &mut Nectar, id: u64, result: PromiseResult) {
@@ -632,7 +632,7 @@ fn reserve_paused() {
 fn reserve_referrer_is_borrower() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, Some(borrower()));
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, Some(borrower()), None);
 }
 
 #[test]
@@ -640,7 +640,7 @@ fn reserve_referrer_is_borrower() {
 fn reserve_unknown_collateral() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("TSLAx".into(), U128(UNITS), U128(BORROW), 7500, None, None);
+    c.reserve_remote_position("TSLAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None);
 }
 
 #[test]
@@ -664,7 +664,7 @@ fn reserve_without_signer() {
 fn reserve_zero_units() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(0), U128(BORROW), 7500, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(0), U128(BORROW), 7500, None, None, None);
 }
 
 #[test]
@@ -672,7 +672,7 @@ fn reserve_zero_units() {
 fn reserve_units_above_u64() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(u128::from(u64::MAX) + 1), U128(BORROW), 7500, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(u128::from(u64::MAX) + 1), U128(BORROW), 7500, None, None, None);
 }
 
 #[test]
@@ -680,7 +680,7 @@ fn reserve_units_above_u64() {
 fn reserve_zero_borrow() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(0), 7500, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(0), 7500, None, None, None);
 }
 
 #[test]
@@ -688,7 +688,7 @@ fn reserve_zero_borrow() {
 fn reserve_borrow_above_u64() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(u128::from(u64::MAX) + 1), 7500, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(u128::from(u64::MAX) + 1), 7500, None, None, None);
 }
 
 #[test]
@@ -696,7 +696,7 @@ fn reserve_borrow_above_u64() {
 fn reserve_pre_liq_range() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 9000, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 9000, None, None, None);
 }
 
 #[test]
@@ -705,7 +705,7 @@ fn reserve_memo_too_long() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
     let pay_to = PayTo { receiver_id: a("shop.test"), memo: Some("m".repeat(129)) };
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, Some(pay_to), None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, Some(pay_to), None, None);
 }
 
 #[test]
@@ -713,7 +713,7 @@ fn reserve_memo_too_long() {
 fn reserve_needs_gas() {
     let mut c = base(true);
     ctx_gas(borrower(), 0, T0 + SEC, 20);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None);
 }
 
 #[test]
@@ -820,9 +820,9 @@ fn deposit_verified_with_pay_to_and_referrer() {
     let mut c = base(true);
     set_ctx(owner(), 0, T0);
     c.register_referrer(a("ref.test"));
-    set_ctx(borrower(), 0, T0 + SEC);
+    set_ctx(borrower(), crate::remote::RESERVE_DEPOSIT_YOCTO, T0 + SEC);
     let pay_to = PayTo { receiver_id: a("shop.test"), memo: Some("inv-1".into()) };
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(5_000_000_000), 7500, Some(pay_to), Some(a("ref.test")));
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(5_000_000_000), 7500, Some(pay_to), Some(a("ref.test")), None);
     fund(&mut c, "buyer1.test", 12_000_000_000, 250, true);
     authority_cb(&mut c, 0, key_result(&auth()));
     confirm(&mut c, 0, T0 + 2 * SEC);

@@ -90,6 +90,52 @@ pub struct CollateralConfig {
     /// Reserved (PRD §4.7 weekend reference price); present, unused in P0.
     pub weekend_ref_price_e6: U128,
     pub weekend_ref_updated_ns: U64,
+    // ---- v2 (WO-23a, PRD §4.9, §4.10, §6.11)
+    /// §4.9 Shield fees and the curator's event window.
+    pub shield: ShieldParams,
+    /// §4.10 Profit-Lock: USDC that opted-in quotes may fill per UTC day (0 = self-settlement off).
+    pub max_voluntary_fill_usd_e6_per_day: U128,
+    pub voluntary_filled_today_e6: U128,
+    /// UTC day (`block_ns / 86400 s`) of `voluntary_filled_today_e6`.
+    pub voluntary_day: u32,
+    /// OutLayer multiplier job read a change outside the `set_multiplier` bound: the owner should announce it.
+    pub ca_suggested_multiplier_e18: U128,
+    pub ca_suggested_ns: U64,
+}
+
+/// §4.9 per-asset Shield pricing (owner `set_shield_params`). `event_window_end_ns = 0`: no event window open.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ShieldParams {
+    pub weekend_fee_bps: u16,
+    pub event_fee_bps: u16,
+    pub event_window_end_ns: U64,
+}
+
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ShieldKind {
+    Weekend,
+    Event,
+}
+
+/// `shield` field of `LockCollateralAndBorrow` / `reserve_remote_position`.
+#[near(serializers = [json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ShieldInput {
+    pub kind: ShieldKind,
+    pub window_end_ns: U64,
+}
+
+/// §4.9 a Shield recorded on its position: sized at weekend parameters, `fee_bps` replaced the limit premium.
+/// Until `window_end_ns` only committed buyers may settle it (no DEX route exists in P0).
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Shield {
+    pub kind: ShieldKind,
+    pub window_end_ns: U64,
+    pub fee_bps: u16,
+    pub opened_ns: U64,
 }
 
 /// v2 is a fresh deploy (`nectar-core-v2`, PRD §6.11): discriminant 0 holds the v2 layout.
@@ -119,6 +165,8 @@ pub struct Quote {
     pub fee_debt_e18: U128,
     pub claimable_fees_usd_e6: U128,
     pub created_ns: U64,
+    /// v2 (§4.10): the quote also fills Profit-Lock self-settlements.
+    pub accepts_voluntary_fills: bool,
 }
 
 impl Quote {
@@ -162,6 +210,8 @@ pub struct Position {
     pub entry_multiplier_e18: U128,
     /// v2 (§B): collateral held in a remote vault (Solana); None = NEAR-held (settles on NEAR only).
     pub remote: Option<RemoteInfo>,
+    /// v2 (§4.9): Shield preset; `premium_usd_e6` then holds the Shield fee.
+    pub shield: Option<Shield>,
 }
 
 /// v2 (§B, PRD §9B) remote lifecycle: AwaitingDeposit -> Open -> (Settling | Releasing) -> Closed; AwaitingDeposit -> Expired.
@@ -209,6 +259,9 @@ pub struct RemoteInfo {
     /// An OutLayer `vault_read` is in flight.
     pub confirming: bool,
     pub last_confirm_ns: U64,
+    /// WO-23a: reservation deposit held (yocto); refunded to the borrower on confirm, refused loan, failed
+    /// authority or expiry, then 0.
+    pub deposit_yocto: U128,
 }
 
 #[near(serializers = [borsh, json])]
@@ -259,6 +312,8 @@ pub struct RemoteConfigView {
     pub vault_read_deposit_yocto: Option<U128>,
     pub vault_read_gas_tgas: Option<u64>,
     pub reservation_expiry_s: u64,
+    /// WO-23a: deposit `reserve_remote_position` requires (refunded).
+    pub reserve_deposit_yocto: U128,
 }
 
 #[near(serializers = [borsh])]
@@ -288,6 +343,9 @@ pub enum TokenMsg {
         buyer_remote_recipient: Option<String>,
         #[serde(default)]
         secrets_profile: Option<String>,
+        /// v2 (§4.10): opt into Profit-Lock fills (default false).
+        #[serde(default)]
+        accepts_voluntary_fills: bool,
     },
     TopUpQuote {
         quote_id: U64,
@@ -302,6 +360,9 @@ pub enum TokenMsg {
         pay_to: Option<PayTo>,
         #[serde(default)]
         referrer: Option<AccountId>,
+        /// v2 (§4.9): Shield preset.
+        #[serde(default)]
+        shield: Option<ShieldInput>,
     },
     Repay {
         position_id: U64,
@@ -424,6 +485,9 @@ pub struct PreviewBorrowView {
     pub aggregate_headroom_usd_e6: U128,
     pub multiplier_e18: U128,
     pub session_open: bool,
+    /// WO-23a: Shield fee when a `shield` was given (then `premium_usd_e6` = this fee and limits use weekend
+    /// parameters); 0 otherwise.
+    pub shield_fee_usd_e6: U128,
 }
 
 // ---------------------------------------------------------------- P1 (interface-p1.md, state V1)
@@ -528,6 +592,10 @@ pub struct PendingSettlement {
     pub recipient: String,
     pub status: PendingStatus,
     pub solana_tx_sig: Option<String>,
+    /// 1 = PRELIQ, 2 = SELF (Profit-Lock).
+    pub kind: u8,
+    /// SELF: Profit-Lock fee the buyer paid on top of `repay_usd_e6` (treasury once signed); 0 for PRELIQ.
+    pub fee_usd_e6: U128,
 }
 
 #[near(serializers = [borsh])]
@@ -554,4 +622,91 @@ pub struct RemoteLeg {
     pub buyer_units: u128,
     pub keeper_units: u128,
     pub recipient: String,
+    /// `chainsig::KIND_PRELIQ` | `chainsig::KIND_SELF`
+    pub kind: u8,
+    pub fee_usd_e6: u128,
+}
+
+// ---------------------------------------------------------------- WO-23a views
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ShieldView {
+    pub position_id: U64,
+    pub kind: ShieldKind,
+    pub window_end_ns: U64,
+    pub fee_bps: u16,
+    pub fee_usd_e6: U128,
+    /// now < window_end_ns: only committed-buyer settlement (no DEX route).
+    pub active: bool,
+    pub committed_buyers_only: bool,
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SelfSettleLegView {
+    pub quote_id: U64,
+    pub disc_bps: u16,
+    /// USDC the quote pays (debt share + fee share).
+    pub fill_usd_e6: U128,
+    pub units: U128,
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct SelfSettlePreview {
+    pub ok: bool,
+    pub reason: Option<String>,
+    pub debt_usd_e6: U128,
+    pub fee_usd_e6: U128,
+    /// debt + fee
+    pub fill_usd_e6: U128,
+    pub units_repaid: U128,
+    pub units_kept: U128,
+    pub legs: Vec<SelfSettleLegView>,
+    pub remote: bool,
+    pub daily_cap_usd_e6: U128,
+    pub daily_used_usd_e6: U128,
+}
+
+/// §4.11 fee stack. Asset-specific rows are None without a symbol.
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct FeeStackView {
+    pub limit_premium_bps: Option<u16>,
+    pub shield_weekend_fee_bps: u16,
+    pub shield_event_fee_bps: u16,
+    pub origination_fee_bps: u16,
+    pub referrer_share_bps: u16,
+    pub profit_lock_fee_bps: u16,
+    pub keeper_fee_bps: u16,
+    pub fee_split: FeeSplit,
+}
+
+/// OutLayer job (calendar | multiplier) pin; same shape as the `vault_read` pin.
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct JobConfigView {
+    pub job: String,
+    pub project_id: String,
+    pub version_key: String,
+    pub deposit_yocto: U128,
+    pub gas_tgas: u64,
+    /// "job" (own pin) | "vault_read" (falls back to the vault_read pin)
+    pub source: String,
+}
+
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq, Default)]
+pub struct JobState {
+    pub last_request_ns: U64,
+    pub in_flight: bool,
+}
+
+/// Base Sepolia B20 token read by the `multiplier` job.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct MultiplierSource {
+    pub rpc_url: String,
+    pub token: String,
 }

@@ -142,9 +142,10 @@ impl Nectar {
                 nonce,
                 expires,
             },
-            chainsig::KIND_PRELIQ,
+            leg.kind,
         )
         .ok_or("bad kind")?;
+        let kind_name = if leg.kind == chainsig::KIND_SELF { "SELF" } else { "PRELIQ" };
         if preimage.len() > chainsig::MAX_EDDSA_PAYLOAD {
             return Err("preimage too long");
         }
@@ -156,7 +157,7 @@ impl Nectar {
             json!({ "position_id": p.position_id, "quote_id": U64(leg.quote_id), "nonce": U64(nonce),
                     "expires": U64(expires), "preimage": preimage, "recipient": leg.recipient,
                     "repay_usd_e6": U128(leg.repay_usd_e6), "seize_units": U128(leg.buyer_units),
-                    "path": r.path, "kind": "PRELIQ" }),
+                    "path": r.path, "kind": kind_name, "fee_usd_e6": U128(leg.fee_usd_e6) }),
         );
         let args = sign_args(&r.path, &preimage, r.domain_id);
         let cb = json!({ "position_id": p.position_id, "quote_id": U64(leg.quote_id), "nonce": U64(nonce) }).to_string();
@@ -173,6 +174,8 @@ impl Nectar {
             recipient: leg.recipient,
             status: PendingStatus::AwaitingSignature,
             solana_tx_sig: None,
+            kind: leg.kind,
+            fee_usd_e6: U128(leg.fee_usd_e6),
         });
         Ok(SignCall {
             account: s.account.clone(),
@@ -197,9 +200,11 @@ impl Nectar {
     }
 
     /// Undo an unsigned leg: escrow back to the quote (re-listed if it had been emptied), debt and units back
-    /// to the position, remote status back to Open. The pool was never credited.
+    /// to the position, remote status back to Open. The pool and treasury were never credited. A SELF leg
+    /// returns `repay + fee` to the quote; the day's voluntary-fill counter is not rolled back (conservative).
     fn rollback_leg(&mut self, p: &mut Position, d: &PendingSettlement) {
         let repay = d.repay_usd_e6.0;
+        let escrow = ok(math::add(repay, d.fee_usd_e6.0));
         p.debt_usd_e6 = U128(ok(math::add(p.debt_usd_e6.0, repay)));
         p.units = U128(ok(math::add(p.units.0, ok(math::add(d.seize_units.0, d.keeper_units.0)))));
         if let Some(r) = p.remote.as_mut() {
@@ -213,9 +218,9 @@ impl Nectar {
             let mut c = self.coll_or_panic(&p.collateral);
             let acc = c.acc_fee_per_dollar_e18.0;
             ok(Self::checkpoint_fees(&mut q, acc));
-            q.remaining_usd_e6 = U128(ok(math::add(q.remaining_usd_e6.0, repay)));
+            q.remaining_usd_e6 = U128(ok(math::add(q.remaining_usd_e6.0, escrow)));
             if !q.exiting() {
-                c.active_committed_q_usd_e6 = U128(ok(math::add(c.active_committed_q_usd_e6.0, repay)));
+                c.active_committed_q_usd_e6 = U128(ok(math::add(c.active_committed_q_usd_e6.0, escrow)));
             }
             ok(Self::reset_fee_debt(&mut q, acc));
             let mut ids = self.live_ids(&p.collateral);
@@ -267,6 +272,8 @@ impl Nectar {
                 let repay = d.repay_usd_e6.0;
                 self.utilised_usd_e6 = ok(math::sub(self.utilised_usd_e6, repay));
                 self.available_usd_e6 = ok(math::add(self.available_usd_e6, repay));
+                // WO-23a SELF: the Profit-Lock fee reaches the treasury once the sale is signed.
+                self.treasury_usd_e6 = ok(math::add(self.treasury_usd_e6, d.fee_usd_e6.0));
                 d.signature_hex = Some(signature_hex.clone());
                 d.status = PendingStatus::Signed;
                 let (path, authority) = p.remote.as_ref().map_or((None, None), |r| (Some(r.path.clone()), r.authority.clone()));
@@ -274,7 +281,7 @@ impl Nectar {
                     "settlement_signed",
                     json!({ "position_id": position_id, "quote_id": quote_id, "nonce": nonce,
                             "preimage": d.preimage, "signature_hex": signature_hex, "path": path,
-                            "pubkey": authority }),
+                            "pubkey": authority, "kind": d.kind }),
                 );
                 self.put_pending(d);
             }

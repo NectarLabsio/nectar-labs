@@ -17,8 +17,11 @@ pub mod chainsig;
 pub mod events;
 pub mod math;
 pub mod types;
+mod shields;
 mod v7;
 
+#[cfg(feature = "p2")]
+mod jobs;
 #[cfg(feature = "p1")]
 mod p1;
 #[cfg(feature = "p2")]
@@ -34,6 +37,8 @@ mod tests_p1;
 mod tests_p2;
 #[cfg(test)]
 mod tests_v7;
+#[cfg(all(test, feature = "p2"))]
+mod tests_v7b;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
@@ -62,6 +67,21 @@ pub const MULTIPLIER_MAX_INCREASE_BPS: u16 = 500;
 /// A5
 pub const DEFAULT_ORIGINATION_FEE_BPS: u16 = 30;
 pub const MAX_ORIGINATION_FEE_BPS: u16 = 100;
+/// §4.11: half of the origination fee to a registered referrer.
+pub const REFERRER_SHARE_BPS: u16 = 5_000;
+/// WO-23a §4.9 Shields (testnet defaults; owner `set_shield_params`).
+pub const DEFAULT_SHIELD_WEEKEND_FEE_BPS: u16 = 15;
+pub const DEFAULT_SHIELD_EVENT_FEE_BPS: u16 = 25;
+pub const MAX_SHIELD_FEE_BPS: u16 = 1_000;
+/// Testnet minimum $5 (PROD $50).
+pub const SHIELD_MIN_BORROW_USD_E6: u128 = 5_000_000;
+pub const MAX_SHIELD_OPENS_PER_DAY: u8 = 5;
+/// Friday 16:00 to Monday 09:30 New York time.
+pub const SHIELD_WEEKEND_MAX_NS: u64 = 235_800 * 1_000_000_000;
+pub const SHIELD_EVENT_MAX_NS: u64 = 259_200 * 1_000_000_000;
+/// WO-23a §4.10 Profit-Lock fee on the debt repaid (treasury).
+pub const PROFIT_LOCK_FEE_BPS: u16 = 50;
+pub const DAY_NS: u64 = 86_400 * 1_000_000_000;
 pub const MAX_QUOTES_PER_ASSET: usize = 64;
 pub const MAX_QUOTES_PER_SETTLEMENT: usize = 8;
 pub const MAX_PAGE: u32 = 100;
@@ -119,6 +139,8 @@ enum StorageKey {
     SessionCalendar,
     Referrers,
     ClaimableUsdc,
+    // v2 WO-23a
+    ShieldOpens,
 }
 
 // Defaults for the V1 fields (packages/config/config.yaml outlayer.*, oracle.max_conf_bps; F-046).
@@ -191,6 +213,8 @@ pub struct Nectar {
     origination_fee_bps: u16,
     /// A4: USDC owed to an account (failed `pay_to`, referrer shares); paid by `withdraw_claimable`.
     claimable_usdc: LookupMap<AccountId, u128>,
+    /// WO-23a §4.9: account -> (UTC day, Shield opens that day).
+    shield_opens: LookupMap<AccountId, (u32, u8)>,
 }
 
 // ---------------------------------------------------------------- internal helpers
@@ -285,6 +309,10 @@ impl Nectar {
         now.saturating_sub(c.oracle_updated_ns.0) <= self.max_age_ns(c)
     }
     fn limit_params(&self, c: &CollateralConfig) -> LimitParams {
+        self.limit_params_for(c, false)
+    }
+    /// WO-23a §4.9: a Shield is sized as if the session were closed (h = weekend haircut, D_c = 0).
+    pub(crate) fn limit_params_for(&self, c: &CollateralConfig, shield: bool) -> LimitParams {
         LimitParams {
             decimals: c.decimals,
             m_e18: Self::eff_multiplier(c),
@@ -293,7 +321,7 @@ impl Nectar {
             q_usd_e6: c.active_committed_q_usd_e6.0,
             r_usd_e6: c.nectar_reserve_usd_e6.0,
             d_usd_e6: c.verified_dex_depth_usd_e6.0,
-            session_open: self.session_open(c),
+            session_open: !shield && self.session_open(c),
             base_ltv_bps: c.base_ltv_bps,
             max_nectar_ltv_bps: c.max_nectar_ltv_bps,
             base_haircut_bps: c.base_haircut_bps,
@@ -376,6 +404,7 @@ impl Nectar {
         notice_period_ns: u64,
         buyer_remote_recipient: Option<String>,
         secrets_profile: Option<String>,
+        accepts_voluntary_fills: bool,
     ) -> Result<u128, &'static str> {
         let mut c = self.coll(&collateral).ok_or(ERR_NO_COLLATERAL)?;
         if max_discount_bps as u128 >= BPS {
@@ -411,6 +440,7 @@ impl Nectar {
             fee_debt_e18: U128(math::fee_debt(amount, acc)?),
             claimable_fees_usd_e6: U128(0),
             created_ns: U64(env::block_timestamp()),
+            accepts_voluntary_fills,
         };
         // effects
         self.next_quote_id = next;
@@ -422,7 +452,8 @@ impl Nectar {
         emit(
             "quote_funded",
             json!({ "quote_id": U64(id), "buyer": sender, "collateral": collateral,
-                    "amount_usd_e6": U128(amount), "max_discount_bps": max_discount_bps }),
+                    "amount_usd_e6": U128(amount), "max_discount_bps": max_discount_bps,
+                    "accepts_voluntary_fills": accepts_voluntary_fills }),
         );
         Ok(0)
     }
@@ -472,6 +503,7 @@ impl Nectar {
         remote_path: Option<String>,
         pay_to: Option<PayTo>,
         referrer: Option<AccountId>,
+        shield: Option<ShieldInput>,
     ) -> Result<u128, &'static str> {
         if collateral != token_symbol {
             return Err("collateral does not match token");
@@ -498,13 +530,21 @@ impl Nectar {
         }
         Self::validate_string(&pay_to.as_ref().and_then(|p| p.memo.clone()))?;
         let referrer = referrer.filter(|r| self.referrers.contains(r)); // unregistered -> treasury
-        let t = self.check_borrow(&c, units, borrow, Some(pre_liq_ltv_bps), referrer.is_some())?;
+        let shield = match shield {
+            Some(s) => Some(self.validate_shield(&c, &s, borrow, sender)?),
+            None => None,
+        };
+        let t = self.check_borrow(&c, units, borrow, Some(pre_liq_ltv_bps), referrer.is_some(), shield.map(|s| s.fee_bps))?;
         let id = self.next_position_id;
         let next = id.checked_add(1).ok_or(math::ERR_OVERFLOW)?;
         let entry_m = c.multiplier_e18;
         // effects (book_borrow: all arithmetic before its first write)
         self.book_borrow(c, &t, borrow, &referrer)?;
         self.next_position_id = next;
+        if let Some(s) = &shield {
+            self.note_shield_open(sender);
+            self.emit_shield_opened(id, sender, &collateral, s, t.premium, false);
+        }
         self.put_position(Position {
             position_id: U64(id),
             borrower: sender.clone(),
@@ -519,6 +559,7 @@ impl Nectar {
             status: PositionStatus::Open,
             entry_multiplier_e18: entry_m,
             remote: None,
+            shield,
         });
         self.emit_opened(id, sender, &collateral, units, borrow, &t, pay_to.as_ref(), &referrer, false);
         // interaction
@@ -624,8 +665,10 @@ impl Nectar {
         borrow: u128,
         pre_liq_ltv_bps: Option<u16>,
         referrer_registered: bool,
+        shield_fee_bps: Option<u16>,
     ) -> Result<BorrowTerms, &'static str> {
-        let l = math::limit(units, &self.limit_params(c))?;
+        // WO-23a §4.9: a Shield is sized at weekend parameters and pays a flat fee instead of the premium.
+        let l = math::limit(units, &self.limit_params_for(c, shield_fee_bps.is_some()))?;
         if borrow > l.ltv_cap_usd_e6 {
             return Err("borrow above B_c");
         }
@@ -640,7 +683,10 @@ impl Nectar {
                 return Err("borrow above pre_liq_ltv_bps");
             }
         }
-        let premium = math::premium_usd_e6(borrow, l.static_limit_usd_e6, c.limit_premium_bps)?;
+        let premium = match shield_fee_bps {
+            Some(bps) => math::shield_fee(borrow, bps)?,
+            None => math::premium_usd_e6(borrow, l.static_limit_usd_e6, c.limit_premium_bps)?,
+        };
         let split = math::split_premium(
             premium,
             self.fee_split.buyers_bps,
@@ -890,6 +936,7 @@ impl Nectar {
             referrers: LookupSet::new(StorageKey::Referrers),
             origination_fee_bps: DEFAULT_ORIGINATION_FEE_BPS,
             claimable_usdc: LookupMap::new(StorageKey::ClaimableUsdc),
+            shield_opens: LookupMap::new(StorageKey::ShieldOpens),
         }
     }
 
@@ -921,6 +968,7 @@ impl Nectar {
                     notice_period_ns,
                     buyer_remote_recipient,
                     secrets_profile,
+                    accepts_voluntary_fills,
                 },
                 None,
             ) => self.on_fund_quote(
@@ -931,6 +979,7 @@ impl Nectar {
                 notice_period_ns.0,
                 buyer_remote_recipient,
                 secrets_profile,
+                accepts_voluntary_fills,
             ),
             (TokenMsg::TopUpQuote { quote_id }, None) => self.on_top_up(&sender_id, amount, quote_id.0),
             (TokenMsg::Repay { position_id }, None) => self.on_repay(amount, position_id.0),
@@ -942,6 +991,7 @@ impl Nectar {
                     remote_path,
                     pay_to,
                     referrer,
+                    shield,
                 },
                 Some(sym),
             ) => self.on_lock_and_borrow(
@@ -954,6 +1004,7 @@ impl Nectar {
                 remote_path,
                 pay_to,
                 referrer,
+                shield,
             ),
             _ => Err("msg not valid for this token"),
         };
@@ -1044,6 +1095,16 @@ impl Nectar {
                 forced_closed: false,
                 weekend_ref_price_e6: U128(0),
                 weekend_ref_updated_ns: U64(0),
+                shield: ShieldParams {
+                    weekend_fee_bps: DEFAULT_SHIELD_WEEKEND_FEE_BPS,
+                    event_fee_bps: DEFAULT_SHIELD_EVENT_FEE_BPS,
+                    event_window_end_ns: U64(0),
+                },
+                max_voluntary_fill_usd_e6_per_day: U128(0),
+                voluntary_filled_today_e6: U128(0),
+                voluntary_day: 0,
+                ca_suggested_multiplier_e18: U128(0),
+                ca_suggested_ns: U64(0),
             },
         };
         self.token_to_symbol.insert(i.token, symbol.clone());
@@ -1483,6 +1544,7 @@ impl Nectar {
         borrow_usd_e6: U128,
         referrer: Option<AccountId>,
         borrower: Option<AccountId>,
+        shield: Option<ShieldInput>,
     ) -> PreviewBorrowView {
         let c = match self.coll(&symbol) {
             Some(c) => c,
@@ -1500,13 +1562,23 @@ impl Nectar {
                     aggregate_headroom_usd_e6: U128(0),
                     multiplier_e18: U128(0),
                     session_open: false,
+                    shield_fee_usd_e6: U128(0),
                 };
             }
         };
         let borrow = borrow_usd_e6.0;
         let registered = referrer.as_ref().is_some_and(|r| self.referrers.contains(r));
-        let l = ok(math::limit(units.0, &self.limit_params(&c)));
-        let premium = ok(math::premium_usd_e6(borrow, l.static_limit_usd_e6, c.limit_premium_bps));
+        // WO-23a: a Shield is validated against the borrower (daily count) when one is given.
+        let shield_checked: Option<Result<Shield, &'static str>> = shield.as_ref().map(|s| match &borrower {
+            Some(b) => self.validate_shield(&c, s, borrow, b),
+            None => self.validate_shield(&c, s, borrow, &env::current_account_id()),
+        });
+        let shield_bps = shield.map(|s| self.shield_fee_bps(&c, s.kind));
+        let l = ok(math::limit(units.0, &self.limit_params_for(&c, shield_bps.is_some())));
+        let premium = match shield_bps {
+            Some(bps) => ok(math::shield_fee(borrow, bps)),
+            None => ok(math::premium_usd_e6(borrow, l.static_limit_usd_e6, c.limit_premium_bps)),
+        };
         let origination = ok(math::origination_fee(borrow, self.origination_fee_bps));
         let share = if registered { origination / 2 } else { 0 };
         let total_fees = ok(math::add(premium, origination));
@@ -1520,8 +1592,10 @@ impl Nectar {
             Some("oracle stale")
         } else if borrow == 0 {
             Some("borrow is zero")
+        } else if let Some(Err(e)) = shield_checked {
+            Some(e)
         } else {
-            self.check_borrow(&c, units.0, borrow, None, registered).err()
+            self.check_borrow(&c, units.0, borrow, None, registered, shield_bps).err()
         };
         PreviewBorrowView {
             b_c_usd_e6: U128(l.b_c_usd_e6),
@@ -1536,6 +1610,7 @@ impl Nectar {
             aggregate_headroom_usd_e6: U128(l.headroom_usd_e6),
             multiplier_e18: c.multiplier_e18,
             session_open: self.session_open(&c),
+            shield_fee_usd_e6: U128(if shield_bps.is_some() { premium } else { 0 }),
         }
     }
 
