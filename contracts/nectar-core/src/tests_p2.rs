@@ -831,6 +831,31 @@ fn deposit_verified_with_pay_to_and_referrer() {
     assert!(c.get_claimable(a("ref.test")).0 > 0);
 }
 
+/// Forged attestation (GATE_FAIL_G11 note): a well-formed vault read whose authority is another valid key is refused,
+/// pays nothing, and the genuine read after the cooldown still opens the loan.
+#[test]
+fn deposit_forged_authority_refused() {
+    let mut c = reserved();
+    let avail = c.get_pool().available_usd_e6;
+    let forged = DEPOSITOR; // a real 32-byte base58 key, but not `remote.authority`
+    assert_ne!(c.get_position(U64(0)).unwrap().remote.unwrap().authority.as_deref(), Some(forged));
+    confirm(&mut c, 0, T0 + 2 * SEC);
+    verified(&mut c, 0, T0 + 3 * SEC, vault_json(0, UNITS, forged, DEPOSITOR));
+    let p = c.get_position(U64(0)).unwrap();
+    let r = p.remote.clone().unwrap();
+    assert_eq!((r.status, r.confirming, r.depositor), (RemoteStatus::AwaitingDeposit, false, None));
+    assert_eq!((p.debt_usd_e6, p.units), (U128(0), U128(0)));
+    assert!(event_with("remote_deposit_rejected", "\"reason\":\"authority_mismatch\""));
+    assert!(!event_with("remote_deposit_confirmed", ""));
+    assert_eq!(c.get_pool().available_usd_e6, avail, "forged read pays nothing");
+    // the genuine attestation is still accepted once the cooldown has passed
+    let t = T0 + 2 * SEC + crate::remote::CONFIRM_COOLDOWN_S * SEC;
+    confirm(&mut c, 0, t);
+    verified(&mut c, 0, t, vault_json(0, UNITS, AUTH_B58, DEPOSITOR));
+    let p = c.get_position(U64(0)).unwrap();
+    assert_eq!((p.status, p.debt_usd_e6), (PositionStatus::Open, U128(BORROW)));
+}
+
 #[test]
 fn deposit_rejections_keep_awaiting() {
     let cases: Vec<(PromiseResult, &str)> = vec![
