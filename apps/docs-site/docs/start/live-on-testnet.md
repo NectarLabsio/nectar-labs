@@ -6,7 +6,7 @@ description: What is deployed, what is mock, what is a fallback.
 # Live on testnet
 
 <p className="verified">Verified against: F-003 (2026-11-09), F-030 (2026-11-09), F-040 (2026-11-09), F-060 (2026-11-10), F-063 (2026-11-10), F-070, F-073, F-075, F-076, F-078 (2026-11-09), F-167 (2026-11-09), F-168 (2026-11-09), F-173 (2026-11-09), F-177 (2026-11-09), F-178 (2026-11-09), F-179 (2026-11-09), F-036 (2026-11-09), F-184 (2026-11-09), C-007 (open), C-012 (open), D-016 (2026-11-10) · docs/EVIDENCE.md G2 (2026-11-09T20:55Z, 5f27f44), G4 + addendum (2026-11-09T22:10Z / 22:51Z, d87eef6 / fea52b7), G6 (2026-11-09T22:58Z, fea52b7), G7 (2026-11-09T23:57Z, 97382fd), G8 re-run (2026-11-09T23:56Z, df4706f) · evidence/upgrades/run-20261109T2340Z.log</p>
-<p className="status">Status on 2026-11-10: P0 gates G1–G3 PASS. G4 (OutLayer quoter) PASS, G6 (1Click depth) PASS. G5 (oracle): FALLBACK (disclosed), the owner oracle is in use. G7 PARTIAL (Chain Signatures signer side verified on NEAR; Solana leg not built). G8 (copilot) PASS on a fixture. G9 pending. Source: docs/EVIDENCE.md.</p>
+<p className="status">Status on 2026-11-10: P0 gates G1–G3 PASS. G4 (OutLayer quoter) PASS, G6 (1Click depth) PASS. G5 (oracle): FALLBACK (disclosed), the owner oracle is in use. G7 PARTIAL (Chain Signatures signer side verified on NEAR; the EVIDENCE run of 2026-11-09 found the Solana leg not built. The vault has since been deployed on devnet; the round trip is pending G7). G8 (copilot) PASS on a fixture. G9 pending. Source: docs/EVIDENCE.md.</p>
 
 The account ids come from `packages/config/config.yaml`. Each link opens the account on testnet NearBlocks.
 
@@ -23,8 +23,22 @@ The account ids come from `packages/config/config.yaml`. Each link opens the acc
 | 1Click depth | `dry: true` quotes only (F-002, F-060) | read-only, signed quotes, mainnet API | **G6 PASS.** NVDAx has no route (F-063), so `D_c` = 0. The Feed shows signed dry-quote depth for wNEAR → USDC. See [1Click depth](/integrate/oneclick-depth) |
 | Feed REST / MCP | local only | read-only, no keys | built; runs locally, no public host. See [Feed MCP](/integrate/feed-mcp) |
 | Chain Signatures signer | [`v1.signer-prod.testnet`](https://testnet.nearblocks.io/address/v1.signer-prod.testnet) (F-030, F-184) | third-party MPC signer; path `solana-devnet-v1`, domain 1 = Ed25519 | **live (testnet); NEAR side of G7 verified (2026-11-09T23:57Z).** nectar-core builds the settlement preimage from its own state, the signer signs the raw bytes (no pre-hash, D-016) and nectar-core emits `settlement_signed`. The signature verifies against the vault authority `ed25519:6QPGoVj8…S1tV`, which equals the signer's `derived_public_key` for (nectar-core.nectar.testnet, solana-devnet-v1) (F-036). See [Chain Signatures](/protocol/chain-signatures). Evidence: trigger tx [FCtApD2L…MHhe](https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe), position #6. The preimage names a **placeholder** Solana program id and a throwaway recipient; nothing was relayed to Solana |
-| Solana `nectar_vault` | `TODO-G7` (devnet) | P2, Anchor program | **not built.** The Solana CLI and Anchor are not installed (handoff H-TOOLCHAIN-SOLANA), so no Solana transaction exists and nothing on Solana verifies the signature yet. **G7: PARTIAL.** If the toolchain does not arrive by 2026-11-13 12:00 UTC, the Solana leg is cut and the NEAR signer round trip above is the shipped P2 demo See [Solana vault](/protocol/solana-vault) |
+| Solana `nectar_vault` | [`ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW`](https://explorer.solana.com/address/ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW?cluster=devnet) (devnet) | P2, Anchor program | **deployed; round trip pending G7.** Deployed with `init_vault(NVDAx)` on 2026-11-10 (evidence/solana/deploy-20261110T124326Z.log; not yet in docs/EVIDENCE.md). No settle or release transaction exists yet, so nothing on Solana has verified a NEAR signature. **G7: PARTIAL.** See [Solana vault](/protocol/solana-vault) |
 | NEAR AI copilot | web app panel, NEAR AI Cloud `cloud-api.near.ai` (F-070) | P2; prose only, never a contract input | **built; no live NEAR AI answer has been verified yet.** Live mode needs key H7, and NEAR AI Cloud returned 500 on 2026-11-09 (F-078). The panel shows an answer only after the signature and attestation checks pass; otherwise it shows "unverified — hidden". Tests (`pnpm --filter web test:copilot`, `e2e/copilot.spec.ts`) run on a fixture built from a real Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording; it correctly ends "unverified — hidden". Intel DCAP quote verification runs on the server (F-073); EIP-191 signer recovery and report_data/nonce checks run in the browser (F-075, F-076). **G8: PASS (fixture), 2026-11-09T23:56Z** |
+
+## v7 in progress
+
+These modules are in the repo and tested, but not on testnet. The contract parts ship together in one new contract, `nectar-core-v2.nectar.testnet`, which has not been created yet: it needs about 6–8 testnet NEAR (D-018, handoff H-NEAR-FAUCET). The v1 rows above do not change.
+
+| Module | Status | Page |
+| --- | --- | --- |
+| Aggregate borrowing limit (two-sided check) | built and tested in the sandbox; testnet deployment pending (gate G1 v7, then G2b) | [Aggregate borrowing limit](/concepts/aggregate-limit) |
+| Weekend Oracle Guard (fails closed, NYSE windows, 900 s) | built and tested in the sandbox; testnet deployment pending | [Weekend Oracle Guard](/concepts/weekend-oracle-guard) |
+| Corporate-action multiplier | built and tested in the sandbox; testnet deployment pending; OutLayer multiplier job not built | [Corporate-action multiplier](/concepts/corporate-actions) |
+| Origination fee, referrers, `pay_to` | built and tested in the sandbox; testnet deployment pending | [Fee stack and referrals](/concepts/fee-stack) |
+| Remote collateral lifecycle (Solana) | NEAR side built and tested in the sandbox; testnet deployment pending. Solana vault deployed on devnet; round trip pending G7 | [Remote collateral on Solana](/integrate/remote-collateral-solana) |
+| Agent skill (MCP tools) | built and unit-tested on view fixtures; runs locally with the Feed | [Agent skill and x402](/integrate/agent-skill-x402) |
+| x402 paid Feed export | built and tested against mocks; testnet settle pending G14 (accounts not created, H-NEAR-FAUCET) | [Agent skill and x402](/integrate/agent-skill-x402) |
 
 ## What "mock", "fallback" and "PROD-only" mean here
 
