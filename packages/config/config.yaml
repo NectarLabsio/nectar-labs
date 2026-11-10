@@ -70,3 +70,31 @@ limits:
   max_quotes_per_asset: 64
   max_quotes_per_settlement: 8
   gas_reserve_target_near: 5
+# ---- v7 (D-017/D-018). Flags are flipped by the orchestrator only when the module's gate passes (addendum §10). ----
+v7:
+  core_v2: nectar-core-v2.nectar.testnet   # TODO-G2b (not created yet; needs H-NEAR-FAUCET)
+  keeper_v2: keeper-v2.nectar.testnet      # TODO-G2b (D-019)
+  x402_relayer: x402-relayer.nectar.testnet # TODO-G14
+  agent1: agent1.nectar.testnet            # TODO-G14
+  origination_fee_bps: 30
+  session_stale_s: 900
+  remote_path_prefix: {solana: "solana-devnet/pos/", base: "base-sepolia/pos/"}
+  reservation_expiry_s: 1800
+features:
+  weekend_guard: false
+  multiplier: false
+  pay_to: false
+  referrals: false
+  shields: false
+  profit_lock: false
+  notes: false
+  reserve: false
+  agent_skill: false
+  x402: false
+  solana_remote: false
+  base: false
+base:
+  chain_id: 84532          # Base mainnet 8453 is blocked (guard, H-GUARD-V7)
+  rpc_url: TODO-G12
+  vault: TODO-G12
+  collateral: TODO-G12

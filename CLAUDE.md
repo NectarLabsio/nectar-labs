@@ -4,33 +4,37 @@ This file is loaded at session start and cached for the whole session. It change
 boundaries (P0 → P1 → P2). Anything volatile lives in `docs/FACTS.md`, `docs/STATE.md` or
 `packages/config/config.yaml`.
 
-Spec: `docs/PRD.md` (Nectar Labs PRD v6). Plan: this file + `docs/work/*.md`.
+Spec: `docs/PRD.md` (Nectar Labs PRD v7; v6 kept as `docs/PRD-v6.md`). Plan: this file + `docs/BUILD_PROMPT_V7.md`
+(addendum, overrides the first prompt where they differ) + `docs/work/*.md`. v7 id mapping (addendum → repo): D-017 in DECISIONS.
 Rules source: `docs/HACKATHON.md` (NEAR Hackathon, verified 2026-11-09).
 
 ## 1. Mission and deadline
 
-Ship Nectar Labs on NEAR testnet (+ Solana devnet settlement leg) for the NEAR Hackathon:
+Ship Nectar Labs on NEAR testnet (hub) with Solana devnet (P2a) and Base Sepolia `84532` (P2b) spokes for the NEAR Hackathon:
 time-committed, escrowed market-maker quotes (Pappus) raise borrowing limits (Cramér) on
 thin-exit collateral; borrowers pay a limit premium that funds buyers' commitment fees.
 
 - Development closes **2026-11-14 23:59 UTC**. Judging 16–18 Nov.
 - Internal: P0 green Nov 11 evening · P1 Nov 13 noon · P2 Nov 14 noon · package Nov 14 18:00 UTC.
-- Chains: NEAR testnet, Solana devnet. Nothing else. No mainnet. No token.
-- Tracks: `defi`, `security`, `privacy`; `agents` only if Feed MCP passes G9.
+- Chains: NEAR testnet (hub), Solana devnet (P2a), Base Sepolia `84532` (P2b). Nothing else. No mainnet. No token.
+- Tracks: `defi`, `security`, `privacy` always; `agents`, `nfts`, `realworld` only after their gates; `thesis` only if H18 = yes
+  and a reproducible notebook ships.
 - Collateral is **mock NVDAx** (`nvdax-mock.nectar.testnet`) standing in for xStocks / Opening Bell.
   The README says so on the first screen.
 - **No hackathon branding in the product UI** (landing, web app, docs navigation): no banner, badge or
   copy about the NEAR Hackathon. UI disclosures say "testnet" and "mock collateral". Hackathon context
   lives only in README.md, docs/EVIDENCE.md and docs/SUBMISSION.md, where judges read it.
+- Copy rules: never "insurance", never "without liquidations", never "live" before EVIDENCE shows it.
 
 ### Phases are strictly ordered
-P0 (core credit, web, docs, README) → gates G1–G3 → P1 (OutLayer quoter, oracle, 1Click depth,
-Feed MCP) → G4–G6 → P2 (Solana vault, Chain Signatures Ed25519, NEAR AI copilot) → G7–G8 →
-submission package → G9. **No P1 file is created before `p0-green`.**
+P0 → G1–G3 → P1 (+ v7 modules, G10 G11 G14) → G4–G6 → P2a (Solana lifecycle, copilot) → G7–G8 → P2b (Base
+Sepolia, G12 G13; hard stop 2026-11-14 12:00 UTC) → submission package → G9. **No P1 file before `p0-green`; no P2b
+file before G7 passed or is recorded as a disclosed failure.** v7 P0 delta = five items only (WO-19/WO-20).
 
-Cut order if time runs short (last to first): copilot → Feed MCP → Solana leg (keep the signer
-round-trip demo) → 1Click depth → oracle (owner oracle, disclosed) → OutLayer quoter (static
-discount, disclosed). P0 is never cut.
+Cut order (cut first → cut last): thesis → Base spoke → copilot → x402 → Reserve → Position Notes → Profit-Lock →
+Shields → Feed MCP + agent skill → Solana leg (keep the signer round-trip) → 1Click depth → oracle (owner oracle,
+disclosed) → OutLayer quoter (static discount, disclosed). P0 is never cut. A cut module leaves its contract fields
+in place, unused and documented.
 
 ### Hackathon rules that bind you
 | Rule | Consequence |
@@ -45,7 +49,8 @@ discount, disclosed). P0 is never cut.
 ### Never, without Kunal's explicit confirmation typed in this session
 send the submission · post on X or anywhere public · make the repo public, push to a public
 remote, or force-push · sign any mainnet transaction, spend real tokens, deploy to mainnet ·
-commit a secret or private key · delete testnet accounts · change approved submission fields.
+commit a secret or private key · delete testnet accounts · change approved submission fields · any Base mainnet
+(`8453`) transaction or deployment · post on market.near.ai · register a Base builder code.
 Keys live in the OS keychain or `0600` files under `~/.nectar/`; `.env` holds paths and ids only.
 `HUMAN_CONFIRMED=1` is set only by Kunal in his own shell; the Bash hook enforces this.
 
@@ -84,10 +89,11 @@ write FACTS CONFLICTS + `docs/DECISIONS.md`, choose the option that keeps P0 shi
 | researcher | `docs/FACTS.md` entries |
 | contract | `contracts/` |
 | quoter | `quoter/` |
-| keeper | `services/keeper/`, `services/feed/` |
-| web | `apps/web/`, `packages/ui/`, `packages/sdk/` |
+| keeper | `services/keeper/`, `services/feed/`, `services/x402/` |
+| web | `apps/web/`, `packages/ui/` (incl. `packages/ui/notes/`), `packages/sdk/` |
 | docs | `apps/docs-site/`, `docs/*.md` except FACTS/EVIDENCE |
 | solana | `solana/` |
+| evm (P2b) | `evm/` |
 | verifier | `docs/EVIDENCE.md`, `evidence/` (read-only elsewhere; runs gates from a fresh clone) |
 
 Dispatch loop per phase: write work orders → researcher for VERIFY items → build agents (≤ 4) →
@@ -101,6 +107,9 @@ G4 OutLayer execution attested, cost recorded, fallback tested · G5 oracle live
 + conf rejection tested · G6 1Click dry quote verified · G7 Solana devnet tx with Ed25519 verify
 ix + settle, signer response on NEAR · G8 copilot verifier green (fixture at minimum) ·
 G9 fresh-clone README rehearsal < 15 min, EVIDENCE complete, no secrets in history.
+v7 (`docs/work/gates-v7.md`): G10 v7 facts + toolchain · G11 v7 contract tests · G12 Base toolchain + collateral ·
+G13 Base round-trip · G14 x402 paid call. G1 adds the v7 P0 tests; G2b/G3b re-run against `nectar-core-v2`; G7 adds
+the remote lifecycle (stored authority = `derived_public_key`, attested deposit, signed release).
 A FAIL halts the phase. Nobody begins the next phase while a gate of this phase is FAIL.
 
 ## 6. Human handoff protocol

@@ -1,0 +1,40 @@
+info: syncing channel updates for 1.95.0-aarch64-apple-darwin
+info: latest update on 2026-04-16 for version 1.95.0 (59807616e 2026-04-14)
+info: component clippy is up to date
+info: component rustfmt is up to date
+
+  1.95.0-aarch64-apple-darwin unchanged - rustc 1.95.0 (59807616e 2026-04-14)
+
+info: checking for self-update (current version: 1.29.3)
+info: using existing install for 1.95.0-aarch64-apple-darwin
+info: default toolchain set to 1.95.0-aarch64-apple-darwin
+
+  1.95.0-aarch64-apple-darwin unchanged - rustc 1.95.0 (59807616e 2026-04-14)
+
+info: component rust-std for target wasm32-unknown-unknown is up to date
+info: component rust-std for target wasm32-wasip2 is up to date
+
+== pnpm 10.34.9 via corepack ==
+Preparing pnpm@10.34.9 for immediate activation...
+downloading stable installer
+  ✨ stable commit 0f131d3 initialized
+Adding 
+export PATH="/Users/lemmalabs/.local/share/solana/install/active_release/bin:$PATH" to /Users/lemmalabs/.profile
+
+Close and reopen your terminal to apply the PATH changes or run the following in your existing shell:
+  
+export PATH="/Users/lemmalabs/.local/share/solana/install/active_release/bin:$PATH"
+
+    Updating git repository `https://github.com/solana-foundation/anchor`
+warning: spurious network error (3 tries remaining): SecureTransport error: I/O error.; class=Net (12)
+warning: spurious network error (2 tries remaining): error receiving data from socket: Can't assign requested address; class=Net (12)
+warning: spurious network error (1 try remaining): failed to resolve address for github.com: nodename nor servname provided, or not known; class=Net (12)
+error: failed to clone into: /Users/lemmalabs/.cargo/git/db/anchor-3eeed4e738e6d335
+
+Caused by:
+  network failure seems to have happened
+  if a proxy or similar is necessary `net.git-fetch-with-cli` may help here
+  https://doc.rust-lang.org/cargo/reference/config.html#netgit-fetch-with-cli
+
+Caused by:
+  failed to resolve address for github.com: nodename nor servname provided, or not known; class=Net (12)

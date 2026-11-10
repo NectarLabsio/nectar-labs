@@ -1,6 +1,6 @@
-# Nectar Labs PRD v6 — Production Specification (NEAR + Solana)
+# Nectar Labs PRD v7 — Production Specification (NEAR hub · Solana · Base)
 
-Nov 9, 2026 · @Kunal Drall
+Nov 10, 2026 · @Kunal Drall
 
 Nectar Labs turns time-committed, escrowed buyer quotes into higher borrowing limits for tokenized stocks and other thin-exit collateral. This document is the production specification and the single input for the hackathon build; every integration fact in it was read from its source on 2026-11-09 or is marked for a gate.
 
@@ -18,6 +18,15 @@ This is v6, the first version where every contract, TEE and signer claim was che
 | P0 / P1 / P2 | Must ship by 2026-11-14 / ships if P0 is green by Nov 12 night / only with time left |
 | PROD | Production design that is specified here but not built in the hackathon window |
 
+**What changed in v7 (2026-11-10)** — Kunal's v6.0 module list, merged after source checks; module-by-module verdicts are in section 1A.
+
+- Chains: NEAR is the hub; Solana (P2a) and **Base Sepolia (P2b)** are spokes. This supersedes "NEAR + Solana only" in the v6 list below. Robinhood Chain, Arc, Arbitrum and Stellar stay on the roadmap.
+- New modules: corporate-action multiplier for B20 and xStocks (4.6), Weekend Oracle Guard enforced in the contract (4.7), retail Nectar Reserve from $10 (4.8), Weekend and Event Shields plus Zap-and-Borrow presets (4.9), borrower self-settlement sold as Profit-Lock (4.10), origination fee with registered referrers (4.11), NEP-171 Position Notes that carry authority over quotes, reserve deposits and loans (6.11), payable credit and x402 (10.5).
+- Two gaps in the v6 spec are closed: the Cramér limit now checks aggregate debt per asset (4.2), and remote collateral on Solana or Base has a verified-deposit and signed-release lifecycle (9B).
+- Eddsa requests sign the raw preimage bytes (at most 1,232, F-130); the stray "sha256" in 6.5 is removed.
+- Tracks: `defi`, `security`, `privacy` are core; `agents`, `nfts` and `realworld` are entered only when their features pass gates; `thesis` only if a reproducible notebook ships (section 18).
+- Nothing in v7 is live. Where v6.0 says "Phase 1 (Live Now)", read "testnet target"; the README calls a component live only after EVIDENCE.md shows it.
+
 **What changed from v5**
 
 - The `v1.signer` request is `{ path, payload_v2: { Ecdsa: <64 hex> } | { Eddsa: <hex> }, domain_id }` with a 1-yoctoNEAR deposit (VERIFIED from `near/mpc` source at commit b5bafa3, 2026-11-09). v5 had this right in the diagram; v4 did not.
@@ -28,30 +37,50 @@ This is v6, the first version where every contract, TEE and signer claim was che
 - Tracks: `defi`, `security`, `privacy`; `agents` only if the Feed MCP server ships. `thesis` is dropped: it is judged on reproducible NEAR data, and our figures are projections.
 - Pre-hackathon research and the Nectar Network design system are disclosed as baseline under HACKATHON.md Q-002 and Q-005.
 
-**Naming.** Brand: Nectar Labs. Protocol modules keep the studio's mathematician names: **Pappus** (escrow and settlement), **Cramér** (borrowing limits), **Macaulay** (pricing for collateral that redeems later; PROD). Products: **Nectar Feed**, **Nectar Keepers**, **Nectar Reserve** (PROD), **Nectar Route** (PROD).
+**Naming.** Brand: Nectar Labs. Protocol modules keep the studio's mathematician names: **Pappus** (escrow and settlement), **Cramér** (borrowing limits), **Macaulay** (pricing for collateral that redeems later; PROD). Products: **Nectar Feed**, **Nectar Keepers**, **Nectar Reserve** (P1, retail from $10), **Nectar Route** (PROD).
 
 ## 1. Product on one page
 
-**Consumer line:** Borrow against stocks without liquidations. **B2B line:** Guaranteed buyers for loan collateral.
+**Consumer line:** Borrow against stocks without fire-sales. **B2B line:** Guaranteed buyers for loan collateral.
 
 **The problem.** Lending protocols cap LTV on tokenized stocks, principal tokens and RWAs because the exit is revocable: DEX and prop-AMM depth disappears on weekends and in crashes. Every loan assumes a buyer, and on a calm day nobody checks.
 
 **The mechanism.** Buyers (market makers, prop AMMs, funds) post *funded* quotes: USDC escrowed in the Pappus contract with a notice period. A lending market may then set each asset's borrowing limit at the lower of the oracle limit and the *recoverable value*: committed quotes plus Nectar Reserve plus verified DEX depth, minus a haircut. Borrowers pay a rate premium on the extra limit; the premium pays buyers a commitment fee. When a position goes bad and the DEX is too thin, Pappus settles against the committed quotes in one transaction.
 
-**Why NEAR.** The escrow, limits and settlement rules live in one NEAR contract. Chain Signatures let that contract authorize collateral release on Solana without a bridge or a custodian. OutLayer runs the buyer's private pricing model in a TEE so the inventory curve never leaves the enclave. NEAR Intents supplies verifiable public depth (`dry: true` quotes) and the USDC rail.
+**Why NEAR.** The escrow, limits and settlement rules live in one NEAR contract. Chain Signatures let that contract authorize collateral release on Solana and Base without a bridge or a custodian. OutLayer runs the buyer's private pricing model in a TEE so the inventory curve never leaves the enclave. NEAR Intents supplies verifiable public depth (`dry: true` quotes) and the USDC rail.
 
 **What ships for NEAR HACKATHON (by 2026-11-14 23:59 UTC)**
 
-| Tier | Scope |
+| Tier | Scope (v7) |
 | --- | --- |
-| P0 | `nectar-core` on NEAR testnet with real NEP-141 custody (mock USDC, mock NVDAx): fund quotes, two-step notice withdrawal, O(1) fee accumulator, lending pool, borrow up to the Cramér limit, keeper-triggered pre-liquidation that moves real tokens, function-call-key keeper, owner-only risk params. Web app (Nectar Network design): landing, Feed, Post a quote, Curator console, Keepers, Talk to us. Docs site. `pnpm demo:testnet` under 2 minutes. |
-| P1 | OutLayer quoter (hash-pinned `wasm32-wasip2`) returning `clearing_discount_bps` from secret inventory; `price-oracle.near` read with sanity band; 1Click dry-quote depth; Nectar Feed MCP server; CSV/JSON export. |
-| P2 | Solana leg: `v1.signer` Ed25519 signature over a contract-built preimage, Solana devnet program releasing mock xStock collateral after Ed25519-precompile verification; NEAR AI Cloud copilot with `provider_tee` signature check. |
-| PROD | Mainnet, real xStocks, Reserve quoting engine, Macaulay, Morpho/Euler/Aave modules, Robinhood Chain and Base legs, audits, bonded keeper slashing, Launch Cover. |
+| P0 | `nectar-core` on NEAR testnet with real NEP-141 custody (mock USDC, mock NVDAx): fund quotes, two-step notice withdrawal, O(1) fee accumulator, lending pool, borrow up to the Cramér limit **with the aggregate-debt check**, **weekend guard rule**, **multiplier field**, **`pay_to`** and **`referrer`**; keeper-triggered pre-liquidation that moves real tokens; function-call-key keeper; owner-only risk params. Web app (Nectar Network design), docs site, `pnpm demo:testnet` under 2 minutes. |
+| P1 | OutLayer quoter (hash-pinned `wasm32-wasip2`) with multiplier read and NYSE calendar; oracle with sanity band; 1Click dry-quote depth; Nectar Feed MCP server and `open_protected_stock_loan` skill; Position Notes; Nectar Reserve; Shields; Profit-Lock; x402 demo on `near:testnet`. |
+| P2a | Solana remote lifecycle: derived key from `derived_public_key`, attested deposit, Ed25519 settlement and release on devnet; NEAR AI Cloud copilot with `provider_tee` signature check. |
+| P2b | Base Sepolia spoke: B20 (or MockB20) collateral, `NectarVaultBase`, EIP-712 secp256k1 settlement and release, ERC-8021 suffix. |
+| PROD | Mainnet; real xStocks and Coinbase B20 with issuer policies; 1Click execution (Zap, KYC USDC fallback, cross-chain payout); Reserve recipients on spokes; TWAP + IV weekend pricing; Macaulay; Morpho/Euler/Aave modules; Robinhood Chain, Arc, Arbitrum and Stellar legs; audits; bonded keepers; NEP-145 storage deposits; sub-account Notes. |
 
 **The demo moment.** Friday evening, markets closed. NVDAx drops 9% on a thin pool. A keeper flags the position. The DEX would fill at a 14% discount; the committed buyer's escrowed USDC repays the loan at 1.5%, the collateral moves to the buyer, and Nectar Feed shows the remaining committed capacity. Then a keeper with a stolen key tries to sign an arbitrary payload and the contract refuses: it only signs what it built itself.
 
-**Non-goals for the hackathon.** Fiat, cash-out, non-USDC quotes, more than two chains, a governance token, a mobile app, real-money mainnet positions.
+**Non-goals for the hackathon.** Fiat, cash-out, non-USDC quotes, more than three chains (NEAR, Solana, Base), a governance token, a mobile app, real-money mainnet positions.
+
+## 1A. v7 module review
+
+All eight v6.0 modules and the Base spoke are adopted, but five change shape after source checks: the multiplier, the Reserve, Profit-Lock, the Notes and the agent channel. None of them is allowed to delay P0 or the Solana leg.
+
+| # | Module (v6.0) | Verdict | What v7 builds | Testnet limit | Tier |
+| --- | --- | --- | --- | --- | --- |
+| 1 | B20 / xStocks corporate-action multiplier + KYC 1Click fallback | Adopt, corrected | Collateral is stored in raw units and valued as raw × M\_T × underlying price. M is applied only to an *underlying* price: a Chainlink B20 token price already includes it (F-125). Entry M is kept for display. A buyer's remote recipient is checked with `isAuthorized` on the B20 PolicyRegistry when the quote is funded (F-121), not discovered at settlement. | 1Click has no testnet and no B20 route (Q-007, F-063), so the USDC fallback is PROD. The xStocks on-chain mechanism is unconfirmed (F-127). | P1; fallback PROD |
+| 2 | Three consumer cards: Weekend Gap Shield, Event Shield, $10 Zap-and-Borrow | Adopt as presets | A Shield is a position opened at the weekend or event limit for a fixed window, with a flat shield fee instead of the up-front limit premium; inside the window only committed buyers can settle it (4.9). | Zap needs 1Click: testnet shows a labelled mock-token faucet beside the dry quote. A $5 position costs the contract about 0.0035 NEAR of storage; PROD needs NEP-145 deposits. | P1 |
+| 3 | Retail Nectar Reserve, $10 minimum | Adopt, scoped | R\_c becomes a pooled buyer per asset: shares, fees through the same O(1) index, fills after Pappus quotes at `reserve_discount_bps`, collateral claims per share, 7-day notice (4.8). | Yield is shown as realised trailing APR, never a promised "200 bps". Retail holders receiving tokenized stock is restricted in PROD (F-124). $10 deposits will not solve cold start. | P1 |
+| 4 | Payable credit via 1Click and x402 | Adopt, testnet-limited | `pay_to` on a borrow sends proceeds to a merchant account; a failed transfer becomes `claimable_usdc`. An agent borrows, then pays an x402 endpoint with `@fastnear/x402` on near:testnet (F-128). | Cross-chain 1Click payout is PROD. | P1 |
+| 5 | Dual-oracle Weekend Oracle Guard | Adopt, moved into the contract | The contract fails closed on its own: price older than 900 s or session closed sets D\_c = 0 and the weekend haircut. OutLayer may only close the session (NYSE calendar, halts), never open it (4.7). | No 24/7 tokenized-stock DEX on testnet: the weekend reference price is owner-set with a badge; TWAP and IV spread are PROD. | P0 rule; P1 calendar |
+| 6 | Dynamic NEP-171 Position Notes | Adopt, strengthened | Notes carry authority: the owner of a quote note withdraws and claims, the owner of a loan note receives residual collateral, and transfers are blocked while a position is Settling. The SVG is rendered live by a view (6.11). | Wallets render data-URI media unevenly, so the app renders `nft_token_svg`. "Share to X" is a link the user clicks. | P1 |
+| 7 | Instant Profit-Lock | Adopt, mechanism replaced | Borrower-initiated settlement while healthy, filled by quotes that opted into voluntary fills, at their clearing discount, plus a 50 bps fee, under a per-asset daily cap (4.10). | v6.0's formula sold shares at the oracle price with no named buyer. | P1 |
+| 8 | Agent skill, 50/50 referral, ERC-8021 | Adopt, guarded | The MCP tool returns an unsigned transaction for the agent's own key; a referrer must be registered and differ from the borrower; the keeper appends the ERC-8021 suffix to Base transactions (10.5). | The builder code needs Kunal (Base Dashboard, F-126). market.near.ai is a task marketplace (F-135), so a listing there is optional. | P1; 8021 P2b |
+| 9 | Base spoke for B20 stocks (secp256k1) | Adopt as P2b | An EIP-712 settlement message signed by `v1.signer` domain 0, verified by `NectarVaultBase` on Base Sepolia with `ecrecover` against the address from `derived_public_key` (F-138). Real B20 collateral via the factory precompile if creation is open (F-122, F-123), else a mock with the same functions (9B). | Base Sepolia ETH needs a faucet with a login (HUMAN H15). | P2b |
+| 10 | Seven tracks | Narrowed | `defi`, `security`, `privacy` always; `agents`, `nfts`, `realworld` only after their gates pass; `thesis` only with a reproducible notebook in the repo. | Each track is judged on its own brief; a weak entry costs nothing formally but dilutes the README. | — |
+
+**Scope cost, stated plainly.** These modules roughly double the contract surface with about 4.6 days left. The cut order in section 18 removes them before it touches P0 or the Solana leg, and the build addendum adds them as separate work orders so a half-built module never blocks a gate.
 
 ## 2. Users, jobs and journeys
 
@@ -126,6 +155,8 @@ B_c = \min\big(\mathrm{LTV}_c \cdot V_c,\; (1-h_c)\,(Q_c + R_c + D_c)\big)
 
 A borrower may draw `borrow_usd_e6 ≤ B_c` and `≤ available_lending_usdc_e6`. The static limit `base_ltv_bps × V_c` is what the market would lend without Nectar; the amount above it carries `limit_premium_bps`, charged up front from proceeds in the hackathon build (PROD: accrued per block).
 
+**Aggregate rule (v7 fix).** Q\_c + R\_c + D\_c is shared by every position in the asset, so the check is two-sided: a position's `debt ≤ LTV_c × V_position`, and the asset's `total_debt_usd_e6 + new_borrow ≤ (1 − h_c)(Q_c + R_c + D_c)`. `CollateralConfig` gains `total_debt_usd_e6`, updated on borrow, repay and settlement. v6 compared each new loan with the whole pool and ignored loans already drawn against it.
+
 ### 4.3 Fee distribution in O(1)
 
 MasterChef-style accumulator per collateral: on each premium payment, `acc_fee_per_dollar_e18 += premium_buyer_share_e6 × 1e18 / active_committed_q_usd_e6`. Each quote stores `fee_debt_e18`; claimable fees are `committed × acc / 1e18 − fee_debt`. Split of the premium: 70% buyers (pro rata by committed size), 20% lenders, 10% protocol treasury; the split is owner-set and shown in the console. No loop over quotes anywhere.
@@ -146,11 +177,86 @@ MasterChef-style accumulator per collateral: on each premium payment, `acc_fee_p
 
 `q_i` (inventory utilisation, bps) and `γ_i` (risk aversion, bps) are the buyer's secrets in OutLayer; `σ_bps` and `regime_vol_bps` come from the price history the quoter fetches. A light inventory clears cheaper than the public ceiling; the buyer's curve never leaves the enclave. The contract clamps whatever comes back to `[0, max_discount_bps]`, so a faulty quoter can only make the buyer pay more, never the borrower.
 
+### 4.6 Corporate-action multiplier (B20, xStocks)
+
+Collateral is stored in raw token units and valued through a per-asset WAD multiplier, so splits and reinvested dividends never break a loan's accounting.
+
+```latex
+V_c = \frac{\mathrm{raw\_units}}{10^{d}} \times \frac{M_T}{10^{18}} \times P_{\mathrm{underlying}}
+```
+
+- `CollateralConfig` gains `multiplier_e18`, `multiplier_updated_ns`, `price_kind: Underlying | TokenIncludesMultiplier` and `ca_pending: bool`. With `TokenIncludesMultiplier` (a Chainlink B20 token feed, F-125) the M term is 1, so the multiplier is never counted twice.
+- `Position` keeps `entry_multiplier_e18` for display only ("+2% from dividends since open"); limits use M\_T.
+- P0 source: owner `set_multiplier(collateral, m_e18)`, bounded to an increase of at most 5% per call. A decrease or a larger change needs `announce_corporate_action(collateral, effective_ns)` at least one hour earlier; while `ca_pending` is set, new borrows in that asset are refused and repays and settlements continue. This mirrors B20's `Announcement` / `EndAnnouncement` events.
+- P1 source: the OutLayer job reads `multiplier()` from the Base Sepolia token by `eth_call` and returns `multiplier_e18` in its stdout; the contract applies the same bounds.
+- Demo: `mock-ft` gains `multiplier()` and owner `update_multiplier`. A 2-for-1 split on mock NVDAx doubles M, halves the underlying price and leaves raw balances and LTV unchanged.
+
+### 4.7 Weekend Oracle Guard
+
+The contract decides on its own whether the market is in session, and it fails closed.
+
+```latex
+\mathrm{session\_open} = \mathrm{in\_nyse\_hours}(t) \land (t - t_{\mathrm{publish}} \le 900\,\mathrm{s}) \land \lnot\,\mathrm{forced\_closed}
+```
+
+- `in_nyse_hours` is computed in the contract from UTC time, a DST table and the NYSE holiday list for 2026–2027 (about 30 timestamps in state, owner-updatable).
+- When the session is closed: D\_c = 0, h\_c = `weekend_haircut_bps`, and health uses min(last close, weekend reference price) when a fresh reference exists.
+- `forced_closed` can be set by the owner or by an attested OutLayer result (halts, circuit breakers). Nothing outside the contract can open a session.
+- Weekend reference price: testnet uses an owner-set price, at most one hour old, shown with an "owner reference" badge. PROD uses a 24/7 DEX TWAP for xStocks and B20 plus an implied-volatility spread.
+
+### 4.8 Nectar Reserve (R\_c)
+
+The Reserve is one pooled buyer per asset that fills after every Pappus quote, open to deposits from $10.
+
+- Deposit: `JoinNectarReserve{collateral}` with at least 10,000,000 (USDC e6). Shares are minted against `reserve_usdc_e6`; each deposit mints a Reserve Note (6.11) holding its shares.
+- R\_c = `reserve_usdc_e6` minus shares in notice. The buyer share of every premium is split between quotes and the Reserve in proportion to Q\_c and R\_c; the Reserve's part accrues through `acc_fee_per_share_e18`.
+- Settlement waterfall: Pappus quotes by ascending discount, then the Reserve at `reserve_discount_bps` (owner-set, higher than any quote ceiling), then the position stays `Settling` for the owner. Seized units accrue to Reserve Notes through `acc_units_per_share_e18`, with a per-note `unit_debt` so late depositors get no claim on earlier fills.
+- Exit: `initiate_reserve_exit` (shares leave R\_c at once), `complete_reserve_exit` after 7 days: USDC per share plus claimable units plus fees.
+- Hackathon limit: the Reserve fills only NEAR-side collateral; remote fills need a Reserve recipient on each spoke (PROD).
+- The page shows realised trailing APR; it never promises a rate.
+
+### 4.9 Shields: weekend and event presets
+
+A Shield is a normal position opened at the weekend limit for a fixed window, so the limit cannot be cut halfway through the weekend.
+
+- `LockCollateralAndBorrow` and the remote open accept `shield: {kind: Weekend | Event, window_end_ns}`. Weekend windows end at the next session open (at most 65.5 h, Friday 16:00 to Monday 09:30 New York time). Event windows are set per asset by the curator (for example earnings), at most 72 h.
+- Sizing ignores the session: h\_c = `weekend_haircut_bps` and D\_c = 0 from the start.
+- Pricing: a flat `shield_fee_bps` on the borrowed amount (testnet defaults 15 bps weekend, 25 bps event) replaces the up-front limit premium; the split is the same.
+- Inside the window only committed buyers can settle it. After `window_end_ns` it is an ordinary position; the app prompts a repay but does not close it.
+- Minimum $5 on testnet. PROD: $50 and a NEP-145 storage deposit, because each position costs the contract about 0.0035 NEAR of storage.
+- Zap-and-Borrow: on mainnet, 1Click `EXACT_INPUT` USDC → collateral to the user, then the borrow. On testnet, a "Get demo NVDAx" faucet (mock mint, once per account per hour) next to the dry quote that mainnet would execute.
+- Copy rule: a Shield is not insurance. The screen says "a weekend-safe limit with committed buyers behind it".
+
+### 4.10 Self-settlement (sold as Profit-Lock)
+
+A healthy borrower can close a loan by selling just enough collateral to committed buyers who opted in, and keep the rest debt-free.
+
+```latex
+Q_{\mathrm{repaid}} = \frac{\mathrm{debt} \times (1 + f_{pl}) \times 10^{d}}{P \times \frac{M_T}{10^{18}} \times (1 - \delta)}, \qquad Q_{\mathrm{kept}} = Q_{\mathrm{locked}} - Q_{\mathrm{repaid}}
+```
+
+- f\_pl = 50 bps; δ = the clearing discount (P0: the quote's `max_discount_bps`; P1: the TEE result).
+- Only quotes with `accepts_voluntary_fills = true` take part, under `max_voluntary_fill_usd_e6_per_day` per asset, so voluntary exits cannot drain Q\_c.
+- Requires health ≥ 1 and no pending corporate action. Remote collateral uses the same signed settlement with `kind=SELF` in the preimage.
+- v6.0 priced the sale at the oracle price with no counterparty. This version names the buyer and the discount. The screen compares it with a 1Click dry quote when a route exists.
+
+### 4.11 Fee stack and referrals
+
+| Fee | Charged on | Testnet default | Paid to |
+| --- | --- | --- | --- |
+| Limit premium | borrow above `base_ltv × V` | 300 bps, up front | 70% buyers and Reserve, 20% lenders, 10% treasury |
+| Shield fee (replaces the premium) | full borrow | 15 bps weekend, 25 bps event | same split |
+| Origination | full borrow | 30 bps | 50% to a registered referrer, else treasury |
+| Profit-Lock | debt repaid | 50 bps | treasury |
+| Keeper | repay amount | `keeper_fee_bps` | keeper |
+
+Referrers are registered by the owner on testnet and must differ from the borrower. A borrower who refers himself through a second account gets a 15 bps rebate; that is accepted and capped, not prevented. The sign modal shows the total of every fee before the wallet opens.
+
 ## 5. System architecture
 
 One NEAR contract holds every rule and every dollar of escrow; everything else either feeds it (quoter, oracle, keeper) or reads it (web, Feed, MCP, agents), and the only thing that leaves NEAR is a signature.
 
-&#91;embedded content: system architecture · actors, web app, NEAR testnet, off-chain services, Solana devnet\]
+&#91;embedded content: system architecture · actors, web app, NEAR testnet, off-chain services, Solana devnet, Base Sepolia\]
 
 Every write reaches nectar-core through a token's `ft_transfer_call`; the contract alone decides prices (through the quoter and the oracle), builds the settlement message and asks the MPC signer for an Ed25519 signature. The keeper only passes position ids and relays what the chain already signed to Solana.
 
@@ -251,7 +357,7 @@ All state changes happen before any cross-contract call; the transfer callbacks 
 ### 6.5 Settlement
 
 - `trigger_preliquidation(position_id)`: keeper only, `attached_deposit == 0`, not paused. Requires fresh oracle, `debt × 10000 > V_c × pre_liq_ltv_bps`. Sets `state = Settling`, picks the quote set (ascending `max_discount_bps`, bounded by `MAX_QUOTES_PER_SETTLEMENT = 8`). **P0:** settles at each quote's `max_discount_bps`. **P1:** calls `outlayer.request_execution` with `source: {Project:{project_id, version_key: quoter_version_key}}`, `input_data` = JSON of symbol, oracle price, feed id, session, quote ids and their secret profiles, `resource_limits: {max_instructions, max_execution_seconds}`, deposit from `gas_reserve_yocto` sized by a prior `estimate_execution_cost` view (G4), then `.then(on_quoter_result)`.
-- `on_quoter_result(position_id)` `#[private]`: parses stdout JSON (≤ 900 bytes), clamps `clearing_discount_bps` to `[0, max_discount_bps]`, applies the oracle band, then: NEAR collateral → `usdc` stays in contract as repayment (escrow debited, pool credited), `collateral_token.ft_transfer(buyer, seized_units)`; Solana collateral → builds the preimage (section 9), `sha256`, calls `mpc_signer.sign({path: position.remote_path, payload_v2: {Eddsa: hex(preimage_bytes)}, domain_id: 1})` with `SIGN_DEPOSIT_YOCTONEAR` (1) from the gas reserve and gas from `config.sign_call_gas_attachment_requirement_tera_gas` read at G3, `.then(on_signature)`.
+- `on_quoter_result(position_id)` `#[private]`: parses stdout JSON (≤ 900 bytes), clamps `clearing_discount_bps` to `[0, max_discount_bps]`, applies the oracle band, then: NEAR collateral → `usdc` stays in contract as repayment (escrow debited, pool credited), `collateral_token.ft_transfer(buyer, seized_units)`; Solana collateral → builds the preimage (section 9)`  and passes its raw bytes (≤ 1,232, F-130) to ` `mpc_signer.sign({path: position.remote_path, payload_v2: {Eddsa: hex(preimage_bytes)}, domain_id: 1})` with `SIGN_DEPOSIT_YOCTONEAR` (1) from the gas reserve and gas from `config.sign_call_gas_attachment_requirement_tera_gas` read at G3, `.then(on_signature)`.
 - `on_signature(position_id)` `#[private]`: stores `PendingSettlement{preimage_hex, signature_hex, derived_pubkey, expires_ns}` and emits `settlement_signed`; `used_nonces.insert(nonce)`.
 - `relay_settlement_result(position_id, solana_tx_sig)`: keeper records the Solana transaction; closes the position. (Trust note: the keeper's claim is advisory; finality on Solana is verified off-chain by the Feed indexer, PROD: light-client or oracle attestation.)
 - A quoter failure or timeout falls back to P0 behaviour (`max_discount_bps`) and emits `quoter_fallback`, so a down TEE never blocks a rescue.
@@ -275,6 +381,67 @@ Storage is 1E19 yoctoNEAR per byte (VERIFIED). Quotes and positions are \~300 by
 ### 6.10 Tests (must be green before any service code)
 
 Unit: every panic path in 6.3–6.5, fee accumulator maths against a reference loop, haircut switch, nonce reuse, cap behaviour. Sandbox integration (near-sandbox, chosen at G1): fund → borrow at limit → price drop → keeper pre-liq → balances match a spreadsheet model in `tests/model.csv`; buyer exit through notice; keeper with a full-access key is refused; keeper calling `ft_transfer` directly fails; paused contract refuses money paths.
+
+### 6.11 v7 contract surface
+
+v7 adds four `msg` fields, one `msg` variant, seventeen methods and NEP-171 Notes to the same contract; the borsh layout changes, so v2 deploys beside v1 instead of migrating it.
+
+**`ft_on_transfer` changes**
+
+| Variant | Change | Effect |
+| --- | --- | --- |
+| `FundPappusQuote{…, accepts_voluntary_fills: bool}` | new field | mints Quote Note `q-<id>`; opts the quote into self-settlement fills |
+| `LockCollateralAndBorrow{…, shield?, pay_to?, referrer?}` | three optional fields | shield sizing and fee (4.9); proceeds to `pay_to.receiver_id` with memo, failure credits `claimable_usdc[borrower]`; origination split to a registered referrer ≠ borrower; mints Loan Note `p-<id>` |
+| `JoinNectarReserve{collateral}` | new variant, USDC only, ≥ 10,000,000 | mints Reserve Note `r-<collateral>-<n>` (4.8) |
+| `Repay{position_id}` | unchanged | for remote positions, a full repay unlocks `request_remote_release` |
+
+**New methods**
+
+| Method | Caller | Purpose |
+| --- | --- | --- |
+| `reserve_remote_position(collateral, units, borrow_usd_e6, shield?, pay_to?, referrer?)` | borrower | opens `AwaitingDeposit`, path `<chain>/pos/<id>`, calls `v1.signer.derived_public_key(path, predecessor = self, domain_id)` and stores the authority in `on_authority` (9B) |
+| `confirm_remote_deposit(position_id)` | anyone (keeper key allowed) | P1/P2: OutLayer reads the vault by RPC and returns an attested `{units, authority, depositor}`; `on_deposit_verified` checks it, runs the limit checks and pays out |
+| `keeper_attest_deposit(position_id, tx_ref)` | keeper, only while `allow_keeper_deposit_attestation` | testnet fallback; the Feed labels such positions "keeper-attested" |
+| `request_remote_release(position_id)` | anyone | after full repay: signs the NECTAR\_RELEASE\_V1 message (pipe-joined fields, 9B) so the borrower withdraws on the vault |
+| `self_settle(position_id)` | Loan Note owner | Profit-Lock (4.10) |
+| `initiate_reserve_exit(note_id)`, `complete_reserve_exit(note_id)`, `withdraw_claimable()` | Note owner / borrower | Reserve exit (4.8), failed `pay_to` refunds |
+| `set_multiplier`, `announce_corporate_action`, `set_session_calendar`, `force_session_closed`, `set_weekend_reference_price` | owner (OutLayer may force closed) | 4.6, 4.7 |
+| `register_referrer`, `set_shield_params`, `set_reserve_params` | owner | 4.9, 4.11 |
+| `nft_token_svg(token_id) -> String` | view | live SVG for a Note |
+
+The keeper's function-call key is re-issued with `confirm_remote_deposit` and `keeper_attest_deposit` added to its method list.
+
+**State additions**
+
+```rust
+CollateralConfig += { total_debt_usd_e6: u128, multiplier_e18: u128, multiplier_updated_ns: u64,
+  price_kind: PriceKind, ca_pending: bool, ca_effective_ns: u64, forced_closed: bool,
+  weekend_ref_price_e6: u128, weekend_ref_updated_ns: u64,
+  reserve: ReservePool { shares: u128, usdc_e6: u128, units: u128, discount_bps: u16,
+    acc_fee_per_share_e18: u128, acc_units_per_share_e18: u128 },
+  shield: ShieldParams { weekend_fee_bps: u16, event_fee_bps: u16, event_window_end_ns: u64 },
+  max_voluntary_fill_usd_e6_per_day: u128, voluntary_filled_today_e6: u128, voluntary_day: u32 }
+Quote += { accepts_voluntary_fills: bool }
+Position += { entry_multiplier_e18: u128, shield: Option<Shield>, remote: Option<Remote {
+  chain: String, path: String, authority: String, status: AwaitingDeposit | Open | Releasing }> }
+Nectar += { session_calendar: Vec<(u64, u64)>, referrers: LookupSet<AccountId>, claimable_usdc: LookupMap<AccountId, u128>,
+  notes: NonFungibleToken /* near-contract-standards, F-137 */, allow_keeper_deposit_attestation: bool }
+```
+
+**Position Notes (NEP-171 + NEP-177 + NEP-181)**
+
+- Token ids: `q-<quote_id>`, `p-<position_id>`, `r-<collateral>-<n>`. The Note owner is the authority: quote withdrawals, fee claims, Reserve exits and self-settlement check `nft_token(id).owner_id`; the original funder stays in events only.
+- A Loan Note's owner receives residual collateral on repay, self-settlement or settlement remainder. Anyone may repay.
+- `nft_transfer` is refused while the Note's quote or position is referenced by a pending settlement. Payout recipients are snapshotted when a settlement starts, so a transfer mid-callback cannot redirect funds.
+- Transferring a Quote Note clears `buyer_remote_recipient`; remote fills skip that quote until the new owner sets a recipient that passes the authorization check.
+- `nft_token` returns NEP-177 metadata whose `media` is a `data:image/svg+xml;base64` render of live state (LTV, health, Q\_c + R\_c backing, multiplier, claimable fees). `nft_token_svg` returns the raw SVG for the app.
+- Track fit: a Quote or Reserve Note is a transferable claim on escrowed USDC and fees, which is the `nfts` brief's "assets that own money" (F-134). One sub-account per Note is PROD.
+
+**Events added (NEP-297):** `reserve_joined`, `reserve_exiting`, `reserve_exited`, `shield_opened`, `self_settled`, `multiplier_updated`, `corporate_action_announced`, `session_forced_closed`, `remote_reserved`, `remote_deposit_confirmed`, `remote_release_signed`, `referrer_paid`, plus the standard NEP-171 `nft_mint` and `nft_transfer`.
+
+**Tests added before any v7 service code:** two borrowers cannot both draw the full capacity (aggregate rule); a 2-for-1 split leaves LTV unchanged; a price older than 900 s flips the asset to weekend parameters; the Reserve fills only after every quote; a Note transfer moves authority and is refused while Settling; the voluntary-fill cap holds; a referrer equal to the borrower is refused; a failed `pay_to` credits `claimable_usdc`; a forged deposit attestation (wrong authority) is refused.
+
+**Deployment.** If v1 is live on testnet, v2 deploys to `nectar-core-v2.nectar.testnet`, is reseeded by script, and `config.yaml` switches to it; v1 stays untouched as evidence. No `migrate()` is written during the hackathon.
 
 ## 7. OutLayer quoter (P1)
 
@@ -350,6 +517,16 @@ The sources conflict, so the oracle is chosen at a gate and the contract defends
 
 **Equities trade in sessions.** Outside NYSE hours the quoter sets `session_open:false`; the contract then counts only Q\_c and R\_c. This is the whole point of the product and the demo runs on a Friday evening for that reason.
 
+**Weekend Oracle Guard (v7, mechanism in 4.7).** The guard needs no TEE to fail safe: a price older than 900 s already switches the asset to weekend parameters, because equity feeds stop updating outside market hours (Chainlink holds the last close with no off-hours heartbeat, F-125; Pyth's equity sessions are confirmed at G5).
+
+| Layer | Decides | Can it raise a limit? |
+| --- | --- | --- |
+| Contract | staleness (> 900 s), NYSE hours from its own calendar, `forced_closed` | only by returning to session when all three allow it |
+| OutLayer job (P1) | holidays, early closes, halts, circuit breakers; returns `force_closed: true` with an attestation | no: it can only close |
+| Owner | `force_session_closed`, calendar updates, weekend reference price | no limit increase without a fresh price inside NYSE hours |
+
+The NYSE holiday and early-close list for 2026–2027 is fetched from nyse.com at G10, written to FACTS with the date, and loaded with `set_session_calendar`; no date is typed from memory.
+
 ## 9. Chain Signatures and Solana settlement (P2)
 
 The NEAR contract never signs a Solana transaction; it signs a canonical settlement *message* it built itself, and a small Solana program releases collateral only when that exact message carries a valid signature from the position's NEAR-derived Ed25519 key. This removes the recent-blockhash problem and the keeper from the trust path.
@@ -399,6 +576,34 @@ ASCII, pipe-separated, decimal integers, no spaces; the Solana program rebuilds 
 
 **Mainnet note (PROD).** Same program, real xStocks mints, `v1.signer` on NEAR mainnet, a 24 h `expires` window, and a bonded keeper set.
 
+## 9B. Remote collateral lifecycle and the Base spoke
+
+A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position; it ends with either a signed settlement to a buyer or a signed release to the borrower. The same lifecycle serves Solana (P2a, Ed25519, domain 1) and Base Sepolia (P2b, secp256k1, domain 0). v6 never said how NEAR learns that a deposit happened; this section is that answer.
+
+&#91;embedded content: remote collateral lifecycle · reserve, deposit, attested confirm, then settle or release\]
+
+The loan is paid in step 8, never earlier: until OutLayer's attested read matches the authority nectar-core derived for itself, nothing leaves the lending pool.
+
+1. **Reserve.** The borrower calls `reserve_remote_position`. The contract assigns the id and path (`solana-devnet/pos/<id>` or `base-sepolia/pos/<id>`), calls `v1.signer.derived_public_key(path, predecessor = nectar-core, domain_id)` (F-138) and stores the authority: the Ed25519 public key for Solana, or the EVM address (last 20 bytes of keccak256 of x‖y, F-139) for Base. The reservation expires after 30 minutes without a deposit.
+2. **Deposit.** The borrower deposits on the vault with `open_position(position_id, authority, units)`.
+3. **Confirm.** Anyone calls `confirm_remote_deposit`. An OutLayer job reads the vault (Solana `getAccountInfo`, Base `eth_call`) and returns `{position_id, units, authority, depositor, slot_or_block}` with an attestation. `on_deposit_verified` requires the authority it stored and at least the reserved units, re-checks both limits against a fresh price, then pays the loan or `pay_to`. Testnet fallback: `keeper_attest_deposit`, labelled on the Feed.
+4. **Settle or release.** An unhealthy loan settles as in section 9 (Solana) or by the EIP-712 message below (Base). After a full repay, `request_remote_release` signs `NECTAR_RELEASE_V1|chain=…|vault=…|pos=…|recipient=<depositor>|nonce=…|expires=…` and the vault releases the collateral. This replaces the keeper-relayed `cancel_position` of v6.
+
+**Base Sepolia spoke (P2b)**
+
+| Item | Specification |
+| --- | --- |
+| Chain | Base Sepolia, `eip155:84532`. Base mainnet (8453) is PROD and blocked by the Bash hook. |
+| Collateral | A B20 ASSET token created through B20Factory `0xB20f000000000000000000000000000000000000` with `createB20` if any account may call it (F-122, F-123), with policies set explicitly for the vault and demo accounts (defaults are allow-all, F-121). Otherwise `MockB20.sol` with `multiplier()`, `scaledBalanceOf` and a `PolicyRegistryMock.isAuthorized(policyId, account)`. |
+| Vault | `NectarVaultBase.sol` (Foundry): `openPosition(id, authority, amount)`, `settle(Settle, v, r, s)`, `release(Release, v, r, s)`. EIP-712 domain `{name: "NectarVault", version: "1", chainId: 84532, verifyingContract}`. |
+| Typed data | `Settle(uint64 positionId,uint64 quoteId,uint256 repayE6,uint256 seizeRaw,address recipient,uint64 nonce,uint64 expires,uint8 kind)` and `Release(uint64 positionId,address recipient,uint64 nonce,uint64 expires)`. |
+| Signing | nectar-core computes the EIP-712 digest with keccak256 and calls `sign({path, payload_v2: {Ecdsa: <64 hex>}, domain_id: 0})` with 1 yoctoNEAR (F-130, F-131). The response's `big_r`, `s`, `recovery_id` become `r = big_r.x`, `s`, `v = 27 + recovery_id` (F-132, confirmed at G13). |
+| Checks in the vault | `ecrecover(digest, v, r, s) == position.authority`, nonce unused, not expired, and `isAuthorized(policyId(TRANSFER_RECEIVER_POLICY), recipient)` before the transfer. The vault itself must be authorized as sender, receiver and executor. |
+| Recipient rule | A quote that may fill Base collateral must carry a Base recipient that passed the same authorization check when it was set, so an unauthorized buyer is refused at funding time, not at settlement. |
+| Keeper | Relays from an EOA funded by a Base Sepolia faucet (HUMAN H15) and appends the ERC-8021 suffix with Kunal's builder code to the calldata (HUMAN H13, F-126). |
+| Multiplier | The OutLayer job reads `multiplier()` by `eth_call`; settlement amounts are raw units; scaled amounts appear only on screen. |
+| PROD limits | Real Coinbase B20 stocks need the issuer to authorize the vault in its policies and are offered only in eligible jurisdictions outside the U.S. (F-124). |
+
 ## 10. Keepers, Nectar Feed and the MCP server
 
 ### 10.1 Nectar Keepers
@@ -439,6 +644,21 @@ Read-only, no keys, rate limited per IP. Listed on Agent Market (docs.market.nea
 ### 10.4 What agents are expected to do with it
 
 A lending agent calls `preview_borrow` before sizing a loan; a risk agent polls `get_exit_capacity` and alerts when the exit gap widens; a buyer's agent reads `list_quotes` to price its own commitment. None of these needs a key, which is the point: the Feed is the top of the funnel for buyers and curators.
+
+### 10.5 Agent skill, referrals, payable credit and x402 (v7)
+
+An agent can open a protected loan with one MCP call and spend the proceeds on a paid API, and the MCP server never holds a key.
+
+| Piece | Specification |
+| --- | --- |
+| `open_protected_stock_loan` | MCP tool. Input `{account_id, collateral, units, borrow_usd, shield?, pay_to?, referrer?}`. Output: the unsigned call `{receiver_id: <collateral token>, method: "ft_transfer_call", args, deposit: "1", gas}` plus a preview (both limits, every fee, health at −5/−10/−20%). The agent signs with its own key through `near-api-js`. |
+| Companion tools | `preview_borrow`, `explain_limit`, `quote_capacity`, `get_note(token_id)`, `build_self_settle(position_id)` |
+| Referral | An agent named in `referrer` earns 50% of the 30 bps origination fee if registered (owner-approved on testnet); event `referrer_paid`. |
+| Payable credit | `pay_to: {receiver_id, memo}` sends the proceeds to a merchant account registered on the USDC token; a failed transfer becomes `claimable_usdc` for the borrower. |
+| x402 demo | The Feed's `/api/feed/export.csv` is an x402 route priced at 0.01 mock USDC on `near:testnet`, served with `@fastnear/x402` and our own facilitator (`createNearFacilitator`, relayer = a CLI-created testnet account) (F-128). The demo agent borrows against mock NVDAx, pays the 402 challenge with a NEP-366 `SignedDelegate` from its full-access key, and receives the file. Whether the facilitator accepts the mock token as the asset is confirmed at G10 (F-129). |
+| market.near.ai | Optional: Kunal may post a task there (H14). It is a task marketplace, not a skill registry (F-135), and nothing depends on it. |
+
+Track fit, honestly: `agents` is a good fit (an agent earns a referral and pays for data with stock-backed credit). `realworld` is a modest fit: paying a merchant from a credit line is real, but it is not payroll or invoicing.
 
 ## 11. NEAR AI Cloud copilot (P2)
 
@@ -490,6 +710,25 @@ SiteHeader (wordmark, links, Talk to us, theme toggle, 760px menu), ExitCapacity
 **Performance and hosting.** Static-first; view calls through a public RPC from `docs.near.org/api/rpc/providers` chosen at G0, with FastNEAR as the first candidate; Vercel (HUMAN: account) or any static host; Lighthouse budget: LCP under 2.5 s on the landing page with the fonts self-hosted.
 
 **Copy rules.** Keep the redesign's voice: short declaratives, the hexagon `⬡` bullet, uppercase mono eyebrows, dated figures, no exclamation marks. Every "Coming soon" in the redesign becomes either live data or "PROD" copy that says it is not built. No hackathon branding in the product UI (landing, app, docs navigation): no banner, badge or copy about the NEAR Hackathon; disclosures say "testnet" and "mock collateral" instead, and hackathon context lives in README, EVIDENCE and SUBMISSION only.
+
+### 12.1 New screens (v7)
+
+v7 adds four routes and extends four; every new control shows its fee and its testnet limit before the wallet opens.
+
+| Route | Purpose | Content and states |
+| --- | --- | --- |
+| `/` additions | landing | hero "Borrow against stocks without fire-sales"; three Shield cards; Reserve strip from $10; Spend and Profit-Lock row; a live Position Note; NEAR hub with Solana and Base spokes |
+| `/shield` | Weekend, Event and Zap cards | amount from $5, window countdown to Monday 09:30 New York time, shield fee, weekend limit, committed backing; "sized at the weekend limit even while the market is open"; testnet "Get demo NVDAx" faucet beside the dry quote mainnet would run |
+| `/reserve` | retail buyer pool | deposit from $10, R\_c, realised trailing 7-day APR, notice countdown, claimable units, the visitor's Reserve Notes |
+| `/notes`, `/note/[id]` | Position Notes | live SVG, owner, history, transfer (disabled while Settling, with the reason), a "Share to X" link the user clicks |
+| `/agents` | agent channel | MCP install snippet, `open_protected_stock_loan` example, x402 demo walkthrough, referral stats |
+| `/borrow` additions | borrower | `pay_to` merchant field, referrer from `?ref=`, fee-stack total, multiplier line ("1 NVDAx = 1.02 shares after dividends"), chain selector NEAR / Solana / Base with the remote steps reserve → deposit → confirm |
+| `/position/[id]` additions | one loan | Profit-Lock with preview (units sold, discount, units kept, fee), remote release after repay, deposit status AwaitingDeposit / Open / Releasing |
+| `/console` additions | curator | multiplier and corporate-action announcement, session calendar and force-closed, weekend reference price, referrers, shield and Reserve parameters |
+
+**Wallets for remote flows only:** Solana wallet-adapter (Phantom on devnet) and an injected EVM wallet on Base Sepolia (viem/wagmi, VERIFY versions at G10) for deposit and release. NEAR wallet-selector stays the only wallet for everything else.
+
+**Copy rules added:** never "insurance", never "without liquidations", never "live" before EVIDENCE shows it; Shields say "weekend-safe limit with committed buyers behind it".
 
 ## 13. Design system (from the Nectar Network redesign)
 
@@ -603,6 +842,24 @@ The guard lives in the contract: every rule that moves money is enforced by `nec
 
 **Disclosure.** `SECURITY.md` with the contact, 90-day coordinated disclosure, and a note that no bug bounty exists yet. PROD: audit before mainnet (the Nectar Network site already says "audit in process"; this repo says "not audited").
 
+**Threats added by v7 modules**
+
+| Threat | Module | Mitigation |
+| --- | --- | --- |
+| A fake split or dividend inflates collateral value | 4.6 | owner-only multiplier, at most +5% per call, announcement window for anything larger, new borrows blocked while `ca_pending`; OutLayer reads are bounded the same way |
+| A keeper reopens a closed session to restore D\_c | 4.7 | nothing outside the contract can open a session; it needs a fresh price inside the contract's own NYSE calendar |
+| A Note transfer mid-settlement redirects a payout | 6.11 | transfers refused while a pending settlement references the Note; recipients snapshotted at trigger time |
+| A forged remote deposit backs an empty loan | 9B | authority comes from `derived_public_key`; payout waits for an attested vault read; keeper attestation exists only behind a testnet flag and is labelled |
+| A settlement or release signature is replayed | 9, 9B | nonce and expiry inside the signed bytes, used-nonce sets on both chains, one derivation path per chain and position |
+| A Solana message is reused on Base or the reverse | 9B | different curves and domains, `chain=` inside the preimage, EIP-712 `chainId` and `verifyingContract` |
+| Self-settlement drains committed capacity | 4.10 | only opted-in quotes, per-asset daily cap |
+| Referral farming | 4.11 | registered referrers only, referrer ≠ borrower, rebate capped at 15 bps |
+| A late Reserve depositor claims earlier fills | 4.8 | per-note `unit_debt` against `acc_units_per_share_e18` |
+| $5 positions exhaust contract storage | 4.9 | testnet cap of 5 Shield opens per account per day; PROD requires NEP-145 storage deposits |
+| x402 facilitator relayer key leaks | 10.5 | a separate CLI-created relayer account holding a few NEAR; it can only relay delegates signed by payers |
+| The B20 issuer changes policies and strands collateral in the vault | 9B | PROD dependency on issuer authorization; the vault checks `isAuthorized` before each transfer and fails visibly; a USDC fallback through 1Click is PROD |
+| A buyer's recipient is not authorized to hold B20 | 9B | checked when the recipient is set on the quote, not at settlement |
+
 ## 16. Production operations
 
 Everything that runs is created by a script from an empty machine, keys included; the only steps a human performs are funding mainnet accounts, holding the owner key, and pressing publish on public channels.
@@ -676,17 +933,15 @@ Three layers: product metrics from the chain, usage analytics from the sites wit
 
 Development closes 2026-11-14 23:59 UTC. Each phase is a shippable product on its own; a later phase never breaks the demo of an earlier one. The build prompt enforces the order.
 
-| Phase | Window | Ships | Gate to pass |
-| --- | --- | --- | --- |
-| **P0 Core credit** | Nov 9–11 | Rust contract on testnet with real NEP-141 custody (`SupplyLendingLiquidity`, `FundPappusQuote`, `TopUpQuote`, `LockCollateralAndBorrow`, `Repay`), O(1) fee index, two-step notice withdrawal, static `max_discount_bps` settlement with owner oracle; mock USDC and NVDAx tokens; keeper that flags and triggers; web app Home / Feed / Post a quote / Borrow / Keepers in Nectar theme; docs site with legal pages; README that a fresh clone can follow; `pnpm demo:testnet` | G0 toolchain, G1 contract tests + sandbox, G2 testnet deploy + explorer links, G3 web E2E against testnet |
-| **P1 Verified pricing and depth** | Nov 11–13 | OutLayer quoter (`wasm32-wasip2`, pinned `version_key`, `≤900` byte stdout) producing clamped `disc_bps`; `request_execution` + `on_quoter_result` with fallback; Pyth/OutLayer oracle read with staleness and conf checks; 1Click `dry: true` depth probe displayed on Feed; Feed REST + MCP server; evidence page with attestation links | G4 OutLayer execution cost + round-trip, G5 oracle read live, G6 1Click dry quote recorded |
-| **P2 Cross-chain settlement and copilot** | Nov 13–14 | Solana `nectar_vault` Anchor program on devnet; `on_signature` → Ed25519 verify ix + `settle`; `relay_settlement_result`; NEAR AI Cloud copilot with signature + attestation verification; agents track entry only if G8 passes | G7 Chain Signatures Ed25519 round-trip on devnet (Instructions sysvar confirmed), G8 copilot verifier green |
-| **Submission** | Nov 14 | `docs/EVIDENCE.md`, 3-minute demo script, X post draft, submission payload prepared; Kunal confirms send, repo public, post | G9 fresh-clone rehearsal by a verifier agent |
-| **PROD (post-hackathon)** | 2027 Q1+ | Mainnet with DAO owner and timelock, audit (contract + Anchor + quoter), real xStocks / Opening Bell collateral via 1Click routing, Rhea depth source, curator fee schedule, keeper network with bonds, mainnet Pyth or OutLayer oracle, status page, Plausible or GA4 per Kunal | Audit report, 30 days testnet soak, legal review of disclaimers |
+**v7 roadmap.** Each phase ships on its own and a later phase never breaks an earlier demo; G10–G14 are the v7 gates defined in the build addendum.
 
-**Cut order if time runs short** (last to first): copilot → Feed MCP → Solana leg (keep the signer round-trip demo) → 1Click depth → oracle (stay on owner oracle, disclosed) → OutLayer quoter (static discount, disclosed). P0 is never cut.
+&#91;embedded content: v7 roadmap · five phases, gates G1–G14, deadline\]
 
-**What is deliberately not built**: Robinhood Chain, Base, Arbitrum, Stellar, EVM paths; secp256k1 settlement; mainnet anything; a token; governance UI; mobile apps.
+P2b is squeezed into Nov 14 morning on purpose: it depends on a faucet login (H15) and a builder code (H13), so it is the first thing to drop if either is late.
+
+**Cut order if time runs short (cut first → cut last):** thesis notebook → Base spoke → copilot → x402 demo → Reserve → Position Notes → Profit-Lock → Shields → Feed MCP and agent skill → Solana leg (keep the signer round-trip demo) → 1Click depth → oracle (owner oracle, disclosed) → OutLayer quoter (static discount, disclosed). P0 is never cut. Modules that need a new outside dependency are cut before modules that only extend the contract.
+
+**Deliberately not built:** Robinhood Chain, Arc, Arbitrum and Stellar legs; any mainnet deployment; 1Click execution (dry quotes only, Q-007); retail KYC; a token; governance UI; mobile apps.
 
 ## 19. Risks, open questions and human decisions
 
@@ -732,15 +987,43 @@ Development closes 2026-11-14 23:59 UTC. Each phase is a shippable product on it
 
 Each row has a matching section in `docs/HUMAN_HANDOFF.md` with the exact command or click path and what Claude Code does the moment the answer arrives.
 
+### 19.4 v7 risks, open questions and decisions
+
+The biggest v7 risk is schedule: the modules are individually small, but together they can push P0 past Nov 11, which is why every one of them waits for `p0-green` except four fields and two checks.
+
+| Risk | Likelihood | Impact | Mitigation |
+| --- | --- | --- | --- |
+| v7 scope delays P0 | high | all phases slip | only the aggregate-debt check, weekend rule, multiplier field, `pay_to` and `referrer` enter P0 |
+| `createB20` is not open to any account on Base Sepolia | medium | less realistic Base demo | `MockB20.sol` with the same functions, disclosed in README |
+| Base Sepolia faucet needs a login | high | P2b blocked | H15; P2b is first in the cut order after the thesis notebook |
+| `@fastnear/x402` facilitator rejects the mock USDC | medium | no x402 demo | configure the facilitator's asset list (G10); otherwise drop x402 per the cut order |
+| `near-contract-standards` NFT module mismatches near-sdk 5.30.x | low | Notes delayed | a minimal NEP-171/177 written in the contract |
+| OutLayer cannot reach Solana or Base RPC fast enough | medium | deposit confirmation | labelled keeper attestation behind the testnet flag |
+| NYSE calendar wrong | low | wrong limits on a holiday | fetched from nyse.com at G10; owner can force the session closed |
+| Seven tracks read as unfocused | medium | weaker scoring | extra tracks only after their gates pass; README leads with `defi` |
+
+**Open questions answered by gates:** F-123 (`createB20` access), F-127 (xStocks multiplier mechanism), F-129 (x402 asset config), F-132 (secp256k1 response JSON), F-136 (Rhea on testnet), F-137 (NFT standards crate), F-139 (`keccak256_array`, secp256k1 key encoding), and the NYSE calendar for 2026–2027.
+
+**New decisions for Kunal (placeholders exist until answered)**
+
+| # | Decision | Default if silent |
+| --- | --- | --- |
+| H13 | Base builder code from Base Dashboard for the ERC-8021 suffix | suffix omitted; noted in README |
+| H14 | Post a market.near.ai task for the agent skill (optional) | not posted |
+| H15 | Base Sepolia ETH for the deployer and keeper EOAs (faucet login) | P2b skipped |
+| H16 | Final track list at submission | `defi`, `security`, `privacy` plus each track whose gate passed |
+| H17 | Consumer line: "without fire-sales" (accurate) vs "without liquidations" (v6.0) | "without fire-sales" |
+| H18 | Attempt the `thesis` notebook | not attempted |
+
 ## 20. Glossary
 
 | Term | Meaning in this document |
 | --- | --- |
 | Pappus quote | A buyer's escrowed, time-committed offer to purchase a fixed USD amount of a collateral asset at up to `max_discount_bps` below oracle, with a notice period |
-| Cramér limit (B\_c) | Borrowing limit per collateral derived from committed capacity: `B_c = min(ltv_static + uplift(Q_c), ltv_max) × collateral_value` |
+| Cramér limit (B\_c) | Borrowing limit per collateral derived from committed capacity: `B_c = min(LTV_c × V_c, (1 − h_c)(Q_c + R_c + D_c)), checked per position and against the asset's total debt` |
 | Q\_c | Committed capacity: sum of live quote remainders for asset c |
-| R\_c, D\_c | Revocable DEX depth (1Click dry quote) and displayed depth, shown but not relied on |
-| Exit gap | Collateral value at stake minus committed plus revocable depth |
+| R\_c, D\_c | R\_c = Nectar Reserve (pooled buyer capital, retail from $10); D\_c = verified DEX depth (1Click dry quotes, Rhea where live, owner-set on testnet), forced to 0 out of session |
+| Exit gap | Collateral value at stake minus (Q\_c + R\_c + D\_c) |
 | Limit premium | Extra rate borrowers pay for the uplift; split to buyers (fee index) and protocol |
 | Fee index | `acc_fee_per_dollar_e18` MasterChef-style accumulator giving O(1) fee accrual |
 | Notice period | Time between `initiate_quote_withdrawal` and `complete_quote_withdrawal`; Q\_c drops immediately |
@@ -820,3 +1103,14 @@ Each row has a matching section in `docs/HUMAN_HANDOFF.md` with the exact comman
 - NEAR Intents $37.006B cumulative volume, $189.13M TVL; Rhea $235.99M TVL; RWA on-chain $33.609B vs $4.09B in DeFi; xStocks \~$196M, >$182M on Solana. Re-verify on submission day and update `FACTS.md` dates.
 
 Conflicts recorded in `FACTS.md`: Pyth-on-NEAR (Pyth docs vs NEAR docs); 1Click fee 20 vs 25 bps by auth; OutLayer stdout cap per docs vs observed at G4.
+
+**v7 sources (read 2026-11-10)**
+
+- B20 standard and multiplier: [base.org blog](https://www.base.org/blog/b20-tokenized-stocks-on-base); [B20 spec, Beryl](https://docs.base.org/base-chain/specs/upgrades/beryl/b20) (`multiplier()`, PolicyRegistry `isAuthorized`, B20Factory `createB20`)
+- Chainlink tokenized equity feeds for B20: [docs.chain.link](https://docs.chain.link/data-feeds/tokenized-equity-feeds/coinbase)
+- ERC-8021 builder codes: [docs.base.org/base-chain/builder-codes](https://docs.base.org/base-chain/builder-codes)
+- x402 networks including `near:testnet`: [docs.x402.org](https://docs.x402.org/core-concepts/network-and-token-support); `@fastnear/x402`: [js.fastnear.com/x402](https://js.fastnear.com/x402)
+- Solana Scaled UI Amount extension: [solana.com docs](https://solana.com/docs/tokens/extensions/scaled-ui-amount); xStocks corporate actions: [Kraken support](https://support.kraken.com/articles/corporate-actions-xstocks-kraken-app)
+- NEAR AI Agent Market: [near.ai blog](https://near.ai/blog/introducing-near-ai-agent-market)
+- `nfts` track brief: [near-hackathon-prompt-examples](https://github.com/nearai/near-hackathon-prompt-examples/blob/main/tracks/10-nfts.md); prize table: `HACKATHON.md` §Prizes
+- MPC: near/mpc commit b5bafa3, `near-mpc-crypto-types/src/primitives.rs` (payload bounds), `primitives/src/domain.rs` (protocols), `contract/src/api/keys.rs` (`derived_public_key`)

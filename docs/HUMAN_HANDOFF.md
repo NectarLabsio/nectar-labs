@@ -13,7 +13,7 @@ default applied, disclosed in README).
 ## H-TOOLCHAIN — pinned P0 toolchain                status: DONE 2026-11-10   (Kunal asked; installed by Claude Code)
 Installed: Rust 1.95.0, near-cli-rs 0.31.1, cargo-near 0.23.0, gitleaks 8.30.1, yq v4.54.3, pnpm 10.34.9. Log: evidence/G0/toolchain.log.
 
-## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1   status: OPEN   needed by: P2 / G7 (not P0)
+## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1   status: IN PROGRESS 2026-11-10 (Kunal asked; solana-cli 4.3.2 installed; Anchor via avm installing)   needed by: P2 / G7 (not P0)
 Why a human: the auto-mode classifier refused `scripts/01-toolchain.sh --with-solana` (Anza installer + `cargo install avm`).
 What Kunal does (≈10 min, mostly compile): `cd /Volumes/T7/nectar-labs && bash scripts/01-toolchain.sh --with-solana 2>&1 | tee evidence/G0/toolchain-solana.log`,
   or add `"Bash(bash scripts/01-toolchain.sh*)"` to `permissions.allow` in `.claude/settings.json`. Reply `H-TOOLCHAIN-SOLANA done`.
@@ -125,3 +125,40 @@ Default if silent: `nearAddress`/`consent` stay `TODO-H14`; the payload is not s
 
 ## H6 — mainnet (post-hackathon)                       status: not in scope
 Nothing mainnet is created, funded or deployed during the hackathon.
+
+---
+# v7 handoffs (2026-11-10, D-017). Addendum ids: H13 → **H19**, H14 → **H20** here (H13/H14 were already used); H15–H18 unchanged.
+
+## H-GUARD-V7 — install the v7 guard rules + evm agent        status: OPEN   needed by: P2b (Base) only
+Why a human: the auto-mode classifier refuses to let an agent edit its own guard and settings (self-modification), which is correct.
+What Kunal does (1 min, repo root): `python3 scripts/v7-install-claude-config.py && bash scripts/test-guard-v7.sh` (every line should say `ok`).
+That blocks Base mainnet (8453), any `--private-key`, and POSTs to market.near.ai. It allows forge/cast/anvil/avm and installs `.claude/agents/evm.md`, which loads next session.
+What Claude Code does then: records it in EVIDENCE G12 prep and uses the `evm` agent for WO-27/29c.
+Default if silent: P2b does not start (Base is cut first anyway).
+
+## H15 — Base Sepolia ETH for the deployer          status: OPEN (not yet actionable)   needed by: P2b / G12
+1. After `scripts/06-base.sh` runs (P2b), read the deployer address printed here. 2. Sign in to a Base Sepolia faucet from the FACTS list (WO-18 item 11).
+3. Send ≥ 0.05 Sepolia ETH to the deployer. 4. Reply `H15 done <tx hash>`.
+Then: funds keeper + borrower from the deployer, runs G12. Default if silent: P2b skipped and disclosed.
+
+## H16 — final track list                            status: OPEN   needed by: submission
+Read the proposal in docs/SUBMISSION.md (core three + each track whose gate passed) and reply `H16 <ids>`. Default: core three + passed tracks.
+
+## H17 — consumer line                               status: OPEN   needed by: landing copy (WO-20 uses the default)
+Reply `H17 fire-sales` or `H17 liquidations`. Default: "Borrow against stocks without fire-sales" (accurate; "without liquidations" is not).
+
+## H18 — thesis notebook                             status: OPEN
+Reply `H18 yes` or `H18 no`. Yes → WO-32 after P2a. Default: not attempted.
+
+## H19 — Base builder code (addendum H13)            status: OPEN   needed by: G13 (optional)
+1. Register the project on Base Dashboard. 2. Settings → Project Settings → Builder Code. 3. `echo 'BASE_BUILDER_CODE=<code>' >> services/keeper/.env.local`
+4. Reply `H19 done`. Then: the keeper appends the ERC-8021 suffix; G13 checks the last bytes of calldata. Default: no suffix; README says so. Agents never register it.
+
+## H20 — market.near.ai task (addendum H14, optional) status: OPEN
+Post the task text from docs/MARKET_TASK.md (written by WO-30) from your own account; reply `H20 <url>`. Then it is linked from /agents and the README.
+Default: not posted. Agents never post there.
+
+## H-NEAR-FAUCET — v7 update (2026-11-10 11:30Z)
+nectar.testnet holds **0.064 NEAR**. The v7 deploy (D-018) needs about **8 NEAR**: the `nectar-core-v2` account + wasm storage (~5–6), `keeper-v2` (0.5),
+`x402-relayer` (3, only if x402 survives F-329), `agent1` (0.5), and the demo reseed. Same steps as above (https://near-faucet.io/ → `nectar.testnet`, repeat if allowed).
+Until then: v7 is built and sandbox-tested, but nothing new deploys; v1 stays the live demo.

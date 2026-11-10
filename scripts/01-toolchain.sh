@@ -11,6 +11,11 @@ YQ_VERSION="v4.54.3"
 PNPM_VERSION="10.34.9"
 BIN="$HOME/.local/bin"; mkdir -p "$BIN"
 export PATH="$HOME/.cargo/bin:$BIN:$PATH"
+# macOS host quirk (same as _lib.sh): the default MacOSX27 SDK breaks ld for cargo build scripts (avm, 2026-11-10); use 26.x if present.
+if [ "$(uname -s)" = "Darwin" ] && [ -z "${SDKROOT:-}" ]; then
+  for sdk in /Library/Developer/CommandLineTools/SDKs/MacOSX26*.sdk; do [ -d "$sdk" ] && export SDKROOT="$sdk"; done
+fi
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$HOME/.avm/bin:$PATH"
 log() { printf '\n== %s ==\n' "$*" >&2; }
 os="$(uname -s | tr '[:upper:]' '[:lower:]')"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && garch=amd64 || garch=arm64
 
