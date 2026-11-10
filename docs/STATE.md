@@ -3,9 +3,9 @@
 ## v7 progress (2026-11-10 18:00Z)
 - Merged: WO-20 web P0 delta + v7 landing (fd3395b) · WO-19 contract P0 delta, v2 layout, 229+17 unit, 17 sandbox (bc6713f) · WO-14 nectar_vault, 25/25 anchor (886d98f).
 - FACTS v7: WO-18 (1a43f44) + WO-18b (c82c86a). Open: F-351 ERC-8021, F-352 xStocks mechanism, F-353 Rhea testnet.
-- main `pnpm verify:quick` RED: 32 keeper tests vs extended model.csv → WO-16 part 1 (running) restores green.
-- Running: WO-16 keeper (maths + Solana relay) · WO-21 contract (remote lifecycle) · WO-31 web (Solana remote flow).
-- Blocked on humans: H-NEAR-FAUCET (v2 deploy, ~8 NEAR), H-SOL-AIRDROP (vault deploy, 4.5 SOL; CLI retry loop running), H-GUARD-V7 (before P2b).
+- Running: WO-21 contract (remote lifecycle) · WO-31 web (Solana remote flow).
+- Solana devnet: nectar_vault ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW, mint 3Ve8GiDB…E8hT, vault PDA HGSFKMWW…EbeX (9fb7cfb). WO-16 relay merged (f97eed3); verify:quick green.
+- Blocked on humans: H-NEAR-FAUCET (v2 deploy, ~8 NEAR), H-GUARD-V7 (before P2b).
 - Next: WO-23a Shields/Profit-Lock → WO-22 Notes → WO-23b Reserve; WO-25 MCP skill/x402; WO-24 OutLayer jobs; WO-26 screens; WO-30 docs; then WO-6a v2 deploy.
 
 # STATE.md — one screen for a returning human
@@ -57,7 +57,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-10T12:16:07Z · commit bcc567f
+Last activity: 2026-11-10T12:32:26Z · commit 8979f7c
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

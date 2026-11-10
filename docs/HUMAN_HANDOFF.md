@@ -163,7 +163,7 @@ nectar.testnet holds **0.064 NEAR**. The v7 deploy (D-018) needs about **8 NEAR*
 `x402-relayer` (3, only if x402 survives F-329), `agent1` (0.5), and the demo reseed. Same steps as above (https://near-faucet.io/ → `nectar.testnet`, repeat if allowed).
 Until then: v7 is built and sandbox-tested, but nothing new deploys; v1 stays the live demo.
 
-## H-SOL-AIRDROP — devnet SOL for the vault deploy          status: OPEN (retrying)   needed by: G7 (Solana leg)
+## H-SOL-AIRDROP — devnet SOL for the vault deploy          status: DONE 2026-11-10 ~18:10Z (deployer showed 5 SOL at the end of the CLI retry loop; source not recorded) → vault deployed (9fb7cfb)   needed by: G7 (Solana leg)
 Why: `solana airdrop` is rate-limited per IP (2026-11-10 17:55Z, every try failed). The vault deploy needs ≥ 4.5 SOL (program rent 2.02 + same-size buffer).
 What Kunal does (2 min): open https://faucet.solana.com (GitHub sign-in raises the limit), choose devnet, request SOL to
 `3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS` (deployer, 5 SOL if allowed) and 1 SOL to `82hq1LTc9cuYsdkKxYQVQ6p4qxvYM9hdrQ6V8zW7HVa7` (keeper fee payer); reply `H-SOL-AIRDROP done`.
