@@ -17,6 +17,13 @@ export interface KeeperConfig {
   healthPort: number;
   healthHost: string;
   dbPath: string;
+  /** P2 relay: Solana fee-payer keypair path (KEEPER_SOLANA_KEYPAIR); null = relay disabled. */
+  solanaKeypairPath: string | null;
+  solanaRpcUrl: string;
+  /** optional cross-check of NEAR's remote_chain.vault_program */
+  vaultProgramId: string | null;
+  /** optional; else the vault is found by symbol */
+  vaultMint: string | null;
 }
 
 export function isPlaceholder(v: string | undefined): boolean {
@@ -58,5 +65,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): KeeperConfig {
     healthPort: int(env, 'KEEPER_HEALTH_PORT', 8787, 0, 65_535),
     healthHost: env.KEEPER_HEALTH_HOST && env.KEEPER_HEALTH_HOST !== '' ? env.KEEPER_HEALTH_HOST : '127.0.0.1',
     dbPath: expandHome(env.KEEPER_DB_PATH && env.KEEPER_DB_PATH !== '' ? env.KEEPER_DB_PATH : '~/.nectar/keeper.sqlite'),
+    solanaKeypairPath: isPlaceholder(env.KEEPER_SOLANA_KEYPAIR) ? null : expandHome(env.KEEPER_SOLANA_KEYPAIR as string),
+    solanaRpcUrl: isPlaceholder(env.SOLANA_RPC_URL) ? 'https://api.devnet.solana.com' : (env.SOLANA_RPC_URL as string),
+    vaultProgramId: isPlaceholder(env.NECTAR_VAULT_PROGRAM_ID) ? null : (env.NECTAR_VAULT_PROGRAM_ID as string),
+    vaultMint: isPlaceholder(env.NECTAR_VAULT_MINT) ? null : (env.NECTAR_VAULT_MINT as string),
   };
 }

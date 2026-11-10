@@ -1,4 +1,4 @@
-# keeper (P0)
+# keeper
 
 Daemon holding one NEAR **function-call key** scoped to `trigger_preliquidation, relay_settlement_result`
 on nectar-core (D-010). It never holds owner keys, never prices anything, and sends only a `position_id`
@@ -23,7 +23,18 @@ pnpm --filter keeper test        # unit; testnet read-only suite runs with NECTA
 
 Idempotent on restart (on-chain `Settling` is skipped; interrupted runs are marked failed), exponential
 backoff per position and per tick, JSON logs to stdout with no IP/address fields.
-P2 relay (`relay_settlement_result`, Solana fee payer `KEEPER_SOLANA_KEYPAIR`) is not built yet.
+
+## Solana relay (P2, `src/solana.ts`)
+
+Enabled only when `KEEPER_SOLANA_KEYPAIR` (0600 solana-keygen JSON, path only; never logged) is set; `SOLANA_RPC_URL`
+defaults to devnet and a mainnet URL is refused. Each tick: `Settling` positions whose collateral has `remote_chain` →
+`get_pending_settlement` (`Signed`) → `[Ed25519 verify ix, settle ix]` (solana/client; kind from the preimage suffix) → confirm →
+`relay_settlement_result(position_id, solana_tx_sig)`. v2 only (`contract_version` 2.x): `remote.status == "Releasing"` →
+`get_pending_release` → `[Ed25519, release]` → `relay_release_result` (falls back to `relay_settlement_result` if absent);
+`remote.status == "AwaitingDeposit"` + position PDA amount ≥ reserved units and authority match → `confirm_remote_deposit`.
+Every argument is transcribed from the signed message and checked by rebuilding it byte for byte. Idempotent: a used nonce PDA
+means the leg landed (the tx that created it is relayed); a closed position PDA is skipped. Optional: `NECTAR_VAULT_PROGRAM_ID`
+(cross-check), `NECTAR_VAULT_MINT` (else the Vault account is found by symbol). `/healthz` gains a `solana` block.
 
 ## Oracle updater (P1, D-013 — disabled until H13)
 

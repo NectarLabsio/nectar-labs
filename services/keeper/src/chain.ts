@@ -5,8 +5,8 @@
 // account.callFunctionRaw({contractId, methodName, args, deposit, gas, waitUntil}), KeyPairSigner.fromSecretKey.
 //
 // Security posture: the writer can only call KEEPER_METHODS, always with 0 deposit (F-015: a
-// function-call key cannot attach deposits anyway), and it never prices or builds payloads: the only
-// argument it sends is a position id.
+// function-call key cannot attach deposits anyway), and it never prices or builds payloads: it sends a
+// position id and, for relays, the Solana tx signature it observed (a result, not an input).
 
 import { Account, JsonRpcProvider, KeyPairSigner } from 'near-api-js';
 import { KEEPER_METHODS, type KeeperMethod } from './abi.ts';
@@ -34,8 +34,14 @@ export interface TxResult {
   logs: string[];
 }
 
+export interface KeeperCallArgs {
+  position_id: string;
+  /** relay_* only: base58 Solana transaction signature. */
+  solana_tx_sig?: string;
+}
+
 export interface KeeperWriter {
-  call(method: KeeperMethod, args: { position_id: string }): Promise<TxResult>;
+  call(method: KeeperMethod, args: KeeperCallArgs): Promise<TxResult>;
 }
 
 export function assertKeeperMethod(m: string): asserts m is KeeperMethod {
@@ -90,12 +96,12 @@ export class NearKeeperWriter implements KeeperWriter {
     this.gas = BigInt(gasTgas) * 10n ** 12n;
   }
 
-  async call(method: KeeperMethod, args: { position_id: string }): Promise<TxResult> {
+  async call(method: KeeperMethod, args: KeeperCallArgs): Promise<TxResult> {
     assertKeeperMethod(method);
     const res = await this.account.callFunctionRaw({
       contractId: this.contractId,
       methodName: method,
-      args: { position_id: args.position_id },
+      args: args.solana_tx_sig === undefined ? { position_id: args.position_id } : { position_id: args.position_id, solana_tx_sig: args.solana_tx_sig },
       deposit: 0n,
       gas: this.gas,
       waitUntil: 'EXECUTED_OPTIMISTIC',
