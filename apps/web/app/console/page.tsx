@@ -1,6 +1,8 @@
 "use client";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { Badge, Button, Card, Field, Kv, Segmented } from "@nectar/ui";
+import { OwnerAction, attempt } from "@/components/OwnerAction";
+import { ConsoleV7 } from "@/components/ConsoleV7";
 import { bpsToPct, formatUsdE6, oracleSourceLabel, parseUnits, tx, type ExitCapacity, type OracleSource, type PoolView, type QuoterConfigView, type TxIntent } from "@nectar/sdk";
 import { SessionBadge } from "@/components/Session";
 import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
@@ -9,34 +11,6 @@ import { OracleBadge, optionalView, pricingLabel } from "@/components/OracleBadg
 import { CopilotPanel } from "@/components/CopilotPanel";
 
 interface Data { cap: ExitCapacity; pool: PoolView; quoter: QuoterConfigView | null; source: OracleSource | null }
-
-/** Build an intent or return the validation message. */
-function attempt(f: () => TxIntent): TxIntent | string {
-  try {
-    return f();
-  } catch (e) {
-    return e instanceof Error ? e.message : String(e);
-  }
-}
-
-/** One owner write: fields, inline payload preview, and a button that opens the sign modal (msg, gas, deposit) before the wallet. */
-function OwnerAction({ title, intent, enabled, onRun, children }: { title: string; intent: TxIntent | string | null; enabled: boolean; onRun: (t: TxIntent) => void; children?: ReactNode }) {
-  const ok = intent !== null && typeof intent !== "string";
-  return (
-    <div className="stack-sm">
-      <h3 className="small">{title}</h3>
-      {children}
-      {typeof intent === "string" ? <p className="small" role="alert">{intent}</p> : null}
-      {ok ? (
-        <details>
-          <summary className="small dim">Payload: {intent.methodName}</summary>
-          <pre className="codeblock mono">{JSON.stringify(intent.args, null, 2)}</pre>
-        </details>
-      ) : null}
-      <Button disabled={!enabled || !ok} onClick={() => ok && onRun(intent)}>{ok ? intent.label : title}</Button>
-    </div>
-  );
-}
 
 export default function ConsolePage() {
   const chain = useChain();
@@ -160,6 +134,7 @@ export default function ConsolePage() {
                 </div>
               ) : null}
             </Card>
+            {chain.generation === "v2" && core ? <ConsoleV7 core={core} sym={sym} cap={d.cap} isOwner={isOwner} onDone={() => { data.reload(); chain.reload(); }} /> : null}
           </div>
         )}
       </Gate>

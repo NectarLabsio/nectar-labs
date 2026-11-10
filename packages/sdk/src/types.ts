@@ -63,6 +63,22 @@ export type SessionReason = "open" | "no_calendar" | "outside_hours" | "stale_pr
 export type PriceKind = "Underlying" | "TokenIncludesMultiplier";
 /** `[open_ns, close_ns)` NYSE session window, U64 strings. */
 export type SessionWindow = [U64, U64];
+/** `get_remote_config()` (interface-v7 §B, WO-21): keeper-attestation flag and the OutLayer `vault_read` pin. */
+export interface RemoteConfigView {
+  allow_keeper_deposit_attestation: boolean;
+  vault_read_project_id: string | null;
+  vault_read_version_key: string | null;
+  vault_read_deposit_yocto: U128 | null;
+  vault_read_gas_tgas: number | null;
+  reservation_expiry_s: number;
+}
+/** `set_vault_read_config` arguments (owner; contract: 1..=128-char strings, deposit > 0, gas 10..=100 Tgas). */
+export interface VaultReadConfigInput {
+  project_id: string;
+  version_key: string;
+  deposit_yocto: U128;
+  gas_tgas: number;
+}
 /** `pay_to` on LockCollateralAndBorrow (interface-v7 §A4). */
 export interface PayTo {
   receiver_id: AccountId;

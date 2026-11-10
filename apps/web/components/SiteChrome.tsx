@@ -17,6 +17,7 @@ const NAV = [
   { href: "/borrow", label: "Borrow" },
   { href: "/quote/new", label: "Post a quote" },
   { href: "/console", label: "Console" },
+  { href: "/agents", label: "Agents" },
   { href: "/keepers", label: "Keepers" },
 ];
 

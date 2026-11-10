@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { parse } from "yaml";
 import type { Page } from "@playwright/test";
 
-export const ROUTES = ["/", "/feed", "/borrow", "/quote/new", "/quote/0", "/position/0", "/console", "/keepers", "/talk", "/security", "/legal/privacy", "/legal/terms", "/docs"] as const;
+export const ROUTES = ["/", "/feed", "/borrow", "/quote/new", "/quote/0", "/position/0", "/console", "/agents", "/keepers", "/talk", "/security", "/legal/privacy", "/legal/terms", "/docs"] as const;
 
 interface Cfg { accounts: { core: string; usdc_mock: string; demo: { borrower1: string } }; collateral: Record<string, { token: string }> }
 export const config = parse(readFileSync(resolve(import.meta.dirname, "../../../packages/config/config.yaml"), "utf8")) as Cfg;
