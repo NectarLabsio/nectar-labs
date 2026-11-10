@@ -99,6 +99,8 @@ features:
   base: false
 base:
   chain_id: 84532 # Base mainnet 8453 is blocked (guard, H-GUARD-V7)
-  rpc_url: TODO-G12
-  vault: TODO-G12
-  collateral: TODO-G12
+  rpc_url: http://127.0.0.1:8545
+  vault: 0xC4f46D859f9B555D95b68DC28564C5201F743d09
+  collateral: 0xD83A1571Ac3431A498f657512439B744c35CAd7E
+  policy_registry: 0x5A87057522B19A6B757a6FB1A7888d2AF5AA52D5
+  network: local-fork-of-base-sepolia

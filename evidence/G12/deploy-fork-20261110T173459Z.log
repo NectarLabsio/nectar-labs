@@ -1,0 +1,14 @@
+
+== DeployMock (PolicyRegistryMock + MockB20) ==
+registry: contract PolicyRegistryMock 0x5A87057522B19A6B757a6FB1A7888d2AF5AA52D5
+token: contract MockB20 0xD83A1571Ac3431A498f657512439B744c35CAd7E
+  PolicyRegistryMock 0x5A87057522B19A6B757a6FB1A7888d2AF5AA52D5
+  MockB20 0xD83A1571Ac3431A498f657512439B744c35CAd7E
+
+== DeployVault ==
+vault: contract NectarVaultBase 0xC4f46D859f9B555D95b68DC28564C5201F743d09
+  NectarVaultBase 0xC4f46D859f9B555D95b68DC28564C5201F743d09
+  0xf9500ad1a57028818a315d759970b306979659f2e9773c174c118a030f1d755b
+Transactions saved to: /Volumes/T7/nectar-labs/evm/broadcast/DeployVault.s.sol/84532/run-latest.json
+Sensitive values saved to: /Volumes/T7/nectar-labs/evm/cache/DeployVault.s.sol/84532/run-latest.json
+registry=0x5A87057522B19A6B757a6FB1A7888d2AF5AA52D5 collateral=0xD83A1571Ac3431A498f657512439B744c35CAd7E vault=0xC4f46D859f9B555D95b68DC28564C5201F743d09 rpc=http://127.0.0.1:8545

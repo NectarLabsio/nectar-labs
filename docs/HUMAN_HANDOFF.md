@@ -136,7 +136,10 @@ That blocks Base mainnet (8453), any `--private-key`, and POSTs to market.near.a
 What Claude Code does then: records it in EVIDENCE G12 prep and uses the `evm` agent for WO-27/29c.
 Default if silent: P2b does not start (Base is cut first anyway).
 
-## H15 — Base Sepolia ETH for the deployer          status: OPEN (not yet actionable)   needed by: P2b / G12
+## H15 — Base Sepolia ETH for the deployer          status: OPEN (optional since D-026)   needed by: real-Base-Sepolia G12/G13 only
+Deployer (Foundry keystore, scripts/06-base.sh): **0x4CAd440076321Da4ef05d35113aC6A58F3aDBFBd** — send ≥ 0.05 Base Sepolia ETH (CDP portal faucet ~1 min) and reply
+`H15 done <tx>`; then `BASE_RPC_URL=https://sepolia.base.org bash scripts/26-deploy-base.sh` re-runs G12/G13 on the real chain. Until then the spoke runs
+on a disclosed local fork of Base Sepolia (D-026).
 1. After `scripts/06-base.sh` runs (P2b), read the deployer address printed here. 2. Sign in to a Base Sepolia faucet from the FACTS list (WO-18 item 11).
 3. Send ≥ 0.05 Sepolia ETH to the deployer. 4. Reply `H15 done <tx hash>`.
 Then: funds keeper + borrower from the deployer, runs G12. Default if silent: P2b skipped and disclosed.
