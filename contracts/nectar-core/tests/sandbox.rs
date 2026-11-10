@@ -505,7 +505,7 @@ async fn owner_setters_and_ft_gas() -> anyhow::Result<()> {
     owner_call(&e, "set_fee_split", json!({ "buyers_bps": 6000, "lenders_bps": 3000, "treasury_bps": 1000 })).await?;
     owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": true })).await?;
     owner_call(&e, "set_dex_depth", json!({ "symbol": "NVDAx", "depth_usd_e6": "2500000000" })).await?;
-    owner_call(&e, "set_reserve", json!({ "symbol": "NVDAx", "reserve_usd_e6": "1000000000" })).await?;
+    owner_call(&e, "set_reserve_params", json!({ "symbol": "NVDAx", "discount_bps": 1000 })).await?;
     // 300 is outside the oracle band from 180: update_owner_price refuses, propose/apply overrides
     owner_call(&e, "propose_price", json!({ "symbol": "NVDAx", "price_usd_e6": "300000000" })).await?;
     e.worker.fast_forward(1).await?;
@@ -517,7 +517,7 @@ async fn owner_setters_and_ft_gas() -> anyhow::Result<()> {
     assert_eq!(c["forced_closed"], true);
 
     assert_eq!(c["verified_dex_depth_usd_e6"], "2500000000");
-    assert_eq!(c["nectar_reserve_usd_e6"], "1000000000");
+    assert_eq!(c["reserve"]["discount_bps"], 1000);
     assert_eq!(c["oracle_price_usd_e6"], "300000000");
     // non-owner refused
     let r = e.keeper.call(e.core.id(), "set_keeper").args_json(json!({ "keeper": e.keeper.id() })).transact().await?;

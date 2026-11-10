@@ -55,7 +55,6 @@ fn input() -> CollateralInput {
         pre_liq_min_bps: 6500,
         pre_liq_max_bps: 8000,
         verified_dex_depth_usd_e6: U128(0),
-        nectar_reserve_usd_e6: U128(0),
         remote_chain: None,
         price_kind: None,
     }
@@ -718,6 +717,6 @@ fn reserved_fields_present_and_zero() {
     let c = base();
     let k = coll(&c);
     assert_eq!((k.weekend_ref_price_e6, k.weekend_ref_updated_ns), (U128(0), U64(0)));
-    assert_eq!(k.nectar_reserve_usd_e6, U128(0));
+    assert_eq!(k.reserve, ReservePool::default());
     assert_eq!((k.ca_multiplier_e18, k.forced_closed), (U128(0), false));
 }

@@ -320,7 +320,9 @@ async fn gas_trigger_quoter_eight_legs() -> anyhow::Result<()> {
     let e = env().await?;
     let core = init_core(&e, &wasm("nectar_core")).await?;
     assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(2));
-    owner_call(&e, &core, "set_reserve", json!({ "symbol": "NVDAx", "reserve_usd_e6": "20000000000" })).await?;
+    owner_call(&e, &core, "set_reserve_params", json!({ "symbol": "NVDAx", "discount_bps": 1000 })).await?;
+    let rs = user(&e, 20_000_000_000, 0).await?; // WO-23b: R_c from a real Reserve deposit
+    ft_call(&e.usdc, &rs, core.id(), 20_000_000_000, r#"{"JoinNectarReserve":{"collateral":"NVDAx"}}"#).await?;
     let lender = user(&e, 50_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 50_000_000_000, r#""SupplyLendingLiquidity""#).await?;
     for i in 0..8u16 {
@@ -514,7 +516,9 @@ async fn v2_pyth_secrets_cancel() -> anyhow::Result<()> {
 async fn gas_trigger_pyth_quoter_eight_legs() -> anyhow::Result<()> {
     let e = env().await?;
     let core = init_core(&e, &wasm("nectar_core")).await?;
-    owner_call(&e, &core, "set_reserve", json!({ "symbol": "NVDAx", "reserve_usd_e6": "20000000000" })).await?;
+    owner_call(&e, &core, "set_reserve_params", json!({ "symbol": "NVDAx", "discount_bps": 1000 })).await?;
+    let rs = user(&e, 20_000_000_000, 0).await?; // WO-23b: R_c from a real Reserve deposit
+    ft_call(&e.usdc, &rs, core.id(), 20_000_000_000, r#"{"JoinNectarReserve":{"collateral":"NVDAx"}}"#).await?;
     let lender = user(&e, 50_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 50_000_000_000, r#""SupplyLendingLiquidity""#).await?;
     for i in 0..8u16 {

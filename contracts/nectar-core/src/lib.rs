@@ -19,6 +19,7 @@ pub mod math;
 pub mod types;
 mod shields;
 mod v7;
+mod reserve;
 pub mod notes;
 
 #[cfg(feature = "p2")]
@@ -42,6 +43,8 @@ mod tests_v7;
 mod tests_v7b;
 #[cfg(all(test, feature = "p2"))]
 mod tests_notes;
+#[cfg(all(test, feature = "p2"))]
+mod tests_reserve;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
@@ -150,6 +153,9 @@ enum StorageKey {
     NotesByOwner,
     NoteCount,
     NoteQuoteRefs,
+    // v2 WO-23b Nectar Reserve
+    ReserveNotes,
+    ReserveRefs,
 }
 
 // Defaults for the V1 fields (packages/config/config.yaml outlayer.*, oracle.max_conf_bps; F-046).
@@ -226,6 +232,12 @@ pub struct Nectar {
     shield_opens: LookupMap<AccountId, (u32, u8)>,
     /// WO-22 (PRD §6.11): NEP-171 Position Notes (src/notes.rs).
     notes: notes::Notes,
+    /// WO-23b (PRD §4.8): Reserve Notes by global n (token id `r-<collateral>-<n>`).
+    reserve_notes: LookupMap<u64, VReserveNote>,
+    next_reserve_note_id: u64,
+    /// symbol -> positions whose settlement may fill (or filled) from the Reserve; Reserve Notes stay put while one
+    /// is pending (pruned lazily).
+    reserve_refs: LookupMap<String, Vec<u64>>,
 }
 
 // ---------------------------------------------------------------- internal helpers
@@ -330,7 +342,7 @@ impl Nectar {
             total_debt_usd_e6: c.total_debt_usd_e6.0,
             price_usd_e6: c.oracle_price_usd_e6.0,
             q_usd_e6: c.active_committed_q_usd_e6.0,
-            r_usd_e6: c.nectar_reserve_usd_e6.0,
+            r_usd_e6: Self::reserve_rc(c),
             d_usd_e6: c.verified_dex_depth_usd_e6.0,
             session_open: !shield && self.session_open(c),
             base_ltv_bps: c.base_ltv_bps,
@@ -420,6 +432,10 @@ impl Nectar {
         let mut c = self.coll(&collateral).ok_or(ERR_NO_COLLATERAL)?;
         if max_discount_bps as u128 >= BPS {
             return Err("max_discount_bps out of range");
+        }
+        // WO-23b: the Reserve fills after every quote, so its discount stays above every quote ceiling.
+        if c.reserve.discount_bps > 0 && max_discount_bps >= c.reserve.discount_bps {
+            return Err("max_discount_bps must be below the reserve discount");
         }
         if notice_period_ns < self.min_notice_period_ns {
             return Err("notice period below minimum");
@@ -598,6 +614,8 @@ impl Nectar {
         let lenders = math::add(self.lenders_fees_usd_e6, t.split.lenders_usd_e6)?;
         let acc = math::add(c.acc_fee_per_dollar_e18.0, t.split.acc_increment_e18)?;
         let total_debt = math::add(c.total_debt_usd_e6.0, borrow)?;
+        let mut pool = c.reserve.clone();
+        Self::reserve_accrue_fees(&mut pool, t.split.reserve_usd_e6, t.split.reserve_acc_increment_e18, env::block_timestamp())?;
         let ref_claim = match referrer {
             Some(r) if t.referrer_share > 0 => Some(math::add(self.claimable(r), t.referrer_share)?),
             _ => None,
@@ -609,6 +627,7 @@ impl Nectar {
         self.lenders_fees_usd_e6 = lenders;
         c.acc_fee_per_dollar_e18 = U128(acc);
         c.total_debt_usd_e6 = U128(total_debt);
+        c.reserve = pool;
         self.put_coll(c);
         if let (Some(r), Some(v)) = (referrer, ref_claim) {
             self.claimable_usdc.insert(r.clone(), v);
@@ -700,11 +719,14 @@ impl Nectar {
             Some(bps) => math::shield_fee(borrow, bps)?,
             None => math::premium_usd_e6(borrow, l.static_limit_usd_e6, c.limit_premium_bps)?,
         };
-        let split = math::split_premium(
+        // WO-23b: the buyers' share is split Q_c : R_c between the quotes' and the Reserve's fee indices.
+        let split = math::split_premium_qr(
             premium,
             self.fee_split.buyers_bps,
             self.fee_split.lenders_bps,
             c.active_committed_q_usd_e6.0,
+            Self::reserve_rc(c),
+            c.reserve.shares.0,
         )?;
         let origination = math::origination_fee(borrow, self.origination_fee_bps)?;
         let referrer_share = if referrer_registered { origination / 2 } else { 0 };
@@ -833,6 +855,39 @@ impl Nectar {
             }
             legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units));
         }
+        // WO-23b (§4.8): then the Reserve at its discount, only once no live quote outside this call has capacity.
+        // Seized units stay here (`reserve.units`) and accrue per active share; no transfer.
+        let reserve_stage = debt > 0
+            && units > 0
+            && c.reserve.discount_bps > 0
+            && self.reserve_stage_open(&p.collateral, cands);
+        let mut reserve_fill: Option<(u128, u128)> = None;
+        if reserve_stage {
+            let rc = Self::reserve_rc(&c);
+            let shares = c.reserve.shares.0;
+            if rc > 0 && shares > 0 {
+                if let Some(leg) = math::settle_leg_m(
+                    debt,
+                    rc,
+                    units,
+                    m,
+                    price,
+                    c.decimals,
+                    c.reserve.discount_bps,
+                    self.keeper_fee_bps,
+                )? {
+                    let inc = math::mul_div_floor(leg.buyer_units, math::E18, shares)?;
+                    c.reserve.usdc_e6 = U128(math::sub(c.reserve.usdc_e6.0, leg.repay_usd_e6)?);
+                    c.reserve.units = U128(math::add(c.reserve.units.0, leg.buyer_units)?);
+                    c.reserve.acc_units_per_share_e18 = U128(math::add(c.reserve.acc_units_per_share_e18.0, inc)?);
+                    debt = math::sub(debt, leg.repay_usd_e6)?;
+                    units = math::sub(units, math::add(leg.buyer_units, leg.keeper_units)?)?;
+                    total_repay = math::add(total_repay, leg.repay_usd_e6)?;
+                    keeper_units = math::add(keeper_units, leg.keeper_units)?;
+                    reserve_fill = Some((leg.repay_usd_e6, leg.buyer_units));
+                }
+            }
+        }
         if total_repay == 0 {
             return Err("no quote capacity");
         }
@@ -844,6 +899,10 @@ impl Nectar {
         p.units = U128(units);
         let release = if debt == 0 {
             self.close_position(&mut p)
+        } else if reserve_stage {
+            // WO-23b: quotes and Reserve exhausted; the shortfall stays Settling for the owner (`cancel_settlement`).
+            p.status = PositionStatus::Settling;
+            0
         } else {
             p.status = PositionStatus::Open;
             0
@@ -862,6 +921,16 @@ impl Nectar {
                 self.remove_live(&p.collateral, q.quote_id.0);
             }
             self.put_quote(q);
+        }
+        if let Some((repay, seize)) = reserve_fill {
+            emit(
+                "settled_reserve",
+                json!({ "position_id": position_id, "collateral": p.collateral, "disc_bps": c.reserve.discount_bps,
+                        "repay_usd_e6": U128(repay), "seize_units": U128(seize) }),
+            );
+        }
+        if reserve_stage && p.status == PositionStatus::Settling {
+            self.reserve_ref_add(&p.collateral, position_id.0);
         }
         self.utilised_usd_e6 = utilised;
         self.available_usd_e6 = available;
@@ -957,6 +1026,9 @@ impl Nectar {
                 count: LookupMap::new(StorageKey::NoteCount),
                 quote_refs: LookupMap::new(StorageKey::NoteQuoteRefs),
             },
+            reserve_notes: LookupMap::new(StorageKey::ReserveNotes),
+            next_reserve_note_id: 0,
+            reserve_refs: LookupMap::new(StorageKey::ReserveRefs),
         }
     }
 
@@ -1003,6 +1075,7 @@ impl Nectar {
             ),
             (TokenMsg::TopUpQuote { quote_id }, None) => self.on_top_up(&sender_id, amount, quote_id.0),
             (TokenMsg::Repay { position_id }, None) => self.on_repay(amount, position_id.0),
+            (TokenMsg::JoinNectarReserve { collateral }, None) => self.on_join_reserve(&sender_id, amount, collateral),
             (
                 TokenMsg::LockCollateralAndBorrow {
                     collateral,
@@ -1080,7 +1153,6 @@ impl Nectar {
                     pre_liq_min_bps: i.pre_liq_min_bps,
                     pre_liq_max_bps: i.pre_liq_max_bps,
                     verified_dex_depth_usd_e6: i.verified_dex_depth_usd_e6,
-                    nectar_reserve_usd_e6: i.nectar_reserve_usd_e6,
                     remote_chain: i.remote_chain,
                     price_kind: i.price_kind.unwrap_or(old.price_kind),
                     ..old
@@ -1101,7 +1173,6 @@ impl Nectar {
                 oracle_price_usd_e6: U128(0),
                 oracle_updated_ns: U64(0),
                 verified_dex_depth_usd_e6: i.verified_dex_depth_usd_e6,
-                nectar_reserve_usd_e6: i.nectar_reserve_usd_e6,
                 active_committed_q_usd_e6: U128(0),
                 acc_fee_per_dollar_e18: U128(0),
                 remote_chain: i.remote_chain,
@@ -1125,6 +1196,7 @@ impl Nectar {
                 voluntary_day: 0,
                 ca_suggested_multiplier_e18: U128(0),
                 ca_suggested_ns: U64(0),
+                reserve: ReservePool::default(),
             },
         };
         self.token_to_symbol.insert(i.token, symbol.clone());
@@ -1149,13 +1221,6 @@ impl Nectar {
         self.assert_owner();
         let mut c = self.coll_or_panic(&symbol);
         c.verified_dex_depth_usd_e6 = depth_usd_e6;
-        self.put_coll(c);
-    }
-
-    pub fn set_reserve(&mut self, symbol: String, reserve_usd_e6: U128) {
-        self.assert_owner();
-        let mut c = self.coll_or_panic(&symbol);
-        c.nectar_reserve_usd_e6 = reserve_usd_e6;
         self.put_coll(c);
     }
 
@@ -1415,6 +1480,7 @@ impl Nectar {
                 let v = ok(math::add(self.claimable(&account_id), amt));
                 self.claimable_usdc.insert(account_id.clone(), v);
             }
+            Payout::ReserveExit { .. } | Payout::ReserveUnits { .. } => self.restore_reserve_payout(&payout, amt),
         }
         emit("payout_failed", json!({ "payout": payout, "account": account_id, "amount": amount }));
         false
@@ -1478,7 +1544,7 @@ impl Nectar {
         };
         ExitCapacityView {
             q_usd_e6: c.active_committed_q_usd_e6,
-            r_usd_e6: c.nectar_reserve_usd_e6,
+            r_usd_e6: U128(Self::reserve_rc(&c)),
             d_usd_e6: U128(d_eff),
             haircut_bps: h,
             session_open,
