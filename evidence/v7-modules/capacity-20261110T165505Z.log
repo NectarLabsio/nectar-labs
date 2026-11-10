@@ -1,0 +1,4 @@
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"150000000"}]}
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"quote_funded","data":[{"quote_id":"3","buyer":"buyer2.nectar.testnet","collateral":"NVDAx","amount_usd_e6":"5000000000","max_discount_bps":450,"accepts_voluntary_fills":false}]}
+EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"buyer2.nectar.testnet","token_ids":["q-3"]}]}
+capacity: {"q_usd_e6":"16107060000","total_debt_usd_e6":"9010000000","aggregate_headroom_usd_e6":"5495354000","session_open":true}

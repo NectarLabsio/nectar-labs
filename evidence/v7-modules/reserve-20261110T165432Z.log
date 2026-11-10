@@ -1,0 +1,4 @@
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"150000000"}]}
+EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"buyer2.nectar.testnet","token_ids":["r-NVDAx-0"]}]}
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"reserve_joined","data":[{"note_id":"r-NVDAx-0","owner":"buyer2.nectar.testnet","collateral":"NVDAx","amount_usd_e6":"10000000","shares":"10000000"}]}
+reserve: {"acc_fee_per_share_e18":"0","acc_units_per_share_e18":"0","discount_bps":600,"fees_7d_usd_e6":"0","min_deposit_usd_e6":"10000000","notice_period_ns":"604800000000000","notice_usdc_e6":"0","r_usd_e6":"10000000","realised_apr_7d_bps":"0","share_price_e6":"1000000","shares":"10000000","symbol":"NVDAx","units":"0","usdc_e6":"10000000"}

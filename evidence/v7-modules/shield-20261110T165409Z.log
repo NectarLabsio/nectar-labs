@@ -1,0 +1,4 @@
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"150000000"}]}
+weekend window_end_ns (next calendar open) = 1794407400000000000
+preview(shield): {"b_c_usd_e6":"0","total_fees_usd_e6":"2","ok":false,"reason":"shield below minimum"}
+shield limit below $5 minimum

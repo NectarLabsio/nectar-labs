@@ -1,0 +1,6 @@
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"150000000"}]}
+weekend window_end_ns (next calendar open) = 1794407400000000000
+preview(shield): {"b_c_usd_e6":"210000000","total_fees_usd_e6":"2","ok":false,"reason":"shield below minimum"}
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"shield_opened","data":[{"position_id":"5","borrower":"borrower1.nectar.testnet","collateral":"NVDAx","kind":"Weekend","window_end_ns":"1794407400000000000","fee_bps":15,"fee_usd_e6":"283500","remote":f
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"position_opened","data":[{"position_id":"5","borrower":"borrower1.nectar.testnet","collateral":"NVDAx","units":"2000000","debt_usd_e6":"189000000","premium_usd_e6":"283500","origination_fee_usd_e6":"56
+EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"borrower1.nectar.testnet","token_ids":["p-5"]}]}
