@@ -111,3 +111,31 @@ refused while locked). Events: NEP-297 standard "nep171" `nft_mint` / `nft_trans
   `positions(id) → (authority, depositor, amount, status)` for vault_read.
 - Keeper: viem on 84532 (RPC from config `base.rpc_url`), Foundry keystore account (never --private-key), relays settle/release, then `relay_settlement_result`
   / `relay_release_result`; ERC-8021 suffix appended only when `BASE_BUILDER_CODE` is set (H19).
+
+## E. Security fix wave (D-027; findings in docs/work/security-review-v7.md) — binding for contract, solana, evm, keeper, quoter, web
+**Depositor commitment (SR-8).** `reserve_remote_position(…, chain?, depositor: String)` — the borrower's remote address (Solana base58 32-byte
+on-curve key, or EVM 0x address ≠ zero). Stored in a NEW raw-key map (code-only upgrade; no change to existing structs), exposed as
+`get_position(id).remote.committed_depositor`. `on_deposit_verified` / `keeper_attest_deposit` require depositor == committed. OutLayer `vault_read`
+input gains `"depositor"`.
+**Solana vault v2 layout (program upgrade in place; no open positions).**
+- Position PDA `[b"pos", vault, position_id.to_le_bytes(), depositor]` (SR-8).
+- Nonce PDA `[b"nonce", vault, position.authority, nonce.to_le_bytes()]` (SR-1). `NonceRecord` v2 = disc · `version u8 (=2)` · `vault Pubkey` ·
+  `authority [u8;32]` · `nonce u64` · `position_id u64` · `op u8` (0 settle, 1 release) · `kind u8`. The keeper validates owner = program, length,
+  discriminator and every field (SR-2).
+- Payouts never depend on an account a third party controls (SR-4): settle pays `seize_units` to the recipient's ATA when that account is valid
+  (owner = recipient, mint, not frozen, no transfer-blocking extension); otherwise it records a program-owned `Claim` PDA `[b"claim", vault, recipient]`
+  (recipient-signed `claim`). The remainder (and the whole amount on release) is recorded on the position as `withdrawable`, and the depositor signs
+  `withdraw(position_id)` to ANY token account of the mint. The position closes when withdrawn. Settle and release still verify the Ed25519 ix exactly as now.
+  The solana agent publishes discriminators, account orders and byte layouts in solana/deploy.md.
+**EVM vault (redeploy on the fork).** `nonceUsed[authority][nonce]` (SR-1). Slots keyed `keccak256(abi.encode(id, depositor))` with depositor = msg.sender
+at `openPosition` (SR-8). `settle`/`release` take an extra `depositor` argument; the signer must equal that slot's authority (the typed data and NEAR's
+digest are UNCHANGED). View `positionOf(uint64 id, address depositor)`. Expiry valid while `block.timestamp < expires` (SR-30, aligns with NEAR/Solana).
+Phantom-token guard per the review's lost finding (keep B20 precompile tokens working: they have no code, F-347).
+**Contract (code-only upgrade → 2.2.0-v7).** SR-3: a fresh-nonce re-sign of the identical leg once `now >= expires` and unrelayed (no blind rollback).
+SR-5: remote sizing excludes R_c/D_c, uses fitting non-exiting quotes, and caps at the largest single fitting quote remaining while settle is single-leg;
+settlement filters by recipient fit BEFORE the 8-candidate truncation. SR-7: recipient validity (Solana on-curve 32-byte; EVM non-zero; reject otherwise
+at funding and at `set_quote_remote_recipient`). SR-10: rounding-tolerant remote leg check. SR-17: a claim path for `owed_collateral`. SR-18: record a
+short deposit so it can be released.
+**Keeper.** New PDAs (depositor in position seeds; authority in nonce seeds), SR-2 strict nonce-record and tx validation, SR-11 (compare against
+`remote.reserved_units`), SR-12/SR-31 (vault program + mint pinned from config by default; refuse mismatches), SR-29 (log scan from the reservation block,
+not the last 10k), EVM `positionOf(id, depositor)` + extra `depositor` arg.
