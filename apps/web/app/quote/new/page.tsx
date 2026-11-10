@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Banner, Button, Card, Field, Kv, Segmented, SelectField } from "@nectar/ui";
+import { Banner, Button, Card, Checkbox, Field, Kv, Segmented, SelectField } from "@nectar/ui";
 import { formatDuration, formatUsdE6, parseUnits, secondsToNs, tx, type QuoteView } from "@nectar/sdk";
-import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
+import { useChain, useFeature, useSign, useView, useWallet } from "@/components/AppProvider";
 import { FaucetLink, Gate } from "@/components/states";
 import { useBalance } from "@/components/useBalance";
 
@@ -16,6 +16,9 @@ export default function NewQuotePage() {
   const [disc, setDisc] = useState(config.quotes.default_max_discount_bps);
   const presets = config.quotes.notice_presets_s.filter((s) => s >= config.quotes.min_notice_period_s);
   const [notice, setNotice] = useState(String(presets[0] ?? config.quotes.min_notice_period_s));
+  // v2 + features.profit_lock (§4.10): opt this quote into Profit-Lock fills. Off by default; the key is sent only when ticked.
+  const profitLockOn = useFeature("profit_lock");
+  const [voluntary, setVoluntary] = useState(false);
   let amount: bigint | null = null;
   try {
     amount = amountIn.trim() ? parseUnits(amountIn, 6) : null;
@@ -32,7 +35,7 @@ export default function NewQuotePage() {
 
   const submit = async () => {
     if (!config.usdc || !config.core || !col || !amount) return;
-    await sign(tx.fundQuote(config.usdc, config.core, amount.toString(), { collateral: col.symbol, max_discount_bps: disc, notice_period_ns: secondsToNs(Number(notice)), buyer_remote_recipient: null }), { success: "Quote funded" });
+    await sign(tx.fundQuote(config.usdc, config.core, amount.toString(), { collateral: col.symbol, max_discount_bps: disc, notice_period_ns: secondsToNs(Number(notice)), buyer_remote_recipient: null, ...(profitLockOn && voluntary ? { accepts_voluntary_fills: true } : {}) }), { success: "Quote funded" });
     bal.reload();
     quotes.reload();
   };
@@ -53,6 +56,12 @@ export default function NewQuotePage() {
                 hint={bal.data !== undefined ? `Balance ${formatUsdE6(bal.data)} · minimum ${formatUsdE6(min, 0)}` : `Minimum ${formatUsdE6(min, 0)}`} />
               <Field label="Max discount" type="number" value={disc} onChange={(e) => setDisc(Number(e.target.value))} unit="bps" error={discErr ?? undefined} hint="Worst price you accept below the oracle at settlement." />
               <Segmented label="Notice period" value={notice} onChange={setNotice} options={presets.map((s) => ({ value: String(s), label: formatDuration(s) }))} />
+              {profitLockOn ? (
+                <div data-testid="voluntary-fills">
+                  <Checkbox label="Accept voluntary fills (Profit-Lock)" checked={voluntary} onChange={(e) => setVoluntary(e.target.checked)}
+                    hint="Also buy collateral when a healthy borrower closes early, at your discount ceiling, under the asset's daily cap. Each fill uses part of this quote." />
+                </div>
+              ) : null}
               {accountId && bal.data === 0n ? <FaucetLink token="USDC (mock)" /> : null}
               {capReached ? <Banner tone="warn" title="Quote cap reached">{config.limits.max_quotes_per_asset} live quotes on this asset. Funding now would be refunded in full.</Banner> : null}
               <Button variant="primary" disabled={!ok} onClick={submit}>Fund quote</Button>
@@ -63,6 +72,7 @@ export default function NewQuotePage() {
               <Kv k="Token" v={config.usdc ?? "—"} />
               <Kv k="Call" v="ft_transfer_call → nectar-core" />
               <Kv k="Deposit" v="1 yoctoNEAR" />
+              {profitLockOn ? <Kv k="Voluntary fills" v={voluntary ? "accepted (Profit-Lock)" : "off"} /> : null}
               <Kv k="Live quotes on asset" v={quotes.data ? `${quotes.data.length} / ${config.limits.max_quotes_per_asset}` : "—"} />
             </div>
             <p className="caption" style={{ marginTop: 12 }}>The next screen shows the exact msg JSON, gas and deposit before your wallet opens.</p>

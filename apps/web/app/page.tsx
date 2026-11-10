@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { FeatureName, Features } from "@nectar/sdk";
 import { LandingStats, LiveLimitCard } from "@/components/LandingLive";
 import { CramerFormula } from "@/components/Formula";
+import { ShieldFeeBps } from "@/components/Shields";
 import { docsHref } from "@/lib/env";
 import { getPublicConfig } from "@/lib/config.server";
 
@@ -117,11 +118,11 @@ export default function Home() {
           <div className="sec-head">
             <span className="label">Shields</span>
             <h2>A weekend-safe limit with committed buyers behind it</h2>
-            <p className="lead">A Shield is a normal loan sized at the weekend limit for a fixed window, so the limit cannot be cut halfway through. It is not insurance.</p>
+            <p className="lead">A Shield is a normal loan sized at the weekend limit for a fixed window, so the limit cannot be cut halfway through. Inside the window only committed buyers can settle it.</p>
           </div>
           <div className="module-grid">
-            <div className="card role"><span className="label">Weekend Shield</span><div className="big num">15 bps</div><p className="small">Friday close to Monday 09:30 New York time. Sized at the weekend limit even while the market is open. From $5 on testnet.</p></div>
-            <div className="card role"><span className="label">Event Shield</span><div className="big num">25 bps</div><p className="small">A curator-set window around an event such as earnings, at most 72 h, at weekend parameters from the start.</p></div>
+            <div className="card role"><span className="label">Weekend Shield</span><div className="big num"><ShieldFeeBps kind="Weekend" /></div><p className="small">Friday close to Monday 09:30 New York time. Sized at the weekend limit even while the market is open. From $5 on testnet.</p></div>
+            <div className="card role"><span className="label">Event Shield</span><div className="big num"><ShieldFeeBps kind="Event" /></div><p className="small">A curator-set window around an event such as earnings, at most 72 h, at weekend parameters from the start.</p></div>
             <div className="card role"><span className="label">Zap and borrow</span><div className="big num">dry quote</div><p className="small">Testnet: get demo NVDAx from the faucet, next to the dry 1Click quote mainnet would run. Then borrow.</p></div>
           </div>
           <p style={{ marginTop: 16 }}><Link className="link" href="/shield">Open a Shield</Link></p>

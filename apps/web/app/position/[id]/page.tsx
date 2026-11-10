@@ -2,10 +2,11 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button, Card, Field, Kv, StatusPill, type PositionPill } from "@nectar/ui";
-import { bpsToPct, formatUnits, formatUsdE6, parseUnits, tx, type HealthView, type PositionView } from "@nectar/sdk";
+import { bpsToPct, formatUnits, formatUsdE6, parseUnits, tx, type HealthView, type PositionView, type ShieldView } from "@nectar/sdk";
 import { useChain, useFeature, useSign, useView, useWallet } from "@/components/AppProvider";
 import { DepositSourceBadge, RemoteDeposit, RemoteOpenCard, RemoteRelease, RemoteStatusBadge, ReservationCard, isRemote } from "@/components/remote/RemoteFlow";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
+import { ProfitLockPanel, ShieldStatusCard } from "@/components/Shields";
 
 export default function PositionPage() {
   const { id } = useParams<{ id: string }>();
@@ -18,6 +19,9 @@ export default function PositionPage() {
   }, [id]);
   const [amt, setAmt] = useState("");
   const solanaOn = useFeature("solana_remote");
+  const shieldsOn = useFeature("shields");
+  const profitLockOn = useFeature("profit_lock");
+  const sh = useView<ShieldView | null>(shieldsOn ? (v) => v.getShield(id) : null, [id, shieldsOn]);
   const [loadedAt, setLoadedAt] = useState(0);
   useEffect(() => {
     if (p.data !== undefined) setLoadedAt(Date.now());
@@ -78,6 +82,10 @@ export default function PositionPage() {
                 </div>
               </Card>
             ) : <Card label="Settlement"><p className="small">Settlement waterfall details appear here once the indexer records <code>settled_near</code> events for this position.</p></Card>}
+            {sh.data ? <ShieldStatusCard shield={sh.data} /> : null}
+            {profitLockOn && pos.status === "Open" && BigInt(pos.debt_usd_e6) > 0n && (!remote || remote.remote.status === "Open") ? (
+              <ProfitLockPanel pos={pos} health={h} decimals={col?.decimals ?? 6} onSettled={p.reload} />
+            ) : null}
           </div>
         )}
       </Gate>
