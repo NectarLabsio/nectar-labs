@@ -2,6 +2,7 @@
 import { useState, type ReactNode } from "react";
 import { Badge, Button, Card, Field, Kv, Segmented } from "@nectar/ui";
 import { bpsToPct, formatUsdE6, oracleSourceLabel, parseUnits, tx, type ExitCapacity, type OracleSource, type PoolView, type QuoterConfigView, type TxIntent } from "@nectar/sdk";
+import { SessionBadge } from "@/components/Session";
 import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { OracleBadge, optionalView, pricingLabel } from "@/components/OracleBadge";
@@ -81,10 +82,11 @@ export default function ConsolePage() {
             <Card label={`${sym} · mock`} live>
               <div className="kvs">
                 <Kv k="Committed Q" v={formatUsdE6(d.cap.q_usd_e6)} />
-                <Kv k="Reserve R" v={formatUsdE6(d.cap.r_usd_e6)} />
-                <Kv k="DEX depth D" v={formatUsdE6(d.cap.d_usd_e6)} />
+                <Kv k="Nectar Reserve R" v={formatUsdE6(d.cap.r_usd_e6)} />
+                <Kv k="Verified DEX depth D" v={formatUsdE6(d.cap.d_usd_e6)} />
                 <Kv k="Haircut" v={bpsToPct(d.cap.haircut_bps)} />
-                <Kv k="Session" v={d.cap.session_open ? "open" : "closed"} />
+                <Kv k="Session" v={<SessionBadge cap={d.cap} />} />
+                <Kv k="Contract" v={<span className="mono">{chain.version ?? "—"}</span>} />
                 <Kv k="Oracle price" v={formatUsdE6(d.cap.oracle_price_usd_e6)} />
                 <Kv k="Oracle" v={<OracleBadge cap={d.cap} />} />
                 <Kv k="Effective limit" v={bpsToPct(d.cap.limit_bps_effective)} />
@@ -108,7 +110,8 @@ export default function ConsolePage() {
                 <div className="stack">
                   <div className="row">
                     <Button disabled={!isOwner} variant={chain.paused ? "primary" : "danger"} onClick={() => run(chain.paused ? tx.unpause(core) : tx.pause(core), chain.paused ? "Unpaused" : "Paused")}>{chain.paused ? "Unpause" : "Pause"}</Button>
-                    <Button disabled={!isOwner} onClick={() => run(tx.setSession(core, sym, !d.cap.session_open), "Session updated")}>{d.cap.session_open ? "Close session" : "Open session"}</Button>
+                    {/* v1 owner flag; v2 removed it (the session comes from the calendar, interface-v7 §A2). */}
+                    {chain.generation !== "v2" ? <Button disabled={!isOwner} onClick={() => run(tx.setSession(core, sym, !d.cap.session_open), "Session updated")}>{d.cap.session_open ? "Close session" : "Open session"}</Button> : null}
                   </div>
                   <OwnerAction title="Update owner price" enabled={isOwner} intent={usd(price) ? tx.updateOwnerPrice(core, sym, usd(price)!) : null} onRun={(t) => run(t, "Price updated")}>
                     <Field label="Owner price" inputMode="decimal" unit="USD" value={price} onChange={(e) => setPrice(e.target.value)} />

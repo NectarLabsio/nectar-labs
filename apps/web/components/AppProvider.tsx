@@ -1,8 +1,8 @@
 "use client";
 import type { ReactNode } from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { NectarViews, type CoreConfigView, type PublicConfig, type TxIntent } from "@nectar/sdk";
-import { SignModal, ToastProvider, useToast } from "@nectar/ui";
+import { NectarViews, contractGeneration, featureOn, type ContractGeneration, type CoreConfigView, type FeatureName, type PublicConfig, type TxIntent } from "@nectar/sdk";
+import { SignModal, ToastProvider, useToast, type FeeLine } from "@nectar/ui";
 import { E2E_KEY_ADAPTER, RPC_URL, txUrl } from "@/lib/env";
 import type { TxOutcome, WalletAdapter } from "@/lib/wallet/types";
 import { NearConnectAdapter } from "@/lib/wallet/near-connect";
@@ -15,6 +15,10 @@ interface ChainState {
   views: NectarViews | null;
   deployed: boolean;
   core: CoreConfigView | null;
+  /** `contract_version()` of the connected core (null until read). */
+  version: string | null;
+  /** "v2" iff the version starts with "2." (interface-v7 §A6); null until read. */
+  generation: ContractGeneration | null;
   paused: boolean;
   loading: boolean;
   rpcError: string | null;
@@ -26,6 +30,12 @@ export function useChain(): ChainState {
   const c = useContext(ChainCtx);
   if (!c) throw new Error("useChain outside AppProvider");
   return c;
+}
+
+/** A v7 control renders only when the connected contract is v2 and `features.<name>` is true in config.yaml (WO-20). */
+export function useFeature(name: FeatureName): boolean {
+  const { config, generation } = useChain();
+  return featureOn(config.features, generation, name);
 }
 
 // ------------------------------------------------------------------ wallet
@@ -49,6 +59,8 @@ export function useWallet(): WalletState {
 
 export interface SignOptions {
   summary?: ReactNode;
+  /** Fee stack shown in the sign modal with its total, before the wallet opens. */
+  fees?: { lines: FeeLine[]; total: ReactNode; note?: ReactNode };
   /** Toast title on success, e.g. "Quote funded". */
   success: string;
 }
@@ -116,6 +128,7 @@ function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; ac
         onConfirm={confirm}
         onCancel={cancel}
         summary={pending?.opts.summary}
+        fees={pending?.opts.fees}
       />
     </SignCtx.Provider>
   );
@@ -127,6 +140,7 @@ export function AppProvider({ config, children }: { config: PublicConfig; childr
   const deployed = config.core !== null;
   const views = useMemo(() => (config.core ? NectarViews.fromRpc(config.core, RPC_URL) : null), [config.core]);
   const [core, setCore] = useState<CoreConfigView | null>(null);
+  const [version, setVersion] = useState<string | null>(null);
   const [loading, setLoading] = useState(deployed);
   const [rpcError, setRpcError] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
@@ -136,11 +150,12 @@ export function AppProvider({ config, children }: { config: PublicConfig; childr
     if (!views) return;
     let live = true;
     setLoading(true);
-    views
-      .getConfig()
-      .then((c) => {
+    Promise.all([views.getConfig(), views.contractVersion().catch(() => null)])
+      .then(([c, v]) => {
         if (!live) return;
         setCore(c);
+        // get_config carries contract_version on the live deployment; contract_version() is the interface (§A6).
+        setVersion(v ?? (typeof c.contract_version === "string" ? c.contract_version : null));
         setRpcError(null);
       })
       .catch((e: unknown) => live && setRpcError(e instanceof Error ? e.message : String(e)))
@@ -173,7 +188,8 @@ export function AppProvider({ config, children }: { config: PublicConfig; childr
     setAccountId(null);
   }, [adapter]);
 
-  const chain: ChainState = { config, views, deployed, core, paused: core?.paused === true, loading, rpcError, reload };
+  const generation = version === null ? null : contractGeneration(version);
+  const chain: ChainState = { config, views, deployed, core, version, generation, paused: core?.paused === true, loading, rpcError, reload };
   const wallet: WalletState = { accountId, network: adapter.network(), label: adapter.label, connecting, connect, disconnect };
 
   return (

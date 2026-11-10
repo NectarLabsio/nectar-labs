@@ -40,6 +40,7 @@ test.describe("testnet write: borrow with demo key", () => {
     await expect(page.getByTestId("sign-msg")).toContainText('"LockCollateralAndBorrow"');
     await expect(page.getByTestId("sign-gas")).toContainText("TGas");
     await expect(page.getByTestId("sign-deposit")).toContainText("1 yoctoNEAR");
+    await expect(page.getByTestId("sign-fees-total")).toContainText("$");
     await page.getByRole("button", { name: "Open wallet to sign" }).click();
     await expect(page.getByText("Position opened")).toBeVisible({ timeout: 60_000 });
   });

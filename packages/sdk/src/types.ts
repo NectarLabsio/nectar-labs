@@ -30,12 +30,42 @@ export interface CollateralInput {
   nectar_reserve_usd_e6: U128;
 }
 
-/** `get_collateral(symbol)` / `list_collaterals` item. Extra state fields: PRD §6.2 (confirm at G1). */
-export interface CollateralView extends CollateralInput {
+/** `get_collateral(symbol)` / `list_collaterals` item. Extra state fields: PRD §6.2 (confirm at G1).
+ * v2 (interface-v7 §A2/A3) removes `market_session_open` and adds the weekend-guard and multiplier fields. */
+export interface CollateralView extends Omit<CollateralInput, "market_session_open"> {
+  /** v1 only (owner flag); absent on v2. */
+  market_session_open?: boolean;
   oracle_price_usd_e6?: U128;
   oracle_updated_ns?: U64;
   active_committed_q_usd_e6?: U128;
   acc_fee_per_dollar_e18?: U128;
+  // v2 (interface-v7 §A1–A3)
+  total_debt_usd_e6?: U128;
+  forced_closed?: boolean;
+  multiplier_e18?: U128;
+  multiplier_updated_ns?: U64;
+  price_kind?: PriceKind;
+  ca_pending?: boolean;
+  ca_effective_ns?: U64;
+  ca_multiplier_e18?: U128;
+  weekend_ref_price_e6?: U128;
+  weekend_ref_updated_ns?: U64;
+}
+
+// ---------------------------------------------------------------- v2 (interface-v7.md §A)
+
+/** `contract_version()` on v2 starts with "2." ("2.0.0-v7"); v1 answers "nectar-core 0.1.0 …". */
+export type ContractGeneration = "v1" | "v2";
+/** interface-v7 §A2, precedence after "no_calendar": outside_hours → stale_price → forced_closed. */
+export type SessionReason = "open" | "no_calendar" | "outside_hours" | "stale_price" | "forced_closed";
+/** interface-v7 §A3. */
+export type PriceKind = "Underlying" | "TokenIncludesMultiplier";
+/** `[open_ns, close_ns)` NYSE session window, U64 strings. */
+export type SessionWindow = [U64, U64];
+/** `pay_to` on LockCollateralAndBorrow (interface-v7 §A4). */
+export interface PayTo {
+  receiver_id: AccountId;
+  memo?: string | null;
 }
 
 /** `get_exit_capacity(symbol)`. */
@@ -54,7 +84,23 @@ export interface ExitCapacity {
   oracle_source?: OracleSource | null;
   /** P1, optional: confidence of the last accepted Pyth price, in bps of price. */
   oracle_conf_bps?: Bps | null;
+  /** (1 − h)(Q + R + D) in USD e6; present on the live v1 deployment and on v2. */
+  capacity_usd_e6?: U128;
+  // v2 additions (interface-v7 §A6); absent on v1.
+  session_reason?: SessionReason;
+  total_debt_usd_e6?: U128;
+  aggregate_capacity_usd_e6?: U128;
+  aggregate_headroom_usd_e6?: U128;
+  multiplier_e18?: U128;
+  price_kind?: PriceKind;
+  ca_pending?: boolean;
+  ca_effective_ns?: U64;
+  forced_closed?: boolean;
 }
+
+/** `get_exit_capacity` on v2: every §A6 addition present. */
+export type ExitCapacityV2 = ExitCapacity &
+  Required<Pick<ExitCapacity, "session_reason" | "total_debt_usd_e6" | "aggregate_capacity_usd_e6" | "aggregate_headroom_usd_e6" | "multiplier_e18" | "price_kind" | "ca_pending" | "ca_effective_ns" | "forced_closed">>;
 
 // ---------------------------------------------------------------- P1 views and owner inputs (interface-p1.md, D-013, D-014)
 
@@ -102,6 +148,8 @@ export interface PositionView {
   pre_liq_ltv_bps: Bps;
   opened_ns: U64;
   status: PositionStatus;
+  /** v2, display only (interface-v7 §A3). */
+  entry_multiplier_e18?: U128;
 }
 
 /** `get_health(position_id)`. */
@@ -122,13 +170,21 @@ export interface PoolView {
   lenders_fees_usd_e6: U128;
 }
 
-/** `preview_borrow(symbol, units, borrow_usd_e6)`. */
+/** `preview_borrow(symbol, units, borrow_usd_e6[, referrer])`. v2 adds the fee stack and aggregate fields (interface-v7 §A6). */
 export interface BorrowPreview {
   b_c_usd_e6: U128;
   static_limit_usd_e6: U128;
   premium_usd_e6: U128;
   ok: boolean;
+  /** v2 adds "aggregate_limit" | "ca_pending" | "referrer_is_borrower". */
   reason: string | null;
+  origination_fee_usd_e6?: U128;
+  referrer_share_usd_e6?: U128;
+  total_fees_usd_e6?: U128;
+  net_proceeds_usd_e6?: U128;
+  aggregate_headroom_usd_e6?: U128;
+  multiplier_e18?: U128;
+  session_open?: boolean;
 }
 
 export interface FeeSplit {
@@ -165,6 +221,10 @@ export interface LockCollateralAndBorrowArgs {
   collateral: string;
   borrow_usd_e6: U128;
   pre_liq_ltv_bps: Bps;
+  /** v2 only (interface-v7 §A4). Omitted from the JSON when absent, so the v1 msg stays byte-identical. */
+  pay_to?: PayTo | null;
+  /** v2 only (interface-v7 §A5). Omitted from the JSON when absent. */
+  referrer?: AccountId | null;
 }
 export interface RepayArgs { position_id: U64 }
 
@@ -193,6 +253,13 @@ export interface NectarEventMap {
   collateral_upserted: { symbol: string };
   paused: Record<string, never>;
   unpaused: Record<string, never>;
+  // v2 (standard "nectar", version "2.0.0"; interface-v7 §A6). Only referrer_paid has its fields fixed by the interface; the rest: confirm at G1b.
+  referrer_paid: { referrer: AccountId; position_id: U64; amount_usd_e6: U128 };
+  pay_to_failed: { position_id?: U64; borrower?: AccountId; receiver_id?: AccountId; amount_usd_e6?: U128 };
+  claimable_withdrawn: { account_id?: AccountId; amount_usd_e6?: U128 };
+  multiplier_updated: { symbol: string; multiplier_e18?: U128 };
+  corporate_action_announced: { symbol: string; multiplier_e18?: U128; effective_ns?: U64 };
+  session_forced_closed: { symbol: string; closed?: boolean };
 }
 export type NectarEventName = keyof NectarEventMap;
 export type NectarEvent = {

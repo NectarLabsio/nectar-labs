@@ -88,6 +88,35 @@ function fmtYocto(y: string): string {
   return `${(v / base).toString()}${frac ? "." + frac : ""} NEAR`;
 }
 
+/** One line of the fee stack. `sub` lines are part of the line above (e.g. the referrer share of origination), not added to the total. */
+export interface FeeLine {
+  label: ReactNode;
+  value: ReactNode;
+  sub?: boolean;
+}
+
+/** Fee stack with its total (PRD §4.11: the sign modal shows the total of every fee before the wallet opens). */
+export function FeeStackList({ lines, total, note, testId }: { lines: FeeLine[]; total: ReactNode; note?: ReactNode; testId?: string }) {
+  return (
+    <div className="stack-sm feestack" data-testid={testId}>
+      <span className="label">Fees</span>
+      <div className="kvs">
+        {lines.map((l, i) => (
+          <div className={l.sub ? "kv sub" : "kv"} key={i}>
+            <span>{l.label}</span>
+            <b className="num">{l.value}</b>
+          </div>
+        ))}
+        <div className="kv total">
+          <span>Total fees</span>
+          <b className="num" data-testid={testId ? `${testId}-total` : undefined}>{total}</b>
+        </div>
+      </div>
+      {note ? <p className="caption">{note}</p> : null}
+    </div>
+  );
+}
+
 export interface SignModalProps {
   preview: SignPreview | null;
   signer: string | null;
@@ -98,10 +127,12 @@ export interface SignModalProps {
   onCancel: () => void;
   /** Extra lines (premium, health after) rendered above the JSON. */
   summary?: ReactNode;
+  /** Fee stack and its total, rendered before the JSON. */
+  fees?: { lines: FeeLine[]; total: ReactNode; note?: ReactNode };
 }
 
 /** The sign preview every write passes through: exact msg JSON, gas and deposit before the wallet opens. */
-export function SignModal({ preview, signer, network, busy, error, onConfirm, onCancel, summary }: SignModalProps) {
+export function SignModal({ preview, signer, network, busy, error, onConfirm, onCancel, summary, fees }: SignModalProps) {
   if (!preview) return null;
   const msgJson = preview.msg === undefined ? null : JSON.stringify(preview.msg, null, 2);
   return (
@@ -130,6 +161,7 @@ export function SignModal({ preview, signer, network, busy, error, onConfirm, on
         <div className="kv"><span>Gas (max, unused is refunded)</span><b data-testid="sign-gas">{fmtGas(preview.gas)}</b></div>
         <div className="kv"><span>Deposit</span><b data-testid="sign-deposit">{fmtYocto(preview.deposit)}</b></div>
       </div>
+      {fees ? <FeeStackList lines={fees.lines} total={fees.total} note={fees.note} testId="sign-fees" /> : null}
       {summary}
       {msgJson ? (
         <div className="stack-sm">
