@@ -19,6 +19,13 @@ SQLite via `node:sqlite` (no native addon). Holds no keys.
   live numbers, cross-checked against the contract's `preview_borrow`). The nectar-core id comes from
   `CORE_ACCOUNT_ID`, else `accounts.core` in `packages/config/config.yaml`, so a fresh clone needs no env: the
   tools read contract views over public RPC (DB-only fallback when no id is known; `preview_borrow` then errors).
+- **Agent skill** (`src/skill.ts`, PRD v7 §10.5), same server, keyless: `open_protected_stock_loan` returns the
+  **unsigned** `ft_transfer_call` (collateral token → core, 1 yocto) plus a preview (static + Cramér limits,
+  every fee, health at −5/−10/−20%); the agent signs it with its own key. v1 vs v2 is read from
+  `contract_version()`: on v1 the origination/referrer/headroom fields are `null` and listed in `absent_fields`,
+  and `pay_to`/`referrer` are refused (`unsupported_on_v1`). `shield` returns `unsupported_until_v2_shields`.
+  `quote_capacity` (Q_c, R_c, D_c, h_c, total debt, headroom); `get_note` / `build_self_settle` return
+  `not_available` until WO-22 / WO-23a. Fixtures: `scripts/record-skill-fixture.ts [core] [out.json]`.
 
 ```bash
 # env (all optional; ids default to packages/config/config.yaml): CORE_ACCOUNT_ID, NECTAR_CONFIG_PATH, NEAR_RPC_URL, FEED_DB_PATH (~/.nectar/feed.sqlite),

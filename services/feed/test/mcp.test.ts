@@ -53,7 +53,7 @@ function seeded(): FeedDb {
 }
 
 describe('Feed MCP (in-memory transport)', () => {
-  it('lists exactly the four read-only tools', async () => {
+  it('lists exactly the read-only tools (four feed + four skill)', async () => {
     const c = await connect({ db: seeded(), views: new Views() });
     const { tools } = await c.listTools();
     assert.deepEqual(tools.map((t) => t.name).sort(), [...MCP_TOOL_NAMES].sort());
@@ -123,7 +123,7 @@ describe('Feed MCP (Streamable HTTP, stateless)', () => {
     try {
       const c = new Client({ name: 'http-test', version: '0' });
       await c.connect(new StreamableHTTPClientTransport(new URL(`http://127.0.0.1:${port}/mcp`)));
-      assert.equal((await c.listTools()).tools.length, 4);
+      assert.equal((await c.listTools()).tools.length, MCP_TOOL_NAMES.length);
       const t = body(await c.callTool({ name: 'explain_limit', arguments: { symbol: 'NVDAx' } }));
       assert.match(t, /\$37,500\.00/);
       await c.close();

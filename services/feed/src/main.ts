@@ -63,7 +63,7 @@ function main(): void {
   // Feed MCP over Streamable HTTP (read-only). FEED_MCP_PORT=off disables it.
   const mcpPort = env.FEED_MCP_PORT ?? '8789';
   const views = ids.core === null ? null : new NearViewReader(rpc, ids.core);
-  const mcp = mcpPort === 'off' ? null : createMcpHttpServer({ db, views });
+  const mcp = mcpPort === 'off' ? null : createMcpHttpServer({ db, views, coreId: ids.core });
   mcp?.listen(Number(mcpPort), host);
 
   // 1Click dry-quote sampler (Q-007: dry only). ONECLICK_ENABLED=0 disables it. FEED_FIXTURES=1 replays

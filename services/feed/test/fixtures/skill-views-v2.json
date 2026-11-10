@@ -1,0 +1,64 @@
+{
+  "recorded_at": null,
+  "synthetic": "nectar-core-v2 is not deployed yet (H-NEAR-FAUCET). Field names from contracts/nectar-core/src/types.rs (CollateralConfig, ExitCapacityView, PreviewBorrowView v2); numbers = contracts/nectar-core/tests/model.csv row demo_borrow (origination 30 bps). Re-record with scripts/record-skill-fixture.ts nectar-core-v2.nectar.testnet at G2b.",
+  "contract": "nectar-core-v2.nectar.testnet",
+  "views": {
+    "contract_version": { "method": "contract_version", "args": {}, "block_height": 1000, "value": "2.0.0-v7" },
+    "get_collateral": {
+      "method": "get_collateral",
+      "args": { "symbol": "NVDAx" },
+      "block_height": 1000,
+      "value": {
+        "symbol": "NVDAx", "token": "nvdax-mock.nectar.testnet", "decimals": 6, "price_feed_id": "TODO-G5",
+        "base_ltv_bps": 4000, "max_nectar_ltv_bps": 7000, "base_haircut_bps": 1000, "weekend_haircut_bps": 2500, "limit_premium_bps": 300,
+        "pre_liq_min_bps": 6500, "pre_liq_max_bps": 8000, "oracle_price_usd_e6": "180000000", "oracle_updated_ns": "1794268138195955491",
+        "verified_dex_depth_usd_e6": "0", "nectar_reserve_usd_e6": "0", "active_committed_q_usd_e6": "15000000000", "acc_fee_per_dollar_e18": "0",
+        "remote_chain": null, "total_debt_usd_e6": "0", "multiplier_e18": "1000000000000000000", "multiplier_updated_ns": "0",
+        "price_kind": "Underlying", "ca_pending": false, "ca_effective_ns": "0", "ca_multiplier_e18": "0", "forced_closed": false,
+        "weekend_ref_price_e6": "0", "weekend_ref_updated_ns": "0"
+      }
+    },
+    "get_exit_capacity": {
+      "method": "get_exit_capacity",
+      "args": { "symbol": "NVDAx" },
+      "block_height": 1000,
+      "value": {
+        "q_usd_e6": "15000000000", "r_usd_e6": "0", "d_usd_e6": "0", "haircut_bps": 2500, "session_open": false,
+        "oracle_price_usd_e6": "180000000", "oracle_age_s": "30", "oracle_fresh": true, "b_c_usd_per_unit_e6": "126000000",
+        "limit_bps_effective": 7000, "capacity_usd_e6": "11250000000", "oracle_source": "Owner", "session_reason": "outside_hours",
+        "total_debt_usd_e6": "0", "aggregate_capacity_usd_e6": "11250000000", "aggregate_headroom_usd_e6": "11250000000",
+        "multiplier_e18": "1000000000000000000", "price_kind": "Underlying", "ca_pending": false, "ca_effective_ns": "0", "forced_closed": false
+      }
+    },
+    "preview_borrow": {
+      "method": "preview_borrow",
+      "args": { "symbol": "NVDAx", "units": "100000000", "borrow_usd_e6": "11250000000" },
+      "block_height": 1000,
+      "value": {
+        "b_c_usd_e6": "11250000000", "static_limit_usd_e6": "7200000000", "premium_usd_e6": "121500000", "ok": true, "reason": null,
+        "origination_fee_usd_e6": "33750000", "referrer_share_usd_e6": "0", "total_fees_usd_e6": "155250000",
+        "net_proceeds_usd_e6": "11094750000", "aggregate_headroom_usd_e6": "11250000000", "multiplier_e18": "1000000000000000000", "session_open": false
+      }
+    },
+    "preview_borrow_referrer": {
+      "method": "preview_borrow",
+      "args": { "symbol": "NVDAx", "units": "100000000", "borrow_usd_e6": "11250000000", "referrer": "agent2.nectar.testnet" },
+      "block_height": 1000,
+      "value": {
+        "b_c_usd_e6": "11250000000", "static_limit_usd_e6": "7200000000", "premium_usd_e6": "121500000", "ok": true, "reason": null,
+        "origination_fee_usd_e6": "33750000", "referrer_share_usd_e6": "16875000", "total_fees_usd_e6": "155250000",
+        "net_proceeds_usd_e6": "11094750000", "aggregate_headroom_usd_e6": "11250000000", "multiplier_e18": "1000000000000000000", "session_open": false
+      }
+    },
+    "preview_borrow_refused": {
+      "method": "preview_borrow",
+      "args": { "symbol": "NVDAx", "units": "100000000", "borrow_usd_e6": "12000000000" },
+      "block_height": 1000,
+      "value": {
+        "b_c_usd_e6": "11250000000", "static_limit_usd_e6": "7200000000", "premium_usd_e6": "144000000", "ok": false, "reason": "aggregate_limit",
+        "origination_fee_usd_e6": "36000000", "referrer_share_usd_e6": "0", "total_fees_usd_e6": "180000000",
+        "net_proceeds_usd_e6": "11820000000", "aggregate_headroom_usd_e6": "11250000000", "multiplier_e18": "1000000000000000000", "session_open": false
+      }
+    }
+  }
+}

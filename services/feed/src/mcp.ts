@@ -12,9 +12,10 @@ import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
 import type { ExitCapacity, FeedDb, OneClickReport } from './db.ts';
 import { errMsg } from './log.ts';
+import { SKILL_TOOL_NAMES, SkillError, notAvailable, openProtectedStockLoan, quoteCapacity } from './skill.ts';
 import type { ViewReader } from './sources.ts';
 
-export const MCP_TOOL_NAMES = ['get_exit_capacity', 'preview_borrow', 'list_quotes', 'explain_limit'] as const;
+export const MCP_TOOL_NAMES = ['get_exit_capacity', 'preview_borrow', 'list_quotes', 'explain_limit', ...SKILL_TOOL_NAMES] as const;
 const QUOTE_FIELDS = ['quote_id', 'collateral', 'committed_usd_e6', 'remaining_usd_e6', 'amount_usd_e6', 'max_discount_bps', 'notice_period_ns', 'unlock_ns', 'status', 'created_ns'] as const;
 const BPS = 10_000n;
 
@@ -22,13 +23,19 @@ export interface McpDeps {
   db: FeedDb;
   /** nectar-core views; null when CORE_ACCOUNT_ID is unset (DB-only mode). */
   views: ViewReader | null;
+  /** nectar-core account id that `views` reads; the agent-skill tools address unsigned calls to it. */
+  coreId?: string | null;
 }
 
 const symbol = z.string().regex(/^[A-Za-z0-9._-]{1,32}$/).describe('collateral symbol, e.g. NVDAx');
 const uint = z.string().regex(/^\d{1,39}$/);
+const account = z.string().min(2).max(64).regex(/^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$/);
 
 const text = (v: unknown): CallToolResult => ({ content: [{ type: 'text', text: typeof v === 'string' ? v : JSON.stringify(v, null, 2) }] });
 const fail = (msg: string): CallToolResult => ({ content: [{ type: 'text', text: msg }], isError: true });
+/** Skill refusals are JSON (`{error, detail, ...data}`) so an agent can branch on the code. */
+const skillFail = (e: unknown): CallToolResult =>
+  e instanceof SkillError ? { content: [{ type: 'text', text: JSON.stringify({ error: e.code, detail: e.message, ...(e.data ?? {}) }, null, 2) }], isError: true } : fail(`error: ${errMsg(e)}`);
 
 /** `1234567890` (e6) -> `$1,234.56`. Display only. */
 export function usd(e6: string | bigint): string {
@@ -68,7 +75,7 @@ function capOf(c: ExitCapacity): bigint {
 }
 
 export function createMcpServer(deps: McpDeps): McpServer {
-  const server = new McpServer({ name: 'nectar-feed', version: '0.2.0' });
+  const server = new McpServer({ name: 'nectar-feed', version: '0.3.0' });
   const ro = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true };
   const guard = (fn: () => Promise<CallToolResult>): Promise<CallToolResult> => fn().catch((e: unknown) => fail(`error: ${errMsg(e)}`));
 
@@ -152,6 +159,49 @@ export function createMcpServer(deps: McpDeps): McpServer {
         for (const p of oc.pairs) lines.push(`1Click dry quotes        = ${impactLine(p)}`);
         return text(lines.join('\n'));
       }),
+  );
+
+  // ---- agent skill (PRD v7 §10.5): read-only, keyless; returns unsigned calls only ----
+  const skill = { views: deps.views, coreId: deps.coreId ?? null };
+  const sguard = (fn: () => Promise<Record<string, unknown>>): Promise<CallToolResult> => fn().then(text, skillFail);
+
+  server.registerTool(
+    'open_protected_stock_loan',
+    {
+      title: 'Open protected stock loan (unsigned)',
+      description:
+        'Builds the UNSIGNED NEP-141 call that locks stock collateral and borrows mock USDC from nectar-core: {receiver_id: <collateral token>, method: "ft_transfer_call", args: {receiver_id: <core>, amount, msg}, deposit: "1", gas}, plus a preview (static and Cramér limits, every fee, health at −5/−10/−20%). Never signs: the agent signs from account_id with its own key. pay_to/referrer need nectar-core v2; shield is not available yet.',
+      inputSchema: {
+        account_id: account.describe('the borrower (signer) NEAR account id'),
+        collateral: symbol,
+        units: uint.describe('collateral base units (integer string; NVDAx has 6 decimals)'),
+        borrow_usd: z.string().regex(/^\d{1,21}(\.\d{1,6})?$/).describe('USD amount to borrow, decimal string, e.g. "100" or "12.5"'),
+        shield: z.string().max(32).optional().describe('weekend/event shield preset (returns unsupported_until_v2_shields for now)'),
+        pay_to: z.object({ receiver_id: account, memo: z.string().max(256).optional() }).optional().describe('v2: send net proceeds to this merchant (must be registered on the USDC token)'),
+        referrer: account.optional().describe('v2: registered referrer, earns half the origination fee; must differ from account_id'),
+        pre_liq_ltv_bps: z.number().int().min(0).max(10_000).optional().describe('pre-liquidation LTV; defaults to the collateral maximum'),
+      },
+      annotations: ro,
+    },
+    (a) => sguard(() => openProtectedStockLoan(skill, a)),
+  );
+
+  server.registerTool(
+    'quote_capacity',
+    { title: 'Quote capacity', description: 'Committed exit capacity terms for a collateral: Q_c (escrowed quotes), R_c (Nectar Reserve), D_c (verified DEX depth), h_c, total debt and aggregate headroom (v2; null on v1).', inputSchema: { symbol }, annotations: ro },
+    ({ symbol: sym }) => sguard(() => quoteCapacity(skill, sym)),
+  );
+
+  server.registerTool(
+    'get_note',
+    { title: 'Get Position Note', description: 'NEP-171 Position Note by token id. Returns not_available until Position Notes ship (WO-22).', inputSchema: { token_id: z.string().min(1).max(64) }, annotations: ro },
+    () => sguard(async () => notAvailable('get_note', 'Position Notes (WO-22)')),
+  );
+
+  server.registerTool(
+    'build_self_settle',
+    { title: 'Build self-settle (unsigned)', description: 'Unsigned Profit-Lock self-settlement call for a position. Returns not_available until WO-23a.', inputSchema: { position_id: uint.describe('position id (integer string)') }, annotations: ro },
+    () => sguard(async () => notAvailable('build_self_settle', 'Profit-Lock self-settlement (WO-23a)')),
   );
   return server;
 }
