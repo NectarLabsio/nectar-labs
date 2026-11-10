@@ -2,9 +2,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button, CONSENT_CHANGED_EVENT, ConsentBanner, Footer, Nav, analyticsAllowed, type LinkLike } from "@nectar/ui";
+import { CONSENT_CHANGED_EVENT, ChainMark, Chip, ConsentBanner, Footer, Nav, SessionChip, analyticsAllowed, type LinkLike, type NavLink } from "@nectar/ui";
+import { sessionHeadline, sessionReasonText, sessionStatus, type ExitCapacity } from "@nectar/sdk";
+import { LandingNav } from "./landing/LandingNav";
 import { CONTACT_EMAIL, GA_ID, docsHref } from "@/lib/env";
-import { useFeature, useWallet } from "./AppProvider";
+import { useChain, useFeature, useView, useWallet } from "./AppProvider";
 
 const NextLink: LinkLike = ({ href, children, ...rest }) => (
   <Link href={href} {...rest}>
@@ -12,61 +14,87 @@ const NextLink: LinkLike = ({ href, children, ...rest }) => (
   </Link>
 );
 
-const NAV = [
-  { href: "/feed", label: "Feed" },
-  { href: "/borrow", label: "Borrow" },
-  { href: "/quote/new", label: "Post a quote" },
-  { href: "/console", label: "Console" },
-  { href: "/agents", label: "Agents" },
-  { href: "/keepers", label: "Keepers" },
-];
-
 function WalletButton() {
   const w = useWallet();
   if (w.accountId)
     return (
-      <Button size="sm" onClick={w.disconnect} title={`Connected as ${w.accountId}. Click to disconnect.`} data-testid="wallet-button">
-        <span className="wallet-btn">{w.accountId}</span>
-      </Button>
+      <button type="button" className="nx-wallet" onClick={w.disconnect} title={`Connected as ${w.accountId}. Click to disconnect.`} data-testid="wallet-button">
+        <span className="acct wallet-btn">{w.accountId}</span>
+        <span className="nx-avatar" aria-hidden="true" />
+      </button>
     );
   return (
-    <Button variant="primary" size="sm" onClick={w.connect} loading={w.connecting} data-testid="wallet-button">
-      Connect wallet
-    </Button>
+    <button type="button" className="nx-wallet connect" onClick={w.connect} disabled={w.connecting} aria-busy={w.connecting || undefined} data-testid="wallet-button">
+      {w.connecting ? "Connecting…" : "Connect wallet"}
+    </button>
   );
+}
+
+/** Session chip from get_exit_capacity (mint open, amber weekend parameters, grey while unknown). */
+function NavSession() {
+  const { deployed, config } = useChain();
+  const sym = config.collaterals[0]?.symbol ?? "NVDAx";
+  const cap = useView<ExitCapacity>((v) => v.getExitCapacity(sym), [sym]);
+  if (!deployed) return null;
+  if (!cap.data) return <SessionChip tone="off" label={cap.error ? "Session unavailable" : "Reading session"} short={cap.error ? "n/a" : "…"} />;
+  const st = sessionStatus(cap.data, config.v7.session_stale_s);
+  return <SessionChip tone={st.open ? "open" : "weekend"} label={sessionHeadline(st)} short={st.open ? "Open" : "Weekend"} title={sessionReasonText(st)} />;
 }
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
-  const shieldsOn = useFeature("shields");
   const notesOn = useFeature("notes");
-  const reserveOn = useFeature("reserve");
-  const links = [
-    ...NAV.slice(0, 2),
-    ...(shieldsOn ? [{ href: "/shield", label: "Shields" }] : []),
-    ...NAV.slice(2, 3),
-    ...(reserveOn ? [{ href: "/reserve", label: "Reserve" }] : []),
-    ...(notesOn ? [{ href: "/notes", label: "Notes" }] : []),
-    ...NAV.slice(3),
+  if (pathname === "/") return <LandingNav />;
+  const links: NavLink[] = [
+    { href: "/feed", label: "Markets", match: ["/feed"] },
+    { href: "/borrow", label: "Borrow", match: ["/borrow", "/shield"] },
+    { href: "/quote/new", label: "Earn", match: ["/quote", "/reserve"] },
+    // Portfolio is /notes; hidden while Position Notes are off so no link leads to a disabled page (WO-33c makes it work without Notes).
+    ...(notesOn ? [{ href: "/notes", label: "Portfolio", match: ["/notes", "/note", "/position"] }] : []),
+    { href: "/agents", label: "Agents" },
+    { href: "/console", label: "Curator", match: ["/console", "/keepers"] },
   ];
   return (
-    <>
-      <div className="ribbon" role="note">
-        Testnet demo · mock collateral (NVDAx) · unaudited
-      </div>
-      <Nav links={links} pathname={pathname} Link={NextLink} actions={<WalletButton />} />
-    </>
+    <Nav
+      links={links}
+      pathname={pathname}
+      Link={NextLink}
+      session={<NavSession />}
+      network={
+        <Chip title="NEAR testnet, mock collateral">
+          <ChainMark chain="near" />
+          Testnet
+        </Chip>
+      }
+      actions={<WalletButton />}
+    />
   );
 }
 
 export function SiteFooter() {
   const docs = docsHref();
+  const pathname = usePathname() ?? "/";
+  const shieldsOn = useFeature("shields");
+  const reserveOn = useFeature("reserve");
+  const notesOn = useFeature("notes");
   return (
     <Footer
+      giant={pathname === "/"}
       Link={NextLink}
       email={CONTACT_EMAIL}
       columns={[
-        { title: "Products", links: [{ href: "/", label: "Nectar Labs" }, { href: "/feed", label: "Nectar Feed" }, { href: "/keepers", label: "Keepers" }, { href: "/quote/new", label: "Post a quote" }] },
+        {
+          title: "Products",
+          links: [
+            { href: "/", label: "Nectar Labs" },
+            { href: "/feed", label: "Nectar Feed" },
+            ...(shieldsOn ? [{ href: "/shield", label: "Shields" }] : []),
+            ...(reserveOn ? [{ href: "/reserve", label: "Reserve" }] : []),
+            ...(notesOn ? [{ href: "/notes", label: "Position Notes" }] : []),
+            { href: "/keepers", label: "Keepers" },
+            { href: "/quote/new", label: "Post a quote" },
+          ],
+        },
         {
           title: "Protocols",
           links: [

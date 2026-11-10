@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import "@nectar/ui/fonts.css";
 import "@nectar/ui/tokens.css";
 import "@nectar/ui/components.css";
+import "@nectar/ui/app.css";
 import { themeInitScript } from "@nectar/ui";
 import { AppProvider } from "@/components/AppProvider";
 import { SiteFooter, SiteHeader, SiteOverlays } from "@/components/SiteChrome";

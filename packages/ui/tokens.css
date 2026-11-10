@@ -12,6 +12,28 @@
   --font-display: "Syne", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --font-mono: "DM Mono", "SFMono-Regular", Menlo, Consolas, monospace;
   --r-ctl: 8px; --r-card: 12px; --gutter: max(16px, env(safe-area-inset-left, 0px));
+  /* App v2 surfaces (docs/ui/app/nectar-app.css, WO-33 token table; system values win where both exist) */
+  --bg2: #0e1114; --panel: #121518; --panel2: #171b1f; --raise: #1e2328;
+  --line: rgba(255,255,255,.065); --line2: rgba(255,255,255,.12); --faint: #5f6772;
+  --teal: #0b9c6b; --violet: #a891ff;
+  --shadow: 0 0 0 1px var(--line), 0 1px 0 0 rgba(255,255,255,.035) inset, 0 28px 56px -32px rgba(0,0,0,.75);
+  --glow: radial-gradient(1100px 520px at 12% -12%, rgba(22,243,169,.075), transparent 62%), radial-gradient(900px 480px at 100% -5%, rgba(81,184,236,.055), transparent 60%);
+  --scrim: rgba(4,6,8,.55); --shade: #000000; --glass-white: #ffffff;
+  --chain-near: #e9ecef; --chain-near-ink: #0b0d10; --chain-sol: linear-gradient(135deg, #9d7bff, #3fd6c2); --chain-base: #2f6bff; --chain-ink: #ffffff;
+  --coin: radial-gradient(circle at 32% 28%, #7cc0ff, #2463d6 70%); --avatar: conic-gradient(from 210deg, #16f3a9, #51b8ec, #a891ff, #16f3a9);
+  /* Landing objects (landing/index.html, DESIGN_SYSTEM 3b) */
+  --hero-line: rgba(150,205,185,.17); --frame: #1d2228; --arrow: #079a68; --nav-bg: rgba(22,24,29,.72); --nav-band: rgba(13,15,18,.78);
+  --tile-1: #12493a; --tile-2: #0b211a; --tile-glow: rgba(22,243,169,.30); --glass-edge: rgba(255,255,255,.55);
+  --glass-fill: rgba(255,255,255,.07); --glass-core: rgba(255,255,255,.18); --tile-ink: rgba(232,255,246,.82); --tile-grid: rgba(220,255,240,.10);
+  --wm-giant: rgba(230,233,239,.075);
+  /* Always-dark panels (chamber, finale), Position Note art and the 3D mark: same in both themes */
+  --chamber: #060b09; --chamber-2: #0b1814; --ch-text: #b8c6bf; --ch-head: #eef4f1; --ch-dim: #82938b; --ch-line: rgba(190,232,215,.12);
+  --ch-surface: rgba(255,255,255,.035); --ch-accent: #16f3a9; --ch-warn: #faaf2e; --ch-danger: #ff8a80; --ch-teal: #0b9c6b; --ch-sky: #51b8ec;
+  --ch-static: #8fa39a; --ch-arrow: #079a68;
+  --note-bg: #0d0f12; --note-line: #303541; --note-accent: #16f3a9; --note-head: #e6e9ef; --note-dim: #8f96a3; --note-track: #202327;
+  --mark-3d: #13e39c; --mark-3d-rim: #9effd8;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r-panel: 22px; --r-panel-md: 16px; --r-panel-sm: 12px; --ease: cubic-bezier(.2,.7,0,1);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
@@ -23,6 +45,16 @@
     --accent-fill: rgba(24,149,108,.08); --accent-glow: rgba(21,132,95,.35); --accent-deep: #8fdcbf;
     --warn: #9a5f00; --warn-bar: #dc8f09; --warn-fill: rgba(220,143,9,.10);
     --info: #17699a; --danger: #b3261e; --danger-fill: rgba(255,138,128,.10); --grid: rgba(110,122,145,.07);
+    --bg2: #eceef1; --panel: #ffffff; --panel2: #ffffff; --raise: #eceff2;
+    --line: rgba(17,22,31,.08); --line2: rgba(17,22,31,.16); --faint: #8a92a0;
+    --teal: #0b7a54; --violet: #6b4fe0;
+    --shadow: 0 0 0 1px var(--line), 0 18px 40px -28px rgba(17,22,31,.28);
+    --glow: radial-gradient(1100px 520px at 12% -12%, rgba(31,220,159,.10), transparent 62%), radial-gradient(900px 480px at 100% -5%, rgba(43,143,196,.07), transparent 60%);
+    --scrim: rgba(17,22,31,.35);
+    --hero-line: rgba(30,70,58,.15); --frame: #dfe4e8; --arrow: #16f3a9; --nav-bg: rgba(255,255,255,.8); --nav-band: rgba(249,250,251,.82);
+    --tile-1: #3fd6a0; --tile-2: #169a6c; --tile-glow: rgba(255,255,255,.38); --glass-edge: rgba(255,255,255,.85);
+    --glass-fill: rgba(255,255,255,.14); --glass-core: rgba(255,255,255,.30); --tile-ink: rgba(255,255,255,.95); --tile-grid: rgba(255,255,255,.22);
+    --wm-giant: rgba(20,25,36,.06);
   }
 }
 :root[data-theme="light"] {
@@ -34,6 +66,17 @@
   --accent-fill: rgba(24,149,108,.08); --accent-glow: rgba(21,132,95,.35); --accent-deep: #8fdcbf;
   --warn: #9a5f00; --warn-bar: #dc8f09; --warn-fill: rgba(220,143,9,.10);
   --info: #17699a; --danger: #b3261e; --danger-fill: rgba(255,138,128,.10); --grid: rgba(110,122,145,.07);
+
+  --bg2: #eceef1; --panel: #ffffff; --panel2: #ffffff; --raise: #eceff2;
+  --line: rgba(17,22,31,.08); --line2: rgba(17,22,31,.16); --faint: #8a92a0;
+  --teal: #0b7a54; --violet: #6b4fe0;
+  --shadow: 0 0 0 1px var(--line), 0 18px 40px -28px rgba(17,22,31,.28);
+  --glow: radial-gradient(1100px 520px at 12% -12%, rgba(31,220,159,.10), transparent 62%), radial-gradient(900px 480px at 100% -5%, rgba(43,143,196,.07), transparent 60%);
+  --scrim: rgba(17,22,31,.35);
+  --hero-line: rgba(30,70,58,.15); --frame: #dfe4e8; --arrow: #16f3a9; --nav-bg: rgba(255,255,255,.8); --nav-band: rgba(249,250,251,.82);
+  --tile-1: #3fd6a0; --tile-2: #169a6c; --tile-glow: rgba(255,255,255,.38); --glass-edge: rgba(255,255,255,.85);
+  --glass-fill: rgba(255,255,255,.14); --glass-core: rgba(255,255,255,.30); --tile-ink: rgba(255,255,255,.95); --tile-grid: rgba(255,255,255,.22);
+  --wm-giant: rgba(20,25,36,.06);
 }
 body {
   background: var(--bg); color: var(--text); font-family: var(--font-mono); font-size: 14px; line-height: 1.5;

@@ -56,25 +56,7 @@ export function Card({ title, titleLevel = 3, label, actions, footer, tone = "de
   );
 }
 
-export interface StatProps {
-  label: ReactNode;
-  value: ReactNode;
-  delta?: ReactNode;
-  deltaUp?: boolean;
-  spark?: ReactNode;
-  loading?: boolean;
-  className?: string;
-}
-export function Stat({ label, value, delta, deltaUp, spark, loading, className }: StatProps) {
-  return (
-    <div className={cx("card stat rise", className)}>
-      <span className="label">{label}</span>
-      <div className="v num">{loading ? <Skeleton lg /> : value}</div>
-      {delta ? <div className={cx("d", deltaUp && "up")}>{delta}</div> : null}
-      {spark ? <div className="spark">{spark}</div> : null}
-    </div>
-  );
-}
+// Stat moved to ./app (v2 look, same props plus size and tone).
 
 export type BadgeKind = "neutral" | "mock" | "live" | "fallback" | "verified" | "unverified" | "paused" | "warn" | "info" | "danger" | "good" | "stale" | "weekend";
 export function Badge({ kind = "neutral", children, className, title }: { kind?: BadgeKind; children: ReactNode; className?: string; title?: string }) {
