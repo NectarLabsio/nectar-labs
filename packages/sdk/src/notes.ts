@@ -2,7 +2,8 @@
 //   token ids: `q-<quote_id>` (Quote Note), `p-<position_id>` (Loan Note), `r-<collateral>-<n>` (Reserve Note)
 //   nft_transfer: Note owner, exactly 1 yocto; refused while `nft_transfer_locked` (a pending settlement references the Note)
 //   set_quote_remote_recipient(quote_id, recipient?): Quote Note owner, no deposit (not #[payable]); refused while locked
-//   JoinNectarReserve{collateral}: ft_transfer_call of USDC, ≥ 10_000_000 e6 (WO-23b; mocked until it merges)
+//   JoinNectarReserve{collateral}: ft_transfer_call of USDC, ≥ 10_000_000 e6 (WO-23b, merged 67a5426)
+//   set_reserve_params(symbol, discount_bps, notice_ns?): owner (txV2.setReserveParams); replaces v1 `set_reserve`
 import type { AccountId, Bps, FtOnTransferMsg, U128, U64 } from "./types";
 import { ONE_YOCTO, assertAccountId, assertU128, assertU64, coreCall, ftTransferCall, type TxIntent } from "./msg";
 import { isSolanaAddress } from "./solana";
@@ -100,51 +101,117 @@ export function noteSvgDataUri(svg: string | null | undefined): string | null {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(s)}`;
 }
 
-// ---------------------------------------------------------------- Reserve (WO-23b; PROVISIONAL field set, mocked until it merges)
+// ---------------------------------------------------------------- Reserve (WO-23b merged 67a5426; shapes = contracts/nectar-core/src/types.rs)
 
-/** Smallest Reserve deposit: $10 (WO-23b `ft_on_transfer` refuses less). */
+/** Smallest Reserve deposit: $10 (contract `RESERVE_MIN_DEPOSIT_USD_E6`; `get_reserve.min_deposit_usd_e6` is authoritative). */
 export const RESERVE_MIN_DEPOSIT_USD_E6 = 10_000_000n;
-/** Reserve exit notice: 7 days. */
+/** Default exit notice: 7 days (contract `RESERVE_NOTICE_NS`; `get_reserve.notice_period_ns` is authoritative). */
 export const RESERVE_NOTICE_NS = 7n * 86_400n * 1_000_000_000n;
+/** Owner `set_reserve_params.notice_ns` bounds (contract `RESERVE_MIN_NOTICE_NS` ..= `RESERVE_MAX_NOTICE_NS`). */
+export const RESERVE_MIN_NOTICE_NS = 60n * 1_000_000_000n;
+export const RESERVE_MAX_NOTICE_NS = 30n * 86_400n * 1_000_000_000n;
+/** D-024: the only label for the Reserve return. Fees only (not seized units), historical, never promised. */
+export const REALISED_APR_LABEL = "Realised fee APR (trailing 7 days)";
 
-/** `get_reserve(symbol)`. R_c = usdc_e6 − USDC of shares in notice. `apr_7d_bps` is realised from fee accruals (null with < 7 days of history). */
-export interface ReserveView {
-  symbol: string;
+/** Contract `ReservePool` (v2 `get_collateral(..).reserve`). R_c = usdc_e6 − notice_usdc_e6. */
+export interface ReservePool {
   shares: U128;
   usdc_e6: U128;
-  r_c_usd_e6: U128;
-  in_notice_usd_e6?: U128;
+  notice_usdc_e6: U128;
   units: U128;
+  /** 0 = Reserve disabled (no deposits, no fills). */
   discount_bps: Bps;
-  apr_7d_bps: number | null;
-  notice_ns?: U64;
-  min_deposit_usd_e6?: U128;
+  acc_fee_per_share_e18: U128;
+  acc_units_per_share_e18: U128;
+  /** 0 = default 7 days. */
+  notice_ns: U64;
+  fee_days: { day: number; fees_usd_e6: U128 }[];
 }
 
-/** `get_reserve_note(note_id)`. `exit_unlock_ns` is null while the Note is not in notice. */
-export interface ReserveNoteView {
-  note_id: string;
-  owner: AccountId;
-  collateral: string;
+/** Contract `ReserveView` = `get_reserve(symbol)` (panics for an unknown symbol). */
+export interface ReserveView {
+  symbol: string;
+  /** R_c: USDC of active shares (counts toward Q_c + R_c + D_c). */
+  r_usd_e6: U128;
   shares: U128;
-  usdc_value_e6: U128;
+  usdc_e6: U128;
+  notice_usdc_e6: U128;
+  units: U128;
+  /** 0 = disabled: `JoinNectarReserve` is refused (`reserve_disabled`). */
+  discount_bps: Bps;
+  acc_fee_per_share_e18: U128;
+  acc_units_per_share_e18: U128;
+  /** USDC value of 1e6 shares. */
+  share_price_e6: U128;
+  min_deposit_usd_e6: U128;
+  notice_period_ns: U64;
+  /** Reserve fee accruals over the trailing 7 UTC days (incl. today). */
+  fees_7d_usd_e6: U128;
+  /** fees_7d · 365 / 7 / R_c in bps (0 when R_c = 0). Historical, never promised. */
+  realised_apr_7d_bps: U128;
+}
+
+/** Contract `ReserveNote` (stored Note; `unlock_ns` null until `initiate_reserve_exit`). */
+export interface ReserveNote {
+  note_id: string;
+  collateral: string;
+  owner: AccountId;
+  deposited_usd_e6: U128;
+  /** Active shares; 0 once the exit is initiated. */
+  shares: U128;
+  unit_debt: U128;
+  fee_debt: U128;
   claimable_units: U128;
   claimable_fees_usd_e6: U128;
-  exit_unlock_ns: U64 | null;
+  unlock_ns: U64 | null;
+  exit_shares: U128;
+  exit_usdc_e6: U128;
+  exited: boolean;
+  created_ns: U64;
 }
 
-export type ReserveExitState = { kind: "none" } | { kind: "notice"; seconds_left: number } | { kind: "ready" };
-
-export function reserveExitState(note: Pick<ReserveNoteView, "exit_unlock_ns">, now_ns: bigint): ReserveExitState {
-  if (note.exit_unlock_ns == null) return { kind: "none" };
-  const u = BigInt(note.exit_unlock_ns);
-  return u > now_ns ? { kind: "notice", seconds_left: Number((u - now_ns + 999_999_999n) / 1_000_000_000n) } : { kind: "ready" };
+/** Contract `ReserveNoteView` = `get_reserve_note(note_id)` (null for an unknown id). Top-level claimables include accruals. */
+export interface ReserveNoteView {
+  note: ReserveNote;
+  /** USDC value of the active shares now (`exit_usdc_e6` once in notice). */
+  value_usd_e6: U128;
+  claimable_units: U128;
+  claimable_fees_usd_e6: U128;
+  can_complete: boolean;
+  /** A settlement that may reach this asset's Reserve is pending: `nft_transfer` is refused. */
+  transfer_locked: boolean;
 }
 
-/** "realised 4.12 % (trailing 7 days)" or "no 7-day history yet". Never a promised rate. */
-export function formatRealisedApr(apr_7d_bps: number | null | undefined): string {
-  if (apr_7d_bps == null || !Number.isFinite(apr_7d_bps)) return "no 7-day history yet";
-  return `realised ${(apr_7d_bps / 100).toFixed(2)} % (trailing 7 days)`;
+export type ReserveExitState = { kind: "none" } | { kind: "notice"; seconds_left: number } | { kind: "ready" } | { kind: "exited" };
+
+/** Mirrors `complete_reserve_exit`'s checks (notice over, not exited, something to pay). */
+export function reserveExitState(
+  v: Pick<ReserveNoteView, "note" | "value_usd_e6" | "claimable_units" | "claimable_fees_usd_e6">,
+  now_ns: bigint,
+): ReserveExitState {
+  if (v.note.exited) return { kind: "exited" };
+  if (v.note.unlock_ns == null) return { kind: "none" };
+  const u = BigInt(v.note.unlock_ns);
+  if (u > now_ns) return { kind: "notice", seconds_left: Number((u - now_ns + 999_999_999n) / 1_000_000_000n) };
+  const any = BigInt(v.value_usd_e6) > 0n || BigInt(v.claimable_units) > 0n || BigInt(v.claimable_fees_usd_e6) > 0n;
+  return any ? { kind: "ready" } : { kind: "exited" };
+}
+
+/** `realised_apr_7d_bps` as "4.12 %" (integer math, truncated); "no active deposits" when R_c = 0. Never a promised rate. */
+export function formatRealisedApr(apr_7d_bps: U128 | null | undefined, r_usd_e6?: U128 | null): string {
+  if (r_usd_e6 != null && BigInt(r_usd_e6) === 0n) return "no active deposits";
+  if (apr_7d_bps == null || !/^\d+$/.test(apr_7d_bps)) return "—";
+  const b = BigInt(apr_7d_bps);
+  return `${b / 100n}.${(b % 100n).toString().padStart(2, "0")} %`;
+}
+
+/** A notice period in ns as "7 days", "1 day", "2 h", "5 min" or "90 s". */
+export function formatNoticePeriod(ns: U64 | bigint): string {
+  const s = BigInt(ns) / 1_000_000_000n;
+  if (s > 0n && s % 86_400n === 0n) return `${s / 86_400n} day${s === 86_400n ? "" : "s"}`;
+  if (s > 0n && s % 3_600n === 0n) return `${s / 3_600n} h`;
+  if (s > 0n && s % 60n === 0n) return `${s / 60n} min`;
+  return `${s} s`;
 }
 
 // ---------------------------------------------------------------- gas, msgs, calls

@@ -9,6 +9,7 @@ import {
   isSolanaAddress,
   noteKindLabel,
   noteTransferBlock,
+  nsToUtc,
   parseNoteId,
   shareToXUrl,
   txNotes,
@@ -138,9 +139,10 @@ export default function NotePage() {
               {ref.kind === "RESERVE" && rnote.data ? (
                 <Card label="Reserve claim">
                   <div className="kvs">
-                    <Kv k="USDC value" v={formatUsdE6(rnote.data.usdc_value_e6)} />
+                    <Kv k="Deposited" v={formatUsdE6(rnote.data.note.deposited_usd_e6)} />
+                    <Kv k="USDC value" v={<span data-testid="note-reserve-value">{formatUsdE6(rnote.data.value_usd_e6)}</span>} />
                     <Kv k="Claimable fees" v={formatUsdE6(rnote.data.claimable_fees_usd_e6)} />
-                    <Kv k="Notice" v={rnote.data.exit_unlock_ns ? "given" : "not given"} />
+                    <Kv k="Notice" v={<span data-testid="note-reserve-notice">{rnote.data.note.exited ? "exited" : rnote.data.note.unlock_ns ? `given, unlocks ${nsToUtc(rnote.data.note.unlock_ns)}` : "not given"}</span>} />
                   </div>
                 </Card>
               ) : null}

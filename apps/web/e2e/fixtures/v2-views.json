@@ -67,19 +67,40 @@
     "oracle_price_usd_e6": "89000000",
     "oracle_updated_ns": "1794268138195955491",
     "verified_dex_depth_usd_e6": "0",
-    "nectar_reserve_usd_e6": "0",
     "active_committed_q_usd_e6": "3850000000",
     "acc_fee_per_dollar_e18": "0",
+    "remote_chain": null,
     "total_debt_usd_e6": "1200000000",
-    "forced_closed": true,
     "multiplier_e18": "1020000000000000000",
     "multiplier_updated_ns": "0",
     "price_kind": "Underlying",
     "ca_pending": false,
     "ca_effective_ns": "0",
     "ca_multiplier_e18": "0",
+    "forced_closed": true,
     "weekend_ref_price_e6": "0",
-    "weekend_ref_updated_ns": "0"
+    "weekend_ref_updated_ns": "0",
+    "shield": {
+      "weekend_fee_bps": 0,
+      "event_fee_bps": 0,
+      "event_window_end_ns": "0"
+    },
+    "max_voluntary_fill_usd_e6_per_day": "0",
+    "voluntary_filled_today_e6": "0",
+    "voluntary_day": 0,
+    "ca_suggested_multiplier_e18": "0",
+    "ca_suggested_ns": "0",
+    "reserve": {
+      "shares": "0",
+      "usdc_e6": "0",
+      "notice_usdc_e6": "0",
+      "units": "0",
+      "discount_bps": 600,
+      "acc_fee_per_share_e18": "0",
+      "acc_units_per_share_e18": "0",
+      "notice_ns": "604800000000000",
+      "fee_days": []
+    }
   },
   "list_collaterals": [
     {
@@ -97,19 +118,40 @@
       "oracle_price_usd_e6": "89000000",
       "oracle_updated_ns": "1794268138195955491",
       "verified_dex_depth_usd_e6": "0",
-      "nectar_reserve_usd_e6": "0",
       "active_committed_q_usd_e6": "3850000000",
       "acc_fee_per_dollar_e18": "0",
+      "remote_chain": null,
       "total_debt_usd_e6": "1200000000",
-      "forced_closed": true,
       "multiplier_e18": "1020000000000000000",
       "multiplier_updated_ns": "0",
       "price_kind": "Underlying",
       "ca_pending": false,
       "ca_effective_ns": "0",
       "ca_multiplier_e18": "0",
+      "forced_closed": true,
       "weekend_ref_price_e6": "0",
-      "weekend_ref_updated_ns": "0"
+      "weekend_ref_updated_ns": "0",
+      "shield": {
+        "weekend_fee_bps": 0,
+        "event_fee_bps": 0,
+        "event_window_end_ns": "0"
+      },
+      "max_voluntary_fill_usd_e6_per_day": "0",
+      "voluntary_filled_today_e6": "0",
+      "voluntary_day": 0,
+      "ca_suggested_multiplier_e18": "0",
+      "ca_suggested_ns": "0",
+      "reserve": {
+        "shares": "0",
+        "usdc_e6": "0",
+        "notice_usdc_e6": "0",
+        "units": "0",
+        "discount_bps": 600,
+        "acc_fee_per_share_e18": "0",
+        "acc_units_per_share_e18": "0",
+        "notice_ns": "604800000000000",
+        "fee_days": []
+      }
     }
   ],
   "list_positions": [],
@@ -140,5 +182,21 @@
     "reservation_expiry_s": 1800
   },
   "is_referrer": true,
-  "get_claimable": "150000"
+  "get_claimable": "150000",
+  "get_reserve": {
+    "symbol": "NVDAx",
+    "r_usd_e6": "0",
+    "shares": "0",
+    "usdc_e6": "0",
+    "notice_usdc_e6": "0",
+    "units": "0",
+    "discount_bps": 600,
+    "acc_fee_per_share_e18": "0",
+    "acc_units_per_share_e18": "0",
+    "share_price_e6": "1000000",
+    "min_deposit_usd_e6": "10000000",
+    "notice_period_ns": "604800000000000",
+    "fees_7d_usd_e6": "0",
+    "realised_apr_7d_bps": "0"
+  }
 }

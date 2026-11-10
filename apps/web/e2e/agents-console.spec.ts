@@ -145,8 +145,29 @@ test.describe("/console v7 controls (v2)", () => {
     await vr.getByLabel(/vault_read gas/).fill("101");
     await expect(vr.getByRole("alert")).toContainText("gas_tgas");
 
+    // Nectar Reserve (WO-23b, D-024): v2 calls set_reserve_params; the v1-only set_reserve action is absent.
+    await expect(page.getByTestId("v1-set-reserve")).toHaveCount(0);
+    const res = page.getByTestId("v7-reserve");
+    await expect(res.getByTestId("v7-reserve-rc")).toHaveText("$0.00");
+    await expect(res.getByTestId("v7-reserve-discount")).toHaveText("600 bps");
+    await expect(res.getByTestId("v7-reserve-notice")).toHaveText("7 days");
+    const rp = page.getByTestId("v7-reserve-params");
+    await rp.getByLabel("discount_bps").fill("0");
+    await expect(rp.getByRole("alert")).toContainText("discount_bps");
+    await rp.getByLabel("discount_bps").fill("650");
+    await rp.getByLabel(/Exit notice/).fill("0.001");
+    await expect(rp.getByRole("alert")).toContainText("60 s");
+    await rp.getByLabel(/Exit notice/).fill("168");
+    await rp.getByRole("button", { name: "Set Reserve params" }).click();
+    const rm = page.getByRole("dialog");
+    await expect(rm.getByTestId("sign-args")).toContainText('"discount_bps": 650');
+    await expect(rm.getByTestId("sign-args")).toContainText('"notice_ns": "604800000000000"');
+    await expect(rm.getByTestId("sign-gas")).toHaveText("30 TGas");
+    await rm.getByRole("button", { name: "Open wallet to sign" }).click();
+    await expect(rm).toHaveCount(0);
+
     const made = (await calls(page)).map((c) => c.methodName);
-    expect(made).toEqual(["set_multiplier", "force_session_closed", "unregister_referrer"]);
+    expect(made).toEqual(["set_multiplier", "force_session_closed", "unregister_referrer", "set_reserve_params"]);
     expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
     await axeClean(page);
   });

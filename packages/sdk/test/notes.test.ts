@@ -3,8 +3,13 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   NOTE_GAS_TGAS,
+  REALISED_APR_LABEL,
+  RESERVE_MAX_NOTICE_NS,
   RESERVE_MIN_DEPOSIT_USD_E6,
+  RESERVE_MIN_NOTICE_NS,
+  RESERVE_NOTICE_NS,
   encodeMsg,
+  formatNoticePeriod,
   formatRealisedApr,
   msgNotes,
   noteHref,
@@ -16,7 +21,14 @@ import {
   reserveExitState,
   shareToXUrl,
   tgas,
+  tx,
   txNotes,
+  txV1,
+  txV2,
+  type ReserveNote,
+  type ReserveNoteView,
+  type ReservePool,
+  type ReserveView,
 } from "../src";
 
 const TEMPLATE = readFileSync(resolve(import.meta.dirname, "../../../contracts/nectar-core/assets/position-note.svg"), "utf8");
@@ -101,7 +113,33 @@ describe("note calls", () => {
   });
 });
 
-describe("Nectar Reserve (WO-23b, mocked)", () => {
+describe("Nectar Reserve (WO-23b, contract shapes)", () => {
+  const TYPES_RS = readFileSync(resolve(import.meta.dirname, "../../../contracts/nectar-core/src/types.rs"), "utf8");
+  const rustFields = (name: string): string[] => {
+    const m = TYPES_RS.match(new RegExp(`pub struct ${name} \\{([\\s\\S]*?)\\n\\}`));
+    if (!m) throw new Error(`struct ${name} not found`);
+    return [...m[1]!.matchAll(/^\s*pub (\w+):/gm)].map((x) => x[1]!).sort();
+  };
+  const NOTE: ReserveNote = {
+    note_id: "r-NVDAx-1", collateral: "NVDAx", owner: "alice.testnet", deposited_usd_e6: "25000000", shares: "25000000", unit_debt: "0", fee_debt: "0",
+    claimable_units: "0", claimable_fees_usd_e6: "0", unlock_ns: null, exit_shares: "0", exit_usdc_e6: "0", exited: false, created_ns: "1",
+  };
+  const NV: ReserveNoteView = { note: NOTE, value_usd_e6: "25400000", claimable_units: "12500", claimable_fees_usd_e6: "400000", can_complete: false, transfer_locked: false };
+  const RV: ReserveView = {
+    symbol: "NVDAx", r_usd_e6: "25400000", shares: "35000000", usdc_e6: "35500000", notice_usdc_e6: "10100000", units: "12500", discount_bps: 600,
+    acc_fee_per_share_e18: "0", acc_units_per_share_e18: "0", share_price_e6: "725714", min_deposit_usd_e6: "10000000", notice_period_ns: "604800000000000",
+    fees_7d_usd_e6: "20000", realised_apr_7d_bps: "410",
+  };
+  const POOL: ReservePool = {
+    shares: "0", usdc_e6: "0", notice_usdc_e6: "0", units: "0", discount_bps: 0, acc_fee_per_share_e18: "0", acc_units_per_share_e18: "0", notice_ns: "0", fee_days: [],
+  };
+
+  it("SDK view types carry exactly the contract's fields", () => {
+    expect(Object.keys(RV).sort()).toEqual(rustFields("ReserveView"));
+    expect(Object.keys(NV).sort()).toEqual(rustFields("ReserveNoteView"));
+    expect(Object.keys(NOTE).sort()).toEqual(rustFields("ReserveNote"));
+    expect(Object.keys(POOL).sort()).toEqual(rustFields("ReservePool"));
+  });
   it("JoinNectarReserve msg and the $10 minimum", () => {
     expect(encodeMsg(msgNotes.joinNectarReserve("NVDAx"))).toBe('{"JoinNectarReserve":{"collateral":"NVDAx"}}');
     const t = txNotes.joinReserve("usdc.nectar.testnet", CORE, RESERVE_MIN_DEPOSIT_USD_E6.toString(), "NVDAx");
@@ -114,12 +152,35 @@ describe("Nectar Reserve (WO-23b, mocked)", () => {
     expect(txNotes.completeReserveExit(CORE, "r-NVDAx-1")).toMatchObject({ methodName: "complete_reserve_exit", deposit: "1" });
     expect(() => txNotes.initiateReserveExit(CORE, "q-1")).toThrow();
   });
-  it("exit state and realised APR copy", () => {
+  it("exit state mirrors complete_reserve_exit", () => {
     const now = 1_000n * 1_000_000_000n;
-    expect(reserveExitState({ exit_unlock_ns: null }, now)).toEqual({ kind: "none" });
-    expect(reserveExitState({ exit_unlock_ns: (now + 3_600n * 1_000_000_000n).toString() }, now)).toEqual({ kind: "notice", seconds_left: 3600 });
-    expect(reserveExitState({ exit_unlock_ns: now.toString() }, now)).toEqual({ kind: "ready" });
-    expect(formatRealisedApr(412)).toBe("realised 4.12 % (trailing 7 days)");
-    expect(formatRealisedApr(null)).toBe("no 7-day history yet");
+    const at = (unlock: bigint | null, extra: Partial<ReserveNote> = {}, top: Partial<ReserveNoteView> = {}) =>
+      reserveExitState({ ...NV, ...top, note: { ...NOTE, unlock_ns: unlock === null ? null : unlock.toString(), ...extra } }, now);
+    expect(at(null)).toEqual({ kind: "none" });
+    expect(at(now + 3_600n * 1_000_000_000n)).toEqual({ kind: "notice", seconds_left: 3600 });
+    expect(at(now)).toEqual({ kind: "ready" });
+    expect(at(now, { exited: true })).toEqual({ kind: "exited" });
+    expect(at(now, {}, { value_usd_e6: "0", claimable_units: "0", claimable_fees_usd_e6: "0" })).toEqual({ kind: "exited" });
+  });
+  it("realised fee APR copy (D-024)", () => {
+    expect(REALISED_APR_LABEL).toBe("Realised fee APR (trailing 7 days)");
+    expect(formatRealisedApr("412", "25400000")).toBe("4.12 %");
+    expect(formatRealisedApr("5")).toBe("0.05 %");
+    expect(formatRealisedApr("0", "0")).toBe("no active deposits");
+    expect(formatRealisedApr(null)).toBe("—");
+    expect(formatNoticePeriod(RESERVE_NOTICE_NS)).toBe("7 days");
+    expect(formatNoticePeriod(60_000_000_000n)).toBe("1 min");
+  });
+  it("owner set_reserve_params (v2) and v1-only set_reserve", () => {
+    expect(txV2.setReserveParams(CORE, "NVDAx", 600)).toMatchObject({ methodName: "set_reserve_params", deposit: "0", args: { symbol: "NVDAx", discount_bps: 600 } });
+    expect(txV2.setReserveParams(CORE, "NVDAx", 600).args).not.toHaveProperty("notice_ns");
+    expect(txV2.setReserveParams(CORE, "NVDAx", 600, RESERVE_NOTICE_NS.toString()).args).toEqual({ symbol: "NVDAx", discount_bps: 600, notice_ns: "604800000000000" });
+    expect(() => txV2.setReserveParams(CORE, "NVDAx", 0)).toThrow(/discount_bps/);
+    expect(() => txV2.setReserveParams(CORE, "NVDAx", 10_000)).toThrow(/discount_bps/);
+    expect(() => txV2.setReserveParams(CORE, "NVDAx", 600, (RESERVE_MIN_NOTICE_NS - 1n).toString())).toThrow(/60 s/);
+    expect(() => txV2.setReserveParams(CORE, "NVDAx", 600, (RESERVE_MAX_NOTICE_NS + 1n).toString())).toThrow(/30 days/);
+    expect(txV2.setReserveParams(CORE, "NVDAx", 600, RESERVE_MAX_NOTICE_NS.toString()).args.notice_ns).toBe("2592000000000000");
+    expect("setReserve" in tx).toBe(false);
+    expect(txV1.setReserve(CORE, "NVDAx", "1000000")).toMatchObject({ methodName: "set_reserve", args: { symbol: "NVDAx", reserve_usd_e6: "1000000" } });
   });
 });

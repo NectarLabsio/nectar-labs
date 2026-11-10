@@ -6,11 +6,14 @@ import {
   NOTE_PAGE,
   RESERVE_MIN_DEPOSIT_USD_E6,
   RESERVE_NOTICE_NS,
+  REALISED_APR_LABEL,
+  formatNoticePeriod,
   formatRealisedApr,
   formatUnits,
   formatUsdE6,
   formatWindowCountdown,
   noteHref,
+  nsToUtc,
   parseNoteId,
   parseUnits,
   reserveExitState,
@@ -37,7 +40,8 @@ const reserveSymbol = (id: string): string | null => {
   return r?.kind === "RESERVE" ? r.collateral : null;
 };
 
-/** /reserve (PRD §4.8, §12.1): the retail buyer pool behind every quote. v2 + features.reserve only. WO-23b views are mocked in E2E until it merges. */
+/** /reserve (PRD §4.8, §12.1): the retail buyer pool behind every quote. v2 + features.reserve only. Views = contract ReserveView /
+ * ReserveNoteView (WO-23b); the return is the realised fee APR over the trailing 7 days (D-024), never a promised rate. */
 export default function ReservePage() {
   const { config, generation } = useChain();
   const { accountId } = useWallet();
@@ -47,7 +51,7 @@ export default function ReservePage() {
   const col = config.collaterals.find((c) => c.key === key) ?? config.collaterals[0];
   const [amtIn, setAmtIn] = useState("");
   const amount = tryUsd(amtIn);
-  const reserve = useView<ReserveView | null>(on && col ? (v) => v.getReserve(col.symbol) : null, [on, col?.symbol]);
+  const reserve = useView<ReserveView>(on && col ? (v) => v.getReserve(col.symbol) : null, [on, col?.symbol]);
   const notes = useView<string[]>(
     on && accountId
       ? async (v) => {
@@ -64,17 +68,20 @@ export default function ReservePage() {
   );
   const bal = useBalance(on ? config.usdc : null);
   const r = reserve.data;
-  const min = r?.min_deposit_usd_e6 ? BigInt(r.min_deposit_usd_e6) : RESERVE_MIN_DEPOSIT_USD_E6;
+  const min = r ? BigInt(r.min_deposit_usd_e6) : RESERVE_MIN_DEPOSIT_USD_E6;
+  // discount_bps 0: the owner has not enabled this Reserve; the contract refuses JoinNectarReserve (`reserve_disabled`).
+  const disabled = r?.discount_bps === 0;
+  const empty = r ? BigInt(r.shares) === 0n && BigInt(r.usdc_e6) === 0n : false;
   const amtErr = !amtIn ? null : amount === null || amount <= 0n ? "Enter a positive number" : amount < min ? `The Reserve takes at least ${formatUsdE6(min)}` : bal.data !== undefined && amount > bal.data ? "More than your USDC balance" : null;
-  const noticeDays = Number((r?.notice_ns ? BigInt(r.notice_ns) : RESERVE_NOTICE_NS) / 86_400_000_000_000n);
+  const notice = formatNoticePeriod(r?.notice_period_ns ?? RESERVE_NOTICE_NS);
 
   const join = async () => {
-    if (!config.usdc || !config.core || !col || !amount || amtErr) return;
+    if (!config.usdc || !config.core || !col || !amount || amtErr || disabled) return;
     await sign(txNotes.joinReserve(config.usdc, config.core, amount.toString(), col.symbol), {
       success: "Joined the Nectar Reserve",
       summary: (
         <p className="small">
-          Deposits {formatUsdE6(amount)} mock USDC into the {col.symbol} Reserve and mints a Reserve Note holding your shares. The Reserve buys collateral only after every committed quote, at the Reserve discount. Exits take {noticeDays} days of notice.
+          Deposits {formatUsdE6(amount)} mock USDC into the {col.symbol} Reserve and mints a Reserve Note holding your shares. The Reserve buys collateral only after every committed quote, at the Reserve discount. Exits take {notice} of notice.
         </p>
       ),
     });
@@ -106,15 +113,29 @@ export default function ReservePage() {
                 ) : reserve.loading && !r ? (
                   <LoadingBlock />
                 ) : !r ? (
-                  <p className="small" data-testid="reserve-none">No Reserve exists for {col?.symbol} yet; the first deposit opens it at one share per mock USDC.</p>
+                  <LoadingBlock />
                 ) : (
-                  <div className="kvs">
-                    <Kv k="R_c (counts toward limits)" v={<span data-testid="reserve-rc">{formatUsdE6(r.r_c_usd_e6)}</span>} />
-                    <Kv k="In notice" v={r.in_notice_usd_e6 ? formatUsdE6(r.in_notice_usd_e6) : "—"} />
-                    <Kv k="Total USDC" v={formatUsdE6(r.usdc_e6)} />
-                    <Kv k="Collateral held" v={`${formatUnits(r.units, col?.decimals ?? 6)} ${col?.symbol ?? ""}`} />
-                    <Kv k="Reserve discount" v={`${r.discount_bps} bps`} />
-                    <Kv k="Return" v={<span data-testid="reserve-apr">{formatRealisedApr(r.apr_7d_bps)}</span>} />
+                  <div className="stack">
+                    {disabled ? (
+                      <div data-testid="reserve-disabled">
+                        <Banner tone="warn" title="Reserve not enabled" role="status">
+                          The owner has not set a Reserve discount for {r.symbol} yet, so the contract refuses deposits. Nothing is sent from this page until it is enabled.
+                        </Banner>
+                      </div>
+                    ) : null}
+                    {empty ? <p className="small" data-testid="reserve-none">No deposits in the {r.symbol} Reserve yet; the first deposit opens it at one share per mock USDC.</p> : null}
+                    <div className="kvs">
+                      <Kv k="R_c (counts toward limits)" v={<span data-testid="reserve-rc">{formatUsdE6(r.r_usd_e6)}</span>} />
+                      <Kv k="In notice" v={<span data-testid="reserve-in-notice">{formatUsdE6(r.notice_usdc_e6)}</span>} />
+                      <Kv k="Total USDC" v={formatUsdE6(r.usdc_e6)} />
+                      <Kv k="Share price" v={`${formatUsdE6(r.share_price_e6)} per share`} />
+                      <Kv k="Collateral held" v={`${formatUnits(r.units, col?.decimals ?? 6)} ${col?.symbol ?? ""}`} />
+                      <Kv k="Reserve discount" v={disabled ? "not set" : `${r.discount_bps} bps`} />
+                      <Kv k="Exit notice" v={<span data-testid="reserve-notice-period">{notice}</span>} />
+                      <Kv k="Fees, trailing 7 days" v={formatUsdE6(r.fees_7d_usd_e6)} />
+                      <Kv k={REALISED_APR_LABEL} v={<span data-testid="reserve-apr">{formatRealisedApr(r.realised_apr_7d_bps, r.r_usd_e6)}</span>} />
+                    </div>
+                    <p className="caption">Fees only (seized collateral is not counted), measured over the last 7 days. A historical figure, never a promised rate.</p>
                   </div>
                 )}
               </Card>
@@ -134,10 +155,10 @@ export default function ReservePage() {
                         error={amtErr ?? undefined}
                       />
                       {bal.data === 0n ? <FaucetLink token="USDC (mock)" /> : null}
-                      <Button variant="primary" disabled={!amount || Boolean(amtErr)} onClick={join} data-testid="reserve-join">
+                      <Button variant="primary" disabled={!amount || Boolean(amtErr) || !r || disabled} onClick={join} data-testid="reserve-join">
                         Join the Reserve
                       </Button>
-                      <p className="caption">ft_transfer_call of mock USDC with <span className="mono">JoinNectarReserve</span>; you get a Reserve Note. Exits need {noticeDays} days of notice; shares in notice stop counting toward R_c at once.</p>
+                      <p className="caption">ft_transfer_call of mock USDC with <span className="mono">JoinNectarReserve</span>; you get a Reserve Note. Exits need {notice} of notice; shares in notice stop counting toward R_c at once.</p>
                     </>
                   )}
                 </div>
@@ -179,6 +200,7 @@ function ReserveNoteRow({ id, decimals, onChanged }: { id: string; decimals: num
   const symbol = reserveSymbol(id) ?? "";
   if (n.error) return <RpcErrorBanner error={n.error} onRetry={n.reload} />;
   if (!d) return n.loading ? <LoadingBlock lines={1} /> : <p className="small">Reserve Note {id} not found.</p>;
+  const unlock = d.note.unlock_ns;
   const state = reserveExitState(d, BigInt(nowS) * 1_000_000_000n);
   const act = async (kind: "init" | "complete") => {
     if (!config.core) return;
@@ -200,14 +222,17 @@ function ReserveNoteRow({ id, decimals, onChanged }: { id: string; decimals: num
       <div className="note-meta">
         <Link className="link mono" href={noteHref(id)}>{id}</Link>
         <span className="caption" data-testid={`reserve-note-${id}-state`}>
-          {state.kind === "none" ? "active" : state.kind === "notice" ? `notice ends in ${formatWindowCountdown(state.seconds_left)}` : "notice over: ready to exit"}
+          {state.kind === "none" ? "active" : state.kind === "notice" ? `notice ends in ${formatWindowCountdown(state.seconds_left)}` : state.kind === "ready" ? "notice over: ready to exit" : "exited"}
         </span>
       </div>
       <div className="kvs">
-        <Kv k="USDC value" v={formatUsdE6(d.usdc_value_e6)} />
+        <Kv k="Deposited" v={formatUsdE6(d.note.deposited_usd_e6)} />
+        <Kv k={unlock ? "USDC value (frozen at notice)" : "USDC value"} v={<span data-testid={`reserve-note-${id}-value`}>{formatUsdE6(d.value_usd_e6)}</span>} />
         <Kv k="Claimable units" v={<span data-testid={`reserve-note-${id}-units`}>{`${formatUnits(d.claimable_units, decimals, decimals).replace(/\.?0+$/, "")} ${symbol}`}</span>} />
         <Kv k="Claimable fees" v={formatUsdE6(d.claimable_fees_usd_e6)} />
+        {unlock ? <Kv k="Unlocks" v={nsToUtc(unlock)} /> : null}
       </div>
+      {d.transfer_locked ? <p className="caption" data-testid={`reserve-note-${id}-locked`}>A settlement that may reach this Reserve is pending; the Note cannot be transferred until it completes.</p> : null}
       <div className="row" style={{ gap: 8, flexWrap: "wrap" }}>
         {state.kind === "none" ? <Button size="sm" onClick={() => act("init")} data-testid={`reserve-note-${id}-notice`}>Give notice</Button> : null}
         {state.kind === "ready" ? <Button size="sm" variant="primary" onClick={() => act("complete")} data-testid={`reserve-note-${id}-exit`}>Exit</Button> : null}

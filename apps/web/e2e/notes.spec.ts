@@ -6,7 +6,7 @@ import { config, noHorizontalScroll, prime } from "./helpers";
 
 // WO-26c: /notes, /note/[id], Note links and /reserve against mocked v2 views (fixtures/notes.json, built from the contract SVG
 // template by scripts/build-notes-fixture.ts) and the localhost-only E2E mock wallet. features.notes / features.reserve are false
-// in config.yaml; window.__NECTAR_E2E_MOCK__ turns them on for these specs only. Reserve views are WO-23b mocks. Nothing signs on testnet.
+// in config.yaml; window.__NECTAR_E2E_MOCK__ turns them on for these specs only. Reserve views use the merged WO-23b shapes (types.rs). Nothing signs on testnet.
 
 const V2 = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/v2-views.json"), "utf8")) as Record<string, unknown>;
 interface NotesFx {
@@ -16,7 +16,7 @@ interface NotesFx {
   nft_transfer_locked: Record<string, boolean>;
   get_quote_3: Record<string, unknown>;
   get_reserve: Record<string, unknown>;
-  get_reserve_note: Record<string, Record<string, unknown>>;
+  get_reserve_note: Record<string, { note: Record<string, unknown> } & Record<string, unknown>>;
 }
 const FX = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/notes.json"), "utf8")) as NotesFx;
 const CORE = config.accounts.core;
@@ -26,7 +26,7 @@ const NOW = BigInt(Date.now()) * 1_000_000n;
 const IN_2H = (NOW + 2n * 3600n * 1_000_000_000n).toString();
 const EVIL = FX.nft_token_svg["q-3"]!.replace("</svg>", "<script>alert(1)</script></svg>");
 
-interface Opts { features?: string[]; tokens?: Array<{ token_id: string; owner_id: string }>; account?: string; theme?: "dark" | "light" }
+interface Opts { features?: string[]; tokens?: Array<{ token_id: string; owner_id: string }>; account?: string; theme?: "dark" | "light"; reserve?: Record<string, unknown> }
 
 async function setup(page: Page, o: Opts = {}) {
   await prime(page, o.theme ?? "dark");
@@ -62,10 +62,10 @@ async function setup(page: Page, o: Opts = {}) {
       case "get_shield":
         return null;
       case "get_reserve":
-        return FX.get_reserve;
+        return o.reserve ?? FX.get_reserve;
       case "get_reserve_note": {
         const n = FX.get_reserve_note[tid];
-        return n ? { ...n, exit_unlock_ns: n.exit_unlock_ns === "NOTICE_IN_2H" ? IN_2H : n.exit_unlock_ns } : null;
+        return n ? { ...n, note: { ...n.note, unlock_ns: n.note.unlock_ns === "NOTICE_IN_2H" ? IN_2H : n.note.unlock_ns } } : null;
       }
       default:
         return method in V2 ? V2[method] : undefined;
@@ -242,12 +242,15 @@ test.describe("/note/[id] (mocked v2)", () => {
   });
 });
 
-test.describe("/reserve (mocked WO-23b views)", () => {
-  test("R_c, realised APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice", async ({ page }) => {
+test.describe("/reserve (mocked v2 views, contract shapes)", () => {
+  test("R_c, realised fee APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice", async ({ page }) => {
     await setup(page);
     await page.goto("/reserve");
     await expect(page.getByTestId("reserve-rc")).toHaveText("$25.40", { timeout: 20_000 });
-    await expect(page.getByTestId("reserve-apr")).toHaveText("realised 4.12 % (trailing 7 days)");
+    await expect(page.getByTestId("reserve-apr")).toHaveText("4.12 %");
+    await expect(page.getByText("Realised fee APR (trailing 7 days)")).toBeVisible();
+    await expect(page.getByTestId("reserve-in-notice")).toHaveText("$10.10");
+    await expect(page.getByTestId("reserve-notice-period")).toHaveText("7 days");
     await expect(page.getByTestId("reserve-note-r-NVDAx-1-state")).toHaveText("active");
     await expect(page.getByTestId("reserve-note-r-NVDAx-1-units")).toHaveText("0.0125 NVDAx");
     await expect(page.getByTestId("reserve-note-r-NVDAx-2-state")).toHaveText(/^notice ends in (0[12]h \d\dm \d\ds|02h 00m 00s)$/);
@@ -275,6 +278,20 @@ test.describe("/reserve (mocked WO-23b views)", () => {
     expect(c[0]).toMatchObject({ receiverId: USDC, methodName: "ft_transfer_call", args: { receiver_id: CORE, amount: "25000000" } });
     expect(JSON.parse(String(c[0]!.args.msg))).toEqual({ JoinNectarReserve: { collateral: "NVDAx" } });
     expect(c[1]).toMatchObject({ receiverId: CORE, methodName: "initiate_reserve_exit", args: { note_id: "r-NVDAx-1" } });
+  });
+});
+
+test.describe("/reserve states (contract shapes)", () => {
+  test("disabled Reserve (discount_bps 0) refuses deposits before the wallet; empty pool shows no APR", async ({ page }) => {
+    await setup(page, { reserve: { ...(V2.get_reserve as Record<string, unknown>), discount_bps: 0 }, tokens: [] });
+    await page.goto("/reserve");
+    await expect(page.getByTestId("reserve-disabled")).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId("reserve-none")).toBeVisible();
+    await expect(page.getByTestId("reserve-apr")).toHaveText("no active deposits");
+    await page.getByLabel("Amount (USDC)").fill("25");
+    await expect(page.getByTestId("reserve-join")).toBeDisabled();
+    await expect(page.getByTestId("reserve-notes-empty")).toBeVisible();
+    expect(await calls(page)).toHaveLength(0);
   });
 });
 
