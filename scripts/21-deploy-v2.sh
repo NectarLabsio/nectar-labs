@@ -73,7 +73,7 @@ near contract call-function as-read-only "$CORE2" contract_version json-args '{}
 
 log "6: configure"
 COLL="$(yq -o=json -I=0 '.collateral.nvdax | .token = "'$NVDAX'" | .remote_chain = null | .price_kind = "Underlying"
-  | .verified_dex_depth_usd_e6 = (.verified_dex_depth_usd_e6 | tostring) | .nectar_reserve_usd_e6 = (.nectar_reserve_usd_e6 | tostring)' "$CFG")"
+  | .verified_dex_depth_usd_e6 = (.verified_dex_depth_usd_e6 | tostring) | del(.nectar_reserve_usd_e6)' "$CFG")"
 owner_call upsert_collateral '{"symbol":"NVDAx","config":'"$COLL"'}'
 owner_call update_owner_price '{"symbol":"NVDAx","price_usd_e6":"180000000"}'
 node "$ROOT/scripts/22-session-calendar.mjs" > "$ROOT/evidence/merge/v2-calendar-args.json"
