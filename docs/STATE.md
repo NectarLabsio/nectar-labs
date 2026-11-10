@@ -1,12 +1,14 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## v7 progress (2026-11-10 18:00Z)
-- Merged: WO-20 web P0 delta + v7 landing (fd3395b) · WO-19 contract P0 delta, v2 layout, 229+17 unit, 17 sandbox (bc6713f) · WO-14 nectar_vault, 25/25 anchor (886d98f).
-- FACTS v7: WO-18 (1a43f44) + WO-18b (c82c86a). Open: F-351 ERC-8021, F-352 xStocks mechanism, F-353 Rhea testnet.
-- Running: WO-21 contract (remote lifecycle) · WO-31 web (Solana remote flow).
-- Solana devnet: nectar_vault ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW, mint 3Ve8GiDB…E8hT, vault PDA HGSFKMWW…EbeX (9fb7cfb). WO-16 relay merged (f97eed3); verify:quick green.
-- Blocked on humans: H-NEAR-FAUCET (v2 deploy, ~8 NEAR), H-GUARD-V7 (before P2b).
-- Next: WO-23a Shields/Profit-Lock → WO-22 Notes → WO-23b Reserve; WO-25 MCP skill/x402; WO-24 OutLayer jobs; WO-26 screens; WO-30 docs; then WO-6a v2 deploy.
+## v7 progress (2026-11-10 20:00Z)
+- Gates: **G1(v7) PASS**, **G10 PASS** (open F-351/F-352/F-353, unused), **G7-prep recorded** (vault on devnet + 25 anchor tests) — EVIDENCE 884552f. G7/G2b/G3b/G11/G14 pending.
+- Merged on main (verify:quick green; web e2e 176 pass / 0 fail): WO-19 P0 delta · WO-20 web delta + landing · WO-14 vault · WO-16 keeper maths + relay ·
+  WO-21 remote lifecycle · WO-31 web remote flow · WO-25 skill tools + x402 · WO-30 docs · WO-24 OutLayer jobs (unpublished) · WO-26a /agents + console.
+- Solana devnet: nectar_vault ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW, mint 3Ve8GiDB…E8hT, vault PDA HGSFKMWW…EbeX.
+- Running: WO-23a contract (Shields, Profit-Lock, reservation deposit, job hooks).
+- Ready to run on funds: scripts/21-deploy-v2.sh (WO-6a) → 30-quoter-publish (new jobs wasm 5d90edb8…) → 40-seed → verifier G2b/G3b → G7 → G14.
+- Blocked on humans: **H-NEAR-FAUCET** (~8 NEAR; blocks every v2/NEAR deploy), H-GUARD-V7 (before P2b).
+- Next: WO-22 Notes → WO-23b Reserve (+ G11 owner-setter gas rows) → WO-26b /shield /reserve /notes → P2b only after G7.
 
 # STATE.md — one screen for a returning human
 
@@ -57,7 +59,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-10T12:32:26Z · commit 8979f7c
+Last activity: 2026-11-10T13:57:27Z · commit 09c4316
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
