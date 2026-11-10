@@ -4,6 +4,7 @@
 import { createServer, type Server } from 'node:http';
 import type { KeeperDb } from './db.ts';
 import type { KeeperStatus } from './keeper.ts';
+import type { BaseRelayStatus } from './base.ts';
 import type { RelayStatus } from './solana.ts';
 
 export interface HealthBody {
@@ -30,6 +31,22 @@ export interface HealthBody {
     releases_relayed: number;
     deposits_confirmed: number;
   } | null;
+  /** P2b Base relay; null when BASE_RPC_URL is unset. */
+  base: {
+    chain_id: number | null;
+    signer: string;
+    attest_mode: boolean;
+    builder_suffix: string;
+    last_block_seen: string | null;
+    last_tick_ok: boolean;
+    last_error: string | null;
+    pending_settlements: number;
+    pending_releases: number;
+    awaiting_deposit: number;
+    settles_relayed: number;
+    releases_relayed: number;
+    deposits_confirmed: number;
+  } | null;
 }
 
 export function allowanceLabel(a: KeeperStatus['allowance']): string {
@@ -45,7 +62,7 @@ export function allowanceLabel(a: KeeperStatus['allowance']): string {
   }
 }
 
-export function healthBody(s: KeeperStatus, pollMs: number, now: number, relay: RelayStatus | null = null): HealthBody {
+export function healthBody(s: KeeperStatus, pollMs: number, now: number, relay: RelayStatus | null = null, base: BaseRelayStatus | null = null): HealthBody {
   const fresh = s.lastTickAt !== null && now - s.lastTickAt <= 3 * pollMs;
   return {
     ok: fresh && s.consecutiveErrors < 3 && s.allowance.kind !== 'full_access',
@@ -73,6 +90,24 @@ export function healthBody(s: KeeperStatus, pollMs: number, now: number, relay: 
             releases_relayed: relay.releasesRelayed,
             deposits_confirmed: relay.depositsConfirmed,
           },
+    base:
+      base === null
+        ? null
+        : {
+            chain_id: base.chainId,
+            signer: base.signer,
+            attest_mode: base.attestMode,
+            builder_suffix: base.builderSuffix,
+            last_block_seen: base.lastBlockSeen,
+            last_tick_ok: base.lastTickOk,
+            last_error: base.lastError,
+            pending_settlements: base.pendingSettlements,
+            pending_releases: base.pendingReleases,
+            awaiting_deposit: base.awaitingDeposit,
+            settles_relayed: base.settlesRelayed,
+            releases_relayed: base.releasesRelayed,
+            deposits_confirmed: base.depositsConfirmed,
+          },
   };
 }
 
@@ -84,6 +119,7 @@ export function startHealthServer(
   host: string,
   now: () => number = Date.now,
   relay: RelayStatus | null = null,
+  base: BaseRelayStatus | null = null,
 ): Server {
   const server = createServer((req, res) => {
     const path = (req.url ?? '/').split('?')[0];
@@ -93,7 +129,7 @@ export function startHealthServer(
     };
     if (req.method !== 'GET') return send(405, { error: 'method not allowed' });
     if (path === '/healthz') {
-      const body = healthBody(status, pollMs, now(), relay);
+      const body = healthBody(status, pollMs, now(), relay, base);
       return send(body.ok ? 200 : 503, body);
     }
     if (path === '/runs') return send(200, { runs: db.runs(50) });

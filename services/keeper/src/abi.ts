@@ -28,7 +28,14 @@ export interface HealthView {
  * `confirm_remote_deposit`). `relay_release_result` is used only if WO-21 adds it (else release results go
  * through `relay_settlement_result`). The live v1 key (F-141) allows only the first two.
  */
-export const KEEPER_METHODS = ['trigger_preliquidation', 'relay_settlement_result', 'confirm_remote_deposit', 'relay_release_result'] as const;
+export const KEEPER_METHODS = [
+  'trigger_preliquidation',
+  'relay_settlement_result',
+  'confirm_remote_deposit',
+  'relay_release_result',
+  // WO-29b: local-fork Base deposits (OutLayer cannot reach localhost); owner-gated by `__v7_allow_keeper_attest`.
+  'keeper_attest_deposit',
+] as const;
 export type KeeperMethod = (typeof KEEPER_METHODS)[number];
 
 /** P0 uses only this one; `relay_settlement_result` is feature-gated (`p2`) in the contract. */

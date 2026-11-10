@@ -51,6 +51,13 @@ export class KeeperDb {
         open_positions INTEGER NOT NULL,
         pending_settlements INTEGER NOT NULL
       );
+      -- WO-29b: EVM tx hash recorded after signing and before broadcast (key = base:<op>:<position>:<nonce>), so a
+      -- restart finds a landed leg by receipt instead of re-sending. Re-derivable from vault logs.
+      CREATE TABLE IF NOT EXISTS keeper_evm_tx (
+        key TEXT PRIMARY KEY,
+        tx_hash TEXT NOT NULL,
+        sent_at INTEGER NOT NULL
+      );
     `);
   }
 
@@ -105,6 +112,21 @@ export class KeeperDb {
   lastHeartbeatAt(): number | null {
     const row = this.db.prepare('SELECT MAX(at) AS at FROM keeper_heartbeats').get() as { at: number | null } | undefined;
     return row?.at ?? null;
+  }
+
+  evmTx(key: string): { tx_hash: string; sent_at: number } | null {
+    const row = this.db.prepare('SELECT tx_hash, sent_at FROM keeper_evm_tx WHERE key = ?').get(key) as { tx_hash: string; sent_at: number } | undefined;
+    return row ?? null;
+  }
+
+  setEvmTx(key: string, txHash: string, sentAt: number): void {
+    this.db
+      .prepare('INSERT INTO keeper_evm_tx (key, tx_hash, sent_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET tx_hash = excluded.tx_hash, sent_at = excluded.sent_at')
+      .run(key, txHash, sentAt);
+  }
+
+  clearEvmTx(key: string): void {
+    this.db.prepare('DELETE FROM keeper_evm_tx WHERE key = ?').run(key);
   }
 
   close(): void {

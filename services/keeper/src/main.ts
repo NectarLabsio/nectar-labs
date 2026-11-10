@@ -2,6 +2,7 @@
 // refuses to start (exit 2) while ids are unset (env and config.yaml), the key file is missing / too open, or the key is
 // a FullAccess key on chain (startup.ts; D-012 deletion stays the primary control).
 
+import { BaseRelay, ChainRefusedError, ViemEvmPort, assertBaseSepoliaRpc, loadFoundryKeystore, rawKeyEnvVars } from './base.ts';
 import { NearCoreReader, NearKeeperWriter } from './chain.ts';
 import { ConfigError, loadConfig } from './config.ts';
 import { KeeperDb } from './db.ts';
@@ -12,6 +13,7 @@ import { startHealthServer } from './server.ts';
 import { KitSolanaPort, SolanaRelay, assertDevnetRpc, loadSolanaFeePayer } from './solana.ts';
 import { FullAccessKeyError, assertNotFullAccess } from './startup.ts';
 import { address } from '@solana/kit';
+import { getAddress, isAddress } from 'viem';
 
 async function main(): Promise<void> {
   const log = createLogger('keeper');
@@ -64,7 +66,41 @@ async function main(): Promise<void> {
       return;
     }
   }
-  const server = startHealthServer(keeper.status, db, cfg.pollMs, cfg.healthPort, cfg.healthHost, Date.now, relay?.status ?? null);
+  // P2b Base relay (WO-29b): only with BASE_RPC_URL; Foundry keystore signer, chain 84532 checked on the wire.
+  let baseRelay: BaseRelay | null = null;
+  if (cfg.base === null) {
+    log.info('base_relay_disabled', { reason: 'BASE_RPC_URL unset' });
+  } else {
+    try {
+      const raw = rawKeyEnvVars(process.env);
+      if (raw.length > 0) throw new Error(`raw key environment variable(s) set (${raw.join(', ')}); the keeper signs from a Foundry keystore only`);
+      assertBaseSepoliaRpc(cfg.base.rpcUrl);
+      if (cfg.base.vaultAddress !== null && !isAddress(cfg.base.vaultAddress, { strict: false })) throw new Error('BASE_VAULT_ADDRESS is not a 0x address');
+      const account = loadFoundryKeystore(cfg.base.keystoreDir, cfg.base.account, cfg.base.passwordFile);
+      // TODO-H19: ERC-8021 suffix bytes are unverified (F-351), so none are injected even when BASE_BUILDER_CODE is set.
+      if (cfg.base.builderCode !== null) log.warn('base_builder_code_not_appended', { reason: 'ERC-8021 suffix format unverified (F-351)' });
+      baseRelay = new BaseRelay(reader, writer, new ViemEvmPort(cfg.base.rpcUrl, account), db, log, {
+        pageSize: cfg.pageSize,
+        expectedVault: cfg.base.vaultAddress === null ? null : getAddress(cfg.base.vaultAddress),
+        keeperAttest: cfg.base.keeperAttest,
+        builderSuffix: null,
+        builderSuffixState: cfg.base.builderCode === null ? 'none' : 'unverified_not_appended',
+      });
+      try {
+        await baseRelay.assertChain();
+      } catch (e) {
+        if (e instanceof ChainRefusedError) throw e;
+        log.warn('base_chain_check_deferred', { error: errMsg(e).slice(0, 200) }); // RPC down: every tick re-checks before acting
+      }
+      log.info('base_relay_enabled', { signer: account.address, chain_id: baseRelay.status.chainId, attest_mode: cfg.base.keeperAttest });
+    } catch (e) {
+      log.error('startup_refused', { error: errMsg(e) });
+      process.exitCode = 2;
+      db.close();
+      return;
+    }
+  }
+  const server = startHealthServer(keeper.status, db, cfg.pollMs, cfg.healthPort, cfg.healthHost, Date.now, relay?.status ?? null, baseRelay?.status ?? null);
   const ac = new AbortController();
   const stop = (): void => {
     log.info('shutdown');
@@ -74,7 +110,11 @@ async function main(): Promise<void> {
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
   log.info('keeper_started', { core: cfg.coreAccountId, keeper: cfg.keeperAccountId, poll_ms: cfg.pollMs, health_port: cfg.healthPort });
-  await Promise.all([keeper.run(ac.signal), relay === null ? Promise.resolve() : relay.run(ac.signal, cfg.pollMs)]);
+  await Promise.all([
+    keeper.run(ac.signal),
+    relay === null ? Promise.resolve() : relay.run(ac.signal, cfg.pollMs),
+    baseRelay === null ? Promise.resolve() : baseRelay.run(ac.signal, cfg.pollMs),
+  ]);
   db.close();
 }
 
