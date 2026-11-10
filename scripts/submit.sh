@@ -3,7 +3,9 @@
 # A real send requires HUMAN_CONFIRMED=1 in Kunal's own shell AND an interactive yes. Agents never run it without --dry-run.
 source "$(dirname "$0")/_lib.sh"
 DRY=1; [ "${1:-}" = "--send" ] && DRY=0
-PAYLOAD=$(node "$ROOT/scripts/build-submission.mjs")   # reads docs/SUBMISSION.md table + README sections
+# reads docs/SUBMISSION.md ("Payload fields" table + "### idea" block); --send-mode makes requestId once (~/.nectar, 0600)
+if [ $DRY = 1 ]; then PAYLOAD=$(node "$ROOT/scripts/build-submission.mjs") || exit 2
+else PAYLOAD=$(node "$ROOT/scripts/build-submission.mjs" --send-mode) || exit 2; fi
 echo "$PAYLOAD" | jq .
 grep -q 'TODO-H' <<<"$PAYLOAD" && { echo "payload still has TODO-H placeholders — not sendable" >&2; [ $DRY = 1 ] || exit 2; }
 [ $DRY = 1 ] && { echo "(dry run — nothing sent)"; exit 0; }
