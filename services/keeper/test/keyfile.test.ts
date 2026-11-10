@@ -37,8 +37,14 @@ describe('key file', () => {
 });
 
 describe('config', () => {
-  it('treats TODO-G2 ids as unset', () => {
-    assert.throws(() => loadConfig({ CORE_ACCOUNT_ID: 'TODO-G2', KEEPER_ACCOUNT_ID: 'k', KEEPER_KEY_PATH: '/x' }), ConfigError);
+  it('treats TODO-* ids as unset and falls back to config.yaml', () => {
+    assert.throws(() => loadConfig({ NECTAR_CONFIG_PATH: '/nonexistent.yaml', CORE_ACCOUNT_ID: 'TODO-G2', KEEPER_ACCOUNT_ID: 'k', KEEPER_KEY_PATH: '/x' }), ConfigError);
+    const c = loadConfig({ CORE_ACCOUNT_ID: 'TODO-G2', KEEPER_KEY_PATH: '/x' });
+    assert.equal(c.coreAccountId, 'nectar-core.nectar.testnet');
+    assert.equal(c.keeperAccountId, 'keeper.nectar.testnet');
+  });
+  it('still requires KEEPER_KEY_PATH (no default key)', () => {
+    assert.throws(() => loadConfig({}), /KEEPER_KEY_PATH/);
   });
   it('parses ids, defaults and the key path', () => {
     const c = loadConfig({ CORE_ACCOUNT_ID: 'core.t', KEEPER_ACCOUNT_ID: 'k.t', KEEPER_KEY_PATH: '~/.nectar/keys/k.json', KEEPER_POLL_MS: '5000' });

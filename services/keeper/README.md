@@ -11,13 +11,14 @@ Local health maths (`src/health.ts`) is a logged cross-check only, pinned to `co
 (fallback `test/model.fixture.csv` until WO-2 lands it).
 
 ```bash
-# env: CORE_ACCOUNT_ID, KEEPER_ACCOUNT_ID, KEEPER_KEY_PATH (0600 JSON: account_id, public_key, private_key)
+# required: KEEPER_KEY_PATH (0600 JSON: account_id, public_key, private_key; no default key)
+# ids: CORE_ACCOUNT_ID, KEEPER_ACCOUNT_ID default to accounts.core / accounts.keeper in packages/config/config.yaml
 # optional: NEAR_RPC_URL, KEEPER_POLL_MS, KEEPER_PAGE_SIZE, KEEPER_GAS_TGAS (≤300), KEEPER_HEALTH_PORT (8787),
 #           KEEPER_HEALTH_HOST (127.0.0.1), KEEPER_DB_PATH (~/.nectar/keeper.sqlite)
 pnpm --filter keeper start
 curl -s localhost:8787/healthz   # last_block_seen, allowance, pending_settlements, ...
 curl -s localhost:8787/runs      # keeper_runs (last 50)
-pnpm --filter keeper test        # unit; testnet read-only suite runs with NECTAR_IT=1 CORE_ACCOUNT_ID=<core>
+pnpm --filter keeper test        # unit; testnet read-only suite runs with NECTAR_IT=1
 ```
 
 Idempotent on restart (on-chain `Settling` is skipped; interrupted runs are marked failed), exponential
