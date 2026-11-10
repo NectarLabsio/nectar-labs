@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nectar NVDAx market</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/90551b2e707e9ae82f26f4d5f7c9d816">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="nx {{themeClass}}">
+  <header class="nav">
+    <a class="brand" href="Main.dc.html" aria-label="Nectar home"><img src="/_blob/76ae889d34e7e0e6ae8dd258fc05f2e1" alt=""><img class="od" src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar"><img class="ol" src="/_blob/b9ab938d8e4e19425a3f0c7a5fb2ab32" alt="nectar"></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="on" href="Main.dc.html">Markets</a><a href="Borrow.dc.html">Borrow</a><a href="Earn.dc.html">Earn</a><a href="Portfolio.dc.html">Portfolio</a><a class="hide-s" href="Agents.dc.html">Agents</a><a class="hide-s" href="Console.dc.html">Curator</a>
+    </nav>
+    <div class="nav-right">
+      <span class="chip"><i class="{{dotClass}}"></i>{{sessionChip}}</span>
+      <span class="chip hide-s"><span class="chain near">N</span>Testnet</span>
+      <button class="wallet" type="button"><span class="bal">$2,400</span>borrower1.testnet<span class="avatar"></span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <nav class="crumb" aria-label="Breadcrumb"><a href="Main.dc.html">Markets</a><span>/</span><span class="head">NVDAx</span></nav>
+
+    <div class="head-row">
+      <div class="row" style="gap: 18px; align-items: center;">
+        <img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt="" style="width: 72px; height: 72px;">
+        <div class="stack" style="gap: 8px;">
+          <div class="row" style="gap: 10px; flex-wrap: wrap;"><h1 class="title">NVDAx</h1><span class="badge"><span class="chain near">N</span>NEAR testnet</span><span class="badge warn">Mock collateral</span></div>
+          <div class="row" style="gap: 12px; flex-wrap: wrap;"><span class="big num" style="font-size: 26px;">$185.00</span><span class="chip"><i class="dot off"></i>Owner oracle, updated 2 min ago</span><span class="k">1 NVDAx = 1.000 NVDA share</span></div>
+        </div>
+      </div>
+      <div class="row"><a class="btn btn-line" href="Earn.dc.html">Commit a quote</a><a class="btn btn-primary" href="Borrow.dc.html">Borrow</a></div>
+    </div>
+
+    <section class="panel pad" aria-label="Key numbers">
+      <div class="stats">
+        <div><span class="k">Exit capacity</span><span class="mid">{{exitVal}}</span></div>
+        <div><span class="k">Borrowed</span><span class="mid">$28,000</span></div>
+        <div><span class="k">Free to borrow</span><span class="mid pos">{{freeVal}}</span></div>
+        <div><span class="k">Max LTV per loan</span><span class="mid">85%</span></div>
+        <div><span class="k">Haircut now</span><span class="mid">{{hVal}}</span></div>
+      </div>
+    </section>
+
+    <div class="split">
+      <section class="panel pad stack" style="gap: 20px;" aria-label="Committed buyers">
+        <div class="ph"><span class="h2">Who stands behind NVDAx</span><span class="k">ordered by discount, the order settlement uses</span></div>
+        <div class="row" style="gap: 14px; align-items: baseline; flex-wrap: wrap;"><span class="hero" style="font-size: 46px;">389.95</span><span class="stack"><span class="head" style="font-weight: 600;">NVDAx can be sold to committed buyers now</span><span class="k">at no more than 4.00% below the oracle price, about $70,000</span></span></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Discount</th><th>Buys at or above</th><th style="width: 38%;">Committed</th><th class="r">Units</th><th class="r">Cumulative</th></tr></thead>
+            <tbody>
+              <tr><td><span class="v">2.50%</span></td><td><span class="v">$180.38</span><span class="k" style="display: block;">quote q-1, buyer1</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v">$40,000</span><span class="meter" aria-hidden="true"><i class="c-q" style="width: 100%;"></i></span></span></td><td class="r"><span class="v">221.76</span></td><td class="r"><span class="v">221.76</span></td></tr>
+              <tr><td><span class="v">3.50%</span></td><td><span class="v">$178.53</span><span class="k" style="display: block;">quote q-2, buyer2</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v">$25,000</span><span class="meter" aria-hidden="true"><i class="c-q" style="width: 62.5%; opacity: .75;"></i></span></span></td><td class="r"><span class="v">140.04</span></td><td class="r"><span class="v">361.80</span></td></tr>
+              <tr><td><span class="v">4.00%</span></td><td><span class="v">$177.60</span><span class="k" style="display: block;">Nectar Reserve, pooled</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v">$5,000</span><span class="meter" aria-hidden="true"><i class="c-r" style="width: 12.5%;"></i></span></span></td><td class="r"><span class="v">28.15</span></td><td class="r"><span class="v pos">389.95</span></td></tr>
+              <tr class="muted"><td><span class="v" style="color: var(--faint);">market</span></td><td><span class="k">DEX depth, verified</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v" style="color: var(--dim);">{{dVal}}</span><span class="meter" aria-hidden="true"><i class="c-d" style="width: {{dBar}}; opacity: .6;"></i></span></span></td><td class="r" colspan="2"><span class="k">{{dNote}}</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel pad stack" style="gap: 18px;" aria-label="Limit composition">
+        <div class="ph"><span class="h2">How the limit is built</span></div>
+        <div class="seg" role="group" aria-label="Market state">
+          <button type="button" class="{{vOpen}}" onClick="{{showOpen}}">In session</button>
+          <button type="button" class="{{vClosed}}" onClick="{{showClosed}}">Closed or Shield</button>
+        </div>
+        <div class="row" style="gap: 22px; align-items: center; flex-wrap: wrap;">
+          <svg viewBox="0 0 170 170" width="170" height="170" role="img" aria-label="Backing {{backVal}}">
+            <circle cx="85" cy="85" r="64" fill="none" stroke-width="18" style="stroke: var(--raise);"></circle>
+            <circle cx="85" cy="85" r="64" fill="none" stroke-width="18" pathLength="100" stroke-dasharray="{{qDash}}" stroke-dashoffset="0" transform="rotate(-90 85 85)" style="stroke: var(--mint); transition: stroke-dasharray .6s;"></circle>
+            <circle cx="85" cy="85" r="64" fill="none" stroke-width="18" pathLength="100" stroke-dasharray="{{rDash}}" stroke-dashoffset="{{rOff}}" transform="rotate(-90 85 85)" style="stroke: var(--teal); transition: all .6s;"></circle>
+            <circle cx="85" cy="85" r="64" fill="none" stroke-width="18" pathLength="100" stroke-dasharray="{{dDash}}" stroke-dashoffset="{{dOff}}" transform="rotate(-90 85 85)" style="stroke: var(--sky); transition: all .6s;"></circle>
+            <text x="85" y="80" text-anchor="middle" style="fill: var(--dim); font: 500 11px 'DM Sans', sans-serif;">backing</text>
+            <text x="85" y="102" text-anchor="middle" style="fill: var(--head); font: 600 20px Syne, sans-serif;">{{backVal}}</text>
+          </svg>
+          <div class="legend" style="flex-direction: column; gap: 10px;">
+            <span><i class="c-q"></i>Quotes <b>$65,000</b></span>
+            <span><i class="c-r"></i>Reserve <b>$5,000</b></span>
+            <span><i class="c-d"></i>DEX depth <b>{{vD}}</b></span>
+          </div>
+        </div>
+        <div class="code" style="white-space: normal; line-height: 1.9;">
+          <div><span class="c">backing</span> {{backVal}} × (1 − {{vH}}) = <b class="pos">{{vExit}}</b> exit capacity</div>
+          <div><span class="c">minus</span> $28,000 borrowed = <b class="pos">{{vFree}}</b> free</div>
+          <div><span class="c">and each loan</span> ≤ 85% of its own collateral</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid2">
+      <section class="panel pad" aria-label="Parameters">
+        <div class="ph" style="margin-bottom: 8px;"><span class="h2">Parameters</span><a class="link" href="Console.dc.html">Curator view</a></div>
+        <div class="kvr"><span>Static limit without Nectar</span><b>40%</b></div>
+        <div class="kvr"><span>Limit premium above static</span><b>3.00%</b></div>
+        <div class="kvr"><span>Weekend Shield</span><b>15 bps flat</b></div>
+        <div class="kvr"><span>Event Shield</span><b>25 bps, no window set</b></div>
+        <div class="kvr"><span>Flag line, chosen at open</span><b>75% to 90% LTV</b></div>
+        <div class="kvr"><span>Reserve discount</span><b>4.00%</b></div>
+        <div class="kvr"><span>Profit-Lock fills per day</span><b>$20,000</b></div>
+      </section>
+      <section class="panel pad" aria-label="Activity">
+        <div class="ph" style="margin-bottom: 8px;"><span class="h2">Activity</span><span class="k">example events</span></div>
+        <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 32px; height: 32px; border-radius: 10px; color: var(--head);">↓</span><span class="stack"><span class="head">Loan p-1 opened</span><span class="k">borrower1.testnet</span></span></span><b>$28,000</b></div>
+        <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 32px; height: 32px; border-radius: 10px; color: var(--teal);">R</span><span class="stack"><span class="head">Reserve deposit r-1</span><span class="k">borrower1.testnet</span></span></span><b>$50</b></div>
+        <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 32px; height: 32px; border-radius: 10px; color: var(--pos);">Q</span><span class="stack"><span class="head">Quote q-2 funded, 3.50%</span><span class="k">buyer2.testnet</span></span></span><b>$25,000</b></div>
+        <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 32px; height: 32px; border-radius: 10px; color: var(--pos);">Q</span><span class="stack"><span class="head">Quote q-1 funded, 2.50%</span><span class="k">buyer1.testnet</span></span></span><b>$40,000</b></div>
+      </section>
+    </div>
+
+    <footer class="foot"><span>Testnet with mock collateral. Unaudited.</span><span class="row" style="gap: 18px;"><a href="https://docs.near.org">Docs</a><a href="Console.dc.html">Evidence</a></span></footer>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"session":{"editor":"enum","options":["in session","weekend"],"default":"in session"},"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { view: null }; }
+  renderVals() {
+    const theme = this.props.theme ?? 'dark';
+    const open = (this.props.session ?? 'in session') === 'in session';
+    const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const D = open ? 12000 : 0, h = open ? 0.04 : 0.12, exit = (1 - h) * (70000 + D);
+    const view = this.state.view ?? (open ? 'open' : 'closed');
+    const vo = view === 'open';
+    const vD = vo ? 12000 : 0, vh = vo ? 0.04 : 0.12, back = 70000 + vD, vExit = back * (1 - vh);
+    const gap = 0.6;
+    const q = 65000 / back * 100, r = 5000 / back * 100, d = vD / back * 100;
+    const dash = (len) => Math.max(0, len - gap).toFixed(2) + ' ' + (100 - Math.max(0, len - gap)).toFixed(2);
+    return {
+      themeClass: theme === 'light' ? 'light' : '',
+      dotClass: open ? 'dot' : 'dot amber', sessionChip: open ? 'NYSE open, closes 16:00 ET' : 'Weekend parameters until Mon 09:30 ET',
+      exitVal: money(exit), freeVal: money(exit - 28000), hVal: open ? '4%, 12% closed' : '12% while closed',
+      dVal: money(D), dBar: open ? '30%' : '0%', dNote: open ? 'counted in limits; testnet settles with quotes' : 'counts as zero while the market is closed',
+      vOpen: vo ? 'on' : '', vClosed: vo ? '' : 'on',
+      showOpen: () => this.setState({ view: 'open' }), showClosed: () => this.setState({ view: 'closed' }),
+      backVal: money(back), vD: money(vD), vH: vo ? '4%' : '12%', vExit: money(vExit), vFree: money(vExit - 28000),
+      qDash: dash(q), rDash: dash(r), rOff: (-q).toFixed(2), dDash: dash(d), dOff: (-(q + r)).toFixed(2)
+    };
+  }
+}
+</script>
+</body>
+</html>

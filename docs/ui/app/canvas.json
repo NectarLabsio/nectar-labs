@@ -1,0 +1,147 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Agents.dc.html": {
+      "expand": "fill",
+      "h": 1320,
+      "is_interactive": true,
+      "title": "Agents",
+      "w": 1440,
+      "x": 1520,
+      "y": 3700
+    },
+    "Borrow.dc.html": {
+      "expand": "fill",
+      "h": 1240,
+      "is_interactive": true,
+      "title": "Borrow",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "Console.dc.html": {
+      "expand": "fill",
+      "h": 1460,
+      "is_interactive": true,
+      "title": "Curator",
+      "w": 1440,
+      "x": 0,
+      "y": 3700
+    },
+    "Earn.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "Earn: quotes and Reserve",
+      "w": 1440,
+      "x": 3040,
+      "y": 1900
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 1480,
+      "is_interactive": true,
+      "title": "Markets",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Market.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "Market: NVDAx",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Portfolio.dc.html": {
+      "expand": "fill",
+      "h": 1360,
+      "is_interactive": true,
+      "title": "Portfolio",
+      "w": 1440,
+      "x": 0,
+      "y": 1900
+    },
+    "Position.dc.html": {
+      "expand": "fill",
+      "h": 1400,
+      "is_interactive": true,
+      "title": "Loan p-1",
+      "w": 1440,
+      "x": 1520,
+      "y": 1900
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-11-10T13:40:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "noteOrder": [
+    "row1",
+    "row2",
+    "row3",
+    "data",
+    "tweaks"
+  ],
+  "notes": {
+    "data": {
+      "fill": "teal",
+      "size": 24,
+      "text": "Every figure is the PRD v7 demo state, the same as the landing page: 300 mock NVDAx at $185, quotes Q = $65,000 (buyer1 $40,000 at 2.50%, buyer2 $25,000 at 3.50%), Reserve R = $5,000, DEX depth D = $12,000 in session and $0 when closed, haircut 4% / 12%, $28,000 drawn by loan p-1. Charts are derived from those numbers and the NYSE calendar, not from history. Solana and Base stay 'Not live yet' until their gates pass.",
+      "w": 440,
+      "x": 4600,
+      "y": 0
+    },
+    "row1": {
+      "kind": "title1",
+      "maxW": 4480,
+      "text": "Find a market and borrow",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "row2": {
+      "kind": "title1",
+      "maxW": 4480,
+      "text": "Manage what you hold, earn from what you commit",
+      "w": 240,
+      "x": 0,
+      "y": 1600
+    },
+    "row3": {
+      "kind": "title1",
+      "maxW": 2960,
+      "text": "Curator and agents",
+      "w": 240,
+      "x": 0,
+      "y": 3400
+    },
+    "tweaks": {
+      "fill": "orange",
+      "size": 24,
+      "text": "Play any screen: forms, sliders, tabs, review drawers and confirmations work. Tweaks: theme on every screen; session on Markets, Market and Borrow; loan status on Loan p-1; viewer on Curator.",
+      "w": 440,
+      "x": 4600,
+      "y": 720
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Market.dc.html",
+    "Borrow.dc.html",
+    "Portfolio.dc.html",
+    "Position.dc.html",
+    "Earn.dc.html",
+    "Console.dc.html",
+    "Agents.dc.html"
+  ],
+  "pages": [],
+  "title": "Nectar Testnet App"
+}

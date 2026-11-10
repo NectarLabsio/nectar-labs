@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nectar Markets</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/90551b2e707e9ae82f26f4d5f7c9d816">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="nx {{themeClass}}">
+  <header class="nav">
+    <a class="brand" href="Main.dc.html" aria-label="Nectar home"><img src="/_blob/76ae889d34e7e0e6ae8dd258fc05f2e1" alt=""><img class="od" src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar"><img class="ol" src="/_blob/b9ab938d8e4e19425a3f0c7a5fb2ab32" alt="nectar"></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="on" href="Main.dc.html" aria-current="page">Markets</a><a href="Borrow.dc.html">Borrow</a><a href="Earn.dc.html">Earn</a><a href="Portfolio.dc.html">Portfolio</a><a class="hide-s" href="Agents.dc.html">Agents</a><a class="hide-s" href="Console.dc.html">Curator</a>
+    </nav>
+    <div class="nav-right">
+      <span class="chip"><i class="{{dotClass}}"></i>{{sessionChip}}</span>
+      <span class="chip hide-s"><span class="chain near">N</span>Testnet</span>
+      <button class="wallet" type="button"><span class="bal">$2,400</span>borrower1.testnet<span class="avatar"></span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="head-row">
+      <div class="stack" style="gap: 10px;">
+        <h1 class="title">Markets</h1>
+        <p class="lede">Borrow against tokenized stocks. Every limit is backed by buyers who have already escrowed USDC.</p>
+      </div>
+      <div class="row"><a class="btn btn-line" href="Earn.dc.html">Commit a quote</a><a class="btn btn-primary" href="Borrow.dc.html">Borrow</a></div>
+    </div>
+
+    <section class="panel pad" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 32px; align-items: center;" aria-label="Exit capacity">
+      <div class="stack" style="gap: 18px; min-width: 0;">
+        <div class="stack" style="gap: 8px;">
+          <span class="k">Committed exit capacity<button class="tip" type="button" aria-label="What is exit capacity">i<span role="tooltip">How much USDC committed buyers, the Reserve and verified DEX depth can pay for collateral after the haircut. Loans are sized against it.</span></button></span>
+          <span class="hero">{{exitVal}}</span>
+          <div class="row" style="gap: 10px; flex-wrap: wrap;"><span class="{{badgeClass}}">{{badgeText}}</span><span class="k">{{altText}}</span></div>
+        </div>
+        <div class="stack" style="gap: 12px;">
+          <div class="meter lg" role="img" aria-label="Backing: quotes {{qTxt}}, Reserve {{rTxt}}, DEX depth {{dTxt}}, haircut {{hTxt}}">
+            <i class="c-q" style="flex-basis: {{qPct}};"></i><i class="c-r" style="flex-basis: {{rPct}};"></i><i class="c-d" style="flex-basis: {{dPct}};"></i><i class="c-h" style="flex-basis: {{hPct}};"></i>
+          </div>
+          <div class="legend">
+            <span><i class="c-q"></i>Quotes <b>{{qTxt}}</b></span>
+            <span><i class="c-r"></i>Reserve <b>{{rTxt}}</b></span>
+            <span><i class="c-d"></i>DEX depth <b>{{dTxt}}</b></span>
+            <span><i class="c-h"></i>Haircut <b>{{hTxt}}</b></span>
+          </div>
+        </div>
+        <div class="stats" style="padding-top: 18px; border-top: 1px solid var(--line);">
+          <div><span class="k">Borrowed</span><span class="v">$28,000</span></div>
+          <div><span class="k">Free to borrow</span><span class="v pos">{{freeVal}}</span></div>
+          <div><span class="k">Used</span><span class="v">{{usedPct}}</span></div>
+        </div>
+      </div>
+
+      <figure class="stack" style="gap: 10px; margin: 0; min-width: 0;">
+        <div class="ph"><span class="h2">This week</span><span class="k">New York time</span></div>
+        <svg viewBox="0 0 600 214" style="width: 100%; height: auto; display: block;" role="img" aria-label="Exit capacity through the week: {{openTxt}} in session, {{closedTxt}} when closed">
+          <defs>
+            <linearGradient id="fillg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--mint); stop-opacity: .32;"></stop><stop offset="1" style="stop-color: var(--mint); stop-opacity: 0;"></stop></linearGradient>
+            <pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3" height="7" style="fill: var(--amber); opacity: .22;"></rect></pattern>
+          </defs>
+          <path class="axl" d="M44 180H592M44 126.7H592M44 73.3H592M44 20H592" fill="none"></path>
+          <text class="ax" x="38" y="184" text-anchor="end">$0</text><text class="ax" x="38" y="130.7" text-anchor="end">$30k</text><text class="ax" x="38" y="77.3" text-anchor="end">$60k</text><text class="ax" x="38" y="24" text-anchor="end">$90k</text>
+          <rect x="44" y="20" width="{{wkA}}" height="160" fill="url(#hatch)"></rect>
+          <rect x="{{wkX}}" y="20" width="{{wkW}}" height="160" fill="url(#hatch)"></rect>
+          <path d="{{areaPath}}" fill="url(#fillg)"></path>
+          <path d="{{linePath}}" fill="none" style="stroke: var(--mint);" stroke-width="2" stroke-linejoin="round"></path>
+          <line x1="{{nowX}}" x2="{{nowX}}" y1="16" y2="180" style="stroke: var(--head);" stroke-width="1.5" stroke-dasharray="3 3"></line>
+          <circle cx="{{nowX}}" cy="{{nowY}}" r="5" style="fill: var(--head);"></circle>
+          <rect x="{{nowLX}}" y="0" width="64" height="18" rx="6" style="fill: var(--head);"></rect>
+          <text x="{{nowTX}}" y="13" text-anchor="middle" style="fill: var(--bg); font: 600 10.5px 'DM Sans', sans-serif;">now</text>
+          <text class="ax" x="83.1" y="204" text-anchor="middle">Mon</text><text class="ax" x="161.4" y="204" text-anchor="middle">Tue</text><text class="ax" x="239.7" y="204" text-anchor="middle">Wed</text><text class="ax" x="318" y="204" text-anchor="middle">Thu</text><text class="ax" x="396.3" y="204" text-anchor="middle">Fri</text><text class="ax" x="474.6" y="204" text-anchor="middle">Sat</text><text class="ax" x="552.9" y="204" text-anchor="middle">Sun</text>
+        </svg>
+        <figcaption class="legend"><span><i class="c-q"></i>In session</span><span><i class="c-h"></i>Weekend window, Shields fixed</span><span><i style="background: var(--head); width: 2px;"></i>Now</span></figcaption>
+      </figure>
+    </section>
+
+    <div class="rail">
+      <section class="panel" aria-label="Markets">
+        <div class="ph" style="padding: 20px 24px 8px;">
+          <span class="h2">All markets</span>
+          <div class="seg" role="group" aria-label="Filter by chain" style="width: 340px; max-width: 100%;">
+            <button type="button" class="{{fAll}}" onClick="{{pickAll}}">All</button><button type="button" class="{{fNear}}" onClick="{{pickNear}}">NEAR</button><button type="button" class="{{fSol}}" onClick="{{pickSol}}">Solana</button><button type="button" class="{{fBase}}" onClick="{{pickBase}}">Base</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Asset</th><th>Exit capacity</th><th class="r">Free to borrow</th><th class="r">Max LTV</th><th>This week</th><th></th></tr></thead>
+            <tbody>
+                <tr hidden="{{hideNear}}">
+                  <td><a class="asset" href="Market.dc.html"><img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt=""><span class="stack" style="display: flex; gap: 2px;"><b>NVDAx</b><span><span class="chain near">N</span>NEAR testnet, mock</span></span></a></td>
+                  <td><span class="stack" style="display: flex; gap: 8px; width: 170px;"><span class="v">{{exitVal}}</span><span class="meter" aria-hidden="true"><i class="c-used" style="flex-basis: {{usedW}};"></i><i class="c-q" style="flex-basis: {{freeW}};"></i></span></span></td>
+                  <td class="r"><span class="v pos">{{freeVal}}</span></td>
+                  <td class="r"><span class="v">85%</span></td>
+                  <td><svg viewBox="0 0 120 36" width="120" height="36" aria-hidden="true"><path d="{{sparkArea}}" style="fill: var(--mint); opacity: .14;"></path><path d="{{sparkLine}}" fill="none" style="stroke: var(--mint);" stroke-width="1.5"></path></svg></td>
+                  <td class="r"><span class="row" style="gap: 8px; justify-content: flex-end;"><a class="btn btn-quiet btn-sm" href="Market.dc.html">Details</a><a class="btn btn-primary btn-sm" href="Borrow.dc.html">Borrow</a></span></td>
+                </tr>
+                <tr class="muted" hidden="{{hideSol}}">
+                  <td><span class="asset"><span class="ghost-ic">NV</span><span class="stack" style="display: flex; gap: 2px;"><b style="color: var(--dim);">NVDAx</b><span><span class="chain sol">S</span>Solana devnet</span></span></span></td>
+                  <td colspan="4"><span class="badge">Not live yet</span><span class="k" style="margin-left: 10px;">Collateral stays in a Solana vault; NEAR signs the settlement.</span></td>
+                  <td class="r"><button class="btn btn-quiet btn-sm" type="button" disabled="" style="opacity: .5;">Notify me</button></td>
+                </tr>
+                <tr class="muted" hidden="{{hideBase}}">
+                  <td><span class="asset"><span class="ghost-ic">NV</span><span class="stack" style="display: flex; gap: 2px;"><b style="color: var(--dim);">NVDA B20</b><span><span class="chain base">B</span>Base Sepolia</span></span></span></td>
+                  <td colspan="4"><span class="badge">Not live yet</span><span class="k" style="margin-left: 10px;">Checks the issuer's transfer policy before any release.</span></td>
+                  <td class="r"><button class="btn btn-quiet btn-sm" type="button" disabled="" style="opacity: .5;">Notify me</button></td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="panel pad stack" style="gap: 18px;" aria-label="Your account">
+        <div class="ph"><span class="h2">Your account</span><a class="link" href="Portfolio.dc.html">Portfolio</a></div>
+        <div class="row" style="gap: 18px;">
+          <svg viewBox="0 0 72 72" width="72" height="72" role="img" aria-label="Health 1.59">
+            <circle cx="36" cy="36" r="29" fill="none" stroke-width="7" style="stroke: var(--raise);"></circle>
+            <circle cx="36" cy="36" r="29" fill="none" stroke-width="7" stroke-linecap="round" pathLength="100" stroke-dasharray="63.6 100" transform="rotate(-90 36 36)" style="stroke: var(--mint);"></circle>
+            <text x="36" y="41" text-anchor="middle" style="fill: var(--head); font: 600 15px Syne, sans-serif;">1.59</text>
+          </svg>
+          <div class="stack" style="gap: 4px;"><span class="k">Health of loan p-1</span><span class="mid">Safe</span><span class="k">Flagged below $116.67</span></div>
+        </div>
+        <div>
+          <div class="kvr"><span>Collateral</span><b>$55,500</b></div>
+          <div class="kvr"><span>Borrowed</span><b>$28,000</b></div>
+          <div class="kvr"><span>You can still borrow</span><b class="pos">$19,175</b></div>
+        </div>
+        <div class="notice" style="align-items: flex-start;">
+          <span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="7.5"></circle><path d="M10 6v4l2.5 2"></path></svg></span>
+          <span class="stack" style="gap: 3px;"><b class="head" style="font-weight: 600;">{{weekendTitle}}</b><span class="k">{{weekendBody}}</span></span>
+        </div>
+        <a class="btn btn-quiet" href="Position.dc.html">Manage loan</a>
+      </aside>
+    </div>
+
+    <div class="grid2">
+      <a class="panel pad row" href="Earn.dc.html" style="gap: 20px; align-items: center;">
+        <img src="/_blob/35efc2e8a41bb153a0ef1e0cb09ba145" alt="" style="width: 84px; height: 84px; flex: none;">
+        <span class="stack" style="gap: 6px;"><span class="mid">Get paid to stand behind a price</span><span class="k">Escrow USDC behind a quote. 70% of every borrower premium goes to quotes and the Reserve.</span><span class="link">Commit a quote</span></span>
+      </a>
+      <a class="panel pad row" href="Agents.dc.html" style="gap: 20px; align-items: center;">
+        <span style="width: 84px; height: 84px; flex: none; border-radius: 22px; display: grid; place-items: center; background: linear-gradient(150deg, var(--raise), var(--bg2)); box-shadow: inset 0 0 0 1px var(--line);"><svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke-width="1.8" aria-hidden="true" style="stroke: var(--mint);"><path d="M8 11l6 5-6 5M17 21h8"></path></svg></span>
+        <span class="stack" style="gap: 6px;"><span class="mid">Agents can borrow too</span><span class="k">One MCP call returns the exact transaction to sign. Referrers earn half the origination fee.</span><span class="link">Connect an agent</span></span>
+      </a>
+    </div>
+
+    <footer class="foot"><span>Testnet with mock collateral. Unaudited.</span><span class="row" style="gap: 18px;"><a href="https://docs.near.org">Docs</a><a href="Console.dc.html">Evidence</a><a href="Console.dc.html">Status</a></span></footer>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"session":{"editor":"enum","options":["in session","weekend"],"default":"in session"},"$preview":{"width":1440,"height":1480}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { chain: 'all' }; }
+  renderVals() {
+    const theme = this.props.theme ?? 'dark';
+    const open = (this.props.session ?? 'in session') === 'in session';
+    const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const Q = 65000, R = 5000, D = open ? 12000 : 0, h = open ? 0.04 : 0.12;
+    const back = Q + R + D, hair = back * h, exit = back - hair, drawn = 28000, free = exit - drawn;
+    const pct = (v) => (v / back * 100).toFixed(2) + '%';
+    const OPEN = 78720, CLOSED = 61600;
+    const X = (hh) => 44 + hh / 168 * 548, Y = (v) => 180 - v / 90000 * 160;
+    let line = 'M' + X(0).toFixed(1) + ' ' + Y(CLOSED).toFixed(1);
+    for (let d = 0; d < 5; d++) {
+      line += ' H' + X(24 * d + 9.5).toFixed(1) + ' V' + Y(OPEN).toFixed(1) + ' H' + X(24 * d + 16).toFixed(1) + ' V' + Y(CLOSED).toFixed(1);
+    }
+    line += ' H' + X(168).toFixed(1);
+    const area = line + ' V180 H44 Z';
+    const sx = (hh) => hh / 168 * 120, sy = (v) => 33 - v / 90000 * 28;
+    let sp = 'M0 ' + sy(CLOSED).toFixed(1);
+    for (let d = 0; d < 5; d++) sp += ' H' + sx(24 * d + 9.5).toFixed(1) + ' V' + sy(OPEN).toFixed(1) + ' H' + sx(24 * d + 16).toFixed(1) + ' V' + sy(CLOSED).toFixed(1);
+    sp += ' H120';
+    const nowH = open ? 35 : 132, nowX = X(nowH), nowY = Y(open ? OPEN : CLOSED);
+    const c = this.state.chain;
+    const seg = (k) => (c === k ? 'on' : '');
+    const pick = (k) => () => this.setState({ chain: k });
+    return {
+      themeClass: theme === 'light' ? 'light' : '',
+      dotClass: open ? 'dot' : 'dot amber', sessionChip: open ? 'NYSE open, closes 16:00 ET' : 'Weekend parameters until Mon 09:30 ET',
+      exitVal: money(exit), freeVal: money(free), usedPct: (drawn / exit * 100).toFixed(1) + '%',
+      badgeClass: open ? 'badge pos' : 'badge warn', badgeText: open ? 'In session' : 'Market closed',
+      altText: open ? 'Drops to $61,600 when the market closes at 16:00 ET' : 'Returns to $78,720 when the market reopens Mon 09:30 ET',
+      qTxt: money(Q), rTxt: money(R), dTxt: money(D), hTxt: '−' + money(hair),
+      qPct: pct(Q), rPct: pct(R), dPct: pct(D), hPct: pct(hair),
+      openTxt: money(OPEN), closedTxt: money(CLOSED),
+      wkA: (X(9.5) - 44).toFixed(1), wkX: X(112).toFixed(1), wkW: (X(168) - X(112)).toFixed(1),
+      linePath: line, areaPath: area, nowX: nowX.toFixed(1), nowY: nowY.toFixed(1), nowLX: (nowX - 32).toFixed(1), nowTX: nowX.toFixed(1),
+      sparkLine: sp, sparkArea: sp + ' V36 H0 Z',
+      usedW: (drawn / exit * 100).toFixed(1) + '%', freeW: (free / exit * 100).toFixed(1) + '%',
+      fAll: seg('all'), fNear: seg('near'), fSol: seg('sol'), fBase: seg('base'),
+      pickAll: pick('all'), pickNear: pick('near'), pickSol: pick('sol'), pickBase: pick('base'),
+      hideNear: !(c === 'all' || c === 'near'), hideSol: !(c === 'all' || c === 'sol'), hideBase: !(c === 'all' || c === 'base'),
+      weekendTitle: open ? 'Weekend in 3 days 5 hours' : 'Weekend parameters are on',
+      weekendBody: open ? 'Your loan stays healthy at 1.59. Free capacity for new loans drops to $33,600 from Friday 16:00 ET.' : 'Your loan stays healthy at 1.59. New loans size at $33,600 of free capacity until Monday 09:30 ET.'
+    };
+  }
+}
+</script>
+</body>
+</html>

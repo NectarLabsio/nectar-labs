@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nectar Borrow</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/90551b2e707e9ae82f26f4d5f7c9d816">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="nx {{themeClass}}">
+  <header class="nav">
+    <a class="brand" href="Main.dc.html" aria-label="Nectar home"><img src="/_blob/76ae889d34e7e0e6ae8dd258fc05f2e1" alt=""><img class="od" src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar"><img class="ol" src="/_blob/b9ab938d8e4e19425a3f0c7a5fb2ab32" alt="nectar"></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="Main.dc.html">Markets</a><a class="on" href="Borrow.dc.html" aria-current="page">Borrow</a><a href="Earn.dc.html">Earn</a><a href="Portfolio.dc.html">Portfolio</a><a class="hide-s" href="Agents.dc.html">Agents</a><a class="hide-s" href="Console.dc.html">Curator</a>
+    </nav>
+    <div class="nav-right">
+      <span class="chip"><i class="{{dotClass}}"></i>{{sessionChip}}</span>
+      <span class="chip hide-s"><span class="chain near">N</span>Testnet</span>
+      <button class="wallet" type="button"><span class="bal">$2,400</span>borrower1.testnet<span class="avatar"></span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="head-row">
+      <div class="stack" style="gap: 10px;">
+        <nav class="crumb" aria-label="Breadcrumb"><a href="Main.dc.html">Markets</a><span>/</span><a href="Market.dc.html">NVDAx</a><span>/</span><span class="head">Borrow</span></nav>
+        <h1 class="title">Borrow USDC</h1>
+      </div>
+      <span class="k">Example: a second loan for borrower1, beside the $28,000 already drawn on NVDAx.</span>
+    </div>
+
+    <div class="split">
+      <section class="panel pad stack" style="gap: 20px;" aria-label="Loan">
+        <div class="seg" role="group" aria-label="Collateral network">
+          <button type="button" class="on"><span class="chain near">N</span>NEAR</button>
+          <button type="button" disabled=""><span class="chain sol">S</span>Solana <small>soon</small></button>
+          <button type="button" disabled=""><span class="chain base">B</span>Base <small>soon</small></button>
+        </div>
+
+        <div class="amt">
+          <div class="amt-top"><label for="units">You lock</label><span>Balance 600 NVDAx</span></div>
+          <div class="amt-mid"><input id="units" type="number" min="0" step="1" value="{{unitsStr}}" onChange="{{onUnits}}"><span class="token"><img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt="">NVDAx</span></div>
+          <div class="amt-bot"><span class="num">{{collValStr}}</span><span class="mini"><button type="button" class="{{u25}}" onClick="{{set150}}">25%</button><button type="button" class="{{u50}}" onClick="{{set300}}">50%</button><button type="button" class="{{u100}}" onClick="{{set600}}">Max</button></span></div>
+        </div>
+
+        <div class="{{borrowBox}}">
+          <div class="amt-top"><label for="amt">You borrow</label><span>Limit <b class="head num">{{limitVal}}</b></span></div>
+          <div class="amt-mid"><input id="amt" type="number" min="0" step="100" value="{{borrowStr}}" onChange="{{onAmt}}" aria-describedby="amtmsg"><span class="token"><span class="coin">$</span>USDC</span></div>
+          <input class="range" type="range" min="0" max="{{limitInt}}" step="100" value="{{sliderVal}}" onChange="{{onAmt}}" aria-label="Borrow amount" style="--track: {{trackBg}};">
+          <div class="amt-bot" id="amtmsg"><span class="{{msgClass}}">{{msgText}}</span><span class="num">{{ltvStr}} LTV</span></div>
+        </div>
+
+        <div class="stack" style="gap: 12px;">
+          <div class="ph"><span class="head" style="font-weight: 600;">Protection</span><button class="tip" type="button" aria-label="About Shields">i<span role="tooltip">A Shield opens your loan at the closed-market limit for a fixed window, so the limit can't be cut halfway through the weekend. Committed buyers stay behind it.</span></button></div>
+          <div class="opts">
+            <button type="button" class="{{oWk}}" onClick="{{pickWk}}"><sc-if value="{{recommend}}" hint-placeholder-val="{{true}}"><span class="flag">Closes in 3d 5h</span></sc-if><span class="t">Weekend Shield</span><span class="d">Limit fixed until Mon 09:30 ET</span><span class="p">{{wkFee}}</span></button>
+            <button type="button" class="{{oStd}}" onClick="{{pickStd}}"><span class="t">Standard</span><span class="d">Limit follows the market session</span><span class="p">{{stdFee}}</span></button>
+            <button type="button" class="opt" disabled=""><span class="t">Event Shield</span><span class="d">No event window set for NVDAx</span><span class="p">25 bps</span></button>
+          </div>
+        </div>
+
+        <div class="stack" style="gap: 12px; padding-top: 16px; border-top: 1px solid var(--line);">
+          <div class="row" style="justify-content: space-between;"><span class="stack"><span class="head" style="font-weight: 600;">Pay a merchant directly</span><span class="k">The USDC goes to their account in the same transaction</span></span><button type="button" class="switch" role="switch" aria-checked="{{payAria}}" aria-label="Pay a merchant directly" onClick="{{togglePay}}"></button></div>
+          <sc-if value="{{payOn}}" hint-placeholder-val="{{false}}">
+            <div class="grid2 fadein" style="gap: 10px;">
+              <label class="stack" style="gap: 6px;" for="rcv"><span class="k">Merchant account</span><input id="rcv" class="txt" type="text" value="merchant.testnet"></label>
+              <label class="stack" style="gap: 6px;" for="memo"><span class="k">Memo</span><input id="memo" class="txt" type="text" value="invoice 1042"></label>
+            </div>
+          </sc-if>
+          <div class="row" style="gap: 10px;"><span class="avatar" style="width: 22px; height: 22px; border-radius: 7px; background: conic-gradient(from 90deg,#a891ff,#51b8ec,#a891ff);"></span><span class="k">Referred by <b class="head" style="font-weight: 500;">agent1.testnet</b>. They receive half the 0.30% origination fee.</span></div>
+        </div>
+      </section>
+
+      <section class="panel pad stack" style="gap: 22px;" aria-label="Outcome">
+        <div class="stack" style="gap: 6px;"><span class="k">{{receiveLabel}}</span><span class="hero">{{receiveVal}}</span><span class="k">after {{feeVal}} in fees</span></div>
+
+        <div class="row" style="gap: 20px; align-items: center; flex-wrap: wrap;">
+          <svg viewBox="0 0 240 132" width="220" height="121" role="img" aria-label="Health after borrowing {{healthStr}}">
+            <path d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke-width="14" stroke-linecap="round" style="stroke: var(--raise);"></path>
+            <path d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke-width="14" stroke-linecap="round" pathLength="100" stroke-dasharray="{{gaugeDash}}" style="stroke: {{gaugeColor}}; transition: stroke-dasharray .5s;"></path>
+            <line x1="76" y1="43.8" x2="62" y2="19.6" stroke-width="2" style="stroke: var(--coral);"></line>
+            <text x="120" y="98" text-anchor="middle" style="fill: var(--head); font: 600 34px Syne, sans-serif;">{{healthStr}}</text>
+            <text x="120" y="120" text-anchor="middle" style="fill: var(--dim); font: 500 12px 'DM Sans', sans-serif;">health after</text>
+          </svg>
+          <div class="stack" style="gap: 6px; flex: 1; min-width: 160px;">
+            <span class="badge {{healthBadge}}" style="align-self: flex-start;">{{healthWord}}</span>
+            <span class="k">Flagged if NVDAx falls below <b class="head num">{{preLiqStr}}</b>, {{dropStr}} from here.</span>
+          </div>
+        </div>
+
+        <div class="stack" style="gap: 10px;">
+          <span class="k">If NVDAx falls</span>
+          <div style="position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; height: 120px; align-items: end; padding-bottom: 22px;">
+            <div style="position: absolute; left: 0; right: 0; bottom: 47.3px; border-top: 1.5px dashed var(--coral); opacity: .7;"></div>
+            <sc-for list="{{stress}}" as="s" hint-placeholder-count="4">
+              <div class="stack" style="gap: 6px; align-items: center; justify-content: flex-end; height: 98px; position: relative;">
+                <span class="num" style="font-size: 12px; color: var(--head);">{{s.h}}</span>
+                <div style="{{s.style}}"></div>
+                <span class="k" style="position: absolute; bottom: -22px;">{{s.label}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div>
+          <div class="kvr"><span>Your limit</span><b>{{limitVal}} ({{limitPct}})</b></div>
+          <div class="kvr"><span>{{feeLabel}}</span><b>{{mainFee}}</b></div>
+          <div class="kvr"><span>Origination, 0.30%</span><b>{{origVal}}</b></div>
+          <div class="kvr"><span class="head">Total fees</span><b>{{feeVal}}</b></div>
+        </div>
+
+        <button type="button" class="btn btn-primary btn-lg" onClick="{{openReview}}" disabled="{{ctaOff}}">{{ctaText}}</button>
+      </section>
+    </div>
+
+    <footer class="foot"><span>Testnet with mock collateral. Unaudited.</span><span class="row" style="gap: 18px;"><a href="https://docs.near.org">Docs</a><a href="Console.dc.html">Evidence</a></span></footer>
+  </main>
+
+  <sc-if value="{{drawer}}" hint-placeholder-val="{{false}}">
+    <div class="scrim" onClick="{{closeReview}}"></div>
+    <aside class="drawer" role="dialog" aria-label="Review borrow">
+      <div class="ph"><span class="h2" style="font-size: 20px;">{{drawerTitle}}</span><button type="button" class="btn btn-quiet btn-sm" onClick="{{closeReview}}" aria-label="Close">Close</button></div>
+      <div class="row" style="gap: 14px;"><img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt="" style="width: 44px; height: 44px;"><span style="color: var(--faint);">→</span><span class="coin" style="width: 40px; height: 40px; font-size: 17px;">$</span><span class="stack"><span class="k">You borrow</span><span class="big">{{borrowFmt}}</span></span></div>
+      <div>
+        <div class="kvr"><span>Collateral locked</span><b>{{unitsStr}} NVDAx</b></div>
+        <div class="kvr"><span>Protection</span><b>{{protText}}</b></div>
+        <div class="kvr"><span>Fees</span><b>{{feeVal}}</b></div>
+        <div class="kvr"><span>{{receiveLabel}}</span><b class="pos">{{receiveVal}}</b></div>
+        <div class="kvr"><span>Health after</span><b>{{healthStr}}</b></div>
+      </div>
+      <div class="stack" style="gap: 8px;">
+        <button type="button" class="link" style="align-self: flex-start;" onClick="{{toggleRaw}}">{{rawLabel}}</button>
+        <sc-if value="{{showRaw}}" hint-placeholder-val="{{false}}"><pre class="code fadein">{{msg}}</pre></sc-if>
+      </div>
+      <div class="stack" style="padding-top: 6px; border-top: 1px solid var(--line);">
+        <div class="{{s1Class}}"><i>{{s1Icon}}</i><span class="stack"><b>Sign in your wallet</b><span>One transaction. 1 yoctoNEAR deposit, no full-access key.</span></span></div>
+        <div class="{{s2Class}}"><i>2</i><span class="stack"><b>Confirmed on NEAR testnet</b><span>{{s2Text}}</span></span><sc-if value="{{signing}}" hint-placeholder-val="{{false}}"><span class="spin" style="margin-left: auto; margin-top: 6px;"></span></sc-if></div>
+      </div>
+      <div class="stack" style="gap: 10px; margin-top: auto;">
+        <sc-if value="{{isReview}}" hint-placeholder-val="{{true}}"><button type="button" class="btn btn-primary btn-lg" onClick="{{confirm}}">Confirm in wallet</button></sc-if>
+        <sc-if value="{{signing}}" hint-placeholder-val="{{false}}"><button type="button" class="btn btn-primary btn-lg" disabled="">Waiting for confirmation</button></sc-if>
+        <sc-if value="{{done}}" hint-placeholder-val="{{false}}"><a class="btn btn-primary btn-lg" href="Portfolio.dc.html">View loan p-2</a><button type="button" class="btn btn-line" onClick="{{closeReview}}">Borrow more</button></sc-if>
+      </div>
+    </aside>
+  </sc-if>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{false}}"><div class="toast" role="status">Loan p-2 opened. {{receiveVal}} sent.<a href="Portfolio.dc.html">View</a></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"session":{"editor":"enum","options":["in session","weekend"],"default":"in session"},"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { units: 300, borrow: 20000, prot: 'weekend', pay: false, stage: null, raw: false, toast: false }; }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._t2); }
+  renderVals() {
+    const st = this.state;
+    const theme = this.props.theme ?? 'dark';
+    const open = (this.props.session ?? 'in session') === 'in session';
+    const m2 = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const m0 = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const price = 185, units = Math.max(0, Number(st.units) || 0), V = units * price;
+    const shield = st.prot === 'weekend';
+    const wk = !open || shield;
+    const h = wk ? 0.12 : 0.04, D = wk ? 0 : 12000, drawn = 28000;
+    const ltvTerm = 0.85 * V, exitTerm = (1 - h) * (65000 + 5000 + D) - drawn;
+    const limit = Math.max(0, Math.floor(Math.min(ltvTerm, exitTerm) / 100) * 100);
+    const staticLim = 0.40 * V;
+    const borrow = Math.max(0, Number(st.borrow) || 0);
+    const premium = shield ? 0 : 0.03 * Math.max(0, borrow - staticLim);
+    const shieldFee = shield ? 0.0015 * borrow : 0;
+    const orig = 0.003 * borrow, fees = premium + shieldFee + orig;
+    const over = borrow > limit;
+    const ltv = V ? borrow / V : 0;
+    const health = borrow > 0 && V > 0 ? 0.80 / ltv : 0;
+    const hc = (x) => x >= 1.5 ? 'var(--mint)' : x >= 1.1 ? 'var(--amber)' : 'var(--coral)';
+    const fpct = limit ? Math.min(100, borrow / limit * 100) : 0;
+    const stress = [0.10, 0.20, 0.30, 0.50].map((x) => {
+      const hv = health * (1 - x);
+      return { label: '−' + Math.round(x * 100) + '%', h: health ? hv.toFixed(2) : 'n/a', style: 'width:100%;max-width:56px;border-radius:8px 8px 3px 3px;height:' + Math.max(4, Math.min(1, hv / 3) * 76).toFixed(1) + 'px;background:' + hc(hv) + ';opacity:.9;transition:height .5s;' };
+    });
+    const set = (o) => () => this.setState(Object.assign({}, o));
+    const stage = st.stage;
+    const msg = 'ft_transfer_call  on nvdax-mock.nectar.testnet\n' +
+      'receiver_id       nectar-core.nectar.testnet\n' +
+      'amount            ' + (units * 1e6).toFixed(0) + '\n' +
+      'deposit           1 yoctoNEAR\n' +
+      'msg  LockCollateralAndBorrow {\n' +
+      '  borrow_usd_e6:  ' + Math.round(borrow * 1e6) + (shield ? ',\n  shield:         Weekend, ends Mon 09:30 ET' : '') +
+      (st.pay ? ',\n  pay_to:         merchant.testnet, "invoice 1042"' : '') + ',\n  referrer:       agent1.testnet }';
+    return {
+      themeClass: theme === 'light' ? 'light' : '',
+      dotClass: open ? 'dot' : 'dot amber', sessionChip: open ? 'NYSE open, closes 16:00 ET' : 'Weekend parameters until Mon 09:30 ET',
+      unitsStr: String(units), onUnits: (e) => this.setState({ units: e.target.value }), collValStr: m2(V),
+      u25: units === 150 ? 'on' : '', u50: units === 300 ? 'on' : '', u100: units === 600 ? 'on' : '',
+      set150: set({ units: 150 }), set300: set({ units: 300 }), set600: set({ units: 600 }),
+      borrowBox: over ? 'amt err' : 'amt',
+      borrowStr: String(borrow), onAmt: (e) => this.setState({ borrow: e.target.value }),
+      limitVal: m0(limit), limitInt: String(Math.max(limit, 100)), sliderVal: String(Math.min(borrow, limit)),
+      trackBg: 'linear-gradient(90deg,' + (over ? 'var(--coral)' : 'var(--mint)') + ' 0 ' + fpct.toFixed(1) + '%,var(--raise) ' + fpct.toFixed(1) + '% 100%)',
+      msgClass: over ? 'neg' : 'dim',
+      msgText: over ? 'Above your limit by ' + m0(borrow - limit) + '. Shared exit capacity is the cap.' : (borrow <= staticLim ? 'Within the 40% a static lender would give' : m0(borrow - staticLim) + ' above the static limit, made possible by committed buyers'),
+      ltvStr: (ltv * 100).toFixed(1) + '%',
+      recommend: open, oWk: shield ? 'opt on' : 'opt', oStd: shield ? 'opt' : 'opt on',
+      pickWk: set({ prot: 'weekend' }), pickStd: set({ prot: 'standard' }),
+      wkFee: '15 bps, ' + m2(0.0015 * borrow), stdFee: '3% above static, ' + m2(0.03 * Math.max(0, borrow - staticLim)),
+      payOn: st.pay, payAria: st.pay ? 'true' : 'false', togglePay: () => this.setState({ pay: !st.pay }),
+      receiveLabel: st.pay ? 'merchant.testnet receives' : 'You receive', receiveVal: m2(Math.max(0, borrow - fees)), feeVal: m2(fees),
+      gaugeDash: (Math.min(1, health / 3) * 100).toFixed(1) + ' 100', gaugeColor: hc(health), healthStr: health ? health.toFixed(2) : 'n/a',
+      healthBadge: health >= 1.5 ? 'pos' : health >= 1.1 ? 'warn' : 'neg', healthWord: health >= 1.5 ? 'Comfortable' : health >= 1.1 ? 'Tight' : 'Too close to the flag line',
+      preLiqStr: units && borrow ? m2(borrow / (0.8 * units)) : 'n/a', dropStr: units && borrow ? (100 - borrow / (0.8 * units) / price * 100).toFixed(1) + '%' : 'n/a',
+      stress,
+      limitPct: V ? (limit / V * 100).toFixed(1) + '%' : '0%',
+      feeLabel: shield ? 'Weekend Shield, 15 bps' : 'Limit premium, 3% above static', mainFee: m2(shield ? shieldFee : premium), origVal: m2(orig),
+      ctaOff: over || borrow <= 0 || units <= 0, ctaText: over ? 'Lower the amount to continue' : 'Review borrow',
+      openReview: set({ stage: 'review', raw: false }), drawer: !!stage,
+      closeReview: () => { clearTimeout(this._t); this.setState({ stage: null }); },
+      drawerTitle: stage === 'done' ? 'Loan opened' : 'Review borrow',
+      borrowFmt: m2(borrow), protText: shield ? 'Weekend Shield to Mon 09:30 ET' : 'Standard',
+      toggleRaw: () => this.setState({ raw: !st.raw }), rawLabel: st.raw ? 'Hide what your wallet signs' : 'Show what your wallet signs', showRaw: st.raw, msg,
+      isReview: stage === 'review', signing: stage === 'signing', done: stage === 'done',
+      s1Class: stage === 'review' ? 'stp now' : 'stp done', s1Icon: stage === 'review' ? '1' : '✓',
+      s2Class: stage === 'done' ? 'stp done' : stage === 'signing' ? 'stp now' : 'stp',
+      s2Text: stage === 'done' ? 'Confirmed. The explorer link comes from the RPC response.' : 'Usually a couple of seconds',
+      confirm: () => {
+        this.setState({ stage: 'signing' });
+        clearTimeout(this._t); clearTimeout(this._t2);
+        this._t = setTimeout(() => { this.setState({ stage: 'done', toast: true }); this._t2 = setTimeout(() => this.setState({ toast: false }), 4500); }, 1600);
+      },
+      toast: st.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

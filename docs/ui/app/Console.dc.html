@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nectar Curator</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/90551b2e707e9ae82f26f4d5f7c9d816">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="nx {{themeClass}}">
+  <header class="nav">
+    <a class="brand" href="Main.dc.html" aria-label="Nectar home"><img src="/_blob/76ae889d34e7e0e6ae8dd258fc05f2e1" alt=""><img class="od" src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar"><img class="ol" src="/_blob/b9ab938d8e4e19425a3f0c7a5fb2ab32" alt="nectar"></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="Main.dc.html">Markets</a><a href="Borrow.dc.html">Borrow</a><a href="Earn.dc.html">Earn</a><a href="Portfolio.dc.html">Portfolio</a><a class="hide-s" href="Agents.dc.html">Agents</a><a class="on hide-s" href="Console.dc.html" aria-current="page">Curator</a>
+    </nav>
+    <div class="nav-right">
+      <span class="chip"><i class="dot"></i>NYSE open, closes 16:00 ET</span>
+      <span class="chip hide-s"><span class="chain near">N</span>Testnet</span>
+      <button class="wallet" type="button"><span class="bal">{{walletBal}}</span>{{walletName}}<span class="avatar" style="{{walletAv}}"></span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="head-row">
+      <div class="stack" style="gap: 10px;">
+        <h1 class="title">Curator</h1>
+        <p class="lede">Tune NVDAx and see what changes before anything is signed. Anyone can read these settings; only the owner account can change them.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Market" style="width: 380px; max-width: 100%;"><button type="button" class="on">NVDAx</button><button type="button" disabled="">Solana <small>soon</small></button><button type="button" disabled="">Base <small>soon</small></button></div>
+    </div>
+
+    <sc-if value="{{readOnly}}" hint-placeholder-val="{{true}}">
+      <div class="notice"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2"></rect><path d="M7 9V6.5a3 3 0 0 1 6 0V9"></path></svg></span><span class="stack" style="gap: 2px;"><b class="head" style="font-weight: 600;">Read only</b><span class="k">You're connected as buyer1.testnet. Try the sliders freely; signing needs nectar.testnet.</span></span></div>
+    </sc-if>
+
+    <div class="split">
+      <section class="panel pad stack" style="gap: 22px;" aria-label="What if">
+        <div class="ph"><span class="h2">What if</span><button type="button" class="link" onClick="{{reset}}">Reset to current</button></div>
+        <sc-for list="{{sliders}}" as="s" hint-placeholder-count="4">
+          <div class="stack" style="gap: 8px;">
+            <div class="ph"><label class="head" style="font-weight: 600;" for="{{s.id}}">{{s.label}}</label><span class="row" style="gap: 10px;"><span class="k">now {{s.cur}}</span><span class="mid num" style="font-size: 18px;">{{s.val}}</span></span></div>
+            <input id="{{s.id}}" class="range" type="range" min="{{s.min}}" max="{{s.max}}" step="{{s.step}}" value="{{s.raw}}" onChange="{{s.on}}" style="--track: {{s.track}};">
+            <span class="k">{{s.help}}</span>
+          </div>
+        </sc-for>
+      </section>
+
+      <section class="panel pad stack" style="gap: 18px;" aria-label="Impact">
+        <div class="ph"><span class="h2">Impact</span><span class="badge {{changedTone}}">{{changedText}}</span></div>
+        <div class="grid2" style="gap: 14px;">
+          <div class="stack" style="gap: 10px; padding: 16px; border-radius: 16px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line);">
+            <span class="k">In session</span>
+            <span class="big">{{sExit}}</span><span class="k">exit capacity <span class="{{sDeltaCls}}">{{sDelta}}</span></span>
+            <span class="hr"></span>
+            <span class="k">Free to borrow <b class="head num">{{sFree}}</b></span>
+          </div>
+          <div class="stack" style="gap: 10px; padding: 16px; border-radius: 16px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line);">
+            <span class="k">Closed or Shield</span>
+            <span class="big">{{cExit}}</span><span class="k">exit capacity <span class="{{cDeltaCls}}">{{cDelta}}</span></span>
+            <span class="hr"></span>
+            <span class="k">Free to borrow <b class="head num">{{cFree}}</b></span>
+          </div>
+        </div>
+        <div>
+          <div class="kvr"><span>Weekend limit, new 300 NVDAx loan</span><b>{{newLimit}}</b></div>
+          <div class="kvr"><span>Premium on a $30,000 standard loan</span><b>{{premEx}}</b></div>
+          <div class="kvr"><span>Open loans newly at risk</span><b>0, they keep their flag line</b></div>
+        </div>
+        <sc-if value="{{negFree}}" hint-placeholder-val="{{false}}"><div class="notice neg"><span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 3l8 14H2z"></path><path d="M10 8v4"></path></svg></span><span class="k">Existing loans would exceed exit capacity when closed. New borrowing would stop until quotes grow.</span></div></sc-if>
+        <sc-if value="{{confirming}}" hint-placeholder-val="{{false}}">
+          <div class="stack fadein" style="gap: 10px; padding: 16px; border-radius: 16px; box-shadow: inset 0 0 0 1px var(--mint-line); background: var(--mint-soft);">
+            <b class="head">Owner transaction on nectar-core.nectar.testnet</b>
+            <pre class="code" style="background: var(--panel);">{{diff}}</pre>
+            <span class="k">New borrows use the new values at once. The change and its transaction go into the evidence log.</span>
+          </div>
+        </sc-if>
+        <button type="button" class="btn btn-primary btn-lg" onClick="{{primary}}" disabled="{{primaryOff}}">{{primaryText}}</button>
+      </section>
+    </div>
+
+    <div class="grid2">
+      <section class="panel pad" aria-label="Session and price">
+        <div class="ph" style="margin-bottom: 8px;"><span class="h2">Session and price</span><span class="badge pos">Contract decides</span></div>
+        <div class="kvr"><span>Calendar</span><b>NYSE 2026 and 2027</b></div>
+        <div class="kvr"><span>Max price age</span><b>15 min</b></div>
+        <div class="kvr"><span>Oracle</span><b>owner price, 1% max confidence</b></div>
+        <div class="kvr"><span>Weekend reference price</span><b>$185.00, owner reference</b></div>
+        <div class="kvr" style="align-items: center;"><span>Force closed</span><button type="button" class="switch" role="switch" aria-checked="{{fcAria}}" aria-label="Force the session closed" onClick="{{toggleFc}}" disabled="{{readOnly}}" style="{{fcStyle}}"></button></div>
+        <p class="k" style="padding-top: 10px;">Nothing outside the contract can open a session. Forcing it closed applies weekend values at once.</p>
+      </section>
+      <section class="panel pad" aria-label="Corporate actions">
+        <div class="ph" style="margin-bottom: 8px;"><span class="h2">Corporate actions</span><span class="badge">None pending</span></div>
+        <div class="kvr"><span>Multiplier</span><b>1.000000</b></div>
+        <div class="kvr"><span>Price kind</span><b>Underlying</b></div>
+        <div class="kvr"><span>Largest change without notice</span><b>+5% per call</b></div>
+        <div class="kvr"><span>Bigger change or decrease</span><b>announce 1 h ahead</b></div>
+        <div class="row" style="gap: 8px; padding-top: 14px;"><button type="button" class="btn btn-quiet btn-sm" disabled="{{readOnly}}">Set multiplier</button><button type="button" class="btn btn-quiet btn-sm" disabled="{{readOnly}}">Announce an action</button></div>
+      </section>
+    </div>
+
+    <div class="grid3">
+      <section class="panel pad" aria-label="Settlement and fees">
+        <div class="ph" style="margin-bottom: 8px;"><span class="h2">Settlement and fees</span></div>
+        <div class="kvr"><span>Quote discount cap</span><b>5.00%</b></div>
+        <div class="kvr"><span>Reserve discount</span><b>4.00%</b></div>
+        <div class="kvr"><span>Profit-Lock fills a day</span><b>$20,000</b></div>
+        <div class="kvr"><span>Shields</span><b>15 / 25 bps</b></div>
+        <div class="kvr"><span>Origination</span><b>0.30%, half to referrer</b></div>
+      </section>
+      <section class="panel pad" aria-label="Keepers">
+        <div class="ph" style="margin-bottom: 8px;"><span class="h2">Keepers</span><span class="row" style="gap: 8px;"><i class="dot off"></i><span class="k">offline</span></span></div>
+        <div class="kvr"><span>Account</span><b>keeper.nectar.testnet</b></div>
+        <div class="kvr"><span>Key</span><b>function-call only</b></div>
+        <div class="kvr"><span>Triggers, 7 days</span><b>0</b></div>
+        <div class="kvr"><span>Gas reserve target</span><b>5 NEAR</b></div>
+      </section>
+      <section class="panel pad" aria-label="Evidence">
+        <div class="ph" style="margin-bottom: 8px;"><span class="h2">Evidence</span><span class="k">per gate</span></div>
+        <div class="kvr"><span>Contract tests</span><span class="badge">Pending</span></div>
+        <div class="kvr"><span>Testnet deploy</span><span class="badge">Pending</span></div>
+        <div class="kvr"><span>OutLayer pricing</span><span class="badge">Pending</span></div>
+        <div class="kvr"><span>Solana settlement</span><span class="badge">Pending</span></div>
+        <div class="kvr"><span>Base settlement</span><span class="badge">Pending</span></div>
+      </section>
+    </div>
+
+    <footer class="foot"><span>Testnet with mock collateral. Unaudited.</span><span class="row" style="gap: 18px;"><a href="https://docs.near.org">Docs</a><a href="Main.dc.html">Markets</a></span></footer>
+  </main>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{false}}"><div class="toast" role="status">Parameters updated on nectar-core.<a href="Market.dc.html">See NVDAx</a></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"viewer":{"editor":"enum","options":["read only","owner"],"default":"read only"},"$preview":{"width":1440,"height":1460}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { hs: 400, hc: 1200, ltv: 8500, prem: 300, confirm: false, busy: false, toast: false, fc: false }; }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._t2); }
+  renderVals() {
+    const st = this.state;
+    const theme = this.props.theme ?? 'dark';
+    const owner = (this.props.viewer ?? 'read only') === 'owner';
+    const m0 = (n) => (n < 0 ? '−$' : '$') + Math.abs(Math.round(n)).toLocaleString('en-US');
+    const m2 = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const pct = (bps) => (bps / 100).toFixed(2) + '%';
+    const sExit = (1 - st.hs / 10000) * 82000, cExit = (1 - st.hc / 10000) * 70000;
+    const sNow = 78720, cNow = 61600;
+    const delta = (a, b) => Math.round(a - b) === 0 ? 'unchanged' : (a > b ? '+' : '−') + '$' + Math.abs(Math.round(a - b)).toLocaleString('en-US');
+    const dcls = (a, b) => Math.round(a - b) === 0 ? 'dim' : a > b ? 'pos' : 'neg';
+    const changed = st.hs !== 400 || st.hc !== 1200 || st.ltv !== 8500 || st.prem !== 300;
+    const tr = (v, min, max) => { const p = ((v - min) / (max - min) * 100).toFixed(1); return 'linear-gradient(90deg,var(--mint) 0 ' + p + '%,var(--raise) ' + p + '% 100%)'; };
+    const mk = (id, label, key, min, max, step, cur, help) => ({ id, label, min: String(min), max: String(max), step: String(step), raw: String(st[key]), val: pct(st[key]), cur: pct(cur), help, track: tr(st[key], min, max), on: (e) => this.setState({ [key]: Number(e.target.value), confirm: false }) });
+    const sliders = [
+      mk('hs', 'Haircut in session', 'hs', 0, 1500, 50, 400, 'Applied to quotes, Reserve and DEX depth while the market is open.'),
+      mk('hc', 'Haircut when closed', 'hc', 0, 2500, 50, 1200, 'Applied on weekends, holidays, stale prices and to every Shield.'),
+      mk('ltv', 'Max LTV per loan', 'ltv', 5000, 9000, 100, 8500, 'Caps each loan against its own collateral.'),
+      mk('prem', 'Limit premium above static', 'prem', 0, 1000, 25, 300, 'Charged on the part of a loan above 40% LTV. Funds buyer fees.')
+    ];
+    const changes = [];
+    if (st.hs !== 400) changes.push('base_haircut_bps     400 → ' + st.hs);
+    if (st.hc !== 1200) changes.push('weekend_haircut_bps  1200 → ' + st.hc);
+    if (st.ltv !== 8500) changes.push('max_nectar_ltv_bps   8500 → ' + st.ltv);
+    if (st.prem !== 300) changes.push('limit_premium_bps    300 → ' + st.prem);
+    const start = () => {
+      if (!st.confirm) { this.setState({ confirm: true }); return; }
+      this.setState({ busy: true }); clearTimeout(this._t); clearTimeout(this._t2);
+      this._t = setTimeout(() => { this.setState({ busy: false, confirm: false, toast: true }); this._t2 = setTimeout(() => this.setState({ toast: false }), 4000); }, 1300);
+    };
+    return {
+      themeClass: theme === 'light' ? 'light' : '',
+      readOnly: !owner, walletName: owner ? 'nectar.testnet' : 'buyer1.testnet', walletBal: owner ? 'owner' : '$120,000',
+      walletAv: owner ? '' : 'background: conic-gradient(from 30deg,#ffd27a,#faaf2e,#ffd27a);',
+      sliders, reset: () => this.setState({ hs: 400, hc: 1200, ltv: 8500, prem: 300, confirm: false }),
+      changedTone: changed ? 'warn' : '', changedText: changed ? changes.length + ' change' + (changes.length > 1 ? 's' : '') : 'No changes',
+      sExit: m0(sExit), cExit: m0(cExit), sDelta: delta(sExit, sNow), cDelta: delta(cExit, cNow), sDeltaCls: dcls(sExit, sNow), cDeltaCls: dcls(cExit, cNow),
+      sFree: m0(sExit - 28000), cFree: m0(cExit - 28000), negFree: cExit - 28000 < 0,
+      newLimit: m0(Math.max(0, Math.min(st.ltv / 10000 * 55500, cExit - 28000))), premEx: m2(st.prem / 10000 * Math.max(0, 30000 - 22200)),
+      confirming: st.confirm && changed, diff: changes.join('\n') || 'no changes',
+      primary: start, primaryOff: !owner || !changed || st.busy,
+      primaryText: !owner ? 'Only nectar.testnet can sign changes' : !changed ? 'Move a slider to propose a change' : st.busy ? 'Confirming on NEAR testnet' : st.confirm ? 'Sign as nectar.testnet' : 'Review ' + changes.length + ' change' + (changes.length > 1 ? 's' : ''),
+      fcAria: st.fc ? 'true' : 'false', toggleFc: () => this.setState({ fc: !st.fc }), fcStyle: owner ? '' : 'opacity:.5;cursor:not-allowed;',
+      toast: st.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

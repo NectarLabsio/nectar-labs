@@ -52,6 +52,32 @@ Semantic (derived, both themes): `--good` = `--accent`; `--danger` = `#ff8a80` d
 - Responsive: container query / media at 760 px; tables switch to `.rt` stacked rows with
   `data-label` cells; nav collapses to a menu button.
 
+## 3b. Landing objects and motion (2026-11-10, landing/index.html)
+Direction taken from falcon.finance and morpho.org (layout and motion ideas only; no copy, imagery or logos reused).
+- Hero: framed 24 px grid with corner crosshairs. Live three.js mark (`packages/ui/3d/nectar3d.js`, three@0.160.0,
+  MeshPhysicalMaterial `#13e39c`, roughness .22, metalness .25, clearcoat 1, no tone mapping, RoomEnvironment) over a
+  2D canvas of converging quote lines, commitment rings and a ticking accent arc. `hero.webp` is the static fallback
+  and the first frame. Counters roll digit by digit once on load.
+- How it works: one position, four states, in a dark "chamber" panel that pins while you scroll (≥ 900 × 620 px,
+  motion allowed); otherwise a static, clickable stepper. Numbers must match PRD §4.2.
+- Role tiles: drawn glass hexagons on a mint field (SVG, theme tokens `--tile-*`, `--glass-*`), with real figures.
+- Closing panel: pre-rendered hex tokens (`packages/ui/3d/tok*.webp`) with depth blur and scroll parallax.
+- Footer: giant wordmark as a CSS mask fading into the page.
+- Primary button: `--heading` pill with the mint line arrow (`--arrow`); mono uppercase only on the two large CTAs.
+- Reduced motion: no intro, no ambient loops, no pinning, one static 3D frame.
+
+## 3c. App (v2, 2026-11-10, docs/ui/app/ and nectar-app.css)
+- Type in the app: DM Sans 14 px for UI text, DM Mono for numbers and addresses only, Syne for titles (42 px) and hero
+  numbers (56 px). The landing keeps DM Mono body.
+- Top bar: logo, Markets / Borrow / Earn / Portfolio / Agents / Curator with a mint underline, session chip with a
+  pulsing dot (mint open, amber weekend), Testnet chip, wallet with balance.
+- Panels: one elevated surface (gradient panel, 1 px inner line, soft shadow), radii 22 / 16 / 12. No nested borders.
+- Assets use the rendered hex token (`packages/ui/3d/tokC.webp`); USDC is a drawn blue coin; chains are 16 px squares.
+- Visual per screen: week chart, buy-side ladder, donut, health gauge with stress bars, price runway simulator,
+  live ladder placement, what-if sliders. Colours: Q mint, R teal, D sky, haircut amber hatch, debt ink.
+- One primary (mint) action per screen. Review drawer, pending spinner, toast with the next step. Signing payload
+  sits behind "Show what your wallet signs".
+
 ## 4. Logo
 Three mint hexagons in a triangular cluster — one on top, two below, edges nearly touching — with a soft
 mint glow in the source file, plus the lowercase rounded geometric "nectar" wordmark (white on dark). Source:
@@ -77,12 +103,18 @@ States every interactive component has: default, hover, focus-visible (2 px `--a
 active, disabled (opacity .5), loading.
 
 ## 6. Voice
+Copy rules (PRD v7): never "insurance" (a Shield is "a weekend-safe limit with committed buyers behind it"), never
+"without liquidations" (the line is "without fire-sales"), never "live" before EVIDENCE shows it.
 No hackathon branding in the UI: no "NEAR Hackathon" banner, badge or copy on the landing, app or docs nav.
 Say "testnet" and "mock collateral" instead; hackathon context is for README, EVIDENCE and SUBMISSION only.
 
 Short sentences. Name things by what people recognize (a "quote", a "limit", a "settlement"). Every
 action button says what happens ("Fund quote", then toast "Quote funded"). Numbers carry units and
 bps. Disclosures are plain: "Mock collateral on testnet", "Owner oracle active", "Fallback pricing".
+
+## 6b. Position Notes
+NEP-171 Note art is `packages/ui/notes/position-note.svg` (600×360, under 2 KB, fixed dark palette because it is shown
+in wallets and on X). Placeholders and per-type metrics are in `packages/ui/notes/README.md`.
 
 ## 7. Accessibility
 Contrast ≥ 4.5:1 for text in both themes (checked at G3), focus visible everywhere, all controls

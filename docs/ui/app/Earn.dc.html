@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nectar Earn</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/90551b2e707e9ae82f26f4d5f7c9d816">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="nx {{themeClass}}">
+  <header class="nav">
+    <a class="brand" href="Main.dc.html" aria-label="Nectar home"><img src="/_blob/76ae889d34e7e0e6ae8dd258fc05f2e1" alt=""><img class="od" src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar"><img class="ol" src="/_blob/b9ab938d8e4e19425a3f0c7a5fb2ab32" alt="nectar"></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="Main.dc.html">Markets</a><a href="Borrow.dc.html">Borrow</a><a class="on" href="Earn.dc.html" aria-current="page">Earn</a><a href="Portfolio.dc.html">Portfolio</a><a class="hide-s" href="Agents.dc.html">Agents</a><a class="hide-s" href="Console.dc.html">Curator</a>
+    </nav>
+    <div class="nav-right">
+      <span class="chip"><i class="dot"></i>NYSE open, closes 16:00 ET</span>
+      <span class="chip hide-s"><span class="chain near">N</span>Testnet</span>
+      <button class="wallet" type="button"><span class="bal">$2,400</span>borrower1.testnet<span class="avatar"></span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="head-row">
+      <div class="stack" style="gap: 10px;">
+        <h1 class="title">Earn</h1>
+        <p class="lede">Stand behind NVDAx loans. Borrowers pay a premium for the limit you make possible, and 70% of it goes to quotes and the Reserve.</p>
+      </div>
+      <div class="seg" role="tablist" aria-label="Ways to earn" style="width: 380px; max-width: 100%;">
+        <button type="button" role="tab" class="{{mQuote}}" aria-selected="{{aQuote}}" onClick="{{goQuote}}">Commit a quote</button>
+        <button type="button" role="tab" class="{{mRes}}" aria-selected="{{aRes}}" onClick="{{goRes}}">Join the Reserve</button>
+      </div>
+    </div>
+
+    <sc-if value="{{isQuote}}" hint-placeholder-val="{{true}}">
+      <div class="split fadein">
+        <section class="panel pad stack" style="gap: 20px;" aria-label="Your quote">
+          <div class="amt">
+            <div class="amt-top"><label for="qa">You commit</label><span>Balance $2,400.00 + top up from any wallet</span></div>
+            <div class="amt-mid"><input id="qa" type="number" min="0" step="1000" value="{{amtStr}}" onChange="{{onAmt}}"><span class="token"><span class="coin">$</span>USDC</span></div>
+            <div class="amt-bot"><span>Escrowed in nectar-core. One dollar backs one quote.</span><span class="mini"><button type="button" onClick="{{a10}}">$10k</button><button type="button" onClick="{{a25}}">$25k</button><button type="button" onClick="{{a50}}">$50k</button></span></div>
+          </div>
+          <div class="stack" style="gap: 10px;">
+            <div class="ph"><label class="head" style="font-weight: 600;" for="cap">Discount ceiling<button class="tip" type="button" aria-label="About the ceiling">i<span role="tooltip">The most you will take off the oracle price when a loan settles to you. A TEE may clear you cheaper, never higher. 5.00% is the cap for NVDAx.</span></button></label><span class="mid num">{{capStr}}</span></div>
+            <input id="cap" class="range" type="range" min="25" max="500" step="25" value="{{capVal}}" onChange="{{onCap}}" style="--track: {{capTrack}};">
+            <div class="row" style="justify-content: space-between; font: 500 11px 'DM Mono', monospace; color: var(--faint);"><span>0.25%</span><span>you buy at or above <b class="head">{{buyAt}}</b></span><span>5.00%</span></div>
+          </div>
+          <div class="stack" style="gap: 10px;">
+            <span class="head" style="font-weight: 600;">Notice to exit</span>
+            <div class="seg" role="group" aria-label="Notice period"><button type="button" class="{{n7}}" onClick="{{pn7}}">7 days</button><button type="button" class="{{n14}}" onClick="{{pn14}}">14 days</button><button type="button" class="{{n30}}" onClick="{{pn30}}">30 days</button></div>
+            <span class="k">Starting an exit removes your quote from new borrowing at once. Loans already backed by it stay backed until it unlocks.</span>
+          </div>
+          <div class="row" style="justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--line);"><span class="stack"><span class="head" style="font-weight: 600;">Accept voluntary fills</span><span class="k">Healthy borrowers can sell to you through Profit-Lock, up to $20,000 a day in total</span></span><button type="button" class="switch" role="switch" aria-checked="{{volAria}}" aria-label="Accept voluntary fills" onClick="{{toggleVol}}"></button></div>
+        </section>
+
+        <section class="panel pad stack" style="gap: 20px;" aria-label="Where you stand">
+          <div class="ph"><span class="h2">Where you'd stand</span><span class="k">settlement fills from the top</span></div>
+          <div class="stack" style="gap: 8px;">
+            <sc-for list="{{ladder}}" as="l" hint-placeholder-count="4">
+              <div style="{{l.box}}">
+                <span class="num" style="width: 18px; color: var(--faint);">{{l.n}}</span>
+                <span class="stack" style="flex: 1; min-width: 0;"><span style="{{l.nameStyle}}">{{l.who}}</span><span class="k">{{l.at}}</span></span>
+                <span class="stack" style="width: 38%; gap: 6px; align-items: flex-end;"><span class="num" style="color: var(--head); font-size: 13px;">{{l.size}}</span><span style="display: block; width: 100%; height: 6px; border-radius: 6px; background: var(--raise); overflow: hidden;"><span style="{{l.bar}}"></span></span></span>
+                <span class="num" style="width: 54px; text-align: right; color: var(--head);">{{l.cap}}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div class="stats" style="padding-top: 18px; border-top: 1px solid var(--line);">
+            <div><span class="k">Share of buyer fees</span><span class="mid">{{shareStr}}</span></div>
+            <div><span class="k">From the last 7 days</span><span class="mid pos">{{weekStr}}</span></div>
+            <div><span class="k">You could receive</span><span class="mid">{{unitsMax}}</span></div>
+          </div>
+          <span class="k">Last week's figure is one $174 premium, shared out. Past fees, not a rate.</span>
+          <button type="button" class="btn btn-primary btn-lg" onClick="{{submitQ}}" disabled="{{qOff}}">{{qText}}</button>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isRes}}" hint-placeholder-val="{{false}}">
+      <div class="split fadein">
+        <section class="panel pad stack" style="gap: 20px;" aria-label="Reserve deposit">
+          <div class="{{rBox}}">
+            <div class="amt-top"><label for="ra">You deposit</label><span>Balance $2,400.00</span></div>
+            <div class="amt-mid"><input id="ra" type="number" min="0" step="10" value="{{rStr}}" onChange="{{onR}}"><span class="token"><span class="coin">$</span>USDC</span></div>
+            <div class="amt-bot"><span class="{{rMsgCls}}">{{rMsg}}</span><span class="mini"><button type="button" onClick="{{r10}}">$10</button><button type="button" onClick="{{r100}}">$100</button><button type="button" onClick="{{r1000}}">$1,000</button></span></div>
+          </div>
+          <div class="stats">
+            <div><span class="k">Realised APR, 7 days</span><span class="mid">9.07%</span></div>
+            <div><span class="k">Your share</span><span class="mid">{{rShare}}</span></div>
+            <div><span class="k">Notice to exit</span><span class="mid">7 days</span></div>
+          </div>
+          <span class="k">$8.70 earned on $5,000 last week. The Reserve never promises a rate.</span>
+          <button type="button" class="btn btn-primary btn-lg" onClick="{{submitR}}" disabled="{{rOff}}">{{rText}}</button>
+        </section>
+        <section class="panel pad stack" style="gap: 14px;" aria-label="Settlement order">
+          <div class="ph"><span class="h2">When a loan settles</span></div>
+          <div class="row" style="gap: 14px; align-items: stretch;"><span style="width: 4px; border-radius: 4px; background: var(--mint); flex: none;"></span><span class="stack" style="gap: 2px; padding: 6px 0;"><b class="head">1. Committed quotes, lowest ceiling first</b><span class="k">$65,000 at 2.50% and 3.50%</span></span></div>
+          <div class="row" style="gap: 14px; align-items: stretch; padding: 12px; margin: 0 -12px; border-radius: 14px; background: var(--mint-soft); box-shadow: inset 0 0 0 1px var(--mint-line);"><span style="width: 4px; border-radius: 4px; background: var(--teal); flex: none;"></span><span class="stack" style="gap: 2px;"><b class="head">2. The Reserve, at 4.00%</b><span class="k">{{rAfter}} after your deposit. Seized NVDAx is shared by Reserve Notes in proportion to their shares.</span></span></div>
+          <div class="row" style="gap: 14px; align-items: stretch;"><span style="width: 4px; border-radius: 4px; background: var(--raise); flex: none;"></span><span class="stack" style="gap: 2px; padding: 6px 0;"><b class="head">3. The loan stays settling</b><span class="k">The curator handles what's left. Never the order book.</span></span></div>
+          <span class="k" style="padding-top: 10px; border-top: 1px solid var(--line);">On testnet the Reserve fills NEAR-side collateral only.</span>
+        </section>
+      </div>
+    </sc-if>
+
+    <div class="grid2">
+      <section class="panel pad stack" style="gap: 16px;" aria-label="Where premiums go">
+        <div class="ph"><span class="h2">Where every premium goes</span></div>
+        <div class="meter lg" role="img" aria-label="70% buyers and Reserve, 20% lenders, 10% treasury"><i class="c-q" style="flex-basis: 70%;"></i><i class="c-d" style="flex-basis: 20%;"></i><i style="flex-basis: 10%; background: var(--violet);"></i></div>
+        <div class="legend"><span><i class="c-q"></i>Quotes and Reserve <b>70%</b></span><span><i class="c-d"></i>Lenders <b>20%</b></span><span><i style="background: var(--violet);"></i>Treasury <b>10%</b></span></div>
+        <span class="k">Split between quotes and the Reserve in proportion to their size, then pro rata within each.</span>
+      </section>
+      <section class="panel pad stack" style="gap: 12px;" aria-label="Your commitments">
+        <div class="ph"><span class="h2">Your commitments</span><a class="link" href="Portfolio.dc.html">Portfolio</a></div>
+        <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 34px; height: 34px; border-radius: 10px; color: var(--teal);">R</span><span class="stack"><span class="head">Reserve r-1, NVDAx</span><span class="k">1.00% share, fees $0.09</span></span></span><b>$50.00</b></div>
+        <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 34px; height: 34px; border-radius: 10px;">Q</span><span class="stack"><span class="head" style="color: var(--dim);">No quotes yet</span><span class="k">Your first quote mints a Note you can hold or transfer</span></span></span><b></b></div>
+      </section>
+    </div>
+
+    <footer class="foot"><span>Testnet with mock collateral. Unaudited.</span><span class="row" style="gap: 18px;"><a href="https://docs.near.org">Docs</a><a href="Console.dc.html">Evidence</a></span></footer>
+  </main>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{false}}"><div class="toast" role="status">{{toastText}}<a href="Portfolio.dc.html">Portfolio</a></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { mode: 'quote', amt: 25000, cap: 200, notice: 7, vol: true, r: 100, busy: false, toast: null }; }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._t2); }
+  renderVals() {
+    const st = this.state;
+    const theme = this.props.theme ?? 'dark';
+    const m2 = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const m0 = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const amt = Math.max(0, Number(st.amt) || 0), cap = Number(st.cap) || 200;
+    const Q = 65000, R = 5000;
+    const share = amt ? amt / (Q + R + amt) : 0;
+    const raw = [
+      { who: 'q-1, buyer1.testnet', size: 40000, bps: 250 },
+      { who: 'q-2, buyer2.testnet', size: 25000, bps: 350 },
+      { who: 'Nectar Reserve', size: 5000, bps: 400 },
+      { who: 'Your quote', size: amt, bps: cap, me: true }
+    ].sort((a, b) => a.bps - b.bps || (a.me ? -1 : 1));
+    const mx = Math.max(40000, amt);
+    const ladder = raw.map((l, i) => ({
+      n: String(i + 1), who: l.who, size: m0(l.size), cap: (l.bps / 100).toFixed(2) + '%', at: 'buys at ≥ ' + m2(185 * (1 - l.bps / 10000)),
+      box: 'display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:14px;transition:background .3s;' + (l.me ? 'background:var(--mint-soft);box-shadow:inset 0 0 0 1.5px var(--mint);' : 'background:var(--bg2);box-shadow:inset 0 0 0 1px var(--line);'),
+      nameStyle: 'font-weight:600;color:' + (l.me ? 'var(--pos)' : 'var(--head)') + ';',
+      bar: 'display:block;height:100%;border-radius:6px;transition:width .4s;width:' + (l.size / mx * 100).toFixed(1) + '%;background:' + (l.me ? 'var(--mint)' : l.who === 'Nectar Reserve' ? 'var(--teal)' : 'var(--dim)') + ';'
+    }));
+    const ra = Math.max(0, Number(st.r) || 0), small = ra < 10;
+    const t = st.mode;
+    const run = (text) => () => {
+      if (st.busy) return;
+      this.setState({ busy: true }); clearTimeout(this._t); clearTimeout(this._t2);
+      this._t = setTimeout(() => { this.setState({ busy: false, toast: text }); this._t2 = setTimeout(() => this.setState({ toast: null }), 4000); }, 1300);
+    };
+    const set = (o) => () => this.setState(o);
+    const fp = ((cap - 25) / 475 * 100).toFixed(1);
+    return {
+      themeClass: theme === 'light' ? 'light' : '',
+      mQuote: t === 'quote' ? 'on' : '', mRes: t === 'reserve' ? 'on' : '', aQuote: t === 'quote' ? 'true' : 'false', aRes: t === 'reserve' ? 'true' : 'false',
+      goQuote: set({ mode: 'quote' }), goRes: set({ mode: 'reserve' }), isQuote: t === 'quote', isRes: t === 'reserve',
+      amtStr: String(amt), onAmt: (e) => this.setState({ amt: e.target.value }), a10: set({ amt: 10000 }), a25: set({ amt: 25000 }), a50: set({ amt: 50000 }),
+      capStr: (cap / 100).toFixed(2) + '%', capVal: String(cap), onCap: (e) => this.setState({ cap: Number(e.target.value) }),
+      capTrack: 'linear-gradient(90deg,var(--mint) 0 ' + fp + '%,var(--raise) ' + fp + '% 100%)', buyAt: m2(185 * (1 - cap / 10000)),
+      n7: st.notice === 7 ? 'on' : '', n14: st.notice === 14 ? 'on' : '', n30: st.notice === 30 ? 'on' : '',
+      pn7: set({ notice: 7 }), pn14: set({ notice: 14 }), pn30: set({ notice: 30 }),
+      volAria: st.vol ? 'true' : 'false', toggleVol: () => this.setState({ vol: !st.vol }),
+      ladder, shareStr: (share * 100).toFixed(1) + '%', weekStr: m2(174 * 0.70 * share), unitsMax: (amt / (185 * (1 - cap / 10000))).toFixed(1) + ' NVDAx',
+      submitQ: run('Quote q-3 funded with ' + m0(amt) + '.'), qOff: st.busy || amt <= 0, qText: st.busy ? 'Confirming on NEAR testnet' : 'Commit ' + m0(amt),
+      rBox: small ? 'amt err' : 'amt', rStr: String(ra), onR: (e) => this.setState({ r: e.target.value }),
+      r10: set({ r: 10 }), r100: set({ r: 100 }), r1000: set({ r: 1000 }),
+      rMsgCls: small ? 'neg' : 'dim', rMsg: small ? 'The minimum is $10.00' : 'Mints a Reserve Note holding your shares',
+      rShare: ((ra / (R + ra)) * 100).toFixed(2) + '%', rAfter: m0(R + ra),
+      submitR: run('Deposited ' + m2(ra) + ' to the Reserve.'), rOff: st.busy || small, rText: st.busy ? 'Confirming on NEAR testnet' : small ? 'Enter at least $10' : 'Deposit ' + m2(ra),
+      toast: !!st.toast, toastText: st.toast || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

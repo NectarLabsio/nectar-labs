@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nectar Loan p-1</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/90551b2e707e9ae82f26f4d5f7c9d816">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="nx {{themeClass}}">
+  <header class="nav">
+    <a class="brand" href="Main.dc.html" aria-label="Nectar home"><img src="/_blob/76ae889d34e7e0e6ae8dd258fc05f2e1" alt=""><img class="od" src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar"><img class="ol" src="/_blob/b9ab938d8e4e19425a3f0c7a5fb2ab32" alt="nectar"></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="Main.dc.html">Markets</a><a href="Borrow.dc.html">Borrow</a><a href="Earn.dc.html">Earn</a><a class="on" href="Portfolio.dc.html">Portfolio</a><a class="hide-s" href="Agents.dc.html">Agents</a><a class="hide-s" href="Console.dc.html">Curator</a>
+    </nav>
+    <div class="nav-right">
+      <span class="chip"><i class="dot"></i>NYSE open, closes 16:00 ET</span>
+      <span class="chip hide-s"><span class="chain near">N</span>Testnet</span>
+      <button class="wallet" type="button"><span class="bal">$2,400</span>borrower1.testnet<span class="avatar"></span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="head-row">
+      <div class="stack" style="gap: 12px;">
+        <nav class="crumb" aria-label="Breadcrumb"><a href="Portfolio.dc.html">Portfolio</a><span>/</span><span class="head">Loan p-1</span></nav>
+        <div class="row" style="gap: 16px;"><img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt="" style="width: 60px; height: 60px;"><div class="stack" style="gap: 6px;"><div class="row" style="gap: 10px;"><h1 class="title">Loan p-1</h1><span class="badge {{statusTone}}">{{statusText}}</span></div><span class="k">300 NVDAx on NEAR testnet. Standard loan, flag line 80% LTV.</span></div></div>
+      </div>
+      <a class="btn btn-line" href="Portfolio.dc.html">View Note</a>
+    </div>
+
+    <sc-if value="{{isRisk}}" hint-placeholder-val="{{false}}">
+      <div class="notice neg">
+        <span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 3l8 14H2z"></path><path d="M10 8v4M10 14.5v.5"></path></svg></span>
+        <span class="stack" style="gap: 2px; flex: 1;"><b class="head" style="font-weight: 600;">Health is below 1 at $112.00</b><span class="k">Any keeper can flag this loan now. Repaying $1,120 brings it back to 1.00; more gives you room.</span></span>
+        <button type="button" class="btn btn-primary btn-sm" onClick="{{fixRisk}}">Repay $1,120</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{isSettling}}" hint-placeholder-val="{{false}}">
+      <div class="notice">
+        <span class="ic"><span class="spin"></span></span>
+        <span class="stack" style="gap: 2px; flex: 1;"><b class="head" style="font-weight: 600;">Settling with committed buyers</b><span class="k">Flagged by keeper.nectar.testnet. Pricing in OutLayer, clamped to the quote ceiling of 2.50%. The Note can't be transferred until this finishes.</span></span>
+      </div>
+    </sc-if>
+
+    <div class="split">
+      <section class="panel pad stack" style="gap: 22px;" aria-label="Health">
+        <div class="ph"><span class="h2">Health</span><span class="k">oracle {{oracleStr}}</span></div>
+        <div class="row" style="gap: 28px; flex-wrap: wrap;">
+          <svg viewBox="0 0 160 160" width="160" height="160" role="img" aria-label="Health at the simulated price {{simHealth}}">
+            <circle cx="80" cy="80" r="64" fill="none" stroke-width="12" style="stroke: var(--raise);"></circle>
+            <circle cx="80" cy="80" r="64" fill="none" stroke-width="12" stroke-linecap="round" pathLength="100" stroke-dasharray="{{ringDash}}" transform="rotate(-90 80 80)" style="stroke: {{simColor}}; transition: stroke-dasharray .3s, stroke .3s;"></circle>
+            <text x="80" y="84" text-anchor="middle" style="fill: var(--head); font: 600 36px Syne, sans-serif;">{{simHealth}}</text>
+            <text x="80" y="106" text-anchor="middle" style="fill: var(--dim); font: 500 12px 'DM Sans', sans-serif;">{{simWord}}</text>
+          </svg>
+          <div class="stats" style="flex: 1; min-width: 260px;">
+            <div><span class="k">At price</span><span class="mid num">{{simPriceStr}}</span></div>
+            <div><span class="k">LTV</span><span class="mid">{{simLtv}}</span></div>
+            <div><span class="k">To the flag line</span><span class="mid {{distClass}}">{{simDist}}</span></div>
+          </div>
+        </div>
+        <div class="stack" style="gap: 10px;">
+          <div class="ph"><label class="head" style="font-weight: 600;" for="sim">Simulate the NVDAx price</label><button type="button" class="link" onClick="{{resetSim}}">Reset to oracle</button></div>
+          <div style="position: relative; padding-top: 22px;">
+            <span style="position: absolute; top: 0; left: {{flagLeft}}; transform: translateX(-50%); font: 500 11px 'DM Mono', monospace; color: var(--coral); white-space: nowrap;">flag {{flagStr}}</span>
+            <span style="position: absolute; top: 0; left: {{oracleLeft}}; transform: translateX(-50%); font: 500 11px 'DM Mono', monospace; color: var(--head); white-space: nowrap;">oracle</span>
+            <input id="sim" class="range" type="range" min="60" max="260" step="0.5" value="{{simVal}}" onChange="{{onSim}}" style="--track: {{runway}};">
+          </div>
+          <div class="row" style="justify-content: space-between; font: 500 11px 'DM Mono', monospace; color: var(--faint);"><span>$60</span><span>$110</span><span>$160</span><span>$210</span><span>$260</span></div>
+          <div class="legend"><span><i style="background: var(--coral);"></i>settles to committed buyers</span><span><i style="background: var(--amber);"></i>health 1.0 to 1.2</span><span><i class="c-q"></i>comfortable</span></div>
+        </div>
+      </section>
+
+      <section class="panel pad stack" style="gap: 18px;" aria-label="Actions">
+        <div class="seg" role="tablist" aria-label="Loan actions">
+          <button type="button" role="tab" class="{{tRepay}}" aria-selected="{{aRepay}}" onClick="{{goRepay}}">Repay</button>
+          <button type="button" role="tab" class="{{tAdd}}" aria-selected="{{aAdd}}" onClick="{{goAdd}}">Add collateral</button>
+          <button type="button" role="tab" class="{{tPl}}" aria-selected="{{aPl}}" onClick="{{goPl}}">Profit-Lock</button>
+        </div>
+
+        <sc-if value="{{isRepay}}" hint-placeholder-val="{{true}}">
+          <div class="stack fadein" style="gap: 16px;">
+            <div class="amt">
+              <div class="amt-top"><label for="rep">You repay</label><span>Debt {{debtStr}}</span></div>
+              <div class="amt-mid"><input id="rep" type="number" min="0" step="100" value="{{repStr}}" onChange="{{onRep}}"><span class="token"><span class="coin">$</span>USDC</span></div>
+              <div class="amt-bot"><span>Wallet $2,400.00 + approve from any account</span><span class="mini"><button type="button" onClick="{{rep25}}">25%</button><button type="button" onClick="{{rep50}}">50%</button><button type="button" onClick="{{repAll}}">All</button></span></div>
+            </div>
+            <div>
+              <div class="kvr"><span>Health after</span><b><span class="dim">{{healthNow}}</span> → <span class="{{repTone}}">{{repHealth}}</span></b></div>
+              <div class="kvr"><span>Flag price after</span><b>{{repFlag}}</b></div>
+              <div class="kvr"><span>Debt after</span><b>{{repDebt}}</b></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isAdd}}" hint-placeholder-val="{{false}}">
+          <div class="stack fadein" style="gap: 16px;">
+            <div class="amt">
+              <div class="amt-top"><label for="add">You add</label><span>Balance 300 NVDAx</span></div>
+              <div class="amt-mid"><input id="add" type="number" min="0" step="1" value="{{addStr}}" onChange="{{onAdd}}"><span class="token"><img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt="">NVDAx</span></div>
+              <div class="amt-bot"><span class="num">{{addVal}}</span><span class="mini"><button type="button" onClick="{{add50}}">50</button><button type="button" onClick="{{add100}}">100</button><button type="button" onClick="{{add300}}">Max</button></span></div>
+            </div>
+            <div>
+              <div class="kvr"><span>Health after</span><b><span class="dim">{{healthNow}}</span> → <span class="pos">{{addHealth}}</span></b></div>
+              <div class="kvr"><span>Flag price after</span><b>{{addFlag}}</b></div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isPl}}" hint-placeholder-val="{{false}}">
+          <div class="stack fadein" style="gap: 16px;">
+            <p class="k" style="font-size: 13.5px;">Sell just enough NVDAx to committed buyers who accept voluntary fills, clear the debt, keep the rest with no loan.</p>
+            <div class="stack" style="gap: 8px;">
+              <div class="meter lg" role="img" aria-label="Sold {{plSold}} NVDAx, kept {{plKept}} NVDAx"><i style="flex-basis: {{plSoldPct}}; background: var(--raise); box-shadow: inset 0 0 0 1px var(--line2);"></i><i class="c-q" style="flex-basis: {{plKeptPct}};"></i></div>
+              <div class="row" style="justify-content: space-between;"><span class="stack"><span class="k">Sold to buyers</span><span class="mid">{{plSold}}</span></span><span class="stack" style="align-items: flex-end;"><span class="k">You keep, debt-free</span><span class="mid pos">{{plKept}}</span></span></div>
+            </div>
+            <div>
+              <div class="kvr"><span>Buyer discount</span><b>1.80% from the TEE, ceiling 2.50%</b></div>
+              <div class="kvr"><span>Profit-Lock fee</span><b>{{plFee}}</b></div>
+              <div class="kvr"><span>Kept value</span><b>{{plKeptVal}}</b></div>
+            </div>
+            <sc-if value="{{plCap}}" hint-placeholder-val="{{true}}">
+              <div class="notice" style="align-items: flex-start;">
+                <span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10" cy="10" r="7.5"></circle><path d="M10 6v5M10 13.5v.5"></path></svg></span>
+                <span class="stack" style="gap: 6px;"><span class="k">This needs <b class="head num">{{plNeed}}</b> of voluntary fills; NVDAx allows <b class="head num">$20,000</b> a day.</span><button type="button" class="link" style="align-self: flex-start;" onClick="{{fixCap}}">Repay {{plFix}} first</button></span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <button type="button" class="btn btn-primary btn-lg" onClick="{{act}}" disabled="{{actOff}}">{{actText}}</button>
+      </section>
+    </div>
+
+    <section class="panel pad" aria-label="Loan details">
+      <div class="stats">
+        <div><span class="k">Debt</span><span class="mid">{{debtStr}}</span></div>
+        <div><span class="k">Collateral</span><span class="mid">{{collStr}}</span></div>
+        <div><span class="k">Flag price</span><span class="mid">$116.67</span></div>
+        <div><span class="k">Paid at open</span><span class="mid">$258.00</span></div>
+        <div><span class="k">Multiplier</span><span class="mid">1.000</span></div>
+      </div>
+    </section>
+
+    <sc-if value="{{isSettled}}" hint-placeholder-val="{{false}}">
+      <section class="panel" aria-label="Settlement">
+        <div class="ph pad" style="padding-bottom: 6px;"><span class="h2">How it settled at $112.00</span><button type="button" class="btn btn-primary btn-sm">Claim 43.59 NVDAx</button></div>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Order</th><th>Buyer</th><th class="r">Debt repaid</th><th class="r">Discount</th><th class="r">NVDAx moved</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Quote q-1, buyer1.testnet</td><td class="r num">$28,000.00</td><td class="r num">2.50%</td><td class="r num">256.41</td></tr>
+              <tr class="muted"><td>2</td><td>Quote q-2, buyer2.testnet</td><td class="r">not needed</td><td class="r num">3.50%</td><td class="r num">0</td></tr>
+              <tr class="muted"><td>3</td><td>Nectar Reserve</td><td class="r">not needed</td><td class="r num">4.00%</td><td class="r num">0</td></tr>
+              <tr><td></td><td>You keep</td><td></td><td></td><td class="r num pos">43.59</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="k" style="padding: 0 24px 22px;">Excludes the keeper fee. The settlement event on NEAR has the final units.</p>
+      </section>
+    </sc-if>
+
+    <footer class="foot"><span>Testnet with mock collateral. Unaudited.</span><span class="row" style="gap: 18px;"><a href="https://docs.near.org">Docs</a><a href="Console.dc.html">Evidence</a></span></footer>
+  </main>
+  <sc-if value="{{toast}}" hint-placeholder-val="{{false}}"><div class="toast" role="status">{{toastText}}<a href="Portfolio.dc.html">Portfolio</a></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"status":{"editor":"enum","options":["open","at risk","settling","settled"],"default":"open"},"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sim: null, tab: 'repay', rep: 5000, add: 50, busy: false, toast: null }; }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._t2); }
+  renderVals() {
+    const st = this.state;
+    const theme = this.props.theme ?? 'dark';
+    const status = this.props.status ?? 'open';
+    const m2 = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const oracle = status === 'open' ? 185 : 112;
+    const debt = status === 'settled' ? 0 : 28000, units = 300;
+    const hAt = (p, d, u) => d > 0 ? 0.8 * u * p / d : Infinity;
+    const col = (x) => x >= 1.2 ? 'var(--mint)' : x >= 1 ? 'var(--amber)' : 'var(--coral)';
+    const fmtH = (x) => x === Infinity ? 'n/a' : x.toFixed(2);
+    const sim = st.sim ?? oracle;
+    const sh = hAt(sim, debt, units);
+    const flag = debt / (0.8 * units), caution = 1.2 * debt / (0.8 * units);
+    const L = (p) => Math.max(0, Math.min(100, (p - 60) / 200 * 100));
+    const a = L(flag).toFixed(1), b = L(caution).toFixed(1);
+    const runway = debt ? 'linear-gradient(90deg,rgba(255,138,128,.55) 0 ' + a + '%,rgba(250,175,46,.55) ' + a + '% ' + b + '%,rgba(22,243,169,.45) ' + b + '% 100%)' : 'var(--raise)';
+    const rep = Math.max(0, Math.min(debt, Number(st.rep) || 0)), nd = debt - rep;
+    const add = Math.max(0, Number(st.add) || 0);
+    const need = debt * 1.005, sold = debt ? need / (oracle * 0.982) : 0, kept = units - sold;
+    const fix = Math.max(0, debt - 20000 / 1.005);
+    const open = status === 'open', risk = status === 'at risk';
+    const canAct = open || risk;
+    const t = st.tab;
+    const cls = (k) => (t === k ? 'on' : '');
+    const go = (k) => () => this.setState({ tab: k });
+    const run = (text) => () => {
+      if (st.busy) return;
+      this.setState({ busy: true }); clearTimeout(this._t); clearTimeout(this._t2);
+      this._t = setTimeout(() => { this.setState({ busy: false, toast: text }); this._t2 = setTimeout(() => this.setState({ toast: null }), 4000); }, 1300);
+    };
+    const plBlocked = t === 'pl' && need > 20000;
+    const actLabel = t === 'repay' ? 'Repay ' + m2(rep) : t === 'add' ? 'Add ' + add + ' NVDAx' : 'Lock profit';
+    return {
+      themeClass: theme === 'light' ? 'light' : '',
+      statusTone: { 'open': 'pos', 'at risk': 'neg', 'settling': 'warn', 'settled': '' }[status], statusText: { 'open': 'Open', 'at risk': 'At risk', 'settling': 'Settling', 'settled': 'Settled' }[status],
+      isRisk: risk, isSettling: status === 'settling', isSettled: status === 'settled',
+      fixRisk: () => this.setState({ tab: 'repay', rep: 1120 }),
+      oracleStr: m2(oracle),
+      ringDash: (Math.min(1, (sh === Infinity ? 3 : sh) / 2.5) * 100).toFixed(1) + ' 100', simColor: sh === Infinity ? 'var(--mint)' : col(sh), simHealth: fmtH(sh),
+      simWord: sh === Infinity ? 'no debt' : sh >= 1.2 ? 'comfortable' : sh >= 1 ? 'tight' : 'would settle',
+      simPriceStr: m2(sim), simLtv: debt ? (debt / (units * sim) * 100).toFixed(1) + '%' : '0%',
+      simDist: debt ? ((flag / sim - 1) * 100).toFixed(1) + '%' : 'n/a', distClass: sim > caution ? 'pos' : sim > flag ? 'warn' : 'neg',
+      resetSim: () => this.setState({ sim: null }), onSim: (e) => this.setState({ sim: Number(e.target.value) }), simVal: String(sim),
+      runway, flagLeft: a + '%', flagStr: m2(flag), oracleLeft: L(oracle).toFixed(1) + '%',
+      tRepay: cls('repay'), tAdd: cls('add'), tPl: cls('pl'),
+      aRepay: t === 'repay' ? 'true' : 'false', aAdd: t === 'add' ? 'true' : 'false', aPl: t === 'pl' ? 'true' : 'false',
+      goRepay: go('repay'), goAdd: go('add'), goPl: go('pl'),
+      isRepay: t === 'repay', isAdd: t === 'add', isPl: t === 'pl',
+      debtStr: m2(debt), collStr: '300 NVDAx, ' + m2(units * oracle),
+      repStr: String(rep), onRep: (e) => this.setState({ rep: e.target.value }),
+      rep25: () => this.setState({ rep: debt * 0.25 }), rep50: () => this.setState({ rep: debt * 0.5 }), repAll: () => this.setState({ rep: debt }),
+      healthNow: fmtH(hAt(oracle, debt, units)), repHealth: nd > 0 ? fmtH(hAt(oracle, nd, units)) : 'closed', repTone: nd > 0 ? (hAt(oracle, nd, units) >= 1.2 ? 'pos' : 'warn') : 'pos',
+      repFlag: nd > 0 ? m2(nd / (0.8 * units)) : 'none', repDebt: m2(nd),
+      addStr: String(add), onAdd: (e) => this.setState({ add: e.target.value }), addVal: m2(add * oracle),
+      add50: () => this.setState({ add: 50 }), add100: () => this.setState({ add: 100 }), add300: () => this.setState({ add: 300 }),
+      addHealth: fmtH(hAt(oracle, debt, units + add)), addFlag: debt ? m2(debt / (0.8 * (units + add))) : 'none',
+      plSold: sold.toFixed(2), plKept: kept.toFixed(2), plSoldPct: (sold / units * 100).toFixed(1) + '%', plKeptPct: (kept / units * 100).toFixed(1) + '%',
+      plFee: m2(debt * 0.005), plKeptVal: m2(Math.max(0, kept) * oracle), plCap: need > 20000, plNeed: m2(need), plFix: m2(fix),
+      fixCap: () => this.setState({ tab: 'repay', rep: Math.ceil(fix * 100) / 100 }),
+      act: run(t === 'repay' ? 'Repaid ' + m2(rep) + '.' : t === 'add' ? 'Added ' + add + ' NVDAx.' : 'Profit locked.'),
+      actOff: !canAct || st.busy || plBlocked || (t === 'repay' && rep <= 0) || (t === 'pl' && !open),
+      actText: st.busy ? 'Confirming on NEAR testnet' : !canAct ? 'Unavailable while ' + status : plBlocked ? 'Over today\'s fill limit' : actLabel,
+      toast: !!st.toast, toastText: st.toast || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

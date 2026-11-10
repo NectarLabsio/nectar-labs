@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<style>body{margin:0;background:#0d0f12}canvas{display:block}</style></head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { buildMark, buildToken, mintMaterials } from './nectar3d.js';
+window.renderShot = async (o) => {
+  const W = o.w || 800, H = o.h || 800;
+  const r = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  r.setPixelRatio(1); r.setSize(W, H); r.setClearColor(0x000000, 0);
+  r.toneMapping = ({aces:THREE.ACESFilmicToneMapping,agx:THREE.AgXToneMapping,none:THREE.NoToneMapping,neutral:THREE.NeutralToneMapping})[o.tm||'aces'] ?? THREE.ACESFilmicToneMapping; r.toneMappingExposure = o.exposure || 1.0;
+  r.outputColorSpace = THREE.SRGBColorSpace;
+  document.body.innerHTML = ''; document.body.style.background = o.bg || 'transparent'; document.body.appendChild(r.domElement);
+  const scene = new THREE.Scene();
+  const pm = new THREE.PMREMGenerator(r);
+  scene.environment = pm.fromScene(new RoomEnvironment(r), 0.04).texture;
+  scene.environmentIntensity = o.env ?? 1;
+  const key = new THREE.DirectionalLight(0xffffff, o.key ?? 1.6); key.position.set(-3, 4, 5); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x9effd8, o.rim ?? 1.2); rim.position.set(4, -2, -3); scene.add(rim);
+  const cam = new THREE.PerspectiveCamera(o.fov || 30, W / H, 0.1, 100); cam.position.set(0, 0, o.dist || 9); cam.lookAt(0, 0, 0);
+  const M = mintMaterials(THREE, o.theme);
+  if (o.mat) { for (const [k,v] of Object.entries(o.mat)) { if (k.endsWith('olor')||k==='emissive') M.cell[k] = new THREE.Color(v); else M.cell[k] = v; } M.cell.needsUpdate = true; }
+  if (o.tmat) { for (const [k,v] of Object.entries(o.tmat)) { if (k.endsWith('olor')) M.tokenMark[k] = new THREE.Color(v); else M.tokenMark[k] = v; } }
+  let obj;
+  if (o.kind === 'token') obj = buildToken(THREE, o.inverse ? M.tokenMark : M.tokenBody, o.inverse ? M.tokenBody : M.tokenMark);
+  else obj = buildMark(THREE, M.cell);
+  obj.rotation.set(o.rx || 0, o.ry || 0, o.rz || 0);
+  if (o.explode) obj.userData.cells.forEach(c => { c.position.multiplyScalar(1 + o.explode); c.position.z = (c.position.x) * o.explode; });
+  scene.add(obj);
+  r.render(scene, cam);
+  return r.domElement.toDataURL(o.type || 'image/png', o.q || 0.92);
+};
+window.ready = true;
+</script></body></html>

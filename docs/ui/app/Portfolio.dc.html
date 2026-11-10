@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Nectar Portfolio</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="/_blob/90551b2e707e9ae82f26f4d5f7c9d816">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="nx {{themeClass}}">
+  <header class="nav">
+    <a class="brand" href="Main.dc.html" aria-label="Nectar home"><img src="/_blob/76ae889d34e7e0e6ae8dd258fc05f2e1" alt=""><img class="od" src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar"><img class="ol" src="/_blob/b9ab938d8e4e19425a3f0c7a5fb2ab32" alt="nectar"></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="Main.dc.html">Markets</a><a href="Borrow.dc.html">Borrow</a><a href="Earn.dc.html">Earn</a><a class="on" href="Portfolio.dc.html" aria-current="page">Portfolio</a><a class="hide-s" href="Agents.dc.html">Agents</a><a class="hide-s" href="Console.dc.html">Curator</a>
+    </nav>
+    <div class="nav-right">
+      <span class="chip"><i class="dot"></i>NYSE open, closes 16:00 ET</span>
+      <span class="chip hide-s"><span class="chain near">N</span>Testnet</span>
+      <button class="wallet" type="button"><span class="bal">$2,400</span>borrower1.testnet<span class="avatar"></span></button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="head-row">
+      <div class="row" style="gap: 16px;">
+        <span class="avatar" style="width: 56px; height: 56px; border-radius: 18px;"></span>
+        <div class="stack" style="gap: 6px;"><h1 class="title">Portfolio</h1><span class="k">borrower1.testnet</span></div>
+      </div>
+      <div class="row"><a class="btn btn-line" href="Earn.dc.html">Deposit</a><a class="btn btn-primary" href="Borrow.dc.html">Borrow</a></div>
+    </div>
+
+    <section class="panel pad" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; align-items: center;" aria-label="Summary">
+      <div class="stack" style="gap: 14px;">
+        <span class="k">Net value<button class="tip" type="button" aria-label="How net value is counted">i<span role="tooltip">Collateral and Reserve deposits at the oracle price, minus what you owe. Mock collateral on testnet.</span></button></span>
+        <span class="hero">$27,550</span>
+        <div class="stack" style="gap: 8px;">
+          <div class="meter lg" role="img" aria-label="Assets $55,550, debt $28,000"><i class="c-q" style="flex-basis: 50.4%;"></i><i class="c-used" style="flex-basis: 49.6%; opacity: .25;"></i></div>
+          <div class="legend"><span><i class="c-q"></i>Assets <b>$55,550</b></span><span><i class="c-used" style="opacity: .4;"></i>Debt <b>$28,000</b></span></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div><span class="k">Health</span><span class="row" style="gap: 10px;"><svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="none" stroke-width="5" style="stroke: var(--raise);"></circle><circle cx="20" cy="20" r="15" fill="none" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="63.6 100" transform="rotate(-90 20 20)" style="stroke: var(--mint);"></circle></svg><span class="mid">1.59</span></span></div>
+        <div><span class="k">Can still borrow</span><span class="mid pos">$19,175</span></div>
+        <div><span class="k">Fees earned</span><span class="mid">$0.09</span></div>
+      </div>
+    </section>
+
+    <div class="notice pos">
+      <span class="ic"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 2.5l6 2.4v4.3c0 3.7-2.6 6.3-6 7.8-3.4-1.5-6-4.1-6-7.8V4.9z"></path><path d="M7.2 10l2 2 3.8-4"></path></svg></span>
+      <span class="stack" style="gap: 2px; flex: 1;"><b class="head" style="font-weight: 600;">Ready for the weekend</b><span class="k">From Friday 16:00 ET limits use weekend values. Loan p-1 keeps a health of 1.59 and is flagged only below $116.67. Nothing to do.</span></span>
+      <a class="btn btn-quiet btn-sm hide-s" href="Position.dc.html">Simulate a drop</a>
+    </div>
+
+    <section class="stack" style="gap: 18px;" aria-label="Holdings">
+      <div class="tabs" role="tablist" aria-label="Holdings">
+        <button type="button" role="tab" class="{{tLoans}}" aria-selected="{{aLoans}}" onClick="{{goLoans}}">Loans<span class="ct">1</span></button>
+        <button type="button" role="tab" class="{{tDep}}" aria-selected="{{aDep}}" onClick="{{goDep}}">Deposits<span class="ct">1</span></button>
+        <button type="button" role="tab" class="{{tNotes}}" aria-selected="{{aNotes}}" onClick="{{goNotes}}">Notes<span class="ct">2</span></button>
+        <button type="button" role="tab" class="{{tAct}}" aria-selected="{{aAct}}" onClick="{{goAct}}">Activity</button>
+      </div>
+
+      <sc-if value="{{isLoans}}" hint-placeholder-val="{{true}}">
+        <article class="panel pad fadein" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px; align-items: center;" aria-label="Loan p-1">
+          <div class="asset"><img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt=""><span class="stack" style="display: flex; gap: 3px;"><b>Loan p-1</b><span>300 NVDAx on NEAR testnet</span></span></div>
+          <div class="stack" style="gap: 4px;"><span class="k">Debt</span><span class="v">$28,000.00</span></div>
+          <div class="stack" style="gap: 8px;"><span class="k">LTV 50.45% of 80% flag line</span><span style="position: relative; display: block;"><span class="meter"><i class="c-q" style="width: 50.45%;"></i></span><span style="position: absolute; left: 80%; top: -4px; width: 2px; height: 18px; background: var(--coral); border-radius: 1px;"></span></span></div>
+          <div class="row" style="gap: 10px;"><svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="none" stroke-width="5" style="stroke: var(--raise);"></circle><circle cx="20" cy="20" r="15" fill="none" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="63.6 100" transform="rotate(-90 20 20)" style="stroke: var(--mint);"></circle></svg><span class="stack"><span class="v">1.59</span><span class="badge pos" style="height: 20px; font-size: 11px;">Open</span></span></div>
+          <div class="row" style="gap: 8px;"><a class="btn btn-quiet btn-sm" href="Position.dc.html">Repay</a><a class="btn btn-primary btn-sm" href="Position.dc.html">Manage</a></div>
+        </article>
+      </sc-if>
+
+      <sc-if value="{{isDep}}" hint-placeholder-val="{{false}}">
+        <article class="panel pad fadein" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px; align-items: center;" aria-label="Reserve deposit r-1">
+          <div class="asset"><span class="ghost-ic" style="background: linear-gradient(150deg, rgba(11,156,107,.35), var(--raise)); color: var(--head);">R</span><span class="stack" style="display: flex; gap: 3px;"><b>Reserve r-1</b><span>NVDAx Reserve</span></span></div>
+          <div class="stack" style="gap: 4px;"><span class="k">Deposited</span><span class="v">$50.00</span></div>
+          <div class="stack" style="gap: 4px;"><span class="k">Share of Reserve</span><span class="v">1.00%</span></div>
+          <div class="stack" style="gap: 4px;"><span class="k">Fees to claim</span><span class="v pos">$0.09</span></div>
+          <div class="row" style="gap: 8px;"><button type="button" class="btn btn-quiet btn-sm">Start exit</button><button type="button" class="btn btn-primary btn-sm">Claim</button></div>
+        </article>
+      </sc-if>
+
+      <sc-if value="{{isNotes}}" hint-placeholder-val="{{false}}">
+        <div class="grid3 fadein">
+          <article class="panel" style="padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; color: #e6e9ef; background: radial-gradient(120% 90% at 100% 0%, rgba(22,243,169,.18), transparent 55%), #0d0f12; box-shadow: inset 0 0 0 1px #23272f;">
+              <div class="row" style="justify-content: space-between;"><img src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar" style="height: 12px;"><span style="font: 500 10px 'DM Mono', monospace; letter-spacing: .12em; color: #8f96a3;">LOAN NOTE P-1</span></div>
+              <div class="row" style="gap: 24px;"><span class="stack"><span style="font-size: 10px; color: #8f96a3;">LTV</span><span style="font: 600 22px Syne, sans-serif;">50.5%</span></span><span class="stack"><span style="font-size: 10px; color: #8f96a3;">HEALTH</span><span style="font: 600 22px Syne, sans-serif;">1.59</span></span></div>
+              <div style="height: 6px; border-radius: 3px; background: #202327;"><div style="height: 100%; width: 50.5%; border-radius: 3px; background: #16f3a9;"></div></div>
+              <span style="font: 500 10px 'DM Mono', monospace; letter-spacing: .1em; color: #16f3a9;">OPEN, IN SESSION</span>
+            </div>
+            <div class="row" style="justify-content: space-between;"><span class="stack"><b class="head" style="font-weight: 600;">Loan p-1</b><span class="k">NEP-171 on NEAR</span></span><span class="row" style="gap: 6px;"><button type="button" class="btn btn-quiet btn-sm">Transfer</button><a class="btn btn-quiet btn-sm" href="https://x.com/intent/post?text=My%20Nectar%20loan%20note">Share</a></span></div>
+          </article>
+          <article class="panel" style="padding: 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; color: #e6e9ef; background: radial-gradient(120% 90% at 100% 0%, rgba(11,156,107,.25), transparent 55%), #0d0f12; box-shadow: inset 0 0 0 1px #23272f;">
+              <div class="row" style="justify-content: space-between;"><img src="/_blob/8cbba3f678a4dfc9acd353e1c7a554d4" alt="nectar" style="height: 12px;"><span style="font: 500 10px 'DM Mono', monospace; letter-spacing: .12em; color: #8f96a3;">RESERVE NOTE R-1</span></div>
+              <div class="row" style="gap: 24px;"><span class="stack"><span style="font-size: 10px; color: #8f96a3;">DEPOSIT</span><span style="font: 600 22px Syne, sans-serif;">$50</span></span><span class="stack"><span style="font-size: 10px; color: #8f96a3;">SHARE</span><span style="font: 600 22px Syne, sans-serif;">1.00%</span></span></div>
+              <div style="height: 6px; border-radius: 3px; background: #202327;"><div style="height: 100%; width: 8%; border-radius: 3px; background: #0b9c6b;"></div></div>
+              <span style="font: 500 10px 'DM Mono', monospace; letter-spacing: .1em; color: #16f3a9;">ACTIVE, FEES $0.09</span>
+            </div>
+            <div class="row" style="justify-content: space-between;"><span class="stack"><b class="head" style="font-weight: 600;">Reserve r-1</b><span class="k">NEP-171 on NEAR</span></span><span class="row" style="gap: 6px;"><button type="button" class="btn btn-quiet btn-sm">Transfer</button><a class="btn btn-quiet btn-sm" href="https://x.com/intent/post?text=My%20Nectar%20reserve%20note">Share</a></span></div>
+          </article>
+          <article class="panel stack" style="padding: 24px; gap: 12px; justify-content: center; align-items: flex-start; background: transparent; box-shadow: inset 0 0 0 1.5px var(--line2);">
+            <img src="/_blob/35efc2e8a41bb153a0ef1e0cb09ba145" alt="" style="width: 64px; height: 64px;">
+            <span class="mid">Every position is a Note</span>
+            <span class="k">Whoever holds it can repay, claim and receive leftover collateral. Transfers pause while a position settles.</span>
+          </article>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isAct}}" hint-placeholder-val="{{false}}">
+        <section class="panel pad fadein" aria-label="Activity">
+          <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 34px; height: 34px; border-radius: 10px; color: var(--teal);">R</span><span class="stack"><span class="head">Deposited to the NVDAx Reserve</span><span class="k">Reserve Note r-1 minted</span></span></span><b>$50.00</b></div>
+          <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 34px; height: 34px; border-radius: 10px; color: var(--head);">↓</span><span class="stack"><span class="head">Opened loan p-1 with 300 NVDAx</span><span class="k">premium $174.00, origination $84.00</span></span></span><b>$28,000.00</b></div>
+          <div class="kvr"><span class="row" style="gap: 12px;"><span class="ghost-ic" style="width: 34px; height: 34px; border-radius: 10px; color: var(--pos);">+</span><span class="stack"><span class="head">Received 600 demo NVDAx</span><span class="k">testnet faucet</span></span></span><b>600 NVDAx</b></div>
+          <p class="k" style="padding-top: 12px; border-top: 1px solid var(--line);">Example history. Each row links to its transaction in the explorer.</p>
+        </section>
+      </sc-if>
+    </section>
+
+    <footer class="foot"><span>Testnet with mock collateral. Unaudited.</span><span class="row" style="gap: 18px;"><a href="https://docs.near.org">Docs</a><a href="Console.dc.html">Evidence</a></span></footer>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":1360}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 'loans' }; }
+  renderVals() {
+    const theme = this.props.theme ?? 'dark';
+    const t = this.state.tab;
+    const cls = (k) => (t === k ? 'on' : '');
+    const go = (k) => () => this.setState({ tab: k });
+    return {
+      themeClass: theme === 'light' ? 'light' : '',
+      tLoans: cls('loans'), tDep: cls('dep'), tNotes: cls('notes'), tAct: cls('act'),
+      aLoans: t === 'loans' ? 'true' : 'false', aDep: t === 'dep' ? 'true' : 'false', aNotes: t === 'notes' ? 'true' : 'false', aAct: t === 'act' ? 'true' : 'false',
+      goLoans: go('loans'), goDep: go('dep'), goNotes: go('notes'), goAct: go('act'),
+      isLoans: t === 'loans', isDep: t === 'dep', isNotes: t === 'notes', isAct: t === 'act'
+    };
+  }
+}
+</script>
+</body>
+</html>
