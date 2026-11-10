@@ -51,6 +51,71 @@ export interface CollateralView extends Omit<CollateralInput, "market_session_op
   ca_multiplier_e18?: U128;
   weekend_ref_price_e6?: U128;
   weekend_ref_updated_ns?: U64;
+  // v2 WO-23a (PRD §4.9, §4.10)
+  shield?: ShieldParams;
+  max_voluntary_fill_usd_e6_per_day?: U128;
+  voluntary_filled_today_e6?: U128;
+  /** UTC day (block_ns / 86400 s) of `voluntary_filled_today_e6`. */
+  voluntary_day?: number;
+}
+
+// ---------------------------------------------------------------- v2 Shields and Profit-Lock (WO-23a, PRD §4.9–§4.11)
+
+/** Per-asset Shield pricing (owner `set_shield_params`). `event_window_end_ns = "0"`: no event window open. */
+export interface ShieldParams {
+  weekend_fee_bps: Bps;
+  event_fee_bps: Bps;
+  event_window_end_ns: U64;
+}
+export type ShieldKind = "Weekend" | "Event";
+/** `shield` on LockCollateralAndBorrow / preview_borrow. Weekend: window_end_ns = the next calendar open, exactly. */
+export interface ShieldInput {
+  kind: ShieldKind;
+  window_end_ns: U64;
+}
+/** `get_shield(position_id)`. */
+export interface ShieldView {
+  position_id: U64;
+  kind: ShieldKind;
+  window_end_ns: U64;
+  fee_bps: Bps;
+  fee_usd_e6: U128;
+  /** now < window_end_ns. */
+  active: boolean;
+  committed_buyers_only: boolean;
+}
+export interface SelfSettleLegView {
+  quote_id: U64;
+  disc_bps: Bps;
+  /** USDC the quote pays (debt share + fee share). */
+  fill_usd_e6: U128;
+  units: U128;
+}
+/** `preview_self_settle(position_id)`: the same checks and numbers as `self_settle`. */
+export interface SelfSettlePreview {
+  ok: boolean;
+  reason: string | null;
+  debt_usd_e6: U128;
+  fee_usd_e6: U128;
+  /** debt + fee */
+  fill_usd_e6: U128;
+  units_repaid: U128;
+  units_kept: U128;
+  legs: SelfSettleLegView[];
+  remote: boolean;
+  daily_cap_usd_e6: U128;
+  daily_used_usd_e6: U128;
+}
+/** `get_fee_stack(symbol?)`. Asset rows are null without a symbol. */
+export interface FeeStackView {
+  limit_premium_bps: Bps | null;
+  shield_weekend_fee_bps: Bps;
+  shield_event_fee_bps: Bps;
+  origination_fee_bps: Bps;
+  referrer_share_bps: Bps;
+  profit_lock_fee_bps: Bps;
+  keeper_fee_bps: Bps;
+  fee_split: FeeSplit;
 }
 
 // ---------------------------------------------------------------- v2 (interface-v7.md §A)
@@ -153,6 +218,8 @@ export interface QuoteView {
   buyer_remote_recipient: string | null;
   claimable_fees_usd_e6?: U128;
   fee_debt_e18?: U128;
+  /** v2 (§4.10): the quote also fills Profit-Lock self-settlements. */
+  accepts_voluntary_fills?: boolean;
 }
 
 /** `get_position(position_id)` / `list_positions`. Fields: PRD §6.2 + interface-p0 `status` (confirm at G1). */
@@ -204,6 +271,8 @@ export interface BorrowPreview {
   aggregate_headroom_usd_e6?: U128;
   multiplier_e18?: U128;
   session_open?: boolean;
+  /** v2 WO-23a: the flat Shield fee when a `shield` was given (then premium_usd_e6 = this fee); "0" otherwise. */
+  shield_fee_usd_e6?: U128;
 }
 
 export interface FeeSplit {
@@ -234,6 +303,8 @@ export interface FundPappusQuoteArgs {
   max_discount_bps: Bps;
   notice_period_ns: U64;
   buyer_remote_recipient: string | null;
+  /** v2 (§4.10): opt into Profit-Lock fills. Sent only when true, so the v1 msg stays byte-identical. */
+  accepts_voluntary_fills?: boolean;
 }
 export interface TopUpQuoteArgs { quote_id: U64 }
 export interface LockCollateralAndBorrowArgs {
@@ -244,6 +315,8 @@ export interface LockCollateralAndBorrowArgs {
   pay_to?: PayTo | null;
   /** v2 only (interface-v7 §A5). Omitted from the JSON when absent. */
   referrer?: AccountId | null;
+  /** v2 only (WO-23a, §4.9). Omitted from the JSON when absent. */
+  shield?: ShieldInput | null;
 }
 export interface RepayArgs { position_id: U64 }
 
@@ -279,6 +352,8 @@ export interface NectarEventMap {
   multiplier_updated: { symbol: string; multiplier_e18?: U128 };
   corporate_action_announced: { symbol: string; multiplier_e18?: U128; effective_ns?: U64 };
   session_forced_closed: { symbol: string; closed?: boolean };
+  shield_opened: { position_id: U64; borrower: AccountId; collateral: string; kind: ShieldKind; window_end_ns: U64; fee_bps: Bps; fee_usd_e6: U128; remote: boolean };
+  self_settled: { position_id: U64; [k: string]: unknown };
 }
 export type NectarEventName = keyof NectarEventMap;
 export type NectarEvent = {

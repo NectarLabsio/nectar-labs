@@ -138,6 +138,26 @@ export function Field({ label, hint, error, unit, id, className, ...rest }: Fiel
   );
 }
 
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {
+  label: ReactNode;
+  hint?: ReactNode;
+}
+/** A labelled checkbox with an optional hint (44 px target). */
+export function Checkbox({ label, hint, id, className, ...rest }: CheckboxProps) {
+  const auto = useId();
+  const fid = id ?? auto;
+  const hintId = hint ? `${fid}-hint` : undefined;
+  return (
+    <div className={cx("check", className)}>
+      <input id={fid} type="checkbox" aria-describedby={hintId} {...rest} />
+      <span className="check-body">
+        <label htmlFor={fid}>{label}</label>
+        {hint ? <span className="hint" id={hintId}>{hint}</span> : null}
+      </span>
+    </div>
+  );
+}
+
 export interface SelectFieldProps {
   label: ReactNode;
   value: string;

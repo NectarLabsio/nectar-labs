@@ -8,6 +8,7 @@ import type {
   OracleSource,
   PayTo,
   SessionWindow,
+  ShieldInput,
   QuoterConfigInput,
   U128,
   U64,
@@ -33,6 +34,8 @@ export const GAS_TGAS = {
   withdrawClaimable: 50,
   /** set_session_calendar writes up to 600 windows. */
   setSessionCalendar: 300,
+  /** self_settle: up to 8 buyer ft_transfers + the kept-units transfer, each 15 TGas reserved (contract checks; sandbox uses 300). */
+  selfSettle: 300,
 } as const;
 
 const DEC = /^(0|[1-9][0-9]*)$/;
@@ -70,15 +73,16 @@ export const msg = {
   supplyLendingLiquidity(): FtOnTransferMsg {
     return "SupplyLendingLiquidity";
   },
+  /** v1 shape unless `accepts_voluntary_fills` is true (v2, §4.10): the key is appended only then. */
   fundPappusQuote(a: FundPappusQuoteArgs): FtOnTransferMsg {
-    return {
-      FundPappusQuote: {
-        collateral: a.collateral,
-        max_discount_bps: assertBps(a.max_discount_bps, "max_discount_bps"),
-        notice_period_ns: assertU64(a.notice_period_ns, "notice_period_ns"),
-        buyer_remote_recipient: a.buyer_remote_recipient,
-      },
+    const body: FundPappusQuoteArgs = {
+      collateral: a.collateral,
+      max_discount_bps: assertBps(a.max_discount_bps, "max_discount_bps"),
+      notice_period_ns: assertU64(a.notice_period_ns, "notice_period_ns"),
+      buyer_remote_recipient: a.buyer_remote_recipient,
     };
+    if (a.accepts_voluntary_fills === true) body.accepts_voluntary_fills = true;
+    return { FundPappusQuote: body };
   },
   topUpQuote(quote_id: U64): FtOnTransferMsg {
     return { TopUpQuote: { quote_id: assertU64(quote_id, "quote_id") } };
@@ -92,12 +96,20 @@ export const msg = {
     };
     if (a.pay_to) body.pay_to = payTo(a.pay_to);
     if (a.referrer) body.referrer = assertAccountId(a.referrer, "referrer");
+    if (a.shield) body.shield = shieldInput(a.shield);
     return { LockCollateralAndBorrow: body };
   },
   repay(position_id: U64): FtOnTransferMsg {
     return { Repay: { position_id: assertU64(position_id, "position_id") } };
   },
 };
+
+export function shieldInput(s: ShieldInput): ShieldInput {
+  if (s.kind !== "Weekend" && s.kind !== "Event") throw new Error(`shield.kind must be "Weekend" or "Event"`);
+  const end = assertU64(s.window_end_ns, "shield.window_end_ns");
+  if (BigInt(end) === 0n) throw new Error("shield.window_end_ns must be > 0");
+  return { kind: s.kind, window_end_ns: end };
+}
 
 function payTo(p: PayTo): PayTo {
   const out: PayTo = { receiver_id: assertAccountId(p.receiver_id, "pay_to.receiver_id") };
@@ -172,8 +184,8 @@ export const tx = {
       core,
       amount: units,
       msg: msg.lockCollateralAndBorrow(a),
-      gasTgas: a.pay_to || a.referrer ? GAS_TGAS.borrowV2 : GAS_TGAS.borrow,
-      label: a.pay_to ? "Lock collateral and pay merchant" : "Lock collateral and borrow",
+      gasTgas: a.pay_to || a.referrer || a.shield ? GAS_TGAS.borrowV2 : GAS_TGAS.borrow,
+      label: a.shield ? `Open ${a.shield.kind} Shield` : a.pay_to ? "Lock collateral and pay merchant" : "Lock collateral and borrow",
     }),
   repay: (usdc: string, core: string, amount: U128, position_id: U64) =>
     ftTransferCall({ token: usdc, core, amount, msg: msg.repay(position_id), gasTgas: GAS_TGAS.repay, label: "Repay" }),
@@ -222,6 +234,9 @@ export const tx = {
 /** v2 (nectar-core-v2, interface-v7 §A2–A5). Calling these on v1 fails with MethodNotFound; the web app feature-detects first. */
 export const txV2 = {
   withdrawClaimable: (core: string) => coreCall(core, "withdraw_claimable", {}, { gasTgas: GAS_TGAS.withdrawClaimable, deposit: ONE_YOCTO, label: "Withdraw claimable USDC" }),
+  /** Profit-Lock (WO-23a, §4.10): borrower only, 1 yocto. */
+  selfSettle: (core: string, position_id: U64) =>
+    coreCall(core, "self_settle", { position_id: assertU64(position_id, "position_id") }, { gasTgas: GAS_TGAS.selfSettle, deposit: ONE_YOCTO, label: "Profit-Lock (self-settle)" }),
   /** Anyone, once `now ≥ ca_effective_ns`. */
   applyCorporateAction: (core: string, symbol: string) => coreCall(core, "apply_corporate_action", { symbol }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Apply corporate action" }),
   // owner

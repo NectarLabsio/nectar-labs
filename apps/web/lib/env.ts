@@ -10,6 +10,8 @@ export const EXPLORER_ACCOUNT = process.env.NEXT_PUBLIC_EXPLORER_ACCOUNT ?? "";
 export const DOCS_URL = process.env.NEXT_PUBLIC_DOCS_URL ?? "";
 // Faucet for testnet NEAR (TODO-G2: confirm URL in FACTS). Mock USDC / NVDAx come from the demo seeding scripts.
 export const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL ?? "";
+// "Get demo NVDAx" (PRD §4.9): testnet mock-mint page, a link only (no auto-mint). Empty: the docs runbook section on mock tokens.
+export const NVDAX_FAUCET_URL = process.env.NEXT_PUBLIC_NVDAX_FAUCET_URL ?? "";
 // GA4 id (TODO-H4 analytics vendor). Loaded only after consent and only when set.
 export const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 // E2E only: lets Playwright sign with the demo borrower key injected at test time. Never set in production.

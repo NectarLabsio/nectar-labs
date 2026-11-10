@@ -15,6 +15,10 @@ import type {
   QuoteView,
   RemoteConfigView,
   SessionWindow,
+  FeeStackView,
+  SelfSettlePreview,
+  ShieldInput,
+  ShieldView,
   U128,
   U64,
 } from "./types";
@@ -81,8 +85,14 @@ export class NectarViews {
   getHealth = (position_id: U64) => this.v<HealthView>("get_health", { position_id });
   getPool = () => this.v<PoolView>("get_pool");
   /** `referrer` is a v2 argument; it is sent only when given, so v1 calls stay unchanged. */
-  previewBorrow = (symbol: string, units: U128, borrow_usd_e6: U128, referrer?: string | null) =>
-    this.v<BorrowPreview>("preview_borrow", referrer ? { symbol, units, borrow_usd_e6, referrer } : { symbol, units, borrow_usd_e6 });
+  /** `referrer`, `shield` and `borrower` are v2 arguments; each is sent only when given, so v1 calls stay unchanged. */
+  previewBorrow = (symbol: string, units: U128, borrow_usd_e6: U128, referrer?: string | null, shield?: ShieldInput | null, borrower?: string | null) => {
+    const args: Record<string, unknown> = { symbol, units, borrow_usd_e6 };
+    if (referrer) args.referrer = referrer;
+    if (shield) args.shield = shield;
+    if (borrower) args.borrower = borrower;
+    return this.v<BorrowPreview>("preview_borrow", args);
+  };
   /** "v1" | "v2" from `contract_version()`. */
   generation = async (): Promise<ContractGeneration> => contractGeneration(await this.contractVersion());
   // v2 views (interface-v7 §A4–A6): reject with RpcError (MethodNotFound) on v1.
@@ -101,6 +111,11 @@ export class NectarViews {
     }
     return out;
   };
+  // WO-23a (PRD §4.9–§4.11)
+  getShield = (position_id: U64) => this.v<ShieldView | null>("get_shield", { position_id });
+  getShieldOpensToday = (account_id: string) => this.v<number>("get_shield_opens_today", { account_id });
+  getFeeStack = (symbol?: string | null) => this.v<FeeStackView>("get_fee_stack", symbol ? { symbol } : {});
+  previewSelfSettle = (position_id: U64) => this.v<SelfSettlePreview>("preview_self_settle", { position_id });
   /** interface-v7 §B (WO-21): keeper-attestation flag and OutLayer vault_read pin. */
   getRemoteConfig = () => this.v<RemoteConfigView>("get_remote_config");
   // P1 views: reject with RpcError on the P0 deployment (method not found); callers render "P0 static pricing" / "owner oracle".

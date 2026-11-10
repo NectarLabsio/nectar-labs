@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button, CONSENT_CHANGED_EVENT, ConsentBanner, Footer, Nav, analyticsAllowed, type LinkLike } from "@nectar/ui";
 import { CONTACT_EMAIL, GA_ID, docsHref } from "@/lib/env";
-import { useWallet } from "./AppProvider";
+import { useFeature, useWallet } from "./AppProvider";
 
 const NextLink: LinkLike = ({ href, children, ...rest }) => (
   <Link href={href} {...rest}>
@@ -38,12 +38,14 @@ function WalletButton() {
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
+  const shieldsOn = useFeature("shields");
+  const links = shieldsOn ? [...NAV.slice(0, 2), { href: "/shield", label: "Shields" }, ...NAV.slice(2)] : NAV;
   return (
     <>
       <div className="ribbon" role="note">
         Testnet demo · mock collateral (NVDAx) · unaudited
       </div>
-      <Nav links={NAV} pathname={pathname} Link={NextLink} actions={<WalletButton />} />
+      <Nav links={links} pathname={pathname} Link={NextLink} actions={<WalletButton />} />
     </>
   );
 }
