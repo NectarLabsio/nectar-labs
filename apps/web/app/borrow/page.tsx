@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Banner, Button, Card, FeeStackList, Field, Kv, SelectField, type FeeLine } from "@nectar/ui";
+import { Banner, Button, Card, FeeStackList, Field, Kv, Segmented, SelectField, type FeeLine } from "@nectar/ui";
 import {
   E18,
   PAY_TO_MEMO_MAX,
@@ -25,6 +25,7 @@ import { FaucetLink, Gate, LoadingBlock, RpcErrorBanner } from "@/components/sta
 import { useBalance } from "@/components/useBalance";
 import { CopilotPanel } from "@/components/CopilotPanel";
 import { CorporateActionBanner, MultiplierLine, SessionBadge } from "@/components/Session";
+import { RemoteBorrow } from "@/components/remote/RemoteBorrow";
 
 const tryParse = (s: string, d: number): bigint | null => {
   try {
@@ -50,6 +51,8 @@ export default function BorrowPage() {
   const sign = useSign();
   const payToOn = useFeature("pay_to");
   const refOn = useFeature("referrals");
+  const solanaOn = useFeature("solana_remote");
+  const [chain, setChain] = useState<"near" | "solana">("near");
   const v2 = generation === "v2";
   const [key, setKey] = useState(config.collaterals[0]?.key ?? "");
   const col = config.collaterals.find((c) => c.key === key) ?? config.collaterals[0];
@@ -68,6 +71,7 @@ export default function BorrowPage() {
     if (hit) setKey(hit.key);
     const r = q.get("ref");
     if (r) setRefParam(r.trim().toLowerCase());
+    if (q.get("chain") === "solana" || q.get("remote")) setChain("solana");
   }, [config.collaterals]);
 
   const units = col ? tryParse(unitsIn, col.decimals) : null;
@@ -136,7 +140,13 @@ export default function BorrowPage() {
         <p className="lead">Lock collateral, borrow USDC up to the Cramér limit. Every fee is listed with its total before your wallet opens and is taken up front from proceeds.</p>
       </div>
       <Gate wallet action="borrow" blockOnPause>
+        {solanaOn ? (
+          <div data-testid="chain-selector">
+            <Segmented label="Collateral held on" value={chain} onChange={setChain} options={[{ value: "near", label: "NEAR" }, { value: "solana", label: "Solana devnet" }]} />
+          </div>
+        ) : null}
         {cap.data && col ? <CorporateActionBanner cap={cap.data} symbol={col.symbol} /> : null}
+        {solanaOn && chain === "solana" ? <RemoteBorrow /> : (
         <div className="grid-2">
           <Card label="Position">
             <div className="stack">
@@ -210,6 +220,7 @@ export default function BorrowPage() {
             ) : null}
           </Card>
         </div>
+        )}
       </Gate>
       <CopilotPanel />
     </div>

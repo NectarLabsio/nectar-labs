@@ -5,20 +5,35 @@
   "type": "module",
   "description": "Typed views, ft_transfer_call msg builders and the settlement preimage for nectar-core (docs/work/interface-p0.md).",
   "exports": {
-    ".": { "types": "./src/index.ts", "default": "./src/index.ts" },
-    "./preimage": { "types": "./src/preimage.ts", "default": "./src/preimage.ts" },
-    "./config": { "types": "./src/config.ts", "default": "./src/config.ts" },
-    "./config-node": { "types": "./src/config-node.ts", "default": "./src/config-node.ts" }
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./preimage": {
+      "types": "./src/preimage.ts",
+      "default": "./src/preimage.ts"
+    },
+    "./config": {
+      "types": "./src/config.ts",
+      "default": "./src/config.ts"
+    },
+    "./config-node": {
+      "types": "./src/config-node.ts",
+      "default": "./src/config-node.ts"
+    }
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest run"
   },
   "dependencies": {
+    "@solana/kit": "8.6.0",
     "near-api-js": "7.4.0",
     "yaml": "^2.9.1"
   },
   "devDependencies": {
+    "@noble/curves": "2.2.0",
+    "@noble/hashes": "2.2.0",
     "@types/node": "^22.20.5",
     "typescript": "~5.9.3",
     "vitest": "^5.1.0"

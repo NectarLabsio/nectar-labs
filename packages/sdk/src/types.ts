@@ -1,3 +1,4 @@
+import type { RemoteView } from "./remote";
 // Types for the nectar-core P0 ABI. Source of truth: docs/work/interface-p0.md (orchestrator, 2026-11-10).
 // Encoding: u128 amounts and u64 ids/timestamps are JSON strings; bps are numbers (u16).
 // Struct fields not spelled out in interface-p0.md follow PRD §6.2 and are marked "PRD §6.2 (confirm at G1)".
@@ -150,6 +151,8 @@ export interface PositionView {
   status: PositionStatus;
   /** v2, display only (interface-v7 §A3). */
   entry_multiplier_e18?: U128;
+  /** v2 remote collateral (interface-v7 §B); absent or null for NEAR-held positions. */
+  remote?: RemoteView | null;
 }
 
 /** `get_health(position_id)`. */

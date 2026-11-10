@@ -177,3 +177,73 @@ export function SignModal({ preview, signer, network, busy, error, onConfirm, on
     </Modal>
   );
 }
+
+/** One Solana instruction as the user will sign it: program, named accounts with roles, decoded args and the raw data. */
+export interface SolanaIxPreview {
+  label: string;
+  program: string;
+  accounts: Array<{ name: string; address: string; signer: boolean; writable: boolean }>;
+  args: Record<string, string>;
+  dataHex: string;
+}
+
+export interface SolanaSignPreview {
+  label: string;
+  network: string;
+  feePayer: string;
+  instructions: SolanaIxPreview[];
+  /** Network fee and rent lines (the Solana analogue of gas and deposit). */
+  fees: FeeLine[];
+  feesTotal: ReactNode;
+  note?: ReactNode;
+}
+
+/** Sign preview for a Solana devnet transaction (Wallet Standard): every instruction, account and byte before the wallet opens. */
+export function SolanaSignModal({ preview, busy, error, onConfirm, onCancel }: { preview: SolanaSignPreview | null; busy: boolean; error?: string | null; onConfirm: () => void; onCancel: () => void }) {
+  if (!preview) return null;
+  return (
+    <Modal
+      open
+      title={`Review: ${preview.label}`}
+      onClose={onCancel}
+      locked={busy}
+      actions={
+        <>
+          <Button onClick={onCancel} disabled={busy}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={onConfirm} loading={busy}>
+            {busy ? "Waiting for wallet" : "Open wallet to sign"}
+          </Button>
+        </>
+      }
+    >
+      <p className="small">Nothing is sent until you approve it in your wallet. These are the exact instructions the wallet will be asked to sign, in order.</p>
+      <div className="kvs">
+        <div className="kv"><span>Network</span><b>{preview.network}</b></div>
+        <div className="kv"><span>Fee payer</span><b className="mono">{preview.feePayer}</b></div>
+        <div className="kv"><span>Instructions</span><b>{preview.instructions.length}</b></div>
+      </div>
+      <FeeStackList lines={preview.fees} total={preview.feesTotal} note={preview.note} testId="sol-sign-fees" />
+      {preview.instructions.map((ix, i) => (
+        <div className="stack-sm" key={i} data-testid={`sol-ix-${i}`}>
+          <span className="label">
+            #{i + 1} {ix.label}
+          </span>
+          <div className="kvs">
+            <div className="kv"><span>Program</span><b className="mono">{ix.program}</b></div>
+          </div>
+          <pre className="codeblock" data-testid={`sol-ix-${i}-args`}>{JSON.stringify(ix.args, null, 2)}</pre>
+          {ix.accounts.length ? (
+            <pre className="codeblock">{ix.accounts.map((a) => `${a.name}${a.signer ? " (signer)" : ""}${a.writable ? " (writable)" : ""}\n  ${a.address}`).join("\n")}</pre>
+          ) : null}
+          <details>
+            <summary className="small">Instruction data ({ix.dataHex.length / 2} bytes)</summary>
+            <pre className="codeblock" data-testid={`sol-ix-${i}-data`}>{ix.dataHex}</pre>
+          </details>
+        </div>
+      ))}
+      {error ? <p className="error danger-text" role="alert">{error}</p> : null}
+    </Modal>
+  );
+}

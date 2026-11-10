@@ -7,6 +7,8 @@ import { E2E_KEY_ADAPTER, RPC_URL, txUrl } from "@/lib/env";
 import type { TxOutcome, WalletAdapter } from "@/lib/wallet/types";
 import { NearConnectAdapter } from "@/lib/wallet/near-connect";
 import { E2EKeyAdapter } from "@/lib/wallet/e2e-key";
+import { E2EMockAdapter } from "@/lib/wallet/e2e-mock";
+import { readLocalE2EMock, type E2EMock } from "@/lib/e2e-mock";
 
 // ------------------------------------------------------------------ chain
 
@@ -136,7 +138,22 @@ function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; ac
 
 // ------------------------------------------------------------------ provider
 
-export function AppProvider({ config, children }: { config: PublicConfig; children: ReactNode }) {
+/** Localhost-only E2E overrides (features + Solana vault ids); a no-op on any deployed host. */
+function applyE2EMock(config: PublicConfig, m: E2EMock | null): PublicConfig {
+  if (!m) return config;
+  const features = { ...config.features };
+  for (const f of m.features ?? []) features[f] = true;
+  return {
+    ...config,
+    features,
+    solana: { ...config.solana, vaultProgram: m.solana?.vaultProgram ?? config.solana.vaultProgram, mint: m.solana?.mint ?? config.solana.mint },
+  };
+}
+
+export function AppProvider({ config: baseConfig, children }: { config: PublicConfig; children: ReactNode }) {
+  const [e2eMock, setE2eMock] = useState<E2EMock | null>(null);
+  useEffect(() => setE2eMock(readLocalE2EMock()), []);
+  const config = useMemo(() => applyE2EMock(baseConfig, e2eMock), [baseConfig, e2eMock]);
   const deployed = config.core !== null;
   const views = useMemo(() => (config.core ? NectarViews.fromRpc(config.core, RPC_URL) : null), [config.core]);
   const [core, setCore] = useState<CoreConfigView | null>(null);
@@ -166,7 +183,7 @@ export function AppProvider({ config, children }: { config: PublicConfig; childr
   }, [views, tick]);
 
   const adapterRef = useRef<WalletAdapter | null>(null);
-  if (!adapterRef.current) adapterRef.current = E2E_KEY_ADAPTER ? new E2EKeyAdapter() : new NearConnectAdapter();
+  if (!adapterRef.current) adapterRef.current = E2E_KEY_ADAPTER ? new E2EKeyAdapter() : readLocalE2EMock()?.near ? new E2EMockAdapter() : new NearConnectAdapter();
   const adapter = adapterRef.current;
   const [accountId, setAccountId] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);

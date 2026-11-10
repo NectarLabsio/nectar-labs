@@ -333,3 +333,12 @@ details p { padding: 0 0 14px; color: var(--text); max-width: 68ch; }
   h1 { font-size: 28px; }
   .prose > * { min-width: 0; }
 }
+
+/* Remote (Solana devnet) borrow steps: reserve → deposit → confirm → open (WO-31). */
+.rsteps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; counter-reset: rs; }
+.rsteps li { counter-increment: rs; min-width: 0; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--r-ctl); font-size: 12px; color: var(--dim); overflow-wrap: anywhere; }
+.rsteps li::before { content: counter(rs) " · "; font-family: var(--font-display); font-weight: 700; }
+.rsteps li[data-state="done"] { border-color: var(--accent-deep); color: var(--text); }
+.rsteps li[data-state="current"] { border-color: var(--accent); color: var(--heading); background: var(--accent-fill); }
+.addr { font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; word-break: break-all; color: var(--heading); }
+@media (max-width: 760px) { .rsteps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

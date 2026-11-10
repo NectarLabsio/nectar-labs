@@ -14,6 +14,11 @@ export const FAUCET_URL = process.env.NEXT_PUBLIC_FAUCET_URL ?? "";
 export const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 // E2E only: lets Playwright sign with the demo borrower key injected at test time. Never set in production.
 export const E2E_KEY_ADAPTER = process.env.NEXT_PUBLIC_E2E_KEY_ADAPTER === "1";
+// Solana devnet RPC for the remote (Solana) collateral flow (@solana/wallet-standard-chains 1.1.2 names this endpoint for solana:devnet).
+export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC || "https://api.devnet.solana.com";
+export const SOLANA_FAUCET_URL = "https://faucet.solana.com";
+export const SOLANA_EXPLORER_TX = (sig: string): string => `https://explorer.solana.com/tx/${sig}?cluster=devnet`;
+export const SOLANA_EXPLORER_ADDR = (a: string): string => `https://explorer.solana.com/address/${a}?cluster=devnet`;
 export const CONTACT_EMAIL = "kunal@nectarnetwork.fun";
 
 export const txUrl = (hash: string): string | null => (EXPLORER_TX ? `${EXPLORER_TX}${hash}` : null);
