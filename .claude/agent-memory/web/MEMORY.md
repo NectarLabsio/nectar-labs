@@ -1,0 +1,2 @@
+- [Worktree bash guard](feedback_worktree_bash.md) — split git/heredoc commands; WIP-commit early under turn budgets
+- [Web E2E patterns](project_web_e2e.md) — v2 views mocked via page.route on fastnear + localhost E2E mock wallet

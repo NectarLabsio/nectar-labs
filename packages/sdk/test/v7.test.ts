@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   aggregateCapacity,
+  announceRefusal,
+  calendarStatus,
+  canApplyCorporateAction,
+  maxSetMultiplierE18,
+  nsToUtc,
+  parseMultiplierE18,
+  setMultiplierRefusal,
+  type SessionWindow,
   contractGeneration,
   encodeMsg,
   featureOn,
@@ -153,5 +161,48 @@ describe("features", () => {
     expect(featureOn(f, "v2", "pay_to")).toBe(true);
     expect(featureOn(f, "v1", "pay_to")).toBe(false);
     expect(featureOn(f, null, "pay_to")).toBe(false);
+  });
+});
+
+describe("console helpers (WO-26a)", () => {
+  const E = 10n ** 18n;
+  it("parses multipliers exactly", () => {
+    expect(parseMultiplierE18("1.02")).toBe(1_020_000_000_000_000_000n);
+    expect(parseMultiplierE18("2")).toBe(2n * E);
+    expect(() => parseMultiplierE18("1.0000000000000000001")).toThrow();
+    expect(() => parseMultiplierE18("-1")).toThrow();
+  });
+  it("set_multiplier: increase only, at most +5%, not while pending", () => {
+    expect(maxSetMultiplierE18(1_020_000_000_000_000_000n)).toBe(1_071_000_000_000_000_000n);
+    expect(setMultiplierRefusal(E, (E * 105n) / 100n, false)).toBeNull();
+    expect(setMultiplierRefusal(E, (E * 105n) / 100n + 1n, false)).toMatch(/\+5%/);
+    expect(setMultiplierRefusal(E, E - 1n, false)).toMatch(/decrease/);
+    expect(setMultiplierRefusal(E, E, true)).toMatch(/pending/);
+  });
+  it("announce needs 1 h notice; apply once effective", () => {
+    const now = 1_000n * 1_000_000_000n;
+    expect(announceRefusal(E, now + 3_600n * 1_000_000_000n, now)).toBeNull();
+    expect(announceRefusal(E, now + 3_599n * 1_000_000_000n, now)).toMatch(/1 h/);
+    expect(announceRefusal(0n, now * 2n, now)).toMatch(/> 0/);
+    expect(canApplyCorporateAction(true, String(now), now)).toBe(true);
+    expect(canApplyCorporateAction(true, String(now + 1n), now)).toBe(false);
+    expect(canApplyCorporateAction(false, String(now), now)).toBe(false);
+  });
+  it("calendar status", () => {
+    const w: SessionWindow[] = [["10", "20"], ["30", "40"]];
+    expect(calendarStatus(w, 15n)).toMatchObject({ windows: 2, current: ["10", "20"], next: ["30", "40"], exhausted: false });
+    expect(calendarStatus(w, 25n)).toMatchObject({ current: null, next: ["30", "40"] });
+    expect(calendarStatus(w, 40n)).toMatchObject({ current: null, next: null, exhausted: true });
+    expect(calendarStatus([], 1n)).toMatchObject({ windows: 0, current: null, next: null, last: null, exhausted: false });
+    expect(nsToUtc("1794268138195955491")).toMatch(/^2026-\d\d-\d\d \d\d:\d\d UTC$/);
+  });
+  it("remote owner builders validate like the contract", () => {
+    expect(txV2.setAllowKeeperDepositAttestation("c", true)).toMatchObject({ methodName: "set_allow_keeper_deposit_attestation", args: { allow: true }, deposit: "0" });
+    const t = txV2.setVaultReadConfig("c", { project_id: "nectar.testnet/vault-read", version_key: "ab", deposit_yocto: "5", gas_tgas: 50 });
+    expect(t.args).toEqual({ project_id: "nectar.testnet/vault-read", version_key: "ab", deposit_yocto: "5", gas_tgas: 50 });
+    expect(() => txV2.setVaultReadConfig("c", { project_id: "", version_key: "k", deposit_yocto: "5", gas_tgas: 50 })).toThrow();
+    expect(() => txV2.setVaultReadConfig("c", { project_id: "p", version_key: "k", deposit_yocto: "0", gas_tgas: 50 })).toThrow();
+    expect(() => txV2.setVaultReadConfig("c", { project_id: "p", version_key: "k", deposit_yocto: "5", gas_tgas: 101 })).toThrow();
+    expect(() => txV2.setVaultReadConfig("c", { project_id: "p", version_key: "k", deposit_yocto: "5", gas_tgas: 9 })).toThrow();
   });
 });

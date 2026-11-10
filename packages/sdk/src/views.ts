@@ -13,6 +13,7 @@ import type {
   PositionView,
   QuoterConfigView,
   QuoteView,
+  RemoteConfigView,
   SessionWindow,
   U128,
   U64,
@@ -90,6 +91,18 @@ export class NectarViews {
   getPendingRelease = (position_id: U64) => this.v<PendingRelease | null>("get_pending_release", { position_id });
   isReferrer = (account_id: string) => this.v<boolean>("is_referrer", { account_id });
   getSessionCalendar = (from_index = 0, limit = 100) => this.v<SessionWindow[]>("get_session_calendar", { from_index, limit });
+  /** Every calendar window (pages of 100, the contract's MAX_PAGE; at most 600 windows). */
+  getFullSessionCalendar = async (): Promise<SessionWindow[]> => {
+    const out: SessionWindow[] = [];
+    for (let from = 0; from < 1000; from += 100) {
+      const page = await this.getSessionCalendar(from, 100);
+      out.push(...page);
+      if (page.length < 100) break;
+    }
+    return out;
+  };
+  /** interface-v7 §B (WO-21): keeper-attestation flag and OutLayer vault_read pin. */
+  getRemoteConfig = () => this.v<RemoteConfigView>("get_remote_config");
   // P1 views: reject with RpcError on the P0 deployment (method not found); callers render "P0 static pricing" / "owner oracle".
   getQuoterConfig = () => this.v<QuoterConfigView | null>("get_quoter_config");
   getOracleSource = (symbol: string) => this.v<OracleSource | null>("get_oracle_source", { symbol });

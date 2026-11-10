@@ -120,5 +120,25 @@
     "utilised_usd_e6": "1200000000",
     "treasury_usd_e6": "0",
     "lenders_fees_usd_e6": "0"
-  }
+  },
+  "get_session_calendar": [
+    [
+      "1794229800000000000",
+      "1794253200000000000"
+    ],
+    [
+      "1794316200000000000",
+      "1794339600000000000"
+    ]
+  ],
+  "get_remote_config": {
+    "allow_keeper_deposit_attestation": true,
+    "vault_read_project_id": "nectar.testnet/vault-read",
+    "vault_read_version_key": "abababababababababababababababababababababababababababababababab",
+    "vault_read_deposit_yocto": "10000000000000000000000",
+    "vault_read_gas_tgas": 50,
+    "reservation_expiry_s": 1800
+  },
+  "is_referrer": true,
+  "get_claimable": "150000"
 }

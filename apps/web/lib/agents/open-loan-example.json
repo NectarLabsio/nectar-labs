@@ -1,0 +1,96 @@
+{
+  "_comment": "EXAMPLE, not a live call: services/feed/src/skill.ts run against e2e/fixtures/v2-views.json by scripts/build-agent-example.ts.",
+  "input": {
+    "account_id": "agent1.nectar.testnet",
+    "collateral": "NVDAx",
+    "units": "1000000",
+    "borrow_usd": "10"
+  },
+  "output": {
+    "contract": {
+      "account_id": "nectar-core-v2.nectar.testnet",
+      "version": "2.0.0-v7",
+      "kind": "v2"
+    },
+    "signer_id": "agent1.nectar.testnet",
+    "call": {
+      "receiver_id": "nvdax-mock.nectar.testnet",
+      "method": "ft_transfer_call",
+      "args": {
+        "receiver_id": "nectar-core-v2.nectar.testnet",
+        "amount": "1000000",
+        "msg": "{\"LockCollateralAndBorrow\":{\"collateral\":\"NVDAx\",\"borrow_usd_e6\":\"10000000\",\"pre_liq_ltv_bps\":8000}}"
+      },
+      "deposit": "1",
+      "gas": "200000000000000"
+    },
+    "msg_decoded": {
+      "LockCollateralAndBorrow": {
+        "collateral": "NVDAx",
+        "borrow_usd_e6": "10000000",
+        "pre_liq_ltv_bps": 8000
+      }
+    },
+    "preview": {
+      "source": "preview_borrow (v2)",
+      "block_height": 1,
+      "symbol": "NVDAx",
+      "units": "1000000",
+      "borrow_usd_e6": "10000000",
+      "value_usd_e6": "90780000",
+      "limits": {
+        "static_limit_usd_e6": "36312000",
+        "cramer_limit_usd_e6": "63546000"
+      },
+      "fees": {
+        "limit_premium_usd_e6": "0",
+        "origination_fee_usd_e6": "30000",
+        "referrer_share_usd_e6": "0",
+        "total_fees_usd_e6": "30000",
+        "net_proceeds_usd_e6": "9970000"
+      },
+      "aggregate_headroom_usd_e6": "1687500000",
+      "multiplier_e18": "1020000000000000000",
+      "session_open": false,
+      "ok": true,
+      "reason": null,
+      "pre_liq_ltv_bps": 8000,
+      "health": [
+        {
+          "shock_bps": 0,
+          "price_usd_e6": "89000000",
+          "value_usd_e6": "90780000",
+          "ltv_bps": "1102",
+          "pre_liq_ltv_bps": 8000,
+          "triggerable": false
+        },
+        {
+          "shock_bps": -500,
+          "price_usd_e6": "84550000",
+          "value_usd_e6": "86241000",
+          "ltv_bps": "1160",
+          "pre_liq_ltv_bps": 8000,
+          "triggerable": false
+        },
+        {
+          "shock_bps": -1000,
+          "price_usd_e6": "80100000",
+          "value_usd_e6": "81702000",
+          "ltv_bps": "1224",
+          "pre_liq_ltv_bps": 8000,
+          "triggerable": false
+        },
+        {
+          "shock_bps": -2000,
+          "price_usd_e6": "71200000",
+          "value_usd_e6": "72624000",
+          "ltv_bps": "1377",
+          "pre_liq_ltv_bps": 8000,
+          "triggerable": false
+        }
+      ],
+      "absent_fields": []
+    },
+    "note": "UNSIGNED. Sign and send this function call from signer_id with your own key (near-api-js). Health rows are display-only; the contract decides."
+  }
+}

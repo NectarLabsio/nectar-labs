@@ -11,6 +11,7 @@ import type {
   QuoterConfigInput,
   U128,
   U64,
+  VaultReadConfigInput,
 } from "./types";
 
 export const ONE_YOCTO = "1";
@@ -57,6 +58,8 @@ export function assertAccountId(v: string, field: string): string {
 }
 /** UI-side cap on the pay_to memo carried by ft_transfer (the contract forwards it verbatim). */
 export const PAY_TO_MEMO_MAX = 256;
+/** Contract `MAX_STRING_LEN` (project ids, version keys). */
+export const MAX_STRING_LEN = 128;
 
 export function assertBps(v: number, field: string): Bps {
   if (!Number.isInteger(v) || v < 0 || v > 10_000) throw new Error(`${field} must be an integer in [0, 10000]`);
@@ -252,6 +255,23 @@ export const txV2 = {
     coreCall(core, "unregister_referrer", { account_id: assertAccountId(account_id, "account_id") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Unregister referrer" }),
   setOriginationFeeBps: (core: string, bps: number) =>
     coreCall(core, "set_origination_fee_bps", { bps: assertInt(bps, "bps", 0, 100) }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set origination fee" }),
+  // remote lifecycle owner calls (interface-v7 §B, WO-21)
+  setAllowKeeperDepositAttestation: (core: string, allow: boolean) =>
+    coreCall(core, "set_allow_keeper_deposit_attestation", { allow }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: allow ? "Allow keeper attestation" : "Disallow keeper attestation" }),
+  setVaultReadConfig: (core: string, c: VaultReadConfigInput) => {
+    const str = (v: string, f: string) => {
+      if (v.length < 1 || v.length > MAX_STRING_LEN) throw new Error(`${f} must be 1–${MAX_STRING_LEN} characters`);
+      return v;
+    };
+    const deposit = assertU128(c.deposit_yocto, "deposit_yocto");
+    if (BigInt(deposit) === 0n) throw new Error("deposit_yocto must be > 0");
+    return coreCall(
+      core,
+      "set_vault_read_config",
+      { project_id: str(c.project_id, "project_id"), version_key: str(c.version_key, "version_key"), deposit_yocto: deposit, gas_tgas: assertInt(c.gas_tgas, "gas_tgas", 10, 100) },
+      { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set vault_read config" },
+    );
+  },
 };
 
 export function assertInt(v: number, field: string, lo: number, hi: number): number {
