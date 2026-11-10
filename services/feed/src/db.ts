@@ -150,7 +150,7 @@ export class FeedDb {
     this.setMeta(key, String(Number(this.meta(key) ?? '0') + 1));
   }
 
-  /** 1Click R_c series: one verified 3-size set. Idempotent per set of correlation ids; `responses` = full signed quotes. */
+  /** 1Click D_c (verified DEX depth) series: one verified 3-size set. Idempotent per set of correlation ids; `responses` = full signed quotes. */
   addOneClickSet(r: OneClickSetRow, responses: string): void {
     this.db
       .prepare('INSERT OR IGNORE INTO oneclick_sets (pair_id, origin, destination, observed_at, set_key, samples, responses) VALUES (?, ?, ?, ?, ?, ?, ?)')

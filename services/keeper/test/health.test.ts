@@ -1,14 +1,19 @@
 // Health maths vs the shared test vectors. Reads contracts/nectar-core/tests/model.csv (written by
 // WO-2's model.py) when present; until WO-2 lands it, falls back to test/model.fixture.csv, which has
 // the columns below and hand-computed values. Columns are matched by header name; the real CSV must
-// carry at least the HEALTH columns, and LIMIT columns are checked when present.
+// carry at least the HEALTH columns, and LIMIT columns are checked when present. V2 columns (multiplier,
+// aggregate debt, origination; interface-v7.md A1/A3/A5) are checked when the header has them; an empty
+// cell in a present column fails loudly. Absent columns take the v1 defaults (M = 1e18, total_debt = 0).
 
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { LTV_INFINITE_BPS, ceilDiv, cramerLimit, isPreLiqBreached, limitPremiumUsdE6, ltvBps, valueUsdE6 } from '../src/health.ts';
+import {
+  E18, LTV_INFINITE_BPS, borrowOk, ceilDiv, collateralStateFromView, cramerLimit, effectiveMultiplierE18, isPreLiqBreached,
+  limitPremiumUsdE6, ltvBps, netProceedsUsdE6, originationFeeUsdE6, valueUsdE6,
+} from '../src/health.ts';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const REAL = resolve(here, '../../../contracts/nectar-core/tests/model.csv');
@@ -46,6 +51,9 @@ const get = (r: Row, k: string): string => {
   if (v === undefined || v === '') throw new Error(`missing column ${k}`);
   return v;
 };
+/** v2 column: the v1 default when the header lacks it; an empty cell in a present column throws. */
+const opt = (r: Row, k: string, dflt: bigint): bigint => (k in r ? BigInt(get(r, k)) : dflt);
+const has = (r: Row, k: string): boolean => k in r;
 
 const all = parseCsv(readFileSync(SOURCE, 'utf8'));
 const label = (r: Row, i: number): string => r.case ?? `row ${i + 2}`;
@@ -65,7 +73,8 @@ describe(`health maths vs ${SOURCE === REAL ? 'contracts/nectar-core/tests/model
 
   rows.forEach((r, i) => {
     it(`health: ${label(r, i)}`, () => {
-      const v = valueUsdE6(BigInt(get(r, 'units')), BigInt(get(r, 'price_usd_e6')), Number(get(r, 'decimals')));
+      const m = opt(r, 'multiplier_e18', E18);
+      const v = valueUsdE6(BigInt(get(r, 'units')), BigInt(get(r, 'price_usd_e6')), Number(get(r, 'decimals')), m);
       assert.equal(v, BigInt(get(r, 'value_usd_e6')), 'value_usd_e6');
       const debt = BigInt(get(r, 'debt_usd_e6'));
       assert.equal(ltvBps(debt, v), BigInt(get(r, 'ltv_bps')), 'ltv_bps');
@@ -76,6 +85,7 @@ describe(`health maths vs ${SOURCE === REAL ? 'contracts/nectar-core/tests/model
       // Every limit row needs every LIMIT column: an empty one fails loudly via get().
       it(`limit: ${label(r, i)}`, () => {
         const v = BigInt(get(r, 'value_usd_e6'));
+        const totalDebt = opt(r, 'total_debt_usd_e6', 0n);
         const lim = cramerLimit({
           valueE6: v,
           sessionOpen: bool(get(r, 'session_open')),
@@ -86,11 +96,27 @@ describe(`health maths vs ${SOURCE === REAL ? 'contracts/nectar-core/tests/model
           weekendHaircutBps: BigInt(get(r, 'weekend_haircut_bps')),
           maxNectarLtvBps: BigInt(get(r, 'max_nectar_ltv_bps')),
           baseLtvBps: BigInt(get(r, 'base_ltv_bps')),
+          totalDebtUsdE6: totalDebt,
         });
         assert.equal(lim.bcUsdE6, BigInt(get(r, 'b_c_usd_e6')), 'b_c_usd_e6');
         assert.equal(lim.staticLimitUsdE6, BigInt(get(r, 'static_limit_usd_e6')), 'static_limit_usd_e6');
-        const prem = limitPremiumUsdE6(BigInt(get(r, 'borrow_usd_e6')), lim.staticLimitUsdE6, BigInt(get(r, 'limit_premium_bps')));
+        const borrow = BigInt(get(r, 'borrow_usd_e6'));
+        const prem = limitPremiumUsdE6(borrow, lim.staticLimitUsdE6, BigInt(get(r, 'limit_premium_bps')));
         assert.equal(prem, BigInt(get(r, 'premium_usd_e6')), 'premium_usd_e6');
+        if (has(r, 'haircut_bps')) assert.equal(lim.haircutBps, BigInt(get(r, 'haircut_bps')), 'haircut_bps');
+        if (has(r, 'capacity_usd_e6')) assert.equal(lim.capacityUsdE6, BigInt(get(r, 'capacity_usd_e6')), 'capacity_usd_e6');
+        if (has(r, 'aggregate_headroom_usd_e6')) {
+          assert.equal(lim.aggregateHeadroomUsdE6, BigInt(get(r, 'aggregate_headroom_usd_e6')), 'aggregate_headroom_usd_e6');
+        }
+        if (has(r, 'borrow_ok')) {
+          const ok = borrowOk(borrow, lim, totalDebt, v, BigInt(get(r, 'pre_liq_ltv_bps')));
+          assert.equal(ok, bool(get(r, 'borrow_ok')), 'borrow_ok');
+        }
+        if (has(r, 'origination_fee_bps')) {
+          const orig = originationFeeUsdE6(borrow, BigInt(get(r, 'origination_fee_bps')));
+          assert.equal(orig, BigInt(get(r, 'origination_fee_usd_e6')), 'origination_fee_usd_e6');
+          assert.equal(netProceedsUsdE6(borrow, prem, orig), BigInt(get(r, 'net_proceeds_usd_e6')), 'net_proceeds_usd_e6');
+        }
         limitChecked++;
       });
     }
@@ -118,5 +144,27 @@ describe('health maths edge cases', () => {
     assert.equal(cramerLimit({ ...base, sessionOpen: false }).bcUsdE6, 0n);
     assert.equal(cramerLimit({ ...base, sessionOpen: false }).haircutBps, 2500n);
     assert.equal(cramerLimit({ ...base, sessionOpen: true }).bcUsdE6, 900_000n);
+  });
+  it('aggregate headroom floors at 0 when total debt exceeds capacity', () => {
+    const base = { valueE6: 10n ** 12n, sessionOpen: true, qUsdE6: 1_000_000n, rUsdE6: 0n, dUsdE6: 0n, baseHaircutBps: 1000n, weekendHaircutBps: 2500n, maxNectarLtvBps: 7000n, baseLtvBps: 4000n };
+    const lim = cramerLimit({ ...base, totalDebtUsdE6: 5_000_000n });
+    assert.equal(lim.aggregateHeadroomUsdE6, 0n);
+    assert.equal(lim.bcUsdE6, 0n);
+    assert.equal(cramerLimit({ ...base, totalDebtUsdE6: 100_000n }).bcUsdE6, 800_000n);
+  });
+  it('TokenIncludesMultiplier ignores M; a 2-for-1 split with halved price leaves V unchanged', () => {
+    assert.equal(effectiveMultiplierE18('TokenIncludesMultiplier', 2n * E18), E18);
+    assert.equal(effectiveMultiplierE18('Underlying', 2n * E18), 2n * E18);
+    assert.equal(valueUsdE6(100_000_000n, 180_000_000n, 6), valueUsdE6(100_000_000n, 90_000_000n, 6, 2n * E18));
+  });
+  it('reads v1 views: no multiplier / total debt ⇒ defaults; session from market_session_open; missing ⇒ closed', () => {
+    assert.deepEqual(collateralStateFromView({ market_session_open: true }), { multiplierE18: E18, priceKind: 'Underlying', totalDebtUsdE6: 0n, sessionOpen: true });
+    assert.deepEqual(collateralStateFromView({ session_open: false, q_usd_e6: '1' }), { multiplierE18: E18, priceKind: 'Underlying', totalDebtUsdE6: 0n, sessionOpen: false });
+    assert.equal(collateralStateFromView({}).sessionOpen, false);
+    assert.equal(collateralStateFromView(null).sessionOpen, false);
+  });
+  it('reads v2 views', () => {
+    const s = collateralStateFromView({ session_open: true, multiplier_e18: '2000000000000000000', price_kind: 'TokenIncludesMultiplier', total_debt_usd_e6: '10500000000' });
+    assert.deepEqual(s, { multiplierE18: 2n * E18, priceKind: 'TokenIncludesMultiplier', totalDebtUsdE6: 10_500_000_000n, sessionOpen: true });
   });
 });
