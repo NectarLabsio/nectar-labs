@@ -8,7 +8,7 @@ import { parse } from 'yaml';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const cfg = parse(readFileSync(join(root, 'packages/config/config.yaml'), 'utf8'));
-const RPC = process.env.NEAR_RPC_URL ?? 'https://rpc.testnet.fastnear.com';
+const RPC = process.env.NEAR_RPC_URL ?? 'https://test.rpc.fastnear.com';
 const CORE = cfg.accounts.core;
 const SYMBOL = cfg.collateral?.nvdax?.symbol ?? 'NVDAx';
 const EXPLORER = 'https://testnet.nearblocks.io';

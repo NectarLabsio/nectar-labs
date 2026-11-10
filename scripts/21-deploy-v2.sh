@@ -8,7 +8,7 @@
 #      flag (testnet fallback, labelled on the Feed)   7. config switch ONLY with --switch (after G2b passes the orchestrator re-runs with it)
 # Usage: scripts/21-deploy-v2.sh [--switch]
 source "$(dirname "$0")/_lib.sh"; guard_mainnet
-RPC="${NEAR_RPC_URL:-https://rpc.testnet.fastnear.com}"
+RPC="${NEAR_RPC_URL:-https://test.rpc.fastnear.com}"
 OWNER=$(cfg .accounts.owner); USDC=$(cfg .accounts.usdc_mock); NVDAX=$(cfg .accounts.nvdax_mock)
 CORE2=$(cfg .v7.core_v2); KEEPER2=$(cfg .v7.keeper_v2)
 W="$ROOT/target/near"; CORE_WASM="$W/nectar_core/nectar_core.wasm"; FT_WASM="$W/mock_ft/mock_ft.wasm"
