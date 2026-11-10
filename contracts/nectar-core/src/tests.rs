@@ -65,7 +65,6 @@ fn nvdax_input() -> CollateralInput {
         pre_liq_min_bps: 6500,
         pre_liq_max_bps: 8000,
         verified_dex_depth_usd_e6: U128(0),
-        nectar_reserve_usd_e6: U128(0),
         remote_chain: None,
         price_kind: None,
     }
@@ -235,7 +234,10 @@ fn session_window_switches_haircut_and_depth() {
     let mut c = setup();
     set_ctx(owner(), 0, T0);
     c.set_dex_depth("NVDAx".into(), U128(4_000_000_000));
-    c.set_reserve("NVDAx".into(), U128(1_000_000_000));
+    // WO-23b: R_c comes from Reserve deposits (the owner setter is gone).
+    c.set_reserve_params("NVDAx".into(), 1_000, None);
+    assert_eq!(ft(&mut c, usdc(), lender(), 1_000_000_000, r#"{"JoinNectarReserve":{"collateral":"NVDAx"}}"#), 0);
+    set_ctx(owner(), 0, T0);
     let closed = c.get_exit_capacity("NVDAx".into());
     assert_eq!(closed.haircut_bps, 2500);
     assert_eq!(closed.d_usd_e6, U128(0));
@@ -264,18 +266,10 @@ fn set_dex_depth_and_reserve_owner_values() {
     let mut c = setup();
     set_ctx(owner(), 0, T0);
     c.set_dex_depth("NVDAx".into(), U128(7));
-    c.set_reserve("NVDAx".into(), U128(9));
+    c.set_reserve_params("NVDAx".into(), 9, None);
     let col = c.get_collateral("NVDAx".into()).unwrap();
     assert_eq!(col.verified_dex_depth_usd_e6, U128(7));
-    assert_eq!(col.nectar_reserve_usd_e6, U128(9));
-}
-
-#[test]
-#[should_panic(expected = "owner only")]
-fn set_reserve_owner_only() {
-    let mut c = setup();
-    set_ctx(buyer1(), 0, T0);
-    c.set_reserve("NVDAx".into(), U128(1));
+    assert_eq!(col.reserve.discount_bps, 9);
 }
 
 #[test]
@@ -841,8 +835,12 @@ fn trigger_without_quotes_reverts() {
     let mut c = setup();
     ft(&mut c, usdc(), lender(), 50_000_000_000, r#""SupplyLendingLiquidity""#);
     set_ctx(owner(), 0, T0);
-    c.set_reserve("NVDAx".into(), U128(20_000_000_000));
+    // WO-23b: capacity from a Reserve deposit that then leaves R_c (notice), so neither quotes nor Reserve can fill.
+    c.set_reserve_params("NVDAx".into(), 1_000, None);
+    ft(&mut c, usdc(), lender(), 20_000_000_000, r#"{"JoinNectarReserve":{"collateral":"NVDAx"}}"#);
     ft(&mut c, nvdax(), borrower(), NVDAX_UNITS, &borrow_msg(11_250_000_000, 7500));
+    set_ctx(lender(), 1, T0 + SEC);
+    c.initiate_reserve_exit("r-NVDAx-0".into());
     crash_price(&mut c);
     set_ctx(keeper(), 0, T0 + 4 * SEC);
     c.trigger_preliquidation(U64(0));
@@ -1088,12 +1086,21 @@ fn model_csv_vectors_match_contract_math() {
                 assert_eq!(orig, u("origination_fee_usd_e6"), "{case}");
                 let prem = math::premium_usd_e6(borrow, l.static_limit_usd_e6, u("limit_premium_bps") as u16).unwrap();
                 assert_eq!(prem, u("premium_usd_e6"), "{case}");
-                let s = math::split_premium(prem, u("buyers_bps") as u16, u("lenders_bps") as u16, u("q_usd_e6"))
-                    .unwrap();
+                // WO-23b: Q:R split; limit rows model R as backed 1:1 by shares
+                let s = math::split_premium_qr(
+                    prem,
+                    u("buyers_bps") as u16,
+                    u("lenders_bps") as u16,
+                    u("q_usd_e6"),
+                    u("r_usd_e6"),
+                    u("r_usd_e6"),
+                )
+                .unwrap();
                 assert_eq!(s.buyers_usd_e6, u("buyers_fee_usd_e6"), "{case}");
                 assert_eq!(s.lenders_usd_e6, u("lenders_fee_usd_e6"), "{case}");
                 assert_eq!(s.treasury_usd_e6, u("treasury_fee_usd_e6"), "{case}");
                 assert_eq!(s.acc_increment_e18, u("acc_increment_e18"), "{case}");
+                assert_eq!(s.reserve_usd_e6, u("reserve_fee_usd_e6"), "{case}");
                 assert_eq!(borrow.saturating_sub(prem + orig), u("net_proceeds_usd_e6"), "{case}");
                 let debt = u("debt_usd_e6");
                 assert_eq!(math::ltv_bps(debt, l.value_usd_e6) as u128, u("ltv_bps"), "{case}");
@@ -1172,6 +1179,39 @@ fn model_csv_vectors_match_contract_math() {
                     .unwrap();
                     assert_eq!(b, u("buyer_units"), "{case}");
                     assert_eq!(u("units") - b, u("units_kept"), "{case}");
+                }
+            }
+            // WO-23b §4.8: fee split Q:R, shares for a deposit, Reserve leg and the per-share unit index.
+            "reserve" => {
+                let shares = u("reserve_shares");
+                let r = u("r_usd_e6");
+                let s = math::split_premium_qr(u("premium_usd_e6"), u("buyers_bps") as u16, u("lenders_bps") as u16, u("q_usd_e6"), r, shares)
+                    .unwrap();
+                assert_eq!(s.buyers_usd_e6, u("buyers_fee_usd_e6"), "{case}");
+                assert_eq!(s.acc_increment_e18, u("acc_increment_e18"), "{case}");
+                assert_eq!(s.reserve_usd_e6, u("reserve_fee_usd_e6"), "{case}");
+                assert_eq!(s.reserve_acc_increment_e18, u("reserve_acc_increment_e18"), "{case}");
+                let minted = math::reserve_shares_for(u("reserve_deposit_usd_e6"), shares, r);
+                if get("minted_shares").is_empty() {
+                    assert!(minted.is_err(), "{case}");
+                } else {
+                    assert_eq!(minted.unwrap(), u("minted_shares"), "{case}");
+                }
+                let leg = math::settle_leg_m(
+                    u("debt_usd_e6"),
+                    r,
+                    u("units"),
+                    math::E18,
+                    u("price_usd_e6").max(1),
+                    u("decimals") as u8,
+                    u("disc_bps") as u16,
+                    u("keeper_fee_bps") as u16,
+                )
+                .unwrap();
+                if !get("repay_usd_e6").is_empty() {
+                    let leg = leg.unwrap_or_else(|| panic!("{case}: expected a leg"));
+                    assert_eq!((leg.repay_usd_e6, leg.buyer_units, leg.keeper_units), (u("repay_usd_e6"), u("buyer_units"), u("keeper_units")), "{case}");
+                    assert_eq!(math::mul_div_floor(leg.buyer_units, math::E18, shares).unwrap(), u("reserve_acc_units_e18"), "{case}");
                 }
             }
             k => panic!("unknown kind {k}"),

@@ -180,21 +180,82 @@ pub struct PremiumSplit {
     pub lenders_usd_e6: u128,
     pub treasury_usd_e6: u128,
     pub acc_increment_e18: u128,
+    /// WO-23b: the Reserve's part of `buyers_usd_e6` (buyers · R/(Q+R), the remainder after the quotes' floor).
+    pub reserve_usd_e6: u128,
+    /// Increment of `reserve.acc_fee_per_share_e18`.
+    pub reserve_acc_increment_e18: u128,
 }
 
-/// Split per fee_split; treasury takes the rounding remainder. If no quote weight exists,
-/// the buyers' share goes to treasury so no USDC is orphaned in the index.
+/// Split per fee_split with no Reserve (v1 form; = `split_premium_qr(.., q, 0, 0)`).
 pub fn split_premium(premium: u128, buyers_bps: u16, lenders_bps: u16, q_usd_e6: u128) -> MathResult<PremiumSplit> {
+    split_premium_qr(premium, buyers_bps, lenders_bps, q_usd_e6, 0, 0)
+}
+
+/// WO-23b (§4.8): the buyers' share is split between quotes and the Reserve in proportion to Q_c : R_c.
+/// quotes = floor(buyers · Q / (Q + R)), Reserve = buyers − quotes. Treasury takes the rounding remainder.
+/// If Q + R = 0 the buyers' share goes to treasury so no USDC is orphaned. R counts only with active shares.
+pub fn split_premium_qr(
+    premium: u128,
+    buyers_bps: u16,
+    lenders_bps: u16,
+    q_usd_e6: u128,
+    r_usd_e6: u128,
+    reserve_shares: u128,
+) -> MathResult<PremiumSplit> {
+    let r = if reserve_shares == 0 { 0 } else { r_usd_e6 };
     let mut buyers = mul_div_floor(premium, buyers_bps as u128, BPS)?;
     let lenders = mul_div_floor(premium, lenders_bps as u128, BPS)?;
-    let acc_inc = if q_usd_e6 == 0 {
+    let total = add(q_usd_e6, r)?;
+    let (acc_inc, r_part, r_inc) = if total == 0 {
         buyers = 0;
-        0
+        (0, 0, 0)
     } else {
-        mul_div_floor(buyers, E18, q_usd_e6)?
+        let q_part = mul_div_floor(buyers, q_usd_e6, total)?;
+        let r_part = sub(buyers, q_part)?;
+        let acc_inc = if q_usd_e6 == 0 { 0 } else { mul_div_floor(q_part, E18, q_usd_e6)? };
+        let r_inc = if r_part == 0 { 0 } else { mul_div_floor(r_part, E18, reserve_shares)? };
+        (acc_inc, r_part, r_inc)
     };
     let treasury = sub(sub(premium, buyers)?, lenders)?;
-    Ok(PremiumSplit { buyers_usd_e6: buyers, lenders_usd_e6: lenders, treasury_usd_e6: treasury, acc_increment_e18: acc_inc })
+    Ok(PremiumSplit {
+        buyers_usd_e6: buyers,
+        lenders_usd_e6: lenders,
+        treasury_usd_e6: treasury,
+        acc_increment_e18: acc_inc,
+        reserve_usd_e6: r_part,
+        reserve_acc_increment_e18: r_inc,
+    })
+}
+
+/// WO-23b: shares minted for a Reserve deposit, `amount` 1:1 for the first deposit, else
+/// `floor(amount · shares / R_c)`. `R_c = 0` with live shares (all USDC filled) is refused: no price.
+pub fn reserve_shares_for(amount: u128, shares: u128, r_usd_e6: u128) -> MathResult<u128> {
+    if shares == 0 {
+        return Ok(amount);
+    }
+    if r_usd_e6 == 0 {
+        return Err("reserve_depleted");
+    }
+    mul_div_floor(amount, shares, r_usd_e6)
+}
+
+/// WO-23b: USDC value of `s` of `shares` active shares, `floor(s · R_c / shares)`; the last shares take all of R_c.
+pub fn reserve_share_value(s: u128, shares: u128, r_usd_e6: u128) -> MathResult<u128> {
+    if s == 0 {
+        return Ok(0);
+    }
+    if s >= shares {
+        return Ok(r_usd_e6);
+    }
+    mul_div_floor(s, r_usd_e6, shares)
+}
+
+/// WO-23b: realised trailing APR in bps, `floor(fees · 365 · 1e4 / (days · R_c))`; 0 when R_c = 0.
+pub fn realised_apr_bps(fees_usd_e6: u128, days: u128, r_usd_e6: u128) -> MathResult<u128> {
+    if r_usd_e6 == 0 || days == 0 {
+        return Ok(0);
+    }
+    mul_div_floor(fees_usd_e6.checked_mul(365).ok_or(ERR_OVERFLOW)?, BPS, days.checked_mul(r_usd_e6).ok_or(ERR_OVERFLOW)?)
 }
 
 /// MasterChef debt: `weight * acc / 1e18`, rounded UP so a checkpoint can never pay more than

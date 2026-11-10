@@ -265,7 +265,9 @@ impl Nectar {
         vol: u16,
     ) -> Result<(), &'static str> {
         if cands.is_empty() {
-            return Err("no quote capacity");
+            // WO-23b: no quote to price; the Reserve (fixed discount) may still fill. Err = nothing written.
+            let keeper = self.keeper.clone();
+            return self.settle(position_id, p, c.clone(), &cands, &keeper);
         }
         let n_transfers = self.n_transfers(&cands);
         let deposit = self.quoter.deposit_yocto;
@@ -291,6 +293,10 @@ impl Nectar {
         // WO-22: the candidate quotes' Notes stay put until this settlement ends.
         let cand_ids: Vec<u64> = cands.iter().map(|(_, id)| *id).collect();
         self.note_refs_add(position_id.0, &cand_ids);
+        // WO-23b: the callback may fill from the Reserve; its Notes stay put meanwhile.
+        if c.reserve.discount_bps > 0 && Self::reserve_rc(c) > 0 {
+            self.reserve_ref_add(&c.symbol, position_id.0);
+        }
         emit(
             "quoter_requested",
             json!({ "position_id": position_id, "input_sha256": sha, "deposit_yocto": U128(deposit),

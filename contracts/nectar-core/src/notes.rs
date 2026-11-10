@@ -4,7 +4,7 @@
 //! crate is not linked because every transfer path needs Nectar hooks (PRD §19 fallback "a minimal NEP-171/177").
 //!
 //! - Token ids: `q-<quote_id>` (minted on `FundPappusQuote`), `p-<position_id>` (minted when a NEAR position opens
-//!   and when a remote position is funded). `r-<collateral>-<n>` is reserved for Reserve Notes (WO-23b).
+//!   and when a remote position is funded), `r-<collateral>-<n>` (Reserve Notes, WO-23b, src/reserve.rs).
 //! - Authority = Note owner. The owner lives in the record (`Quote.buyer`, `Position.borrower`) and a transfer
 //!   rewrites it, so every authority check (top-up, withdrawal initiate/complete, `claim_fees`, `self_settle`) and
 //!   every payout (residual collateral on repay, settlement and self-settlement remainder) follows the Note.
@@ -67,11 +67,22 @@ pub struct Notes {
 pub enum NoteRef {
     Quote(u64),
     Position(u64),
+    /// WO-23b: `r-<collateral>-<n>`, n global (the symbol is checked against the stored Note).
+    Reserve(u64),
 }
 
-/// `q-<n>` / `p-<n>`, canonical decimal only (no sign, no leading zero).
+/// `q-<n>` / `p-<n>` / `r-<collateral>-<n>`, canonical decimal only (no sign, no leading zero).
 pub fn parse_note_id(id: &str) -> Option<NoteRef> {
-    let (kind, n) = id.split_once('-')?;
+    let (kind, rest) = id.split_once('-')?;
+    let n = if kind == "r" {
+        let (sym, n) = rest.rsplit_once('-')?;
+        if sym.is_empty() {
+            return None;
+        }
+        n
+    } else {
+        rest
+    };
     if n.is_empty() || n.len() > 20 || !n.bytes().all(|b| b.is_ascii_digit()) || (n.len() > 1 && n.starts_with('0')) {
         return None;
     }
@@ -79,6 +90,7 @@ pub fn parse_note_id(id: &str) -> Option<NoteRef> {
     match kind {
         "q" => Some(NoteRef::Quote(v)),
         "p" => Some(NoteRef::Position(v)),
+        "r" => Some(NoteRef::Reserve(v)),
         _ => None,
     }
 }
@@ -205,6 +217,7 @@ impl Nectar {
         let owner = match r {
             NoteRef::Quote(id) => self.quote(id)?.buyer,
             NoteRef::Position(id) => self.position(id)?.borrower,
+            NoteRef::Reserve(_) => self.reserve_note_by_id(token_id)?.1.owner,
         };
         Some((r, owner))
     }
@@ -233,6 +246,8 @@ impl Nectar {
             NoteRef::Quote(id) => {
                 self.notes.quote_refs.get(&id).is_some_and(|ps| ps.iter().any(|pid| self.position_pending(*pid)))
             }
+            // WO-23b: refused while a settlement that may fill from this asset's Reserve is pending.
+            NoteRef::Reserve(n) => self.reserve_note(n).is_some_and(|r| self.reserve_locked(&r.collateral)),
         }
     }
 
@@ -305,6 +320,12 @@ impl Nectar {
                 p.borrower = to.clone();
                 self.put_position(p);
             }
+            // WO-23b: the claim (shares, notice, claimable units and fees) moves with the Note.
+            NoteRef::Reserve(n) => {
+                let mut r = self.reserve_note(n).unwrap_or_else(|| env::panic_str(ERR_NO_NOTE));
+                r.owner = to.clone();
+                self.put_reserve_note(n, r);
+            }
         }
     }
 
@@ -346,7 +367,7 @@ impl Nectar {
             let x100 = u128::from(p.pre_liq_ltv_bps).saturating_mul(100) / ltv;
             format!("{}.{:02}", x100 / 100, x100 % 100)
         };
-        let backing = c.active_committed_q_usd_e6.0.saturating_add(c.nectar_reserve_usd_e6.0);
+        let backing = c.active_committed_q_usd_e6.0.saturating_add(Self::reserve_rc(&c));
         let releasing = p.remote.as_ref().is_some_and(|r| r.status == RemoteStatus::Releasing);
         let status = match p.status {
             PositionStatus::Closed => "CLOSED",
@@ -405,12 +426,51 @@ impl Nectar {
         })
     }
 
+    /// WO-23b Reserve Note face: value, claimable units and fees, notice.
+    fn reserve_face(&self, n: u64, locked: bool) -> Option<NoteFace> {
+        let r = self.reserve_note(n)?;
+        let c = self.coll(&r.collateral)?;
+        let (value, units, fees) = self.reserve_note_live(&r);
+        let one = math::pow10(c.decimals).unwrap_or(1);
+        let units_txt = format!("{}.{:02}", units / one, (units % one).saturating_mul(100) / one);
+        let now = env::block_timestamp();
+        let unlock = match r.unlock_ns {
+            None => "7D NOTICE".to_string(),
+            Some(u) if now >= u.0 => "NOW".to_string(),
+            Some(u) => format!("IN {}H", (u.0 - now).div_ceil(3_600_000_000_000)),
+        };
+        let dep = r.deposited_usd_e6.0;
+        let bar = if dep == 0 { 0 } else { (value.saturating_mul(100) / dep).min(100) };
+        let status = if r.exited {
+            "EXITED"
+        } else if locked {
+            "SETTLING"
+        } else if r.unlock_ns.is_some() {
+            "EXITING"
+        } else {
+            "ACTIVE"
+        };
+        Some(NoteFace {
+            kind: "RESERVE",
+            asset: r.collateral,
+            metrics: [
+                ("VALUE", fmt_usd(value)),
+                ("CLAIMABLE UNITS", units_txt),
+                ("CLAIMABLE FEES", fmt_usd(fees)),
+                ("UNLOCK", unlock),
+            ],
+            bar_pct: bar,
+            status,
+        })
+    }
+
     pub(crate) fn render_note(&self, token_id: &str) -> Option<String> {
         let (r, _) = self.note_owner(token_id)?;
         let locked = self.note_locked(r);
         let f = match r {
             NoteRef::Quote(id) => self.quote_face(id, locked)?,
             NoteRef::Position(id) => self.loan_face(id, locked)?,
+            NoteRef::Reserve(n) => self.reserve_face(n, locked)?,
         };
         let [(l1, v1), (l2, v2), (l3, v3), (l4, v4)] = f.metrics;
         Some(
@@ -438,6 +498,7 @@ impl Nectar {
         let title = match r {
             NoteRef::Quote(_) => format!("Quote Note {token_id}"),
             NoteRef::Position(_) => format!("Loan Note {token_id}"),
+            NoteRef::Reserve(_) => format!("Reserve Note {token_id}"),
         };
         Some(Token {
             token_id: token_id.to_string(),

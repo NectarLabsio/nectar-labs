@@ -107,7 +107,6 @@ fn input(symbol: &str, token: AccountId) -> CollateralInput {
         pre_liq_min_bps: 6500,
         pre_liq_max_bps: 8000,
         verified_dex_depth_usd_e6: U128(0),
-        nectar_reserve_usd_e6: U128(0),
         remote_chain: None,
         price_kind: None,
     }
@@ -166,7 +165,9 @@ fn owner_of(c: &Nectar, id: &str) -> AccountId {
 fn v7_notes_ids_parse_canonical_only() {
     assert_eq!(parse_note_id("q-0"), Some(NoteRef::Quote(0)));
     assert_eq!(parse_note_id("p-42"), Some(NoteRef::Position(42)));
-    for bad in ["q-", "q-01", "x-1", "q1", "q--1", "q-+1", "p-1a", "r-NVDAx-1", "q-99999999999999999999"] {
+    assert_eq!(parse_note_id("r-NVDAx-1"), Some(NoteRef::Reserve(1)));
+    assert_eq!(parse_note_id("r-A-B-7"), Some(NoteRef::Reserve(7)));
+    for bad in ["q-", "q-01", "x-1", "q1", "q--1", "q-+1", "p-1a", "r--1", "r-NVDAx-01", "r-1", "q-99999999999999999999"] {
         assert_eq!(parse_note_id(bad), None, "{bad}");
     }
     assert_eq!((quote_note_id(3), position_note_id(4)), ("q-3".to_string(), "p-4".to_string()));

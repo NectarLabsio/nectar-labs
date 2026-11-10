@@ -91,7 +91,6 @@ fn input() -> CollateralInput {
         pre_liq_min_bps: 6500,
         pre_liq_max_bps: 8000,
         verified_dex_depth_usd_e6: U128(0),
-        nectar_reserve_usd_e6: U128(0),
         remote_chain: None,
         price_kind: None,
     }

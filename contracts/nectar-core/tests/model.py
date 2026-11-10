@@ -63,6 +63,9 @@ COLUMNS = [
     "aggregate_headroom_usd_e6", "origination_fee_usd_e6", "net_proceeds_usd_e6",
     # WO-23a (appended): Shields (kind=shield) and Profit-Lock (kind=self)
     "shield_fee_bps", "pl_fee_bps", "pl_fee_usd_e6", "fill_usd_e6", "units_kept",
+    # WO-23b (appended): Nectar Reserve (kind=reserve; reserve_fee_usd_e6 also on limit rows)
+    "reserve_fee_usd_e6", "reserve_shares", "reserve_acc_increment_e18", "reserve_deposit_usd_e6", "minted_shares",
+    "reserve_acc_units_e18",
 ]
 PROFIT_LOCK_BPS = 50  # contract constant (PRD §4.10)
 ORIGINATION_BPS = 30  # contract default (interface-v7.md A5)
@@ -95,12 +98,9 @@ def limit_row(case, units, dec, price, q, r, d, session_open, base_ltv, max_ltv,
     b_c = min(ltv_cap, headroom)
     premium = ceil_div(max(0, borrow - static) * prem_bps, BPS)
     origination = ceil_div(borrow * orig_bps, BPS)
-    buyers = premium * buyers_bps // BPS
     lenders = premium * lenders_bps // BPS
-    if q == 0:
-        buyers, acc = 0, 0
-    else:
-        acc = buyers * E18 // q
+    # WO-23b: buyers' share split Q : R (R backed by shares; limit rows assume 1:1 shares = r)
+    buyers, acc, r_fee, _ = split_qr(premium, buyers_bps, lenders_bps, q, r, r)
     treasury = premium - buyers - lenders
     ok = 1 if (0 < borrow <= ltv_cap and total_debt + borrow <= cap and borrow * BPS <= v * pre_liq) else 0
     return {
@@ -116,7 +116,41 @@ def limit_row(case, units, dec, price, q, r, d, session_open, base_ltv, max_ltv,
         "multiplier_e18": m, "total_debt_usd_e6": total_debt, "origination_fee_bps": orig_bps,
         "aggregate_headroom_usd_e6": headroom, "origination_fee_usd_e6": origination,
         "net_proceeds_usd_e6": max(0, borrow - premium - origination),
+        "reserve_fee_usd_e6": r_fee,
     }
+
+
+def split_qr(premium, buyers_bps, lenders_bps, q, r, shares):
+    """math::split_premium_qr: quotes = floor(buyers*Q/(Q+R)), Reserve = rest; R ignored without shares."""
+    if shares == 0:
+        r = 0
+    buyers = premium * buyers_bps // BPS
+    if q + r == 0:
+        return 0, 0, 0, 0
+    q_part = buyers * q // (q + r)
+    r_part = buyers - q_part
+    acc = 0 if q == 0 else q_part * E18 // q
+    r_acc = 0 if r_part == 0 else r_part * E18 // shares
+    return buyers, acc, r_part, r_acc
+
+
+def reserve_row(case, q, r, shares, premium, deposit, debt=0, units=0, price=0, disc=0, kfee=0, dec=6):
+    """WO-23b (PRD §4.8): fee split Q:R, shares minted for `deposit`, and the Reserve leg at `disc` against R
+    (units seized accrue per share: floor(buyer_units * 1e18 / shares))."""
+    buyers, acc, r_fee, r_acc = split_qr(premium, SPLIT["buyers_bps"], SPLIT["lenders_bps"], q, r, shares)
+    minted = deposit if shares == 0 else ("" if r == 0 else deposit * shares // r)
+    row = {"case": case, "kind": "reserve", "q_usd_e6": q, "r_usd_e6": r, "reserve_shares": shares,
+           "premium_usd_e6": premium, "buyers_bps": SPLIT["buyers_bps"], "lenders_bps": SPLIT["lenders_bps"],
+           "buyers_fee_usd_e6": buyers, "acc_increment_e18": acc, "reserve_fee_usd_e6": r_fee,
+           "reserve_acc_increment_e18": r_acc, "reserve_deposit_usd_e6": deposit, "minted_shares": minted,
+           "debt_usd_e6": debt, "units": units, "decimals": dec, "price_usd_e6": price, "disc_bps": disc,
+           "keeper_fee_bps": kfee, "quote_remaining_usd_e6": r, "multiplier_e18": E18}
+    if debt and units and price:
+        lg = leg(debt, r, units, price, dec, disc, kfee)
+        if lg:
+            row.update({"repay_usd_e6": lg[0], "buyer_units": lg[1], "keeper_units": lg[2],
+                        "reserve_acc_units_e18": lg[1] * E18 // shares})
+    return row
 
 
 def seize(repay, price, dec, disc, kfee, m=E18):
@@ -302,6 +336,21 @@ def rows():
         m = E18 // 2 + rnd(5 * E18 // 2)
         out.append(self_row("grid_self_%02d" % i, rnd(500_000_000), 1_000_000 + rnd(500_000_000),
                             rnd(20_000_000_000), rnd(25_000_000_000), rnd(2000), m=m))
+
+    # --- WO-23b Nectar Reserve (src/tests_reserve.rs + tests/sandbox_reserve.rs: Q 10k @250, R 5k @1000, $140) ---
+    out.append(reserve_row("res_premium_split", q1, 5_000_000_000, 5_000_000_000, 121_500_000, 10_000_000))
+    res_leg = reserve_row("res_leg_after_quote", 0, 5_000_000_000, 5_000_000_000, 0, 0, debt=1_250_000_000,
+                          units=units - l1[1] - l1[2], price=140_000_000, disc=1000, kfee=kfee)
+    out.append(res_leg)
+    out.append(reserve_row("res_late_deposit", 0, 3_750_000_000, 5_000_000_000, 0, 3_750_000_000))
+    out.append(reserve_row("res_reserve_only", 0, 9_000_000_000, 9_000_000_000, 121_500_000, 10_000_000))
+    out.append(reserve_row("res_no_shares", q1, 5_000_000_000, 0, 121_500_000, 10_000_000))
+    for i in range(12):
+        sh = rnd(20_000_000_000)
+        rr = rnd(20_000_000_000) if sh else 0
+        out.append(reserve_row("grid_reserve_%02d" % i, rnd(50_000_000_000), rr, sh, rnd(500_000_000),
+                               10_000_000 + rnd(5_000_000_000), debt=rnd(20_000_000_000), units=rnd(500_000_000),
+                               price=1_000_000 + rnd(500_000_000), disc=1000 + rnd(2000), kfee=rnd(200)))
     return out
 
 
@@ -327,6 +376,12 @@ def main():
         if on_disk != text:
             print("model.csv is stale or hand-edited: run python3 tests/model.py", file=sys.stderr)
             sys.exit(1)
+        if "--v7" in sys.argv:
+            # gates-v7 G11: the v7 kinds (shield, self, reserve) and the agg_/mult_ rows must be present
+            for kind in (",shield,", ",self,", ",reserve,", "agg_a_borrow,", "mult_post_split,"):
+                if kind not in on_disk:
+                    print("model.csv lacks v7 rows: %s" % kind.strip(","), file=sys.stderr)
+                    sys.exit(1)
         print("model.csv OK (%d rows)" % (text.count("\n") - 1))
         return
     with open(path, "w", newline="") as f:

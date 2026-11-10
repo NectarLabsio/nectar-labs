@@ -35,7 +35,6 @@ pub struct CollateralInput {
     pub pre_liq_min_bps: u16,
     pub pre_liq_max_bps: u16,
     pub verified_dex_depth_usd_e6: U128,
-    pub nectar_reserve_usd_e6: U128,
     #[serde(default)]
     pub remote_chain: Option<RemoteChain>,
     /// v2 (A3): None keeps the stored kind (Underlying for a new symbol).
@@ -71,7 +70,6 @@ pub struct CollateralConfig {
     pub oracle_price_usd_e6: U128,
     pub oracle_updated_ns: U64,
     pub verified_dex_depth_usd_e6: U128,
-    pub nectar_reserve_usd_e6: U128,
     pub active_committed_q_usd_e6: U128,
     pub acc_fee_per_dollar_e18: U128,
     pub remote_chain: Option<RemoteChain>,
@@ -101,6 +99,102 @@ pub struct CollateralConfig {
     /// OutLayer multiplier job read a change outside the `set_multiplier` bound: the owner should announce it.
     pub ca_suggested_multiplier_e18: U128,
     pub ca_suggested_ns: U64,
+    // ---- v2 (WO-23b, PRD §4.8): Nectar Reserve. R_c = usdc_e6 - notice_usdc_e6 (replaces the owner-set value).
+    pub reserve: ReservePool,
+}
+
+/// §4.8 one pooled buyer per asset. Shares are minted against R_c; seized units and fees are distributed per
+/// active share through O(1) indices (`*_debt` per Note, rounded up, so late depositors get nothing earlier).
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq, Default)]
+pub struct ReservePool {
+    /// Active shares (shares in notice have left the pool).
+    pub shares: U128,
+    /// USDC held for the Reserve: active (R_c) plus the frozen value of shares in notice.
+    pub usdc_e6: U128,
+    /// USDC of shares in notice (out of R_c at once; paid by `complete_reserve_exit`).
+    pub notice_usdc_e6: U128,
+    /// Seized collateral units held for Reserve Notes (paid at exit).
+    pub units: U128,
+    /// Fill discount; 0 = Reserve disabled (no deposits, no fills). Above every live quote ceiling.
+    pub discount_bps: u16,
+    pub acc_fee_per_share_e18: U128,
+    pub acc_units_per_share_e18: U128,
+    /// Exit notice; 0 = `RESERVE_NOTICE_NS` (7 days). Owner `set_reserve_params(.., notice_ns)`, >= 60 s.
+    pub notice_ns: U64,
+    /// Reserve fee accruals per UTC day, newest last, at most `RESERVE_FEE_DAYS` entries (realised APR).
+    pub fee_days: Vec<ReserveFeeDay>,
+}
+
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ReserveFeeDay {
+    pub day: u32,
+    pub fees_usd_e6: U128,
+}
+
+/// A Reserve Note `r-<collateral>-<n>` (owner = Note owner; a transfer rewrites it).
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ReserveNote {
+    pub note_id: String,
+    pub collateral: String,
+    pub owner: AccountId,
+    pub deposited_usd_e6: U128,
+    /// Active shares; 0 once the exit is initiated.
+    pub shares: U128,
+    pub unit_debt: U128,
+    pub fee_debt: U128,
+    pub claimable_units: U128,
+    pub claimable_fees_usd_e6: U128,
+    /// Set by `initiate_reserve_exit`.
+    pub unlock_ns: Option<U64>,
+    pub exit_shares: U128,
+    pub exit_usdc_e6: U128,
+    /// Everything paid by `complete_reserve_exit` (a failed transfer restores and clears it).
+    pub exited: bool,
+    pub created_ns: U64,
+}
+
+#[near(serializers = [borsh])]
+pub enum VReserveNote {
+    V1(ReserveNote),
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug)]
+pub struct ReserveView {
+    pub symbol: String,
+    /// R_c: USDC of active shares (counts toward Q_c + R_c + D_c).
+    pub r_usd_e6: U128,
+    pub shares: U128,
+    pub usdc_e6: U128,
+    pub notice_usdc_e6: U128,
+    pub units: U128,
+    pub discount_bps: u16,
+    pub acc_fee_per_share_e18: U128,
+    pub acc_units_per_share_e18: U128,
+    /// USDC value of 1e6 shares (= 1 share-dollar at the first deposit).
+    pub share_price_e6: U128,
+    pub min_deposit_usd_e6: U128,
+    pub notice_period_ns: U64,
+    /// Reserve fee accruals over the trailing 7 UTC days (incl. today).
+    pub fees_7d_usd_e6: U128,
+    /// Realised trailing 7-day APR: fees_7d * 365 / 7 / R_c in bps. Historical, never a promised rate.
+    pub realised_apr_7d_bps: U128,
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug)]
+pub struct ReserveNoteView {
+    pub note: ReserveNote,
+    /// USDC value of the active shares now (exit_usdc_e6 once in notice).
+    pub value_usd_e6: U128,
+    /// claimable + accrued since the last checkpoint.
+    pub claimable_units: U128,
+    pub claimable_fees_usd_e6: U128,
+    pub can_complete: bool,
+    pub transfer_locked: bool,
 }
 
 /// §4.9 per-asset Shield pricing (owner `set_shield_params`). `event_window_end_ns = 0`: no event window open.
@@ -367,6 +461,10 @@ pub enum TokenMsg {
     Repay {
         position_id: U64,
     },
+    /// v2 (WO-23b, §4.8): USDC only, >= 10,000,000 e6; mints Reserve Note `r-<collateral>-<n>`.
+    JoinNectarReserve {
+        collateral: String,
+    },
 }
 
 /// What a contract-initiated `ft_transfer` was for; drives the rollback in `on_payout`.
@@ -379,6 +477,10 @@ pub enum Payout {
     SettlementKeeper { position_id: U64 },
     QuoteWithdrawal { quote_id: U64, principal_usd_e6: U128, fees_usd_e6: U128 },
     Fees { quote_id: U64 },
+    /// v2 (WO-23b): `complete_reserve_exit` USDC (share value + fees); failure restores the Note's exit claim.
+    ReserveExit { note_id: String, principal_usd_e6: U128, fees_usd_e6: U128 },
+    /// v2 (WO-23b): `complete_reserve_exit` collateral units; failure restores the Note's claimable units.
+    ReserveUnits { note_id: String },
     /// v2 (A4): net proceeds sent to `pay_to.receiver_id`; failure credits `claimable_usdc[borrower]`.
     PayTo { position_id: U64, borrower: AccountId },
     /// v2 (A4): `withdraw_claimable`; failure restores the claimable balance.
