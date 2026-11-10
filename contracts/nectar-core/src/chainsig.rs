@@ -127,6 +127,20 @@ pub fn valid_base58_address(s: &str) -> bool {
     (32..=44).contains(&s.len()) && s.bytes().all(|b| B58.contains(&b))
 }
 
+/// EVM address: `0x` + 40 hex, any case (WO-29a).
+pub fn valid_evm_address(s: &str) -> bool {
+    s.len() == 42 && s.starts_with("0x") && s.bytes().skip(2).all(|b| b.is_ascii_hexdigit())
+}
+
+/// A quote's `buyer_remote_recipient` fills positions of this domain only: base58 -> Solana (1), `0x` -> EVM (0).
+pub fn recipient_fits(domain_id: u32, recipient: &str) -> bool {
+    match domain_id {
+        ED25519_DOMAIN_ID => valid_base58_address(recipient),
+        SECP256K1_DOMAIN_ID => valid_evm_address(recipient),
+        _ => false,
+    }
+}
+
 /// Solana transaction signature: base58, 64..=90 chars.
 pub fn valid_tx_signature(s: &str) -> bool {
     (64..=90).contains(&s.len()) && s.bytes().all(|b| B58.contains(&b))

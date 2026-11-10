@@ -6,6 +6,11 @@
 //! the caller's `.then` sees exactly the F-035 shape. `set_signer_mode("fail")` resumes with a marker that
 //! makes the callback panic: the caller sees a failed promise, as on MPC `fail_on_timeout`.
 //! State lives under raw keys so the OutLayer/Pyth stub layout is untouched.
+//!
+//! WO-29a: domain 0 is a real secp256k1 key per path (k256, same per-path seed derivation), answered as
+//! `"secp256k1:<b58 of 64 B x‖y>"` (F-338), and `sign` with `payload_v2:{Ecdsa:<64 hex>}` + `domain_id:0` signs the 32-byte
+//! digest as a prehash (F-331) and answers `{"scheme":"Secp256k1","big_r":{"affine_point"},"s":{"scalar"},"recovery_id"}`
+//! (F-332). Mode `high_s` answers the high-s twin (n - s, flipped recovery id) to exercise normalisation.
 
 use ed25519_dalek::{Signer, SigningKey};
 use near_sdk::serde_json::{Value, json};
@@ -38,6 +43,53 @@ pub fn sign_payload(payload: &[u8]) -> [u8; 64] {
 
 pub fn sign_with(seed: &[u8; 32], payload: &[u8]) -> [u8; 64] {
     SigningKey::from_bytes(seed).sign(payload).to_bytes()
+}
+
+fn secp_key(seed: &[u8; 32]) -> k256::ecdsa::SigningKey {
+    k256::ecdsa::SigningKey::from_bytes(&(*seed).into()).unwrap_or_else(|_| env::panic_str("stub: bad secp seed"))
+}
+
+/// 64 bytes x‖y of the secp256k1 key for `seed` (no 0x04 prefix, F-338).
+pub fn secp_public_xy(seed: &[u8; 32]) -> [u8; 64] {
+    let p = secp_key(seed).verifying_key().to_encoded_point(false);
+    p.as_bytes()[1..65].try_into().unwrap_or_else(|_| env::panic_str("stub: point"))
+}
+
+/// F-332 response JSON for a prehash ECDSA signature. `high_s` returns the (valid) high-s twin.
+pub fn ecdsa_response(seed: &[u8; 32], digest: &[u8; 32], high_s: bool) -> Value {
+    let (sig, rid) = secp_key(seed)
+        .sign_prehash_recoverable(digest)
+        .unwrap_or_else(|_| env::panic_str("stub: ecdsa sign"));
+    let b = sig.to_bytes();
+    let (r, mut s) = (b[..32].to_vec(), b[32..].to_vec());
+    let mut y_odd = rid.is_y_odd();
+    if high_s {
+        s = sub_from_n(&s);
+        y_odd = !y_odd;
+    }
+    let mut big_r = vec![if y_odd { 3u8 } else { 2u8 }];
+    big_r.extend_from_slice(&r);
+    json!({ "scheme": "Secp256k1", "big_r": { "affine_point": hex(&big_r) }, "s": { "scalar": hex(&s) },
+            "recovery_id": u8::from(y_odd) })
+}
+
+/// secp256k1 order n minus a 32-byte big-endian value.
+fn sub_from_n(s: &[u8]) -> Vec<u8> {
+    const N: [u8; 32] = [
+        0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xfe, 0xba, 0xae, 0xdc, 0xe6, 0xaf,
+        0x48, 0xa0, 0x3b, 0xbf, 0xd2, 0x5e, 0x8c, 0xd0, 0x36, 0x41, 0x41,
+    ];
+    let mut out = vec![0u8; 32];
+    let mut borrow = 0i16;
+    for i in (0..32).rev() {
+        let mut d = i16::from(N[i]) - i16::from(s[i]) - borrow;
+        borrow = if d < 0 { 1 } else { 0 };
+        if d < 0 {
+            d += 256;
+        }
+        out[i] = d as u8;
+    }
+    out
 }
 
 /// Stub derivation (WO-21): a per-position path `<chain>/pos/<id>` gets its own key,
@@ -86,17 +138,26 @@ impl OutlayerStub {
                 let vk = SigningKey::from_bytes(&seed_for(pred.as_str(), &path)).verifying_key();
                 format!("ed25519:{}", b58_encode(&vk.to_bytes()))
             }
-            _ => SECP_KEY_F338.into(),
+            _ => format!("secp256k1:{}", b58_encode(&secp_public_xy(&seed_for(pred.as_str(), &path)))),
         }
     }
 
     #[payable]
     pub fn sign(&mut self, request: Value) {
         require!(env::attached_deposit() >= NearToken::from_yoctonear(1), "deposit 1 yocto");
-        require!(request["domain_id"] == json!(1), "domain_id must be 1 (Ed25519)");
-        let payload_hex = request["payload_v2"]["Eddsa"].as_str().unwrap_or_else(|| env::panic_str("Eddsa payload"));
+        let ecdsa = request["domain_id"] == json!(0);
+        require!(ecdsa || request["domain_id"] == json!(1), "domain_id must be 0 or 1");
+        let payload_hex = if ecdsa {
+            request["payload_v2"]["Ecdsa"].as_str().unwrap_or_else(|| env::panic_str("Ecdsa payload"))
+        } else {
+            request["payload_v2"]["Eddsa"].as_str().unwrap_or_else(|| env::panic_str("Eddsa payload"))
+        };
         let payload = unhex(payload_hex).unwrap_or_else(|| env::panic_str("payload hex"));
-        require!(!payload.is_empty() && payload.len() <= 1232, "payload size");
+        if ecdsa {
+            require!(payload.len() == 32, "Ecdsa payload must be 32 bytes"); // F-331
+        } else {
+            require!(!payload.is_empty() && payload.len() <= 1232, "payload size");
+        }
         let path = request["path"].as_str().unwrap_or_default().to_string();
         let seed = seed_for(env::predecessor_account_id().as_str(), &path);
         env::storage_write(LAST_KEY, request.to_string().as_bytes());
@@ -106,7 +167,7 @@ impl OutlayerStub {
             // all gas left after the 5 Tgas yield callback (weight 1, F-171): the stub fits the live 15 Tgas
             .function_call_weight(
                 "respond",
-                json!({ "data_id_hex": hex(&data_id), "payload_hex": payload_hex, "seed_hex": hex(&seed) })
+                json!({ "data_id_hex": hex(&data_id), "payload_hex": payload_hex, "seed_hex": hex(&seed), "ecdsa": ecdsa })
                     .to_string()
                     .into_bytes(),
                 NearToken::from_yoctonear(0),
@@ -119,11 +180,15 @@ impl OutlayerStub {
 
     /// Plays the MPC nodes: sign the raw payload (no pre-hash, D-016) and resume the yield.
     #[private]
-    pub fn respond(&mut self, data_id_hex: String, payload_hex: String, seed_hex: Option<String>) {
+    pub fn respond(&mut self, data_id_hex: String, payload_hex: String, seed_hex: Option<String>, ecdsa: Option<bool>) {
         let id: [u8; 32] = unhex(&data_id_hex).and_then(|v| v.try_into().ok()).unwrap_or_else(|| env::panic_str("data id"));
         let seed: [u8; 32] = seed_hex.and_then(|s| unhex(&s)).and_then(|v| v.try_into().ok()).unwrap_or(TEST_SEED);
-        let data = if env::storage_read(MODE_KEY).as_deref() == Some(FAIL) {
+        let mode = env::storage_read(MODE_KEY);
+        let data = if mode.as_deref() == Some(FAIL) {
             FAIL.to_vec()
+        } else if ecdsa == Some(true) {
+            let digest: [u8; 32] = unhex(&payload_hex).and_then(|v| v.try_into().ok()).unwrap_or_else(|| env::panic_str("digest"));
+            ecdsa_response(&seed, &digest, mode.as_deref() == Some(b"high_s")).to_string().into_bytes()
         } else {
             let sig = sign_with(&seed, &unhex(&payload_hex).unwrap_or_default());
             json!({ "scheme": "Ed25519", "signature": sig.to_vec() }).to_string().into_bytes()
@@ -194,7 +259,11 @@ mod tests {
         assert!(k0.starts_with("ed25519:") && k0 != k1);
         let legacy = s.derived_public_key("solana-devnet-v1".into(), Some(core.clone()), Some(1));
         assert_eq!(legacy, format!("ed25519:{}", b58_encode(&unhex(&s.signer_public_key_hex()).unwrap())));
-        assert_eq!(s.derived_public_key("base-sepolia/pos/0".into(), Some(core), Some(0)), SECP_KEY_F338);
+        let secp = s.derived_public_key("base-sepolia/pos/0".into(), Some(core.clone()), Some(0));
+        let xy = secp_public_xy(&seed_for("core.test", "base-sepolia/pos/0"));
+        assert_eq!(secp, format!("secp256k1:{}", b58_encode(&xy)));
+        assert_ne!(secp, s.derived_public_key("base-sepolia/pos/1".into(), Some(core), Some(0)));
+        assert_eq!(SECP_KEY_F338.len(), "secp256k1:".len() + 88, "live key shape (F-338)");
         assert_eq!(b58_encode(&[0, 0, 1]), "112");
         assert_eq!(b58_encode(&[0u8; 32]), "11111111111111111111111111111111");
         s.set_signer_mode("derive_bad".into());
@@ -215,10 +284,43 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "domain_id must be 1")]
-    fn sign_rejects_secp_domain() {
+    #[should_panic(expected = "domain_id must be 0 or 1")]
+    fn sign_rejects_unknown_domain() {
         testing_env!(VMContextBuilder::new().attached_deposit(NearToken::from_yoctonear(1)).build());
         let mut s = OutlayerStub::new();
-        s.sign(json!({ "path": "p", "payload_v2": { "Eddsa": "00" }, "domain_id": 0 }));
+        s.sign(json!({ "path": "p", "payload_v2": { "Eddsa": "00" }, "domain_id": 2 }));
+    }
+
+    #[test]
+    #[should_panic(expected = "Ecdsa payload must be 32 bytes")]
+    fn sign_rejects_short_ecdsa_payload() {
+        testing_env!(VMContextBuilder::new().attached_deposit(NearToken::from_yoctonear(1)).build());
+        let mut s = OutlayerStub::new();
+        s.sign(json!({ "path": "p", "payload_v2": { "Ecdsa": "00" }, "domain_id": 0 }));
+    }
+
+    #[test]
+    fn ecdsa_response_recovers_to_the_derived_key_low_and_high_s() {
+        use k256::ecdsa::{RecoveryId, Signature as KSig, VerifyingKey as KVk};
+        testing_env!(VMContextBuilder::new().build());
+        let seed = seed_for("core.test", "base-sepolia/pos/3");
+        let digest = env::keccak256_array(b"digest");
+        let xy = secp_public_xy(&seed);
+        for high in [false, true] {
+            let v = ecdsa_response(&seed, &digest, high);
+            assert_eq!(v["scheme"], "Secp256k1");
+            let big_r = unhex(v["big_r"]["affine_point"].as_str().unwrap()).unwrap();
+            let s = unhex(v["s"]["scalar"].as_str().unwrap()).unwrap();
+            let rid = v["recovery_id"].as_u64().unwrap() as u8;
+            assert_eq!(big_r[0], 2 + rid);
+            let mut rs = big_r[1..].to_vec();
+            rs.extend_from_slice(&s);
+            let sig = KSig::from_slice(&rs).unwrap();
+            assert_eq!(sig.normalize_s().is_some(), high, "high-s twin only in high_s mode");
+            // k256 recovery refuses high s: normalise the twin (s -> n - s flips the recovery id) first
+            let (sig, rid) = if high { (sig.normalize_s().unwrap(), rid ^ 1) } else { (sig, rid) };
+            let vk = KVk::recover_from_prehash(&digest, &sig, RecoveryId::from_byte(rid).unwrap()).unwrap();
+            assert_eq!(&vk.to_encoded_point(false).as_bytes()[1..], &xy[..]);
+        }
     }
 }

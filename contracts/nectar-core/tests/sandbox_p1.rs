@@ -232,7 +232,7 @@ async fn v2_seed_then_quoter_outcomes() -> anyhow::Result<()> {
     let e = env().await?;
     let core = init_core(&e, &wasm("nectar_core")).await?;
     let v: String = core.view("contract_version").await?.json()?;
-    assert_eq!(v, "2.0.0-v7");
+    assert_eq!(v, "2.1.0-v7");
 
     let lender = user(&e, 100_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;

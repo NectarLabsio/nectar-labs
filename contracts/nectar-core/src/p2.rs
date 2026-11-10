@@ -115,6 +115,11 @@ impl Nectar {
         }
     }
 
+    /// MPC domain of a remote position (Ed25519 for anything else).
+    pub(crate) fn remote_domain(&self, position_id: u64) -> u32 {
+        self.position(position_id).and_then(|p| p.remote).map_or(chainsig::ED25519_DOMAIN_ID, |r| r.domain_id)
+    }
+
     pub(crate) fn check_sign_gas(s: &SignerConfig) -> Result<(), &'static str> {
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
         if left < Self::sign_leg_gas(s) { Err("attach more gas") } else { Ok(()) }
@@ -130,36 +135,63 @@ impl Nectar {
     ) -> Result<SignCall, &'static str> {
         let nonce = self.next_nonce();
         let expires = (env::block_timestamp() / SEC).checked_add(s.expiry_s).ok_or("expiry overflow")?;
-        let preimage = chainsig::build_preimage_v2(
-            &PreimageInput {
-                chain_id: &r.chain_id,
-                vault_program: &r.vault_program,
+        if !chainsig::recipient_fits(r.domain_id, &leg.recipient) {
+            return Err("remote settle: domain not supported");
+        }
+        // WO-29a: an EVM (domain 0) leg signs the EIP-712 `Settle` digest; `preimage` holds `0x<digest>`.
+        let (preimage, args, evm_rec) = if r.domain_id == chainsig::SECP256K1_DOMAIN_ID {
+            if leg.kind != chainsig::KIND_PRELIQ && leg.kind != chainsig::KIND_SELF {
+                return Err("bad kind");
+            }
+            let f = crate::evm::SettleFields {
                 position_id: p.position_id.0,
                 quote_id: leg.quote_id,
                 repay_e6: leg.repay_usd_e6,
-                seize_units: leg.buyer_units,
-                recipient: &leg.recipient,
+                seize_raw: leg.buyer_units,
+                recipient: crate::evm::parse_address(&leg.recipient).ok_or("bad recipient")?,
                 nonce,
                 expires,
-            },
-            leg.kind,
-        )
-        .ok_or("bad kind")?;
+                kind: leg.kind,
+            };
+            let (digest, rec) = crate::evm::settle_digest_for(r, &f)?;
+            (crate::evm::hex0x(&digest), crate::evm::ecdsa_sign_args(&r.path, &digest, r.domain_id), Some(rec))
+        } else {
+            let preimage = chainsig::build_preimage_v2(
+                &PreimageInput {
+                    chain_id: &r.chain_id,
+                    vault_program: &r.vault_program,
+                    position_id: p.position_id.0,
+                    quote_id: leg.quote_id,
+                    repay_e6: leg.repay_usd_e6,
+                    seize_units: leg.buyer_units,
+                    recipient: &leg.recipient,
+                    nonce,
+                    expires,
+                },
+                leg.kind,
+            )
+            .ok_or("bad kind")?;
+            if preimage.len() > chainsig::MAX_EDDSA_PAYLOAD {
+                return Err("preimage too long");
+            }
+            let args = sign_args(&r.path, &preimage, r.domain_id);
+            (preimage, args, None)
+        };
         let kind_name = if leg.kind == chainsig::KIND_SELF { "SELF" } else { "PRELIQ" };
-        if preimage.len() > chainsig::MAX_EDDSA_PAYLOAD {
-            return Err("preimage too long");
-        }
         // effects
         self.take_nonce()?;
         p.nonce = U64(nonce);
+        if let Some(rec) = evm_rec {
+            self.put_evm_record(crate::evm::EVM_SETTLE_PREFIX, p.position_id.0, rec);
+        }
         emit(
             "settlement_sign_requested",
             json!({ "position_id": p.position_id, "quote_id": U64(leg.quote_id), "nonce": U64(nonce),
                     "expires": U64(expires), "preimage": preimage, "recipient": leg.recipient,
                     "repay_usd_e6": U128(leg.repay_usd_e6), "seize_units": U128(leg.buyer_units),
-                    "path": r.path, "kind": kind_name, "fee_usd_e6": U128(leg.fee_usd_e6) }),
+                    "path": r.path, "kind": kind_name, "fee_usd_e6": U128(leg.fee_usd_e6), "chain": r.chain_id,
+                    "domain_id": r.domain_id }),
         );
-        let args = sign_args(&r.path, &preimage, r.domain_id);
         let cb = json!({ "position_id": p.position_id, "quote_id": U64(leg.quote_id), "nonce": U64(nonce) }).to_string();
         // WO-22: the leg's Quote Note stays put until the leg is relayed, cancelled or fails.
         self.note_refs_add(p.position_id.0, &[leg.quote_id]);
@@ -258,19 +290,19 @@ impl Nectar {
         if d.nonce != nonce || d.quote_id != quote_id || d.status != PendingStatus::AwaitingSignature {
             return; // cancelled after expiry meanwhile
         }
+        let mut p = self.position_or_panic(position_id.0);
+        let domain = p.remote.as_ref().map_or(chainsig::ED25519_DOMAIN_ID, |r| r.domain_id);
         let sig = if env::promise_results_count() != 1 {
             Err("no_result")
         } else {
             match env::promise_result_checked(0, MAX_SIGNATURE_RESULT_LEN) {
-                Ok(b) => chainsig::parse_signature_response(&b),
+                Ok(b) => crate::evm::parse_sign_result(&b, domain),
                 Err(PromiseError::TooLong(_)) => Err("too_long"),
                 Err(_) => Err("failed"), // MPC timeout -> fail_on_timeout (F-035)
             }
         };
-        let mut p = self.position_or_panic(position_id.0);
         match sig {
-            Ok(bytes) => {
-                let signature_hex = chainsig::hex(&bytes);
+            Ok((signature_hex, evm_sig)) => {
                 let repay = d.repay_usd_e6.0;
                 self.utilised_usd_e6 = ok(math::sub(self.utilised_usd_e6, repay));
                 self.available_usd_e6 = ok(math::add(self.available_usd_e6, repay));
@@ -279,12 +311,19 @@ impl Nectar {
                 d.signature_hex = Some(signature_hex.clone());
                 d.status = PendingStatus::Signed;
                 let (path, authority) = p.remote.as_ref().map_or((None, None), |r| (Some(r.path.clone()), r.authority.clone()));
-                emit(
-                    "settlement_signed",
-                    json!({ "position_id": position_id, "quote_id": quote_id, "nonce": nonce,
+                let chain = p.remote.as_ref().map(|r| r.chain_id.clone());
+                let mut ev = json!({ "position_id": position_id, "quote_id": quote_id, "nonce": nonce,
                             "preimage": d.preimage, "signature_hex": signature_hex, "path": path,
-                            "pubkey": authority, "kind": d.kind }),
-                );
+                            "pubkey": authority, "kind": d.kind, "chain": chain });
+                if let Some(es) = &evm_sig {
+                    ev["digest"] = json!(d.preimage);
+                    ev["r"] = json!(crate::evm::hex0x(&es.r));
+                    ev["s"] = json!(crate::evm::hex0x(&es.s));
+                    ev["v"] = json!(es.v);
+                    ev["s_normalised"] = json!(es.normalised);
+                    self.store_evm_sig(crate::evm::EVM_SETTLE_PREFIX, position_id.0, es);
+                }
+                emit("settlement_signed", ev);
                 self.put_pending(d);
             }
             Err(reason) => {
@@ -301,10 +340,12 @@ impl Nectar {
         }
     }
 
-    /// Keeper records the Solana settlement tx of a signed leg (PRD §6.5). Not payable.
+    /// Keeper records the remote settlement tx of a signed leg (PRD §6.5): a Solana signature, or for an EVM
+    /// (domain 0) position the `0x` tx hash in the same argument (the keeper key's method list is unchanged). Not payable.
     pub fn relay_settlement_result(&mut self, position_id: U64, solana_tx_sig: String) {
         require!(env::predecessor_account_id() == self.keeper, ERR_KEEPER);
-        require!(chainsig::valid_tx_signature(&solana_tx_sig), "bad solana_tx_sig");
+        let domain = self.remote_domain(position_id.0);
+        require!(crate::evm::valid_relay_tx(domain, &solana_tx_sig), "bad solana_tx_sig");
         let mut d = self.pending(position_id.0).unwrap_or_else(|| env::panic_str("no pending settlement"));
         require!(d.status == PendingStatus::Signed, "settlement not signed");
         let mut p = self.position_or_panic(position_id.0);

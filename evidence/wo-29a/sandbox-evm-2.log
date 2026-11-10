@@ -1,0 +1,320 @@
+   Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/nectar-core)
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:219:5
+    |
+219 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+    |
+219 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:222:5
+    |
+222 |     ft_call(&e.usdc, &b1, core.id(), 12_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+222 |     let _ = ft_call(&e.usdc, &b1, core.id(), 12_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:223:5
+    |
+223 |     ft_call(&e.usdc, &b2, core.id(), 12_000_000_000, &fund_msg(400, Some(ERCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+223 |     let _ = ft_call(&e.usdc, &b2, core.id(), 12_000_000_000, &fund_msg(400, Some(ERCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:404:5
+    |
+404 |     ft_call(&e.usdc, &borrower, core.id(), BORROW, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+404 |     let _ = ft_call(&e.usdc, &borrower, core.id(), BORROW, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:461:5
+    |
+461 |     ft_call(&e.nvdax, &alice, core.id(), UNITS, lock).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+461 |     let _ = ft_call(&e.nvdax, &alice, core.id(), UNITS, lock).await?;
+    |     +++++++
+
+warning: `nectar-core` (test "sandbox_evm") generated 5 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.62s
+     Running tests/sandbox_evm.rs (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/debug/deps/sandbox_evm-8fff8d4dfcb1154d)
+
+running 3 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.39s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 9.50s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794331196, tv_nsec: 880000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794331108, tv_nsec: 60000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 986ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 767.9 KB (767891 bytes)
+     - SHA-256 checksum hex : d2fbc44b0f0335834833d0318561c4a544a397b9ca31139986acbbc464251124
+     - SHA-256 checksum bs58: FCbHG4GpjbKu2JD4KLNJLRfaDoa9yYcTMGwVG33MuuYo
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 11s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.30s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.49s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794331201, tv_nsec: 340000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794331113, tv_nsec: 110000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 215ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 156.9 KB (156898 bytes)
+     - SHA-256 checksum hex : 010ba4cc32acfe95cfe7f9b824a26ffb7f126cd7bb4e5ad261732df10da4d119
+     - SHA-256 checksum bs58: 55hvEqmBmZNjhmhiUagzZrx9f5rLzxC5iuHtfvG3pKA
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.32s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 2.57s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794331204, tv_nsec: 980000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794331121, tv_nsec: 240000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 359ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+GAS,upsert_collateral,total,2905800146335
+GAS,upsert_collateral,dev-20261110172006-18007923138382.test.near,2577188965170
+GAS,upsert_collateral,total,2869693250702
+GAS,upsert_collateral,dev-20261110172006-43244059718781.test.near,2541082069537
+GAS,upsert_collateral,total,2905800146335
+GAS,upsert_collateral,dev-20261110172006-17867427592418.test.near,2577188965170
+GAS,set_remote_chain,total,2759375904124
+GAS,set_remote_chain,dev-20261110172006-18007923138382.test.near,2443734693439
+GAS,set_remote_chain,total,2723258312663
+GAS,set_remote_chain,dev-20261110172006-43244059718781.test.near,2407617101978
+GAS,set_remote_chain,total,2759375904124
+GAS,set_remote_chain,dev-20261110172006-17867427592418.test.near,2443734693439
+GAS,set_signer_config,total,2563840650900
+GAS,set_signer_config,dev-20261110172006-18007923138382.test.near,2249582267950
+GAS,set_signer_config,total,2527768311019
+GAS,set_signer_config,dev-20261110172006-43244059718781.test.near,2213509928069
+GAS,set_signer_config,total,2563840650900
+GAS,set_signer_config,dev-20261110172006-17867427592418.test.near,2249582267950
+GAS,set_outlayer_account,total,2348627116980
+GAS,set_outlayer_account,dev-20261110172006-18007923138382.test.near,2036752919780
+GAS,set_outlayer_account,total,2312563827415
+GAS,set_outlayer_account,dev-20261110172006-43244059718781.test.near,2000689630215
+GAS,set_outlayer_account,total,2348627116980
+GAS,set_outlayer_account,dev-20261110172006-17867427592418.test.near,2036752919780
+GAS,set_vault_read_config,total,2606896975221
+GAS,set_vault_read_config,dev-20261110172006-18007923138382.test.near,2289348415936
+GAS,set_vault_read_config,total,2570008461388
+GAS,set_vault_read_config,dev-20261110172006-43244059718781.test.near,2252459902103
+GAS,set_vault_read_config,total,2606896975221
+GAS,set_vault_read_config,dev-20261110172006-17867427592418.test.near,2289348415936
+GAS,set_extra_remote_chain,total,2806229346126
+GAS,set_extra_remote_chain,dev-20261110172006-18007923138382.test.near,2488680786841
+GAS,set_extra_remote_chain,total,2806229346126
+GAS,set_extra_remote_chain,dev-20261110172006-17867427592418.test.near,2488680786841
+GAS,reserve_remote_position(base)+derived_public_key,total,12245183366215
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110172006-18007923138382.test.near,3571855580033
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110172012-63453892083477.test.near,5364990299580
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110172015-62881387042716.test.near,223182562500
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110172006-18007923138382.test.near,2547189457787
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110172015-62881387042716.test.near,223182562500
+GAS,set_allow_keeper_deposit_attestation,total,2516264438631
+GAS,set_allow_keeper_deposit_attestation,dev-20261110172006-18007923138382.test.near,2205820752881
+GAS,keeper_attest_deposit(base)+payout,total,9944846725758
+GAS,keeper_attest_deposit(base)+payout,dev-20261110172006-18007923138382.test.near,4972904310219
+GAS,keeper_attest_deposit(base)+payout,dev-20261110172005-73590202928148.test.near,1692970955234
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171945-20817422355902.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261110172006-18007923138382.test.near,2069837060180
+GAS,keeper_attest_deposit(base)+payout,dev-20261110172015-62881387042716.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171945-20817422355902.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171945-20817422355902.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,total,15474918411784
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110172006-17867427592418.test.near,3515465116310
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110172012-46869252799871.test.near,1622497991937
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110172006-17867427592418.test.near,4925037380808
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110172005-37038674389848.test.near,1692970955234
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110172006-17867427592418.test.near,2069837060180
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110172015-64590646369722.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,request_remote_release(base)+sign,total,26206116658697
+GAS,request_remote_release(base)+sign,dev-20261110172006-17867427592418.test.near,4065456592354
+GAS,request_remote_release(base)+sign,dev-20261110172012-46869252799871.test.near,2644150250874
+GAS,request_remote_release(base)+sign,dev-20261110172012-46869252799871.test.near,1393087388438
+GAS,request_remote_release(base)+sign,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261110172012-46869252799871.test.near,13590790464025
+GAS,request_remote_release(base)+sign,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261110172006-17867427592418.test.near,3086704618191
+GAS,request_remote_release(base)+sign,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261110171945-84908053958117.test.near,223182562500
+GAS,relay_release_result(base),total,2971979960392
+GAS,relay_release_result(base),dev-20261110172006-17867427592418.test.near,2658007679732
+test base_confirm_repay_release_signed_ecrecover ... ok
+GAS,ft_transfer_call:Repay(after upgrade),total,12314814345445
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172005-44957441240916.test.near,2544822120337
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172006-43244059718781.test.near,3463534378170
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172006-59364385610406.test.near,1717753377225
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172015-25290424887595.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172006-43244059718781.test.near,2069719527804
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172015-25290424887595.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172005-44957441240916.test.near,1311376420664
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172015-25290424887595.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261110172015-25290424887595.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),total,13244944663455
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172006-59364385610406.test.near,2562749316160
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172006-43244059718781.test.near,4394717655165
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172005-44957441240916.test.near,1690556724274
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172020-82795108747968.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172006-43244059718781.test.near,2069662514176
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172020-82795108747968.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172006-59364385610406.test.near,1315930602665
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172020-82795108747968.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261110172020-82795108747968.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),total,27174184194276
+GAS,trigger+sign(base, Ecdsa),dev-20261110172006-18007923138382.test.near,5217612004641
+GAS,trigger+sign(base, Ecdsa),dev-20261110172012-63453892083477.test.near,2567366092088
+GAS,trigger+sign(base, Ecdsa),dev-20261110172012-63453892083477.test.near,1377820722994
+GAS,trigger+sign(base, Ecdsa),dev-20261110171945-20817422355902.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110172012-63453892083477.test.near,13516462231899
+GAS,trigger+sign(base, Ecdsa),dev-20261110171945-20817422355902.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110171945-20817422355902.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110172006-18007923138382.test.near,3068995797839
+GAS,trigger+sign(base, Ecdsa),dev-20261110171945-20817422355902.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110171945-20817422355902.test.near,223182562500
+GAS,relay_settlement_result(base),total,2999573637938
+GAS,relay_settlement_result(base),dev-20261110172006-18007923138382.test.near,2685458306133
+test base_reserve_attest_settle_signed_ecrecover_relay ... ok
+GAS,trigger+sign(solana, after upgrade),total,18951837699677
+GAS,trigger+sign(solana, after upgrade),dev-20261110172006-43244059718781.test.near,5087442482896
+GAS,trigger+sign(solana, after upgrade),dev-20261110172012-59805068757011.test.near,2751016716923
+GAS,trigger+sign(solana, after upgrade),dev-20261110172012-59805068757011.test.near,1464216588089
+GAS,trigger+sign(solana, after upgrade),dev-20261110171945-35332538031830.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261110172012-59805068757011.test.near,5438669317421
+GAS,trigger+sign(solana, after upgrade),dev-20261110171945-35332538031830.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261110171945-35332538031830.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261110172006-43244059718781.test.near,2784565249533
+GAS,trigger+sign(solana, after upgrade),dev-20261110171945-35332538031830.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261110171945-35332538031830.test.near,223182562500
+GAS,set_extra_remote_chain,total,2806229346126
+GAS,set_extra_remote_chain,dev-20261110172006-43244059718781.test.near,2488680786841
+test code_only_upgrade_over_live_v2_state ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 44.37s
+

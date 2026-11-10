@@ -497,7 +497,7 @@ fn remote_open() -> Nectar {
     c.set_signer_config(a("v1.signer-prod.testnet"), "solana-devnet-v1".into(), 15, 3600);
     c.set_vault_read_config("nectar.testnet/vault-read".into(), "ab".repeat(32), U128(100), 50);
     set_ctx(alice(), RESERVE_DEPOSIT_YOCTO, T0 + SEC);
-    let id = c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(10_000_000_000), 7500, None, None, None).0;
+    let id = c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(10_000_000_000), 7500, None, None, None, None).0;
     cb_ctx(T0 + SEC, PromiseResult::Successful(serde_json::to_vec(&format!("ed25519:{AUTH_B58}")).unwrap()));
     c.on_authority(U64(id));
     assert!(c.nft_token("p-0".into()).is_none(), "no Loan Note before the deposit is proven");
