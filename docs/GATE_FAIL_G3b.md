@@ -10,3 +10,5 @@ v7 module runs verified on chain (PASS).
 `/feed` degrades cleanly without a Feed URL (panel says "Feed indexer not configured", no 503 noise). Then the verifier re-runs G3b.
 
 **RESOLVED (pending verifier re-run):** WO-26f 201c9cf — specs pin flags per test (both paths), /api/feed reads live with age/stale, /feed degrades without a Feed URL.
+
+**RESOLVED 2026-11-10 17:48Z:** G3b re-run PASS (EVIDENCE ac09433): e2e 244/0/18, Lighthouse a11y 100 ×20, /api/feed live.
