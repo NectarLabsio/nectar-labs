@@ -396,6 +396,29 @@ async fn outlayer_calendar_cannot_open_and_multiplier_bounded() -> anyhow::Resul
     Ok(())
 }
 
+/// G11 (GATE_FAIL_G11): gas rows for the two WO-23a owner setters; each < 100 Tgas.
+#[tokio::test]
+async fn shield_and_job_setters_gas() -> anyhow::Result<()> {
+    let e = setup().await?;
+    let window_end = now_ns(&e).await? + 3600 * SEC;
+    let r = owner_call(&e, "set_shield_params", json!({ "symbol": "NVDAx", "weekend_fee_bps": 150, "event_fee_bps": 300,
+        "event_window_end_ns": window_end.to_string() })).await?;
+    assert!(r.total_gas_burnt.as_gas() < Gas::from_tgas(100).as_gas(), "set_shield_params >= 100 Tgas");
+    let shield = &view(&e, "get_collateral", json!({ "symbol": "NVDAx" })).await?["shield"];
+    assert_eq!((shield["weekend_fee_bps"].as_u64(), shield["event_fee_bps"].as_u64()), (Some(150), Some(300)));
+    assert_eq!(shield["event_window_end_ns"], window_end.to_string());
+
+    for job in ["calendar", "multiplier"] {
+        let r = owner_call(&e, "set_job_config", json!({ "job": job, "project_id": format!("nectar.testnet/{job}"),
+            "version_key": "cd".repeat(32), "deposit_yocto": "10000000000000000000000", "gas_tgas": 40 })).await?;
+        assert!(r.total_gas_burnt.as_gas() < Gas::from_tgas(100).as_gas(), "set_job_config >= 100 Tgas");
+        let v = view(&e, "get_job_config", json!({ "job": job })).await?;
+        assert_eq!((v["source"].as_str(), v["gas_tgas"].as_u64()), (Some("job"), Some(40)), "{job}");
+        assert_eq!(v["project_id"], format!("nectar.testnet/{job}"));
+    }
+    Ok(())
+}
+
 async fn view_s(c: &Contract, method: &str) -> anyhow::Result<String> {
     Ok(c.view(method).args_json(json!({})).await?.json::<String>()?)
 }
