@@ -88,3 +88,9 @@ emits `pay_to_failed`. `withdraw_claimable()` (1 yocto) pays all of the caller's
 On `settlement_signed` / `remote_release_signed` it builds `[Ed25519 verify ix (F-082 bytes by hand, F-186), settle|release ix]`, sends it to devnet with the
 keeper fee-payer keypair (path in `.env`), confirms, then calls `relay_settlement_result`. It is idempotent on restart. Delta: after `remote_reserved`, it watches the
 vault for the position PDA and calls `confirm_remote_deposit`.
+
+## C. Position Notes (WO-22, merged)
+Token ids `q-<quote_id>`, `p-<position_id>` (`r-<collateral>-<n>` reserved for WO-23b). Owner = `Quote.buyer` / `Position.borrower` (a transfer rewrites it).
+Views: NEP-171 `nft_token`, NEP-181 `nft_tokens` / `nft_tokens_for_owner` / `nft_total_supply` (pages capped at 20), `nft_token_svg(token_id) -> String`,
+`nft_transfer_locked(token_id) -> bool`. Calls: `nft_transfer`, `nft_transfer_call`, `set_quote_remote_recipient(quote_id, recipient?)` (Note owner;
+refused while locked). Events: NEP-297 standard "nep171" `nft_mint` / `nft_transfer`; nectar `quote_remote_recipient_cleared` / `_set`.
