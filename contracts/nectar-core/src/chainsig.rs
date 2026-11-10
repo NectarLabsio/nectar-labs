@@ -36,6 +36,92 @@ pub fn build_preimage(i: &PreimageInput) -> String {
     )
 }
 
+/// Settle kinds rebuilt by `nectar_vault` (solana/programs/nectar_vault/src/preimage.rs). v2 never produces kind 0.
+pub const KIND_PRELIQ: u8 = 1;
+pub const KIND_SELF: u8 = 2;
+
+/// v2 settle preimage = v1 preimage + `|kind=PRELIQ` (1) or `|kind=SELF` (2). `None` for any other kind.
+pub fn build_preimage_v2(i: &PreimageInput, kind: u8) -> Option<String> {
+    let suffix = match kind {
+        KIND_PRELIQ => "|kind=PRELIQ",
+        KIND_SELF => "|kind=SELF",
+        _ => return None,
+    };
+    Some(format!("{}{suffix}", build_preimage(i)))
+}
+
+/// `NECTAR_RELEASE_V1|chain=<id>|vault=<vault program id>|pos=<n>|recipient=<depositor b58>|nonce=<n>|expires=<unix_s>`
+pub fn build_release_preimage(chain_id: &str, vault_program: &str, position_id: u64, recipient: &str, nonce: u64, expires: u64) -> String {
+    format!("NECTAR_RELEASE_V1|chain={chain_id}|vault={vault_program}|pos={position_id}|recipient={recipient}|nonce={nonce}|expires={expires}")
+}
+
+/// MPC derivation path of one remote position: `<chain_id>/pos/<id>` (interface-v7 §B).
+pub fn position_path(chain_id: &str, position_id: u64) -> String {
+    format!("{chain_id}/pos/{position_id}")
+}
+
+/// Base58 (Bitcoin alphabet) decode; `None` on a foreign character or an empty string.
+pub fn b58_decode(s: &str) -> Option<Vec<u8>> {
+    if s.is_empty() {
+        return None;
+    }
+    let mut out: Vec<u8> = Vec::with_capacity(s.len());
+    for ch in s.bytes() {
+        let mut carry = B58.iter().position(|b| *b == ch)? as u32;
+        for byte in out.iter_mut() {
+            carry += u32::from(*byte) * 58;
+            *byte = (carry & 0xff) as u8;
+            carry >>= 8;
+        }
+        while carry > 0 {
+            out.push((carry & 0xff) as u8);
+            carry >>= 8;
+        }
+    }
+    let zeros = s.bytes().take_while(|b| *b == b'1').count();
+    out.extend(std::iter::repeat_n(0u8, zeros));
+    out.reverse();
+    Some(out)
+}
+
+/// `derived_public_key` answer (F-338) -> stored authority. Domain 1: `"ed25519:<b58 of 32 B>"` kept as is.
+/// Domain 0: `"secp256k1:<b58 of 64 B x‖y>"` -> EVM address `0x` + hex(last 20 bytes of keccak256(x‖y)) (F-339).
+pub fn authority_from_derived_key(key: &str, domain_id: u32) -> Result<String, &'static str> {
+    match domain_id {
+        ED25519_DOMAIN_ID => {
+            let b58 = key.strip_prefix("ed25519:").ok_or("bad_curve")?;
+            let bytes = b58_decode(b58).ok_or("bad_base58")?;
+            if bytes.len() != 32 {
+                return Err("bad_key_length");
+            }
+            Ok(key.to_string())
+        }
+        SECP256K1_DOMAIN_ID => {
+            let b58 = key.strip_prefix("secp256k1:").ok_or("bad_curve")?;
+            let xy = b58_decode(b58).ok_or("bad_base58")?;
+            if xy.len() != 64 {
+                return Err("bad_key_length");
+            }
+            let h = near_sdk::env::keccak256_array(&xy);
+            Ok(format!("0x{}", hex(&h[12..])))
+        }
+        _ => Err("bad_domain"),
+    }
+}
+
+/// Compare a vault-reported authority with the stored one. Ed25519: the base58 part, with or without the
+/// `ed25519:` prefix. EVM: case-insensitive `0x` address.
+pub fn authority_matches(stored: &str, reported: &str) -> bool {
+    if let Some(s) = stored.strip_prefix("ed25519:") {
+        let r = reported.strip_prefix("ed25519:").unwrap_or(reported);
+        return !s.is_empty() && s == r;
+    }
+    stored.starts_with("0x") && stored.len() == 42 && stored.eq_ignore_ascii_case(reported)
+}
+
+/// Secp256k1 domain of the MPC signer (F-032).
+pub const SECP256K1_DOMAIN_ID: u32 = 0;
+
 /// Base58 string of 32..=44 chars (a Solana address / program id; never contains `|`, `=` or spaces).
 pub fn valid_base58_address(s: &str) -> bool {
     (32..=44).contains(&s.len()) && s.bytes().all(|b| B58.contains(&b))
