@@ -75,6 +75,11 @@ What Kunal does (3 min):
 What Claude Code does then: runs `pnpm --filter web test:copilot --live`, updates EVIDENCE G8, flips the copilot badge from "key missing" to live.
 Default if silent (2026-11-14 15:00 UTC): copilot ships with the recorded-fixture verifier and a visible "key missing" state; README says so.
 
+UPDATE 2026-11-10T00:15Z (C-019, daily verify): the NEAR Builders $10 credit is now a SEPARATE API key claimed at
+https://nearbuilders.org/dashboard (not applied to a cloud.near.ai account). Either route works: claim it there, or create a key at
+cloud.near.ai. Store it outside the repo: `printf '%s' '<key>' > ~/.nectar/nearai.key && chmod 600 ~/.nectar/nearai.key`, then reply `H7 done`.
+Note: NEAR AI Cloud /v1/models has returned HTTP 500 since 2026-11-09T23:05Z; the live G8 run happens once it answers.
+
 ## H8 — 1Click API key (optional)                     status: OPEN   needed by: WO-11 (optional)
 Why a human: key issued per partner; lowers displayed fee from 25 to 20 bps.
 What Kunal does: request a key per https://docs.near-intents.org/ ; `echo 'ONE_CLICK_API_KEY=<paste>' >> services/keeper/.env.local`; reply `H8 done`.
