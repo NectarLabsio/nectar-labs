@@ -1,0 +1,3 @@
+sign request keys: path,payload_v2,domain_id path: solana-devnet-v1 domain_id: 1 payload_v2 type: Eddsa
+Eddsa payload decodes to view preimage: true
+SignatureResponse scheme: Ed25519 len: 64 hex==view sig: true

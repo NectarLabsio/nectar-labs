@@ -9,7 +9,7 @@
 | G4 OutLayer | PASS | 2026-11-09T22:10Z | d87eef6 | evidence/G4/verifier-20261109T2210Z/ (attestation via testnet-api.outlayer.ai/attestations/by-request/15114, TDX quote present, not verified; gates.md get_settlement view missing, criterion checked from events; fills = max until WO-10b) |
 | G5 oracle | FALLBACK (disclosed) | 2026-11-09T22:55Z | 706d940 | evidence/G5/verifier-20261109T2254Z/ (no live Pyth price: pyth-oracle.testnet NVDA → null, Hermes 401, H13 key absent; nectar-core source = Owner; Pyth defences tested: unit 157/0 + sandbox 5/0 + sandbox_p1 4/0; gates.md filter `oracle_rejects` matches 0 tests; README $180 vs on-chain $112; see §G5) |
 | G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at 578b006: 3-size live dry quotes verify, impact from base units, no amountIn/OutUsd use; GET /api/oneclick fixture + live match shape; /feed panel and NVDAx route status come from the API; web e2e 128 passed / 0 failed; see §G6) |
-| G7 Solana + signer | pending | | | |
+| G7 Solana + signer | PARTIAL: NEAR side verified; Solana leg not built | 2026-11-09T23:57Z | 97382fd | evidence/G7/verifier-20261109T2357Z/ (both gates.md commands fail: anchor absent, solana/ empty, no keeper test:settle-devnet script = H-TOOLCHAIN-SOLANA; NEAR side: trigger tx FCtApD2… → v1.signer-prod.testnet sign (payload_v2 Eddsa, domain_id 1) → SignatureResponse Ed25519 → settlement_signed; preimage event == get_pending_settlement; Ed25519 sig valid vs derived_public_key == config authority; tampered preimage → invalid; rebuild code hash == on-chain CFTfzY4…; cargo test 210/0 incl. sandbox_p2 3/0 + golden vectors; program id PLACEHOLDER, recipient throwaway, #6 stays Settling; see §G7) |
 | G8 copilot | PASS (fixture) (re-run; earlier FAIL 2b49f42 was docs wording) | 2026-11-09T23:56Z | df4706f | evidence/G8/verifier-20261109T235453Z/ (fixture 10 pass / 0 fail / 1 skip = live; --live without key exit 1; e2e copilot 4/4 with exact "Key missing" banner; README/docs-site say built, no live answer verified, fixture = Phala sample + throwaway key; panel says browser vs server checks; live round trip not performed: H7 key absent, /v1/models HTTP 500) |
 | G9 fresh-clone rehearsal | pending | | | |
 
@@ -23,6 +23,50 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G7
+
+### G7 — Solana + signer — PARTIAL: NEAR side verified; Solana leg not built — 2026-11-09T23:57Z — commit 97382fd
+Fresh clone /tmp/verify-G7-1794268628 at main 97382fd. PATH += ~/.cargo/bin ~/.local/bin, SDKROOT per gates.md host notes.
+No secrets used, no transactions sent (RPC reads only). Logs: evidence/G7/verifier-20261109T2357Z/.
+Not PASS (no Solana devnet tx exists), not FAIL-by-bug (Solana toolchain absent: H-TOOLCHAIN-SOLANA).
+$ cd solana && anchor test 2>&1 | tail -40                 → "command not found: anchor" (solana/ holds only .gitkeep)
+$ pnpm --filter keeper test:settle-devnet                  → ERR_PNPM_RECURSIVE_RUN_NO_SCRIPT (script does not exist)
+Explorer links: none for Solana (no tx). NEAR: https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe
+  opened with WebFetch → HTTP 403; proven via RPC instead (below).
+NEAR side, source = evidence/G7/signer-roundtrip-20261109T2348Z.log (latest, position #6), trigger tx FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe:
+$ RPC EXPERIMENTAL_tx_status (sender keeper.nectar.testnet, rpc.testnet.near.org) → tx_status_FCtApD2.json, rpc_checks.log
+  status SuccessValue, FINAL; keeper.nectar.testnet → nectar-core trigger_preliquidation {"position_id":"6"}
+  receipt chain: outlayer.testnet request_execution → on_quoter_result → nectar-core → v1.signer-prod.testnet `sign`
+    deposit 1 yocto, 30 Tgas, request {path:"solana-devnet-v1", payload_v2:{Eddsa:<hex>}, domain_id:1}
+  → signer return_signature_and_clean_state_on_success SuccessValue {"scheme":"Ed25519","signature":[64 u8]}
+    (SignatureResponse shape per F-035) → nectar-core on_signature → keeper reward ft_transfer 11634 units
+  nectar events: preliq_triggered, quoter_requested, quoter_result, settlement_sign_requested, settlement_signed
+  Eddsa payload hex decodes to the raw preimage bytes (not pre-hashed) == view preimage: true (sign_args_check.log)
+  sign_requested.preimage == signed.preimage == get_pending_settlement {"position_id":"6"}.preimage: true true
+  SignatureResponse bytes == event signature_hex == view signature_hex: true
+$ node scripts/verify-ed25519.mjs ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV '<pending json>' → "signature_valid":true
+  negative control (repay_e6 205000000→205000001 in preimage) → "signature_valid":false (verify_ed25519_negative.log)
+$ view v1.signer-prod.testnet derived_public_key {"path":"solana-devnet-v1","predecessor":"nectar-core.nectar.testnet","domain_id":1}
+  → "ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV" == config.yaml signer.authority: true
+$ view get_position {"position_id":"6"} → status "Settling", units 0, debt 0 (no relay; stays Settling)
+Code:
+$ (cd contracts/nectar-core && cargo near build non-reproducible-wasm) → exit 0, bs58(sha256) CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t
+  == on-chain view_account code_hash CFTfzY4APx3fBsebqQ8SqcfLVVcShKe4TdD48Sapgi5t: true (code_hash.log)
+$ cargo test --workspace → exit 0 (cargo_test.log): mock_ft 11/0, nectar_core unit 179/0 (incl.
+  tests_p2::preimage_golden_vectors_byte_for_byte ok), sandbox 5/0, sandbox_p1 4/0, sandbox_p2 3/0, test_stubs 8/0
+Disclosures (must stay true in README/submission):
+  - preimage program id EgfPYZfKHksk1P5x9z8WXKGr7cKcQ7sr5Zf8sdo68NYZ is a PLACEHOLDER (random address from
+    scripts/55-g7-signer-roundtrip.sh); no Solana vault is deployed; config.yaml solana.program_id/authority = TODO-G7.
+  - recipient DbrceqSnyAcm2EkTD2j5npcc16BdkWtZuW73MULaUt98 is a throwaway address (key generated and discarded per script).
+  - position #6 stays Settling: the signature was never relayed to Solana (solana_tx_sig null).
+Notes for the orchestrator (not fixed by verifier):
+  - README line 51 says in present tense "A Solana program verifies it before releasing collateral"; line 23 says the vault is
+    "not built". Line 56 says pre-hashing is "open until G7"; the on-chain sign args show the raw preimage is signed (no pre-hash).
+  - scripts/55-g7-signer-roundtrip.sh says the placeholder is "disclosed in EVIDENCE/README"; README does not mention it.
+  - gates.md G7 commands reference a keeper script `test:settle-devnet` that does not exist yet.
+Remaining for PASS: Solana toolchain (H-TOOLCHAIN-SOLANA) → nectar_vault on devnet → devnet tx with Ed25519 verify ix + settle,
+both explorer links opened.
 
 ## G8
 
