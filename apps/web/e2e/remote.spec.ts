@@ -5,8 +5,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { config, noHorizontalScroll, prime } from "./helpers";
 
 // WO-31: Solana remote borrow flow against mocked v2 views, a mocked devnet RPC and a mocked Wallet Standard wallet.
-// features.solana_remote is false in config.yaml and the vault ids may be TODO: the localhost-only window.__NECTAR_E2E_MOCK__
-// override (apps/web/lib/e2e-mock.ts) turns the flag on and supplies vault ids. Nothing here touches Solana or signs on NEAR.
+// The localhost-only window.__NECTAR_E2E_MOCK__ override (apps/web/lib/e2e-mock.ts) pins the flags (only solana_remote on,
+// independent of config.yaml) and supplies vault ids. Nothing here touches Solana or signs on NEAR.
 
 const FIXTURE = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/v2-views.json"), "utf8")) as Record<string, unknown>;
 const CORE = config.accounts.core;

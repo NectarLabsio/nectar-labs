@@ -5,8 +5,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { config, noHorizontalScroll, prime } from "./helpers";
 
 // WO-26b: /shield, Profit-Lock on /position/[id] and the voluntary-fills checkbox on /quote/new, against mocked v2 views
-// (WO-23a methods answered per call args) and the localhost-only E2E mock wallet. features.shields / features.profit_lock
-// are false in config.yaml; window.__NECTAR_E2E_MOCK__ turns them on for these specs only. Nothing here signs on testnet.
+// (WO-23a methods answered per call args) and the localhost-only E2E mock wallet. window.__NECTAR_E2E_MOCK__ pins the flag
+// state per test (default shields + profit_lock on, everything else off; `features: []` = all off), independent of config.yaml. Nothing here signs on testnet.
 
 const FIXTURE = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/v2-views.json"), "utf8")) as Record<string, unknown>;
 const CORE = config.accounts.core;

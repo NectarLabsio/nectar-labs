@@ -92,7 +92,8 @@ export function Gate({ children, wallet, action = "continue", blockOnPause }: { 
   const w = useWallet();
   if (!chain.deployed) return <NotDeployed />;
   if (chain.rpcError) return <RpcErrorBanner error={chain.rpcError} onRetry={chain.reload} />;
-  if (chain.loading) return <LoadingBlock />;
+  // Only the first read blocks; a background reload after a write keeps the page (and any half-filled form) mounted.
+  if (chain.loading && !chain.core) return <LoadingBlock />;
   return (
     <div className="stack">
       {chain.paused ? <PausedBanner /> : null}

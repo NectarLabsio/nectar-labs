@@ -2,7 +2,7 @@
 import { Badge, Banner, Button, Card, Table } from "@nectar/ui";
 import { bpsToPct, formatRateE6, type FeedOneClick, type FeedOneClickPair, type FeedOneClickSample } from "@nectar/sdk";
 import { LoadingBlock } from "@/components/states";
-import type { FeedApiState } from "@/components/useFeedApi";
+import { FeedUnconfigured, type FeedApiState } from "@/components/useFeedApi";
 
 /** "0.5×", "1×", "2×" relative to the smallest sample (which the feed takes at 0.5× notional). */
 function multiple(s: FeedOneClickSample, smallest: number): string {
@@ -62,6 +62,8 @@ export function OneClickPanel({ state }: { state: FeedApiState<FeedOneClick> }) 
       <h2 id="oneclick-h">1Click reference depth</h2>
       {state.loading ? (
         <LoadingBlock lines={3} />
+      ) : state.unconfigured ? (
+        <FeedUnconfigured what="1Click reference samples" />
       ) : state.error || !d ? (
         <Banner tone="warn" title="1Click data unavailable" actions={<Button size="sm" onClick={state.reload}>Retry</Button>}>
           The Feed API did not return 1Click samples{state.error ? <>: <span className="mono">{state.error}</span></> : null}. No depth or route status is shown.

@@ -1,23 +1,27 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
-import { PENDING_MSG, TESTNET_PENDING, config, prime } from "./helpers";
+import { ALL_FEATURES, PENDING_MSG, TESTNET_PENDING, config, pinFlags, prime } from "./helpers";
 
-// WO-20: v7 P0 delta. Covers the v1 path (the live contract today) and a mocked v2 view fixture.
-// features.* in packages/config/config.yaml are all false, so every v7 control must stay hidden on both paths.
+// WO-20 / WO-26f: v7 P0 delta on a mocked v1 contract and a mocked v2 view fixture. Flag state is pinned per test (pinFlags), never
+// read from config.yaml: flag-off hides every v7 control; flag-on shows it on v2 only (a v1 contract keeps it hidden).
 
 const FIXTURE = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/v2-views.json"), "utf8")) as Record<string, unknown>;
 const CORE = config.accounts.core;
 
-/** Answer nectar-core view calls from the v2 fixture; everything else goes to the real testnet RPC. */
-async function mockV2(page: Page) {
+const V1_VERSION = "nectar-core 0.1.0 p2";
+const V1_VIEWS = { contract_version: V1_VERSION, get_config: { ...(FIXTURE.get_config as object), contract_version: V1_VERSION } };
+
+/** Answer nectar-core view calls from the v2 fixture (optionally overridden); everything else goes to the real testnet RPC. */
+async function mockV2(page: Page, override: Record<string, unknown> = {}) {
+  const views = { ...FIXTURE, ...override };
   await page.route("**/*fastnear.com/**", async (route) => {
     const req = route.request();
     if (req.method() === "OPTIONS") return route.fulfill({ status: 204, headers: { "access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "POST" } });
     const body = req.postDataJSON() as { id: unknown; params?: { request_type?: string; account_id?: string; method_name?: string } } | null;
     const p = body?.params;
-    if (p?.request_type === "call_function" && p.account_id === CORE && p.method_name && p.method_name in FIXTURE) {
-      const bytes = Array.from(Buffer.from(JSON.stringify(FIXTURE[p.method_name])));
+    if (p?.request_type === "call_function" && p.account_id === CORE && p.method_name && p.method_name in views) {
+      const bytes = Array.from(Buffer.from(JSON.stringify(views[p.method_name])));
       return route.fulfill({
         status: 200,
         contentType: "application/json",
@@ -29,9 +33,18 @@ async function mockV2(page: Page) {
   });
 }
 
+function copyRules(text: string) {
+  expect(text).not.toContain("insurance");
+  expect(text).not.toContain("without liquidations");
+  expect(text).not.toContain("hackathon");
+  expect(text).toContain("testnet");
+  expect(text).toContain("mock collateral");
+}
+
 test.describe("landing v7", () => {
-  test("hero, live card, how it works, FAQ, footer; no module sections while flags are off; copy rules", async ({ page }) => {
+  test("flags off: hero, live card, how it works, FAQ, footer; no module sections; copy rules", async ({ page }) => {
     await prime(page, "dark");
+    await pinFlags(page, []);
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1, name: "Borrow against stocks without fire-sales" })).toBeVisible();
     await expect(page.getByTestId("live-limit-card")).toBeVisible();
@@ -39,12 +52,28 @@ test.describe("landing v7", () => {
     await expect(page.locator("#faq")).toBeVisible();
     await expect(page.locator("footer")).toBeVisible();
     await expect(page.locator("[data-feature]")).toHaveCount(0);
-    const text = (await page.locator("body").innerText()).toLowerCase();
-    expect(text).not.toContain("insurance");
-    expect(text).not.toContain("without liquidations");
-    expect(text).not.toContain("hackathon");
-    expect(text).toContain("testnet");
-    expect(text).toContain("mock collateral");
+    copyRules((await page.locator("body").innerText()).toLowerCase());
+  });
+
+  test("flags on: every module section renders with its data-feature tag; copy rules still hold", async ({ page }) => {
+    await prime(page, "dark");
+    await pinFlags(page, ALL_FEATURES);
+    await page.goto("/");
+    await expect(page.getByRole("heading", { level: 1, name: "Borrow against stocks without fire-sales" })).toBeVisible();
+    for (const [id, tag] of [["shields", "shields"], ["reserve", "reserve"], ["spend", "pay_to"], ["notes", "notes"], ["hub", "solana_remote"], ["agents", "agent_skill"]] as const) {
+      await expect(page.locator(`section#${id}`)).toHaveAttribute("data-feature", tag);
+    }
+    for (const f of ["pay_to", "profit_lock", "solana_remote", "base", "x402"] as const) await expect(page.locator(`div[data-feature="${f}"]`)).toHaveCount(1);
+    await expect(page.locator("#faq")).toBeVisible();
+    copyRules((await page.locator("body").innerText()).toLowerCase());
+  });
+
+  test("one flag on: only that module renders", async ({ page }) => {
+    await prime(page, "dark");
+    await pinFlags(page, ["reserve"]);
+    await page.goto("/");
+    await expect(page.locator("section#reserve")).toBeVisible();
+    await expect(page.locator("[data-feature]")).toHaveCount(1);
   });
 
   test("live card shows in-session vs weekend parameters from testnet", async ({ page }) => {
@@ -57,9 +86,14 @@ test.describe("landing v7", () => {
   });
 });
 
-test.describe("v1 path (live contract)", () => {
+test.describe("v1 path (mocked v1 contract, every flag on)", () => {
   test.skip(TESTNET_PENDING, PENDING_MSG);
-  test.beforeEach(async ({ page }) => prime(page, "dark"));
+  // All flags on: a v1 contract must still hide every v7 control (featureOn needs v2).
+  test.beforeEach(async ({ page }) => {
+    await prime(page, "dark");
+    await pinFlags(page, ALL_FEATURES);
+    await mockV2(page, V1_VIEWS);
+  });
 
   test("feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows", async ({ page }) => {
     await page.goto("/feed");
@@ -90,10 +124,11 @@ test.describe("v1 path (live contract)", () => {
   });
 });
 
-test.describe("v2 path (mocked view fixture)", () => {
+test.describe("v2 path (mocked view fixture), flags off", () => {
   test.skip(TESTNET_PENDING, PENDING_MSG);
   test.beforeEach(async ({ page }) => {
     await prime(page, "dark");
+    await pinFlags(page, []);
     await mockV2(page);
   });
 
@@ -105,7 +140,7 @@ test.describe("v2 path (mocked view fixture)", () => {
     await expect(card.getByTestId("session-badge")).toHaveAttribute("data-reason", "forced_closed");
     await expect(card.getByTestId("session-badge")).toContainText("Weekend parameters");
     await expect(card.getByTestId("session-badge")).toContainText("forced closed");
-    // features.multiplier is false: no multiplier line even though M = 1.02 on the fixture.
+    // features.multiplier is pinned off: no multiplier line even though M = 1.02 on the fixture.
     await expect(page.getByTestId("multiplier-line")).toHaveCount(0);
   });
 
@@ -120,5 +155,26 @@ test.describe("v2 path (mocked view fixture)", () => {
     await expect(page.getByText("Aggregate headroom")).toBeVisible();
     await expect(page.getByTestId("pay-to")).toHaveCount(0);
     await expect(page.getByTestId("referrer")).toHaveCount(0);
+  });
+});
+
+test.describe("v2 path (mocked view fixture), flags on", () => {
+  test.skip(TESTNET_PENDING, PENDING_MSG);
+  test.beforeEach(async ({ page }) => {
+    await prime(page, "dark");
+    await pinFlags(page, ALL_FEATURES);
+    await mockV2(page);
+  });
+
+  test("feed shows the multiplier line (M = 1.02 on the fixture)", async ({ page }) => {
+    await page.goto("/feed");
+    await expect(page.getByTestId("equation-card").getByTestId("eq-total-debt")).toHaveText("$1,200", { timeout: 20_000 });
+    await expect(page.getByTestId("multiplier-line").first()).toBeVisible();
+  });
+
+  test("borrow shows pay_to and the referrer from ?ref=", async ({ page }) => {
+    await page.goto("/borrow?ref=agent1.nectar.testnet");
+    await expect(page.getByTestId("pay-to")).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId("referrer")).toBeVisible();
   });
 });

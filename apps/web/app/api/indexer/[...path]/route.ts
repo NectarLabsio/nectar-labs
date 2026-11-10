@@ -11,7 +11,8 @@ export async function GET(req: Request, ctx: { params: Promise<{ path: string[] 
   const { path } = await ctx.params;
   const p = path.join("/");
   if (!ALLOWED.some((r) => r.test(p))) return Response.json({ error: "not found" }, { status: 404 });
-  if (!FEED_URL) return Response.json({ configured: false, error: "Feed API not configured (NEXT_PUBLIC_FEED_URL)" }, { status: 503 });
+  // Not an error to the browser: an unset indexer is a supported configuration (the panels say so), so no 5xx noise.
+  if (!FEED_URL) return Response.json({ configured: false, error: "Feed indexer not configured" }, { status: 200, headers: { "cache-control": "no-store" } });
   const inUrl = new URL(req.url);
   const out = new URL(`${FEED_URL.replace(/\/$/, "")}/${p}`);
   for (const k of QUERY) {

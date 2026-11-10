@@ -141,8 +141,9 @@ function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; ac
 /** Localhost-only E2E overrides (features + Solana vault ids); a no-op on any deployed host. */
 function applyE2EMock(config: PublicConfig, m: E2EMock | null): PublicConfig {
   if (!m) return config;
+  // `features` is the exact set of flags that are on for this page load (others off), so a spec never depends on config.yaml.
   const features = { ...config.features };
-  for (const f of m.features ?? []) features[f] = true;
+  if (m.features) for (const f of Object.keys(features) as FeatureName[]) features[f] = m.features.includes(f);
   return {
     ...config,
     features,

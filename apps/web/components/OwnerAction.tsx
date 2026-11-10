@@ -17,7 +17,7 @@ export function OwnerAction({ title, intent, enabled, onRun, children, testId }:
   const ok = intent !== null && typeof intent !== "string";
   return (
     <div className="stack-sm" data-testid={testId}>
-      <h3 className="small">{title}</h3>
+      <h2 className="small">{title}</h2>
       {children}
       {typeof intent === "string" ? <p className="small warn-text" role="alert">{intent}</p> : null}
       {ok ? (

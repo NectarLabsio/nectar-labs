@@ -26,6 +26,8 @@ export function Button({ variant = "default", size = "md", loading, disabled, cl
 
 export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   title?: ReactNode;
+  /** Heading level of `title` (default 3). Use 2 when the card sits directly under the page h1, so the outline never skips a level. */
+  titleLevel?: 2 | 3;
   label?: ReactNode;
   actions?: ReactNode;
   footer?: ReactNode;
@@ -33,8 +35,9 @@ export interface CardProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   live?: boolean;
   as?: "section" | "div" | "article";
 }
-export function Card({ title, label, actions, footer, tone = "default", live, as = "section", className, children, ...rest }: CardProps) {
+export function Card({ title, titleLevel = 3, label, actions, footer, tone = "default", live, as = "section", className, children, ...rest }: CardProps) {
   const Tag = as;
+  const H = titleLevel === 2 ? "h2" : "h3";
   const head = title || label || actions;
   return (
     <Tag className={cx("card", tone !== "default" && tone, className)} data-live={live ? "true" : undefined} {...rest}>
@@ -42,7 +45,7 @@ export function Card({ title, label, actions, footer, tone = "default", live, as
         <div className="card-head">
           <div className="stack-sm">
             {label ? <span className="label">{label}</span> : null}
-            {title ? <h3>{title}</h3> : null}
+            {title ? <H className="card-title">{title}</H> : null}
           </div>
           {actions ? <div className="row">{actions}</div> : null}
         </div>

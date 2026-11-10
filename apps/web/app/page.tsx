@@ -1,29 +1,14 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-import type { FeatureName, Features } from "@nectar/sdk";
 import { LandingStats, LiveLimitCard } from "@/components/LandingLive";
 import { CramerFormula } from "@/components/Formula";
 import { ShieldFeeBps } from "@/components/Shields";
+import { Module, On } from "@/components/FeatureGate";
 import { docsHref } from "@/lib/env";
-import { getPublicConfig } from "@/lib/config.server";
 
 // Landing v7 (addendum §10; the bundle's landing/index.html v7 is not in the repo, D-017).
-// Module sections carry data-feature="<name>" and render only when config.yaml `features.<name>` is true; the orchestrator
+// Module sections (components/FeatureGate) carry data-feature="<name>" and render only when config.yaml `features.<name>` is true; the orchestrator
 // flips a flag when that module's gate passes. With every flag off the page reads complete: hero, live card, how it works, FAQ, footer.
 // Copy rules: never "insurance", never "without liquidations"; testnet and mock collateral disclosed.
-
-function Module({ name, features, children, className = "sec", id }: { name: FeatureName; features: Features; children: ReactNode; className?: string; id?: string }) {
-  if (!features[name]) return null;
-  return (
-    <section className={className} id={id} data-feature={name}>
-      {children}
-    </section>
-  );
-}
-
-function On({ name, features, children }: { name: FeatureName; features: Features; children: ReactNode }) {
-  return features[name] ? <div data-feature={name}>{children}</div> : null;
-}
 
 /** Position Note preview: the layout of the contract-rendered SVG (WO-22), drawn here in theme tokens and labelled as a preview. */
 function NotePreview() {
@@ -49,8 +34,6 @@ function NotePreview() {
 }
 
 export default function Home() {
-  const { features } = getPublicConfig();
-  const hub = features.solana_remote || features.base;
   return (
     <>
       <header className="hero" id="top">
@@ -113,7 +96,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Module name="shields" features={features} className="sec alt" id="shields">
+      <Module name="shields" className="sec alt" id="shields">
         <div className="wrap">
           <div className="sec-head">
             <span className="label">Shields</span>
@@ -129,7 +112,7 @@ export default function Home() {
         </div>
       </Module>
 
-      <Module name="reserve" features={features} id="reserve">
+      <Module name="reserve" id="reserve">
         <div className="wrap">
           <div className="card tint row between">
             <div className="stack-sm">
@@ -142,11 +125,10 @@ export default function Home() {
         </div>
       </Module>
 
-      {features.pay_to || features.profit_lock ? (
-        <section className="sec" id="spend">
+      <Module name={["pay_to", "profit_lock"]} id="spend">
           <div className="wrap">
             <div className="grid-2">
-              <On name="pay_to" features={features}>
+              <On name="pay_to">
                 <div className="card stack-sm">
                   <span className="label">Spend without selling</span>
                   <h3>Pay a merchant from a stock-backed loan</h3>
@@ -154,7 +136,7 @@ export default function Home() {
                   <Link className="btn sm" href="/borrow">Borrow and pay</Link>
                 </div>
               </On>
-              <On name="profit_lock" features={features}>
+              <On name="profit_lock">
                 <div className="card stack-sm">
                   <span className="label">Profit-Lock</span>
                   <h3>Close a loan by selling just enough</h3>
@@ -163,10 +145,9 @@ export default function Home() {
               </On>
             </div>
           </div>
-        </section>
-      ) : null}
+      </Module>
 
-      <Module name="notes" features={features} className="sec alt" id="notes">
+      <Module name="notes" className="sec alt" id="notes">
         <div className="wrap grid-2">
           <div className="sec-head">
             <span className="label">Position Notes</span>
@@ -178,8 +159,7 @@ export default function Home() {
         </div>
       </Module>
 
-      {hub ? (
-        <section className="sec" id="hub" data-feature={features.solana_remote ? "solana_remote" : "base"}>
+      <Module name={["solana_remote", "base"]} id="hub">
           <div className="wrap">
             <div className="sec-head">
               <span className="label">One hub, remote collateral</span>
@@ -190,15 +170,14 @@ export default function Home() {
               <div className="card node"><span className="label">Hub</span><h3>NEAR testnet</h3><p className="small">Limits, quotes, fees, settlement decisions and Chain Signatures.</p></div>
               <span className="label" aria-hidden="true">⬡ ⬡ ⬡</span>
               <div className="spokes">
-                <On name="solana_remote" features={features}><div className="card node"><span className="label">Spoke</span><h3>Solana devnet</h3><p className="small">Vault program; Ed25519-signed settle and release.</p></div></On>
-                <On name="base" features={features}><div className="card node"><span className="label">Spoke</span><h3>Base Sepolia</h3><p className="small">Vault contract; secp256k1-signed settle and release.</p></div></On>
+                <On name="solana_remote"><div className="card node"><span className="label">Spoke</span><h3>Solana devnet</h3><p className="small">Vault program; Ed25519-signed settle and release.</p></div></On>
+                <On name="base"><div className="card node"><span className="label">Spoke</span><h3>Base Sepolia</h3><p className="small">Vault contract; secp256k1-signed settle and release.</p></div></On>
               </div>
             </div>
           </div>
-        </section>
-      ) : null}
+      </Module>
 
-      <Module name="agent_skill" features={features} className="sec alt" id="agents">
+      <Module name="agent_skill" className="sec alt" id="agents">
         <div className="wrap grid-2">
           <div className="sec-head">
             <span className="label">Agent channel</span>
@@ -214,7 +193,7 @@ export default function Home() {
   account_id, collateral: "NVDAx",
   units, borrow_usd, pay_to?, referrer?
 })`}</pre>
-            <On name="x402" features={features}>
+            <On name="x402">
               <div className="card small">Paid data with stock-backed credit: the Feed export is an x402 route priced in mock USDC on testnet.</div>
             </On>
           </div>
