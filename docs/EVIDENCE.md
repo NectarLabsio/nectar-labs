@@ -19,7 +19,8 @@
 | G2b testnet deploy v2 | PASS (re-run after WO-16b; prior FAIL block kept) | 2026-11-10T16:45Z–16:52Z | 91db9ea | evidence/G2b/verifier-rerun-20261110T1645Z/ (pnpm i exit 0; pnpm verify exit 0: keeper 168/0, feed 57/0, x402 9/0, sdk 77/0 + lint/typecheck; demo:testnet exit 0; code_hash 3W5bif…31ey unchanged, contract_version 2.0.0-v7; live state 3 quotes / 4 positions (#2,#3 Closed = G7 v2, expected); see §G2b) |
 | G2b (first run) | FAIL — superseded by re-run above | 2026-11-10T16:34Z–16:45Z | 1c4cdb3 | evidence/G2b/verifier-20261110T163415Z/ (rebuild sha256 252a6abe… == view_code == code_hash 3W5bif…; keeper-v2 one FC key, 5 methods; views OK; calendar 287; demo:testnet exit 0; live state drifted to 3 quotes / 3 positions during run (concurrent G7 v2 work); nearblocks 403; see §G2b) |
 | G14 x402 | PASS (1–2 hold; F-328 keys hold) | 2026-11-10T16:48Z–16:52Z | 91db9ea (clone; tests) / 6ba1b09 (summary) | evidence/G14/verifier-20261110T1645Z/ (borrow tx GcHF… agent1 → nvdax-mock ft_transfer_call → v2 position_opened #4 $10, fee $0.03; relay tx 5VL1… signer x402-relayer, Delegate by agent1 (pk 3zyEty…) → usdc-mock ft_transfer 10000 → nectar.testnet, 0 failed receipts; no ft_transfer event log (mock-ft emits none) — transfer proven by the receipt; agent1 + x402-relayer each 1 FullAccess key; x402 test 9/0; rpc.testnet.near.org returned -429 deprecation, fastnear used; see §G14) |
-| G3b web E2E (v2) | FAIL — e2e 214/14/18 (7 flags-off/v1 specs × 2 projects); LH 20/20 ≥ 90; live v2 data OK | 2026-11-10T16:56Z–17:25Z | 2bf99e1 | evidence/G3b/verifier-20261110T1656Z/ (failing specs listed in §G3b; write spec skipped, no key; /notes list needs wallet) |
+| G3b web E2E (v2) | PASS (re-run after WO-26f; prior FAIL block kept) | 2026-11-10T17:39Z–17:48Z | 0ed567f | evidence/G3b/verifier-rerun-20261110T1740Z/ (e2e exit 0: 244 passed / 0 failed / 18 skipped, 0 flaky; write spec ×2 skipped, no key; LH a11y 20/20 = 100 on 10 routes × 2 themes; 400 px no-scroll; /api/feed live (as_of = request time, age_s 0, matches RPC get_exit_capacity); /feed 0 5xx, 0 console errors without NEXT_PUBLIC_FEED_URL; see §G3b) |
+| G3b (first run) | FAIL — superseded by re-run above; e2e 214/14/18 (7 flags-off/v1 specs × 2 projects); LH 20/20 ≥ 90; live v2 data OK | 2026-11-10T16:56Z–17:25Z | 2bf99e1 | evidence/G3b/verifier-20261110T1656Z/ (failing specs listed in §G3b; write spec skipped, no key; /notes list needs wallet) |
 | v7 module runs | PASS (Profit-Lock state only; self_settled tx hash not recorded) | 2026-11-10T17:20Z | 2bf99e1 | §v7 module runs (pos 0 Closed, quote 1 −$4,522.50; reserve r 10,000,000, r-NVDAx-0 → buyer2; shield pos 5 Weekend 15 bps) |
 | G9 fresh-clone rehearsal | pending | | | |
 
@@ -35,6 +36,31 @@ Notes: faucet rate-limited once; retried after 90 s.
 ```
 
 ## G3b
+
+### G3b — web E2E against nectar-core-v2 — PASS (re-run after WO-26f) — 2026-11-10T17:39Z–17:48Z — commit 0ed567f
+Fresh clone /tmp/verify-G3b-20261110T173957Z (git clone /Volumes/T7/nectar-labs, main HEAD 0ed567f), no secrets; NECTAR_E2E_BORROWER_KEY, NEXT_PUBLIC_E2E_KEY_ADAPTER, NEXT_PUBLIC_FEED_URL all unset. Config unchanged: core nectar-core-v2, 8 flags on.
+$ pnpm i                                   → exit 0 (pnpm 10.34.9)
+$ pnpm --filter web build                  → exit 0; /api/feed is now ƒ (dynamic), was prerendered in the FAIL run
+$ PW_CHANNEL=chrome pnpm --filter web e2e  → exit 0: 244 passed / 0 failed / 18 skipped (3.7 m), no flaky/retried tests
+  The 7 specs that failed before now pass on both projects, under new titles that pin flag state, e.g. v7.spec.ts:45 "flags off: … no module sections", :58 "flags on: every module section renders",
+  :98/:112 "v1 path (mocked v1 contract, every flag on)", shields.spec.ts:175/:242, notes flags-off, agents-console x402. They also pass against live config with flags on.
+  Skipped 18: testnet write "borrow with demo key" ×2 (SKIPPED: no key, as expected); notes screenshots ×4 and remote screenshots ×12 (capture-only).
+  400 px: shell.spec.ts "/<route> renders in dark|light, no horizontal scroll, axe clean" passes on phone (400×860) and desktop for every route.
+$ LH_START=1 pnpm --filter web lighthouse  → exit 0: / /feed /borrow /quote/new /console /agents /keepers = 100/100 (dark/light)
+$ LH_START=1 node scripts/lh-g3b-extra.mjs → exit 0: /shield /reserve /notes = 100/100. This is a verifier copy of the repo script with only ROUTES/outDir changed; the repo script still leaves out these 3 routes.
+  All 20 = 100, no failing a11y audit (heading-order from the FAIL run is gone). Theme proof (mean brightness of the LH screenshot, dark/light): home 33/242, feed 33/235, shield 33/243, reserve 32/244, notes 32/244.
+Live probe (next start :3100, RPC https://test.rpc.fastnear.com, 17:47Z), g3b-rerun-probe.mjs:
+  GET /api/health → core nectar-core-v2.nectar.testnet, version "2.0.0-v7"
+  GET /api/feed ×3, 8 s apart → HTTP 200, cache-control no-store, as_of = request time (17:47:07.439Z / :16.057Z / :24.452Z), age_s 0, stale false.
+    NVDAx: session_open false, "stale_price", haircut 2500, q 16,107.06, r 10.00, debt 9,199.00, capacity 12,087.795. oracle_age_s 3101 → 3109 → 3118 tracks the chain,
+    and each read equals RPC get_exit_capacity at the same moment. Not a build-time snapshot.
+  GET /api/indexer/api/oneclick → HTTP 200 {"configured":false,"error":"Feed indexer not configured"}
+  /feed in Chrome, 15 s settle → 0 responses ≥ 500, 0 console errors; the 1Click panel says "Feed indexer not configured … Set NEXT_PUBLIC_FEED_URL and run pnpm --filter feed start".
+Screenshot: evidence/G3b/verifier-rerun-20261110T1740Z/feed-live-no-feed-url-dark.png
+Evidence: evidence/G3b/verifier-rerun-20261110T1740Z/ (install, build, e2e, lighthouse-script, lighthouse-extra logs; lighthouse-scores.tsv; theme-brightness.txt; live-probe.log; probe + LH-copy scripts). LH JSON not committed.
+Explorer links: none opened (G3b has no explorer criterion; nearblocks returns 403 to WebFetch, see §G2).
+Verdict: PASS. e2e exit 0, LH a11y 100 on all 10 routes × 2 themes, 400 px no-scroll, /api/feed live with as_of/age_s, /feed clean without a Feed URL.
+Open (not gate criteria): the repo LH script leaves out /shield /reserve /notes; the Notes list needs a wallet (not UI-verified); write flow verified only by skip.
 
 ### G3b — web E2E against nectar-core-v2 — FAIL — 2026-11-10T16:56Z–17:25Z — commit 2bf99e1
 Fresh clone /tmp/verify-G3b-20261110T165651Z (git clone /Volumes/T7/nectar-labs), no secrets. config.yaml: core nectar-core-v2.nectar.testnet; features on = weekend_guard, shields, profit_lock, notes, reserve, agent_skill, x402, solana_remote (multiplier, pay_to, referrals, base off).

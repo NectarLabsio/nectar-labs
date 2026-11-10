@@ -1,0 +1,15 @@
+[2026-11-10T17:47:07.449Z] GET /api/feed #1 HTTP 200 cache-control=no-store as_of=2026-11-10T17:47:07.439Z age_s=0 stale=false core=nectar-core-v2.nectar.testnet
+   NVDAx: {"session_open":false,"session_reason":"stale_price","oracle_age_s":"3101","haircut_bps":2500,"q":"16107060000","r":"10000000","debt":"9199000000","cap":"12087795000"}
+   RPC get_exit_capacity NVDAx: {"session_open":false,"session_reason":"stale_price","oracle_age_s":"3101","haircut_bps":2500,"q":"16107060000","r":"10000000","debt":"9199000000","cap":"12087795000"}
+[2026-11-10T17:47:16.059Z] GET /api/feed #2 HTTP 200 cache-control=no-store as_of=2026-11-10T17:47:16.057Z age_s=0 stale=false core=nectar-core-v2.nectar.testnet
+   NVDAx: {"session_open":false,"session_reason":"stale_price","oracle_age_s":"3109","haircut_bps":2500,"q":"16107060000","r":"10000000","debt":"9199000000","cap":"12087795000"}
+   RPC get_exit_capacity NVDAx: {"session_open":false,"session_reason":"stale_price","oracle_age_s":"3110","haircut_bps":2500,"q":"16107060000","r":"10000000","debt":"9199000000","cap":"12087795000"}
+[2026-11-10T17:47:24.455Z] GET /api/feed #3 HTTP 200 cache-control=no-store as_of=2026-11-10T17:47:24.452Z age_s=0 stale=false core=nectar-core-v2.nectar.testnet
+   NVDAx: {"session_open":false,"session_reason":"stale_price","oracle_age_s":"3118","haircut_bps":2500,"q":"16107060000","r":"10000000","debt":"9199000000","cap":"12087795000"}
+   RPC get_exit_capacity NVDAx: {"session_open":false,"session_reason":"stale_price","oracle_age_s":"3118","haircut_bps":2500,"q":"16107060000","r":"10000000","debt":"9199000000","cap":"12087795000"}
+GET /api/indexer/api/oneclick HTTP 200 {"configured":false,"error":"Feed indexer not configured"}
+/feed 'Feed indexer not configured': true | 'Feed API not configured': false
+/feed excerpt: unts 0 and the weekend haircut applies. Owner oracle on testnet unless a Pyth source is set (disclosed); mock collateral. 1Click reference depth i Feed indexer not configured 1Click reference samples come from the Feed API (services/feed), which this deployment does not run. Set NEXT_PUBLIC_FEED_URL and run pnpm --filter feed start; see the Feed API docs. Dry quotes only 
+/feed session/Qc excerpt: ow Shields Post a quote Reserve Notes Console Agents Keepers ◐ theme Connect wallet NECTAR FEED Exit capacity by market Committed quotes, the Nectar Reserve and verified DEX depth per collateral, and the limit they support. Read from nectar-core on NEAR testnet. CRAMÉR LIMIT (PRD §4.2) Bc = min( LTVc · Vc , (1 − hc) · (Qc + Rc + Dc) )
+5xx responses on /feed: 0 []
+console errors on /feed: 0 []
