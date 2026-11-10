@@ -191,6 +191,18 @@ describe('REST API', () => {
     assert.equal(route(db, 'GET', '/healthz').status, 503);
   });
 
+  it('export.csv: header + one row per snapshot, text/csv, no account ids', () => {
+    const db = new FeedDb(':memory:');
+    db.addSnapshot({ symbol: 'NVDAx', block_height: 7, observed_at: 0, capacity: { q_usd_e6: '50000000000', r_usd_e6: '0', d_usd_e6: '0', haircut_bps: 2500, session_open: false, oracle_price_usd_e6: '180000000', oracle_age_s: 1, oracle_fresh: true, limit_bps_effective: 7000 } });
+    const r = route(db, 'GET', '/api/feed/export.csv');
+    assert.equal(r.status, 200);
+    assert.equal(r.contentType, 'text/csv; charset=utf-8');
+    assert.deepEqual(String(r.body).trim().split('\n'), [
+      'symbol,block_height,observed_at,q_usd_e6,r_usd_e6,d_usd_e6,haircut_bps,session_open,capacity_usd_e6,oracle_price_usd_e6,oracle_fresh,limit_bps_effective',
+      'NVDAx,7,1970-01-01T00:00:00.000Z,50000000000,0,0,2500,false,37500000000,180000000,true,7000',
+    ]);
+  });
+
   it('openapi.yaml documents exactly the served routes', () => {
     const yaml = readFileSync(resolve(here, '../openapi.yaml'), 'utf8');
     const documented = [...yaml.matchAll(/^ {2}(\/[^:]*):\s*$/gm)].map((m) => m[1]).sort();

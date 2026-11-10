@@ -4,7 +4,13 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import type { AssetSnapshot, FeedDb, SettlementRow } from './db.ts';
 
-export const ROUTES = ['/api/feed', '/api/asset/{id}', '/api/settlements', '/api/oneclick', '/healthz'] as const;
+export const ROUTES = ['/api/feed', '/api/feed/export.csv', '/api/asset/{id}', '/api/settlements', '/api/oneclick', '/healthz'] as const;
+/** Columns of /api/feed/export.csv (the x402-paid export, services/x402). No account ids. */
+export const EXPORT_COLUMNS = [
+  'symbol', 'block_height', 'observed_at', 'q_usd_e6', 'r_usd_e6', 'd_usd_e6', 'haircut_bps', 'session_open',
+  'capacity_usd_e6', 'oracle_price_usd_e6', 'oracle_fresh', 'limit_bps_effective',
+] as const;
+const EXPORT_ROWS_PER_ASSET = 168;
 export const CACHE_MS = 10_000;
 const SYMBOL_RE = /^[A-Za-z0-9._-]{1,32}$/;
 
@@ -59,6 +65,27 @@ export interface Reply {
   status: number;
   body: unknown;
   cacheable: boolean;
+  /** Default application/json; a string body with another type is sent verbatim. */
+  contentType?: string;
+}
+
+const csvCell = (v: unknown): string => {
+  const t = v === null || v === undefined ? '' : String(v);
+  return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+};
+
+/** Capacity history per asset (newest first, at most 168 rows each) as CSV. */
+export function exportCsv(db: FeedDb): string {
+  const lines = [EXPORT_COLUMNS.join(',')];
+  for (const latest of db.latestSnapshots()) {
+    for (const s of db.history(latest.symbol, EXPORT_ROWS_PER_ASSET)) {
+      const c = s.capacity;
+      const cap = c.capacity_usd_e6 ?? (((BigInt(c.q_usd_e6) + BigInt(c.r_usd_e6) + BigInt(c.d_usd_e6)) * (10_000n - BigInt(c.haircut_bps))) / 10_000n).toString();
+      const row = [s.symbol, s.block_height, new Date(s.observed_at).toISOString(), c.q_usd_e6, c.r_usd_e6, c.d_usd_e6, c.haircut_bps, c.session_open, cap, c.oracle_price_usd_e6, c.oracle_fresh, c.limit_bps_effective];
+      lines.push(row.map(csvCell).join(','));
+    }
+  }
+  return lines.join('\n') + '\n';
 }
 
 export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptions = {}): Reply {
@@ -87,6 +114,7 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
     };
   }
   if (path === '/api/oneclick') return { status: 200, body: db.oneClickReport(now), cacheable: true };
+  if (path === '/api/feed/export.csv') return { status: 200, body: exportCsv(db), cacheable: true, contentType: 'text/csv; charset=utf-8' };
   if (path === '/api/feed') return { status: 200, body: { ...asOf, assets: db.latestSnapshots().map(asset) }, cacheable: true };
 
   const m = /^\/api\/asset\/([^/]+)$/.exec(path);
@@ -142,10 +170,11 @@ export function createApi(db: FeedDb, opts: ApiOptions = {}): Server {
       }
     }
     res.writeHead(reply.status, {
-      'content-type': 'application/json',
+      'content-type': reply.contentType ?? 'application/json',
       'cache-control': reply.cacheable ? `public, max-age=${CACHE_MS / 1000}` : 'no-store',
       'access-control-allow-origin': '*',
     });
-    res.end(req.method === 'HEAD' ? undefined : JSON.stringify(reply.body));
+    const out = typeof reply.body === 'string' && reply.contentType !== undefined ? reply.body : JSON.stringify(reply.body);
+    res.end(req.method === 'HEAD' ? undefined : out);
   });
 }
