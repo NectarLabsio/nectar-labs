@@ -1,7 +1,8 @@
-//! P2 sandbox tests (WO-15): live V1c wasm (tests/fixtures/nectar_core_v1c.wasm, sha256 fa2bb4f1...) -> this
-//! build with no migrate, then the Chain Signatures leg against the signer stub in contracts/test-stubs (yields
-//! like `v1.signer-prod.testnet` and resumes with a real Ed25519 signature from a local test key over the exact
-//! preimage bytes). The signature is verified off-chain here against the stub's public key.
+//! P2 sandbox tests (WO-15, WO-21 remote lifecycle): live V1c wasm fails closed under v2, then the remote lifecycle
+//! (reserve, derived_public_key, OutLayer vault_read, keeper attestation, settle and release signed with the position
+//! path) against contracts/test-stubs (MPC signer stub with per-path keys, yield/resume, real Ed25519; OutLayer stub).
+//! Signatures are verified off-chain against the key the stub derives for `solana-devnet/pos/<id>` over the exact
+//! bytes the vault rebuilds.
 //! Gas lines: `GAS,<label>,<receipt executor>,<gas burnt>` (run with --nocapture).
 
 use std::path::PathBuf;
@@ -21,7 +22,6 @@ const VAULT: &str = "Nectar1Vau1t11111111111111111111111111111111";
 const RCPT: &str = "3DTxgHcUXRb9uvpKwtasZN7YBUbbPuf3uvbBPjAGWqiV";
 const TX: &str = "5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR4tjF3ZpRzrFmBV6UjKdiSZkQUW";
 const DEPOSIT: u128 = 4_000_010_000_000_000_000_000; // F-046 estimate
-const PYTH_ID: &str = "B1073854ED24CBC755DC527418F52B7D271F6CC967BBF8D8129112B18860A593";
 /// Live MPC requirement (F-034); the stub fits in it too.
 const SIGN_TGAS: u64 = 15;
 
@@ -162,9 +162,6 @@ fn fund_msg(disc: u16, remote: bool) -> String {
     let r = if remote { format!("\"{RCPT}\"") } else { "null".into() };
     format!(r#"{{"FundPappusQuote":{{"collateral":"NVDAx","max_discount_bps":{disc},"notice_period_ns":"604800000000000","buyer_remote_recipient":{r}}}}}"#)
 }
-fn borrow_msg(borrow: u128) -> String {
-    format!(r#"{{"LockCollateralAndBorrow":{{"collateral":"NVDAx","borrow_usd_e6":"{borrow}","pre_liq_ltv_bps":7500}}}}"#)
-}
 
 async fn view(c: &Contract, method: &str, args: Value) -> anyhow::Result<Value> {
     Ok(c.view(method).args_json(args).await?.json()?)
@@ -172,9 +169,6 @@ async fn view(c: &Contract, method: &str, args: Value) -> anyhow::Result<Value> 
 async fn bal(token: &Contract, a: &AccountId) -> anyhow::Result<u128> {
     let v: String = token.view("ft_balance_of").args_json(json!({ "account_id": a })).await?.json()?;
     Ok(v.parse()?)
-}
-async fn status(core: &Contract, pos: u64) -> anyhow::Result<Value> {
-    Ok(view(core, "get_position", json!({ "position_id": pos.to_string() })).await?["status"].clone())
 }
 async fn pending(core: &Contract, pos: u64) -> anyhow::Result<Value> {
     view(core, "get_pending_settlement", json!({ "position_id": pos.to_string() })).await
@@ -211,193 +205,276 @@ async fn relay(e: &Env, core: &Contract, pos: u64, sig: &str) -> anyhow::Result<
         .await?)
 }
 
+
+const SEC: u64 = 1_000_000_000;
+const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T";
+const UNITS: u128 = 100_000_000;
+const BORROW: u128 = 11_250_000_000;
+
 async fn stub(e: &Env) -> anyhow::Result<Contract> {
     let s = e.worker.dev_deploy(&wasm("test_stubs")).await?;
     s.call("new").transact().await?.into_result()?;
     Ok(s)
 }
 
-async fn chain(e: &Env, core: &Contract, signer: &Contract) -> anyhow::Result<()> {
+/// One stub wasm plays the MPC signer and OutLayer (`vault_read` answers = `raw` body).
+async fn chain(e: &Env, core: &Contract, s: &Contract) -> anyhow::Result<()> {
     owner_call(e, core, "set_remote_chain", json!({ "symbol": "NVDAx",
         "remote_chain": { "chain_id": "solana-devnet", "vault_program": VAULT, "mpc_domain_id": 1 } })).await?;
-    owner_call(e, core, "set_signer_config", json!({ "account": signer.id(), "path": "solana-devnet-v1",
-        "gas_tgas": SIGN_TGAS, "expiry_s": 3600 })).await
+    owner_call(e, core, "set_signer_config", json!({ "account": s.id(), "path": "solana-devnet-v1",
+        "gas_tgas": SIGN_TGAS, "expiry_s": 3600 })).await?;
+    owner_call(e, core, "set_outlayer_account", json!({ "account_id": s.id() })).await?;
+    owner_call(e, core, "set_vault_read_config", json!({ "project_id": "nectar.testnet/vault-read",
+        "version_key": "ab".repeat(32), "deposit_yocto": DEPOSIT.to_string(), "gas_tgas": 50 })).await
 }
 
-/// buyer1 $10k @250 remote, buyer2 $5k @400 NEAR, borrower 100 NVDAx / $11,250.
-async fn seed(e: &Env, core: &Contract) -> anyhow::Result<(Account, Account, Account)> {
+/// Lender $100k; buyer1 $12k @250 with a Solana recipient; buyer2 $5k @400 NEAR-only.
+async fn seed(e: &Env, core: &Contract) -> anyhow::Result<Account> {
     let lender = user(e, 100_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
-    let b1 = user(e, 10_000_000_000, 0).await?;
+    let b1 = user(e, 12_000_000_000, 0).await?;
     let b2 = user(e, 5_000_000_000, 0).await?;
-    ft_call(&e.usdc, &b1, core.id(), 10_000_000_000, &fund_msg(250, true)).await?;
+    ft_call(&e.usdc, &b1, core.id(), 12_000_000_000, &fund_msg(250, true)).await?;
     ft_call(&e.usdc, &b2, core.id(), 5_000_000_000, &fund_msg(400, false)).await?;
-    let borrower = user(e, 0, 100_000_000).await?;
-    ft_call(&e.nvdax, &borrower, core.id(), 100_000_000, &borrow_msg(11_250_000_000)).await?;
-    Ok((b1, b2, borrower))
+    Ok(b1)
 }
 
-async fn snapshot(core: &Contract) -> anyhow::Result<Value> {
-    let mut cfg = view(core, "get_config", json!({})).await?;
-    cfg.as_object_mut().unwrap().remove("contract_version");
-    let mut cap = view(core, "get_exit_capacity", json!({ "symbol": "NVDAx" })).await?;
-    cap.as_object_mut().unwrap().remove("oracle_age_s");
-    Ok(json!({
-        "config": cfg, "capacity": cap,
-        "collateral": view(core, "get_collateral", json!({ "symbol": "NVDAx" })).await?,
-        "quotes": view(core, "list_quotes", json!({ "symbol": "NVDAx" })).await?,
-        "positions": view(core, "list_positions", json!({})).await?,
-        "health": view(core, "get_health", json!({ "position_id": "0" })).await?,
-        "pool": view(core, "get_pool", json!({})).await?,
-        "quoter": view(core, "get_quoter_config", json!({})).await?,
-        "oracle": view(core, "get_oracle_source", json!({ "symbol": "NVDAx" })).await?,
-    }))
+async fn reserve(_e: &Env, core: &Contract, borrower: &Account) -> anyhow::Result<(u64, ExecutionFinalResult)> {
+    let r = borrower
+        .call(core.id(), "reserve_remote_position")
+        .args_json(json!({ "collateral": "NVDAx", "units": UNITS.to_string(), "borrow_usd_e6": BORROW.to_string(),
+                           "pre_liq_ltv_bps": 7500 }))
+        .gas(Gas::from_tgas(100))
+        .transact()
+        .await?;
+    assert!(r.is_success() && r.failures().is_empty(), "reserve: {:?}", r.failures());
+    let id: String = r.clone().json()?;
+    Ok((id.parse()?, r))
 }
 
-fn verify(pk_hex: &str, d: &Value) {
-    let pk = VerifyingKey::from_bytes(&unhex(pk_hex).try_into().unwrap()).unwrap();
-    let sig = Signature::from_bytes(&unhex(d["signature_hex"].as_str().unwrap()).try_into().unwrap());
-    pk.verify_strict(d["preimage"].as_str().unwrap().as_bytes(), &sig).expect("Ed25519 over the raw preimage");
+fn vault_body(id: u64, units: u128, authority: &str) -> String {
+    format!(r#"{{"position_id":"{id}","units":"{units}","authority":"{authority}","depositor":"{DEPOSITOR}","slot_or_block":412345678}}"#)
 }
 
-/// v1 `upgrade_v1c_then_remote_leg_signed_and_relayed`, v2 form: the live V1c fixture state cannot be read by
-/// v2 code (fresh deploy, PRD §6.11); then on a fresh v2: trigger -> sign -> on_signature -> relay.
+async fn confirm(e: &Env, core: &Contract, s: &Contract, id: u64, body: &str) -> anyhow::Result<ExecutionFinalResult> {
+    s.call("set_mode").args_json(json!({ "mode": "raw", "body": body })).transact().await?.into_result()?;
+    Ok(e.keeper
+        .call(core.id(), "confirm_remote_deposit")
+        .args_json(json!({ "position_id": id.to_string() }))
+        .gas(Gas::from_tgas(150))
+        .transact()
+        .await?)
+}
+
+async fn position(core: &Contract, id: u64) -> anyhow::Result<Value> {
+    view(core, "get_position", json!({ "position_id": id.to_string() })).await
+}
+
+/// Key the signer derives for `path` with nectar-core as predecessor (the stub's per-path derivation).
+async fn derived_key(s: &Contract, core: &Contract, path: &str) -> anyhow::Result<VerifyingKey> {
+    let k: String = view(s, "derived_public_key", json!({ "path": path, "predecessor": core.id(), "domain_id": 1 })).await?
+        .as_str()
+        .unwrap()
+        .into();
+    let b = nectar_core::chainsig::b58_decode(k.strip_prefix("ed25519:").unwrap()).unwrap();
+    Ok(VerifyingKey::from_bytes(&b.try_into().unwrap())?)
+}
+
+/// Off-chain check: the signature verifies against the position key over the exact message bytes.
+fn verify_with(pk: &VerifyingKey, message: &str, sig_hex: &str) {
+    let sig = Signature::from_bytes(&unhex(sig_hex).try_into().unwrap());
+    pk.verify_strict(message.as_bytes(), &sig).expect("Ed25519 over the raw message");
+}
+
+/// reserve -> authority; confirm through OutLayer (borrow paid). Returns (core, stub, borrower, id).
+async fn open_remote(e: &Env) -> anyhow::Result<(Contract, Contract, Account, u64)> {
+    let core = init_core(e, &wasm("nectar_core")).await?;
+    seed(e, &core).await?;
+    let s = stub(e).await?;
+    chain(e, &core, &s).await?;
+    let borrower = user(e, 0, 0).await?;
+    let (id, r) = reserve(e, &core, &borrower).await?;
+    gas("reserve_remote_position+derived_public_key", &r);
+    let auth = position(&core, id).await?["remote"]["authority"].as_str().unwrap().to_string();
+    assert!(auth.starts_with("ed25519:"));
+    let r = confirm(e, &core, &s, id, &vault_body(id, UNITS, &auth)).await?;
+    gas("confirm_remote_deposit+vault_read+payout", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(events(&r, "remote_deposit_confirmed")[0]["source"], "outlayer");
+    Ok((core, s, borrower, id))
+}
+
+async fn release(e: &Env, core: &Contract, id: u64) -> anyhow::Result<ExecutionFinalResult> {
+    let st = e.keeper
+        .call(core.id(), "request_remote_release")
+        .args_json(json!({ "position_id": id.to_string() }))
+        .gas(Gas::from_tgas(100))
+        .transact_async()
+        .await?;
+    for _ in 0..120 {
+        let d = view(core, "get_pending_release", json!({ "position_id": id.to_string() })).await?;
+        if !d.is_null() && d["status"] != "AwaitingSignature" {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(500));
+    }
+    Ok(st.await?)
+}
+
+/// v2 code over the live V1c state fails closed; then the happy path on a fresh v2: reserve -> confirm (borrow
+/// paid) -> price drop -> settle signed with the position's path (`|kind=PRELIQ`) -> relay -> Closed.
 #[tokio::test]
-async fn v2_remote_leg_signed_and_relayed() -> anyhow::Result<()> {
+async fn remote_reserve_confirm_borrow_settle_signed_with_position_path() -> anyhow::Result<()> {
     let e = env().await?;
     let old = init_core(&e, &v1c_wasm()).await?;
     old.as_account().deploy(&wasm("nectar_core")).await?.into_result()?;
     assert!(old.view("get_config").await.is_err(), "v2 code over V1c state fails closed");
-    let core = init_core(&e, &wasm("nectar_core")).await?;
-    let (b1, b2, borrower) = seed(&e, &core).await?;
-    let _ = snapshot(&core).await?;
-    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(2));
-    let v: String = view(&core, "contract_version", json!({})).await?.as_str().unwrap().into();
-    assert_eq!(v, "2.0.0-v7");
+    let (core, s, borrower, id) = open_remote(&e).await?;
+    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.0.0-v7"));
+    let p = position(&core, id).await?;
+    assert_eq!((p["remote"]["status"].clone(), p["debt_usd_e6"].clone()), (json!("Open"), json!(BORROW.to_string())));
+    assert!(bal(&e.usdc, borrower.id()).await? > 0, "borrow paid after the attested read");
+    let hint = view(&core, "get_vault_authority_hint", json!({ "position_id": id.to_string() })).await?;
+    assert_eq!(hint["path"], "solana-devnet/pos/0");
 
-
-    let signer = stub(&e).await?;
-    chain(&e, &core, &signer).await?;
-    let hint = view(&core, "get_vault_authority_hint", json!({})).await?;
-    assert_eq!(hint["path"], "solana-devnet-v1");
-    assert_eq!(hint["predecessor"], json!(core.id()));
     price(&e, &core, 155_000_000).await?;
     price(&e, &core, 140_000_000).await?;
-
-    let r = trigger(&e, &core, 0).await?;
-    gas("trigger+sign(1 remote, 1 near)", &r);
+    let r = trigger(&e, &core, id).await?;
+    gas("trigger+sign(remote position)", &r);
     assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
-    assert_eq!(events(&r, "settled_near").len(), 1);
-    let req = events(&r, "settlement_sign_requested");
-    let signed = events(&r, "settlement_signed");
-    assert_eq!((req.len(), signed.len()), (1, 1));
-    let d = pending(&core, 0).await?;
+    assert!(events(&r, "settled_near").is_empty());
+    let d = pending(&core, id).await?;
     assert_eq!(d["status"], "Signed");
-    assert_eq!(d["preimage"], req[0]["preimage"]);
-    assert_eq!(d["signature_hex"], signed[0]["signature_hex"]);
-    assert!(d["preimage"].as_str().unwrap().contains(&format!("|recipient={RCPT}|nonce=0|")));
-    let pk: String = view(&signer, "signer_public_key_hex", json!({})).await?.as_str().unwrap().into();
-    verify(&pk, &d);
-    let last: Value = near_sdk::serde_json::from_str(view(&signer, "get_last_sign_request", json!({})).await?.as_str().unwrap())?;
-    assert_eq!(last["path"], "solana-devnet-v1");
-    assert_eq!(last["domain_id"], 1);
-    assert_eq!(last["payload_v2"]["Eddsa"], json!(hexs(d["preimage"].as_str().unwrap().as_bytes())), "raw preimage, no pre-hash (D-016)");
-    assert_eq!(status(&core, 0).await?, "Settling");
-    assert_eq!(bal(&e.nvdax, b1.id()).await?, 0, "remote leg: no NVDAx on NEAR");
-    assert!(bal(&e.nvdax, b2.id()).await? > 0);
-    assert!(bal(&e.nvdax, e.keeper.id()).await? > 0);
-    assert!(bal(&e.nvdax, borrower.id()).await? > 0, "residual released");
-    assert_eq!(view(&core, "get_next_nonce", json!({})).await?, json!("1"));
+    let pre = d["preimage"].as_str().unwrap();
+    assert!(pre.starts_with(&format!("NECTAR_SETTLE_V1|chain=solana-devnet|program={VAULT}|pos=0|quote=0|repay_e6={BORROW}|")));
+    assert!(pre.ends_with("|kind=PRELIQ") && pre.contains(&format!("|recipient={RCPT}|nonce=0|")));
+    let last: Value = near_sdk::serde_json::from_str(view(&s, "get_last_sign_request", json!({})).await?.as_str().unwrap())?;
+    assert_eq!((last["path"].clone(), last["domain_id"].clone()), (json!("solana-devnet/pos/0"), json!(1)));
+    assert_eq!(last["payload_v2"]["Eddsa"], json!(hexs(pre.as_bytes())), "raw preimage, no pre-hash (D-016)");
+    let pk = derived_key(&s, &core, "solana-devnet/pos/0").await?;
+    verify_with(&pk, pre, d["signature_hex"].as_str().unwrap());
+    let global: String = view(&s, "signer_public_key_hex", json!({})).await?.as_str().unwrap().into();
+    assert_ne!(hexs(pk.as_bytes()), global, "not the v1 global path key");
+    assert_eq!(position(&core, id).await?["remote"]["status"], "Settling");
 
-    let r = relay(&e, &core, 0, TX).await?;
+    let r = relay(&e, &core, id, TX).await?;
     gas("relay_settlement_result", &r);
     assert!(r.is_success(), "{:?}", r.failures());
-    assert_eq!(events(&r, "settlement_relayed").len(), 1);
-    assert_eq!(status(&core, 0).await?, "Closed");
-    assert_eq!(pending(&core, 0).await?["solana_tx_sig"], TX);
-    let r = relay(&e, &core, 0, TX).await?;
-    assert!(format!("{:?}", r.failures()).contains("settlement not signed"));
+    let p = position(&core, id).await?;
+    assert_eq!((p["status"].clone(), p["remote"]["status"].clone()), (json!("Closed"), json!("Closed")));
     Ok(())
 }
 
-/// Sign failure (stub resumes with the timeout marker) rolls the leg back; retry signs with nonce 1;
-/// owner cancel of a signed leg keeps the signature and the relay still records.
+/// reserve -> confirm -> release before repay refused -> repay -> release signed (verified off-chain over the
+/// vault's exact string) -> relay -> a replayed release request and a replayed relay are refused.
 #[tokio::test]
-async fn sign_failure_rolls_back_then_retry_and_cancel() -> anyhow::Result<()> {
+async fn remote_repay_then_release_signed_and_replay_refused() -> anyhow::Result<()> {
     let e = env().await?;
-    let core = init_core(&e, &wasm("nectar_core")).await?;
-    let (b1, _b2, _borrower) = seed(&e, &core).await?;
-    let signer = stub(&e).await?;
-    chain(&e, &core, &signer).await?;
-    price(&e, &core, 155_000_000).await?;
-    price(&e, &core, 140_000_000).await?;
-    signer.call("set_signer_mode").args_json(json!({ "mode": "fail" })).transact().await?.into_result()?;
+    let (core, s, borrower, id) = open_remote(&e).await?;
+    let r = e.keeper.call(core.id(), "request_remote_release").args_json(json!({ "position_id": "0" }))
+        .gas(Gas::from_tgas(100)).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("debt outstanding"));
 
-    let r = trigger(&e, &core, 0).await?;
-    gas("trigger+sign_failed", &r);
-    let failed = events(&r, "settlement_sign_failed");
-    assert_eq!(failed.len(), 1, "{:?}", r.logs());
-    assert_eq!(failed[0]["reason"], "failed");
-    assert_eq!(status(&core, 0).await?, "Open");
-    assert_eq!(pending(&core, 0).await?["status"], "SignFailed");
-    assert_eq!(view(&core, "get_quote", json!({ "quote_id": "0" })).await?["remaining_usd_e6"], "10000000000");
-    let p = view(&core, "get_position", json!({ "position_id": "0" })).await?;
-    assert_eq!(p["debt_usd_e6"], "10000000000");
-    assert_eq!(bal(&e.nvdax, b1.id()).await?, 0);
+    e.owner.call(e.usdc.id(), "mint").args_json(json!({ "account_id": borrower.id(), "amount": BORROW.to_string() }))
+        .transact().await?.into_result()?;
+    ft_call(&e.usdc, &borrower, core.id(), BORROW, r#"{"Repay":{"position_id":"0"}}"#).await?;
+    let p = position(&core, id).await?;
+    assert_eq!((p["debt_usd_e6"].clone(), p["status"].clone()), (json!("0"), json!("Open")));
+    assert_eq!(bal(&e.nvdax, borrower.id()).await?, 0, "remote collateral is not released on NEAR");
 
-    signer.call("set_signer_mode").args_json(json!({ "mode": "ok" })).transact().await?.into_result()?;
-    let r = trigger(&e, &core, 0).await?;
-    gas("retrigger+sign", &r);
-    assert!(r.is_success(), "{:?}", r.failures());
-    let d = pending(&core, 0).await?;
-    assert_eq!((d["status"].clone(), d["nonce"].clone()), (json!("Signed"), json!("1")));
-    let pk: String = view(&signer, "signer_public_key_hex", json!({})).await?.as_str().unwrap().into();
-    verify(&pk, &d);
-
-    owner_call(&e, &core, "cancel_settlement", json!({ "position_id": "0" })).await?;
-    assert_eq!(status(&core, 0).await?, "Open");
-    assert_eq!(pending(&core, 0).await?["status"], "Signed");
-    let r = relay(&e, &core, 0, TX).await?;
-    assert!(r.is_success(), "{:?}", r.failures());
-    assert_eq!(status(&core, 0).await?, "Closed");
-    Ok(())
-}
-
-/// Pyth + OutLayer quoter + MPC sign + callbacks in one 300 Tgas trigger (D-015 budget + sign leg), 4 legs.
-#[tokio::test]
-async fn gas_trigger_pyth_quoter_sign() -> anyhow::Result<()> {
-    let e = env().await?;
-    let core = init_core(&e, &wasm("nectar_core")).await?;
-    let lender = user(&e, 50_000_000_000, 0).await?;
-    ft_call(&e.usdc, &lender, core.id(), 50_000_000_000, r#""SupplyLendingLiquidity""#).await?;
-    for i in 0..5u16 {
-        let b = user(&e, 3_000_000_000, 0).await?;
-        ft_call(&e.usdc, &b, core.id(), 3_000_000_000, &fund_msg(200 + i * 10, i == 0)).await?;
-    }
-    let borrower = user(&e, 0, 100_000_000).await?;
-    ft_call(&e.nvdax, &borrower, core.id(), 100_000_000, &borrow_msg(11_250_000_000)).await?;
-    let s = stub(&e).await?; // one stub wasm plays OutLayer, Pyth and the MPC signer
-    owner_call(&e, &core, "set_outlayer_account", json!({ "account_id": s.id() })).await?;
-    owner_call(&e, &core, "set_quoter_config", json!({ "deposit_yocto": DEPOSIT.to_string(), "gas_tgas": 80,
-        "max_instructions": "100000000", "max_memory_mb": 128, "max_execution_seconds": 30 })).await?;
-    owner_call(&e, &core, "set_quoter_pin", json!({ "project_id": "nectar.testnet/nectar-quoter", "version_key": "ab".repeat(32) })).await?;
-    owner_call(&e, &core, "set_vol_bps", json!({ "symbol": "NVDAx", "vol_bps": 420 })).await?;
-    s.call("set_mode").args_json(json!({ "mode": "echo", "disc_bps": 65 })).transact().await?.into_result()?;
-    owner_call(&e, &core, "set_oracle_source", json!({ "symbol": "NVDAx",
-        "source": { "Pyth": { "account": s.id(), "price_identifier": PYTH_ID } } })).await?;
-    chain(&e, &core, &s).await?;
-    price(&e, &core, 155_000_000).await?;
-    let t = (e.worker.view_block().await?.timestamp() / 1_000_000_000) as i64;
-    let px = format!(r#"{{"price":"14000000000","conf":"1000000","expo":-8,"publish_time":{t}}}"#);
-    s.call("set_pyth_body").args_json(json!({ "body": px })).transact().await?.into_result()?;
-
-    let r = trigger(&e, &core, 0).await?;
-    gas("trigger+pyth+quoter+sign+4legs", &r);
+    let r = release(&e, &core, id).await?;
+    gas("request_remote_release+sign", &r);
     assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
-    assert_eq!(events(&r, "quoter_result").len(), 1);
-    assert_eq!(events(&r, "settled_near").len(), 3);
-    assert_eq!(events(&r, "settlement_signed").len(), 1);
-    assert_eq!(status(&core, 0).await?, "Settling");
-    println!("GAS,trigger+pyth+quoter+sign+4legs,attached,{}", 300 * TGAS);
+    let d = view(&core, "get_pending_release", json!({ "position_id": "0" })).await?;
+    assert_eq!(d["status"], "Signed");
+    let msg = d["message"].as_str().unwrap();
+    let want = format!("NECTAR_RELEASE_V1|chain=solana-devnet|vault={VAULT}|pos=0|recipient={DEPOSITOR}|nonce=0|expires={}",
+        d["expires"].as_str().unwrap());
+    assert_eq!(msg, want);
+    verify_with(&derived_key(&s, &core, "solana-devnet/pos/0").await?, msg, d["signature_hex"].as_str().unwrap());
+    let last: Value = near_sdk::serde_json::from_str(view(&s, "get_last_sign_request", json!({})).await?.as_str().unwrap())?;
+    assert_eq!(last["path"], "solana-devnet/pos/0");
+    let again = e.keeper.call(core.id(), "request_remote_release").args_json(json!({ "position_id": "0" }))
+        .gas(Gas::from_tgas(100)).transact().await?;
+    assert!(format!("{:?}", again.failures()).contains("release pending"));
+
+    let relay_rel = |sig: &'static str| {
+        e.keeper.call(core.id(), "relay_release_result").args_json(json!({ "position_id": "0", "solana_tx_sig": sig })).transact()
+    };
+    let r = relay_rel(TX).await?;
+    gas("relay_release_result", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    let p = position(&core, id).await?;
+    assert_eq!((p["status"].clone(), p["remote"]["status"].clone()), (json!("Closed"), json!("Closed")));
+    assert!(format!("{:?}", relay_rel(TX).await?.failures()).contains("release not signed"));
+    let again = e.keeper.call(core.id(), "request_remote_release").args_json(json!({ "position_id": "0" }))
+        .gas(Gas::from_tgas(100)).transact().await?;
+    assert!(format!("{:?}", again.failures()).contains("remote position closed"));
     Ok(())
+}
+
+/// Forged attestation (wrong authority) and units below reserved are refused with no payout; keeper attestation
+/// is refused while the flag is off, accepted once on; an unconfirmed reservation expires after 30 min.
+#[tokio::test]
+async fn remote_refusals_attestation_and_expiry() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    seed(&e, &core).await?;
+    let s = stub(&e).await?;
+    chain(&e, &core, &s).await?;
+    let borrower = user(&e, 0, 0).await?;
+    let (id, _) = reserve(&e, &core, &borrower).await?;
+    let auth = position(&core, id).await?["remote"]["authority"].as_str().unwrap().to_string();
+
+    let r = confirm(&e, &core, &s, id, &vault_body(id, UNITS, &format!("ed25519:{RCPT}"))).await?;
+    assert_eq!(events(&r, "remote_deposit_rejected")[0]["reason"], "authority_mismatch");
+    assert_eq!(bal(&e.usdc, borrower.id()).await?, 0, "forged attestation pays nothing");
+    advance(&e, 31).await?;
+    let r = confirm(&e, &core, &s, id, &vault_body(id, UNITS - 1, &auth)).await?;
+    gas("confirm_remote_deposit(rejected)", &r);
+    assert_eq!(events(&r, "remote_deposit_rejected")[0]["reason"], "units_below_reserved");
+    assert_eq!(position(&core, id).await?["remote"]["status"], "AwaitingDeposit");
+
+    let attest = || {
+        e.keeper.call(core.id(), "keeper_attest_deposit")
+            .args_json(json!({ "position_id": id.to_string(), "tx_ref": TX, "depositor": DEPOSITOR }))
+            .gas(Gas::from_tgas(100))
+            .transact()
+    };
+    assert!(format!("{:?}", attest().await?.failures()).contains("keeper attestation disabled"));
+    owner_call(&e, &core, "set_allow_keeper_deposit_attestation", json!({ "allow": true })).await?;
+    let r = attest().await?;
+    gas("keeper_attest_deposit+payout", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(events(&r, "remote_deposit_confirmed")[0]["source"], "keeper");
+    assert!(bal(&e.usdc, borrower.id()).await? > 0);
+
+    // a second reservation nobody deposits for: expiry refused early, accepted after 30 min
+    let (id2, _) = reserve(&e, &core, &borrower).await?;
+    let expire = || e.worker.dev_create_account();
+    let anyone = expire().await?;
+    let r = anyone.call(core.id(), "expire_remote_reservation").args_json(json!({ "position_id": id2.to_string() })).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("reservation not expired"));
+    advance(&e, 1801).await?;
+    let r = anyone.call(core.id(), "expire_remote_reservation").args_json(json!({ "position_id": id2.to_string() })).transact().await?;
+    gas("expire_remote_reservation", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    let p = position(&core, id2).await?;
+    assert_eq!((p["status"].clone(), p["remote"]["status"].clone()), (json!("Closed"), json!("Expired")));
+    Ok(())
+}
+
+async fn now_ns(e: &Env) -> anyhow::Result<u64> {
+    Ok(e.worker.view_block().await?.timestamp())
+}
+/// Advance the sandbox clock by at least `secs` (fast_forward in chunks, F-132).
+async fn advance(e: &Env, secs: u64) -> anyhow::Result<()> {
+    let t0 = now_ns(e).await?;
+    for _ in 0..60 {
+        e.worker.fast_forward(500).await?;
+        if now_ns(e).await? >= t0 + secs * SEC {
+            return Ok(());
+        }
+    }
+    anyhow::bail!("sandbox clock did not advance {secs} s")
 }

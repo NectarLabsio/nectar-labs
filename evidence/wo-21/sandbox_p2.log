@@ -1,0 +1,204 @@
+   Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/contracts/nectar-core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.77s
+     Running tests/sandbox_p2.rs (/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/debug/deps/sandbox_p2-ac31866d7b619e81)
+
+running 3 tests
+test remote_refusals_attestation_and_expiry ... • Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.35s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │     Finished `release` profile [optimized] target(s) in 0.33s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794315727, tv_nsec: 920000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794315729, tv_nsec: 260000000 }
+
+• Skipped running wasm-opt as final target exists and is newer than wasm produced by cargo
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 544.6 KB (544629 bytes)
+     - SHA-256 checksum hex : cce183169cb35248c68461c49365b6f873c4f078db9861f0950e18b620aabd4a
+     - SHA-256 checksum bs58: EnmcdhAwtmn6qGTFBX1UEZ2uJHs6PXurMWSafsE9Ny13
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 1s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.31s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 4.27s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794315752, tv_nsec: 270000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794314929, tv_nsec: 40000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 381ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 156.9 KB (156898 bytes)
+     - SHA-256 checksum hex : 010ba4cc32acfe95cfe7f9b824a26ffb7f126cd7bb4e5ad261732df10da4d119
+     - SHA-256 checksum bs58: 55hvEqmBmZNjhmhiUagzZrx9f5rLzxC5iuHtfvG3pKA
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 6s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.35s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 4.45s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794315758, tv_nsec: 550000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794314951, tv_nsec: 480000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 476ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 233.5 KB (233529 bytes)
+     - SHA-256 checksum hex : 84d4a868583175efeefcca49d841462cea220cc2c98015a6e966108141cd63d9
+     - SHA-256 checksum bs58: 9wWtiwcoNGPFiZpQd9VijsmosCAySQpRfvuGmor5CRdz
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-add4daae2f71659b9/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 6s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+GAS,confirm_remote_deposit(rejected),total,7663653449599
+GAS,confirm_remote_deposit(rejected),dev-20261110130240-64105367596677.test.near,3136020320947
+GAS,confirm_remote_deposit(rejected),dev-20261110130246-68887307425885.test.near,1601216406593
+GAS,confirm_remote_deposit(rejected),dev-20261110130224-36218634560824.test.near,223182562500
+GAS,confirm_remote_deposit(rejected),dev-20261110130240-64105367596677.test.near,2170037064744
+GAS,confirm_remote_deposit(rejected),dev-20261110130224-36218634560824.test.near,223182562500
+GAS,keeper_attest_deposit+payout,total,7875017787375
+GAS,keeper_attest_deposit+payout,dev-20261110130240-64105367596677.test.near,3624103369210
+GAS,keeper_attest_deposit+payout,dev-20261110130239-87197988591589.test.near,1686185257130
+GAS,keeper_attest_deposit+payout,dev-20261110130224-36218634560824.test.near,223182562500
+GAS,keeper_attest_deposit+payout,dev-20261110130240-64105367596677.test.near,1800815476750
+GAS,keeper_attest_deposit+payout,dev-20261110130224-36218634560824.test.near,223182562500
+GAS,expire_remote_reservation,total,2383169816834
+GAS,expire_remote_reservation,dev-20261110130240-64105367596677.test.near,2073012233374
+ok
+test remote_repay_then_release_signed_and_replay_refused ... GAS,reserve_remote_position+derived_public_key,total,8694284683287
+GAS,reserve_remote_position+derived_public_key,dev-20261110130400-37085167721997.test.near,3187661853948
+GAS,reserve_remote_position+derived_public_key,dev-20261110130406-49171241053993.test.near,2552237851074
+GAS,reserve_remote_position+derived_public_key,dev-20261110130408-17075277813749.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,dev-20261110130400-37085167721997.test.near,2194333674895
+GAS,reserve_remote_position+derived_public_key,dev-20261110130408-17075277813749.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,total,12972102167584
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130400-37085167721997.test.near,3145130447875
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130406-49171241053993.test.near,1567509579157
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130400-37085167721997.test.near,3578836624357
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130359-79518186798113.test.near,1672505257130
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130400-37085167721997.test.near,1805375476750
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,request_remote_release+sign,total,16917046482359
+GAS,request_remote_release+sign,dev-20261110130400-37085167721997.test.near,3581048660966
+GAS,request_remote_release+sign,dev-20261110130406-49171241053993.test.near,2665433055703
+GAS,request_remote_release+sign,dev-20261110130406-49171241053993.test.near,1406863683751
+GAS,request_remote_release+sign,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110130406-49171241053993.test.near,5357603052281
+GAS,request_remote_release+sign,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110130400-37085167721997.test.near,2480170684843
+GAS,request_remote_release+sign,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261110130359-55844287484566.test.near,223182562500
+GAS,relay_release_result,total,2732846582584
+GAS,relay_release_result,dev-20261110130400-37085167721997.test.near,2417825260194
+ok
+test remote_reserve_confirm_borrow_settle_signed_with_position_path ... GAS,reserve_remote_position+derived_public_key,total,8680234979595
+GAS,reserve_remote_position+derived_public_key,dev-20261110130419-14820242016996.test.near,3178541853948
+GAS,reserve_remote_position+derived_public_key,dev-20261110130426-16678474860355.test.near,2552353036914
+GAS,reserve_remote_position+derived_public_key,dev-20261110130428-49811494275773.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,dev-20261110130419-14820242016996.test.near,2189288785363
+GAS,reserve_remote_position+derived_public_key,dev-20261110130428-49811494275773.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,total,12958367865688
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130419-14820242016996.test.near,3136010447875
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130426-16678474860355.test.near,1562949579157
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130415-77288654039668.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130419-14820242016996.test.near,3565156624357
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130415-83442005434599.test.near,1690690955234
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130415-77288654039668.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130419-14820242016996.test.near,1800815476750
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130415-77288654039668.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261110130415-77288654039668.test.near,223182562500
+GAS,trigger+sign(remote position),total,17928442310721
+GAS,trigger+sign(remote position),dev-20261110130419-14820242016996.test.near,4543609496290
+GAS,trigger+sign(remote position),dev-20261110130426-16678474860355.test.near,2688076917685
+GAS,trigger+sign(remote position),dev-20261110130426-16678474860355.test.near,1408661043337
+GAS,trigger+sign(remote position),dev-20261110130415-77288654039668.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110130426-16678474860355.test.near,5381665170665
+GAS,trigger+sign(remote position),dev-20261110130415-77288654039668.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110130415-77288654039668.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110130419-14820242016996.test.near,2480502337929
+GAS,trigger+sign(remote position),dev-20261110130415-77288654039668.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261110130415-77288654039668.test.near,223182562500
+GAS,relay_settlement_result,total,2749229936777
+GAS,relay_settlement_result,dev-20261110130419-14820242016996.test.near,2434065563242
+ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 131.62s
+

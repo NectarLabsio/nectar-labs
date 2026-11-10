@@ -1,3 +1,3 @@
 - [Host toolchain quirks](host_toolchain_quirks.md) — SDKROOT=MacOSX26.5.sdk needed for host linking; exFAT incremental; plain cargo check fails by design
 - [NEAR gas budgeting](near_gas_budgeting.md) — receipt exec fees charged to creator (~5 Tgas/transfer pair); weight-1 callback; 300 Tgas cap
-- [Worktree shell guard](worktree_shell_guard.md) — no heredocs/inline python/git -C in worktrees; Write a script, run it by abs path
+- [Worktree shell guard](worktree_shell_guard.md) — no heredocs/inline python/git -C in worktrees; Write a script, run it by abs path; gitleaks hook

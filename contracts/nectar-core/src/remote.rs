@@ -1,0 +1,768 @@
+//! v2 remote collateral lifecycle (interface-v7 §B, PRD §9B, WO-21). Solana now (domain 1); the authority
+//! parsing is domain-aware so the Base spoke (domain 0, P2b) only adds its signing path later.
+//!
+//! 1. `reserve_remote_position` (borrower, no deposit): position with `remote.status = AwaitingDeposit`, path
+//!    `<chain>/pos/<id>`, cross-contract `derived_public_key({path, predecessor: <this>, domain_id})` (F-338)
+//!    `.then(on_authority)`. No pool funds are locked; the reservation expires after 30 min
+//!    (`expire_remote_reservation`, anyone).
+//! 2. `confirm_remote_deposit` (anyone): OutLayer `vault_read` (deposit from `gas_reserve_yocto`)
+//!    `.then(on_deposit_verified)`: authority must match, units ≥ reserved, depositor recorded; then both limits (A1)
+//!    are re-checked with the stored price (must be fresh) and the loan is paid (A4 `pay_to`, A5 fees). OutLayer
+//!    failure: stays AwaitingDeposit + `remote_deposit_rejected` (no fallback payout). A proven deposit whose
+//!    loan is refused (limits, expiry) records the depositor so the collateral can be released.
+//!    `keeper_attest_deposit` is the testnet fallback behind `allow_keeper_deposit_attestation` (`source: "keeper"`).
+//! 3. Settlement: `settle_remote` (one signed leg, `|kind=PRELIQ`, the position's own path; src/p2.rs).
+//! 4. `request_remote_release` (anyone, after debt = 0): signs `NECTAR_RELEASE_V1` with the position's path;
+//!    `relay_release_result` (keeper) closes it.
+//!
+//! All amounts in Solana preimages are u64 (the vault takes u64): units and repay that do not fit are refused.
+//! Keeper-callable methods are not payable; the 1 yocto `sign` deposit and the OutLayer deposit come from
+//! `gas_reserve_yocto`. State: raw storage keys (like `__p2_*`).
+
+use near_sdk::json_types::{U64, U128};
+use near_sdk::serde_json::{self, Value, json};
+use near_sdk::{AccountId, Gas, GasWeight, NearToken, Promise, PromiseError, env, near, require};
+
+use crate::chainsig;
+use crate::events::emit;
+use crate::p2::{SEC, SignCall, sign_args, valid_remote_chain};
+use crate::types::*;
+use crate::{ERR_CA_PENDING, ERR_KEEPER, ERR_REFERRER_IS_BORROWER, MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar, NectarExt, math};
+
+pub const ALLOW_KEEPER_ATTEST_KEY: &[u8] = b"__v7_allow_keeper_attest";
+pub const VAULT_READ_KEY: &[u8] = b"__v7_vault_read";
+pub const RELEASE_PREFIX: &[u8] = b"__v7_release:";
+/// 30 min (interface-v7 §B; config `v7.reservation_expiry_s`).
+pub const RESERVATION_EXPIRY_S: u64 = 1_800;
+/// Minimum spacing of two `vault_read` requests on one position (bounds `gas_reserve_yocto` griefing).
+pub const CONFIRM_COOLDOWN_S: u64 = 30;
+/// `derived_public_key` is pure math (F-338). TODO-G10: confirm the live burn on `v1.signer-prod.testnet`.
+pub const GAS_DERIVE_KEY: Gas = Gas::from_tgas(10);
+pub const GAS_ON_AUTHORITY: Gas = Gas::from_tgas(10);
+/// Own burn of `on_deposit_verified` (parse, limits, ~6 writes), on top of one USDC transfer pair.
+pub const GAS_ON_DEPOSIT_BASE: Gas = Gas::from_tgas(20);
+pub const GAS_ON_RELEASE_SIG: Gas = Gas::from_tgas(10);
+/// Exec fees of the receipts a method creates, charged to it (WO-10a lesson).
+pub const GAS_CREATE_RECEIPTS: Gas = Gas::from_tgas(5);
+/// `"ed25519:<44 b58>"` / `"secp256k1:<88 b58>"` < 128 B.
+pub const MAX_DERIVED_KEY_LEN: usize = 256;
+/// OutLayer stdout ≤ 900 B (F-043); headroom for the JSON string wrapper.
+pub const MAX_VAULT_READ_LEN: usize = 1024;
+pub const SOURCE_OUTLAYER: &str = "outlayer";
+pub const SOURCE_KEEPER: &str = "keeper";
+const U64_MAX: u128 = u64::MAX as u128;
+
+fn release_key(position_id: u64) -> Vec<u8> {
+    let mut k = RELEASE_PREFIX.to_vec();
+    k.extend_from_slice(&position_id.to_le_bytes());
+    k
+}
+
+/// Vault depositor of the position's chain: Solana base58 (domain 1) or a 0x address (domain 0).
+pub fn valid_depositor(s: &str, domain_id: u32) -> bool {
+    match domain_id {
+        chainsig::ED25519_DOMAIN_ID => chainsig::valid_base58_address(s),
+        chainsig::SECP256K1_DOMAIN_ID => {
+            s.len() == 42 && s.starts_with("0x") && s.bytes().skip(2).all(|b| b.is_ascii_hexdigit())
+        }
+        _ => false,
+    }
+}
+
+/// `tx_ref` of a keeper attestation: printable ASCII, 1..=128 bytes.
+pub fn valid_tx_ref(s: &str) -> bool {
+    (1..=MAX_STRING_LEN).contains(&s.len()) && s.bytes().all(|b| b.is_ascii_graphic())
+}
+
+fn u128_of(v: &Value) -> Option<u128> {
+    match v {
+        Value::String(s) if !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit()) => s.parse().ok(),
+        Value::Number(n) => n.as_u64().map(u128::from),
+        _ => None,
+    }
+}
+
+/// One `vault_read` answer.
+#[derive(Debug, PartialEq, Eq)]
+pub struct VaultRead {
+    pub units: u128,
+    pub authority: String,
+    pub depositor: String,
+    pub slot_or_block: String,
+}
+
+/// OutLayer `vault_read` stdout (WO-24): `{"position_id","units","authority","depositor","slot_or_block"}`;
+/// numbers may be JSON numbers or decimal strings. `null` (failed run) and `{"error":..}` are failures.
+pub fn parse_vault_read(raw: &[u8], position_id: u64) -> Result<VaultRead, &'static str> {
+    let v: Value = serde_json::from_slice(raw).map_err(|_| "parse")?;
+    if v.is_null() {
+        return Err("no_result");
+    }
+    if v.get("error").is_some() {
+        return Err("job_error");
+    }
+    if u128_of(&v["position_id"]) != Some(u128::from(position_id)) {
+        return Err("position_mismatch");
+    }
+    let units = u128_of(&v["units"]).ok_or("bad_units")?;
+    let authority = v["authority"].as_str().ok_or("bad_authority")?.to_string();
+    let depositor = v["depositor"].as_str().ok_or("bad_depositor")?.to_string();
+    let slot_or_block = match &v["slot_or_block"] {
+        Value::Number(n) => n.to_string(),
+        Value::String(s) if valid_tx_ref(s) => s.clone(),
+        _ => return Err("bad_slot"),
+    };
+    if authority.len() > MAX_STRING_LEN || depositor.len() > MAX_STRING_LEN {
+        return Err("too_long");
+    }
+    Ok(VaultRead { units, authority, depositor, slot_or_block })
+}
+
+impl Nectar {
+    pub(crate) fn allow_keeper_attest(&self) -> bool {
+        env::storage_read(ALLOW_KEEPER_ATTEST_KEY).as_deref() == Some(&[1u8][..])
+    }
+    pub(crate) fn vault_read_config(&self) -> Option<VaultReadConfig> {
+        env::storage_read(VAULT_READ_KEY).and_then(|b| near_sdk::borsh::from_slice(&b).ok())
+    }
+    pub(crate) fn release(&self, position_id: u64) -> Option<PendingRelease> {
+        env::storage_read(&release_key(position_id))
+            .and_then(|b| near_sdk::borsh::from_slice::<VRelease>(&b).ok())
+            .map(|VRelease::V1(d)| d)
+    }
+    fn put_release(&mut self, d: PendingRelease) {
+        let b = near_sdk::borsh::to_vec(&VRelease::V1(d.clone())).unwrap_or_else(|_| env::panic_str("borsh"));
+        env::storage_write(&release_key(d.position_id.0), &b);
+    }
+    fn gas_left() -> u64 {
+        env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas())
+    }
+    fn remote_or_panic(p: &Position) -> RemoteInfo {
+        p.remote.clone().unwrap_or_else(|| env::panic_str("not a remote position"))
+    }
+
+    /// A deposit is proven (attested read or keeper attestation): record it, then pay the loan if both limits
+    /// still hold with a fresh price. Never panics on business failures (callback path).
+    pub(crate) fn accept_deposit(&mut self, mut p: Position, units: u128, depositor: String, source: &str, deposit_ref: String) {
+        let id = p.position_id.0;
+        let Some(mut r) = p.remote.take() else { return };
+        let now = env::block_timestamp();
+        let late = r.status == RemoteStatus::Expired || now >= r.expires_ns.0;
+        r.depositor = Some(depositor.clone());
+        r.source = Some(source.to_string());
+        r.deposit_ref = Some(deposit_ref.clone());
+        r.units = U128(units);
+        p.units = U128(units);
+        let borrow = r.borrow_usd_e6.0;
+        let c = self.coll_or_panic(&p.collateral);
+        let referrer = r.referrer.clone().filter(|x| self.referrers.contains(x));
+        let refusal = if late {
+            Some("reservation_expired")
+        } else if self.paused {
+            Some("paused")
+        } else if c.ca_pending {
+            Some(ERR_CA_PENDING)
+        } else if !self.oracle_fresh(&c) {
+            Some("oracle stale")
+        } else {
+            None
+        };
+        let terms = match refusal {
+            Some(e) => Err(e),
+            None => self.check_borrow(&c, units, borrow, Some(p.pre_liq_ltv_bps), referrer.is_some()),
+        };
+        let entry_m = c.multiplier_e18;
+        let booked = match terms {
+            Ok(t) => self.book_borrow(c, &t, borrow, &referrer).map(|_| t),
+            Err(e) => Err(e),
+        };
+        emit(
+            "remote_deposit_confirmed",
+            json!({ "position_id": U64(id), "units": U128(units), "depositor": depositor, "source": source,
+                    "deposit_ref": deposit_ref, "funded": booked.is_ok() }),
+        );
+        match booked {
+            Ok(t) => {
+                p.debt_usd_e6 = U128(borrow);
+                p.premium_usd_e6 = U128(t.premium);
+                p.opened_ns = U64(now);
+                p.entry_multiplier_e18 = entry_m;
+                p.status = PositionStatus::Open;
+                r.status = RemoteStatus::Open;
+                r.paid_usd_e6 = U128(t.net);
+                let pay_to = r.pay_to.clone();
+                p.remote = Some(r);
+                let borrower = p.borrower.clone();
+                let collateral = p.collateral.clone();
+                self.put_position(p);
+                self.emit_opened(id, &borrower, &collateral, units, borrow, &t, pay_to.as_ref(), &referrer, true);
+                self.pay_proceeds(id, &borrower, t.net, pay_to);
+            }
+            Err(reason) => {
+                // The collateral is in the vault under our key: it stays releasable (debt 0). Before expiry the
+                // borrower may retry the confirmation; after it, the position is Open with no loan.
+                if late {
+                    r.status = RemoteStatus::Open;
+                    p.status = PositionStatus::Open;
+                }
+                emit("remote_loan_refused", json!({ "position_id": U64(id), "reason": reason }));
+                p.remote = Some(r);
+                self.put_position(p);
+            }
+        }
+    }
+
+    /// One signed leg for a remote position (v2 settle preimage + `|kind=PRELIQ`, the position's own path).
+    /// Only quotes with a valid `buyer_remote_recipient` fill it, and the leg must leave the debt or the units at
+    /// 0, because the vault closes the position on settle. No keeper share in collateral. `Err` = nothing written.
+    pub(crate) fn settle_remote(
+        &mut self,
+        position_id: U64,
+        mut p: Position,
+        mut c: CollateralConfig,
+        cands: &[(u16, u64)],
+    ) -> Result<(), &'static str> {
+        let r = p.remote.clone().ok_or("not a remote position")?;
+        if r.status != RemoteStatus::Open {
+            return Err("remote position not open");
+        }
+        if r.domain_id != chainsig::ED25519_DOMAIN_ID {
+            return Err("remote settle: domain not supported");
+        }
+        let s = self.signer_config().ok_or("no signer config")?;
+        if self.settle_in_flight(position_id.0) {
+            return Err("remote settlement in flight");
+        }
+        let price = c.oracle_price_usd_e6.0;
+        let m = Self::eff_multiplier(&c);
+        let acc = c.acc_fee_per_dollar_e18.0;
+        let debt = p.debt_usd_e6.0;
+        let units = p.units.0;
+        let mut chosen: Option<(Quote, math::Leg, String)> = None;
+        for &(disc, qid) in cands.iter().take(MAX_QUOTES_PER_SETTLEMENT) {
+            let Some(q) = self.quote(qid) else { continue };
+            if q.remaining_usd_e6.0 == 0 || q.collateral != p.collateral {
+                continue;
+            }
+            let Some(rcpt) = q.buyer_remote_recipient.clone().filter(|x| chainsig::valid_base58_address(x)) else {
+                continue;
+            };
+            let Some(leg) = math::settle_leg_m(debt, q.remaining_usd_e6.0, units, m, price, c.decimals, disc, 0)? else {
+                continue;
+            };
+            if leg.repay_usd_e6 == debt || leg.buyer_units == units {
+                chosen = Some((q, leg, rcpt));
+                break;
+            }
+        }
+        let (mut q, leg, rcpt) = chosen.ok_or("no remote quote capacity")?;
+        if leg.repay_usd_e6 > U64_MAX || leg.buyer_units > U64_MAX {
+            return Err("amount exceeds u64");
+        }
+        let reserve = math::sub(self.gas_reserve_yocto, 1).map_err(|_| "gas reserve empty")?;
+        Self::check_sign_gas(&s)?;
+        Self::checkpoint_fees(&mut q, acc)?;
+        let q_c = if q.exiting() {
+            c.active_committed_q_usd_e6.0
+        } else {
+            math::sub(c.active_committed_q_usd_e6.0, leg.repay_usd_e6)?
+        };
+        q.remaining_usd_e6 = U128(math::sub(q.remaining_usd_e6.0, leg.repay_usd_e6)?);
+        Self::reset_fee_debt(&mut q, acc)?;
+        let debt_after = math::sub(debt, leg.repay_usd_e6)?;
+        let units_after = math::sub(units, leg.buyer_units)?;
+        // A1: the leg's repayment leaves the aggregate now; `rollback_leg` re-adds it on a sign failure.
+        let total_debt = math::sub(c.total_debt_usd_e6.0, leg.repay_usd_e6)?;
+        p.debt_usd_e6 = U128(debt_after);
+        p.units = U128(units_after);
+        p.status = PositionStatus::Settling; // until relay_settlement_result (or sign failure)
+        if let Some(pr) = p.remote.as_mut() {
+            pr.status = RemoteStatus::Settling;
+        }
+
+        // effects (record_remote_leg writes nothing on Err)
+        let call = self.record_remote_leg(
+            &mut p,
+            &r,
+            &s,
+            RemoteLeg {
+                quote_id: q.quote_id.0,
+                repay_usd_e6: leg.repay_usd_e6,
+                buyer_units: leg.buyer_units,
+                keeper_units: 0,
+                recipient: rcpt,
+            },
+        )?;
+        if q.remaining_usd_e6.0 == 0 {
+            self.remove_live(&p.collateral, q.quote_id.0);
+        }
+        self.put_quote(q);
+        self.gas_reserve_yocto = reserve;
+        c.active_committed_q_usd_e6 = U128(q_c);
+        c.total_debt_usd_e6 = U128(total_debt);
+        self.put_coll(c);
+        self.put_position(p);
+        // interaction
+        Self::schedule_sign(call);
+        Ok(())
+    }
+}
+
+#[near]
+impl Nectar {
+    // ------------------------------------------------------------ 1. reserve
+    /// Borrower, no deposit. Reserves a remote position (`AwaitingDeposit`) and asks the signer for the
+    /// position's vault authority. Limits run at confirmation, not here (a reservation locks no pool funds).
+    pub fn reserve_remote_position(
+        &mut self,
+        collateral: String,
+        units: U128,
+        borrow_usd_e6: U128,
+        pre_liq_ltv_bps: u16,
+        pay_to: Option<PayTo>,
+        referrer: Option<AccountId>,
+    ) -> U64 {
+        self.assert_not_paused();
+        let borrower = env::predecessor_account_id();
+        require!(referrer.as_ref() != Some(&borrower), ERR_REFERRER_IS_BORROWER);
+        let c = self.coll_or_panic(&collateral);
+        let rc = c.remote_chain.clone().filter(valid_remote_chain).unwrap_or_else(|| env::panic_str("no remote chain"));
+        let s = self.signer_config().unwrap_or_else(|| env::panic_str("no signer config"));
+        require!(units.0 > 0, "units is zero");
+        require!(units.0 <= U64_MAX, "units exceed u64");
+        require!(borrow_usd_e6.0 > 0, "borrow is zero");
+        require!(borrow_usd_e6.0 <= U64_MAX, "borrow exceeds u64");
+        require!(
+            (c.pre_liq_min_bps..=c.pre_liq_max_bps).contains(&pre_liq_ltv_bps),
+            "pre_liq_ltv_bps out of range"
+        );
+        if let Err(e) = Self::validate_string(&pay_to.as_ref().and_then(|p| p.memo.clone())) {
+            env::panic_str(e);
+        }
+        require!(
+            Self::gas_left() >= GAS_DERIVE_KEY.as_gas() + GAS_ON_AUTHORITY.as_gas() + GAS_CREATE_RECEIPTS.as_gas(),
+            "attach more gas"
+        );
+        let id = self.next_position_id;
+        let next = id.checked_add(1).unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
+        let path = chainsig::position_path(&rc.chain_id, id);
+        require!(chainsig::valid_path(&path), "bad path");
+        let now = env::block_timestamp();
+        let expires_ns = now
+            .checked_add(RESERVATION_EXPIRY_S * SEC)
+            .unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
+        // effects
+        self.next_position_id = next;
+        self.put_position(Position {
+            position_id: U64(id),
+            borrower: borrower.clone(),
+            collateral: collateral.clone(),
+            units: U128(0),
+            debt_usd_e6: U128(0),
+            premium_usd_e6: U128(0),
+            pre_liq_ltv_bps,
+            opened_ns: U64(now),
+            remote_path: Some(path.clone()),
+            nonce: U64(id),
+            status: PositionStatus::Open,
+            entry_multiplier_e18: c.multiplier_e18,
+            remote: Some(RemoteInfo {
+                chain_id: rc.chain_id.clone(),
+                vault_program: rc.vault_program.clone(),
+                domain_id: rc.mpc_domain_id,
+                path: path.clone(),
+                authority: None,
+                status: RemoteStatus::AwaitingDeposit,
+                reserved_units: units,
+                units,
+                borrow_usd_e6,
+                paid_usd_e6: U128(0),
+                reserved_ns: U64(now),
+                pay_to,
+                referrer,
+                expires_ns: U64(expires_ns),
+                depositor: None,
+                source: None,
+                deposit_ref: None,
+                confirming: false,
+                last_confirm_ns: U64(0),
+            }),
+        });
+        emit(
+            "remote_reserved",
+            json!({ "position_id": U64(id), "borrower": borrower, "collateral": collateral, "chain": rc.chain_id,
+                    "vault_program": rc.vault_program, "path": path, "domain_id": rc.mpc_domain_id,
+                    "units": units, "borrow_usd_e6": borrow_usd_e6, "expires_ns": U64(expires_ns) }),
+        );
+        // interaction (F-338: always pass predecessor and domain_id)
+        let args = json!({ "path": path, "predecessor": env::current_account_id(), "domain_id": rc.mpc_domain_id });
+        Promise::new(s.account)
+            .function_call("derived_public_key", args.to_string().into_bytes(), NearToken::from_yoctonear(0), GAS_DERIVE_KEY)
+            .then(Promise::new(env::current_account_id()).function_call(
+                "on_authority",
+                json!({ "position_id": U64(id) }).to_string().into_bytes(),
+                NearToken::from_yoctonear(0),
+                GAS_ON_AUTHORITY,
+            ))
+            .detach();
+        U64(id)
+    }
+
+    /// `derived_public_key` callback: stores the vault authority. A failed or malformed answer ends the reservation.
+    #[private]
+    pub fn on_authority(&mut self, position_id: U64) {
+        let Some(mut p) = self.position(position_id.0) else { return };
+        let Some(mut r) = p.remote.clone() else { return };
+        if r.authority.is_some() || r.status != RemoteStatus::AwaitingDeposit {
+            return;
+        }
+        let res: Result<String, &'static str> = if env::promise_results_count() != 1 {
+            Err("no_result")
+        } else {
+            match env::promise_result_checked(0, MAX_DERIVED_KEY_LEN) {
+                Ok(b) => serde_json::from_slice::<String>(&b)
+                    .map_err(|_| "parse")
+                    .and_then(|k| chainsig::authority_from_derived_key(&k, r.domain_id)),
+                Err(PromiseError::TooLong(_)) => Err("too_long"),
+                Err(_) => Err("failed"),
+            }
+        };
+        match res {
+            Ok(a) => {
+                emit(
+                    "remote_authority_set",
+                    json!({ "position_id": position_id, "path": r.path, "domain_id": r.domain_id, "authority": a }),
+                );
+                r.authority = Some(a);
+            }
+            Err(reason) => {
+                r.status = RemoteStatus::Expired;
+                p.status = PositionStatus::Closed;
+                emit("remote_reservation_failed", json!({ "position_id": position_id, "reason": reason }));
+            }
+        }
+        p.remote = Some(r);
+        self.put_position(p);
+    }
+
+    /// Anyone, once the reservation is 30 min old without a recorded deposit.
+    pub fn expire_remote_reservation(&mut self, position_id: U64) {
+        let mut p = self.position_or_panic(position_id.0);
+        let mut r = Self::remote_or_panic(&p);
+        require!(r.status == RemoteStatus::AwaitingDeposit, "not awaiting deposit");
+        require!(env::block_timestamp() >= r.expires_ns.0, "reservation not expired");
+        require!(!r.confirming, "deposit check in flight");
+        require!(r.depositor.is_none(), "deposit recorded: request_remote_release");
+        r.status = RemoteStatus::Expired;
+        p.status = PositionStatus::Closed;
+        p.remote = Some(r);
+        self.put_position(p);
+        emit("remote_reservation_expired", json!({ "position_id": position_id }));
+    }
+
+    // ------------------------------------------------------------ 2. confirm
+    /// Anyone (the keeper key included). OutLayer `vault_read` (WO-24) `.then(on_deposit_verified)`. Accepted on an
+    /// expired reservation too, so a late deposit can be proven and released (no loan then).
+    pub fn confirm_remote_deposit(&mut self, position_id: U64) {
+        self.assert_not_paused();
+        let mut p = self.position_or_panic(position_id.0);
+        let mut r = Self::remote_or_panic(&p);
+        require!(
+            matches!(r.status, RemoteStatus::AwaitingDeposit | RemoteStatus::Expired),
+            "not awaiting deposit"
+        );
+        require!(r.authority.is_some(), "authority pending");
+        require!(!r.confirming, "deposit check in flight");
+        let now = env::block_timestamp();
+        require!(
+            r.last_confirm_ns.0 == 0 || now >= r.last_confirm_ns.0.saturating_add(CONFIRM_COOLDOWN_S * SEC),
+            "confirm cooldown"
+        );
+        let cfg = self.vault_read_config().unwrap_or_else(|| env::panic_str("vault_read not configured"));
+        require!(self.gas_reserve_yocto >= cfg.deposit_yocto, "gas reserve empty");
+        let exec_gas = Gas::from_tgas(cfg.gas_tgas);
+        let cb_gas = GAS_ON_DEPOSIT_BASE.as_gas() + Self::per_transfer_gas();
+        require!(
+            Self::gas_left() >= exec_gas.as_gas() + cb_gas + GAS_CREATE_RECEIPTS.as_gas(),
+            "attach more gas"
+        );
+        let input = json!({ "job": "vault_read", "chain": r.chain_id, "program": r.vault_program,
+                            "position_id": position_id })
+        .to_string();
+        let q = &self.quoter;
+        let args = json!({
+            "source": { "Project": { "project_id": cfg.project_id, "version_key": cfg.version_key } },
+            "resource_limits": { "max_instructions": q.max_instructions, "max_memory_mb": q.max_memory_mb,
+                                 "max_execution_seconds": q.max_execution_seconds },
+            "input_data": input,
+            "response_format": "Json",
+            "payer_account_id": env::current_account_id(),
+        })
+        .to_string();
+        let outlayer = q.outlayer_account.clone();
+        // effects
+        self.gas_reserve_yocto = math::sub(self.gas_reserve_yocto, cfg.deposit_yocto).unwrap_or_else(|e| env::panic_str(e));
+        r.confirming = true;
+        r.last_confirm_ns = U64(now);
+        p.remote = Some(r);
+        self.put_position(p);
+        emit(
+            "remote_deposit_check_requested",
+            json!({ "position_id": position_id, "input": input, "deposit_yocto": U128(cfg.deposit_yocto) }),
+        );
+        // interaction
+        Promise::new(outlayer)
+            .function_call("request_execution", args.into_bytes(), NearToken::from_yoctonear(cfg.deposit_yocto), exec_gas)
+            .then(Promise::new(env::current_account_id()).function_call_weight(
+                "on_deposit_verified",
+                json!({ "position_id": position_id }).to_string().into_bytes(),
+                NearToken::from_yoctonear(0),
+                Gas::from_gas(cb_gas),
+                GasWeight(1),
+            ))
+            .detach();
+    }
+
+    /// OutLayer callback (F-048). Never panics on business failures.
+    #[private]
+    pub fn on_deposit_verified(&mut self, position_id: U64) {
+        let Some(mut p) = self.position(position_id.0) else { return };
+        let Some(mut r) = p.remote.clone() else { return };
+        if !r.confirming {
+            return;
+        }
+        r.confirming = false;
+        let read = if env::promise_results_count() != 1 {
+            Err("no_result")
+        } else {
+            match env::promise_result_checked(0, MAX_VAULT_READ_LEN) {
+                Ok(b) => parse_vault_read(&b, position_id.0),
+                Err(PromiseError::TooLong(_)) => Err("too_long"),
+                Err(_) => Err("failed"),
+            }
+        };
+        let checked = read.and_then(|v| {
+            let stored = r.authority.as_deref().ok_or("authority_pending")?;
+            if !chainsig::authority_matches(stored, &v.authority) {
+                return Err("authority_mismatch");
+            }
+            if v.units < r.reserved_units.0 {
+                return Err("units_below_reserved");
+            }
+            if v.units > U64_MAX {
+                return Err("units_exceed_u64");
+            }
+            if !valid_depositor(&v.depositor, r.domain_id) {
+                return Err("bad_depositor");
+            }
+            Ok(v)
+        });
+        match checked {
+            Ok(v) => {
+                p.remote = Some(r);
+                self.accept_deposit(p, v.units, v.depositor, SOURCE_OUTLAYER, v.slot_or_block);
+            }
+            Err(reason) => {
+                emit(
+                    "remote_deposit_rejected",
+                    json!({ "position_id": position_id, "reason": reason, "source": SOURCE_OUTLAYER }),
+                );
+                p.remote = Some(r);
+                self.put_position(p);
+            }
+        }
+    }
+
+    /// Testnet fallback (PRD §9B): keeper only, only while `allow_keeper_deposit_attestation` is set. The same
+    /// checks without the attested read; the reserved units are taken as deposited. Not payable.
+    pub fn keeper_attest_deposit(&mut self, position_id: U64, tx_ref: String, depositor: String) {
+        self.assert_not_paused();
+        require!(env::predecessor_account_id() == self.keeper, ERR_KEEPER);
+        require!(self.allow_keeper_attest(), "keeper attestation disabled");
+        let p = self.position_or_panic(position_id.0);
+        let r = Self::remote_or_panic(&p);
+        require!(
+            matches!(r.status, RemoteStatus::AwaitingDeposit | RemoteStatus::Expired),
+            "not awaiting deposit"
+        );
+        require!(r.authority.is_some(), "authority pending");
+        require!(!r.confirming, "deposit check in flight");
+        require!(valid_tx_ref(&tx_ref), "bad tx_ref");
+        require!(valid_depositor(&depositor, r.domain_id), "bad depositor");
+        let units = r.reserved_units.0;
+        self.accept_deposit(p, units, depositor, SOURCE_KEEPER, tx_ref);
+    }
+
+    // ------------------------------------------------------------ 4. release
+    /// Anyone, after debt = 0 and a recorded deposit: signs `NECTAR_RELEASE_V1` (raw bytes, Eddsa, the position's
+    /// path, 1 yocto from `gas_reserve_yocto`) to the depositor. Re-requestable only after a sign failure or once a
+    /// signed release has expired unrelayed (fresh nonce). Not payable.
+    pub fn request_remote_release(&mut self, position_id: U64) {
+        self.assert_not_paused();
+        let mut p = self.position_or_panic(position_id.0);
+        let mut r = Self::remote_or_panic(&p);
+        require!(r.domain_id == chainsig::ED25519_DOMAIN_ID, "release: domain not supported");
+        require!(p.debt_usd_e6.0 == 0, "debt outstanding");
+        require!(!r.confirming, "deposit check in flight");
+        require!(!self.settle_in_flight(position_id.0), "remote settlement in flight");
+        let depositor = r.depositor.clone().unwrap_or_else(|| env::panic_str("no deposit recorded"));
+        let now_s = env::block_timestamp() / SEC;
+        match r.status {
+            RemoteStatus::Open | RemoteStatus::AwaitingDeposit | RemoteStatus::Expired => {}
+            RemoteStatus::Releasing => {
+                let d = self.release(position_id.0).unwrap_or_else(|| env::panic_str("no pending release"));
+                require!(
+                    d.status == ReleaseStatus::SignFailed || (d.status == ReleaseStatus::Signed && now_s >= d.expires.0),
+                    "release pending"
+                );
+            }
+            RemoteStatus::Settling => env::panic_str("remote position settling"),
+            RemoteStatus::Closed => env::panic_str("remote position closed"),
+        }
+        let s = self.signer_config().unwrap_or_else(|| env::panic_str("no signer config"));
+        require!(self.gas_reserve_yocto >= 1, "gas reserve empty");
+        let need = Gas::from_tgas(s.gas_tgas).as_gas() + GAS_ON_RELEASE_SIG.as_gas() + GAS_CREATE_RECEIPTS.as_gas();
+        require!(Self::gas_left() >= need, "attach more gas");
+        let nonce = self.next_nonce();
+        let expires = now_s.checked_add(s.expiry_s).unwrap_or_else(|| env::panic_str("expiry overflow"));
+        let message = chainsig::build_release_preimage(&r.chain_id, &r.vault_program, position_id.0, &depositor, nonce, expires);
+        require!(message.len() <= chainsig::MAX_EDDSA_PAYLOAD, "message too long");
+        // effects
+        self.take_nonce().unwrap_or_else(|e| env::panic_str(e));
+        self.gas_reserve_yocto -= 1;
+        let args = sign_args(&r.path, &message, r.domain_id);
+        let path = r.path.clone();
+        r.status = RemoteStatus::Releasing;
+        p.remote = Some(r);
+        self.put_position(p);
+        emit(
+            "remote_release_requested",
+            json!({ "position_id": position_id, "nonce": U64(nonce), "expires": U64(expires), "message": message,
+                    "recipient": depositor, "path": path }),
+        );
+        self.put_release(PendingRelease {
+            position_id,
+            message,
+            signature_hex: None,
+            nonce: U64(nonce),
+            expires: U64(expires),
+            recipient: depositor,
+            status: ReleaseStatus::AwaitingSignature,
+            solana_tx_sig: None,
+        });
+        // interaction
+        Self::schedule_sign(SignCall {
+            account: s.account,
+            args,
+            cb_method: "on_release_signature",
+            cb: json!({ "position_id": position_id, "nonce": U64(nonce) }).to_string(),
+            gas: Gas::from_tgas(s.gas_tgas),
+            cb_gas: GAS_ON_RELEASE_SIG,
+        });
+    }
+
+    /// MPC `sign` callback of a release (F-035). Never panics on business failures.
+    #[private]
+    pub fn on_release_signature(&mut self, position_id: U64, nonce: U64) {
+        let Some(mut d) = self.release(position_id.0) else { return };
+        if d.nonce != nonce || d.status != ReleaseStatus::AwaitingSignature {
+            return;
+        }
+        let sig = if env::promise_results_count() != 1 {
+            Err("no_result")
+        } else {
+            match env::promise_result_checked(0, crate::p2::MAX_SIGNATURE_RESULT_LEN) {
+                Ok(b) => chainsig::parse_signature_response(&b),
+                Err(PromiseError::TooLong(_)) => Err("too_long"),
+                Err(_) => Err("failed"),
+            }
+        };
+        match sig {
+            Ok(bytes) => {
+                let signature_hex = chainsig::hex(&bytes);
+                let (path, authority) = self
+                    .position(position_id.0)
+                    .and_then(|p| p.remote)
+                    .map_or((None, None), |r| (Some(r.path), r.authority));
+                emit(
+                    "remote_release_signed",
+                    json!({ "position_id": position_id, "nonce": nonce, "expires": d.expires, "message": d.message,
+                            "signature_hex": signature_hex, "recipient": d.recipient, "path": path,
+                            "pubkey": authority }),
+                );
+                d.signature_hex = Some(signature_hex);
+                d.status = ReleaseStatus::Signed;
+            }
+            Err(reason) => {
+                emit("remote_release_sign_failed", json!({ "position_id": position_id, "nonce": nonce, "reason": reason }));
+                d.status = ReleaseStatus::SignFailed;
+            }
+        }
+        self.put_release(d);
+    }
+
+    /// Keeper records the Solana release tx: the position is Closed. Not payable.
+    pub fn relay_release_result(&mut self, position_id: U64, solana_tx_sig: String) {
+        require!(env::predecessor_account_id() == self.keeper, ERR_KEEPER);
+        require!(chainsig::valid_tx_signature(&solana_tx_sig), "bad solana_tx_sig");
+        let mut d = self.release(position_id.0).unwrap_or_else(|| env::panic_str("no pending release"));
+        require!(d.status == ReleaseStatus::Signed, "release not signed");
+        let mut p = self.position_or_panic(position_id.0);
+        let mut r = Self::remote_or_panic(&p);
+        r.status = RemoteStatus::Closed;
+        p.remote = Some(r);
+        p.units = U128(0);
+        p.status = PositionStatus::Closed;
+        d.status = ReleaseStatus::Relayed;
+        d.solana_tx_sig = Some(solana_tx_sig.clone());
+        emit(
+            "remote_release_relayed",
+            json!({ "position_id": position_id, "nonce": d.nonce, "solana_tx_sig": solana_tx_sig }),
+        );
+        self.put_release(d);
+        self.put_position(p);
+    }
+
+    // ------------------------------------------------------------ owner
+    pub fn set_allow_keeper_deposit_attestation(&mut self, allow: bool) {
+        self.assert_owner();
+        env::storage_write(ALLOW_KEEPER_ATTEST_KEY, &[u8::from(allow)]);
+        emit("keeper_deposit_attestation_set", json!({ "allow": allow }));
+    }
+
+    /// OutLayer `vault_read` project pin (WO-24); `deposit_yocto` > 0, `gas_tgas` in 10..=100.
+    pub fn set_vault_read_config(&mut self, project_id: String, version_key: String, deposit_yocto: U128, gas_tgas: u64) {
+        self.assert_owner();
+        require!(
+            (1..=MAX_STRING_LEN).contains(&project_id.len()) && (1..=MAX_STRING_LEN).contains(&version_key.len()),
+            "bad project pin"
+        );
+        require!(deposit_yocto.0 > 0, "deposit must be > 0");
+        require!((10..=100).contains(&gas_tgas), "gas_tgas out of range");
+        let cfg = VaultReadConfig { project_id, version_key, deposit_yocto: deposit_yocto.0, gas_tgas };
+        let b = near_sdk::borsh::to_vec(&cfg).unwrap_or_else(|_| env::panic_str("borsh"));
+        env::storage_write(VAULT_READ_KEY, &b);
+        emit(
+            "vault_read_config_set",
+            json!({ "project_id": cfg.project_id, "version_key": cfg.version_key, "deposit_yocto": deposit_yocto,
+                    "gas_tgas": gas_tgas }),
+        );
+    }
+
+    // ------------------------------------------------------------ views
+    pub fn get_pending_release(&self, position_id: U64) -> Option<PendingRelease> {
+        self.release(position_id.0)
+    }
+
+    pub fn get_remote_config(&self) -> RemoteConfigView {
+        let v = self.vault_read_config();
+        RemoteConfigView {
+            allow_keeper_deposit_attestation: self.allow_keeper_attest(),
+            vault_read_project_id: v.as_ref().map(|c| c.project_id.clone()),
+            vault_read_version_key: v.as_ref().map(|c| c.version_key.clone()),
+            vault_read_deposit_yocto: v.as_ref().map(|c| U128(c.deposit_yocto)),
+            vault_read_gas_tgas: v.as_ref().map(|c| c.gas_tgas),
+            reservation_expiry_s: RESERVATION_EXPIRY_S,
+        }
+    }
+}

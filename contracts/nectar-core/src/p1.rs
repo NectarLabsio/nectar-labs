@@ -274,11 +274,11 @@ impl Nectar {
             return Err("gas reserve empty");
         }
         let cb_gas = Gas::from_gas(
-            GAS_QUOTER_CB_BASE.as_gas() + n_transfers * Self::per_transfer_gas() + self.remote_extra_gas(&p.collateral),
+            GAS_QUOTER_CB_BASE.as_gas() + n_transfers * Self::per_transfer_gas() + self.remote_extra_gas(&p),
         );
         let exec_gas = Gas::from_tgas(self.quoter.gas_tgas);
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
-        if left < self.quoter_leg_gas(n_transfers) + self.remote_extra_gas(&p.collateral) {
+        if left < self.quoter_leg_gas(n_transfers) + self.remote_extra_gas(&p) {
             return Err("attach more gas");
         }
 
@@ -317,9 +317,9 @@ impl Nectar {
         let cands = self.select_quotes(&p.collateral);
         let n = self.n_transfers(&cands);
         let downstream = if self.quoter_enabled() && self.vol_bps.get(&p.collateral).is_some() {
-            self.quoter_leg_gas(n) + self.remote_extra_gas(&p.collateral)
+            self.quoter_leg_gas(n) + self.remote_extra_gas(&p)
         } else {
-            n * Self::per_transfer_gas() + self.remote_extra_gas(&p.collateral)
+            n * Self::per_transfer_gas() + self.remote_extra_gas(&p)
         };
         let cb_min = GAS_PYTH_CB_BASE.as_gas() + downstream;
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());

@@ -1,5 +1,6 @@
 //! nectar-core v2 (`2.0.0-v7`): Pappus funded quotes + Cramér borrowing limit on NEAR.
-//! ABI: docs/work/interface-p0.md + interface-p1.md + interface-p2.md + interface-v7.md §A.
+//! ABI: docs/work/interface-p0.md + interface-p1.md + interface-p2.md + interface-v7.md §A + §B (remote lifecycle,
+//! src/remote.rs; NEAR-held collateral always settles on NEAR).
 //! Spec: docs/PRD.md §4, §6, §8 (D-009 parameters), §4.2/4.6/4.7/4.11/6.11 (v7 P0 delta, D-017/D-018).
 //! v2 is a fresh deploy with `new` (no migrate, PRD §6.11): the root layout is V2.
 //!
@@ -22,6 +23,8 @@ mod v7;
 mod p1;
 #[cfg(feature = "p2")]
 mod p2;
+#[cfg(feature = "p2")]
+mod remote;
 
 #[cfg(test)]
 mod tests;
@@ -476,7 +479,7 @@ impl Nectar {
         if referrer.as_ref() == Some(sender) {
             return Err(ERR_REFERRER_IS_BORROWER);
         }
-        let mut c = self.coll(&collateral).ok_or(ERR_NO_COLLATERAL)?;
+        let c = self.coll(&collateral).ok_or(ERR_NO_COLLATERAL)?;
         if c.ca_pending {
             return Err(ERR_CA_PENDING);
         }
@@ -489,36 +492,19 @@ impl Nectar {
         if borrow == 0 {
             return Err("borrow is zero");
         }
-        Self::validate_string(&remote_path)?;
+        if remote_path.is_some() {
+            // v2 (WO-21): NEAR-held collateral always settles on NEAR; remote collateral starts at reserve_remote_position.
+            return Err("remote_path removed in v2: use reserve_remote_position");
+        }
         Self::validate_string(&pay_to.as_ref().and_then(|p| p.memo.clone()))?;
         let referrer = referrer.filter(|r| self.referrers.contains(r)); // unregistered -> treasury
         let t = self.check_borrow(&c, units, borrow, Some(pre_liq_ltv_bps), referrer.is_some())?;
-        let available = math::sub(self.available_usd_e6, borrow)?;
-        let utilised = math::add(self.utilised_usd_e6, borrow)?;
-        let treasury = math::add(
-            math::add(self.treasury_usd_e6, t.split.treasury_usd_e6)?,
-            math::sub(t.origination, t.referrer_share)?,
-        )?;
-        let lenders = math::add(self.lenders_fees_usd_e6, t.split.lenders_usd_e6)?;
-        let acc = math::add(c.acc_fee_per_dollar_e18.0, t.split.acc_increment_e18)?;
-        let total_debt = math::add(c.total_debt_usd_e6.0, borrow)?;
-        let ref_claim = match &referrer {
-            Some(r) if t.referrer_share > 0 => Some(math::add(self.claimable(r), t.referrer_share)?),
-            _ => None,
-        };
         let id = self.next_position_id;
         let next = id.checked_add(1).ok_or(math::ERR_OVERFLOW)?;
-        // effects
-        self.available_usd_e6 = available;
-        self.utilised_usd_e6 = utilised;
-        self.treasury_usd_e6 = treasury;
-        self.lenders_fees_usd_e6 = lenders;
-        self.next_position_id = next;
-        c.acc_fee_per_dollar_e18 = U128(acc);
-        c.total_debt_usd_e6 = U128(total_debt);
         let entry_m = c.multiplier_e18;
-        let usdc = self.usdc_token.clone();
-        self.put_coll(c);
+        // effects (book_borrow: all arithmetic before its first write)
+        self.book_borrow(c, &t, borrow, &referrer)?;
+        self.next_position_id = next;
         self.put_position(Position {
             position_id: U64(id),
             borrower: sender.clone(),
@@ -528,40 +514,101 @@ impl Nectar {
             premium_usd_e6: U128(t.premium),
             pre_liq_ltv_bps,
             opened_ns: U64(env::block_timestamp()),
-            remote_path,
+            remote_path: None,
             nonce: U64(id),
             status: PositionStatus::Open,
             entry_multiplier_e18: entry_m,
+            remote: None,
         });
+        self.emit_opened(id, sender, &collateral, units, borrow, &t, pay_to.as_ref(), &referrer, false);
+        // interaction
+        self.pay_proceeds(id, sender, t.net, pay_to);
+        Ok(0)
+    }
+
+    /// Pool, fee and aggregate-debt effects of an approved borrow (A1, A5), shared by LockCollateralAndBorrow
+    /// and remote confirmation. All arithmetic first; `Err` = nothing written.
+    pub(crate) fn book_borrow(
+        &mut self,
+        mut c: CollateralConfig,
+        t: &BorrowTerms,
+        borrow: u128,
+        referrer: &Option<AccountId>,
+    ) -> Result<(), &'static str> {
+        let available = math::sub(self.available_usd_e6, borrow)?;
+        let utilised = math::add(self.utilised_usd_e6, borrow)?;
+        let treasury = math::add(
+            math::add(self.treasury_usd_e6, t.split.treasury_usd_e6)?,
+            math::sub(t.origination, t.referrer_share)?,
+        )?;
+        let lenders = math::add(self.lenders_fees_usd_e6, t.split.lenders_usd_e6)?;
+        let acc = math::add(c.acc_fee_per_dollar_e18.0, t.split.acc_increment_e18)?;
+        let total_debt = math::add(c.total_debt_usd_e6.0, borrow)?;
+        let ref_claim = match referrer {
+            Some(r) if t.referrer_share > 0 => Some(math::add(self.claimable(r), t.referrer_share)?),
+            _ => None,
+        };
+        // effects
+        self.available_usd_e6 = available;
+        self.utilised_usd_e6 = utilised;
+        self.treasury_usd_e6 = treasury;
+        self.lenders_fees_usd_e6 = lenders;
+        c.acc_fee_per_dollar_e18 = U128(acc);
+        c.total_debt_usd_e6 = U128(total_debt);
+        self.put_coll(c);
+        if let (Some(r), Some(v)) = (referrer, ref_claim) {
+            self.claimable_usdc.insert(r.clone(), v);
+        }
+        Ok(())
+    }
+
+    /// `position_opened` (+ `referrer_paid` when a registered referrer earned a share).
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn emit_opened(
+        &self,
+        id: u64,
+        borrower: &AccountId,
+        collateral: &str,
+        units: u128,
+        borrow: u128,
+        t: &BorrowTerms,
+        pay_to: Option<&PayTo>,
+        referrer: &Option<AccountId>,
+        remote: bool,
+    ) {
         emit(
             "position_opened",
-            json!({ "position_id": U64(id), "borrower": sender, "collateral": collateral,
+            json!({ "position_id": U64(id), "borrower": borrower, "collateral": collateral,
                     "units": U128(units), "debt_usd_e6": U128(borrow), "premium_usd_e6": U128(t.premium),
                     "origination_fee_usd_e6": U128(t.origination), "net_proceeds_usd_e6": U128(t.net),
-                    "pay_to": pay_to.as_ref().map(|p| &p.receiver_id), "referrer": referrer }),
+                    "pay_to": pay_to.map(|p| &p.receiver_id), "referrer": referrer, "remote": remote }),
         );
-        if let (Some(r), Some(v)) = (&referrer, ref_claim) {
-            self.claimable_usdc.insert(r.clone(), v);
-            emit(
-                "referrer_paid",
-                json!({ "referrer": r, "position_id": U64(id), "amount_usd_e6": U128(t.referrer_share) }),
-            );
-        }
-        // interaction
-        if t.net > 0 {
-            match pay_to {
-                Some(p) => Self::transfer_memo(
-                    &usdc,
-                    &p.receiver_id,
-                    t.net,
-                    p.memo.as_deref(),
-                    Payout::PayTo { position_id: U64(id), borrower: sender.clone() },
-                )
-                .detach(),
-                None => Self::transfer(&usdc, sender, t.net, Payout::BorrowProceeds { position_id: U64(id) }).detach(),
+        if let Some(r) = referrer {
+            if t.referrer_share > 0 {
+                emit(
+                    "referrer_paid",
+                    json!({ "referrer": r, "position_id": U64(id), "amount_usd_e6": U128(t.referrer_share) }),
+                );
             }
         }
-        Ok(0)
+    }
+
+    /// Net proceeds to the borrower, or to `pay_to.receiver_id` with its memo (A4).
+    pub(crate) fn pay_proceeds(&self, id: u64, borrower: &AccountId, net: u128, pay_to: Option<PayTo>) {
+        if net == 0 {
+            return;
+        }
+        match pay_to {
+            Some(p) => Self::transfer_memo(
+                &self.usdc_token,
+                &p.receiver_id,
+                net,
+                p.memo.as_deref(),
+                Payout::PayTo { position_id: U64(id), borrower: borrower.clone() },
+            )
+            .detach(),
+            None => Self::transfer(&self.usdc_token, borrower, net, Payout::BorrowProceeds { position_id: U64(id) }).detach(),
+        }
     }
 
     pub(crate) fn claimable(&self, a: &AccountId) -> u128 {
@@ -632,7 +679,8 @@ impl Nectar {
             "repaid",
             json!({ "position_id": U64(position_id), "amount_usd_e6": U128(applied), "remaining_debt_usd_e6": U128(debt) }),
         );
-        let release = if debt == 0 { self.close_position(&mut p) } else { 0 };
+        // Remote collateral stays in the vault until `request_remote_release` (the position stays Open, debt 0).
+        let release = if debt == 0 && p.remote.is_none() { self.close_position(&mut p) } else { 0 };
         let borrower = p.borrower.clone();
         self.put_position(p);
         if release > 0 {
@@ -673,6 +721,8 @@ impl Nectar {
 
     /// Settlement legs at the given `(disc_bps, quote_id)` list (already ordered, <= 8).
     /// Checks first, then effects, then interactions; on `Err` nothing has been written.
+    /// v2 (WO-21): NEAR-held collateral always settles on NEAR (every leg is an `ft_transfer`); a remote
+    /// position settles through one signed `NECTAR_SETTLE_V1|..|kind=PRELIQ` leg (`settle_remote`).
     pub(crate) fn settle(
         &mut self,
         position_id: U64,
@@ -681,6 +731,9 @@ impl Nectar {
         cands: &[(u16, u64)],
         keeper: &AccountId,
     ) -> Result<(), &'static str> {
+        if p.remote.is_some() {
+            return self.settle_remote(position_id, p, c, cands);
+        }
         let price = c.oracle_price_usd_e6.0;
         let m = Self::eff_multiplier(&c);
         let acc = c.acc_fee_per_dollar_e18.0;
@@ -690,10 +743,7 @@ impl Nectar {
         let mut total_repay: u128 = 0;
         let mut keeper_units: u128 = 0;
         let mut buyer_transfers: Vec<(AccountId, u128, u64)> = Vec::new();
-        let mut legs: Vec<(Quote, u16, u128, u128, bool)> = Vec::new();
-        // P2: at most one remote (Solana) leg per call; None without feature p2 or remote_chain/signer.
-        let remote_ctx = self.remote_ctx(position_id.0, &c);
-        let mut remote: Option<RemoteLeg> = None;
+        let mut legs: Vec<(Quote, u16, u128, u128)> = Vec::new();
         for &(disc, qid) in cands.iter().take(MAX_QUOTES_PER_SETTLEMENT) {
             if debt == 0 || units == 0 {
                 break;
@@ -701,13 +751,6 @@ impl Nectar {
             let Some(mut q) = self.quote(qid) else { continue };
             if q.remaining_usd_e6.0 == 0 || q.collateral != p.collateral {
                 continue;
-            }
-            let recipient = match (&remote_ctx, &q.buyer_remote_recipient) {
-                (Some(_), Some(r)) if chainsig::valid_base58_address(r) => Some(r.clone()),
-                _ => None,
-            };
-            if recipient.is_some() && remote.is_some() {
-                continue; // one remote leg per settlement call; the keeper re-triggers after the relay
             }
             let Some(leg) =
                 math::settle_leg_m(debt, q.remaining_usd_e6.0, units, m, price, c.decimals, disc, self.keeper_fee_bps)?
@@ -723,35 +766,21 @@ impl Nectar {
             debt = math::sub(debt, leg.repay_usd_e6)?;
             units = math::sub(units, math::add(leg.buyer_units, leg.keeper_units)?)?;
             total_repay = math::add(total_repay, leg.repay_usd_e6)?;
-            let is_remote = recipient.is_some();
-            if let Some(r) = recipient {
-                // Collateral for this leg is released on Solana, not ft_transferred here; the keeper's
-                // share and the pool credit wait for the MPC signature (`on_signature`).
-                remote = Some(RemoteLeg {
-                    quote_id: qid,
-                    repay_usd_e6: leg.repay_usd_e6,
-                    buyer_units: leg.buyer_units,
-                    keeper_units: leg.keeper_units,
-                    recipient: r,
-                });
-            } else {
-                keeper_units = math::add(keeper_units, leg.keeper_units)?;
-                // One ft_transfer per distinct buyer (bounds receipts to <= 8 + keeper + borrower).
-                match buyer_transfers.iter_mut().find(|(b, _, _)| *b == q.buyer) {
-                    Some(entry) => entry.1 = math::add(entry.1, leg.buyer_units)?,
-                    None => buyer_transfers.push((q.buyer.clone(), leg.buyer_units, qid)),
-                }
+            keeper_units = math::add(keeper_units, leg.keeper_units)?;
+            // One ft_transfer per distinct buyer (bounds receipts to <= 8 + keeper + borrower).
+            match buyer_transfers.iter_mut().find(|(b, _, _)| *b == q.buyer) {
+                Some(entry) => entry.1 = math::add(entry.1, leg.buyer_units)?,
+                None => buyer_transfers.push((q.buyer.clone(), leg.buyer_units, qid)),
             }
-            legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units, is_remote));
+            legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units));
         }
         if total_repay == 0 {
             return Err("no quote capacity");
         }
-        let pool_repay = math::sub(total_repay, remote.as_ref().map_or(0, |r| r.repay_usd_e6))?;
-        // A1: all debt repaid by this call leaves the aggregate (the remote leg's too; `rollback_leg` re-adds it).
+        // A1: all debt repaid by this call leaves the aggregate.
         let total_debt = math::sub(c.total_debt_usd_e6.0, total_repay)?;
-        let utilised = math::sub(self.utilised_usd_e6, pool_repay)?;
-        let available = math::add(self.available_usd_e6, pool_repay)?;
+        let utilised = math::sub(self.utilised_usd_e6, total_repay)?;
+        let available = math::add(self.available_usd_e6, total_repay)?;
         p.debt_usd_e6 = U128(debt);
         p.units = U128(units);
         let release = if debt == 0 {
@@ -761,28 +790,15 @@ impl Nectar {
             0
         };
         let n_local = buyer_transfers.len() as u64 + u64::from(keeper_units > 0) + u64::from(release > 0);
-        // sign (1 yocto) + the remote leg's keeper transfer (scheduled by on_signature)
-        let n_remote = remote.as_ref().map_or(0, |r| 1 + u64::from(r.keeper_units > 0));
-        let reserve =
-            math::sub(self.gas_reserve_yocto, u128::from(n_local + n_remote)).map_err(|_| "gas reserve empty")?;
-        if remote.is_some() {
-            p.status = PositionStatus::Settling; // until relay_settlement_result (or sign failure)
-            self.check_remote_gas(&remote_ctx, n_local)?;
-        }
+        let reserve = math::sub(self.gas_reserve_yocto, u128::from(n_local)).map_err(|_| "gas reserve empty")?;
 
         // effects
-        let sign_call = match (remote, &remote_ctx) {
-            (Some(r), Some((rc, s))) => Some(self.record_remote_leg(&mut p, rc, s, r)?),
-            _ => None,
-        };
-        for (q, disc, repay, seize, is_remote) in legs {
-            if !is_remote {
-                emit(
-                    "settled_near",
-                    json!({ "position_id": position_id, "quote_id": q.quote_id, "disc_bps": disc,
-                            "repay_usd_e6": U128(repay), "seize_units": U128(seize), "buyer": q.buyer }),
-                );
-            }
+        for (q, disc, repay, seize) in legs {
+            emit(
+                "settled_near",
+                json!({ "position_id": position_id, "quote_id": q.quote_id, "disc_bps": disc,
+                        "repay_usd_e6": U128(repay), "seize_units": U128(seize), "buyer": q.buyer }),
+            );
             if q.remaining_usd_e6.0 == 0 {
                 self.remove_live(&p.collateral, q.quote_id.0);
             }
@@ -809,40 +825,20 @@ impl Nectar {
         if release > 0 {
             Self::transfer(&token, &borrower, release, Payout::CollateralRelease { position_id }).detach();
         }
-        if let Some(call) = sign_call {
-            Self::schedule_sign(call);
-        }
         Ok(())
     }
 
-    // ---- P2 hooks: no-ops without feature `p2` (src/p2.rs implements them).
+    // ---- P2 hooks: remote positions need feature `p2` (src/remote.rs implements them).
     #[cfg(not(feature = "p2"))]
-    fn remote_ctx(&self, _position_id: u64, _c: &CollateralConfig) -> Option<(RemoteChain, SignerConfig)> {
-        None
-    }
-    #[cfg(not(feature = "p2"))]
-    fn check_remote_gas(&self, _ctx: &Option<(RemoteChain, SignerConfig)>, _n_local: u64) -> Result<(), &'static str> {
-        Ok(())
-    }
-    #[cfg(not(feature = "p2"))]
-    fn record_remote_leg(
-        &mut self,
-        _p: &mut Position,
-        _rc: &RemoteChain,
-        _s: &SignerConfig,
-        _r: RemoteLeg,
-    ) -> Result<(), &'static str> {
+    fn settle_remote(&mut self, _id: U64, _p: Position, _c: CollateralConfig, _cands: &[(u16, u64)]) -> Result<(), &'static str> {
         Err("p2 disabled")
     }
-    #[cfg(not(feature = "p2"))]
-    fn schedule_sign(_call: ()) {}
-    /// Extra gas a settlement of this collateral needs downstream for the sign leg (0 without p2).
+    /// Extra gas a settlement of this position needs downstream for the sign leg (0 without p2).
     #[cfg(not(feature = "p2"))]
     #[allow(dead_code)]
-    pub(crate) fn remote_extra_gas(&self, _symbol: &str) -> u64 {
+    pub(crate) fn remote_extra_gas(&self, _p: &Position) -> u64 {
         0
     }
-
     fn owed_key(account: &AccountId, symbol: &str) -> String {
         format!("{account}|{symbol}")
     }
@@ -1242,6 +1238,9 @@ impl Nectar {
         require!(env::predecessor_account_id() == self.keeper, ERR_KEEPER);
         let p = self.position_or_panic(position_id.0);
         require!(p.status == PositionStatus::Open, "position not open");
+        if let Some(r) = &p.remote {
+            require!(r.status == RemoteStatus::Open, "remote position not open");
+        }
         let c = self.coll_or_panic(&p.collateral);
         // WO-10b: Pyth source -> freshness, conf, band and health are checked in `on_pyth_price`.
         #[cfg(feature = "p1")]
@@ -1292,7 +1291,8 @@ impl Nectar {
                     "repaid",
                     json!({ "position_id": position_id, "amount_usd_e6": U128(applied), "remaining_debt_usd_e6": p.debt_usd_e6 }),
                 );
-                if p.debt_usd_e6.0 == 0 && p.status == PositionStatus::Open {
+                // Remote: the units sit in the vault; the borrower releases them with request_remote_release.
+                if p.debt_usd_e6.0 == 0 && p.status == PositionStatus::Open && p.remote.is_none() {
                     let units = self.close_position(&mut p);
                     self.record_owed(&p.borrower, &p.collateral, units);
                 }

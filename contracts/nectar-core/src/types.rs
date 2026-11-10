@@ -160,6 +160,105 @@ pub struct Position {
     pub status: PositionStatus,
     /// v2 (A3): multiplier at open, display only (limits use the current M).
     pub entry_multiplier_e18: U128,
+    /// v2 (§B): collateral held in a remote vault (Solana); None = NEAR-held (settles on NEAR only).
+    pub remote: Option<RemoteInfo>,
+}
+
+/// v2 (§B, PRD §9B) remote lifecycle: AwaitingDeposit -> Open -> (Settling | Releasing) -> Closed; AwaitingDeposit -> Expired.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum RemoteStatus {
+    AwaitingDeposit,
+    Open,
+    Settling,
+    Releasing,
+    Closed,
+    Expired,
+}
+
+/// Remote collateral record of one position. Chain, vault, domain and path are pinned at reserve time.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RemoteInfo {
+    pub chain_id: String,
+    pub vault_program: String,
+    pub domain_id: u32,
+    /// `<chain_id>/pos/<position_id>` (MPC derivation path).
+    pub path: String,
+    /// `ed25519:<base58>` (domain 1) or `0x<40 hex>` (domain 0), from `derived_public_key` (F-338, F-339).
+    pub authority: Option<String>,
+    pub status: RemoteStatus,
+    pub reserved_units: U128,
+    /// Units in the vault: the reserved units until a deposit is proven, then the proven units.
+    pub units: U128,
+    pub borrow_usd_e6: U128,
+    /// Net proceeds paid at confirmation (0 until the loan is paid).
+    pub paid_usd_e6: U128,
+    /// Reservation time (block ns).
+    pub reserved_ns: U64,
+    pub pay_to: Option<PayTo>,
+    pub referrer: Option<AccountId>,
+    /// Reservation deadline (block ns).
+    pub expires_ns: U64,
+    /// Vault depositor (Solana base58) once a deposit is proven.
+    pub depositor: Option<String>,
+    /// "outlayer" | "keeper"
+    pub source: Option<String>,
+    /// OutLayer `slot_or_block` or the keeper's `tx_ref`.
+    pub deposit_ref: Option<String>,
+    /// An OutLayer `vault_read` is in flight.
+    pub confirming: bool,
+    pub last_confirm_ns: U64,
+}
+
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ReleaseStatus {
+    AwaitingSignature,
+    Signed,
+    SignFailed,
+    Relayed,
+}
+
+/// `NECTAR_RELEASE_V1` signed for one remote position (interface-v7 §B).
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PendingRelease {
+    pub position_id: U64,
+    pub message: String,
+    pub signature_hex: Option<String>,
+    pub nonce: U64,
+    /// unix seconds
+    pub expires: U64,
+    pub recipient: String,
+    pub status: ReleaseStatus,
+    pub solana_tx_sig: Option<String>,
+}
+
+#[near(serializers = [borsh])]
+pub enum VRelease {
+    V1(PendingRelease),
+}
+
+/// OutLayer `vault_read` job (WO-24) pin. Stored under its own raw key.
+#[near(serializers = [borsh])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct VaultReadConfig {
+    pub project_id: String,
+    pub version_key: String,
+    pub deposit_yocto: u128,
+    pub gas_tgas: u64,
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RemoteConfigView {
+    pub allow_keeper_deposit_attestation: bool,
+    pub vault_read_project_id: Option<String>,
+    pub vault_read_version_key: Option<String>,
+    pub vault_read_deposit_yocto: Option<U128>,
+    pub vault_read_gas_tgas: Option<u64>,
+    pub reservation_expiry_s: u64,
 }
 
 #[near(serializers = [borsh])]
@@ -168,7 +267,7 @@ pub enum VPosition {
 }
 
 /// v2 (A4): where net borrow proceeds go instead of the borrower.
-#[near(serializers = [json])]
+#[near(serializers = [borsh, json])]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct PayTo {
     pub receiver_id: AccountId,
@@ -443,6 +542,8 @@ pub struct VaultAuthorityHint {
     pub predecessor: AccountId,
     pub path: String,
     pub domain_id: u32,
+    /// What `on_authority` stored (None until the signer answered).
+    pub authority: Option<String>,
 }
 
 /// A remote leg chosen inside `settle` (not stored as such).
