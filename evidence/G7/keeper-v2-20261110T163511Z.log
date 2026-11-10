@@ -1,0 +1,7 @@
+{"ts":"2026-11-10T16:35:16.216Z","level":"info","service":"keeper","msg":"solana_relay_enabled","fee_payer":"82hq1LTc9cuYsdkKxYQVQ6p4qxvYM9hdrQ6V8zW7HVa7"}
+{"ts":"2026-11-10T16:35:16.218Z","level":"info","service":"keeper","msg":"keeper_started","core":"nectar-core-v2.nectar.testnet","keeper":"keeper-v2.nectar.testnet","poll_ms":10000,"health_port":8790}
+{"ts":"2026-11-10T16:38:02.855Z","level":"info","service":"keeper","msg":"remote_deposit_confirm_requested","position_id":"2","tx_hash":"8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3"}
+{"ts":"2026-11-10T16:39:01.040Z","level":"info","service":"keeper","msg":"solana_tx_sending","op":"release","position_id":"2","solana_tx_sig":"5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv"}
+{"ts":"2026-11-10T16:39:03.704Z","level":"info","service":"keeper","msg":"solana_tx_confirmed","op":"release","position_id":"2","solana_tx_sig":"5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv"}
+{"ts":"2026-11-10T16:39:12.273Z","level":"info","service":"keeper","msg":"solana_leg_relayed","op":"release","position_id":"2","method":"relay_release_result","tx_hash":"7biCvPbApT6RU7hoxUcKGeMxNX2aG6PWEv79KzPxsz2e","solana_tx_sig":"5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv"}
+{"ts":"2026-11-10T16:40:00.677Z","level":"info","service":"keeper","msg":"remote_deposit_confirm_requested","position_id":"3","tx_hash":"8hNqxAdC61nAwmTWeUbK5auA4CbB35ppkPcnNX7PYe5C"}

@@ -76,8 +76,8 @@ limits:
   gas_reserve_target_near: 5
 # ---- v7 (D-017/D-018). Flags are flipped by the orchestrator only when the module's gate passes (addendum §10). ----
 v7:
-  core_v2: nectar-core-v2.nectar.testnet # TODO-G2b (not created yet; needs H-NEAR-FAUCET)
-  keeper_v2: keeper-v2.nectar.testnet # TODO-G2b (D-019)
+  core_v2: nectar-core-v2.nectar.testnet # deployed 2026-11-10 (1c4cdb3)
+  keeper_v2: keeper-v2.nectar.testnet # deployed 2026-11-10 (D-019)
   x402_relayer: x402-relayer.nectar.testnet # TODO-G14
   agent1: agent1.nectar.testnet # TODO-G14
   origination_fee_bps: 30

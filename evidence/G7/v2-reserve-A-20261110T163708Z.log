@@ -1,0 +1,91 @@
+scripts/58-g7-v2.sh: line 18: 21299 Abort trap: 6           spl-token --version > /dev/null 2>&1
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  update_owner_price
+│                       args:         {
+│                                       "price_usd_e6": "180000000",
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:2NRJpQXKAGSAeopWoTka5UaSKALEom2DXZsYN97C7ytek9kUjUnFNwVVe4AmJPF89Hbi73MtJN3VdLCteY59pN3
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.0 Tgas
+│    Transaction fee: 0.0002701501574404 NEAR
+│    Transaction ID: J4MeXaKRHx6o2KrpRcCMazHZqfMZxHcbVzuA8xdQBZWD
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/J4MeXaKRHx6o2KrpRcCMazHZqfMZxHcbVzuA8xdQBZWD
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"180000000"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+
+Function execution return value (printed to stdout):
+
+
+The "update_owner_price" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet update_owner_price json-args '{"symbol":"NVDAx","price_usd_e6":"180000000"}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+b_c=378000000 borrow=370440000
+├  Unsigned transaction:
+│    signer_id:    borrower1.nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  reserve_remote_position
+│                       args:         {
+│                                       "borrow_usd_e6": "370440000",
+│                                       "collateral": "NVDAx",
+│                                       "pre_liq_ltv_bps": 7500,
+│                                       "units": "3000000"
+│                                     }
+│                       gas:          100.0 Tgas
+│                       deposit:      0.05 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:Dpn6xupWdsxoixqi5e1kgB8ge4Ze9h9aSiiG67ic2wjV
+│    Signature:  ed25519:2KywbP5Pq2ayB2b3Sc8beiWZwEYq1KZ48sFRgqqCW1QEfBcyJeWgVMQGnTdxxiWpaM7gvQkWcsWWZj4RCkRkVwcn
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 12.3 Tgas
+│    Transaction fee: 0.0011590560917517 NEAR
+│    Transaction ID: 3KhWcLQVd5ByqoVxY7pBSiUN2DJZXDV35HwrpUJ3pauu
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/3KhWcLQVd5ByqoVxY7pBSiUN2DJZXDV35HwrpUJ3pauu
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"remote_reserved","data":[{"position_id":"2","borrower":"borrower1.nectar.testnet","collateral":"NVDAx","chain":"solana-devnet","vault_program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW","path":"solana-devnet/pos/2","domain_id":1,"units":"3000000","borrow_usd_e6":"370440000","expires_ns":"1794330437017802505","deposit_yocto":"50000000000000000000000","shield":null}]}
+│    [36mLogs [v1.signer-prod.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"remote_authority_set","data":[{"position_id":"2","path":"solana-devnet/pos/2","domain_id":1,"authority":"ed25519:HRf3veyfWvAccxvAgkDvp9eCKTuCpfobLVMJ9TVstarz"}]}
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+
+Function execution return value (printed to stdout):
+
+
+The "reserve_remote_position" call to <nectar-core-v2.nectar.testnet> on behalf of <borrower1.nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet reserve_remote_position json-args '{"collateral":"NVDAx","units":"3000000","borrow_usd_e6":"370440000","pre_liq_ltv_bps":7500}' prepaid-gas '100.0 Tgas' attached-deposit '0.05 NEAR' sign-as borrower1.nectar.testnet network-config testnet sign-with-keychain send[39m
+

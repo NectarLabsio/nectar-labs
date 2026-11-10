@@ -1,0 +1,7 @@
+scripts/58-g7-v2.sh: line 18: 20961 Abort trap: 6           spl-token --version > /dev/null 2>&1
+depositor=Wrote new keypair to /Users/lemmalabs/.nectar/solana/borrower1-sol.json
+2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS recipient=Wrote new keypair to /Users/lemmalabs/.nectar/solana/buyer1-sol.json
+FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q
+error: Invalid value for '<ACCOUNT_ADDRESS>': unrecognized signer source
+scripts/58-g7-v2.sh: line 28: [: : integer expression expected
+error: Invalid value for '<RECIPIENT_ADDRESS>': unrecognized signer source

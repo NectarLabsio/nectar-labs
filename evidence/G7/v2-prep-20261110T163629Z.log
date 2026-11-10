@@ -1,0 +1,106 @@
+scripts/58-g7-v2.sh: line 18: 21073 Abort trap: 6           spl-token --version > /dev/null 2>&1
+depositor=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS recipient=FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q
+
+Signature: 8eCPs2QbRxbKq9jcYatM6LNhXmJJxJYCEEtmQmbGZBeNgDkKo1onXiYp5XmomoYrkKRpkDthFecNt7yFynAei4Q
+
+Creating account CxUSzmUNUFU6bPPPE45ko1VVM9aKihqeMNodv5ne5hpG
+
+Signature: KwL3jxSXxw2C8pdLd8Bd8NgfEga27DSBhhqp8ETgTsbX9669tqK5vNsvpmz6VsRgaPP8m2czuqMUTKN6B22Gwwt
+
+Minting 10 tokens
+  Mint: 3Ve8GiDBtD7crfwUcKukpMigKQaU2aXtSCNgu661E8hT
+  Recipient: CxUSzmUNUFU6bPPPE45ko1VVM9aKihqeMNodv5ne5hpG
+
+Signature: 3RZQxE3gzDA95fqYB3Dik42RffNeUnNQMWxkJd41QU6JgKU8qaKug8X4KR3hAgggzXuSE8L1i7UD9YZV4d2tNocC
+
+10
+
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  usdc-mock.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  mint
+│                       args:         {
+│                                       "account_id": "buyer1.nectar.testnet",
+│                                       "amount": "1000000000"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:3cjif6oVtja9utuatgL6gzkrfKZkKjKPiJ8ocMHdvoE2NbEG6dzqmfgWbknMouE71R1GKGqvNh87LzKXumwJihhd
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.1 Tgas
+│    Transaction fee: 0.000182724475858 NEAR
+│    Transaction ID: GB6UFYX8A3ThrZWZhx87is43V52LrBC7w8G9DVJ9LgAK
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/GB6UFYX8A3ThrZWZhx87is43V52LrBC7w8G9DVJ9LgAK
+│     [0m
+├  Function execution logs:
+│    [36mLogs [usdc-mock.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "mint" call to <usdc-mock.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction usdc-mock.nectar.testnet mint json-args '{"account_id":"buyer1.nectar.testnet","amount":"1000000000"}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+├  Unsigned transaction:
+│    signer_id:    buyer1.nectar.testnet
+│    receiver_id:  usdc-mock.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  ft_transfer_call
+│                       args:         {
+│                                       "amount": "1000000000",
+│                                       "msg": "{\"FundPappusQuote\":{\"collateral\":\"NVDAx\",\"max_discount_bps\":300,\"notice_period_ns\":\"604800000000000\",\"buyer_remote_recipient\":\"FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q\"}}",
+│                                       "receiver_id": "nectar-core-v2.nectar.testnet"
+│                                     }
+│                       gas:          300.0 Tgas
+│                       deposit:      1 yoctoNEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:GjbbEoCnqiMSNhWdZqzv3uTonPKjY4Pn3f8ABJW748ex
+│    Signature:  ed25519:1wtxrKXR9gGzP5H59aMHFq65FXCDEfMnnpaVfM6m9vdJCff72JVvLaTQzwDUJUgZ2FiakpwJR7kh4SAU14nCQ4v
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.7 Tgas
+│    Transaction fee: 0.0007943708603568 NEAR
+│    Transaction ID: 8Pf5B7US3uk4HxcswqCtwvepB5Wn8wu5x4UzrC2JwTKF
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/8Pf5B7US3uk4HxcswqCtwvepB5Wn8wu5x4UzrC2JwTKF
+│     [0m
+├  Function execution logs:
+│    [36mLogs [usdc-mock.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"quote_funded","data":[{"quote_id":"2","buyer":"buyer1.nectar.testnet","collateral":"NVDAx","amount_usd_e6":"1000000000","max_discount_bps":300,"accepts_voluntary_fills":false}]}
+│      EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"buyer1.nectar.testnet","token_ids":["q-2"]}]}
+│    [36mLogs [buyer1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [usdc-mock.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [buyer1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [buyer1.nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+
+Function execution return value (printed to stdout):
+"1000000000"
+
+
+The "ft_transfer_call" call to <usdc-mock.nectar.testnet> on behalf of <buyer1.nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction usdc-mock.nectar.testnet ft_transfer_call json-args '{"receiver_id":"nectar-core-v2.nectar.testnet","amount":"1000000000","msg":"{\"FundPappusQuote\":{\"collateral\":\"NVDAx\",\"max_discount_bps\":300,\"notice_period_ns\":\"604800000000000\",\"buyer_remote_recipient\":\"FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q\"}}"}' prepaid-gas '300.0 Tgas' attached-deposit '1 yoctoNEAR' sign-as buyer1.nectar.testnet network-config testnet sign-with-keychain send[39m
+
