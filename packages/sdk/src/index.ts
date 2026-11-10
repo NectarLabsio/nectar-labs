@@ -8,3 +8,5 @@ export * from "./views";
 export * from "./config";
 export * from "./feed";
 export * from "./v7";
+export * from "./remote";
+export * from "./solana";

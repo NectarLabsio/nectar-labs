@@ -17,6 +17,7 @@ import type {
   U128,
   U64,
 } from "./types";
+import type { PendingRelease } from "./solana";
 
 /** interface-v7 §A6: v2 answers `contract_version()` with a "2." prefix ("2.0.0-v7"). Anything else (v1: "nectar-core 0.1.0 p2") is v1. */
 export function contractGeneration(version: string | null | undefined): ContractGeneration {
@@ -85,6 +86,8 @@ export class NectarViews {
   generation = async (): Promise<ContractGeneration> => contractGeneration(await this.contractVersion());
   // v2 views (interface-v7 §A4–A6): reject with RpcError (MethodNotFound) on v1.
   getClaimable = (account_id: string) => this.v<U128>("get_claimable", { account_id });
+  /** interface-v7 §B: the signed NECTAR_RELEASE_V1 for a Releasing remote position, or null. */
+  getPendingRelease = (position_id: U64) => this.v<PendingRelease | null>("get_pending_release", { position_id });
   isReferrer = (account_id: string) => this.v<boolean>("is_referrer", { account_id });
   getSessionCalendar = (from_index = 0, limit = 100) => this.v<SessionWindow[]>("get_session_calendar", { from_index, limit });
   // P1 views: reject with RpcError on the P0 deployment (method not found); callers render "P0 static pricing" / "owner oracle".

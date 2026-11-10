@@ -79,7 +79,9 @@ export interface PublicConfig {
   /** `features:` (all false until each module's gate passes). A v7 control also needs a v2 contract (featureOn). */
   features: Features;
   /** v7 parameters the UI shows before the contract answers (the contract stays authoritative). */
-  v7: { origination_fee_bps: number; session_stale_s: number };
+  v7: { origination_fee_bps: number; session_stale_s: number; reservation_expiry_s: number; remote_path_prefix: string };
+  /** Solana devnet vault (config `solana.vault_program` / `solana.program_id`, `solana.mint`); null while TODO-G7. */
+  solana: { cluster: "devnet"; vaultProgram: string | null; mint: string | null; decimals: number };
 }
 
 export function parseConfig(text: string): NectarConfigYaml {
@@ -130,6 +132,25 @@ export function toPublicConfig(c: NectarConfigYaml): PublicConfig {
     v7: {
       origination_fee_bps: typeof c.v7?.origination_fee_bps === "number" ? c.v7.origination_fee_bps : DEFAULT_ORIGINATION_FEE_BPS,
       session_stale_s: typeof c.v7?.session_stale_s === "number" ? c.v7.session_stale_s : DEFAULT_SESSION_STALE_S,
+      reservation_expiry_s: typeof c.v7?.reservation_expiry_s === "number" ? c.v7.reservation_expiry_s : 1800,
+      remote_path_prefix: remotePrefix(c.v7?.remote_path_prefix),
     },
+    solana: solanaConfig(c.solana),
+  };
+}
+
+function remotePrefix(raw: unknown): string {
+  const p = raw && typeof raw === "object" ? (raw as Record<string, unknown>).solana : undefined;
+  return typeof p === "string" && p ? p : "solana-devnet/pos/";
+}
+
+/** `solana:` block. `vault_program` (interface-v7 §B, deploy.md step 5) wins over the older `program_id` key. */
+function solanaConfig(raw: unknown): PublicConfig["solana"] {
+  const s = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
+  return {
+    cluster: "devnet",
+    vaultProgram: orNull(s.vault_program) ?? orNull(s.program_id),
+    mint: orNull(s.mint),
+    decimals: typeof s.mint_decimals === "number" ? s.mint_decimals : 6,
   };
 }
