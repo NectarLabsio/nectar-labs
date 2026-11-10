@@ -1,19 +1,19 @@
-// Read-only integration against the deployed testnet contract. Skipped unless NECTAR_IT=1 and the ids
-// are filled (they are TODO-G2 until WO-6 deploys). Never sends a transaction.
-//   NECTAR_IT=1 CORE_ACCOUNT_ID=<core> [NEAR_RPC_URL=...] pnpm --filter keeper test
+// Read-only integration against the deployed testnet contract. Skipped unless NECTAR_IT=1. Core id:
+// CORE_ACCOUNT_ID, else accounts.core in packages/config/config.yaml. Never sends a transaction.
+//   NECTAR_IT=1 [CORE_ACCOUNT_ID=<core>] [NEAR_RPC_URL=...] pnpm --filter keeper test
 
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { isHealthView, isPositionView, positionIdOf } from '../src/abi.ts';
 import { NearCoreReader } from '../src/chain.ts';
-import { isPlaceholder } from '../src/config.ts';
 import { isPreLiqBreached } from '../src/health.ts';
+import { loadRepoIds } from '../src/repo-config.ts';
 
-const core = process.env.CORE_ACCOUNT_ID;
-const enabled = process.env.NECTAR_IT === '1' && !isPlaceholder(core);
+const core = loadRepoIds().core;
+const enabled = process.env.NECTAR_IT === '1' && core !== null;
 const rpc = process.env.NEAR_RPC_URL || 'https://rpc.testnet.near.org';
 
-describe('testnet integration (read-only)', { skip: enabled ? false : 'set NECTAR_IT=1 and CORE_ACCOUNT_ID (TODO-G2)' }, () => {
+describe('testnet integration (read-only)', { skip: enabled ? false : 'set NECTAR_IT=1' }, () => {
   const reader = new NearCoreReader(rpc, core as string);
 
   it('contract_version answers', async () => {

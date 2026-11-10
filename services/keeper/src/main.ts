@@ -1,5 +1,5 @@
 // Keeper entrypoint: `pnpm --filter keeper start`. Reads ids + KEEPER_KEY_PATH from the environment;
-// refuses to start (exit 2) while ids are TODO-G2, the key file is missing / too open, or the key is
+// refuses to start (exit 2) while ids are unset (env and config.yaml), the key file is missing / too open, or the key is
 // a FullAccess key on chain (startup.ts; D-012 deletion stays the primary control).
 
 import { NearCoreReader, NearKeeperWriter } from './chain.ts';

@@ -1,8 +1,10 @@
 // Environment → config. `.env` holds ids and key PATHS only (CLAUDE.md §1); key material is never read
-// from the environment. Ids still set to `TODO-G2` are treated as unset.
+// from the environment. Account ids default to packages/config/config.yaml (accounts.core, accounts.keeper);
+// env overrides; `TODO-*` values are treated as unset. KEEPER_KEY_PATH has no default (no default key).
 
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
+import { loadRepoIds } from './repo-config.ts';
 
 export interface KeeperConfig {
   rpcUrl: string;
@@ -38,12 +40,17 @@ function int(env: NodeJS.ProcessEnv, key: string, dflt: number, min: number, max
 export class ConfigError extends Error {}
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): KeeperConfig {
-  const missing = ['CORE_ACCOUNT_ID', 'KEEPER_ACCOUNT_ID', 'KEEPER_KEY_PATH'].filter((k) => isPlaceholder(env[k]));
-  if (missing.length > 0) throw new ConfigError(`unset (TODO-G2?): ${missing.join(', ')}`);
+  const ids = loadRepoIds(env);
+  const missing = [
+    ...(ids.core === null ? ['CORE_ACCOUNT_ID'] : []),
+    ...(ids.keeper === null ? ['KEEPER_ACCOUNT_ID'] : []),
+    ...(isPlaceholder(env.KEEPER_KEY_PATH) ? ['KEEPER_KEY_PATH'] : []),
+  ];
+  if (missing.length > 0) throw new ConfigError(`unset: ${missing.join(', ')}`);
   return {
     rpcUrl: env.NEAR_RPC_URL && env.NEAR_RPC_URL !== '' ? env.NEAR_RPC_URL : 'https://rpc.testnet.near.org',
-    coreAccountId: env.CORE_ACCOUNT_ID as string,
-    keeperAccountId: env.KEEPER_ACCOUNT_ID as string,
+    coreAccountId: ids.core as string,
+    keeperAccountId: ids.keeper as string,
     keyPath: expandHome(env.KEEPER_KEY_PATH as string),
     pollMs: int(env, 'KEEPER_POLL_MS', 10_000, 1_000, 3_600_000),
     pageSize: int(env, 'KEEPER_PAGE_SIZE', 50, 1, 500),

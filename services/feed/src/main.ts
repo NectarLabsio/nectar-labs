@@ -1,5 +1,5 @@
 // Feed entrypoint: `pnpm --filter feed start`. Serves REST from SQLite; polls views when
-// CORE_ACCOUNT_ID is set (TODO-G2 until deploy → API serves whatever the DB holds, polling off).
+// a nectar-core id is known: CORE_ACCOUNT_ID, else accounts.core in packages/config/config.yaml.
 // Events: Neardata block tail (FEED_INDEXER=neardata, default) or, as fallback (FEED_INDEXER=views),
 // KEEPER_DB_PATH + KEEPER_ACCOUNT_ID → NEP-297 logs of the keeper's own txs.
 
@@ -16,6 +16,7 @@ import { createMcpHttpServer } from './mcp.ts';
 import { OneClickClient, OneClickSampler, defaultSamplerConfig } from './oneclick.ts';
 import { NearTxOutcomeFetcher, NearViewReader } from './near.ts';
 import { HttpNeardataFetcher, NeardataSource } from './neardata.ts';
+import { loadRepoIds } from './repo-config.ts';
 import { TxStatusSource, ViewPollingSource, type Source } from './sources.ts';
 
 const env = process.env;
@@ -30,9 +31,10 @@ function main(): void {
   const host = unset(env.FEED_HOST) ? '127.0.0.1' : (env.FEED_HOST as string);
   const db = new FeedDb(home(unset(env.FEED_DB_PATH) ? '~/.nectar/feed.sqlite' : (env.FEED_DB_PATH as string)));
 
+  const ids = loadRepoIds(env);
   const sources: Source[] = [];
-  if (!unset(env.CORE_ACCOUNT_ID)) {
-    const core = env.CORE_ACCOUNT_ID as string;
+  if (ids.core !== null) {
+    const core = ids.core;
     sources.push(new ViewPollingSource(new NearViewReader(rpc, core), log));
     // FEED_INDEXER=neardata (default): events from Neardata blocks (F-122). FEED_INDEXER=views: fallback,
     // view polling only (+ keeper tx-status logs below).
@@ -44,14 +46,14 @@ function main(): void {
       if (start !== null && !Number.isSafeInteger(start)) throw new Error('FEED_NEARDATA_START_HEIGHT must be an integer');
       const fetcher = new HttpNeardataFetcher(unset(env.FEED_NEARDATA_URL) ? undefined : env.FEED_NEARDATA_URL, apiKey);
       sources.push(new NeardataSource(fetcher, { contractId: core, startHeight: start, maxBlocksPerPoll: Number(env.FEED_NEARDATA_MAX_BLOCKS ?? 100) }, log));
-    } else if (!unset(env.KEEPER_DB_PATH) && !unset(env.KEEPER_ACCOUNT_ID)) {
+    } else if (!unset(env.KEEPER_DB_PATH) && ids.keeper !== null) {
       const kdb = new DatabaseSync(home(env.KEEPER_DB_PATH as string), { readOnly: true });
       const hashes = (): string[] =>
         (kdb.prepare("SELECT tx_hash FROM keeper_runs WHERE tx_hash IS NOT NULL ORDER BY id DESC LIMIT 200").all() as Array<{ tx_hash: string }>).map((r) => r.tx_hash);
-      sources.push(new TxStatusSource(new NearTxOutcomeFetcher(rpc, env.KEEPER_ACCOUNT_ID as string, core), hashes, log));
+      sources.push(new TxStatusSource(new NearTxOutcomeFetcher(rpc, ids.keeper, core), hashes, log));
     }
   } else {
-    log.warn('polling_disabled', { reason: 'CORE_ACCOUNT_ID unset (TODO-G2)' });
+    log.warn('polling_disabled', { reason: 'no CORE_ACCOUNT_ID and no accounts.core in config.yaml' });
   }
 
   const server = createApi(db, { pollMs, source: sources.map((s) => s.kind).join('+') || 'none' });
@@ -60,7 +62,7 @@ function main(): void {
 
   // Feed MCP over Streamable HTTP (read-only). FEED_MCP_PORT=off disables it.
   const mcpPort = env.FEED_MCP_PORT ?? '8789';
-  const views = unset(env.CORE_ACCOUNT_ID) ? null : new NearViewReader(rpc, env.CORE_ACCOUNT_ID as string);
+  const views = ids.core === null ? null : new NearViewReader(rpc, ids.core);
   const mcp = mcpPort === 'off' ? null : createMcpHttpServer({ db, views });
   mcp?.listen(Number(mcpPort), host);
 
@@ -83,7 +85,7 @@ function main(): void {
   };
   process.once('SIGINT', stop);
   process.once('SIGTERM', stop);
-  log.info('feed_started', { port, mcp_port: mcpPort, oneclick, fixtures, sources: sources.map((s) => s.kind).join('+') || 'none', poll_ms: pollMs });
+  log.info('feed_started', { port, core: ids.core, nvdax: ids.nvdaxToken, mcp_port: mcpPort, oneclick, fixtures, sources: sources.map((s) => s.kind).join('+') || 'none', poll_ms: pollMs });
   if (sources.length > 0) {
     new Indexer(db, sources, log, pollMs).run(ac.signal).catch((e: unknown) => log.error('fatal', { error: errMsg(e) }));
   }
