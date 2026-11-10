@@ -87,7 +87,7 @@ What Claude Code does then: replaces `TODO-H9` in `apps/docs-site/docs/legal/*.m
 Default if silent: "Nectar Labs (unincorporated project)", `kunal@nectarnetwork.fun`, mailto form.
 
 ## H10 — team and second-project check               status: OPEN   needed by: SUBMISSION.md
-What Kunal does: reply `H10 team: <names/handles> | projects: <0 or 1 other>`.
+What Kunal does: reply `H10 team: <names/handles> | projects: <0 or 1 other> | lead: <name> | email: <address> | size: <1 or "2 - 4" …>` (SUBMISSION.md `leadName`, `email`, `size`).
 Default if silent: Kunal only; Q-015 noted as unconfirmed in SUBMISSION.md (blocks H1).
 
 ## H11 — demo video voice-over                         status: OPEN   needed by: Nov 14
@@ -104,11 +104,19 @@ What Kunal does: `git tag submission-rc && git remote add origin <url> && git pu
 What Claude Code does then: fills repo URL in SUBMISSION.md and X_POST.md; re-runs G9 against the public URL.
 
 ## H1 — send the submission                            status: OPEN   needed by: Nov 14 23:59 UTC   NEVER by an agent
-Pre-conditions: G9 PASS, H2 done, H10 done, H12 approved.
-What Kunal does: review `docs/SUBMISSION.md`; `HUMAN_CONFIRMED=1 scripts/submit.sh` (interactive `yes`); reply `H1 done`.
+Pre-conditions: G9 PASS, H2 done, H3 done (its URL is `demoUrl`), H10 done, H12 approved, H14 done.
+What Kunal does: review `docs/SUBMISSION.md`; `HUMAN_CONFIRMED=1 scripts/submit.sh --send` (without `--send` it is a dry run; interactive `yes`); reply `H1 done`.
 
-## H3 — X post                                         status: OPEN   needed by: after H1   NEVER by an agent
-What Kunal does: post from `docs/X_POST.md` himself.
+## H3 — X post                                         status: OPEN   needed by: before H1   NEVER by an agent
+HACKATHON.md: send the submission only once the repo is public and the demo post is up; the post URL is the `demoUrl` field.
+What Kunal does: after H2 and H11, post from `docs/X_POST.md` himself (video on post 1); reply `H3 <post url>`.
+What Claude Code does then: puts the URL in SUBMISSION.md `demoUrl`.
+
+## H14 — payout account, contact consent                status: OPEN   needed by: H1   NEVER by an agent
+Why a human: the mainnet payout account is Kunal's own wallet; consent must be his agreement to the verbatim notice.
+What Kunal does: create or pick a mainnet NEAR account in his wallet; read "I agree that the organizers may use these details to
+review our submission and contact us about this hackathon."; reply `H14 <account.near> | consent yes`.
+Default if silent: `nearAddress`/`consent` stay `TODO-H14`; the payload is not sendable (submit script exits 2 on `TODO-H`).
 
 ## H6 — mainnet (post-hackathon)                       status: not in scope
 Nothing mainnet is created, funded or deployed during the hackathon.
