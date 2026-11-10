@@ -606,7 +606,7 @@ impl Nectar {
         let mut q = self.quote_or_panic(quote_id.0);
         require!(env::predecessor_account_id() == q.buyer, ERR_NOTE_OWNER);
         if let Some(r) = &recipient {
-            require!(chainsig::valid_base58_address(r), "bad recipient");
+            require!(chainsig::valid_base58_address(r) || chainsig::valid_evm_address(r), "bad recipient");
         }
         require!(!self.note_locked(NoteRef::Quote(quote_id.0)), ERR_NOTE_LOCKED);
         q.buyer_remote_recipient = recipient.clone();

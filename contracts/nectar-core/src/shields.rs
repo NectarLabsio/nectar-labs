@@ -156,6 +156,7 @@ impl Nectar {
             return Err("position not open");
         }
         let remote = p.remote.is_some();
+        let domain = p.remote.as_ref().map(|r| r.domain_id);
         if let Some(r) = &p.remote {
             if r.status != RemoteStatus::Open {
                 return Err("remote position not open");
@@ -183,7 +184,8 @@ impl Nectar {
             if q.remaining_usd_e6.0 == 0 || !q.accepts_voluntary_fills || q.collateral != p.collateral {
                 continue;
             }
-            let rcpt = q.buyer_remote_recipient.clone().filter(|x| chainsig::valid_base58_address(x));
+            // WO-29a: a 0x recipient fills EVM positions only, a base58 one Solana positions only
+            let rcpt = q.buyer_remote_recipient.clone().filter(|x| domain.is_some_and(|d| chainsig::recipient_fits(d, x)));
             if remote && (rcpt.is_none() || q.remaining_usd_e6.0 < fill) {
                 continue;
             }

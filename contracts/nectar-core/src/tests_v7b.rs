@@ -508,7 +508,7 @@ fn chain_base() -> Nectar {
 }
 fn reserve_at(c: &mut Nectar, deposit: u128, borrow: u128) -> u64 {
     set_ctx(alice(), deposit, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(borrow), 7500, None, None, None).0
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(borrow), 7500, None, None, None, None).0
 }
 fn authority_ok(c: &mut Nectar, id: u64) {
     cb_ctx(T0 + SEC, PromiseResult::Successful(serde_json::to_vec(&format!("ed25519:{AUTH_B58}")).unwrap()));
@@ -661,6 +661,7 @@ fn shield_on_remote_reservation_counts_and_prices_at_confirm() {
             None,
             None,
             Some(ShieldInput { kind: ShieldKind::Event, window_end_ns: U64(T0 + 10 * HOUR) }),
+            None,
         )
         .0;
     assert_eq!(c.get_shield_opens_today(alice()), 1);
@@ -683,6 +684,7 @@ fn shield_on_remote_reservation_validated() {
         None,
         None,
         Some(ShieldInput { kind: ShieldKind::Weekend, window_end_ns: U64(T0 + HOUR) }),
+        None,
     );
 }
 

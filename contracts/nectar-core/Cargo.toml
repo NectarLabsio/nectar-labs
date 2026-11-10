@@ -25,3 +25,4 @@ near-workspaces = "0.24.0" # F-029
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 anyhow = "1"
 ed25519-dalek = { version = "2.2.0", default-features = false, features = ["std"] } # verify stub / vector signatures off-chain
+k256 = { version = "0.13", features = ["ecdsa"] } # WO-29a: ecrecover of the stored r/s/v off-chain

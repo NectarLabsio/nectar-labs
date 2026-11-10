@@ -13,6 +13,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 near-sdk = { workspace = true }
 ed25519-dalek = { version = "2.2.0", default-features = false, features = ["fast"] } # WO-15 signer stub (sign from a fixed test seed; precomputed tables keep it inside 15 Tgas)
+k256 = { version = "0.13", default-features = false, features = ["ecdsa"] } # WO-29a: domain-0 stub keys + Ecdsa (no precomputed-tables: they are built lazily per call in wasm)
 
 [dev-dependencies]
 near-sdk = { workspace = true, features = ["unit-testing"] }

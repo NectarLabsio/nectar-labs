@@ -191,7 +191,7 @@ async fn demo_flow_matches_model() -> anyhow::Result<()> {
     let e = setup().await?;
     let rows = model();
     let v: String = e.core.view("contract_version").await?.json()?;
-    assert_eq!(v, "2.0.0-v7", "F-027: wasm runs on the sandbox VM ({v})");
+    assert_eq!(v, "2.1.0-v7", "F-027: wasm runs on the sandbox VM ({v})");
 
     let lender = user(&e, 50_000_000_000, 0).await?;
     let buyer1 = user(&e, 10_000_000_000, 0).await?;

@@ -1,0 +1,354 @@
+   Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/nectar-core)
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:218:5
+    |
+218 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+    |
+218 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:221:5
+    |
+221 |     ft_call(&e.usdc, &b1, core.id(), 12_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+221 |     let _ = ft_call(&e.usdc, &b1, core.id(), 12_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:222:5
+    |
+222 |     ft_call(&e.usdc, &b2, core.id(), 12_000_000_000, &fund_msg(400, Some(ERCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+222 |     let _ = ft_call(&e.usdc, &b2, core.id(), 12_000_000_000, &fund_msg(400, Some(ERCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:403:5
+    |
+403 |     ft_call(&e.usdc, &borrower, core.id(), BORROW, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+403 |     let _ = ft_call(&e.usdc, &borrower, core.id(), BORROW, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:456:5
+    |
+456 |     ft_call(&e.nvdax, &alice, core.id(), UNITS, lock).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+456 |     let _ = ft_call(&e.nvdax, &alice, core.id(), UNITS, lock).await?;
+    |     +++++++
+
+warning: `nectar-core` (test "sandbox_evm") generated 5 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.01s
+     Running tests/sandbox_evm.rs (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/debug/deps/sandbox_evm-8fff8d4dfcb1154d)
+
+running 3 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/nectar-core)
+ │     Finished `dev` profile [unoptimized] target(s) in 3.09s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling nectar-core v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 7.34s
+
+Modification timestamps of:
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794331107, tv_nsec: 20000000 }
+ |    "/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794329972, tv_nsec: 950000000 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 903ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 767.9 KB (767891 bytes)
+     - SHA-256 checksum hex : d2fbc44b0f0335834833d0318561c4a544a397b9ca31139986acbbc464251124
+     - SHA-256 checksum bs58: FCbHG4GpjbKu2JD4KLNJLRfaDoa9yYcTMGwVG33MuuYo
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 12s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/mock-ft)
+ │     Finished `dev` profile [unoptimized] target(s) in 0.65s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 3.28s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 207ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 156.9 KB (156898 bytes)
+     - SHA-256 checksum hex : 010ba4cc32acfe95cfe7f9b824a26ffb7f126cd7bb4e5ad261732df10da4d119
+     - SHA-256 checksum bs58: 55hvEqmBmZNjhmhiUagzZrx9f5rLzxC5iuHtfvG3pKA
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 4s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling zeroize v1.9.1
+ │    Compiling subtle v2.6.1
+ │    Compiling const-oid v0.9.6
+ │    Compiling generic-array v0.14.9
+ │    Compiling rand_core v0.6.4
+ │    Compiling rustc_version v0.4.1
+ │    Compiling der v0.7.10
+ │    Compiling base16ct v0.2.0
+ │    Compiling cpufeatures v0.2.17
+ │    Compiling ff v0.13.1
+ │    Compiling group v0.13.0
+ │    Compiling curve25519-dalek v4.1.3
+ │    Compiling crypto-common v0.1.6
+ │    Compiling block-buffer v0.10.4
+ │    Compiling sec1 v0.7.3
+ │    Compiling crypto-bigint v0.5.5
+ │    Compiling digest v0.10.7
+ │    Compiling signature v2.2.0
+ │    Compiling hmac v0.12.1
+ │    Compiling ripemd v0.1.3
+ │    Compiling sha2 v0.10.9
+ │    Compiling ed25519 v2.2.3
+ │    Compiling rfc6979 v0.4.0
+ │    Compiling ed25519-dalek v2.2.0
+ │    Compiling elliptic-curve v0.13.8
+ │    Compiling near-sdk-env v0.1.9
+ │    Compiling near-sdk v5.30.1
+ │    Compiling ecdsa v0.16.9
+ │    Compiling k256 v0.13.4
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/test-stubs)
+ │     Finished `dev` profile [unoptimized] target(s) in 2.51s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling version_check v0.9.5
+ │    Compiling zeroize v1.9.1
+ │    Compiling subtle v2.6.1
+ │    Compiling const-oid v0.9.6
+ │    Compiling rand_core v0.6.4
+ │    Compiling semver v1.0.28
+ │    Compiling cfg-if v1.0.5
+ │    Compiling base16ct v0.2.0
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling der v0.7.10
+ │    Compiling ff v0.13.1
+ │    Compiling rustc_version v0.4.1
+ │    Compiling group v0.13.0
+ │    Compiling generic-array v0.14.9
+ │    Compiling curve25519-dalek v4.1.3
+ │    Compiling near-sdk v5.30.1
+ │    Compiling block-buffer v0.10.4
+ │    Compiling crypto-common v0.1.6
+ │    Compiling sec1 v0.7.3
+ │    Compiling crypto-bigint v0.5.5
+ │    Compiling digest v0.10.7
+ │    Compiling signature v2.2.0
+ │    Compiling hmac v0.12.1
+ │    Compiling sha2 v0.10.9
+ │    Compiling ed25519 v2.2.3
+ │    Compiling rfc6979 v0.4.0
+ │    Compiling ed25519-dalek v2.2.0
+ │    Compiling elliptic-curve v0.13.8
+ │    Compiling ecdsa v0.16.9
+ │    Compiling k256 v0.13.4
+ │    Compiling test-stubs v0.1.0 (/Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 4.30s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 437ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /Volumes/T7/nectar-labs/.claude/worktrees/agent-a0669dbe0c9e3e866/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 8s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+GAS,upsert_collateral,total,2887596347599
+GAS,upsert_collateral,dev-20261110171842-48273015810646.test.near,2558985166434
+GAS,upsert_collateral,total,2887596347599
+GAS,upsert_collateral,dev-20261110171842-30267589985561.test.near,2558985166434
+GAS,upsert_collateral,total,2851489451966
+GAS,upsert_collateral,dev-20261110171842-86135653106713.test.near,2522878270801
+GAS,set_remote_chain,total,2741135904124
+GAS,set_remote_chain,dev-20261110171842-48273015810646.test.near,2425494693439
+GAS,set_remote_chain,total,2741135904124
+GAS,set_remote_chain,dev-20261110171842-30267589985561.test.near,2425494693439
+GAS,set_remote_chain,total,2705018312663
+GAS,set_remote_chain,dev-20261110171842-86135653106713.test.near,2389377101978
+GAS,set_signer_config,total,2545600650900
+GAS,set_signer_config,dev-20261110171842-48273015810646.test.near,2231342267950
+GAS,set_signer_config,total,2545600650900
+GAS,set_signer_config,dev-20261110171842-30267589985561.test.near,2231342267950
+GAS,set_signer_config,total,2509528311019
+GAS,set_signer_config,dev-20261110171842-86135653106713.test.near,2195269928069
+GAS,set_outlayer_account,total,2339507116980
+GAS,set_outlayer_account,dev-20261110171842-48273015810646.test.near,2027632919780
+GAS,set_outlayer_account,total,2339507116980
+GAS,set_outlayer_account,dev-20261110171842-30267589985561.test.near,2027632919780
+GAS,set_outlayer_account,total,2303443827415
+GAS,set_outlayer_account,dev-20261110171842-86135653106713.test.near,1991569630215
+GAS,set_vault_read_config,total,2588656975221
+GAS,set_vault_read_config,dev-20261110171842-48273015810646.test.near,2271108415936
+GAS,set_vault_read_config,total,2551768461388
+GAS,set_vault_read_config,dev-20261110171842-86135653106713.test.near,2234219902103
+GAS,set_vault_read_config,total,2588656975221
+GAS,set_vault_read_config,dev-20261110171842-30267589985561.test.near,2271108415936
+GAS,set_extra_remote_chain,total,2787989346126
+GAS,set_extra_remote_chain,dev-20261110171842-48273015810646.test.near,2470440786841
+GAS,set_extra_remote_chain,total,2787989346126
+GAS,set_extra_remote_chain,dev-20261110171842-30267589985561.test.near,2470440786841
+GAS,reserve_remote_position(base)+derived_public_key,total,12208415401615
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110171842-48273015810646.test.near,3553615580033
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110171848-31868898763712.test.near,5364875113740
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110171851-84438926851372.test.near,223182562500
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110171842-48273015810646.test.near,2528776679027
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261110171851-84438926851372.test.near,223182562500
+GAS,set_allow_keeper_deposit_attestation,total,2498024438631
+GAS,set_allow_keeper_deposit_attestation,dev-20261110171842-48273015810646.test.near,2187580752881
+GAS,keeper_attest_deposit(base)+payout,total,9862766725758
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171842-48273015810646.test.near,4909064310219
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171841-79746553341608.test.near,1683850955234
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171815-62973567206713.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171842-48273015810646.test.near,2060717060180
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171851-84438926851372.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171815-62973567206713.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261110171815-62973567206713.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,total,15374598411784
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171842-30267589985561.test.near,3497225116310
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171848-33238762048846.test.near,1622497991937
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171815-41471033274873.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171842-30267589985561.test.near,4861197380808
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171841-88021941999933.test.near,1683850955234
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171815-41471033274873.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171842-30267589985561.test.near,2060717060180
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171851-12779226865812.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171815-41471033274873.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171815-41471033274873.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261110171815-41471033274873.test.near,223182562500
+
+thread 'code_only_upgrade_over_live_v2_state' (16788653) panicked at contracts/nectar-core/tests/sandbox_evm.rs:474:9:
+assertion `left == right` failed: view #0 reads the same after the code-only upgrade
+  left: Object {"contract_version": String("2.0.0-v7"), "owner": String("dev-20261110171815-35178459517759.test.near"), "usdc_token": String("dev-20261110171841-91331592688416.test.near"), "keeper": String("dev-20261110171815-87729397501964.test.near"), "keeper_fee_bps": Number(50), "fee_split": Object {"buyers_bps": Number(7000), "lenders_bps": Number(2000), "treasury_bps": Number(1000)}, "paused": Bool(false), "min_notice_period_ns": String("604800000000000"), "min_quote_usd_e6": String("100000000"), "max_age_ns_session": String("120000000000"), "max_age_ns_closed": String("86400000000000"), "band_bps": Number(1500), "gas_reserve_yocto": String("45999990000000000000000"), "next_quote_id": String("2"), "next_position_id": String("2"), "max_quotes_per_asset": Number(64), "max_quotes_per_settlement": Number(8), "origination_fee_bps": Number(30)}
+ right: Object {"contract_version": String("2.1.0-v7"), "owner": String("dev-20261110171815-35178459517759.test.near"), "usdc_token": String("dev-20261110171841-91331592688416.test.near"), "keeper": String("dev-20261110171815-87729397501964.test.near"), "keeper_fee_bps": Number(50), "fee_split": Object {"buyers_bps": Number(7000), "lenders_bps": Number(2000), "treasury_bps": Number(1000)}, "paused": Bool(false), "min_notice_period_ns": String("604800000000000"), "min_quote_usd_e6": String("100000000"), "max_age_ns_session": String("120000000000"), "max_age_ns_closed": String("86400000000000"), "band_bps": Number(1500), "gas_reserve_yocto": String("45999990000000000000000"), "next_quote_id": String("2"), "next_position_id": String("2"), "max_quotes_per_asset": Number(64), "max_quotes_per_settlement": Number(8), "origination_fee_bps": Number(30)}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test code_only_upgrade_over_live_v2_state ... FAILED
+test base_confirm_repay_release_signed_ecrecover has been running for over 60 seconds
+test base_reserve_attest_settle_signed_ecrecover_relay has been running for over 60 seconds
+GAS,request_remote_release(base)+sign,total,18995010194617
+GAS,request_remote_release(base)+sign,dev-20261110171842-30267589985561.test.near,4019856592354
+GAS,request_remote_release(base)+sign,dev-20261110171848-33238762048846.test.near,2644211957574
+GAS,request_remote_release(base)+sign,dev-20261110171848-33238762048846.test.near,1328303286486
+GAS,request_remote_release(base)+sign,dev-20261110171815-41471033274873.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261110171848-33238762048846.test.near,7356085421648
+GAS,request_remote_release(base)+sign,dev-20261110171815-41471033274873.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261110171815-41471033274873.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261110171842-30267589985561.test.near,2443808154240
+GAS,request_remote_release(base)+sign,dev-20261110171815-41471033274873.test.near,223182562500
+
+thread 'base_confirm_repay_release_signed_ecrecover' (16788651) panicked at contracts/nectar-core/tests/sandbox_evm.rs:406:5:
+[ExecutionOutcome { transaction_hash: BRNUZdqSsL4MKz2cNmPbd5fb8PZZ49qHpFpbtgyjDaM4, block_hash: FsiAkDUPyhAnTvEhmEvhc1JfU82xNFMgGUKV8Yky9rGA, logs: [], receipt_ids: [6g1GTqQWPMVrzuTo1LBeWTEWGjbvZiHvd2p7js9q42W7], gas_burnt: NearGas { inner: 1328303286486 }, tokens_burnt: NearToken { inner: 132830328648600000000 }, executor_id: AccountId("dev-20261110171848-33238762048846.test.near"), status: Failure(ActionError(ActionError { index: Some(0), kind: FunctionCallError(ExecutionError("Smart contract panicked: Signature request has timed out.")) })) }, ExecutionOutcome { transaction_hash: 6KNTZdwPDBnzfLVpUcncQTLvYFBrAxYEd8cU7VFj3z16, block_hash: EhMmC49mAnVhp4eEZx9ZM38vhmRuZrCaCWk1jPKxK6Pq, logs: [], receipt_ids: [AigZzcQNmRNAMmUB9h6YYiB3daABf44a1vo323yBTogH], gas_burnt: NearGas { inner: 7356085421648 }, tokens_burnt: NearToken { inner: 735608542164800000000 }, executor_id: AccountId("dev-20261110171848-33238762048846.test.near"), status: Failure(ActionError(ActionError { index: Some(0), kind: FunctionCallError(ExecutionError("Exceeded the prepaid gas.")) })) }]
+test base_confirm_repay_release_signed_ecrecover ... FAILED
+GAS,trigger+sign(base, Ecdsa),total,21058788987386
+GAS,trigger+sign(base, Ecdsa),dev-20261110171842-48273015810646.test.near,5144652004641
+GAS,trigger+sign(base, Ecdsa),dev-20261110171848-31868898763712.test.near,2567242678688
+GAS,trigger+sign(base, Ecdsa),dev-20261110171848-31868898763712.test.near,1313224209410
+GAS,trigger+sign(base, Ecdsa),dev-20261110171815-62973567206713.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110171848-31868898763712.test.near,7433054700534
+GAS,trigger+sign(base, Ecdsa),dev-20261110171815-62973567206713.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110171815-62973567206713.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110171842-48273015810646.test.near,3174688049298
+GAS,trigger+sign(base, Ecdsa),dev-20261110171815-62973567206713.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261110171815-62973567206713.test.near,223182562500
+
+thread 'base_reserve_attest_settle_signed_ecrecover_relay' (16788652) panicked at contracts/nectar-core/tests/sandbox_evm.rs:356:5:
+[ExecutionOutcome { transaction_hash: CwkPE5QfyF7YFkZ1facktGHtHrJzSAmN3i7zmUsA3Vu3, block_hash: 2NioEc2gcn38DWEsoUaNJot36T51aUJoVyVaP6MGj5tJ, logs: [], receipt_ids: [HQJGVmrLeMfC4UFQ4B5u4r7kP9qtX9tdXAoCr1xt74BG], gas_burnt: NearGas { inner: 1313224209410 }, tokens_burnt: NearToken { inner: 131322420941000000000 }, executor_id: AccountId("dev-20261110171848-31868898763712.test.near"), status: Failure(ActionError(ActionError { index: Some(0), kind: FunctionCallError(ExecutionError("Smart contract panicked: Signature request has timed out.")) })) }, ExecutionOutcome { transaction_hash: C2tbpPpDxZkp4GkqHzqcPvy3mX6ayVMNpPeZUmzi6Hz, block_hash: Ajpf9k4LoCibRz79VwxvSC6i2eEEJN3qqb6F5yKxSvra, logs: [], receipt_ids: [3JHztpXTCNtWKU3jSisrCo6RWhP79M8XCKyTWVWyYbKC], gas_burnt: NearGas { inner: 7433054700534 }, tokens_burnt: NearToken { inner: 743305470053400000000 }, executor_id: AccountId("dev-20261110171848-31868898763712.test.near"), status: Failure(ActionError(ActionError { index: Some(0), kind: FunctionCallError(ExecutionError("Exceeded the prepaid gas.")) })) }]
+test base_reserve_attest_settle_signed_ecrecover_relay ... FAILED
+
+failures:
+
+failures:
+    base_confirm_repay_release_signed_ecrecover
+    base_reserve_attest_settle_signed_ecrecover_relay
+    code_only_upgrade_over_live_v2_state
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 73.76s
+
+error: test failed, to rerun pass `--test sandbox_evm`

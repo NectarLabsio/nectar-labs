@@ -333,7 +333,7 @@ async fn remote_reserve_confirm_borrow_settle_signed_with_position_path() -> any
     old.as_account().deploy(&wasm("nectar_core")).await?.into_result()?;
     assert!(old.view("get_config").await.is_err(), "v2 code over V1c state fails closed");
     let (core, s, borrower, id) = open_remote(&e).await?;
-    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.0.0-v7"));
+    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.1.0-v7"));
     let p = position(&core, id).await?;
     assert_eq!((p["remote"]["status"].clone(), p["debt_usd_e6"].clone()), (json!("Open"), json!(BORROW.to_string())));
     assert!(bal(&e.usdc, borrower.id()).await? > 0, "borrow paid after the attested read");

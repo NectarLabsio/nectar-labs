@@ -30,6 +30,8 @@ mod p1;
 mod p2;
 #[cfg(feature = "p2")]
 mod remote;
+#[cfg(feature = "p2")]
+pub mod evm;
 
 #[cfg(test)]
 mod tests;
@@ -37,6 +39,8 @@ mod tests;
 mod tests_p1;
 #[cfg(all(test, feature = "p2"))]
 mod tests_p2;
+#[cfg(all(test, feature = "p2"))]
+mod tests_evm;
 #[cfg(test)]
 mod tests_v7;
 #[cfg(all(test, feature = "p2"))]
@@ -59,7 +63,7 @@ use crate::math::{BPS, LimitParams, MathResult};
 use crate::types::*;
 
 /// interface-v7.md A6.
-pub const CONTRACT_VERSION: &str = "2.0.0-v7";
+pub const CONTRACT_VERSION: &str = "2.1.0-v7";
 /// Raw storage key holding the state layout version. Written by `new` (v2 has no migrate).
 pub const STATE_VERSION_KEY: &[u8] = b"__state_version";
 pub const STATE_VERSION: u8 = 2;

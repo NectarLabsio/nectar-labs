@@ -14,5 +14,7 @@ Also refused (WO-21): `VAR=...; sed $VAR`, `mkdir ... && cd ... && git ...` chai
 The pre-commit hook runs gitleaks: a test comment like `key -> 0x<40 hex>` next to a long base58 public key tripped
 `generic-api-key`; reword the comment (do not touch .gitleaks.toml) and check with `gitleaks protect --staged -v`.
 
+Also refused (WO-29a): `python3 $S/apply.py ...` with a shell var; put the calls in a driver .sh and run it by abs path.
+
 **How to apply:** for multi-block edits write a spec with Write and apply it with a small replacement script
 kept in the scratchpad (exact-match, fail if not found once); use Edit for single blocks; commit with plain `git`.

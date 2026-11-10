@@ -25,7 +25,8 @@ use near_sdk::{AccountId, Gas, GasWeight, NearToken, Promise, PromiseError, env,
 
 use crate::chainsig;
 use crate::events::emit;
-use crate::p2::{SEC, SignCall, sign_args, valid_remote_chain};
+use crate::evm;
+use crate::p2::{SEC, SignCall, sign_args};
 use crate::types::*;
 use crate::{ERR_CA_PENDING, ERR_KEEPER, ERR_REFERRER_IS_BORROWER, MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar, NectarExt, math};
 
@@ -270,7 +271,7 @@ impl Nectar {
         if r.status != RemoteStatus::Open {
             return Err("remote position not open");
         }
-        if r.domain_id != chainsig::ED25519_DOMAIN_ID {
+        if r.domain_id != chainsig::ED25519_DOMAIN_ID && r.domain_id != chainsig::SECP256K1_DOMAIN_ID {
             return Err("remote settle: domain not supported");
         }
         let s = self.signer_config().ok_or("no signer config")?;
@@ -288,7 +289,8 @@ impl Nectar {
             if q.remaining_usd_e6.0 == 0 || q.collateral != p.collateral {
                 continue;
             }
-            let Some(rcpt) = q.buyer_remote_recipient.clone().filter(|x| chainsig::valid_base58_address(x)) else {
+            // WO-29a: a 0x recipient fills EVM positions only, a base58 one Solana positions only
+            let Some(rcpt) = q.buyer_remote_recipient.clone().filter(|x| chainsig::recipient_fits(r.domain_id, x)) else {
                 continue;
             };
             let Some(leg) = math::settle_leg_m(debt, q.remaining_usd_e6.0, units, m, price, c.decimals, disc, 0)? else {
@@ -365,7 +367,7 @@ impl Nectar {
         plan: crate::shields::SelfPlan,
     ) -> Result<(), &'static str> {
         let r = p.remote.clone().ok_or("not a remote position")?;
-        if r.domain_id != chainsig::ED25519_DOMAIN_ID {
+        if r.domain_id != chainsig::ED25519_DOMAIN_ID && r.domain_id != chainsig::SECP256K1_DOMAIN_ID {
             return Err("remote settle: domain not supported");
         }
         let s = self.signer_config().ok_or("no signer config")?;
@@ -438,6 +440,7 @@ impl Nectar {
     /// refunded on confirm, refused loan, failed authority or expiry). Reserves a remote position
     /// (`AwaitingDeposit`) and asks the signer for the position's vault authority. Limits run at confirmation,
     /// not here (a reservation locks no pool funds). A `shield` is validated and counted here (§4.9).
+    /// WO-29a: `chain` (optional) selects the remote chain by id (`"base-sepolia"`); `None` = the primary chain.
     #[payable]
     #[allow(clippy::too_many_arguments)]
     pub fn reserve_remote_position(
@@ -449,12 +452,13 @@ impl Nectar {
         pay_to: Option<PayTo>,
         referrer: Option<AccountId>,
         shield: Option<ShieldInput>,
+        chain: Option<String>,
     ) -> U64 {
         self.assert_not_paused();
         let borrower = env::predecessor_account_id();
         require!(referrer.as_ref() != Some(&borrower), ERR_REFERRER_IS_BORROWER);
         let c = self.coll_or_panic(&collateral);
-        let rc = c.remote_chain.clone().filter(valid_remote_chain).unwrap_or_else(|| env::panic_str("no remote chain"));
+        let rc = self.select_remote_chain(&c, chain.as_deref());
         let s = self.signer_config().unwrap_or_else(|| env::panic_str("no signer config"));
         require!(units.0 > 0, "units is zero");
         require!(units.0 <= U64_MAX, "units exceed u64");
@@ -631,8 +635,14 @@ impl Nectar {
             Self::gas_left() >= exec_gas.as_gas() + cb_gas + GAS_CREATE_RECEIPTS.as_gas(),
             "attach more gas"
         );
-        let input = json!({ "job": "vault_read", "chain": r.chain_id, "program": r.vault_program,
-                            "position_id": position_id })
+        // WO-29a: an EVM vault is read over the chain's RPC (`vault_read` job, Base input shape).
+        let input = if r.domain_id == chainsig::SECP256K1_DOMAIN_ID {
+            let rpc = self.chain_rpc_url(&p.collateral, &r.chain_id).unwrap_or_else(|| env::panic_str(evm::ERR_NO_RPC));
+            json!({ "job": "vault_read", "chain": r.chain_id, "vault": r.vault_program, "position_id": position_id,
+                    "rpc_url": rpc })
+        } else {
+            json!({ "job": "vault_read", "chain": r.chain_id, "program": r.vault_program, "position_id": position_id })
+        }
         .to_string();
         let q = &self.quoter;
         let args = json!({
@@ -746,7 +756,10 @@ impl Nectar {
         self.assert_not_paused();
         let mut p = self.position_or_panic(position_id.0);
         let mut r = Self::remote_or_panic(&p);
-        require!(r.domain_id == chainsig::ED25519_DOMAIN_ID, "release: domain not supported");
+        require!(
+            r.domain_id == chainsig::ED25519_DOMAIN_ID || r.domain_id == chainsig::SECP256K1_DOMAIN_ID,
+            "release: domain not supported"
+        );
         require!(p.debt_usd_e6.0 == 0, "debt outstanding");
         require!(!r.confirming, "deposit check in flight");
         require!(!self.settle_in_flight(position_id.0), "remote settlement in flight");
@@ -770,12 +783,24 @@ impl Nectar {
         require!(Self::gas_left() >= need, "attach more gas");
         let nonce = self.next_nonce();
         let expires = now_s.checked_add(s.expiry_s).unwrap_or_else(|| env::panic_str("expiry overflow"));
-        let message = chainsig::build_release_preimage(&r.chain_id, &r.vault_program, position_id.0, &depositor, nonce, expires);
-        require!(message.len() <= chainsig::MAX_EDDSA_PAYLOAD, "message too long");
+        // WO-29a: an EVM position signs the EIP-712 `Release` digest; `message` holds `0x<digest>`.
+        let (message, args, evm_rec) = if r.domain_id == chainsig::SECP256K1_DOMAIN_ID {
+            let (digest, rec) = evm::release_digest_for(&r, position_id.0, &depositor, nonce, expires)
+                .unwrap_or_else(|e| env::panic_str(e));
+            (evm::hex0x(&digest), evm::ecdsa_sign_args(&r.path, &digest, r.domain_id), Some(rec))
+        } else {
+            let message = chainsig::build_release_preimage(&r.chain_id, &r.vault_program, position_id.0, &depositor, nonce, expires);
+            require!(message.len() <= chainsig::MAX_EDDSA_PAYLOAD, "message too long");
+            let args = sign_args(&r.path, &message, r.domain_id);
+            (message, args, None)
+        };
         // effects
         self.take_nonce().unwrap_or_else(|e| env::panic_str(e));
         self.gas_reserve_yocto -= 1;
-        let args = sign_args(&r.path, &message, r.domain_id);
+        if let Some(rec) = evm_rec {
+            self.put_evm_record(evm::EVM_RELEASE_PREFIX, position_id.0, rec);
+        }
+        let chain_id = r.chain_id.clone();
         let path = r.path.clone();
         r.status = RemoteStatus::Releasing;
         p.remote = Some(r);
@@ -783,7 +808,7 @@ impl Nectar {
         emit(
             "remote_release_requested",
             json!({ "position_id": position_id, "nonce": U64(nonce), "expires": U64(expires), "message": message,
-                    "recipient": depositor, "path": path }),
+                    "recipient": depositor, "path": path, "chain": chain_id }),
         );
         self.put_release(PendingRelease {
             position_id,
@@ -813,28 +838,34 @@ impl Nectar {
         if d.nonce != nonce || d.status != ReleaseStatus::AwaitingSignature {
             return;
         }
+        let domain = self.remote_domain(position_id.0);
         let sig = if env::promise_results_count() != 1 {
             Err("no_result")
         } else {
             match env::promise_result_checked(0, crate::p2::MAX_SIGNATURE_RESULT_LEN) {
-                Ok(b) => chainsig::parse_signature_response(&b),
+                Ok(b) => evm::parse_sign_result(&b, domain),
                 Err(PromiseError::TooLong(_)) => Err("too_long"),
                 Err(_) => Err("failed"),
             }
         };
         match sig {
-            Ok(bytes) => {
-                let signature_hex = chainsig::hex(&bytes);
-                let (path, authority) = self
+            Ok((signature_hex, evm_sig)) => {
+                let (path, authority, chain) = self
                     .position(position_id.0)
                     .and_then(|p| p.remote)
-                    .map_or((None, None), |r| (Some(r.path), r.authority));
-                emit(
-                    "remote_release_signed",
-                    json!({ "position_id": position_id, "nonce": nonce, "expires": d.expires, "message": d.message,
+                    .map_or((None, None, None), |r| (Some(r.path), r.authority, Some(r.chain_id)));
+                let mut ev = json!({ "position_id": position_id, "nonce": nonce, "expires": d.expires, "message": d.message,
                             "signature_hex": signature_hex, "recipient": d.recipient, "path": path,
-                            "pubkey": authority }),
-                );
+                            "pubkey": authority, "chain": chain });
+                if let Some(es) = &evm_sig {
+                    ev["digest"] = json!(d.message);
+                    ev["r"] = json!(evm::hex0x(&es.r));
+                    ev["s"] = json!(evm::hex0x(&es.s));
+                    ev["v"] = json!(es.v);
+                    ev["s_normalised"] = json!(es.normalised);
+                    self.store_evm_sig(evm::EVM_RELEASE_PREFIX, position_id.0, es);
+                }
+                emit("remote_release_signed", ev);
                 d.signature_hex = Some(signature_hex);
                 d.status = ReleaseStatus::Signed;
             }
@@ -846,10 +877,11 @@ impl Nectar {
         self.put_release(d);
     }
 
-    /// Keeper records the Solana release tx: the position is Closed. Not payable.
+    /// Keeper records the remote release tx (Solana signature, or the `0x` tx hash of an EVM position): the
+    /// position is Closed. Not payable.
     pub fn relay_release_result(&mut self, position_id: U64, solana_tx_sig: String) {
         require!(env::predecessor_account_id() == self.keeper, ERR_KEEPER);
-        require!(chainsig::valid_tx_signature(&solana_tx_sig), "bad solana_tx_sig");
+        require!(evm::valid_relay_tx(self.remote_domain(position_id.0), &solana_tx_sig), "bad solana_tx_sig");
         let mut d = self.release(position_id.0).unwrap_or_else(|| env::panic_str("no pending release"));
         require!(d.status == ReleaseStatus::Signed, "release not signed");
         let mut p = self.position_or_panic(position_id.0);

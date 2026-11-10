@@ -705,6 +705,95 @@ pub enum VPending {
     V1(PendingSettlement),
 }
 
+// ---------------------------------------------------------------- WO-29a Base spoke (new raw keys only)
+
+/// Extra remote chain of a collateral (`__v8_chains:<symbol>`): chain + the RPC the `vault_read` job reads.
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ExtraRemoteChain {
+    pub chain: RemoteChain,
+    pub rpc_url: String,
+}
+
+#[near(serializers = [borsh])]
+pub enum VExtraChains {
+    V1(Vec<ExtraRemoteChain>),
+}
+
+/// EIP-712 digest of one EVM settle leg or release and, once signed, r/s/v (`__v8_evm_settle:` / `__v8_evm_release:`).
+#[near(serializers = [borsh, json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct EvmSigned {
+    /// `0x` + 64 hex
+    pub digest: String,
+    pub chain_id: u64,
+    pub verifying_contract: String,
+    /// `0x` + 64 hex (x of big_r)
+    pub r: Option<String>,
+    /// `0x` + 64 hex, low s
+    pub s: Option<String>,
+    /// 27 + recovery id
+    pub v: Option<u8>,
+}
+
+#[near(serializers = [borsh])]
+pub enum VEvmSigned {
+    V1(EvmSigned),
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct RemoteChainView {
+    pub chain_id: String,
+    pub vault_program: String,
+    pub mpc_domain_id: u32,
+    pub rpc_url: Option<String>,
+    pub evm_chain_id: Option<u64>,
+    pub primary: bool,
+}
+
+/// `get_pending_settlement_evm`: the `Settle` struct as the vault takes it (camelCase) + digest and r/s/v.
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct PendingSettlementEvm {
+    pub digest: String,
+    pub r: Option<String>,
+    pub s: Option<String>,
+    pub v: Option<u8>,
+    pub position_id: U64,
+    pub quote_id: U64,
+    pub repay_e6: U128,
+    pub seize_raw: U128,
+    pub recipient: String,
+    pub nonce: U64,
+    pub expires: U64,
+    pub kind: u8,
+    pub status: PendingStatus,
+    pub chain_id: u64,
+    pub verifying_contract: String,
+    pub tx_hash: Option<String>,
+}
+
+/// `get_pending_release_evm`: the `Release` struct (camelCase) + digest and r/s/v.
+#[near(serializers = [json])]
+#[derive(Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "camelCase")]
+pub struct PendingReleaseEvm {
+    pub digest: String,
+    pub r: Option<String>,
+    pub s: Option<String>,
+    pub v: Option<u8>,
+    pub position_id: U64,
+    pub recipient: String,
+    pub nonce: U64,
+    pub expires: U64,
+    pub status: ReleaseStatus,
+    pub chain_id: u64,
+    pub verifying_contract: String,
+    pub tx_hash: Option<String>,
+}
+
 #[near(serializers = [json])]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct VaultAuthorityHint {
