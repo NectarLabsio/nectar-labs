@@ -1,0 +1,33 @@
+scripts/56-solana-deploy.sh: line 8: 24589 Abort trap: 6           spl-token --version > /dev/null 2>&1
+
+== balances ==
+2.65538996 SOL
+mint=3Ve8GiDBtD7crfwUcKukpMigKQaU2aXtSCNgu661E8hT
+
+== program keypair (outside the repo) + keys sync ==
+Syncing program ids for the configured cluster (localnet)
+
+All program id declarations are synced.
+
+== build ==
+info: uninstalling toolchain solana
+info: toolchain solana uninstalled
+    Finished `release` profile [optimized] target(s) in 0.63s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+     Running unittests src/lib.rs (/Volumes/T7/nectar-labs/solana/target/debug/deps/nectar_vault-c2d8d5daa005ef27)
+program=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+
+Program Id: ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+Owner: BPFLoaderUpgradeab1e11111111111111111111111
+ProgramData Address: 55ZD9n58bZKC9PfVcsiuRMoDyGVkJSPQX2AtTvUL1vzR
+Authority: 3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS
+Last Deployed In Slot: 520746382
+Data Length: 397240 (0x60fb8) bytes
+Balance: 2.01885804 SOL
+
+== init_vault(NVDAx) ==
+bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+{"vault":"HGSFKMWWnXeHJtPyaCEysWb5vHvQZJLvTkeB6YntEbeX","vault_ata":"85Wvx9LTRMhH7vnmZiTr2oB7uDsqJN9DR3xBdmK2hcj2","tx":"<redacted tx signature>","explorer":"https://explorer.solana.com/tx/<redacted>?cluster=devnet"}
+
+== config ==
+explorer: https://explorer.solana.com/address/ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW?cluster=devnet

@@ -11,7 +11,7 @@ use anchor_spl::token_interface::{self, Mint, TokenAccount, TokenInterface, Tran
 pub mod ed25519;
 pub mod preimage;
 
-declare_id!("GdCVqcg24RJkwNWZ2kgEaQRVhsXxEupvBSZSJy39xkrm");
+declare_id!("ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW");
 
 pub const VAULT_SEED: &[u8] = b"vault";
 pub const TOKENS_SEED: &[u8] = b"tokens";

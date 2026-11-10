@@ -1,0 +1,77 @@
+scripts/56-solana-deploy.sh: line 8: 22953 Abort trap: 6           spl-token --version > /dev/null 2>&1
+
+== balances ==
+5 SOL
+
+== fund keeper fee payer 0.3 SOL from deployer ==
+
+Signature: 2sX38VX5MZ71AMaqpu1fMKW745shvSEqvnw5CkhsV2cop2hNrucvaujEc5aat5jcfnseqLL7wi9JNLqcxmyshsPf
+
+
+== mock NVDAx mint (6 dp, authority = deployer) ==
+mint=3Ve8GiDBtD7crfwUcKukpMigKQaU2aXtSCNgu661E8hT
+
+== program keypair (outside the repo) + keys sync ==
+Wrote new keypair to /Users/lemmalabs/.nectar/solana/nectar_vault-keypair.json
+info: uninstalling toolchain solana
+info: toolchain solana uninstalled
+Syncing program ids for the configured cluster (localnet)
+
+Found incorrect program id declaration in "/Volumes/T7/nectar-labs/solana/programs/nectar_vault/src/lib.rs"
+Updated to ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+
+Found incorrect program id declaration in Anchor.toml for the program `nectar_vault`
+Updated to ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+
+All program id declarations are synced.
+Please rebuild the program to update the generated artifacts.
+
+== build ==
+   Compiling spl-associated-token-account v7.0.0
+   Compiling anchor-spl v0.32.1
+   Compiling nectar_vault v0.1.0 (/Volumes/T7/nectar-labs/solana/programs/nectar_vault)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 48.41s
+     Running unittests src/lib.rs (/Volumes/T7/nectar-labs/solana/target/debug/deps/nectar_vault-c2d8d5daa005ef27)
+program=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+
+== deploy (devnet) ==
+Program confirmed on-chain
+Idl data length: 2052 bytes
+Step 0/2052 
+Step 600/2052 
+Step 1200/2052 
+Step 1800/2052 
+Idl account created: FNYrGMKjYxMFLbb3yuQ55a5jss9u5JH4JtAKSiMAReud
+Deploy success
+
+Program Id: ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+Owner: BPFLoaderUpgradeab1e11111111111111111111111
+ProgramData Address: 55ZD9n58bZKC9PfVcsiuRMoDyGVkJSPQX2AtTvUL1vzR
+Authority: 3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS
+Last Deployed In Slot: 520746382
+Data Length: 397240 (0x60fb8) bytes
+Balance: 2.01885804 SOL
+
+== init_vault(NVDAx) ==
+node:internal/modules/cjs/loader:1430
+  const err = new Error(message);
+              ^
+
+Error: Cannot find module '@coral-xyz/anchor'
+Require stack:
+- /Volumes/T7/nectar-labs/solana/package.json
+    at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)
+    at Function._load (node:internal/modules/cjs/loader:1216:25)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Module.require (node:internal/modules/cjs/loader:1527:12)
+    at require (node:internal/modules/helpers:147:16)
+    at file:///Volumes/T7/nectar-labs/scripts/57-vault-init.mjs:11:16
+    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [ '/Volumes/T7/nectar-labs/solana/package.json' ]
+}
+
+Node.js v22.23.4

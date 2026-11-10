@@ -64,18 +64,20 @@ signer:
   authority_check: live derived_public_key(nectar-core.nectar.testnet, solana-devnet-v1, 1) == off-chain @noble derivation, 2026-11-09T23:4xZ
 solana:
   cluster: devnet
-  program_id: TODO-G7
+  program_id: ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
   authority: TODO-G7
+  vault_program: ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW
+  mint: 3Ve8GiDBtD7crfwUcKukpMigKQaU2aXtSCNgu661E8hT
 limits:
   max_quotes_per_asset: 64
   max_quotes_per_settlement: 8
   gas_reserve_target_near: 5
 # ---- v7 (D-017/D-018). Flags are flipped by the orchestrator only when the module's gate passes (addendum §10). ----
 v7:
-  core_v2: nectar-core-v2.nectar.testnet   # TODO-G2b (not created yet; needs H-NEAR-FAUCET)
-  keeper_v2: keeper-v2.nectar.testnet      # TODO-G2b (D-019)
+  core_v2: nectar-core-v2.nectar.testnet # TODO-G2b (not created yet; needs H-NEAR-FAUCET)
+  keeper_v2: keeper-v2.nectar.testnet # TODO-G2b (D-019)
   x402_relayer: x402-relayer.nectar.testnet # TODO-G14
-  agent1: agent1.nectar.testnet            # TODO-G14
+  agent1: agent1.nectar.testnet # TODO-G14
   origination_fee_bps: 30
   session_stale_s: 900
   remote_path_prefix: {solana: "solana-devnet/pos/", base: "base-sepolia/pos/"}
@@ -94,7 +96,7 @@ features:
   solana_remote: false
   base: false
 base:
-  chain_id: 84532          # Base mainnet 8453 is blocked (guard, H-GUARD-V7)
+  chain_id: 84532 # Base mainnet 8453 is blocked (guard, H-GUARD-V7)
   rpc_url: TODO-G12
   vault: TODO-G12
   collateral: TODO-G12
