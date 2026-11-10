@@ -42,7 +42,7 @@ Optional:
 pnpm --filter docs-site build   # static docs build (broken links fail the build)
 pnpm --filter docs-site start   # docs dev server on http://localhost:3000
 pnpm --filter feed start        # Feed REST on :8788, MCP over HTTP at http://127.0.0.1:8789/mcp; no env needed
-pnpm --filter feed mcp          # Feed MCP over stdio (read-only tools; see services/feed/README.md)
+pnpm -s --filter feed mcp          # Feed MCP over stdio (read-only tools; see services/feed/README.md)
 ```
 What works today (2026-11-10): all five commands (the repo URL in the first one is TODO-H2). Rehearsal timings are in
 [docs/EVIDENCE.md](docs/EVIDENCE.md): `pnpm i` 9 s on a warm pnpm store (a cold machine is slower), `pnpm verify` 39 s.
