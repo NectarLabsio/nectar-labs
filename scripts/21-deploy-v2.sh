@@ -13,7 +13,7 @@ OWNER=$(cfg .accounts.owner); USDC=$(cfg .accounts.usdc_mock); NVDAX=$(cfg .acco
 CORE2=$(cfg .v7.core_v2); KEEPER2=$(cfg .v7.keeper_v2)
 W="$ROOT/target/near"; CORE_WASM="$W/nectar_core/nectar_core.wasm"; FT_WASM="$W/mock_ft/mock_ft.wasm"
 [ -f "$CORE_WASM" ] && [ -f "$FT_WASM" ] || { echo "run scripts/10-build.sh first" >&2; exit 2; }
-CORE2_NEAR=${CORE2_NEAR:-6}; KEEPER2_NEAR=${KEEPER2_NEAR:-0.5}; GAS_RESERVE_NEAR=${GAS_RESERVE_NEAR:-1}
+CORE2_NEAR=${CORE2_NEAR:-9}; KEEPER2_NEAR=${KEEPER2_NEAR:-0.5}; GAS_RESERVE_NEAR=${GAS_RESERVE_NEAR:-1}
 
 rpc() { curl -s "$RPC" -H 'content-type: application/json' -d "$1"; }
 acct() { rpc "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"query\",\"params\":{\"request_type\":\"view_account\",\"finality\":\"final\",\"account_id\":\"$1\"}}"; }

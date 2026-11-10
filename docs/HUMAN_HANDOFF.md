@@ -159,7 +159,7 @@ Post the task text from docs/MARKET_TASK.md (written by WO-30) from your own acc
 Default: not posted. Agents never post there.
 
 ## H-NEAR-FAUCET — v7 update (2026-11-10 11:30Z)
-nectar.testnet holds **0.064 NEAR**. The v7 deploy (D-018) needs about **8 NEAR**: the `nectar-core-v2` account + wasm storage (~5–6), `keeper-v2` (0.5),
+nectar.testnet holds **0.064 NEAR**. The v7 deploy (D-018) needs about **11 NEAR** (updated 20:00Z: v2 wasm is 628 KB after WO-23a, more with Notes/Reserve): the `nectar-core-v2` account + wasm storage (~9), `keeper-v2` (0.5),
 `x402-relayer` (3, only if x402 survives F-329), `agent1` (0.5), and the demo reseed. Same steps as above (https://near-faucet.io/ → `nectar.testnet`, repeat if allowed).
 Until then: v7 is built and sandbox-tested, but nothing new deploys; v1 stays the live demo.
 
