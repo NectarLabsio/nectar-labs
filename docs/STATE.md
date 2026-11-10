@@ -1,15 +1,15 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## v7 progress (2026-11-10 23:50 local / 17:50Z)
-- **Gates PASS:** G1(v7), G10 (open F-351/F-352/F-353 unused), G11 (re-run), **G2b** (re-run), **G3b** (re-run: e2e 244/0, a11y 100), **G7 (v7)** (attested deposits,
-  settle + release relayed on devnet, authorities = derived keys), **G14** (x402 borrow → 402 → pay → 200), v7 module runs (Shield, Profit-Lock, Reserve). Tag `p2-green` (local).
-- **Live on testnet:** nectar-core-v2 (2.0.0-v7) + keeper-v2 + quoter 5d90edb8 (quote/vault_read/calendar/multiplier); Solana vault ENZa…pubW; x402-relayer + agent1.
-  Feature flags on: weekend_guard, solana_remote, x402, agent_skill, shields, profit_lock, notes, reserve. Off: multiplier, pay_to, referrals (no testnet run), base.
-- **P2b (D-026):** evm/ vault + mocks merged (74 forge tests); nectar-core Base signing merged (WO-29a, code-only upgrade over v2 tested in sandbox, NOT yet
-  deployed); Base spoke deployed on a LOCAL FORK of Base Sepolia (vault 0xC4f4…3d09, MockB20 0xD83A…Ad7E). Running: WO-29b keeper Base relay. Then: restart
-  keeper → upgrade v2 code → set_extra_remote_chain(base, fork vault) → G13 on the fork (disclosed). Real Base Sepolia only if H15 (deployer 0x4CAd…BFBd).
-- RPC default → test.rpc.fastnear.com (D-025, F-369). Background processes: keeper-v2 daemon, Feed :8788/:8789, x402 :8791, anvil fork :8545.
-- Human: H-GUARD-V7 (classifier refused even with Kunal's instruction — Kunal runs the script), H15 (optional), H16 tracks, H11 video, H10/H14 team + payout, H1–H3 publish.
+## v7 progress (2026-11-11 00:10 local / 18:10Z)
+- **Gates PASS:** G1(v7), G10 (open F-351/F-352/F-353), G11, G2b, G3b, G7 (v7), G14, v7 module runs, **G12 + G13 on a LOCAL FORK of Base Sepolia (D-026)**
+  (EVIDENCE 770d053; no ERC-8021 suffix — H19/F-351). Tag `p2-green` (local). Only G9 (fresh-clone package rehearsal) remains.
+- **Live on testnet:** nectar-core-v2 **2.1.0-v7** (code-only upgrade, Base signing) + keeper-v2 + quoter 5d90edb8; Solana vault ENZa…pubW (devnet);
+  x402-relayer + agent1. Base spoke: vault 0xC4f4…3d09 + MockB20 0xD83A…Ad7E on the local fork (127.0.0.1:8545; anvil, disclosed).
+- **Running:** WO-33a (design port part 1: landing v2, tokens, fonts, shared components). Next: WO-33b, WO-33c, then G3b re-run;
+  pre-submission security review (ultracode workflow); docs for P2b; G9.
+- RPC default test.rpc.fastnear.com (D-025). Background: keeper-v2 daemon (Solana + Base relays), Feed :8788/:8789, x402 :8791, anvil :8545.
+- Commits: no Co-Authored-By trailer (Kunal, 2026-11-10); kunal-drall sole author.
+- Human: H-GUARD-V7 (Kunal runs the script), H15 (optional: real Base Sepolia), H16 tracks, H11 video, H10/H14 team + payout, H1–H3 publish.
 
 # STATE.md — one screen for a returning human
 
@@ -60,7 +60,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-10T17:48:39Z · commit ac09433
+Last activity: 2026-11-10T18:05:06Z · commit 74ed593
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
