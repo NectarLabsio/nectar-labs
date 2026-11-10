@@ -1,0 +1,98 @@
+{
+  "recorded_at": "2026-11-10T12:52:59.075Z",
+  "rpc": "https://rpc.testnet.near.org",
+  "contract": "nectar-core.nectar.testnet",
+  "views": {
+    "contract_version": {
+      "method": "contract_version",
+      "args": {},
+      "block_height": 277069921,
+      "value": "nectar-core 0.1.0 p2"
+    },
+    "get_collateral": {
+      "method": "get_collateral",
+      "args": {
+        "symbol": "NVDAx"
+      },
+      "block_height": 277069927,
+      "value": {
+        "symbol": "NVDAx",
+        "token": "nvdax-mock.nectar.testnet",
+        "decimals": 6,
+        "price_feed_id": "TODO-G5",
+        "base_ltv_bps": 4000,
+        "max_nectar_ltv_bps": 7000,
+        "base_haircut_bps": 1000,
+        "weekend_haircut_bps": 2500,
+        "limit_premium_bps": 300,
+        "pre_liq_min_bps": 6500,
+        "pre_liq_max_bps": 8000,
+        "market_session_open": false,
+        "oracle_price_usd_e6": "89000000",
+        "oracle_updated_ns": "1794268138195955491",
+        "verified_dex_depth_usd_e6": "0",
+        "nectar_reserve_usd_e6": "0",
+        "active_committed_q_usd_e6": "3850000000",
+        "acc_fee_per_dollar_e18": "8020233156942359",
+        "remote_chain": {
+          "chain_id": "solana-devnet",
+          "vault_program": "EgfPYZfKHksk1P5x9z8WXKGr7cKcQ7sr5Zf8sdo68NYZ",
+          "mpc_domain_id": 1
+        }
+      }
+    },
+    "get_exit_capacity": {
+      "method": "get_exit_capacity",
+      "args": {
+        "symbol": "NVDAx"
+      },
+      "block_height": 277069932,
+      "value": {
+        "q_usd_e6": "3850000000",
+        "r_usd_e6": "0",
+        "d_usd_e6": "0",
+        "haircut_bps": 2500,
+        "session_open": false,
+        "oracle_price_usd_e6": "89000000",
+        "oracle_age_s": "47031",
+        "oracle_fresh": true,
+        "b_c_usd_per_unit_e6": "62300000",
+        "limit_bps_effective": 7000,
+        "capacity_usd_e6": "2887500000",
+        "oracle_source": "Owner"
+      }
+    },
+    "preview_borrow": {
+      "method": "preview_borrow",
+      "args": {
+        "symbol": "NVDAx",
+        "units": "100000000",
+        "borrow_usd_e6": "2500000000"
+      },
+      "block_height": 277069937,
+      "value": {
+        "b_c_usd_e6": "2887500000",
+        "static_limit_usd_e6": "3560000000",
+        "premium_usd_e6": "0",
+        "ok": true,
+        "reason": null
+      }
+    },
+    "preview_borrow_refused": {
+      "method": "preview_borrow",
+      "args": {
+        "symbol": "NVDAx",
+        "units": "100000000",
+        "borrow_usd_e6": "5000000000"
+      },
+      "block_height": 277069943,
+      "value": {
+        "b_c_usd_e6": "2887500000",
+        "static_limit_usd_e6": "3560000000",
+        "premium_usd_e6": "43200000",
+        "ok": false,
+        "reason": "borrow above B_c"
+      }
+    }
+  }
+}

@@ -20,5 +20,5 @@ const db = new FeedDb(home(unset(env.FEED_DB_PATH) ? '~/.nectar/feed.sqlite' : (
 const rpc = unset(env.NEAR_RPC_URL) ? 'https://rpc.testnet.near.org' : (env.NEAR_RPC_URL as string);
 const core = loadRepoIds(env).core;
 const views = core === null ? null : new NearViewReader(rpc, core);
-await createMcpServer({ db, views }).connect(new StdioServerTransport());
+await createMcpServer({ db, views, coreId: core }).connect(new StdioServerTransport());
 process.stderr.write(JSON.stringify({ ts: new Date().toISOString(), level: 'info', service: 'feed-mcp', msg: 'mcp_stdio_ready', live_views: views !== null }) + '\n');
