@@ -5,12 +5,12 @@ description: Committed exit liquidity as a borrowing-limit input.
 ---
 # Whitepaper (short form)
 
-<p className="verified">Verified against: F-052 (2026-11-09), F-110 (2026-11-09), F-112 (2026-11-09), F-113 (2026-11-09), F-114 (2026-11-09) · spec docs/PRD.md §1, §3, §4 · D-009 (2026-11-10)</p>
+<p className="verified">Verified against: F-052 (2026-11-09), F-110a (2026-11-10), F-112a (2026-11-10) · spec docs/PRD.md §1, §3, §4 · D-009 (2026-11-10)</p>
 <p className="status">Status: design document. Market figures are dated 2026-11-09 and re-pulled before each release. All other numbers are illustrative, computed from config.yaml.</p>
 
 ## 1. Problem
 
-Every collateralised loan assumes a buyer for the collateral. For tokenized stocks, principal tokens and other RWAs, that buyer is a DEX pool or a prop AMM quoting during market hours, and the quote can be withdrawn without notice. Lenders respond with low, hand-set LTV caps. On-chain RWA AUM was $33.609B on 2026-11-09, of which $4.09B (13.5 %) was active in DeFi (F-113). xStocks supply was about $196M, more than $182M of it on Solana (F-114).
+Every collateralised loan assumes a buyer for the collateral. For tokenized stocks, principal tokens and other RWAs, that buyer is a DEX pool or a prop AMM quoting during market hours, and the quote can be withdrawn without notice. Lenders respond with low, hand-set LTV caps.
 
 ## 2. Mechanism
 
@@ -30,7 +30,7 @@ The contract holds every rule. Off-chain parties (keeper, quoter, oracle, copilo
 
 ## 5. Why NEAR
 
-One contract holds escrow, limits and settlement. Chain Signatures let that contract authorise a release on Solana without a bridge. OutLayer runs the buyer's private pricing in a TEE. NEAR Intents is the public depth and USDC rail. For context, NEAR Intents showed $37.006B cumulative volume and $189.13M TVL (F-110), and Rhea Finance $235.99M TVL (F-112), on 2026-11-09.
+One contract holds escrow, limits and settlement. Chain Signatures let that contract authorise a release on Solana without a bridge. OutLayer runs the buyer's private pricing in a TEE. NEAR Intents is the public depth and USDC rail. For context, on 2026-11-10 NEAR Intents showed $37.006B cumulative volume and $191.14M TVL (F-110a, source: [DefiLlama](https://defillama.com/protocol/near-intents)), and Rhea Finance $237.35M TVL (F-112a, source: [DefiLlama](https://defillama.com/protocol/rhea-finance)).
 
 ## 6. Competitive position
 
