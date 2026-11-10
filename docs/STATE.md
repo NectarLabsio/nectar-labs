@@ -1,6 +1,6 @@
 # STATE.md — one screen for a returning human
 
-Phase: **P2** — WO-4g (README for G7/G8) running. p2-green held: G7 is PARTIAL until the Solana toolchain arrives or the cut deadline (2026-11-13 12:00 UTC) applies the disclosed fallback. Then: submission package + G9.
+Phase: **P2 / submission prep** — submission package drafted (WO-4h, nothing sent); payload builder wired (dry-run only); WO-4i (figure removal + rules copy) running; G9 after demo re-seed (needs H-NEAR-FAUCET). p2-green held on G7 PARTIAL.
 Gates: G0–G4 PASS · G5 FALLBACK (disclosed) · G6 PASS · G7 PARTIAL (NEAR side verified; Solana leg not built — H-TOOLCHAIN-SOLANA) · G8 PASS (fixture) · G9 pending
 Open handoffs: H13, H-NEAR-FAUCET, H-EXPLORER, H-TOOLCHAIN-SOLANA (P2), H4, H5, H7, H8, H9, H10, H11, H12 — see docs/HUMAN_HANDOFF.md
 Blocking right now: H13 Pyth key (G5 live price) · H-NEAR-FAUCET top-up (P1 contract redeploy). Neither blocks round 1.
@@ -43,7 +43,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify: rules unchanged; C-019 Q-000 credits now a separate key; xStocks/RWA figures not re-found)
-Last activity: 2026-11-10T00:10:24Z · commit 8d16567
+Last activity: 2026-11-10T00:16:51Z · commit 22328a2
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
@@ -72,6 +72,9 @@ WO-17 merged (681beac): copilot verifier (EIP-191 signer recovery, report_data/n
 G7 NEAR side (2026-11-09T23:5xZ): position #6 remote leg (quote #3, 100 bps, recipient DbrceqSn… throwaway) → settlement_signed by
   v1.signer-prod.testnet; scripts/verify-ed25519.mjs: signature_valid true vs authority 6QPGoVj8…; vault program in the preimage is a
   PLACEHOLDER (EgfPYZfK…) — Solana vault not deployed; #6 stays Settling until a relay. Owner ~0.04 NEAR — faucet needed for anything more.
+Submission: docs/SUBMISSION.md payload table → scripts/build-submission.mjs; open fields TODO-H10 (lead/email/size), TODO-H14 (mainnet
+  nearAddress + consent), TODO-H2 (repo URL), TODO-H3 (X demo post URL; video H11). Tracks defi/security/privacy (agents only if G9 shows MCP).
+  Post-P2 NEAR settlement confirmed by G7 run 1 (position #5 settled_near after the p2 upgrade).
 Next after G5 + WO-4e: tag p1-green if G5 is PASS or a disclosed fallback (CLAUDE.md §8 P1 acceptance allows "README says exactly which
   fallback is active"); refresh .claude/agents/quoter.md at the boundary; open P2 (WO-13 researcher) — Solana leg needs H-TOOLCHAIN-SOLANA,
   copilot needs H7 (fixture verifier otherwise). Re-seed demo state (needs H-NEAR-FAUCET).
