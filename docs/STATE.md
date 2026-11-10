@@ -1,14 +1,15 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## v7 progress (2026-11-10 20:00Z)
-- Gates: **G1(v7) PASS**, **G10 PASS** (open F-351/F-352/F-353, unused), **G7-prep recorded** (vault on devnet + 25 anchor tests) — EVIDENCE 884552f. G7/G2b/G3b/G11/G14 pending.
-- Merged on main (verify:quick green; web e2e 176 pass / 0 fail): WO-19 P0 delta · WO-20 web delta + landing · WO-14 vault · WO-16 keeper maths + relay ·
-  WO-21 remote lifecycle · WO-31 web remote flow · WO-25 skill tools + x402 · WO-30 docs · WO-24 OutLayer jobs (unpublished) · WO-26a /agents + console.
+## v7 progress (2026-11-10 21:30Z local)
+- Gates: **G1(v7) PASS**, **G10 PASS** (open F-351/F-352/F-353, unused), **G11 PASS** (re-run after GATE_FAIL_G11, 482 tests, all 68 mutating methods
+  gas-measured, max 68.9 Tgas), **G7-prep recorded** (vault on devnet + 25 anchor tests). Pending: G2b, G3b, G7, G14 (need v2 on testnet), G12/G13 (P2b, after G7).
+- **The whole v7 contract surface is built and merged** (P0 delta, remote lifecycle, Shields, Profit-Lock, Notes, Reserve, OutLayer job hooks), wasm 734,784 B
+  sha256 252a6abe…; quoter jobs wasm 5d90edb8… (unpublished); keeper relay + deposit watcher; Feed skill tools + x402; web screens for every module
+  (gated by `features.*`, all false until their testnet gate); docs pages + legal. main verify:quick green; web e2e 228 pass / 0 fail.
 - Solana devnet: nectar_vault ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW, mint 3Ve8GiDB…E8hT, vault PDA HGSFKMWW…EbeX.
-- Running: WO-23a contract (Shields, Profit-Lock, reservation deposit, job hooks).
-- Ready to run on funds: scripts/21-deploy-v2.sh (WO-6a) → 30-quoter-publish (new jobs wasm 5d90edb8…) → 40-seed → verifier G2b/G3b → G7 → G14.
-- Blocked on humans: **H-NEAR-FAUCET** (~8 NEAR; blocks every v2/NEAR deploy), H-GUARD-V7 (before P2b).
-- Next: WO-22 Notes → WO-23b Reserve (+ G11 owner-setter gas rows) → WO-26b /shield /reserve /notes → P2b only after G7.
+- **Everything left needs testnet NEAR (H-NEAR-FAUCET, ~11 NEAR):** scripts/10-build.sh → 21-deploy-v2.sh → 30-quoter-publish (jobs) → 21-deploy-v2.sh --switch
+  → 40-seed-demo.sh → verifier G2b/G3b → G7 round trip (reserve → Phantom/CLI deposit → confirm → settle/release relay) → G14 (x402-relayer + agent1 accounts).
+- Then P2b (Base, after G7; needs H-GUARD-V7, H15) and the package (DEMO_SCRIPT/SUBMISSION still say "Solana leg not built": fix at package time).
 
 # STATE.md — one screen for a returning human
 
@@ -59,7 +60,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-10T13:57:27Z · commit 09c4316
+Last activity: 2026-11-10T15:47:25Z · commit 53f1e63
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
