@@ -1,0 +1,7 @@
+target/
+.anchor/
+test-ledger/
+node_modules/
+# local-only throwaway wallet for solana-test-validator (never commit keypairs)
+.localnet/
+*-keypair.json

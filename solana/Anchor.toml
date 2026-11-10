@@ -1,0 +1,23 @@
+# Anchor 0.32.1 + Solana CLI 2.3.0 (the anchor v0.32.1 CI pin, C-017 / F-187).
+[toolchain]
+anchor_version = "0.32.1"
+solana_version = "2.3.0"
+package_manager = "pnpm"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+nectar_vault = "GdCVqcg24RJkwNWZ2kgEaQRVhsXxEupvBSZSJy39xkrm"
+
+[programs.devnet]
+nectar_vault = "GdCVqcg24RJkwNWZ2kgEaQRVhsXxEupvBSZSJy39xkrm"
+
+[provider]
+cluster = "localnet"
+# Throwaway local wallet (gitignored; `pnpm run wallet:local` creates it). Devnet overrides this, see deploy.md.
+wallet = ".localnet/wallet.json"
+
+[scripts]
+test = "pnpm run test:ts"
