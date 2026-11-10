@@ -1,0 +1,36 @@
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+live version "2.0.0-v7"
+wasm old≈734784 new=767891 storage_usage=748665 balance=10091283293704661099999991 topup_yocto=0
+├  Unsigned transaction:
+│    signer_id:    nectar-core-v2.nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- deploy code <FCbHG4GpjbKu2JD4KLNJLRfaDoa9yYcTMGwVG33MuuYo> to a account <nectar-core-v2.nectar.testnet>
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:6tmYgY7UieFw5Krg23GnpZpX8x3iR5usy9HFbip4ZUft
+│    Signature:  ed25519:2L3afANXzH5Uxs1uW1URsFkmi2kz5c56J31GjAtwQreZRtnGMPE8bFzzA41UrWQdgg8SLjuhyy4Dv3PhFVwyHd1s
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 55.7 Tgas
+│    Transaction fee: 0.0055402273656213 NEAR
+│    Transaction ID: 316FUrsYGDQBiEtgekGYqVHiYfLVWgwnpcHeHh7rJd5L
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/316FUrsYGDQBiEtgekGYqVHiYfLVWgwnpcHeHh7rJd5L
+│     [0m
+
+Contract code has been successfully deployed.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy nectar-core-v2.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/nectar_core/nectar_core.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+new version "2.1.0-v7"
+VIEWS CHANGED:
+1c1
+< get_config {"contract_version":"2.0.0-v7","owner":"nectar.testnet","usdc_token":"usdc-mock.nectar.testnet","keeper":"keeper-v2.nectar.testnet","keeper_fee_bps":50,"fee_split":{"buyers_bps":7000,"lenders_bps":2000,"treasury_bps":1000},"paused":false,"min_notice_period_ns":"604800000000000","min_quote_usd_e6":"100000000","max_age_ns_session":"120000000000","max_age_ns_closed":"86400000000000","band_bps":1500,"gas_reserve_yocto":"1069999999999999999999996","next_quote_id":"4","next_position_id":"6","max_quotes_per_asset":64,"max_quotes_per_settlement":8,"origination_fee_bps":30}
+---
+> get_config {"contract_version":"2.1.0-v7","owner":"nectar.testnet","usdc_token":"usdc-mock.nectar.testnet","keeper":"keeper-v2.nectar.testnet","keeper_fee_bps":50,"fee_split":{"buyers_bps":7000,"lenders_bps":2000,"treasury_bps":1000},"paused":false,"min_notice_period_ns":"604800000000000","min_quote_usd_e6":"100000000","max_age_ns_session":"120000000000","max_age_ns_closed":"86400000000000","band_bps":1500,"gas_reserve_yocto":"1069999999999999999999996","next_quote_id":"4","next_position_id":"6","max_quotes_per_asset":64,"max_quotes_per_settlement":8,"origination_fee_bps":30}

@@ -131,4 +131,4 @@ Rust: `near-sdk` 5.30.1, edition 2024, `cargo near build`; no floats in contract
 amounts `_e6` (USD/USDC) and `_e18` (fee index); `bps` everywhere; borsh layouts versioned.
 TS: Node ≥ 22.22.2, pnpm, strict TS, `near-api-js` 7.4.0, `@solana/kit` 8.6.0; no `any`.
 Commits: conventional (`feat:`, `fix:`, `chore:`, `docs:`, `test:`), one work order per commit,
-`Co-Authored-By` lines as configured. Tags: `p0-green`, `p1-green`, `p2-green`, `submission-rc`.
+no `Co-Authored-By` trailer — kunal-drall is the sole author (Kunal, 2026-11-10). Tags: `p0-green`, `p1-green`, `p2-green`, `submission-rc`.
