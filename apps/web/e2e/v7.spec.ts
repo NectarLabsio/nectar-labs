@@ -60,10 +60,12 @@ test.describe("landing v7", () => {
     await pinFlags(page, ALL_FEATURES);
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1, name: "Borrow against stocks without fire-sales" })).toBeVisible();
-    for (const [id, tag] of [["shields", "shields"], ["reserve", "reserve"], ["spend", "pay_to"], ["notes", "notes"], ["hub", "solana_remote"], ["agents", "agent_skill"]] as const) {
+    // Landing v2 (WO-33a): the Shield role is #borrow, remote chains are #chains, the agent channel is a block inside #code.
+    for (const [id, tag] of [["borrow", "shields"], ["reserve", "reserve"], ["spend", "pay_to"], ["notes", "notes"], ["chains", "solana_remote"]] as const) {
       await expect(page.locator(`section#${id}`)).toHaveAttribute("data-feature", tag);
     }
-    for (const f of ["pay_to", "profit_lock", "solana_remote", "base", "x402"] as const) await expect(page.locator(`div[data-feature="${f}"]`)).toHaveCount(1);
+    for (const f of ["pay_to", "profit_lock", "solana_remote", "base", "x402", "agent_skill"] as const) await expect(page.locator(`div[data-feature="${f}"]`)).toHaveCount(1);
+    await expect(page.locator("#code div[data-feature=\"agent_skill\"]")).toHaveCount(1);
     await expect(page.locator("#faq")).toBeVisible();
     copyRules((await page.locator("body").innerText()).toLowerCase());
   });

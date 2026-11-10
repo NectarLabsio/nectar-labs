@@ -4,7 +4,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "../../..");
-const dirs = ["packages/ui/src", "packages/ui/components.css", "apps/web/app", "apps/web/components", "apps/web/lib"];
+const dirs = ["packages/ui/src", "packages/ui/components.css", "packages/ui/app.css", "apps/web/app", "apps/web/components", "apps/web/lib"];
 const allow = new Set(["packages/ui/tokens.css"]);
 const pattern = /#[0-9a-fA-F]{3,8}\b(?![\w-])|\brgba?\(|\bhsla?\(/;
 const bad = [];

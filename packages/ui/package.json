@@ -5,26 +5,42 @@
   "type": "module",
   "description": "Nectar Network design system components (docs/DESIGN_SYSTEM.md). Colors live only in tokens.css.",
   "exports": {
-    ".": { "types": "./src/index.ts", "default": "./src/index.ts" },
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
     "./tokens.css": "./tokens.css",
     "./fonts.css": "./fonts.css",
     "./components.css": "./components.css",
-    "./logo/*": "./logo/*"
+    "./app.css": "./app.css",
+    "./logo/*": "./logo/*",
+    "./3d/*": "./3d/*"
   },
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "lint": "node scripts/check-no-literal-colors.mjs"
+    "lint": "node scripts/check-no-literal-colors.mjs",
+    "test": "node --test src/charts.test.ts"
   },
   "peerDependencies": {
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "three": "0.160.0"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.2.0",
+    "@types/three": "0.160.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "three": "0.160.0",
     "typescript": "~5.9.3"
+  },
+  "peerDependenciesMeta": {
+    "three": {
+      "optional": true
+    }
   }
 }

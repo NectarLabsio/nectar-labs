@@ -1,6 +1,6 @@
 "use client";
 import type { ComponentType, ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ThemeToggle } from "./theme";
 import { openConsent } from "./ConsentBanner";
 
@@ -34,40 +34,57 @@ export function Lockup({ base = "/brand", size = "nav", Link = A, href = "/" }: 
   );
 }
 
+export interface NavLink {
+  href: string;
+  label: string;
+  /** Path prefixes that mark this task current (default: href). Borrow covers /shield, Earn covers /reserve, and so on. */
+  match?: string[];
+}
+
 export interface NavProps {
-  links: Array<{ href: string; label: string }>;
+  links: NavLink[];
   pathname: string;
   Link?: LinkLike;
+  /** Session chip (SessionChip from ./app). */
+  session?: ReactNode;
+  /** Network chip, e.g. "Testnet". Hidden at phone width. */
+  network?: ReactNode;
+  /** Wallet button. */
   actions?: ReactNode;
   brandBase?: string;
 }
 
-export function Nav({ links, pathname, Link = A, actions, brandBase }: NavProps) {
-  const [open, setOpen] = useState(false);
-  useEffect(() => setOpen(false), [pathname]);
+function isCurrent(l: NavLink, pathname: string) {
+  const ms = l.match ?? [l.href];
+  return ms.some((m) => (m === "/" ? pathname === "/" : pathname === m || pathname.startsWith(m + "/")));
+}
+
+/**
+ * App top bar v2 (DESIGN_SYSTEM §3c): logo, tasks with a mint underline, session chip, network chip, wallet.
+ * At phone width the tasks move to a second row that scrolls inside itself, so the page never scrolls sideways.
+ */
+export function Nav({ links, pathname, Link = A, session, network, actions, brandBase }: NavProps) {
   return (
-    <nav className="top" aria-label="Main">
-      <div className="wrap">
+    <header className="nx-nav">
+      <div className="nx-nav-in">
         <Lockup base={brandBase} Link={Link} />
-        <div className={`links ${open ? "open" : ""}`} id="nav-links">
+        <nav className="nx-nav-links" aria-label="Main">
           {links.map((l) => {
-            const current = l.href === "/" ? pathname === "/" : pathname === l.href || pathname.startsWith(l.href + "/");
+            const current = isCurrent(l, pathname);
             return (
-              <Link key={l.href} href={l.href} aria-current={current ? "page" : undefined} onClick={() => setOpen(false)}>
+              <Link key={l.href} href={l.href} className={current ? "on" : undefined} aria-current={current ? "page" : undefined}>
                 {l.label}
               </Link>
             );
           })}
-        </div>
-        <div className="navbtns">
-          <ThemeToggle className="hide-sm" />
+        </nav>
+        <div className="nx-nav-right">
+          {session}
+          {network ? <span className="nx-hide-s">{network}</span> : null}
           {actions}
-          <button type="button" className="btn sm menu" aria-expanded={open} aria-controls="nav-links" onClick={() => setOpen((o) => !o)}>
-            Menu
-          </button>
         </div>
       </div>
-    </nav>
+    </header>
   );
 }
 
@@ -77,14 +94,16 @@ export interface FooterProps {
   Link?: LinkLike;
   brandBase?: string;
   email: string;
+  /** Giant wordmark fading into the page under the bottom bar (landing). */
+  giant?: boolean;
 }
 
-export function Footer({ columns, Link = A, brandBase, email }: FooterProps) {
+export function Footer({ columns, Link = A, brandBase = "/brand", email, giant }: FooterProps) {
   const [copied, setCopied] = useState(false);
   return (
     <footer className="site">
       <div className="wrap">
-        <div className="fgrid">
+        <nav className="fgrid" aria-label="Footer">
           <div className="brand">
             <Lockup base={brandBase} size="footer" Link={Link} />
             <p>Committed liquidity, verifiable settlement.</p>
@@ -127,7 +146,7 @@ export function Footer({ columns, Link = A, brandBase, email }: FooterProps) {
               )}
             </div>
           ))}
-        </div>
+        </nav>
         <div className="fbar">
           <span>© 2026 Nectar Network · MIT License · Unaudited testnet software</span>
           <span className="r">
@@ -138,6 +157,7 @@ export function Footer({ columns, Link = A, brandBase, email }: FooterProps) {
           </span>
         </div>
       </div>
+      {giant ? <div className="nx-giant" aria-hidden="true" style={{ WebkitMaskImage: `url(${brandBase}/wordmark-giant.png)`, maskImage: `url(${brandBase}/wordmark-giant.png)` }} /> : null}
     </footer>
   );
 }
