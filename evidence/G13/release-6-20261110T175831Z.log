@@ -1,0 +1,3 @@
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"repaid","data":[{"position_id":"6","amount_usd_e6":"308700000","remaining_debt_usd_e6":"0"}]}
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"remote_release_requested","data":[{"position_id":"6","nonce":"2","expires":"1794337122","message":"0xf5f93f431d35956ed770acef233b7398315f44951a999e3f07a1b9caa9bdc769","recipient":"0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"remote_release_signed","data":[{"position_id":"6","nonce":"2","expires":"1794337122","message":"0xf5f93f431d35956ed770acef233b7398315f44951a999e3f07a1b9caa9bdc769","signature_hex":"3fc55e46f9c863bd2650225a3fc27d15651ac0c5

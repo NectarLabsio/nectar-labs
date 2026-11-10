@@ -1,0 +1,4 @@
+position 7 (get_pending_settlement_evm) relay tx 0x20d13922df857bd352bde1e30bafde868c1c76d8cedd3bd33acbe38eda6fe4bb status true
+  replay → reverted: NonceUsed(6)
+position 6 (get_pending_release_evm) relay tx 0x759a9a8b956831b054648605932ea8af72c5bfbc73b77e4f679591f96788694b status true
+  replay → reverted: NonceUsed(2)

@@ -1,0 +1,5 @@
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"extra_remote_chain_set","data":[{"symbol":"NVDAx","remote_chain":{"chain_id":"base-sepolia","vault_program":"0xC4f46D859f9B555D95b68DC28564C5201F743d09","mpc_domain_id":0},"rpc_url":"http://127.0.0.1:8545"}]}
+remote chains: [{"chain_id":"solana-devnet","evm_chain_id":null,"mpc_domain_id":1,"primary":true,"rpc_url":null,"vault_program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW"},{"chain_id":"base-sepolia","evm_chain_id":84532,"mpc_domain_id":0,"primary":false,"rpc_url":"http://127.0.0.1:8545","vault_program":"0xC4f46D859f9B555D95b68DC28564C5201F743d09"}]
+EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"quote_funded","data":[{"quote_id":"4","buyer":"buyer1.nectar.testnet","collateral":"NVDAx","amount_usd_e6":"1000000000","max_discount_bps":300,"accepts_voluntary_fills":false}]}
+EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"buyer1.nectar.testnet","token_ids":["q-4"]}]}
+borrower1 EVM 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A MockB20 balance 0
