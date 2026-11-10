@@ -5,8 +5,8 @@ description: The contract decides on its own whether the market is in session, a
 ---
 # Weekend Oracle Guard
 
-<p className="verified">Verified against: F-342 (2026-11-10, NYSE 2026–2027 calendar), F-350 (2026-11-10) · spec docs/PRD.md §4.7 · docs/work/interface-v7.md §A2 · D-018 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10)</p>
-<p className="status">Status: built and tested in the sandbox; testnet deployment pending. It ships in `nectar-core-v2.nectar.testnet`, which has not been created yet (D-018, handoff H-NEAR-FAUCET). The live v1 contract still uses the owner flag `market_session_open`.</p>
+<p className="verified">Verified against: F-342 (2026-11-10, NYSE 2026–2027 calendar), F-350 (2026-11-10) · spec docs/PRD.md §4.7 · docs/work/interface-v7.md §A2 · D-018 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:52Z, 91db9ea)</p>
+<p className="status">Status: live on testnet (EVIDENCE §G2b, 2026-11-10T16:52Z). `nectar-core-v2.nectar.testnet` holds 287 NYSE session windows and answers the session check (`get_exit_capacity` returns `session_open` and a reason). A closed-window refusal is tested in the sandbox only. The OutLayer calendar job has no recorded testnet execution. The earlier v1 contract still uses the owner flag `market_session_open`.</p>
 
 ## The rule
 
@@ -49,7 +49,7 @@ The guard does not trust a price feed's own idea of "the market is open". Coinba
 
 ## Pending or not built (PRD §4.7)
 
-- An attested OutLayer result that sets `forced_closed`. The contract hook is built and tested in the sandbox: `request_session_check(symbol)` (anyone, 60 s cooldown) calls the OutLayer calendar job, and `on_session_check` only accepts `force_closed: true`; a `false` answer is ignored, so nothing outside the contract can open a session (`tests_v7b::calendar_job_can_close_but_never_open`, sandbox `outlayer_calendar_cannot_open_and_multiplier_bounded`). The OutLayer job itself is built (quoter/src/calendar.rs, vectors in quoter/tests/jobs_vectors.json); publish pending, so it has no testnet `version_key` yet.
+- An attested OutLayer result that sets `forced_closed`. The contract hook is built and tested in the sandbox: `request_session_check(symbol)` (anyone, 60 s cooldown) calls the OutLayer calendar job, and `on_session_check` only accepts `force_closed: true`; a `false` answer is ignored, so nothing outside the contract can open a session (`tests_v7b::calendar_job_can_close_but_never_open`, sandbox `outlayer_calendar_cannot_open_and_multiplier_bounded`). The OutLayer job itself is built (quoter/src/calendar.rs, vectors in quoter/tests/jobs_vectors.json); no testnet execution of it is recorded in docs/EVIDENCE.md.
 - A weekend reference price. The v2 fields `weekend_ref_price_e6` and `weekend_ref_updated_ns` exist and are unused. PROD would use a 24/7 DEX TWAP plus an implied-volatility spread.
 
 ## Tests

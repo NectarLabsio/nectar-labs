@@ -15,7 +15,7 @@ Format the builder relies on: one row per API field, column 1 = API field name i
 | `leadName` | `TODO-H10` | README "Team" names Kunal Drall, but HACKATHON.md says never guess this field: Kunal confirms in H10 |
 | `email` | `TODO-H10` | the earlier draft had `kunal@nectarnetwork.fun`; Kunal confirms it in H10 (≤ 160 chars, ≤ 2 submissions per email, Q-015) |
 | `size` | `TODO-H10` | one of `1`, `2 - 4`, `4 - 6`, `6 - 8`, `8+`, exactly as written; `1` if H10 says "Kunal only" |
-| `tracks` | `["defi","security","privacy"]` | see "Tracks" below; `agents` is added only per the rule there |
+| `tracks` | `["defi","security","privacy"]` | core three; the proposal in "Tracks" below adds `agents` and `nfts`. Kunal decides (H16); this value changes only on his reply |
 | `nearAddress` | `TODO-H14` | **mainnet** payout account, made by Kunal in his own wallet; never created or invented by an agent; must match the regex in HACKATHON.md |
 | `projectUrl` | `TODO-H2` | public repo URL after H2; ≤ 300 chars; each repo is submitted once |
 | `demoUrl` | `TODO-H3` | URL of the **public X demo post** (H3) carrying the video (H11). HACKATHON.md: send only once the repo is public and the post is up |
@@ -29,7 +29,7 @@ and must not add any key outside the 11 above. Demo video `TODO-H11` is not an A
 ```text
 Problem: lenders cap the LTV of tokenized stocks because DEX exit liquidity is revocable. Nectar Labs makes exit liquidity committed. Market makers escrow time-locked USDC quotes (Pappus) in a NEAR contract with a 7-day notice period. Borrowers get a higher limit (Cramér), B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)), and pay a limit premium that funds the buyers' commitment fees. Pre-liquidation sells collateral to the committed buyer at a bounded discount instead of on a DEX.
 
-How NEAR fits: nectar-core (Rust, near-sdk 5.30.1) on NEAR testnet holds quotes, positions, the pool and an O(1) fee index (G1, G2 PASS). A hash-pinned OutLayer TEE program computes the settlement discount from encrypted market-maker inputs; the contract clamps it to the quote's cap and settles at the cap if the call fails (G4 PASS: request 15148 returned 159 bps against a 400 bps cap, demo inputs). The keeper holds a function-call key for two methods only. 1Click dry quotes give signed reference depth and are never deposited (G6 PASS). Chain Signatures: the contract builds the settlement message itself and v1.signer-prod.testnet signs the raw bytes with Ed25519; the signature verifies against the derived vault key (G7 PARTIAL: NEAR side verified, Solana devnet program not built). The NEAR AI copilot shows an answer only after TDX quote and signature checks (G8 PASS on a fixture; no live answer verified).
+How NEAR fits: nectar-core (Rust, near-sdk 5.30.1) on NEAR testnet holds quotes, positions, the pool and an O(1) fee index (G1, G2 PASS). A hash-pinned OutLayer TEE program computes the settlement discount from encrypted market-maker inputs; the contract clamps it to the quote's cap and settles at the cap if the call fails (G4 PASS: request 15148 returned 159 bps against a 400 bps cap, demo inputs). The keeper holds a function-call key for two methods only. 1Click dry quotes give signed reference depth and are never deposited (G6 PASS). Chain Signatures: the contract builds the settlement or release message itself, v1.signer-prod.testnet signs the raw bytes with a key derived per position, and a Solana devnet program verifies the Ed25519 signature before it settles to the buyer or releases to the borrower (G7 PASS: both round trips on devnet; deposits confirmed by an OutLayer vault read). Agents can pay for data with x402 on NEAR (G14 PASS), and every quote and loan is an NEP-171 Note. The NEAR AI copilot shows an answer only after TDX quote and signature checks (G8 PASS on a fixture; no live answer verified).
 
 Disclosed: collateral and USDC are mock tokens; the price comes from an owner oracle (G5 FALLBACK; the Pyth path is built and tested, no live NVDA price); testnet only, no token, no mainnet. Evidence: docs/EVIDENCE.md.
 ```
@@ -42,16 +42,20 @@ Claim → evidence (docs/EVIDENCE.md gate table, quoted exactly):
 | two-method keeper key | D-010, D-012; G2 `view_access_key_list` |
 | 1Click dry, never deposited | G6 PASS (22:58Z), Q-007 |
 | oracle | G5 FALLBACK (disclosed) (22:55Z) |
-| Chain Signatures NEAR side | G7 PARTIAL: NEAR side verified; Solana leg not built (23:57Z), position #6 |
+| Chain Signatures + Solana round trip, per-position key, OutLayer deposit read | G7 (v7) PASS (2026-11-10T16:52Z): devnet release 5fTihnbJ…, settle 3cdcQru2…; supersedes G7 PARTIAL (2026-11-09T23:57Z) |
+| x402, NEP-171 Notes | G14 PASS (2026-11-10T16:52Z): relay tx 5VL1P4kg…, `nft_mint p-4`; G2b PASS (16:52Z) `nft_tokens` |
+| v7 contract on testnet | G2b PASS (2026-11-10T16:52Z), `nectar-core-v2.nectar.testnet` |
 | copilot | G8 PASS (fixture) (23:56Z) |
 | web | G3 PASS (21:15Z), not claimed in `idea` |
 
-## Tracks
-`defi`, `security`, `privacy`: each backed by a gate.
-- `defi` (lending): committed exit liquidity as a limit input; G1, G2, G4, G6.
-- `security`: function-call keeper key (D-010/D-012), pinned TEE program, contract-built signing preimage (D-003, D-016), oracle staleness/confidence/band checks (G5 sandbox tests).
+## Tracks — proposal for H16 (Kunal decides)
+Proposed: `defi`, `security`, `privacy`, `agents`, `nfts`. Not proposed: `realworld`. Each proposed track is backed by a gate.
+- `defi` (lending): committed exit liquidity as a limit input; G1, G2, G2b, G4, G6, G7 (v7).
+- `security`: function-call keeper key (D-010/D-012/D-019), pinned TEE program, contract-built signing preimage with a per-position derived key (D-003, D-016, F-338), oracle staleness/confidence/band checks (G5 sandbox tests), weekend guard that can only close.
 - `privacy`: market-maker inputs encrypted for the TEE (G4 addendum; disclosed: demo values, plaintext seen by OutLayer's `/secrets/pubkey`, F-167); copilot verification gate (G8 PASS fixture).
-- `agents`: **not included today.** The Feed MCP server is built and runs locally, but no gate in EVIDENCE verifies it as working with an agent client (G6 only saw `get_exit_capacity` output; the `claude mcp add` syntax is still TODO-FACTS). Add `agents` only if the G9 record lists the MCP check as PASS (CLAUDE.md §1).
+- `agents`: an agent account opened a loan and paid 0.01 mock USDC for a Feed export through x402 on testnet (G14 PASS). The Feed MCP server is built and read-only, but no gate has run it with an agent client; say so if asked.
+- `nfts`: Position Notes (NEP-171) are minted on testnet for every quote, position and Reserve deposit (EVIDENCE §G2b `nft_tokens`, §G14 `nft_mint p-4`).
+- `realworld`: **not proposed.** The real-world payout path (`pay_to`) is built and sandbox-tested but has no testnet run, and the collateral is a mock.
 
 ## Baseline disclosure (Q-002 / Q-005): not an API field; lives in README. DRAFT until H12
 README "Prior work" text, unchanged: "Nectar Network (Kunal Drall) published research on exit-liquidity gaps for tokenized stocks

@@ -5,8 +5,8 @@ description: MCP tools that return an unsigned borrow for the agent's own key, a
 ---
 # Agent skill and x402 export
 
-<p className="verified">Verified against: F-328 (2026-11-10, `@fastnear/x402` 2.5.0), F-329 (2026-11-10, NEP-141 asset per route; gate G14 open) · spec docs/PRD.md §10.5 · docs/work/interface-v7.md §A4–§A6 · D-018 (2026-11-10) · tests listed below (services/feed/test/skill.test.ts, services/x402/test/x402.test.ts)</p>
-<p className="status">Status: built and tested in the sandbox; testnet deployment pending. The skill tools are unit-tested against JSON view fixtures for v1 and v2 (services/feed/test/fixtures/skill-views-v1.json, skill-views-v2.json); v2 is not deployed, so its fixture is not a chain recording. The x402 route is tested against a mocked facilitator chain and mocked NEAR RPC. The relayer and agent accounts (`x402-relayer.nectar.testnet`, `agent1.nectar.testnet`) do not exist yet (handoff H-NEAR-FAUCET), so no x402 payment has settled on testnet (gate G14). Whether the facilitator accepts mock USDC as the asset is also confirmed at G14 (F-329).</p>
+<p className="verified">Verified against: F-328 (2026-11-10, `@fastnear/x402` 2.5.0), F-329 (2026-11-10, NEP-141 asset per route; gate G14 open) · spec docs/PRD.md §10.5 · docs/work/interface-v7.md §A4–§A6 · D-018 (2026-11-10) · tests listed below (services/feed/test/skill.test.ts, services/x402/test/x402.test.ts) · testnet: docs/EVIDENCE.md §G14 (2026-11-10T16:52Z)</p>
+<p className="status">Status: x402 live on testnet (EVIDENCE §G14, 2026-11-10T16:52Z). Relay tx <a href="https://testnet.nearblocks.io/txns/5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx">5VL1P4kg…</a>: `x402-relayer.nectar.testnet` submitted `agent1.nectar.testnet`'s signed delegate paying 0.01 mock USDC (10000 e6) to `nectar.testnet`; agent borrow tx <a href="https://testnet.nearblocks.io/txns/GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt">GcHF75nW…</a> opened position #4 for $10 on nectar-core-v2. The payment asset was mock USDC (the `usdc-mock` `ft_transfer` receipt succeeded; F-329). The HTTP 402 → 200 leg is off-chain and was not re-run by the verifier. The skill tools run locally with the Feed and are unit-tested on view fixtures; no gate has run them with an agent client.</p>
 
 An agent can open a loan with one MCP call and spend the proceeds on a paid API. The MCP server never holds a key.
 
@@ -18,8 +18,8 @@ The Feed MCP server (`nectar-feed` 0.3.0; see [Feed MCP](./feed-mcp.md) for tran
 | --- | --- | --- |
 | `open_protected_stock_loan` | `account_id`, `collateral`, `units`, `borrow_usd` (required); `pay_to`, `referrer`, `shield`, `pre_liq_ltv_bps` (optional) | an **unsigned** call `{receiver_id: <collateral token>, method: "ft_transfer_call", args, deposit: "1", gas}` plus a preview: both limits, every fee, and health at −5%, −10% and −20% |
 | `quote_capacity` | `symbol` | exit capacity; on v2 also total debt and [aggregate headroom](../concepts/aggregate-limit.md) |
-| `get_note` | `token_id` | `not_available`: the tool is not wired yet. [Position Notes](../concepts/position-notes.md) are built and tested in the sandbox; testnet deployment pending |
-| `build_self_settle` | `position_id` | `not_available`: the tool is not wired yet. [Profit-Lock](../concepts/profit-lock.md) is built and tested in the sandbox; testnet deployment pending |
+| `get_note` | `token_id` | `not_available`: the tool is not wired yet. [Position Notes](../concepts/position-notes.md) are live on testnet (EVIDENCE §G2b, §G14) |
+| `build_self_settle` | `position_id` | `not_available`: the tool is not wired yet. [Profit-Lock](../concepts/profit-lock.md) ran on testnet on 2026-11-10 (evidence/v7-modules/summary.md) |
 
 Rules the tool enforces:
 

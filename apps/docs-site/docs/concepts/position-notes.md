@@ -5,8 +5,8 @@ description: Every quote, loan and Reserve deposit is an NEP-171 Note. Authority
 ---
 # Position Notes
 
-<p className="verified">Verified against: spec docs/PRD.md §6.11, §19.4 · docs/work/interface-v7.md §C · contracts/nectar-core/src/notes.rs (WO-22, merged 2026-11-10) · F-337 (near-contract-standards 5.30.1, 2026-11-10) · D-023 (2026-11-10) · tests listed below</p>
-<p className="status">Status: built and tested in the sandbox; testnet deployment pending. It ships in `nectar-core-v2.nectar.testnet`, which has not been created yet (D-018, handoff H-NEAR-FAUCET). The live v1 contract mints no Notes.</p>
+<p className="verified">Verified against: spec docs/PRD.md §6.11, §19.4 · docs/work/interface-v7.md §C · contracts/nectar-core/src/notes.rs (WO-22, merged 2026-11-10) · F-337 (near-contract-standards 5.30.1, 2026-11-10) · D-023 (2026-11-10) · tests listed below · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:34Z first run, views), §G14 (2026-11-10T16:52Z)</p>
+<p className="status">Status: live on testnet (EVIDENCE §G2b: `nft_tokens` lists `q-0`, `p-0`, `q-1`, `p-1` and `nft_token_svg p-1` renders; EVIDENCE §G14: `nft_mint p-4`). Reserve Note `r-NVDAx-0` was minted in the 2026-11-10 module run (evidence/v7-modules/summary.md). Transfer locks are tested in the sandbox only. The earlier v1 contract mints no Notes.</p>
 
 ## Three kinds of Note
 

@@ -38,7 +38,7 @@ Errors return `{"error": "<message>"}`.
 | --- | --- | --- |
 | `symbol` | string | collateral symbol |
 | `q_usd_e6` | string | committed quotes `Q_c` |
-| `r_usd_e6` | string | Nectar Reserve `R_c` (0 on the live v1 contract; the [Reserve pool](/concepts/nectar-reserve) is built and tested in the sandbox, testnet deployment pending) |
+| `r_usd_e6` | string | Nectar Reserve `R_c` (0 on the earlier v1 contract; on nectar-core-v2 it is the [Reserve pool](/concepts/nectar-reserve), deployed on testnet, EVIDENCE §G2b) |
 | `d_usd_e6` | string | verified DEX depth `D_c` (0 when the session is closed) |
 | `haircut_bps` | integer | haircut `h_c` |
 | `session_open` | boolean | market session state |
