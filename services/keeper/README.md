@@ -46,3 +46,15 @@ It uses its **own** small-balance account, never the keeper account. It stays di
 Unverified shapes are configurable: `PYTH_AUTH_HEADER` (default `Authorization`), `PYTH_AUTH_SCHEME` (default `Bearer`,
 empty = raw key), `ORACLE_UPDATER_FEE_VIEW`, `ORACLE_UPDATER_DATA_ARG` (default `data`). Fee cap: `ORACLE_UPDATER_MAX_FEE_YOCTO`
 (default 0.1 NEAR). The API key is never logged. Tests use a synthetic Hermes fixture (no key exists yet).
+
+## Base relay (P2b, WO-29b)
+
+Enabled by `BASE_RPC_URL` (chain 84532 only: Base Sepolia or the disclosed local fork; 8453 and mainnet hosts are refused,
+and the chain id is checked on the wire). Signer: Foundry keystore `BASE_KEYSTORE_DIR/BASE_ACCOUNT` + 0600
+`BASE_PASSWORD_FILE`, decrypted in-process; startup refuses if any `*PRIVATE_KEY*` / `*SECRET_KEY*` / `MNEMONIC` env var is set.
+For each signed `get_pending_settlement_evm` / `get_pending_release_evm` the keeper rebuilds the EIP-712 digest from the
+view fields, checks it equals the signed digest and that the signature recovers to the vault position's authority, then
+sends `settle` / `release` and relays the 0x tx hash via `relay_settlement_result` / `relay_release_result`. The tx hash is
+stored before broadcast (restart-safe); a used vault nonce relays the tx found in `PositionSettled` / `PositionReleased` logs.
+Deposits: `confirm_remote_deposit`, or `keeper_attest_deposit` with `BASE_KEEPER_ATTEST=1` (local fork; labelled).
+ERC-8021 suffix: not appended while the format is unverified (F-351); `/healthz` `base.builder_suffix` says so (TODO-H19).

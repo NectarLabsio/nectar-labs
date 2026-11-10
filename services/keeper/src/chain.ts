@@ -36,8 +36,21 @@ export interface TxResult {
 
 export interface KeeperCallArgs {
   position_id: string;
-  /** relay_* only: base58 Solana transaction signature. */
+  /** relay_* only: base58 Solana transaction signature, or a 0x EVM tx hash for a Base position (same arg name). */
   solana_tx_sig?: string;
+  /** keeper_attest_deposit only: tx reference of the observed deposit. */
+  tx_ref?: string;
+  /** keeper_attest_deposit only: vault depositor (0x address on Base). */
+  depositor?: string;
+}
+
+/** JSON args of a keeper call: `position_id` plus whichever optional fields are set (observed results only). */
+export function callArgsJson(args: KeeperCallArgs): Record<string, string> {
+  const out: Record<string, string> = { position_id: args.position_id };
+  if (args.solana_tx_sig !== undefined) out.solana_tx_sig = args.solana_tx_sig;
+  if (args.tx_ref !== undefined) out.tx_ref = args.tx_ref;
+  if (args.depositor !== undefined) out.depositor = args.depositor;
+  return out;
 }
 
 export interface KeeperWriter {
@@ -101,7 +114,7 @@ export class NearKeeperWriter implements KeeperWriter {
     const res = await this.account.callFunctionRaw({
       contractId: this.contractId,
       methodName: method,
-      args: args.solana_tx_sig === undefined ? { position_id: args.position_id } : { position_id: args.position_id, solana_tx_sig: args.solana_tx_sig },
+      args: callArgsJson(args),
       deposit: 0n,
       gas: this.gas,
       waitUntil: 'EXECUTED_OPTIMISTIC',

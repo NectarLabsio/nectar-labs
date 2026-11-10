@@ -414,6 +414,9 @@ export async function signToWire(instructions: Instruction[], payer: Transaction
 // ------------------------------------------------------------------ NEAR view shapes (tolerant; interface-v7 §B)
 
 interface RemoteView {
+  /** pinned at reserve time (v2): `solana-devnet`, `base-sepolia`, … */
+  chain_id?: string;
+  vault_program?: string;
   status?: string;
   authority?: string;
 }
@@ -449,6 +452,18 @@ interface RemoteChainView {
 
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
 const str = (v: unknown): v is string => typeof v === 'string';
+
+/** The only remote chain this relay serves (interface-v7 §B). */
+export const SOLANA_CHAIN_ID = 'solana-devnet';
+
+/**
+ * True unless the position is pinned to another remote chain. Positions without `remote.chain_id` (v1, or NEAR-held)
+ * pass here and are resolved through the collateral's primary remote chain, which must also be solana-devnet.
+ */
+export function isSolanaPosition(p: { remote?: { chain_id?: unknown } | null }): boolean {
+  const c = p.remote?.chain_id;
+  return c === undefined || c === null || c === SOLANA_CHAIN_ID;
+}
 
 function asPending(v: unknown): PendingSettlementView | null {
   if (!isObj(v)) return null;
@@ -620,11 +635,24 @@ export class SolanaRelay {
     return ctx;
   }
 
-  private programOf(rc: RemoteChainView): Address {
-    if (rc.chain_id !== 'solana-devnet') throw new Error(`remote chain ${rc.chain_id} is not solana-devnet`);
-    const p = address(rc.vault_program);
-    if (this.opts.expectedProgram != null && this.opts.expectedProgram !== p) throw new Error('remote_chain.vault_program != NECTAR_VAULT_PROGRAM_ID');
-    return p;
+  /**
+   * The Solana vault program of a position, or null when it is not a Solana position. v2 positions carry the chain and
+   * vault pinned at reserve time (`remote.chain_id` / `remote.vault_program`); v1 positions fall back to the collateral's
+   * primary `remote_chain`, which must itself be solana-devnet.
+   */
+  private async programFor(p: PositionLike): Promise<Address | null> {
+    let vaultProgram: string;
+    if (str(p.remote?.chain_id)) {
+      if (p.remote.chain_id !== SOLANA_CHAIN_ID || !str(p.remote.vault_program)) return null;
+      vaultProgram = p.remote.vault_program;
+    } else {
+      const rc = await this.remoteChain(p.collateral as string);
+      if (rc === null || rc.chain_id !== SOLANA_CHAIN_ID) return null;
+      vaultProgram = rc.vault_program;
+    }
+    const prog = address(vaultProgram);
+    if (this.opts.expectedProgram != null && this.opts.expectedProgram !== prog) throw new Error('remote_chain.vault_program != NECTAR_VAULT_PROGRAM_ID');
+    return prog;
   }
 
   async tick(): Promise<RelayReport> {
@@ -658,6 +686,9 @@ export class SolanaRelay {
   private async item(op: 'settle' | 'release' | 'deposit', p: PositionLike, report: RelayReport): Promise<boolean> {
     const id = p.position_id ?? p.id;
     if (!str(id) || !str(p.collateral)) return false;
+    // Chain gate (WO-29b): a position pinned to another remote chain (e.g. base-sepolia) is never ours; its pending
+    // views carry an EIP-712 digest, not a NECTAR_*_V1 preimage, and must not reach the Solana parser.
+    if (!isSolanaPosition(p)) return false;
     const key = `sol:${op}:${id}`;
     if (this.inFlight.has(key)) return true;
     const now = this.opts.nowMs();
@@ -668,9 +699,8 @@ export class SolanaRelay {
     }
     this.inFlight.add(key);
     try {
-      const rc = await this.remoteChain(p.collateral);
-      if (rc === null) return false; // NEAR-held collateral: nothing to do on Solana
-      const program = this.programOf(rc);
+      const program = await this.programFor(p);
+      if (program === null) return false; // NEAR-held collateral or another spoke's position: nothing to do on Solana
       if (op === 'deposit') {
         await this.deposit(id, p, program, report, key);
         return true;

@@ -32,6 +32,7 @@ import {
   SolanaRelay,
   VAULT_DISCRIMINATOR,
   assertDevnetRpc,
+  isSolanaPosition,
   associatedTokenAddress,
   buildReleaseInstructions,
   buildSettleInstructions,
@@ -276,8 +277,11 @@ class FakeNear implements CoreReader, KeeperWriter {
   version: string | null = null;
   missingMethods = new Set<string>();
   calls: Array<{ method: KeeperMethod; args: KeeperCallArgs }> = [];
+  views: Array<{ method: string; id: string }> = [];
+  primaryChain: { chain_id: string; vault_program: string; mpc_domain_id: number } | null = null;
   async view(method: string, args: Record<string, unknown>): Promise<ViewResult> {
     const id = String(args.position_id);
+    this.views.push({ method, id });
     switch (method) {
       case 'contract_version':
         if (this.version === null) throw new Error('MethodNotFound');
@@ -285,7 +289,7 @@ class FakeNear implements CoreReader, KeeperWriter {
       case 'list_positions':
         return { value: this.positions.slice(Number(args.from_index), Number(args.from_index) + Number(args.limit)), blockHeight: 1 };
       case 'get_collateral':
-        return { value: { symbol: 'NVDAx', remote_chain: { chain_id: 'solana-devnet', vault_program: V.vault_program, mpc_domain_id: 1 } }, blockHeight: 1 };
+        return { value: { symbol: 'NVDAx', remote_chain: this.primaryChain ?? { chain_id: 'solana-devnet', vault_program: V.vault_program, mpc_domain_id: 1 } }, blockHeight: 1 };
       case 'get_pending_settlement':
         return { value: this.pending.get(id) ?? null, blockHeight: 1 };
       case 'get_pending_release':
@@ -422,6 +426,43 @@ describe('solana: relay with a mocked RPC', () => {
     await relay.tick(); // cooldown
     assert.equal(near.calls.length, 1);
     assert.equal(sol.sent.length, 0);
+  });
+  it('chain gate (WO-29b): Base positions next to Solana ones are skipped before any pending view or parse', async () => {
+    const { sol, near, relay, v } = await setup();
+    near.version = '2.1.0-v7';
+    settlingPosition(near, V.preimage, V.signature_hex); // Solana position 0 (v1 shape, no remote)
+    sol.accounts.set(await positionPda(PROGRAM, v.vault, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n) });
+    const base = { chain_id: 'base-sepolia', vault_program: '0x4E65637461725661756c74426173650000000001', authority: '0xbcb6eAB973570cB1e5C16195696b8BdDb4c7D8f7' };
+    near.positions.push({ position_id: '20', status: 'Settling', collateral: 'NVDAx', units: '1', remote: { ...base, status: 'Settling' } });
+    near.positions.push({ position_id: '21', status: 'Open', collateral: 'NVDAx', units: '1', remote: { ...base, status: 'Releasing' } });
+    near.positions.push({ position_id: '22', status: 'Open', collateral: 'NVDAx', units: '1', remote: { ...base, status: 'AwaitingDeposit' } });
+    // What a Base pending settlement looks like to the old view: an EIP-712 digest where a NECTAR_SETTLE_V1 preimage would be.
+    near.pending.set('20', { position_id: '20', quote_id: '1', nonce: '1', expires: '9999999999', preimage: `0x${'ab'.repeat(32)}`, signature_hex: '00'.repeat(65), recipient: base.authority, status: 'Signed', solana_tx_sig: null });
+    near.releases.set('21', { message: `0x${'cd'.repeat(32)}`, signature_hex: '00'.repeat(65), nonce: '2', expires: '9999999999', status: 'Signed' });
+    const r = await relay.tick();
+    assert.deepEqual(r.settled, ['0'], JSON.stringify(r));
+    assert.deepEqual(r.failed, []);
+    assert.deepEqual(r.skipped, []);
+    assert.equal(sol.sent.length, 1);
+    assert.equal(relay.status.pendingSettlements, 1);
+    assert.equal(relay.status.pendingReleases, 0);
+    const baseViews = near.views.filter((x) => ['20', '21', '22'].includes(x.id));
+    assert.deepEqual(baseViews, []);
+    assert.deepEqual(near.calls.map((c) => c.method), ['relay_settlement_result']);
+  });
+  it('chain gate: a Solana-pinned v2 position uses its pinned vault; a non-Solana primary chain is skipped', async () => {
+    assert.equal(isSolanaPosition({ remote: { chain_id: 'solana-devnet' } }), true);
+    assert.equal(isSolanaPosition({ remote: null }), true);
+    assert.equal(isSolanaPosition({}), true);
+    assert.equal(isSolanaPosition({ remote: { chain_id: 'base-sepolia' } }), false);
+    assert.equal(isSolanaPosition({ remote: { chain_id: 'solana-mainnet' } }), false);
+    const { near, relay } = await setup();
+    near.version = '2.1.0-v7';
+    near.primaryChain = { chain_id: 'base-sepolia', vault_program: '0x4E65637461725661756c74426173650000000001', mpc_domain_id: 0 };
+    near.positions.push({ position_id: '30', status: 'Settling', collateral: 'NVDAx', units: '1' }); // no remote: falls back to the primary
+    const r = await relay.tick();
+    assert.deepEqual(r, { settled: [], released: [], deposits: [], skipped: [], failed: [] });
+    assert.equal(near.views.some((x) => x.method === 'get_pending_settlement'), false);
   });
   it('vault discovery decodes the Vault account (mint after the symbol)', async () => {
     const { v } = await setup();

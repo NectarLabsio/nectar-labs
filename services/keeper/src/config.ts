@@ -24,6 +24,40 @@ export interface KeeperConfig {
   vaultProgramId: string | null;
   /** optional; else the vault is found by symbol */
   vaultMint: string | null;
+  /** P2b Base relay (WO-29b); null = BASE_RPC_URL unset = relay disabled. */
+  base: BaseConfig | null;
+}
+
+export interface BaseConfig {
+  rpcUrl: string;
+  keystoreDir: string;
+  account: string;
+  passwordFile: string;
+  vaultAddress: string | null;
+  keeperAttest: boolean;
+  /** BASE_BUILDER_CODE (H19); set but not appended while the ERC-8021 format is unverified (F-351). */
+  builderCode: string | null;
+}
+
+/** Base relay config; throws ConfigError when BASE_RPC_URL is set but the keystore triple is incomplete. */
+export function loadBaseConfig(env: NodeJS.ProcessEnv = process.env): BaseConfig | null {
+  if (isPlaceholder(env.BASE_RPC_URL)) return null;
+  const missing = [
+    ...(isPlaceholder(env.BASE_ACCOUNT) ? ['BASE_ACCOUNT'] : []),
+    ...(isPlaceholder(env.BASE_PASSWORD_FILE) ? ['BASE_PASSWORD_FILE'] : []),
+  ];
+  if (missing.length > 0) throw new ConfigError(`BASE_RPC_URL is set but unset: ${missing.join(', ')}`);
+  const attest = env.BASE_KEEPER_ATTEST ?? '';
+  if (!['', '0', '1'].includes(attest.trim())) throw new ConfigError('BASE_KEEPER_ATTEST must be 0 or 1');
+  return {
+    rpcUrl: (env.BASE_RPC_URL as string).trim(),
+    keystoreDir: expandHome(isPlaceholder(env.BASE_KEYSTORE_DIR) ? '~/.foundry/keystores' : (env.BASE_KEYSTORE_DIR as string)),
+    account: (env.BASE_ACCOUNT as string).trim(),
+    passwordFile: expandHome(env.BASE_PASSWORD_FILE as string),
+    vaultAddress: isPlaceholder(env.BASE_VAULT_ADDRESS) ? null : (env.BASE_VAULT_ADDRESS as string).trim(),
+    keeperAttest: attest.trim() === '1',
+    builderCode: isPlaceholder(env.BASE_BUILDER_CODE) ? null : (env.BASE_BUILDER_CODE as string).trim(),
+  };
 }
 
 export function isPlaceholder(v: string | undefined): boolean {
@@ -69,5 +103,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): KeeperConfig {
     solanaRpcUrl: isPlaceholder(env.SOLANA_RPC_URL) ? 'https://api.devnet.solana.com' : (env.SOLANA_RPC_URL as string),
     vaultProgramId: isPlaceholder(env.NECTAR_VAULT_PROGRAM_ID) ? null : (env.NECTAR_VAULT_PROGRAM_ID as string),
     vaultMint: isPlaceholder(env.NECTAR_VAULT_MINT) ? null : (env.NECTAR_VAULT_MINT as string),
+    base: loadBaseConfig(env),
   };
 }
