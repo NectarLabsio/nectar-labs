@@ -55,7 +55,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): KeeperConfig {
   ];
   if (missing.length > 0) throw new ConfigError(`unset: ${missing.join(', ')}`);
   return {
-    rpcUrl: env.NEAR_RPC_URL && env.NEAR_RPC_URL !== '' ? env.NEAR_RPC_URL : 'https://rpc.testnet.near.org',
+    rpcUrl: env.NEAR_RPC_URL && env.NEAR_RPC_URL !== '' ? env.NEAR_RPC_URL : 'https://test.rpc.fastnear.com',
     coreAccountId: ids.core as string,
     keeperAccountId: ids.keeper as string,
     keyPath: expandHome(env.KEEPER_KEY_PATH as string),

@@ -9,7 +9,7 @@ import { loadRepoIds } from '../src/repo-config.ts';
 
 const core = process.argv[2] ?? loadRepoIds().core;
 if (core === null || core === undefined) throw new Error('no core account: pass one or set accounts.core');
-const rpc = process.env.NEAR_RPC_URL ?? 'https://rpc.testnet.near.org';
+const rpc = process.env.NEAR_RPC_URL ?? 'https://test.rpc.fastnear.com';
 const v = new NearViewReader(rpc, core);
 // [label, method, args]; the borrow amounts are an accepted and a refused case for 100 NVDAx.
 const calls: Array<[string, string, Record<string, unknown>]> = [

@@ -22,5 +22,5 @@ pnpm --filter x402 test                  # mocked facilitator chain + mocked NEA
   `X402_RELAYER_KEY_PATH` (full-access; never logged). `X402_FACILITATOR_URL` uses a remote one instead.
 - `src/demo-agent.ts`: gets the unsigned borrow from the Feed MCP tool `open_protected_stock_loan`, signs it with
   `AGENT1_KEY_PATH` (near-api-js 7.4.0), then pays the 402 with a NEP-366 SignedDelegate. Env: `FEED_MCP_URL`,
-  `X402_URL`, `X402_RPC_URL` (default `https://rpc.testnet.fastnear.com`), `DEMO_UNITS` (1000000 = 1 NVDAx),
+  `X402_URL`, `X402_RPC_URL` (default `https://test.rpc.fastnear.com`), `DEMO_UNITS` (1000000 = 1 NVDAx),
   `DEMO_BORROW_USD` (10), `DEMO_SKIP_BORROW=1`.

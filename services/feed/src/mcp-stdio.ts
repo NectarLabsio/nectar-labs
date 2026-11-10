@@ -17,7 +17,7 @@ const unset = (v: string | undefined): boolean => v === undefined || v.trim() ==
 const home = (p: string): string => (p.startsWith('~/') ? resolve(homedir(), p.slice(2)) : resolve(p));
 
 const db = new FeedDb(home(unset(env.FEED_DB_PATH) ? '~/.nectar/feed.sqlite' : (env.FEED_DB_PATH as string)));
-const rpc = unset(env.NEAR_RPC_URL) ? 'https://rpc.testnet.near.org' : (env.NEAR_RPC_URL as string);
+const rpc = unset(env.NEAR_RPC_URL) ? 'https://test.rpc.fastnear.com' : (env.NEAR_RPC_URL as string);
 const core = loadRepoIds(env).core;
 const views = core === null ? null : new NearViewReader(rpc, core);
 await createMcpServer({ db, views, coreId: core }).connect(new StdioServerTransport());

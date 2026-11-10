@@ -11,7 +11,7 @@ import { loadRepoIds } from '../src/repo-config.ts';
 
 const core = loadRepoIds().core;
 const enabled = process.env.NECTAR_IT === '1' && core !== null;
-const rpc = process.env.NEAR_RPC_URL || 'https://rpc.testnet.near.org';
+const rpc = process.env.NEAR_RPC_URL || 'https://test.rpc.fastnear.com';
 
 describe('testnet integration (read-only)', { skip: enabled ? false : 'set NECTAR_IT=1' }, () => {
   const reader = new NearCoreReader(rpc, core as string);
