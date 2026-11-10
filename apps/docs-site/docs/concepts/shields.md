@@ -5,8 +5,8 @@ description: A weekend-safe borrowing limit with committed buyers behind it, for
 ---
 # Shields
 
-<p className="verified">Verified against: spec docs/PRD.md §4.9, §4.11 · contracts/nectar-core/src/shields.rs (WO-23a, merged 2026-11-10) · F-342 (NYSE calendar, 2026-11-10) · D-022, D-024 (2026-11-10) · tests listed below</p>
-<p className="status">Status: built and tested in the sandbox; testnet deployment pending. It ships in `nectar-core-v2.nectar.testnet`, which has not been created yet (D-018, handoff H-NEAR-FAUCET). The live v1 contract has no Shields.</p>
+<p className="verified">Verified against: spec docs/PRD.md §4.9, §4.11 · contracts/nectar-core/src/shields.rs (WO-23a, merged 2026-11-10) · F-342 (NYSE calendar, 2026-11-10) · D-022, D-024 (2026-11-10) · tests listed below · testnet: evidence/v7-modules/summary.md, evidence/v7-modules/shield-20261110T165521Z.log (2026-11-10)</p>
+<p className="status">Status: ran on testnet on 2026-11-10 in `nectar-core-v2.nectar.testnet` (scripts/61-v7-modules-testnet.sh, evidence/v7-modules/summary.md): Weekend Shield position #5 (2 NVDAx, $189 debt, 15 bps fee instead of the premium, Note `p-5`); the first attempt was refused by the aggregate check, as designed. Not yet recorded by the verifier in docs/EVIDENCE.md. The earlier v1 contract has no Shields.</p>
 
 ## What a Shield is
 

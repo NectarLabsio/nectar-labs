@@ -5,8 +5,8 @@ description: One pooled committed buyer per asset that fills after every Pappus 
 ---
 # Nectar Reserve (`R_c`)
 
-<p className="verified">Verified against: spec docs/PRD.md §4.8, §6.11 · contracts/nectar-core/src/reserve.rs (WO-23b, merged 2026-11-10) · scripts/21-deploy-v2.sh (testnet parameters) · D-023, D-024 (2026-11-10) · tests listed below</p>
-<p className="status">Status: built and tested in the sandbox; testnet deployment pending. It ships in `nectar-core-v2.nectar.testnet`, which has not been created yet (D-018, handoff H-NEAR-FAUCET). The live v1 contract has no Reserve pool; its `R_c` is 0.</p>
+<p className="verified">Verified against: spec docs/PRD.md §4.8, §6.11 · contracts/nectar-core/src/reserve.rs (WO-23b, merged 2026-11-10) · scripts/21-deploy-v2.sh (testnet parameters) · D-023, D-024 (2026-11-10) · tests listed below · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:34Z first run, `get_reserve`), evidence/v7-modules/summary.md (2026-11-10)</p>
+<p className="status">Status: deployed in `nectar-core-v2.nectar.testnet` (EVIDENCE §G2b: `get_reserve NVDAx` answers, discount 600 bps). A $10 deposit ran on testnet on 2026-11-10 and minted Reserve Note `r-NVDAx-0` (evidence/v7-modules/summary.md; verifier record pending). No settlement has reached the Reserve on testnet; the waterfall and shortfall paths are tested in the sandbox. The earlier v1 contract has no Reserve pool; its `R_c` is 0.</p>
 
 ## What it is
 

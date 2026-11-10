@@ -5,8 +5,8 @@ description: Collateral is stored in raw units and valued through a per-asset mu
 ---
 # Corporate-action multiplier
 
-<p className="verified">Verified against: F-345 (2026-11-10, B20 `multiplier()` / `scaledBalanceOf`), F-350 (2026-11-10, Chainlink tokenized-equity feeds include M), F-352 (2026-11-10, xStocks mechanism not verified) · spec docs/PRD.md §4.6 · docs/work/interface-v7.md §A3 · D-021 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10)</p>
-<p className="status">Status: built and tested in the sandbox; testnet deployment pending. It ships in `nectar-core-v2.nectar.testnet`, which has not been created yet (D-018, handoff H-NEAR-FAUCET). The OutLayer job that reads `multiplier()` from Base Sepolia is not built. The collateral is still **mock NVDAx**.</p>
+<p className="verified">Verified against: F-345 (2026-11-10, B20 `multiplier()` / `scaledBalanceOf`), F-350 (2026-11-10, Chainlink tokenized-equity feeds include M), F-352 (2026-11-10, xStocks mechanism not verified) · spec docs/PRD.md §4.6 · docs/work/interface-v7.md §A3 · D-021 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (wasm deployed, 2026-11-10T16:52Z); config `features.multiplier: false`</p>
+<p className="status">Status: built and tested in the sandbox; no testnet run. The code is in the `nectar-core-v2.nectar.testnet` wasm (G2b), but the product flag `features.multiplier` is off and no multiplier call has run on testnet. The OutLayer job that reads `multiplier()` has no recorded testnet execution, and no Base Sepolia token exists. The collateral is still **mock NVDAx**.</p>
 
 ## Valuation
 
@@ -45,7 +45,7 @@ The owner announces M → 2 × M at least one hour ahead, and anyone applies it 
 
 ## Not built yet or not verified
 
-- The P1 source: an OutLayer job that reads `multiplier()` by `eth_call` from a Base Sepolia token (PRD §4.6). The contract hook `request_multiplier_read(symbol)` is built and tested in the sandbox: `on_multiplier_read` applies the `set_multiplier` bound (increase only, at most +5%, not while a corporate action is pending) and records any other change as `ca_suggested_multiplier_e18` for the owner (`tests_v7b::multiplier_job_bounded`). The OutLayer job is built (quoter/src/jobs.rs); publish pending. No Base Sepolia token is deployed.
+- The P1 source: an OutLayer job that reads `multiplier()` by `eth_call` from a Base Sepolia token (PRD §4.6). The contract hook `request_multiplier_read(symbol)` is built and tested in the sandbox: `on_multiplier_read` applies the `set_multiplier` bound (increase only, at most +5%, not while a corporate action is pending) and records any other change as `ca_suggested_multiplier_e18` for the owner (`tests_v7b::multiplier_job_bounded`). The OutLayer job is built (quoter/src/jobs.rs); no testnet execution of it is recorded in docs/EVIDENCE.md. No Base Sepolia token is deployed.
 - xStocks: whether xStocks use a Token-2022 Scaled UI Amount multiplier is **not verified** (F-352, gate G11 open).
 - Real B20 collateral needs the issuer and eligible jurisdictions; this is PROD-only.
 
