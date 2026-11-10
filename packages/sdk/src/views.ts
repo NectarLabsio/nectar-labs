@@ -127,8 +127,8 @@ export class NectarViews {
   /** `from_index` is a U128 string per NEP-181. */
   nftTokensForOwner = (account_id: string, from_index = 0, limit = NOTE_PAGE) =>
     this.v<NoteToken[]>("nft_tokens_for_owner", { account_id, from_index: String(from_index), limit: Math.min(limit, NOTE_PAGE) });
-  // Nectar Reserve (WO-23b; PROVISIONAL until it merges).
-  getReserve = (symbol: string) => this.v<ReserveView | null>("get_reserve", { symbol });
+  // Nectar Reserve (WO-23b, merged 67a5426). get_reserve panics for an unknown symbol; get_reserve_note is null for an unknown id.
+  getReserve = (symbol: string) => this.v<ReserveView>("get_reserve", { symbol });
   getReserveNote = (note_id: string) => this.v<ReserveNoteView | null>("get_reserve_note", { note_id });
   // P1 views: reject with RpcError on the P0 deployment (method not found); callers render "P0 static pricing" / "owner oracle".
   getQuoterConfig = () => this.v<QuoterConfigView | null>("get_quoter_config");

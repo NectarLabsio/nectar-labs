@@ -1,4 +1,5 @@
 import type { RemoteView } from "./remote";
+import type { ReservePool } from "./notes";
 // Types for the nectar-core P0 ABI. Source of truth: docs/work/interface-p0.md (orchestrator, 2026-11-10).
 // Encoding: u128 amounts and u64 ids/timestamps are JSON strings; bps are numbers (u16).
 // Struct fields not spelled out in interface-p0.md follow PRD §6.2 and are marked "PRD §6.2 (confirm at G1)".
@@ -28,7 +29,6 @@ export interface CollateralInput {
   pre_liq_max_bps: Bps;
   market_session_open: boolean;
   verified_dex_depth_usd_e6: U128;
-  nectar_reserve_usd_e6: U128;
 }
 
 /** `get_collateral(symbol)` / `list_collaterals` item. Extra state fields: PRD §6.2 (confirm at G1).
@@ -36,6 +36,10 @@ export interface CollateralInput {
 export interface CollateralView extends Omit<CollateralInput, "market_session_open"> {
   /** v1 only (owner flag); absent on v2. */
   market_session_open?: boolean;
+  /** v1 only (owner `set_reserve`); v2 reads R_c from `reserve` / `get_reserve` (D-024). */
+  nectar_reserve_usd_e6?: U128;
+  /** v2 (WO-23b): the Nectar Reserve pool; R_c = usdc_e6 − notice_usdc_e6. */
+  reserve?: ReservePool;
   oracle_price_usd_e6?: U128;
   oracle_updated_ns?: U64;
   active_committed_q_usd_e6?: U128;

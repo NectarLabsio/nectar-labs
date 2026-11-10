@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Badge, Button, Card, Field, Kv, Segmented } from "@nectar/ui";
 import { OwnerAction, attempt } from "@/components/OwnerAction";
 import { ConsoleV7 } from "@/components/ConsoleV7";
-import { bpsToPct, formatUsdE6, oracleSourceLabel, parseUnits, tx, type ExitCapacity, type OracleSource, type PoolView, type QuoterConfigView, type TxIntent } from "@nectar/sdk";
+import { bpsToPct, formatUsdE6, oracleSourceLabel, parseUnits, tx, txV1, type ExitCapacity, type OracleSource, type PoolView, type QuoterConfigView, type TxIntent } from "@nectar/sdk";
 import { SessionBadge } from "@/components/Session";
 import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
@@ -29,6 +29,7 @@ export default function ConsolePage() {
   const isOwner = Boolean(accountId && owner && accountId === owner);
   const [price, setPrice] = useState("");
   const [depth, setDepth] = useState("");
+  const [reserveV1, setReserveV1] = useState("");
   const [pid, setPid] = useState("");
   const [ver, setVer] = useState("");
   // Defaults mirror packages/config/config.yaml `outlayer.resource_limits`; deposit in yoctoNEAR.
@@ -93,6 +94,12 @@ export default function ConsolePage() {
                   <OwnerAction title="Set DEX depth" enabled={isOwner} intent={usd(depth) ? tx.setDexDepth(core, sym, usd(depth)!) : null} onRun={(t) => run(t, "Depth updated")}>
                     <Field label="Verified DEX depth" inputMode="decimal" unit="USD" value={depth} onChange={(e) => setDepth(e.target.value)} />
                   </OwnerAction>
+                  {/* v1 only: owner-set R. v2 removed set_reserve (D-024); its Reserve card below calls set_reserve_params. */}
+                  {chain.generation !== "v2" ? (
+                    <OwnerAction title="Set Nectar Reserve R (v1)" enabled={isOwner} intent={usd(reserveV1) ? txV1.setReserve(core, sym, usd(reserveV1)!) : null} onRun={(t) => run(t, "Reserve updated")} testId="v1-set-reserve">
+                      <Field label="Nectar Reserve R" inputMode="decimal" unit="USD" value={reserveV1} onChange={(e) => setReserveV1(e.target.value)} />
+                    </OwnerAction>
+                  ) : null}
                 </div>
               ) : null}
             </Card>

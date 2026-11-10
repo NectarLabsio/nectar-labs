@@ -24,7 +24,8 @@ export interface CollateralYaml {
   /** v1 only; v2 has no owner session flag. */
   market_session_open?: boolean;
   verified_dex_depth_usd_e6: number;
-  nectar_reserve_usd_e6: number;
+  /** v1 deploy only (`set_reserve`); v2 ignores it (D-024). */
+  nectar_reserve_usd_e6?: number;
   remote_chain: null | { chain_id: string; vault_program: string; mpc_domain_id: number };
 }
 

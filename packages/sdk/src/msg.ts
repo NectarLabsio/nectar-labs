@@ -201,8 +201,6 @@ export const tx = {
     coreCall(core, "set_session", { symbol, open }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: open ? "Open session" : "Close session" }),
   setDexDepth: (core: string, symbol: string, depth_usd_e6: U128) =>
     coreCall(core, "set_dex_depth", { symbol, depth_usd_e6: assertU128(depth_usd_e6, "depth_usd_e6") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set DEX depth" }),
-  setReserve: (core: string, symbol: string, reserve_usd_e6: U128) =>
-    coreCall(core, "set_reserve", { symbol, reserve_usd_e6: assertU128(reserve_usd_e6, "reserve_usd_e6") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set reserve" }),
   updateOwnerPrice: (core: string, symbol: string, price_usd_e6: U128) =>
     coreCall(core, "update_owner_price", { symbol, price_usd_e6: assertU128(price_usd_e6, "price_usd_e6") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Update owner price" }),
   // P1 owner calls (interface-p1.md "Contract additions"); 0 deposit like the P0 owner calls.
@@ -229,6 +227,12 @@ export const tx = {
   },
   setMaxConfBps: (core: string, max_conf_bps: number) =>
     coreCall(core, "set_max_conf_bps", { max_conf_bps: assertInt(max_conf_bps, "max_conf_bps", 0, 10_000) }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set max oracle confidence" }),
+};
+
+/** v1 only (the live nectar-core v1): owner-set Nectar Reserve R. v2 removed `set_reserve` (D-024, R_c is the Reserve pool); use `txV2.setReserveParams`. */
+export const txV1 = {
+  setReserve: (core: string, symbol: string, reserve_usd_e6: U128) =>
+    coreCall(core, "set_reserve", { symbol, reserve_usd_e6: assertU128(reserve_usd_e6, "reserve_usd_e6") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set reserve (v1)" }),
 };
 
 /** v2 (nectar-core-v2, interface-v7 §A2–A5). Calling these on v1 fails with MethodNotFound; the web app feature-detects first. */
@@ -270,6 +274,17 @@ export const txV2 = {
     coreCall(core, "unregister_referrer", { account_id: assertAccountId(account_id, "account_id") }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Unregister referrer" }),
   setOriginationFeeBps: (core: string, bps: number) =>
     coreCall(core, "set_origination_fee_bps", { bps: assertInt(bps, "bps", 0, 100) }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set origination fee" }),
+  /** Nectar Reserve (WO-23b, D-024). `discount_bps` 1..9999 and above every live quote ceiling (contract checks the ceiling);
+   * `notice_ns` 60 s ..= 30 days, sent only when set (applies to exits initiated afterwards). */
+  setReserveParams: (core: string, symbol: string, discount_bps: Bps, notice_ns?: U64 | null) => {
+    const args: Record<string, unknown> = { symbol, discount_bps: assertInt(discount_bps, "discount_bps", 1, 9_999) };
+    if (notice_ns != null) {
+      const n = BigInt(assertU64(notice_ns, "notice_ns"));
+      if (n < 60_000_000_000n || n > 2_592_000_000_000_000n) throw new Error("notice_ns must be between 60 s and 30 days");
+      args.notice_ns = notice_ns;
+    }
+    return coreCall(core, "set_reserve_params", args, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set Reserve params" });
+  },
   // remote lifecycle owner calls (interface-v7 §B, WO-21)
   setAllowKeeperDepositAttestation: (core: string, allow: boolean) =>
     coreCall(core, "set_allow_keeper_deposit_attestation", { allow }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: allow ? "Allow keeper attestation" : "Disallow keeper attestation" }),

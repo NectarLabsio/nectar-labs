@@ -1,6 +1,7 @@
 "use client";
 // v7 owner controls on /console (WO-26a), v2 contracts only. Every write goes through the sign modal (msg/args, gas, deposit).
-// Contract rules mirrored for inline validation: interface-v7 §A2 (session), §A3 (multiplier), §A5 (referrers), §B (remote).
+// Contract rules mirrored for inline validation: interface-v7 §A2 (session), §A3 (multiplier), §A5 (referrers), §B (remote),
+// WO-23b / D-024 (Reserve: `set_reserve_params`; v2 has no `set_reserve`).
 import { useState } from "react";
 import { Badge, Banner, Card, Field, Kv } from "@nectar/ui";
 import {
@@ -19,6 +20,9 @@ import {
   setMultiplierRefusal,
   txV2,
   E18,
+  RESERVE_NOTICE_NS,
+  formatNoticePeriod,
+  formatUsdE6,
   type CollateralView,
   type ExitCapacity,
   type RemoteConfigView,
@@ -54,6 +58,8 @@ export function ConsoleV7({ core, sym, cap, isOwner, onDone }: { core: string; s
   const [ref, setRef] = useState("");
   const [fee, setFee] = useState("");
   const [vr, setVr] = useState({ project_id: "", version_key: "", deposit_yocto: "", gas_tgas: "50" });
+  const [resDisc, setResDisc] = useState("");
+  const [resNoticeH, setResNoticeH] = useState("");
 
   const refOk = isAccountId(ref.trim());
   const refView = useView<boolean | null>(refOk ? (v) => optionalView(v.isReferrer(ref.trim())) : null, [ref, refOk]);
@@ -93,8 +99,40 @@ export function ConsoleV7({ core, sym, cap, isOwner, onDone }: { core: string; s
     ? attempt(() => txV2.setVaultReadConfig(core, { project_id: vr.project_id.trim(), version_key: vr.version_key.trim(), deposit_yocto: vr.deposit_yocto.trim(), gas_tgas: /^\d+$/.test(vr.gas_tgas.trim()) ? Number(vr.gas_tgas.trim()) : NaN }))
     : null;
 
+  const pool = coll?.reserve;
+  const curNotice = pool && pool.notice_ns !== "0" ? pool.notice_ns : RESERVE_NOTICE_NS.toString();
+  const noticeH = resNoticeH.trim();
+  const resIntent = resDisc.trim()
+    ? attempt(() => {
+        let notice: string | null = null;
+        if (noticeH) {
+          if (!/^\d+(\.\d+)?$/.test(noticeH)) throw new Error("Exit notice must be a number of hours.");
+          notice = (BigInt(Math.round(Number(noticeH) * 3600)) * 1_000_000_000n).toString();
+        }
+        return txV2.setReserveParams(core, sym, /^\d+$/.test(resDisc.trim()) ? Number(resDisc.trim()) : NaN, notice);
+      })
+    : null;
+
   return (
     <>
+      <Card label="Nectar Reserve" className="stack" data-testid="v7-reserve">
+        {pool ? (
+          <div className="kvs">
+            <Kv k="R_c" v={<span data-testid="v7-reserve-rc">{formatUsdE6((BigInt(pool.usdc_e6) - BigInt(pool.notice_usdc_e6)).toString())}</span>} />
+            <Kv k="In notice" v={formatUsdE6(pool.notice_usdc_e6)} />
+            <Kv k="Reserve discount" v={<span data-testid="v7-reserve-discount">{pool.discount_bps === 0 ? "not set (deposits refused)" : `${pool.discount_bps} bps`}</span>} />
+            <Kv k="Exit notice" v={<span data-testid="v7-reserve-notice">{formatNoticePeriod(curNotice)}</span>} />
+          </div>
+        ) : (
+          <p className="small dim">This deployment does not report a Reserve pool on <code>get_collateral</code>; the control below still previews its payload.</p>
+        )}
+        <p className="small dim">R_c is the Reserve pool itself (deposits minus shares in notice); there is no owner-set reserve on v2.</p>
+        <OwnerAction title="Set Reserve params" enabled={isOwner} intent={resIntent} onRun={(t) => run(t, "Reserve params set")} testId="v7-reserve-params">
+          <Field label="discount_bps" inputMode="numeric" unit="bps" value={resDisc} onChange={(e) => setResDisc(e.target.value)} hint="1–9999, above every live quote ceiling (the contract checks)" />
+          <Field label="Exit notice" inputMode="decimal" unit="h" value={resNoticeH} onChange={(e) => setResNoticeH(e.target.value)} hint="Optional: blank keeps the current notice. 1 min to 30 days (720 h); applies to exits started afterwards." />
+        </OwnerAction>
+      </Card>
+
       <Card label="Multiplier · corporate actions" className="stack" data-testid="v7-multiplier">
         <div className="kvs">
           <Kv k="Multiplier" v={<span className="mono" data-testid="v7-multiplier-value">{formatMultiplierE18(m)}</span>} />
