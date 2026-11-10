@@ -1,0 +1,101 @@
+GAS,upsert_collateral,2848387733342
+GAS,upsert_collateral,2848387733342
+GAS,update_owner_price,2637765799985
+GAS,upsert_collateral,2848387733342
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,upsert_collateral,2848387733342
+GAS,upsert_collateral,2848387733342
+GAS,upsert_collateral,2848387733342
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,set_quote_params,2304652019935
+GAS,set_allow_keeper_deposit_attestation,2449235085691
+GAS,set_vault_read_config,2539248749563
+GAS,set_quoter_secrets_ref,2506625240521
+GAS,set_dex_depth,2559676724669
+GAS,set_quoter_pin,2412186216970
+GAS,FundPappusQuote+nft_mint,8057506792147
+GAS,set_session_calendar,9157355143321
+GAS,set_outlayer_account,2313246187571
+GAS,set_session_calendar,2844836547151
+GAS,ft_transfer_call:LockCollateralAndBorrow(v2),13024869366643
+GAS,set_vol_bps,2647956823907
+GAS,nft_transfer,3649544634605
+GAS,update_owner_price,2638192810349
+GAS,set_oracle_source,2567617915334
+GAS,LockCollateralAndBorrow+nft_mint,13001500692492
+GAS,borrow,13001500692492
+GAS,borrow(aggregate_limit),7276086838178
+GAS,force_session_closed,2626073169392
+GAS,set_max_conf_bps,2310348756506
+GAS,update_owner_price,2638192810349
+GAS,force_session_closed,2626492084898
+GAS,set_signer_config,2525196165650
+GAS,nft_transfer(loan),3572939876384
+GAS,update_owner_price,2638192810349
+GAS,borrow(headroom),13032421674255
+GAS,set_remote_chain,2718462937458
+GAS,set_quote_remote_recipient,2676320050075
+test notes::gas_rows_g11_owner_setters ... ok
+GAS,update_owner_price,2638192810349
+GAS,borrow(1 over),7271912763968
+GAS,upsert_collateral,2848387733342
+GAS,upsert_collateral,2848387733342
+GAS,update_owner_price,2637765799985
+GAS,nft_transfer_call(returned),9122114357630
+GAS,update_owner_price,2637765799985
+GAS,Repay(full)->note owner,12112272874893
+test notes::notes_residual_collateral_to_loan_note_owner ... ok
+GAS,upsert_collateral,2848387733342
+GAS,set_outlayer_account,2308003827415
+GAS,update_owner_price,2637765799985
+GAS,borrow(after repay),13074700476937
+GAS,set_quoter_config,2390973919585
+GAS,update_owner_price,2638192810349
+GAS,set_quoter_pin,2420406582241
+GAS,update_owner_price,2638192810349
+GAS,set_vol_bps,2657076823907
+GAS,update_owner_price,2638192810349
+GAS,trigger_preliquidation(v2),17905484495023
+test aggregate_debt_two_borrowers_repay_settle ... ok
+test notes::notes_transfer_refused_while_settling ... ok
+GAS,mock-ft:set_registration_required,1662612968554
+GAS,borrow,13001392088700
+test notes::notes_authority_follows_transfer ... ok
+GAS,nft_token_svg,2774998369730
+GAS,nft_token_svg(quote),2770179440078
+GAS,nft_token,3064025805536
+GAS,ft_transfer_call:LockCollateralAndBorrow(pay_to failed),13353374857312
+GAS,nft_tokens,4851464874701
+GAS,borrow(pre-split),13005952088700
+GAS,nft_tokens_for_owner,3224269995307
+GAS,withdraw_claimable,7579332136512
+GAS,set_multiplier,2675597370398
+GAS,nft_transfer_locked,2358451534168
+GAS,upsert_collateral,2887111532078
+GAS,announce_corporate_action,2670174915839
+GAS,borrow(ca_pending),7210947017223
+GAS,register_referrer,2471646451639
+test notes::notes_svg_gas_and_xml_escaping ... ok
+GAS,register_referrer,2473926451639
+GAS,mock-ft:update_multiplier,1758184373590
+GAS,borrow(referrer_is_borrower),7115240821553
+GAS,ft_transfer_call:LockCollateralAndBorrow(referrer),13479771394548
+GAS,unregister_referrer,2468939420149
+GAS,borrow(unregistered referrer),13233922414563
+GAS,set_origination_fee_bps,2353932021244
+test pay_to_claimable_and_referrers ... ok
+GAS,force_session_closed,2626492084898
+GAS,borrow(weekend over),7253377599880
+GAS,borrow(weekend),13027682747969
+GAS,set_session_calendar,2500590087487
+GAS,update_owner_price,2638192810349
+GAS,force_session_closed,2626492084898
+test weekend_guard_calendar_stale_and_forced ... ok
+GAS,update_owner_price,2638192810349
+GAS,apply_corporate_action,2739299027764
+GAS,borrow(post-split),13037520485289
+test multiplier_bounds_announce_and_split ... ok
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 181.89s

@@ -14,6 +14,7 @@
 | G1 (v7 additions) | PASS | 2026-11-10T13:34Z–14:05Z | 09c4316 | evidence/G1/verifier-v7-20261110T1334Z/ (unit 318/0, sandbox 5/0, sandbox_p1 5/0, sandbox_p2 3/0, sandbox_v7 4/0, mock-ft 17/0, model.csv OK 87 rows; all 9 v7.rs methods gas-measured, max 8.93 Tgas; 10 owner setters (2 remote.rs, 8 p1/p2) lack a gas row, G11 scope, see §G1) |
 | G10 v7 facts + toolchain | PASS with open items (F-351, F-352, F-353) | 2026-11-10T13:44Z | 09c4316 | evidence/G10/verifier-20261110T1334Z/g10.log (FACTS F-328/329/337/338/339/340–361 present; calendar source+retrieved; solana 2.3.0 / anchor 0.32.1 / forge 1.9.0 == F-340/F-341/F-343; live derived_public_key == F-338) |
 | G7 prep (not G7) | RECORDED: vault deployed + 25 anchor tests | 2026-11-10T13:44Z | 09c4316 | evidence/G7/prep-verifier-20261110T1334Z/ (program ENZa… on devnet, vault PDA HGSF… owned by it; test:unit 7/0, test:anchor 25/0; G7 stays pending: needs v2 on testnet) |
+| G11 v7 contract | FAIL (gas rows) | 2026-11-10T15:12Z–15:39Z | 74ce8be | evidence/G11/verifier-20261110T1512Z/ (unit 452/0, sandbox 5+5+4+2+9+3 = 28/0, mock-ft 17/0, model --v7 OK 132 rows; 81 v7_* tests; all 9 PRD §6.11 tests mapped and green; wasm 734784 B sha256 252a6abe…; set_shield_params + set_job_config lack a sandbox gas row; F-352 open; see §G11) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -26,6 +27,54 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## G11
+
+### G11 — v7 contract — FAIL (2 owner setters without a gas row; every test and PRD §6.11 criterion green) — 2026-11-10T15:12Z–15:39Z — commit 74ce8be
+Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-G11-20261110T151225Z (HEAD 74ce8bea59d5); SDKROOT=.../MacOSX26.5.sdk; no secrets.
+Exit codes via bash -c. Trimmed logs: evidence/G11/verifier-20261110T1512Z/ (unit-tests.txt, sandbox*.txt, gas-max.csv, coverage.txt).
+$ cargo test -p nectar-core                       → exit 0: unit 452/0 · sandbox 5/0 · sandbox_p1 5/0 · sandbox_p2 4/0 · sandbox_reserve 2/0 ·
+                                                      sandbox_v7 9/0 · sandbox_v7b 3/0 · doc 0 → total 480 passed, 0 failed
+     v7: 81 tests named v7_* (tests_notes 43 + tests_reserve 38; = `cargo test -p nectar-core v7_` filter) + 103 in tests_v7/tests_v7b
+         (names without the prefix) + 14 sandbox v7 tests (sandbox_v7 9 incl. tests/v7/notes.rs, sandbox_v7b 3, sandbox_reserve 2)
+$ cargo test -p nectar-core --test <t> -- --nocapture  (targets listed from contracts/nectar-core/tests/*.rs)
+     sandbox 5/0 · sandbox_p1 5/0 · sandbox_p2 4/0 · sandbox_v7 9/0 (181.9 s) · sandbox_v7b 3/0 · sandbox_reserve 2/0 — all exit 0
+$ cargo test -p mock-ft                           → 17 passed; 0 failed, exit 0
+$ python3 contracts/nectar-core/tests/model.py --check --v7 → model.csv OK (132 rows), exit 0 (--v7 asserts shield/self/reserve + agg_/mult_ rows)
+$ (contracts/nectar-core) cargo near build non-reproducible-wasm → exit 0
+     -                  Size: 734.8 KB (734784 bytes)
+     - SHA-256 checksum hex : 252a6abe1803b2628b0adadb7b5ec120853ddbd8e1f698dddf4f629a29e8937a
+$ git status --short (clone, after runs)          → only ?? ev/ (verifier scratch logs)
+PRD v7 §6.11 "Tests added before any v7 service code" → passing test(s):
+  two borrowers vs aggregate capacity — tests_v7::two_borrowers_cannot_both_draw_full_capacity; sandbox_v7 aggregate_debt_two_borrowers_repay_settle
+  2-for-1 split leaves LTV unchanged — tests_v7::split_two_for_one_leaves_ltv_and_value_unchanged; sandbox_v7 multiplier_bounds_announce_and_split
+  price > 900 s → weekend parameters — tests_v7::price_older_than_900s_flips_to_weekend_parameters; sandbox_v7 weekend_guard_calendar_stale_and_forced
+  Reserve fills only after every quote — tests_reserve::v7_reserve_fills_only_after_every_quote; sandbox_reserve reserve_waterfall_late_depositor_transfer_and_exit
+  Note transfer moves authority / refused while Settling — tests_notes::v7_notes_quote_authority_moves_with_transfer,
+    v7_notes_loan_transfer_refused_while_settling, v7_notes_candidate_quote_transfer_refused_while_settling;
+    sandbox_v7 notes::notes_authority_follows_transfer, notes::notes_transfer_refused_while_settling
+  voluntary-fill cap holds — tests_v7b::self_settle_above_daily_cap (should panic), self_settle_daily_cap_resets_next_day; sandbox_v7b self_settle_refusals_and_exact_units
+  referrer == borrower refused — tests_v7::referrer_equal_to_borrower_refused_with_full_refund; sandbox_v7 pay_to_claimable_and_referrers
+  failed pay_to credits claimable_usdc — tests_v7::pay_to_failure_credits_borrower_claimable_then_withdraw; sandbox_v7 pay_to_claimable_and_referrers
+  forged deposit attestation (wrong authority) refused — sandbox_p2 remote_refusals_attestation_and_expiry (reason authority_mismatch,
+    borrower USDC 0); no unit test named for it. Missing: none.
+Gas (max total per label from sandbox --nocapture GAS rows; 129 labels; max receipt chain trigger+pyth+quoter+8legs 68.94 total / 14.24 per receipt;
+  "attached,300" rows are prepaid, excluded). New v7 methods: set_session_calendar 9.16 · force_session_closed 2.63 · set_multiplier 2.68 ·
+  announce_corporate_action 2.67 · apply_corporate_action 2.74 · register_referrer 2.47 · unregister_referrer 2.47 · set_origination_fee_bps 2.35 ·
+  withdraw_claimable 7.58 · nft_transfer 3.65 · nft_transfer_call 9.12 · set_quote_remote_recipient 2.68 · set_reserve_params 2.81 ·
+  initiate_reserve_exit 2.91 · complete_reserve_exit 12.61 · ft_transfer_call(JoinNectarReserve) 7.82 · trigger_preliquidation(reserve) 17.93 ·
+  set_max_voluntary_fill 2.64 · self_settle(remote)+sign 18.81 · LockCollateralAndBorrow(shield) 13.42 · set_multiplier_source 2.64 ·
+  request_session_check+calendar 8.11 · request_multiplier_read+multiplier 8.47. G1-flagged owner setters now measured: set_allow_keeper_deposit_attestation
+  2.45 · set_vault_read_config 2.55 · set_max_conf_bps 2.31 · set_oracle_source 2.57 · set_outlayer_account 2.31 · set_quoter_pin 2.42 ·
+  set_quoter_secrets_ref 2.51 · set_vol_bps 2.66 · set_remote_chain 2.72 · set_signer_config 2.53 (+ set_quoter_config 2.39). All measured < 100 Tgas.
+  MISSING gas row (never called in any sandbox target; grep of tests/*.rs + tests/v7/ finds no call): shields.rs set_shield_params,
+  jobs.rs set_job_config (both owner setters, unit-tested only). Private callbacks excepted (nft_resolve_transfer, on_session_check,
+  on_multiplier_read, on_authority, on_deposit_verified, on_release_signature).
+F-327 → superseded by F-352: OPEN ("GATE G11 open": xStocks multiplier mechanism not verified; no primary source ties xStocks mints to
+  Token-2022 ScaledUiAmount).
+Explorer: none (local sandbox).
+Result: FAIL — reason: set_shield_params and set_job_config have no recorded sandbox gas (criterion "gas per new v7 method < 100 Tgas,
+  recorded from sandbox output, include the owner setters"). All tests, model --v7 and build green; F-352 open (listed, not a FAIL reason).
 
 ## G10
 

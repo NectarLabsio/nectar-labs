@@ -1,0 +1,537 @@
+   Compiling thiserror v2.0.21
+   Compiling thiserror-impl v2.0.21
+   Compiling thiserror v1.0.69
+   Compiling thiserror-impl v1.0.69
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+   = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+    = note: use `into_result()` to handle potential execution errors
+     Running unittests src/lib.rs (target/debug/deps/nectar_core-e9553e01eabf8ba2)
+test math::tests::limit_zero_capacity_is_zero ... ok
+test math::tests::increase_bound_and_origination ... ok
+test math::tests::limit_closed_session_ignores_depth_and_uses_weekend_haircut ... ok
+test math::tests::aggregate_headroom_limits_b_c ... ok
+test math::tests::premium_rounds_up_and_is_zero_below_static ... ok
+test math::tests::limit_open_session_counts_depth ... ok
+test math::tests::ltv_and_trigger ... ok
+test math::tests::overflow_is_an_error_not_a_wrap ... ok
+test math::tests::multiplier_split_keeps_value_and_seize ... ok
+test math::tests::seize_rounds_up_and_keeper_cut ... ok
+test math::tests::settle_leg_caps_on_units ... ok
+test math::tests::session_window_search ... ok
+test math::tests::split_sends_buyer_share_to_treasury_without_quotes ... ok
+test math::tests::settle_leg_m_caps_on_raw_units ... ok
+test math::tests::fee_index_matches_reference_loop ... ok
+test tests::contract_version_view ... ok
+test tests::apply_price_same_block_rejected - should panic ... ok
+test tests::apply_price_without_proposal - should panic ... ok
+test tests::claim_fees_nothing - should panic ... ok
+test tests::events_are_nep297 ... ok
+test tests::claim_fees_pays_and_zeroes ... ok
+test tests::complete_withdrawal_without_initiate - should panic ... ok
+test tests::force_session_closed_unknown_symbol - should panic ... ok
+test tests::claim_fees_refused_when_paused - should panic ... ok
+test tests::complete_withdrawal_before_unlock - should panic ... ok
+test tests::ft_on_transfer_unknown_token_panics - should panic ... ok
+test tests::complete_withdrawal_allowed_while_paused ... ok
+test tests::ft_on_transfer_invalid_msg_refunds ... ok
+test tests::fund_gas_reserve_accumulates ... ok
+test tests::fees_after_exit_stop_accruing ... ok
+test tests::ft_on_transfer_wrong_token_for_variant_refunds ... ok
+test tests::fund_gas_reserve_requires_deposit - should panic ... ok
+test tests::fund_quote_creates_quote_and_q ... ok
+test tests::get_owed_collateral_default_zero ... ok
+test tests::get_pool_view ... ok
+test tests::fund_quote_failures_refund_without_state_change ... ok
+test tests::get_health_view ... ok
+test tests::get_exit_capacity_view ... ok
+test tests::get_position_and_list_positions_views ... ok
+test tests::get_quote_and_list_quotes_views ... ok
+test tests::list_collaterals_paginates ... ok
+test tests::model_csv_vectors_match_contract_math ... ok
+test tests::initiate_withdrawal_buyer_only - should panic ... ok
+test tests::initiate_withdrawal_requires_one_yocto - should panic ... ok
+test tests::initiate_and_complete_withdrawal ... ok
+test tests::initiate_withdrawal_twice - should panic ... ok
+test tests::new_sets_defaults ... ok
+test tests::lock_and_borrow_at_limit ... ok
+test tests::lock_and_borrow_pool_insufficient_refunds ... ok
+test tests::lock_and_borrow_stale_oracle_refunds ... ok
+test tests::lock_and_borrow_failures_refund ... ok
+test tests::pause_owner_only - should panic ... ok
+test tests::on_payout_failed_borrow_proceeds_become_repayment ... ok
+test tests::on_payout_failed_fees_restored ... ok
+test tests::on_payout_failed_collateral_recorded_as_owed ... ok
+test tests::on_payout_success_is_noop ... ok
+test tests::pause_unpause_and_paused_refunds ... ok
+test tests::preview_borrow_view ... ok
+test tests::on_payout_failed_withdrawal_restores_quote ... ok
+test tests::propose_apply_bypasses_band ... ok
+test tests::set_dex_depth_and_reserve_owner_values ... ok
+test tests::set_dex_depth_owner_only - should panic ... ok
+test tests::set_fee_split_must_sum - should panic ... ok
+test tests::set_fee_split_ok ... ok
+test tests::set_keeper_owner_only - should panic ... ok
+test tests::session_window_switches_haircut_and_depth ... ok
+test tests::set_keeper_rotates ... ok
+test tests::set_oracle_params_ok ... ok
+test tests::set_oracle_params_rejects_zero_age - should panic ... ok
+test tests::repay_partial_full_and_overpay ... ok
+test tests::set_quote_params_ok ... ok
+test tests::supply_lending_liquidity ... ok
+test tests::top_up_quote ... ok
+test tests::top_up_settles_fees_first ... ok
+test tests::trigger_healthy_position - should panic ... ok
+test tests::settlement_consumes_exiting_quote_during_notice ... ok
+test tests::trigger_needs_gas_reserve - should panic ... ok
+test tests::trigger_keeper_only - should panic ... ok
+test tests::trigger_preliquidation_static_settle_matches_model ... ok
+test tests::update_owner_price_owner_only - should panic ... ok
+test tests::update_owner_price_band ... ok
+test tests::trigger_paused - should panic ... ok
+test tests::upsert_collateral_creates_and_updates ... ok
+test tests_notes::v7_notes_base64_rfc4648_vectors ... ok
+test tests::upsert_collateral_owner_only - should panic ... ok
+test tests::trigger_stale_oracle - should panic ... ok
+test tests::upsert_collateral_rejects_usdc_token - should panic ... ok
+test tests::trigger_twice_on_one_position - should panic ... ok
+test tests_notes::v7_notes_ids_parse_canonical_only ... ok
+test tests::trigger_without_quotes_reverts - should panic ... ok
+test tests::upsert_collateral_rejects_bad_bps - should panic ... ok
+test tests::upsert_collateral_symbol_mismatch - should panic ... ok
+test tests_notes::v7_notes_claim_fees_old_owner_refused - should panic ... ok
+test tests_notes::v7_notes_claim_fees_follows_note ... ok
+test tests_notes::v7_notes_candidate_quote_transfer_refused_while_settling - should panic ... ok
+test tests::settlement_order_and_cap_of_eight ... ok
+test tests_notes::v7_notes_metadata_and_token_media ... ok
+test tests_notes::v7_notes_minted_on_funding_and_open_with_nep171_events ... ok
+test tests_notes::v7_notes_enumeration_pages_and_owner_lists_after_transfers ... ok
+test tests_notes::v7_notes_loan_transfer_refused_while_settling - should panic ... ok
+test tests_notes::v7_notes_old_quote_owner_refused - should panic ... ok
+test tests_notes::v7_notes_locked_while_quoter_settling_then_free_after_cancel ... ok
+test tests_notes::v7_notes_quote_authority_moves_with_transfer ... ok
+test tests_notes::v7_notes_residual_collateral_goes_to_loan_note_owner ... ok
+test tests_notes::v7_notes_resolve_keeps_note_locked_meanwhile ... ok
+test tests_notes::v7_notes_releasing_locks_loan ... ok
+test tests::fund_quote_cap_64 ... ok
+test tests_notes::v7_notes_self_settle_by_new_loan_owner ... ok
+test tests_notes::v7_notes_remote_sign_failure_unlocks ... ok
+test tests_notes::v7_notes_remote_leg_locks_quote_and_loan_until_relayed ... ok
+test tests_notes::v7_notes_self_settle_old_owner_refused - should panic ... ok
+test tests_notes::v7_notes_resolve_keeps_reverts_and_respects_moves ... ok
+test tests_notes::v7_notes_template_is_small_and_has_every_placeholder ... ok
+test tests_notes::v7_notes_set_recipient_owner_only - should panic ... ok
+test tests_notes::v7_notes_set_recipient_unknown_quote - should panic ... ok
+test tests_notes::v7_notes_set_recipient_validates_base58 - should panic ... ok
+test tests_notes::v7_notes_svg_unknown_note - should panic ... ok
+test tests_notes::v7_notes_svg_loan_and_quote_metrics ... ok
+test tests_notes::v7_notes_svg_escapes_the_asset_symbol ... ok
+test tests_notes::v7_notes_transfer_call_gas_floor - should panic ... ok
+test tests_notes::v7_notes_transfer_call_msg_bounded - should panic ... ok
+test tests_notes::v7_notes_svg_quote_unlock_states ... ok
+test tests_notes::v7_notes_page_cap ... ok
+test tests_notes::v7_notes_transfer_call_needs_one_yocto - should panic ... ok
+test tests_notes::v7_notes_transfer_call_schedules_receiver_and_resolve ... ok
+test tests_notes::v7_notes_xml_escape_and_number_formats ... ok
+test tests_notes::v7_notes_transfer_locked_view_unknown - should panic ... ok
+test tests_notes::v7_notes_transfer_clears_remote_recipient_and_new_owner_sets_one ... ok
+test tests_notes::v7_notes_set_recipient_refused_while_locked - should panic ... ok
+test tests_notes::v7_notes_transfer_memo_in_event_and_approval_id_ignored ... ok
+test tests_notes::v7_notes_transfer_memo_bounded - should panic ... ok
+test tests_notes::v7_notes_transfer_needs_one_yocto - should panic ... ok
+test tests_notes::v7_notes_transfer_to_self_refused - should panic ... ok
+test tests_notes::v7_notes_transfer_owner_only - should panic ... ok
+test tests_notes::v7_notes_transfer_unknown_note - should panic ... ok
+test tests_p1::default_quoter_gas_is_80_tgas ... ok
+test tests_p1::callback_ignores_non_settling_position ... ok
+test tests_p1::callback_aborts_when_paused ... ok
+test tests_p1::cancel_settlement_owner_only - should panic ... ok
+test tests_p1::contract_version_says_v2 ... ok
+test tests_p1::callback_aborts_when_price_recovered ... ok
+test tests_p1::cancel_settlement_requires_settling - should panic ... ok
+test tests_p1::cancel_settlement_returns_to_open ... ok
+test tests_p1::fallback_bad_hash ... ok
+test tests_p1::fallback_failed_receipt ... ok
+test tests_p1::new_writes_v2_layout_with_p1_defaults ... ok
+test tests_p1::parse_rejects_wrong_fields ... ok
+test tests_p1::pyth_acceptance_rules ... ok
+test tests_p1::fallback_guest_error ... ok
+test tests_p1::fallback_null ... ok
+test tests_p1::pyth_age_rounds_up_to_seconds ... ok
+test tests_p1::gas_reserve_view_tracks_quoter_deposit ... ok
+test tests_p1::fallback_too_long ... ok
+test tests_p1::fallback_unparseable ... ok
+test tests_p1::pyth_expo_to_usd_e6 ... ok
+test tests_p1::pyth_id_and_profile_validation ... ok
+test tests_p1::max_conf_bound - should panic ... ok
+test tests_p1::fallback_duplicate_fill ... ok
+test tests_p1::outlayer_account_owner_only - should panic ... ok
+test tests_p1::fallback_unknown_quote_id ... ok
+test tests_p1::pyth_accepted_then_quoter ... ok
+test tests_p1::pyth_accepted_then_static_settle ... ok
+test tests_p1::pyth_price_recovered_aborts_healthy ... ok
+test tests_p1::pyth_rejects_failed_receipt ... ok
+test tests_p1::pyth_callback_aborts_when_paused ... ok
+test tests_p1::pyth_callback_ignores_cancelled ... ok
+test tests_p1::pyth_callback_quoter_reserve_empty_aborts ... ok
+test tests_p1::pyth_rejects_negative_price ... ok
+test tests_p1::pyth_rejects_null ... ok
+test tests_p1::pyth_source_owner_only - should panic ... ok
+test tests_p1::pyth_rejects_out_of_band ... ok
+test tests_p1::pyth_source_bad_id - should panic ... ok
+test tests_p1::pyth_source_set_view_and_clear ... ok
+test tests_p1::pyth_rejects_stale_in_session ... ok
+test tests_p1::pyth_rejects_too_long ... ok
+test tests_p1::pyth_rejects_unparseable ... ok
+test tests_p1::pyth_rejects_wide_conf ... ok
+test tests_p1::pyth_trigger_closed_session_age ... ok
+test tests_p1::quoter_config_gas_bound - should panic ... ok
+test tests_p1::quoter_vectors_if_present ... ok
+test tests_p1::pyth_trigger_open_session_age ... ok
+test tests_p1::quoter_config_instr_bound - should panic ... ok
+test tests_p1::quoter_pin_half_set - should panic ... ok
+test tests_p1::quoter_pin_owner_only - should panic ... ok
+test tests_p1::quoter_result_applies_discounts ... ok
+test tests_p1::quoter_result_clamps_9999_to_max ... ok
+test tests_p1::quoter_result_missing_fill_uses_max ... ok
+test tests_p1::quoter_setters_and_views ... ok
+test tests_p1::secrets_ref_bad_profile - should panic ... ok
+test tests_p1::secrets_ref_in_request_args ... ok
+test tests_p1::trigger_pyth_needs_gas - should panic ... ok
+test tests_p1::trigger_pyth_requests_price_and_waits ... ok
+test tests_p1::secrets_ref_owner_only - should panic ... ok
+test tests_p1::trigger_pyth_skips_stale_owner_price ... ok
+test tests_p1::trigger_with_pin_requests_execution ... ok
+test tests_p1::trigger_quoter_needs_deposit_in_reserve - should panic ... ok
+test tests_p2::base58_and_authority_parsing ... ok
+test tests_p1::trigger_without_vol_falls_back_to_static ... ok
+test tests_p2::allow_keeper_attestation_owner_only - should panic ... ok
+test tests_p1::trigger_quoter_needs_gas - should panic ... ok
+test tests_p1::vol_bound - should panic ... ok
+test tests_p1::vol_unknown_symbol - should panic ... ok
+test tests_p2::confirm_before_authority - should panic ... ok
+test tests_p2::confirm_near_position - should panic ... ok
+test tests_p2::confirm_gas_reserve_empty - should panic ... ok
+test tests_p2::confirm_cooldown - should panic ... ok
+test tests_p2::confirm_needs_gas - should panic ... ok
+test tests_p2::cancel_unsigned_before_expiry_refused - should panic ... ok
+test tests_p2::cancel_unsigned_after_expiry_rolls_back_and_late_signature_is_ignored ... ok
+test tests_p2::bad_debt_remote_leg_seizes_all_units ... ok
+test tests_p2::confirm_paused - should panic ... ok
+test tests_p2::confirm_open_position - should panic ... ok
+test tests_p2::confirm_without_vault_read - should panic ... ok
+test tests_p2::cancel_signed_keeps_signature_blocks_release_and_relay_still_records ... ok
+test tests_p2::confirm_requests_vault_read_from_gas_reserve ... ok
+test tests_p2::confirm_twice_in_flight - should panic ... ok
+test tests_p2::expire_near_position - should panic ... ok
+test tests_p2::deposit_verified_pays_loan_and_opens ... ok
+test tests_p2::deposit_proven_but_limits_fail_records_depositor ... ok
+test tests_p2::deposit_verified_with_pay_to_and_referrer ... ok
+test tests_p2::expire_reservation_after_30_min ... ok
+test tests_p2::expire_too_early - should panic ... ok
+test tests_p2::emptied_quote_is_relisted_on_rollback ... ok
+test tests_p2::expire_open_position - should panic ... ok
+test tests_p2::expire_while_confirming - should panic ... ok
+test tests_p2::keeper_attestation_before_authority - should panic ... ok
+test tests_p2::keeper_attestation_bad_depositor - should panic ... ok
+test tests_p2::keeper_attestation_bad_tx_ref - should panic ... ok
+test tests_p2::keeper_attestation_keeper_only - should panic ... ok
+test tests_p2::expire_with_recorded_deposit - should panic ... ok
+test tests_p2::failed_borrow_payout_on_remote_does_not_record_owed_units ... ok
+test tests_p2::keeper_attestation_refused_while_flag_off - should panic ... ok
+test tests_p2::keeper_attestation_paused - should panic ... ok
+test tests_p2::lock_and_borrow_refuses_remote_path ... ok
+test tests_p2::keeper_attestation_when_enabled ... ok
+test tests_p2::preimage_golden_vectors_byte_for_byte ... ok
+test tests_p2::keeper_attestation_on_open - should panic ... ok
+test tests_p2::on_authority_stores_key_once ... ok
+test tests_p2::near_held_position_with_remote_quote_settles_on_near ... ok
+test tests_p2::late_deposit_on_expired_reservation_is_releasable_without_loan ... ok
+test tests_p2::keeper_attestation_while_confirming - should panic ... ok
+test tests_p2::partial_remote_quote_is_skipped - should panic ... ok
+test tests_p2::malformed_signature_is_a_failure ... ok
+test tests_p2::relay_release_without_request - should panic ... ok
+test tests_p2::relay_release_bad_tx_sig - should panic ... ok
+test tests_p2::relay_keeper_only - should panic ... ok
+test tests_p2::relay_rejects_bad_tx_sig - should panic ... ok
+test tests_p2::relay_release_keeper_only - should panic ... ok
+test tests_p2::on_authority_failure_ends_reservation ... ok
+test tests_p2::relay_requires_signature - should panic ... ok
+test tests_p2::release_near_position_refused - should panic ... ok
+test tests_p2::relay_without_pending - should panic ... ok
+test tests_p2::release_after_relay_refused - should panic ... ok
+test tests_p2::release_needs_reserve - should panic ... ok
+test tests_p2::release_nonce_follows_settle_nonces ... ok
+test tests_p2::release_needs_gas - should panic ... ok
+test tests_p2::release_before_full_repay_refused - should panic ... ok
+test tests_p2::release_paused - should panic ... ok
+test tests_p2::release_refuses_unknown_domain - should panic ... ok
+test tests_p2::release_request_refused_while_awaiting_signature - should panic ... ok
+test tests_p2::release_refused_while_signed_settlement_unrelayed - should panic ... ok
+test tests_p2::remote_config_setters_and_view ... ok
+test tests_p2::release_without_deposit_refused - should panic ... ok
+test tests_p2::release_signs_exact_message_with_position_path ... ok
+test tests_p2::release_sign_failure_then_rerequest_with_fresh_nonce ... ok
+test tests_p2::release_while_confirming_refused - should panic ... ok
+test tests_p2::release_without_signer - should panic ... ok
+test tests_p2::repay_to_zero_keeps_collateral_in_vault ... ok
+test tests_p2::release_while_settling_refused - should panic ... ok
+test tests_p2::reserve_borrow_above_u64 - should panic ... ok
+test tests_p2::reserve_memo_too_long - should panic ... ok
+test tests_p2::reserve_creates_awaiting_position_without_locking_funds ... ok
+test tests_p2::reserve_needs_gas - should panic ... ok
+test tests_p2::deposit_rejections_keep_awaiting ... ok
+test tests_p2::remote_position_needs_a_remote_quote - should panic ... ok
+test tests_p2::replayed_release_relay_refused - should panic ... ok
+test tests_p2::reserve_pre_liq_range - should panic ... ok
+test tests_p2::replayed_release_request_refused_while_signed - should panic ... ok
+test tests_p2::reserve_referrer_is_borrower - should panic ... ok
+test tests_p2::reserve_without_remote_chain - should panic ... ok
+test tests_p2::reserve_units_above_u64 - should panic ... ok
+test tests_p2::reserve_paused - should panic ... ok
+test tests_p2::reserve_unknown_collateral - should panic ... ok
+test tests_p2::reserve_without_signer - should panic ... ok
+test tests_p2::reserve_zero_borrow - should panic ... ok
+test tests_p2::set_remote_chain_owner_only - should panic ... ok
+test tests_p2::set_remote_chain_and_clear ... ok
+test tests_p2::set_remote_chain_rejects_secp_domain - should panic ... ok
+test tests_p2::reserve_zero_units - should panic ... ok
+test tests_p2::signer_config_expiry - should panic ... ok
+test tests_p2::signer_config_bad_path - should panic ... ok
+test tests_p2::settle_remote_hooks_without_signer_and_in_flight ... ok
+test tests_p2::signer_config_min_gas - should panic ... ok
+test tests_p2::signer_config_owner_only - should panic ... ok
+test tests_p2::settle_remote_needs_reserve - should panic ... ok
+test tests_p2::v2_preimage_kinds_release_and_path ... ok
+test tests_p2::validators_and_signature_parse ... ok
+test tests_p2::settle_remote_needs_sign_gas - should panic ... ok
+test tests_p2::signer_config_and_views ... ok
+test tests_p2::vault_read_config_empty_pin - should panic ... ok
+test tests_p2::settle_remote_refuses_unknown_domain - should panic ... ok
+test tests_p2::vault_read_parsing ... ok
+test tests_reserve::v7_reserve_apr_window_drops_old_days ... ok
+test tests_p2::sign_failure_rolls_back_remote_leg ... ok
+test tests_p2::signed_release_rerequestable_only_after_expiry ... ok
+test tests_p2::vault_read_config_gas - should panic ... ok
+test tests_p2::vault_read_config_owner_only - should panic ... ok
+test tests_p2::vault_read_config_zero_deposit - should panic ... ok
+test tests_p2::trigger_refuses_awaiting_deposit - should panic ... ok
+test tests_p2::signature_success_then_relay_closes_remote ... ok
+test tests_p2::stale_nonce_callback_ignored ... ok
+test tests_p2::trigger_signs_with_position_path_and_kind_preliq ... ok
+test tests_reserve::v7_reserve_complete_not_initiated - should panic ... ok
+test tests_reserve::v7_reserve_complete_before_notice - should panic ... ok
+test tests_reserve::v7_reserve_complete_nothing_to_withdraw - should panic ... ok
+test tests_reserve::v7_reserve_complete_note_owner_only - should panic ... ok
+test tests_reserve::v7_reserve_get_reserve_unknown_symbol - should panic ... ok
+test tests_reserve::v7_reserve_complete_twice - should panic ... ok
+test tests_reserve::v7_reserve_complete_needs_one_yocto - should panic ... ok
+test tests_reserve::v7_reserve_enabled_but_empty_and_no_quotes_reverts - should panic ... ok
+test tests_reserve::v7_reserve_initiate_needs_one_yocto - should panic ... ok
+test tests_reserve::v7_reserve_exit_after_notice_pays_exact_amounts ... ok
+test tests_reserve::v7_reserve_fills_only_after_every_quote ... ok
+test tests_reserve::v7_reserve_join_below_ten_dollars_refunded ... ok
+test tests_reserve::v7_reserve_join_depleted_refunded ... ok
+test tests_reserve::v7_reserve_join_disabled_refunded ... ok
+test tests_reserve::v7_reserve_initiate_twice - should panic ... ok
+test tests_reserve::v7_reserve_initiate_note_owner_only - should panic ... ok
+test tests_reserve::v7_reserve_initiate_unknown_note - should panic ... ok
+test tests_reserve::v7_reserve_join_first_deposit_mints_1to1_and_a_note ... ok
+test tests_reserve::v7_reserve_failed_exit_transfers_restore_the_claim ... ok
+test tests_reserve::v7_reserve_notice_param_below_min - should panic ... ok
+test tests_reserve::v7_reserve_join_unknown_collateral_and_wrong_token_refunded ... ok
+test tests_reserve::v7_reserve_notice_param_bounds_and_effect ... ok
+test tests_reserve::v7_reserve_old_owner_loses_authority_after_transfer - should panic ... ok
+test tests_reserve::v7_reserve_premium_split_q_to_r_and_realised_apr ... ok
+test tests_reserve::v7_reserve_set_params_out_of_range - should panic ... ok
+test tests_reserve::v7_reserve_set_params_must_exceed_quote_ceilings - should panic ... ok
+test tests_reserve::v7_reserve_late_depositor_gets_no_earlier_units_or_fees ... ok
+test tests_reserve::v7_reserve_quote_at_or_above_reserve_discount_refunded ... ok
+test tests_reserve::v7_reserve_set_params_ok_and_event ... ok
+test tests_reserve::v7_reserve_note_transfer_refused_while_reserve_settlement_pending - should panic ... ok
+test tests_reserve::v7_reserve_note_transfer_moves_the_claim ... ok
+test tests_reserve::v7_reserve_set_params_owner_only - should panic ... ok
+test tests_reserve::v7_reserve_set_params_unknown_collateral - should panic ... ok
+test tests_reserve::v7_reserve_views_unknown_and_math_helpers ... ok
+test tests_reserve::v7_reserve_set_params_zero_refused - should panic ... ok
+test tests_v7::announce_under_one_hour_refused - should panic ... ok
+test tests_v7::announce_owner_only - should panic ... ok
+test tests_v7::announce_zero_refused - should panic ... ok
+test tests_v7::apply_without_announcement_refused - should panic ... ok
+test tests_v7::calendar_over_600_rejected - should panic ... ok
+test tests_v7::apply_before_effective_refused - should panic ... ok
+test tests_v7::calendar_empty_window_rejected - should panic ... ok
+test tests_v7::calendar_overlap_rejected - should panic ... ok
+test tests_reserve::v7_reserve_shortfall_stays_settling_and_locks_reserve_notes ... ok
+test tests_v7::calendar_owner_only - should panic ... ok
+test tests_v7::borrow_refused_while_ca_pending_repay_continues ... ok
+test tests_v7::calendar_set_and_paginate ... ok
+test tests_v7::calendar_unsorted_rejected - should panic ... ok
+test tests_v7::force_session_closed_owner_only - should panic ... ok
+test tests_v7::empty_calendar_means_closed ... ok
+test tests_v7::failed_borrow_proceeds_leave_the_aggregate ... ok
+test tests_reserve::v7_reserve_waits_for_quotes_beyond_the_call ... ok
+test tests_v7::get_claimable_default_zero ... ok
+test tests_v7::outside_hours_is_closed ... ok
+test tests_v7::pay_to_memo_too_long_refunds ... ok
+test tests_v7::preview_with_registered_referrer_returns_fee_stack ... ok
+test tests_v7::pay_to_failure_credits_borrower_claimable_then_withdraw ... ok
+test tests_v7::forced_closed_and_false_cannot_open ... ok
+test tests_v7::price_kind_change_with_debt_refused - should panic ... ok
+test tests_v7::referrer_registry ... ok
+test tests_v7::register_referrer_owner_only - should panic ... ok
+test tests_v7::referrer_equal_to_borrower_refused_with_full_refund ... ok
+test tests_v7::reason_precedence_outside_hours_before_stale_and_forced ... ok
+test tests_v7::reserved_fields_present_and_zero ... ok
+test tests_v7::registered_referrer_gets_half_the_origination_fee ... ok
+test tests_v7::set_multiplier_above_5pct_refused - should panic ... ok
+test tests_v7::price_older_than_900s_flips_to_weekend_parameters ... ok
+test tests_v7::set_multiplier_bounds ... ok
+test tests_v7::set_multiplier_decrease_refused - should panic ... ok
+test tests_v7::set_multiplier_owner_only - should panic ... ok
+test tests_v7::set_multiplier_refused_while_pending - should panic ... ok
+test tests_v7::set_origination_fee_bps_above_100_refused - should panic ... ok
+test tests_v7::token_includes_multiplier_ignores_m_and_keeps_price ... ok
+test tests_v7::set_origination_fee_bps_bounds ... ok
+test tests_v7::set_origination_fee_bps_owner_only - should panic ... ok
+test tests_v7::split_two_for_one_leaves_ltv_and_value_unchanged ... ok
+test tests_v7::split_voids_pending_price_proposal - should panic ... ok
+test tests_v7::split_capacity_between_two_borrowers_then_repay_frees_headroom ... ok
+test tests_v7::settlement_after_split_seizes_model_units ... ok
+test tests_v7::underlying_multiplier_values_per_unit_with_m ... ok
+test tests_v7::unregister_referrer_owner_only - should panic ... ok
+test tests_v7::unregistered_referrer_fee_goes_to_treasury ... ok
+test tests_v7::withdraw_claimable_nothing - should panic ... ok
+test tests_v7::two_borrowers_cannot_both_draw_full_capacity ... ok
+test tests_v7::settlement_reduces_total_debt ... ok
+test tests_v7b::job_output_parsers ... ok
+test tests_v7::withdraw_claimable_requires_one_yocto - should panic ... ok
+test tests_v7b::math_helpers ... ok
+test tests_v7b::fee_stack_view ... ok
+test tests_v7b::job_not_configured - should panic ... ok
+test tests_v7b::job_config_pin_and_fallback ... ok
+test tests_v7b::calendar_job_in_flight - should panic ... ok
+test tests_v7b::calendar_job_cooldown - should panic ... ok
+test tests_v7b::job_needs_gas_reserve - should panic ... ok
+test tests_v7b::calendar_job_after_cooldown_and_stale_in_flight ... ok
+test tests_v7b::job_refused_while_paused - should panic ... ok
+test tests_v7b::calendar_job_can_close_but_never_open ... ok
+test tests_v7b::multiplier_job_needs_source - should panic ... ok
+test tests_v7b::multiplier_job_refused_for_token_feed - should panic ... ok
+test tests_v7b::opted_in_quote_event_and_flag ... ok
+test tests_v7b::preview_self_settle_reasons ... ok
+test tests_v7b::remote_self_settle_needs_a_remote_recipient_covering_the_fill ... ok
+test tests_v7b::multiplier_job_bounded ... ok
+test tests_v7b::remote_self_settle_sign_failure_rolls_back_fill ... ok
+test tests_v7b::reservation_deposit_refunded_on_authority_failure_and_refused_loan ... ok
+test tests_v7b::reservation_deposit_refunded_on_expiry ... ok
+test tests_v7b::remote_self_settle_signs_kind_self_and_credits_on_signature ... ok
+test tests_v7b::reserve_refused_below_deposit - should panic ... ok
+test tests_v7b::reservation_deposit_refunded_on_confirm ... ok
+test tests_v7b::self_settle_above_daily_cap - should panic ... ok
+test tests_v7b::self_settle_borrower_only - should panic ... ok
+test tests_v7b::self_settle_ca_pending - should panic ... ok
+test tests_v7b::self_settle_daily_cap_resets_next_day ... ok
+test tests_v7b::self_settle_happy_path_exact_units ... ok
+test tests_v7b::self_settle_needs_one_yocto - should panic ... ok
+test tests_v7b::self_settle_closed_position - should panic ... ok
+test tests_v7b::self_settle_fills_opted_in_quotes_in_ascending_discount ... ok
+test tests_v7b::self_settle_oracle_stale - should panic ... ok
+test tests_v7b::self_settle_health_below_one - should panic ... ok
+test tests_v7b::self_settle_unknown_position - should panic ... ok
+test tests_v7b::self_settle_paused - should panic ... ok
+test tests_v7b::set_job_config_bad_pin - should panic ... ok
+test tests_v7b::set_job_config_owner_only - should panic ... ok
+test tests_v7b::set_job_config_gas_range - should panic ... ok
+test tests_v7b::set_job_config_zero_deposit - should panic ... ok
+test tests_v7b::set_job_config_unknown_job - should panic ... ok
+test tests_v7b::set_max_voluntary_fill_owner_only - should panic ... ok
+test tests_v7b::self_settle_without_opted_in_capacity - should panic ... ok
+test tests_v7b::set_multiplier_source_bad_rpc - should panic ... ok
+test tests_v7b::set_shield_params_event_in_past - should panic ... ok
+test tests_v7b::vault_read_not_found_is_rejected ... ok
+test tests_v7b::set_multiplier_source_bad_token - should panic ... ok
+test tests_v7b::set_shield_params_fee_bound - should panic ... ok
+test tests_v7b::set_shield_params_owner_only - should panic ... ok
+test tests_v7b::set_shield_params_unknown_symbol - should panic ... ok
+test tests_v7b::shield_on_remote_reservation_validated - should panic ... ok
+test tests_v7b::shield_sized_at_weekend_params_in_session_and_fee_replaces_premium ... ok
+test tests_v7b::shield_on_remote_reservation_counts_and_prices_at_confirm ... ok
+test tests_v7b::shield_five_opens_per_day_then_refused_until_next_utc_day ... ok
+test tests_v7b::shield_window_and_minimum_refusals ... ok
+test result: ok. 452 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 17.97s
+     Running tests/sandbox.rs (target/debug/deps/sandbox-c95f0e5bcc57e6fe)
+ │    Compiling proc-macro-error-attr3 v3.1.1
+ │    Compiling proc-macro-error3 v3.1.1
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+test owner_setters_and_ft_gas ... ok
+test refunds_and_guards ... ok
+test topup_exit_and_repay ... ok
+test demo_flow_matches_model ... ok
+test preliq_eight_buyers_gas ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 89.74s
+     Running tests/sandbox_p1.rs (target/debug/deps/sandbox_p1-88fbaaa3e1c64387)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+test v2_code_over_v1_state_fails_closed ... ok
+test gas_trigger_quoter_eight_legs ... ok
+test gas_trigger_pyth_quoter_eight_legs ... ok
+test v2_seed_then_quoter_outcomes ... ok
+test v2_pyth_secrets_cancel ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 65.70s
+     Running tests/sandbox_p2.rs (target/debug/deps/sandbox_p2-b640d27cb29329c0)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+test remote_repay_then_release_signed_and_replay_refused ... ok
+test remote_reserve_confirm_borrow_settle_signed_with_position_path ... ok
+test remote_reservation_deposit_refunds_and_self_settle_kind_self ... ok
+test remote_refusals_attestation_and_expiry ... ok
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 140.21s
+     Running tests/sandbox_reserve.rs (target/debug/deps/sandbox_reserve-9027db5f89699363)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+test reserve_shortfall_stays_settling_and_locks_transfers ... ok
+test reserve_waterfall_late_depositor_transfer_and_exit ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 67.61s
+     Running tests/sandbox_v7.rs (target/debug/deps/sandbox_v7-b45523478b510160)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+test notes::notes_residual_collateral_to_loan_note_owner ... ok
+test notes::notes_svg_gas_and_xml_escaping ... ok
+test notes::notes_transfer_refused_while_settling ... ok
+test aggregate_debt_two_borrowers_repay_settle ... ok
+test pay_to_claimable_and_referrers ... ok
+test notes::notes_authority_follows_transfer ... ok
+test notes::gas_rows_g11_owner_setters ... ok
+test weekend_guard_calendar_stale_and_forced ... ok
+test multiplier_bounds_announce_and_split ... ok
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 246.25s
+     Running tests/sandbox_v7b.rs (target/debug/deps/sandbox_v7b-81aa12ec8662fd20)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+test self_settle_refusals_and_exact_units ... ok
+test shield_weekend_sizing_fee_and_daily_limit ... ok
+test outlayer_calendar_cannot_open_and_multiplier_bounded ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 66.26s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

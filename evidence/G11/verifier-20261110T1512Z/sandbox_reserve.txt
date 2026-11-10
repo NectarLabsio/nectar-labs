@@ -1,0 +1,20 @@
+GAS,upsert_collateral,2845410250874
+GAS,upsert_collateral,2845410250874
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,set_reserve_params,2809765455263
+GAS,set_reserve_params,2809765455263
+GAS,ft_transfer_call(JoinNectarReserve),7818527089444
+GAS,update_owner_price,2641857339621
+GAS,update_owner_price,2641857339621
+GAS,update_owner_price,2641857339621
+GAS,update_owner_price,2641857339621
+GAS,trigger_preliquidation(reserve),13397643916608
+GAS,trigger_preliquidation(reserve),17931554000292
+GAS,cancel_settlement,2621983346320
+test reserve_shortfall_stays_settling_and_locks_transfers ... ok
+GAS,nft_transfer(reserve),3621900863963
+GAS,initiate_reserve_exit,2906050042417
+GAS,complete_reserve_exit,12611657101365
+test reserve_waterfall_late_depositor_transfer_and_exit ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 54.96s

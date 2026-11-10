@@ -1,0 +1,41 @@
+GAS,upsert_collateral,2848423934606
+GAS,upsert_collateral,2848423934606
+GAS,upsert_collateral,2848423934606
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,set_dex_depth,2559676724669
+GAS,set_session_calendar,2503508077915
+GAS,set_outlayer_account,2303443827415
+GAS,update_owner_price,2638192810349
+GAS,set_vault_read_config,2546870510020
+GAS,borrow_alice,13029005497548
+GAS,set_session_calendar,2495968329844
+GAS,set_max_voluntary_fill,2640915516275
+GAS,force_session_closed,2629658663867
+GAS,shield_over_weekend_capacity,7378272845084
+GAS,request_session_check+calendar,8114830741696
+GAS,update_owner_price,2638192810349
+GAS,force_session_closed,2630077579373
+GAS,FundPappusQuote(accepts_voluntary_fills),8063665483560
+GAS,set_max_voluntary_fill,2640915516275
+GAS,LockCollateralAndBorrow(shield),13416317122825
+GAS,update_owner_price,2638192810349
+GAS,set_max_voluntary_fill,2640915516275
+GAS,shield_open_2,13478550713246
+GAS,update_owner_price,2638192810349
+GAS,borrow_bob,13074434491146
+GAS,shield_open_3,13485390713246
+GAS,update_owner_price,2638192810349
+GAS,self_settle(near),13222137914068
+GAS,update_owner_price,2638192810349
+GAS,shield_open_4,13485390713246
+test self_settle_refusals_and_exact_units ... ok
+GAS,update_owner_price,2638192810349
+GAS,shield_open_5,13485390713246
+GAS,update_owner_price,2641778304824
+test shield_weekend_sizing_fee_and_daily_limit ... ok
+GAS,set_multiplier_source,2638696873943
+GAS,request_multiplier_read+multiplier,8469944084322
+test outlayer_calendar_cannot_open_and_multiplier_bounded ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 68.57s
