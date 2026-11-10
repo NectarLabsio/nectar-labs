@@ -1,0 +1,67 @@
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1530156222610
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,mock-ft:new,1532582157458
+GAS,new,2309853490539
+GAS,upsert_collateral,2848387733342
+GAS,new,2309853490539
+GAS,new,2309853490539
+GAS,new,2309853490539
+GAS,new,2309853490539
+GAS,update_owner_price,2637765799985
+GAS,upsert_collateral,2848387733342
+GAS,upsert_collateral,2848387733342
+GAS,upsert_collateral,2848387733342
+GAS,upsert_collateral,2848387733342
+GAS,fund_gas_reserve,2284122968413
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,update_owner_price,2637765799985
+GAS,fund_gas_reserve,2284122968413
+GAS,fund_gas_reserve,2284122968413
+GAS,fund_gas_reserve,2284122968413
+GAS,fund_gas_reserve,2284122968413
+GAS,set_quote_params,2304652019935
+GAS,set_keeper,2301673404073
+GAS,set_fee_split,2302038896290
+GAS,ft_transfer_call:invalid,6928708525533
+GAS,force_session_closed,2626073169392
+GAS,set_dex_depth,2559676724669
+GAS,mock-ft:new,1534716222610
+GAS,set_reserve_params,2709833943367
+GAS,propose_price,2575679868232
+GAS,set_oracle_params,2304655694050
+GAS,apply_price,2785328337700
+GAS,ft_transfer_call:SupplyLendingLiquidity,6824071414349
+GAS,ft_transfer_call:FundPappusQuote,7991872494047
+GAS,mock-ft:mint,1733165696679
+GAS,ft_transfer_call:TopUpQuote,7214302830805
+GAS,pause,2328447958057
+GAS,mock-ft:storage_deposit,1732887497245
+GAS,mock-ft:ft_transfer,2002711471160
+test owner_setters_and_ft_gas ... ok
+GAS,ft_transfer_call:LockCollateralAndBorrow,12998216231357
+GAS,update_owner_price,2638192810349
+GAS,unpause,2329266980305
+GAS,ft_transfer_call:Repay(partial),7151719633913
+GAS,update_owner_price,2638192810349
+test refunds_and_guards ... ok
+GAS,ft_transfer_call:Repay(refund),7059518919858
+GAS,initiate_quote_withdrawal,2829800395407
+GAS,complete_quote_withdrawal,7767819268541
+test topup_exit_and_repay ... ok
+GAS,trigger_preliquidation(2 legs),22813991218435
+GAS,claim_fees,7673574239510
+GAS,update_owner_price,2638192810349
+test demo_flow_matches_model ... ok
+GAS,update_owner_price,2638192810349
+GAS,trigger_preliquidation(8 legs),53108791984037
+test preliq_eight_buyers_gas ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 46.33s

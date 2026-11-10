@@ -14,7 +14,7 @@
 | G1 (v7 additions) | PASS | 2026-11-10T13:34Z–14:05Z | 09c4316 | evidence/G1/verifier-v7-20261110T1334Z/ (unit 318/0, sandbox 5/0, sandbox_p1 5/0, sandbox_p2 3/0, sandbox_v7 4/0, mock-ft 17/0, model.csv OK 87 rows; all 9 v7.rs methods gas-measured, max 8.93 Tgas; 10 owner setters (2 remote.rs, 8 p1/p2) lack a gas row, G11 scope, see §G1) |
 | G10 v7 facts + toolchain | PASS with open items (F-351, F-352, F-353) | 2026-11-10T13:44Z | 09c4316 | evidence/G10/verifier-20261110T1334Z/g10.log (FACTS F-328/329/337/338/339/340–361 present; calendar source+retrieved; solana 2.3.0 / anchor 0.32.1 / forge 1.9.0 == F-340/F-341/F-343; live derived_public_key == F-338) |
 | G7 prep (not G7) | RECORDED: vault deployed + 25 anchor tests | 2026-11-10T13:44Z | 09c4316 | evidence/G7/prep-verifier-20261110T1334Z/ (program ENZa… on devnet, vault PDA HGSF… owned by it; test:unit 7/0, test:anchor 25/0; G7 stays pending: needs v2 on testnet) |
-| G11 v7 contract | FAIL (gas rows) | 2026-11-10T15:12Z–15:39Z | 74ce8be | evidence/G11/verifier-20261110T1512Z/ (unit 452/0, sandbox 5+5+4+2+9+3 = 28/0, mock-ft 17/0, model --v7 OK 132 rows; 81 v7_* tests; all 9 PRD §6.11 tests mapped and green; wasm 734784 B sha256 252a6abe…; set_shield_params + set_job_config lack a sandbox gas row; F-352 open; see §G11) |
+| G11 v7 contract | PASS with open item (F-352) — re-run after WO-23c; prior FAIL block kept | 2026-11-10T15:47Z–16:12Z | 53f1e63 | evidence/G11/verifier-rerun-20261110T1547Z/ (unit 453/0 incl. tests_p2::deposit_forged_authority_refused, sandbox 5+5+4+2+9+4 = 29/0, mock-ft 17/0, model --v7 OK 132 rows; 81 v7_* + 103 tests_v7/v7b; wasm 734784 B sha256 252a6abe… (unchanged); set_shield_params 2.67 / set_job_config 2.57 Tgas; every non-private change method gas-measured, max 68.94 Tgas; see §G11) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -29,6 +29,38 @@ Notes: faucet rate-limited once; retried after 90 s.
 ```
 
 ## G11
+
+### G11 — v7 contract — RE-RUN — PASS with open item F-352 — 2026-11-10T15:47Z–16:12Z — commit 53f1e63
+Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-G11-20261110T154726Z (HEAD 53f1e63); SDKROOT=.../MacOSX26.5.sdk; no secrets.
+Exit codes captured by a bash script (ev/status). Trimmed logs: evidence/G11/verifier-rerun-20261110T1547Z/ (unit-tests.txt, sandbox*.txt,
+  mock-ft.txt, model.txt, build.txt, gas-max.csv, status).
+$ cargo test -p nectar-core                       → exit 0: unit 453/0 · sandbox 5/0 · sandbox_p1 5/0 · sandbox_p2 4/0 · sandbox_reserve 2/0 ·
+                                                      sandbox_v7 9/0 · sandbox_v7b 4/0 · doc 0 → 482 passed, 0 failed, 0 ignored
+     v7: 81 unit tests named *v7_* (the `cargo test -p nectar-core v7_` filter set) + 103 in tests_v7/tests_v7b; new unit test
+         tests_p2::deposit_forged_authority_refused ... ok
+$ cargo test -p nectar-core --test <t> -- --nocapture  for t in sandbox sandbox_p1 sandbox_p2 sandbox_reserve sandbox_v7 sandbox_v7b
+     5/0 · 5/0 · 4/0 · 2/0 · 9/0 (167–279 s) · 4/0 — all exit 0; 591 GAS rows ("attached,…" prepaid rows excluded)
+$ cargo test -p mock-ft                           → 17 passed; 0 failed, exit 0
+$ python3 contracts/nectar-core/tests/model.py --check --v7 → model.csv OK (132 rows), exit 0
+$ (contracts/nectar-core) cargo near build non-reproducible-wasm → exit 0
+     -                  Size: 734.8 KB (734784 bytes)
+     - SHA-256 checksum hex : 252a6abe1803b2628b0adadb7b5ec120853ddbd8e1f698dddf4f629a29e8937a  (identical to 74ce8be: fix touched tests only)
+$ git diff --stat add9427 53f1e63                 → src/tests_p2.rs +25, tests/sandbox_v7b.rs +23, docs only otherwise (no product code)
+$ git status --short (clone, after runs)          → only ?? ev/ (verifier scratch)
+Gas: previously missing rows now present (sandbox_v7b): GAS,set_shield_params,2672958059192 (2.67 Tgas);
+  GAS,set_job_config,2558697971305 / 2565438983317 (2.56 / 2.57 Tgas; two jobs). Test asserts < 100 Tgas for both.
+  Method diff: 68 `pub fn …(&mut self` in contracts/nectar-core/src/*.rs (non-test) vs GAS labels → every method measured except the 10
+  #[private] callbacks (on_payout, on_pyth_price, on_quoter_result, on_signature, nft_resolve_transfer, on_session_check, on_multiplier_read,
+  on_authority, on_deposit_verified, on_release_signature; counted inside caller totals) and ft_on_transfer (NEP-141 receiver, measured via the
+  ft_transfer_call:* rows, e.g. LockCollateralAndBorrow 13.00–13.48, JoinNectarReserve 7.85, FundPappusQuote 7.99).
+  Max label total 68.94 Tgas (trigger+pyth+quoter+8legs); no label >= 100 Tgas. All v7 method values from the FAIL run are reproduced in gas-max.csv.
+PRD §6.11 tests: same mapping as the FAIL block below, all green again; forged deposit attestation now has a unit test
+  (tests_p2::deposit_forged_authority_refused) in addition to sandbox_p2 remote_refusals_attestation_and_expiry. Missing: none.
+F-352 (supersedes F-327): still "GATE G11 open" in docs/FACTS.md — xStocks multiplier mechanism unverified. Listed, not a FAIL reason
+  (criterion is "F-327 answered or open").
+Explorer: none (local sandbox).
+Result: PASS — the only prior FAIL reason (no gas row for set_shield_params / set_job_config) is closed; all tests, model --v7 and build green.
+  Open: F-352.
 
 ### G11 — v7 contract — FAIL (2 owner setters without a gas row; every test and PRD §6.11 criterion green) — 2026-11-10T15:12Z–15:39Z — commit 74ce8be
 Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-G11-20261110T151225Z (HEAD 74ce8bea59d5); SDKROOT=.../MacOSX26.5.sdk; no secrets.

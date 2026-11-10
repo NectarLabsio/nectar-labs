@@ -1,0 +1,11 @@
+core exit 0
+sandbox exit 0
+sandbox_p1 exit 0
+sandbox_p2 exit 0
+sandbox_reserve exit 0
+sandbox_v7 exit 0
+sandbox_v7b exit 0
+mockft exit 0
+model exit 0
+build exit 0
+EXIT

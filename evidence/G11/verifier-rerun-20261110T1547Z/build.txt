@@ -1,0 +1,7 @@
+ │     Finished `dev` profile [unoptimized] target(s) in 0.16s
+ │     Finished `release` profile [optimized] target(s) in 13.64s
+    Finished wasm-opt -O in 1s 645ms
+     -                  Size: 734.8 KB (734784 bytes)
+     - SHA-256 checksum hex : 252a6abe1803b2628b0adadb7b5ec120853ddbd8e1f698dddf4f629a29e8937a
+     - SHA-256 checksum bs58: 3W5bifwgurTNyZwHsseLU8NmJxaW5Dt2221CfhvQ31ey
+    Finished cargo near build in 16s

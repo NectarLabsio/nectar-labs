@@ -1,0 +1,19 @@
+test tests::mint_owner_only ... ok
+test tests::new_and_metadata ... ok
+test tests::multiplier_default_and_update ... ok
+test tests::ft_transfer_call_debits_sender ... ok
+test tests::ft_transfer_insufficient - should panic ... ok
+test tests::registration_required_panics_for_unknown - should panic ... ok
+test tests::ft_transfer_requires_one_yocto - should panic ... ok
+test tests::ft_transfer_moves_balance ... ok
+test tests::mint_rejects_non_owner - should panic ... ok
+test tests::registration_required_blocks_unregistered_receiver ... ok
+test tests::update_multiplier_rejects_zero - should panic ... ok
+test tests::set_registration_required_owner_only - should panic ... ok
+test tests::storage_shims ... ok
+test tests::update_multiplier_owner_only - should panic ... ok
+test tests::resolve_refunds_all_on_failure ... ok
+test tests::resolve_refunds_unused ... ok
+test tests::resolve_keeps_all_when_used ... ok
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
