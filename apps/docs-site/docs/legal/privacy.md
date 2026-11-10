@@ -38,7 +38,7 @@ Current state (2026-11-10): this documentation site, the web app (G3 PASS) and t
 | Phala PCCS (Intel DCAP collateral) | web app copilot, from our server | **live mode only**, to check the TDX quote | the attestation quote; no personal data |
 | NVIDIA NRAS (`nras.attestation.nvidia.com`) | web app copilot, from our server | **live mode only**, to check GPU attestation | the GPU attestation payload; no personal data |
 
-This site loads its fonts and search index from its own origin. It requests nothing from Google Fonts or any other CDN. Links to other sites (NEAR, Solana, OutLayer and others) are plain links. Those sites have their own policies once you follow them.
+This site loads its fonts and search index from its own origin. It requests nothing from Google Fonts or any other CDN. Links to other sites (NEAR, Solana, OutLayer and others) are plain links. Those sites have their own policies once you follow them. The "Share to X" link on a Note page is one of these: it opens X in a new tab with a short text (the Note id, "NEAR testnet", "mock collateral") and the Note's page address prefilled, sends nothing until you click it, and posts nothing unless you do.
 
 Contact form (TODO-H9): until a form provider is chosen, "Talk to us" opens your own mail client (`mailto:`). No form processor is involved.
 

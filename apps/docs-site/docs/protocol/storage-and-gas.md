@@ -48,7 +48,7 @@ Measured P0 values, copied from evidence/G1/gas-sandbox.csv (total gas burnt per
 | `set_keeper` | 1,814,311,870,139 | 1.81 |
 | `set_oracle_params` | 1,817,307,324,212 | 1.82 |
 | `set_quote_params` | 1,817,303,650,097 | 1.82 |
-| `set_reserve` | 2,041,323,627,883 | 2.04 |
+| `set_reserve` (v1 only; removed in v2, D-024) | 2,041,323,627,883 | 2.04 |
 | `set_session` | 2,037,962,774,353 | 2.04 |
 | `trigger_preliquidation(2 legs)` | 19,979,096,630,723 | 19.98 |
 | `trigger_preliquidation(8 legs)` | 46,970,045,935,847 | 46.97 |

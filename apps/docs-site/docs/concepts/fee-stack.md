@@ -5,20 +5,20 @@ description: Every fee a borrower pays, who receives it, and how a registered re
 ---
 # Fee stack and referrals
 
-<p className="verified">Verified against: spec docs/PRD.md §4.3, §4.11 · docs/work/interface-v7.md §A4, §A5, §A6 · packages/config/config.yaml (`limit_premium_bps`, `fee_split`, `keeper_fee_bps`, `v7.origination_fee_bps`) · D-018 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10)</p>
-<p className="status">Status: origination fee, referrers and <code>pay_to</code> are built and tested in the sandbox; testnet deployment pending (`nectar-core-v2.nectar.testnet` not created yet, D-018, handoff H-NEAR-FAUCET). The limit premium and keeper fee are live in v1 on testnet (G2 PASS 2026-11-09T20:55Z). Shield fees and the Profit-Lock fee are not built yet.</p>
+<p className="verified">Verified against: spec docs/PRD.md §4.3, §4.11 · docs/work/interface-v7.md §A4, §A5, §A6 · packages/config/config.yaml (`limit_premium_bps`, `fee_split`, `keeper_fee_bps`, `v7.origination_fee_bps`) · D-018, D-024 (2026-11-10) · contracts/nectar-core/src/shields.rs, src/reserve.rs · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10)</p>
+<p className="status">Status: origination fee, referrers and <code>pay_to</code> are built and tested in the sandbox; testnet deployment pending (`nectar-core-v2.nectar.testnet` not created yet, D-018, handoff H-NEAR-FAUCET). The limit premium and keeper fee are live in v1 on testnet (G2 PASS 2026-11-09T20:55Z). Shield fees, the Profit-Lock fee and the Reserve share are built and tested in the sandbox; testnet deployment pending.</p>
 
 ## The stack (testnet defaults)
 
 | Fee | Charged on | Default | Paid to | State |
 | --- | --- | --- | --- | --- |
-| Limit premium | the part of a borrow above `base_ltv_bps × V` | 300 bps, up front from proceeds | 70% buyers, 20% lenders, 10% treasury (`fee_split`) | live in v1 |
+| Limit premium | the part of a borrow above `base_ltv_bps × V` | 300 bps, up front from proceeds | 70% buyers, 20% lenders, 10% treasury (`fee_split`); in v2 the buyers' share is split between quotes and the Reserve as `Q_c : R_c` | live in v1; Reserve split v2, sandbox |
 | Origination | the full borrow, rounded up | 30 bps (owner may set 0–100) | 50% to a registered referrer, the rest to treasury; all to treasury without one | v2, sandbox |
 | Keeper | the repay amount at settlement | `keeper_fee_bps` = 50 | the keeper | live in v1 |
-| Shield fee (replaces the premium) | the full borrow | 15 bps weekend, 25 bps event (PRD) | same split as the premium | not built |
-| Profit-Lock | debt repaid | 50 bps (PRD) | treasury | not built |
+| Shield fee (replaces the premium) | the full borrow | 15 bps weekend, 25 bps event (owner may set 0–1,000) | same split as the premium | v2, sandbox ([Shields](/concepts/shields)) |
+| Profit-Lock | debt repaid | 50 bps, fixed | treasury | v2, sandbox ([Profit-Lock](/concepts/profit-lock)) |
 
-PRD §4.11 sends 70% of the premium to "buyers and Reserve". The Reserve is not built, so today that share goes to buyers only.
+PRD §4.11 sends 70% of the premium to "buyers and Reserve". On the live v1 contract that share goes to quotes only. In v2 it is split `floor(buyers × Q_c / (Q_c + R_c))` to quotes and the rest to the [Nectar Reserve](/concepts/nectar-reserve) (`math::split_premium_qr`); if `Q_c + R_c` is 0 it goes to treasury so no USDC is orphaned. `get_fee_stack(symbol?)` returns every row above.
 
 Net proceeds on v2 = borrow − limit premium − origination fee. `preview_borrow(symbol, units, borrow_usd_e6, referrer?)` returns `origination_fee_usd_e6`, `referrer_share_usd_e6`, `total_fees_usd_e6` and `net_proceeds_usd_e6`, so a client can show every fee before a wallet opens.
 
@@ -45,3 +45,4 @@ A borrow may carry `pay_to: {receiver_id, memo?}`. Net proceeds then go to that 
 - `tests_v7::pay_to_failure_credits_borrower_claimable_then_withdraw`, `pay_to_memo_too_long_refunds`, `withdraw_claimable_requires_one_yocto`, `withdraw_claimable_nothing`, `get_claimable_default_zero`
 - `math::tests::increase_bound_and_origination`, `math::tests::fee_index_matches_reference_loop`
 - sandbox `pay_to_claimable_and_referrers` (contracts/nectar-core/tests/sandbox_v7.rs)
+- Shield fee, Profit-Lock fee and Reserve split: `tests_v7b::fee_stack_view`, `tests_reserve::v7_reserve_premium_split_q_to_r_and_realised_apr`; tests on [Shields](/concepts/shields), [Profit-Lock](/concepts/profit-lock) and [Nectar Reserve](/concepts/nectar-reserve)
