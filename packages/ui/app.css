@@ -44,7 +44,7 @@
 .nx-mid { font: 600 22px/1.1 var(--font-display); letter-spacing: -.02em; color: var(--heading); }
 .nx-big { font: 600 32px/1.05 var(--font-display); letter-spacing: -.035em; color: var(--heading); }
 .nx-hero { font: 600 56px/1 var(--font-display); letter-spacing: -.045em; color: var(--heading); }
-.nx-pos { color: var(--accent); } .nx-warn { color: var(--warn); } .nx-neg { color: var(--danger); }
+.nx-pos { color: var(--accent-text); } .nx-warn { color: var(--warn); } .nx-neg { color: var(--danger); }
 .nx-row { display: flex; align-items: center; gap: 12px; }
 .nx-stack { display: flex; flex-direction: column; }
 .nx-gap6 { gap: 6px; }
@@ -58,7 +58,7 @@
 .nx-stats > .nx-stat:first-child { padding-left: 0; border-left: 0; }
 .nx-stat { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .nx-delta { font: 400 12px/1.4 var(--font-sans); color: var(--dim); }
-.nx-delta.up { color: var(--accent); }
+.nx-delta.up { color: var(--accent-text); }
 .nx-skel { display: block; width: 7em; height: 1.1em; border-radius: 6px; background: var(--raise); }
 .nx-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 12px; border: 0; cursor: pointer; font: 600 14px var(--font-sans); white-space: nowrap; background: var(--accent); color: var(--on-accent); text-decoration: none; }
 .nx-btn:hover { background: var(--accent-hover); }
@@ -216,7 +216,7 @@
 .nx-opt .p { font: 500 13px var(--font-mono); color: var(--heading); }
 .nx-opt .flag { position: absolute; top: -10px; right: 12px; display: flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 6px; background: var(--accent); color: var(--on-accent); font: 700 11px var(--font-sans); }
 .nx-badge { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 7px; background: var(--raise); color: var(--text); font: 600 12px var(--font-sans); white-space: nowrap; }
-.nx-badge.pos { background: var(--accent-fill); color: var(--accent); } .nx-badge.warn { background: var(--warn-fill); color: var(--warn); } .nx-badge.neg { background: var(--danger-fill); color: var(--danger); } .nx-badge.info { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
+.nx-badge.pos { background: var(--accent-fill); color: var(--accent-text); } .nx-badge.warn { background: var(--warn-fill); color: var(--warn); } .nx-badge.neg { background: var(--danger-fill); color: var(--danger); } .nx-badge.info { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
 .nx-notice { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: linear-gradient(90deg, var(--warn-fill), transparent 75%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn-bar) 25%, transparent); flex-wrap: wrap; }
 .nx-notice.pos { background: linear-gradient(90deg, var(--accent-fill), transparent 75%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent); }
 .nx-notice.neg { background: linear-gradient(90deg, var(--danger-fill), transparent 75%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--danger) 35%, transparent); }
