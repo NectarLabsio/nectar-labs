@@ -49,13 +49,14 @@ let loaded = false;
 function loadAnalytics(f: Fields): void {
   if (loaded || typeof window === 'undefined') return;
   if (f.analytics === 'ga4' && f.ga4Id) {
-    // Same tags @docusaurus/plugin-google-gtag 3.10.2 would inject, but only after consent.
+    // Same loader URL as @docusaurus/plugin-google-gtag 3.10.2, but only after consent. No `anonymize_ip`: a Universal Analytics
+    // parameter that GA4 does not use (review 2, C14).
     addScript({ async: '', src: `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(f.ga4Id)}` });
     window.dataLayer = window.dataLayer ?? [];
     const gtag: Gtag = (...args) => { window.dataLayer?.push(args); };
     window.gtag = gtag;
     gtag('js', new Date());
-    gtag('config', f.ga4Id, { anonymize_ip: true });
+    gtag('config', f.ga4Id);
     loaded = true;
   } else if (f.analytics === 'plausible' && f.plausibleDomain) {
     addScript({ defer: '', 'data-domain': f.plausibleDomain, src: 'https://plausible.io/js/script.js' });

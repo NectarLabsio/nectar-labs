@@ -1,9 +1,9 @@
 # DEMO_SCRIPT.md v4 — 3 minutes, exact clicks and commands (2026-11-11)
 
-Shows only what docs/EVIDENCE.md records (gate table as of commit 89f83ee): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
+Shows only what docs/EVIDENCE.md records (gate table as of commit 2e16f9b): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
 G8 PASS on a fixture (no live NEAR AI answer) · re-runs after the D-027 security rollout, 2026-11-11T08:02Z–08:25Z, on `2.2.1-v7`:
 G11 PASS (every SR-1…SR-33 has a named test), G2b PASS, G3b PASS (design port; mocked remote and Notes E2E passed), G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
-Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims (the HTTP 402 → 200 leg was not re-run by the verifier) · G9 PASS (fresh-clone re-run on 0af5cdd, recorded in 89f83ee; supersedes the first run's FAIL on c5f6349).
+Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims, and its HTTP 402 → 200 leg in a later verifier run (2026-11-11T13:54Z, recorded in 2e16f9b) · G1 gas-row check on 2.2.1 FAIL (one owner setter without a gas row; test added, re-check pending; nothing on camera depends on it) · G9 PASS (fresh-clone re-run on 0af5cdd, recorded in 89f83ee; supersedes the first run's FAIL on c5f6349).
 The contract on camera is **`nectar-core-v2.nectar.testnet`** at `2.2.1-v7` (ids in `packages/config/config.yaml`; review findings and what
 remains open in SECURITY.md). v1 (`nectar-core.nectar.testnet`) is the earlier deployment, kept as evidence; it is not shown.
 Every number said on camera is read from the screen at recording time, never from this file. Voice-over: H11.
@@ -109,6 +109,15 @@ The verifier got 403 (NearBlocks) and 429 (Solana Explorer) from these explorers
 Wallet: near-connect with a testnet wallet holding the demo accounts (D-011). If a wallet cannot import them, the sign modal shows the exact `msg`
 JSON; send it with the `ft_transfer_call` form from scripts/40-seed-demo.sh off camera and cut.
 
+### 8. Two checks the E2E suite does not make
+- **(a) Real wallet, once.** Since review 2 the web app sends new security headers (CSP `frame-ancestors 'none'`, `object-src 'none'`,
+  `base-uri` / `form-action 'self'`, X-Frame-Options DENY, HSTS; R2-08), and the E2E suite signs with mock wallets only. On the build you will
+  record: "Connect wallet" → pick the testnet wallet in the selector → sign one small testnet action (for example a small quote as buyer2)
+  → the toast and the explorer link appear. If the selector or the wallet sandbox does not load, stop and report it; do not record around it.
+- **(b) x402 top-up.** Each `pnpm --filter x402 demo:testnet` run locks 1 mock NVDAx from agent1, and the verifier runs may have used the
+  last one. Before the x402 segment (a Q&A answer or a take that shows it), re-run `bash scripts/60-x402-accounts.sh`: it keeps the existing
+  keys and accounts (skips what exists) and mints agent1 2 more mock NVDAx (signed by the owner from the keychain). Then start x402 as in step 2.
+
 ## Script
 No hackathon name, badge or banner in any segment. Captions say "testnet", "mock collateral" and, for Base, "local fork of Base Sepolia".
 | t | Screen / command | Say / show |
@@ -121,12 +130,12 @@ No hackathon name, badge or banner in any segment. Captions say "testnet", "mock
 | 1:45 | nearblocks (trigger tx from the keeper log) | `quoter_requested` → OutLayer `execution_completed` → `quoter_result` (fills per quote) → `settlement_signed`. "The TEE priced the fill; the contract built the message; Chain Signatures signed it with this position's own key." If the run differs, open the trigger tab `6TKH53Xp…` and say "recorded run". |
 | 2:05 | keeper log → Solana Explorer → terminal | Keeper `solana_tx_sending` → `solana_tx_confirmed` → `solana_leg_relayed`: `[Ed25519 verify, settle]` to `nectar_vault` on devnet. In the Solana tx: ix0 Ed25519SigVerify (pubkey = the position's derived key, message = the NEAR preimage), ix1 the vault's settle. Then `bash scripts/58-g7-v2.sh withdraw #R`: "The buyer was paid in the settle. The vault pays the depositor by pull, so the borrower withdraws the remainder." `/position/#R` shows the Solana tx and Closed. Backup: the settle tab `3Qm6H4sW…` (position 10, then withdraw 0.613144 NVDAx). |
 | 2:30 | terminal, caption "Local fork of Base Sepolia (chain id 84532), not Base Sepolia" | `bash scripts/62-g13-base.sh show 12` (or the Base id from step 5). "The same flow on an EVM vault. NEAR derives a secp256k1 key per position and the MPC signer signs the EIP-712 message on NEAR testnet. The vault runs on a local fork because no Base Sepolia faucet works without a login." |
-| 2:40 | `/console` copilot panel → terminal | Banner "Key missing": no NEAR AI key on this server, so live answers are off. `pnpm --filter web test:copilot` output (run just before) → 10 pass, 1 skipped (live). "Answers whose attestation or signature fails are hidden. Tested on a fixture, not on a live answer." |
+| 2:40 | `/console` copilot panel → terminal | Banner "Key missing": no NEAR AI key on this server, so live answers are off. `pnpm --filter web test:copilot` output (run just before) → 12 pass, 1 skipped (live). "Answers are hidden unless the signature, the attestation and the signed question all check out. Provenance, not advice. Tested on a fixture, not on a live answer." |
 | 2:50 | README "Live on testnet" | "Testnet, Solana devnet and a local fork of Base Sepolia. Mock collateral and mock USDC. Owner oracle. Not audited: SECURITY.md lists what was fixed and what remains. Every row links to docs/EVIDENCE.md." |
 
 Not in the video (not verified by a gate, or not on testnet): Feed MCP with an agent client, a live NEAR AI answer, a live Pyth price, the
 corporate-action multiplier, `pay_to`, referrers, real Base Sepolia (H15), the Base web screens (`features.base: false`). On testnet but left out
-for time: the x402 payment (G14 re-run PASS for the chain claims), the Shield / Profit-Lock / Reserve runs (chain-checked by the verifier, EVIDENCE
+for time: the x402 payment (G14 PASS, its 402 → 200 leg verifier-run 2026-11-11), the Shield / Profit-Lock / Reserve runs (chain-checked by the verifier, EVIDENCE
 §v7 module runs; the Profit-Lock event is not chain-confirmed), and the web withdraw / claim / Re-sign screens (mocked E2E passed in the G3b re-run; the real-chain flow is in the G7/G13 re-runs).
 
 Capture: `pnpm demo:capture` (Playwright `e2e/screens.spec.ts`) gives silent screens; the full take above is screen-recorded by Kunal (H11).

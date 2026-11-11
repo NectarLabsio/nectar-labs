@@ -6,4 +6,4 @@ metadata:
 ---
 The `idea` fenced block in docs/SUBMISSION.md was 1995/2000 chars after WO-43 (2026-11-11); scripts/build-submission.mjs fails on `idea.length > 2000`.
 **Why:** WO-43 first overshot to 2036 chars by adding privacy disclosures; had to compress the copilot and quoter wording.
-**How to apply:** after any edit to the idea block, measure it (python: text between "### idea\n```text\n" and the next "\n```"). Put long disclosures in the Tracks/claim-table prose, not in `idea`. Privacy-claim wording rules are in [[bulk-edits-and-pending-records]] context: never claim copilot request binding until WO-42a lands.
+**How to apply:** after any edit to the idea block, measure it (python: text between "### idea\n```text\n" and the next "\n```"). Put long disclosures in the Tracks/claim-table prose, not in `idea`. WO-43b (2026-11-11) added copilot binding ("signed for the question typed") and paid for it by trimming "a 7-day notice period", "instead of on a DEX", "and are never deposited" — still 1995. Binding is now real (WO-42a merged 2111b71). Related: [[bulk-edits-and-pending-records]].
