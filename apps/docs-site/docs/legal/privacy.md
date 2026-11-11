@@ -3,7 +3,7 @@ title: Privacy policy
 slug: /legal/privacy
 description: What the Nectar Labs service processes, which third parties your browser contacts, and what each one can see.
 # Sources (YAML comment, not rendered by either renderer):
-# - Hosts, storage keys, cookies: apps/web/content/data-inventory.json + .md (generated 2026-11-11T20:34:35Z by apps/web/e2e/inventory.spec.ts).
+# - Hosts, storage keys, cookies: apps/web/content/data-inventory.json + .md (generated 2026-11-11T21:04:52Z by apps/web/e2e/inventory.spec.ts, WO-34f: all 6 selector wallets, CSP enforced).
 #   Solana devnet RPC is not in the measured run (needs a wallet extension): apps/web/lib/csp.ts, apps/web/lib/env.ts.
 #   jsDelivr fallback blocked: @hot-labs/near-connect 0.12.0 build/NearConnector.js l.15-16 vs apps/web/lib/csp.ts MEASURED.connect.
 # - Vercel: F-402 (Hobby), F-403 (runtime logs 1 h on Hobby; method/path/host/UA/search params; IP is derived, hence "may include").
@@ -59,20 +59,20 @@ Some web app URLs contain a position id, a Note id or a referrer account (`?ref=
 | `nectar-wallet-connected` | localStorage | app | our code | `1` after a wallet connects, so the app reconnects on your next visit | set on connect, removed on disconnect |
 | `theme` | localStorage | app (this documentation) | Docusaurus | the documentation colour mode, only if you use its colour switch | until you clear site data |
 | `selected-wallet` | localStorage | app | near-connect 0.12.0 (wallet selector library) | id of the wallet you picked | set on connect, removed on disconnect |
-| `hot-connector/wallets`, `hot-connector/wallets/<wallet id>:<version>` (measured: `hot-connector/wallets/meteor-wallet:1.1.1`) | IndexedDB | app | near-connect 0.12.0 | cache of the sandboxed wallet's code | until you clear site data; replaced on a new wallet version |
+| `hot-connector/wallets`, `hot-connector/wallets/<wallet id>:<version>` (measured: `ethereum-wallets:0.1.4`, `intear-wallet:1.0.0`, `ledger:1.0.0`, `meteor-wallet:1.1.1`, `near-cli:1.0.0`, `nightly-wallet:1.0.0`) | IndexedDB | app | near-connect 0.12.0 | cache of the sandboxed wallet's code | until you clear site data; replaced on a new wallet version |
 | `<wallet id>:…` (measured: `meteor-wallet:<random id>`, `meteor-wallet:met_bridge_partner::<per-session ids>`) | localStorage | app | the wallet you opened, through near-connect | the wallet's own storage, passed out of its sandboxed frame and prefixed with its wallet id | until you disconnect or clear site data |
 
-How this was measured: on 2026-11-11, real Chrome with a fresh profile visited every route on both hosts in dark and light theme, with consent accepted and declined, and opened the wallet selector with one wallet (Meteor Wallet) without signing. `nectar-wallet-connected` and `theme` did not appear in that run because it never completed a connect or used the documentation colour switch. They are listed from the code. No cookie was set in any run.
+How this was measured: on 2026-11-11, real Chrome with a fresh profile visited every route on both hosts in dark and light theme, with consent accepted and declined, and opened each of the six wallets in the selector one at a time, in a fresh profile, with our content security policy enforced and without signing. `nectar-wallet-connected` and `theme` did not appear in that run because it never completed a connect or used the documentation colour switch. They are listed from the code. No cookie was set in any run.
 
 ## Third parties your browser contacts
 
 | Host | Who | When | What it can see |
 | --- | --- | --- | --- |
 | `test.rpc.fastnear.com` | FastNEAR, NEAR testnet RPC (default) | app pages that read the contracts; the wallet selector | your IP address and user agent, the contracts and accounts you query, and the transaction hashes the app checks. After you connect, your account id travels with the reads of your balances, claims and Notes. |
-| `rpc.testnet.fastnear.com` | FastNEAR, NEAR testnet RPC (fallback) | only when the default does not answer | the same as above |
+| `rpc.testnet.fastnear.com` | FastNEAR, NEAR testnet RPC (fallback) | when the default does not answer; the Meteor Wallet and Intear Wallet frames also call it | the same as above |
 | `raw.githubusercontent.com` | GitHub, serving the selector's wallet list (`manifest.json`) and wallet icons | after you press **Connect wallet** | your IP address and user agent; no account id |
-| `storage.herewallet.app` | host of wallet icons named in the wallet list | after you press **Connect wallet** | your IP address and user agent; no account id |
-| `evm-on-near.dev` | host of wallet icons named in the wallet list | after you press **Connect wallet** | your IP address and user agent; no account id |
+| `storage.herewallet.app` | host of wallet icons named in the wallet list; also images inside the Nightly Wallet frame | after you press **Connect wallet** | your IP address and user agent; no account id |
+| `evm-on-near.dev` | host of wallet icons named in the wallet list; also the Ethereum Wallets frame and the window it opens | after you press **Connect wallet**; more once you open Ethereum Wallets | your IP address and user agent; once you use Ethereum Wallets, what you do in it |
 | `api.devnet.solana.com` | Solana devnet public RPC | the Solana collateral flow only, which needs a Solana wallet extension (listed from the code; the fresh-profile run could not reach it) | your IP address, the Solana addresses and accounts queried, and the signatures of transactions it checks. Your wallet sends the transactions itself. |
 | the hosts of the wallet you open | that wallet (next section) | after you open it in the selector | see [Wallets](#wallets) |
 
@@ -82,20 +82,22 @@ Your browser contacts nothing else. The site, the web app and this documentation
 
 The wallet selector (near-connect 0.12.0) runs each wallet's code in a sandboxed iframe inside our page. Before you open a wallet, no wallet code runs. Once you open one, its frame contacts that wallet's own hosts, listed below per wallet. Once you connect, the wallet sees your account id and every transaction you ask it to sign, under that wallet's own privacy policy. We never ask for or collect your keys. What a wallet keeps in its storage space stays in your browser under its prefixed keys (see [Browser storage](#browser-storage)) and never reaches our servers. A wallet that opens its own window or tab, for example to approve a transaction, does so under its own site's policy.
 
-### Meteor Wallet
+### Hosts per wallet
 
-| Host | What the frame loads | When |
+Before you pick a wallet, the selector itself contacts `raw.githubusercontent.com`, `storage.herewallet.app`, `evm-on-near.dev` and `test.rpc.fastnear.com` (table above). Each wallet adds the hosts below once you open it. Measured on 2026-11-11, one wallet at a time in a fresh profile, with our content security policy enforced and without signing.
+
+| Wallet | Hosts its frame contacts | Windows it opens |
 | --- | --- | --- |
-| `mc.meteorwallet.app` | Meteor Wallet's own API (HTTPS; our policy also allows its websocket) | after you open Meteor Wallet in the selector |
-| `meteorwallet.app` | Meteor Wallet images | after you open Meteor Wallet in the selector |
-| `fonts.cdnfonts.com` | Meteor Wallet's web fonts (stylesheet and font files) | after you open Meteor Wallet in the selector |
-| `rsms.me` | Meteor Wallet's web fonts (stylesheet and font files) | after you open Meteor Wallet in the selector |
+| Meteor Wallet | `mc.meteorwallet.app` (its API; our policy also allows its websocket), `meteorwallet.app` (images), `fonts.cdnfonts.com` and `rsms.me` (web fonts), `rpc.testnet.fastnear.com` (NEAR testnet RPC) | none |
+| Intear Wallet | `wallet.intear.tech` (its frame page and API), `rpc.testnet.fastnear.com` (NEAR testnet RPC) | none |
+| NEAR CLI | `rsms.me` (web fonts) | none |
+| Ethereum Wallets | `evm-on-near.dev` (its frame page and API) | `https://evm-on-near.dev/`, under that site's own policy, not ours |
+| Ledger | no host beyond the selector's | none |
+| Nightly Wallet | `storage.herewallet.app` (images) | none |
 
-Each of these hosts sees your IP address and user agent. Meteor Wallet's API also sees what you do in the wallet.
+Each of these hosts sees your IP address and user agent. A wallet's own API also sees what you do in that wallet.
 
-### Other wallets in the selector
-
-Hosts for the other wallets in the selector are added here, per wallet, as each one is measured. Our content security policy lets a wallet frame reach only our own hosts and the hosts listed on this page. A wallet frame's requests to any other host are blocked.
+The wallet list is the selector library's manifest. It is fetched at runtime and not pinned, so its maintainers can add a wallet or change a wallet's hosts before we measure again. Our content security policy lets a wallet frame reach only our own hosts and the hosts listed on this page, so a frame's requests to any other host are blocked. A window that a wallet opens, as Ethereum Wallets does, is outside our policy.
 
 ### Solana wallet
 
