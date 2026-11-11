@@ -17,6 +17,19 @@ call() { near contract call-function as-transaction "$1" "$2" json-args "$3" pre
 view() { near contract call-function as-read-only "$1" "$2" json-args "$3" network-config testnet now </dev/null 2>/dev/null | sed -n '/^[[{"]/,$p'; }
 ftc() { call "$1" ft_transfer_call "$(jq -cn --arg r "$CORE" --arg a "$3" --arg m "$4" '{receiver_id:$r, amount:$a, msg:$m}')" "$2" '300 Tgas' '1 yoctoNEAR'; }
 events() { grep -oE 'EVENT_JSON:\{[^│]*' | cut -c1-280 || true; }
+walk_price() { # owner price → $1 in steps of 14% (band 1,500 bps); `oracle_rejected` carries last_usd_e6
+  local tgt=$1 out last nxt i
+  for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
+    out=$(call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"$tgt\"}" "$OWNER" '30 Tgas')
+    echo "$out" | grep -q '"oracle_updated"' && { echo "price $tgt"; return 0; }
+    last=$(echo "$out" | grep -oE '"last_usd_e6":"[0-9]+"' | head -1 | grep -oE '[0-9]+')
+    [ -n "$last" ] || { echo "price update failed: $(echo "$out" | grep -iE 'error|fail' | head -2)" >&2; return 1; }
+    if [ "$tgt" -gt "$last" ]; then nxt=$(( last * 114 / 100 )); else nxt=$(( last * 86 / 100 )); fi
+    call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"$nxt\"}" "$OWNER" '30 Tgas' | grep -q '"oracle_updated"' \
+      || { echo "price step to $nxt rejected" >&2; return 1; }
+    echo "price stepped $last → $nxt"
+  done
+  echo "price walk did not reach $tgt" >&2; return 1; }
 evm() { cast wallet address --keystore "$E/$1" --password-file "$PW"; }
 csend() { local who="$1"; shift; cast send --rpc-url "$RPC" --keystore "$E/$who" --password-file "$PW" "$@"; }
 
@@ -31,7 +44,7 @@ setup)
   fi
   echo "borrower1 EVM $(evm borrower1) MockB20 balance $(cast call "$TOK" 'balanceOf(address)(uint256)' "$(evm borrower1)" --rpc-url "$RPC")" ;;
 reserve)
-  U=${2:?units}; call "$CORE" update_owner_price '{"symbol":"NVDAx","price_usd_e6":"150000000"}' "$OWNER" '30 Tgas' >/dev/null
+  U=${2:?units}; walk_price 150000000 || exit 1
   BC=$(view "$CORE" preview_borrow "{\"symbol\":\"NVDAx\",\"units\":\"$U\",\"borrow_usd_e6\":\"1\"}" | jq -r '.b_c_usd_e6'); B=$(( BC * 98 / 100 )); echo "b_c=$BC borrow=$B"
   call "$CORE" reserve_remote_position "$(jq -cn --arg u "$U" --arg b "$B" --arg d "$(evm borrower1)" '{collateral:"NVDAx", units:$u, borrow_usd_e6:$b, pre_liq_ltv_bps:7500, chain:"base-sepolia", depositor:$d}')" "$BR" '150 Tgas' '0.05 NEAR' | events ;;
 check)
@@ -57,6 +70,6 @@ repay)
 release)
   ID=${2:?id}; call "$CORE" request_remote_release "{\"position_id\":\"$ID\"}" "$BR" '150 Tgas' | events ;;
 price)
-  call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"${2:?usd_e6}\"}" "$OWNER" '30 Tgas' | events ;;
+  walk_price "${2:?usd_e6}" ;;
 *) sed -n '2,11p' "$0"; exit 2 ;;
 esac

@@ -9,7 +9,7 @@
 #   withdraw <id>        borrower1 pulls its tokens from the vault after settle/release (vault v2)
 #   repay <id>           borrower1 repays the full debt (USDC ft_transfer_call Repay)
 #   release <id>         request_remote_release (the keeper relays the signed release to Solana)
-#   price <usd_e6>       owner price (band 1,500 bps per step; disclosed demo control)
+#   price <usd_e6>       owner price, walked in ≤ 14% steps (band 1,500 bps per update; disclosed demo control)
 # Devnet + testnet only. Keys: OS keychain (NEAR), ~/.nectar/solana/*.json (0600). Nothing is printed but public keys.
 source "$(dirname "$0")/_lib.sh"; guard_mainnet
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
@@ -21,6 +21,19 @@ call() { near contract call-function as-transaction "$1" "$2" json-args "$3" pre
   sign-as "$4" network-config testnet sign-with-keychain send </dev/null; }
 view() { near contract call-function as-read-only "$1" "$2" json-args "$3" network-config testnet now </dev/null 2>/dev/null | sed -n '/^[[{"]/,$p'; }
 ftc() { call "$1" ft_transfer_call "$(jq -cn --arg r "$CORE" --arg a "$3" --arg m "$4" '{receiver_id:$r, amount:$a, msg:$m}')" "$2" '300 Tgas' '1 yoctoNEAR'; }
+walk_price() { # owner price → $1 in steps of 14% (band 1,500 bps); `oracle_rejected` carries last_usd_e6
+  local tgt=$1 out last nxt i
+  for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
+    out=$(call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"$tgt\"}" "$OWNER" '30 Tgas' 2>&1)
+    echo "$out" | grep -q '"oracle_updated"' && { echo "price $tgt"; return 0; }
+    last=$(echo "$out" | grep -oE '"last_usd_e6":"[0-9]+"' | head -1 | grep -oE '[0-9]+')
+    [ -n "$last" ] || { echo "price update failed: $(echo "$out" | grep -iE 'error|fail' | head -2)" >&2; return 1; }
+    if [ "$tgt" -gt "$last" ]; then nxt=$(( last * 114 / 100 )); else nxt=$(( last * 86 / 100 )); fi
+    call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"$nxt\"}" "$OWNER" '30 Tgas' 2>&1 | grep -q '"oracle_updated"' \
+      || { echo "price step to $nxt rejected" >&2; return 1; }
+    echo "price stepped $last → $nxt"
+  done
+  echo "price walk did not reach $tgt" >&2; return 1; }
 kp() { [ -f "$K/$1.json" ] || solana-keygen new --no-bip39-passphrase --silent -o "$K/$1.json" >/dev/null 2>&1; chmod 600 "$K/$1.json"; solana-keygen pubkey "$K/$1.json"; }
 
 case "${1:-}" in
@@ -36,7 +49,7 @@ prep)
     ftc "$USDC" "$B1" 1000000000 "$(jq -cn --arg r "$RCP" '{FundPappusQuote:{collateral:"NVDAx", max_discount_bps:300, notice_period_ns:"604800000000000", buyer_remote_recipient:$r}}')"
   fi ;;
 reserve)
-  U=${2:?units}; call "$CORE" update_owner_price '{"symbol":"NVDAx","price_usd_e6":"180000000"}' "$OWNER" '30 Tgas' >/dev/null
+  U=${2:?units}; walk_price 180000000 || exit 1
   BC=$(view "$CORE" preview_borrow "{\"symbol\":\"NVDAx\",\"units\":\"$U\",\"borrow_usd_e6\":\"1\"}" | jq -r '.b_c_usd_e6')
   B=$(( BC * 98 / 100 )); echo "b_c=$BC borrow=$B"
   call "$CORE" reserve_remote_position "$(jq -cn --arg u "$U" --arg b "$B" --arg d "$(kp borrower1-sol)" '{collateral:"NVDAx", units:$u, borrow_usd_e6:$b, pre_liq_ltv_bps:7500, depositor:$d}')" "$BR" '100 Tgas' '0.05 NEAR' \
@@ -64,6 +77,6 @@ repay)
 release)
   ID=${2:?id}; call "$CORE" request_remote_release "{\"position_id\":\"$ID\"}" "$BR" '100 Tgas' | grep -oE 'EVENT_JSON:\{.*' | cut -c1-260 ;;
 price)
-  call "$CORE" update_owner_price "{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"${2:?usd_e6}\"}" "$OWNER" '30 Tgas' | grep -oE 'EVENT_JSON:\{.*' | cut -c1-200 ;;
+  walk_price "${2:?usd_e6}" ;;
 *) sed -n '2,13p' "$0"; exit 2 ;;
 esac
