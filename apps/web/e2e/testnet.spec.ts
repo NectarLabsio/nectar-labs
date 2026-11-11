@@ -33,10 +33,11 @@ test.describe("testnet write: borrow with demo key", () => {
       (window as unknown as { __NECTAR_E2E__: unknown }).__NECTAR_E2E__ = { accountId: a, privateKey: k };
     }, [id, key!] as const);
     await page.goto("/borrow");
-    await page.getByLabel(/Collateral units/).fill("1");
-    await page.getByLabel(/^Borrow/).fill("10");
-    await expect(page.getByText(/Limit B_c \(contract\)/)).toBeVisible({ timeout: 20_000 });
-    await page.getByRole("button", { name: "Lock collateral and borrow" }).click();
+    await page.getByLabel("You lock").fill("1");
+    await page.getByLabel("You borrow").fill("10");
+    await expect(page.getByTestId("preview-fees")).toBeVisible({ timeout: 20_000 });
+    await page.getByTestId("review-borrow").click();
+    await page.getByTestId("confirm-in-wallet").click();
     await expect(page.getByTestId("sign-msg")).toContainText('"LockCollateralAndBorrow"');
     await expect(page.getByTestId("sign-gas")).toContainText("TGas");
     await expect(page.getByTestId("sign-deposit")).toContainText("1 yoctoNEAR");

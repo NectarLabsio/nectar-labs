@@ -186,3 +186,14 @@ export function profitLockBlock(p: SelfSettlePreview | null | undefined, opts: {
   const kind: ProfitLockBlock = r === "health below 1" ? "health" : r === "ca_pending" ? "ca_pending" : r === "no voluntary capacity" ? "no_capacity" : r === "voluntary daily cap" ? "daily_cap" : "other";
   return { kind, text: selfSettleReasonText(r) ?? "Profit-Lock is not available for this position." };
 }
+
+/**
+ * DI-1 "Repay $X first": the Profit-Lock fill is debt · (1 + fee). When it exceeds the asset's voluntary-fill cap left today,
+ * repaying `debt − capLeft / (1 + fee)` (rounded up to the cent) brings the fill under the cap. 0 when it already fits.
+ */
+export function profitLockRepayFirstUsdE6(debt_usd_e6: bigint, cap_left_usd_e6: bigint, fee_bps = PROFIT_LOCK_FEE_BPS): bigint {
+  const { fill_usd_e6 } = profitLockFill(debt_usd_e6, fee_bps);
+  if (fill_usd_e6 <= cap_left_usd_e6) return 0n;
+  const maxDebt = (cap_left_usd_e6 * BPS) / (BPS + BigInt(fee_bps));
+  return ((debt_usd_e6 - maxDebt + 9_999n) / 10_000n) * 10_000n;
+}

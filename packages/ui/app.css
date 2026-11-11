@@ -150,7 +150,8 @@
 .nx-week-now text { fill: var(--bg); font: 600 10.5px var(--font-sans); }
 .nx-ax { fill: var(--dim); font: 500 11px var(--font-mono); }
 .nx-axl { stroke: var(--line2); stroke-width: 1; }
-.nx-tbl-wrap { overflow-x: auto; }
+/* position: relative keeps absolutely positioned .sr-only cells inside the scroller; otherwise they widen the document. */
+.nx-tbl-wrap { position: relative; overflow-x: auto; }
 .nx-tbl { width: 100%; border-collapse: collapse; font-family: var(--font-sans); }
 .nx-tbl th { padding: 14px 16px; font: 500 12.5px var(--font-sans); color: var(--dim); text-align: left; white-space: nowrap; }
 .nx-tbl td { padding: 16px; border-top: 1px solid var(--line); color: var(--heading); white-space: nowrap; vertical-align: middle; }
@@ -162,6 +163,115 @@
 .nx-s-q { stroke: var(--accent); } .nx-s-r { stroke: var(--teal); } .nx-s-d { stroke: var(--info); } .nx-s-h { stroke: var(--warn-bar); } .nx-s-used { stroke: var(--heading); }
 .nx-donut-lab { fill: var(--dim); font: 500 11px var(--font-sans); }
 .nx-donut-val { fill: var(--heading); font: 600 20px var(--font-display); }
+
+/* app pages (WO-33b): page frame, composer, notices, badges, rows; ported from nectar-app.css with system tokens */
+.nx-page { max-width: 1240px; margin: 0 auto; padding: 34px max(28px, env(safe-area-inset-left, 0px)) 88px; display: flex; flex-direction: column; gap: 28px; font-family: var(--font-sans); color: var(--text); font-size: 14px; }
+.nx-head-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+.nx-title { margin: 0; font: 600 42px/1.04 var(--font-display); letter-spacing: -.035em; color: var(--heading); }
+.nx-lede { margin: 0; color: var(--dim); font-size: 15px; line-height: 1.55; max-width: 58ch; }
+.nx-crumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--dim); }
+.nx-crumb a { color: var(--dim); text-decoration: none; } .nx-crumb a:hover { color: var(--heading); }
+.nx-split { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(330px, 1fr); gap: 24px; align-items: start; }
+.nx-rail { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+.nx-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.nx-hero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 32px; align-items: center; }
+.nx-link { color: var(--accent); font: 600 13.5px var(--font-sans); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: none; }
+.nx-link:hover { text-decoration: underline; }
+.nx-dim { color: var(--dim); } .nx-head { color: var(--heading); } .nx-strong { color: var(--heading); font-weight: 600; }
+.nx-btn.lg { height: 56px; width: 100%; font-size: 15.5px; border-radius: 15px; }
+.nx-btn:focus-visible, .nx-link:focus-visible, .nx-opt:focus-visible, .nx-switch:focus-visible, .nx-mini button:focus-visible, .nx-seg button:focus-visible, .nx-tabs button:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 2px; }
+.nx-foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 22px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--dim); }
+.nx-switch { position: relative; width: 42px; height: 24px; flex: none; border: 0; border-radius: 999px; background: var(--raise); box-shadow: inset 0 0 0 1px var(--line2); cursor: pointer; }
+.nx-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--dim); }
+.nx-switch[aria-checked="true"] { background: var(--accent); box-shadow: none; }
+.nx-switch[aria-checked="true"]::after { transform: translateX(18px); background: var(--on-accent); }
+.nx-amt { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 18px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); min-width: 0; }
+.nx-amt:focus-within { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent), 0 0 0 4px var(--accent-fill); }
+.nx-amt.err { box-shadow: inset 0 0 0 1px var(--danger), 0 0 0 4px var(--danger-fill); }
+.nx-amt-top, .nx-amt-bot { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 12.5px; color: var(--dim); }
+.nx-amt-top label { color: var(--dim); }
+.nx-amt-mid { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.nx-amt input { all: unset; flex: 1; min-width: 0; width: 100%; font: 600 38px/1.1 var(--font-display); letter-spacing: -.035em; color: var(--heading); }
+.nx-amt input::placeholder { color: var(--faint); }
+.nx-token { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 14px 0 6px; border-radius: 999px; background: var(--raise); box-shadow: 0 0 0 1px var(--line); color: var(--heading); font: 600 14px var(--font-sans); flex: none; }
+.nx-token img { width: 30px; height: 30px; }
+.nx-coin { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; flex: none; font: 700 14px/1 var(--font-sans); color: var(--chain-ink); background: var(--coin); }
+.nx-mini { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.nx-mini button { height: 26px; padding: 0 10px; border: 0; border-radius: 8px; background: var(--raise); color: var(--text); font: 500 12px var(--font-sans); cursor: pointer; }
+.nx-mini button:hover, .nx-mini button.on { color: var(--heading); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent); }
+.nx-mini button[disabled] { opacity: .5; cursor: not-allowed; }
+.nx-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.nx-field-err { font-size: 12.5px; color: var(--danger); }
+.nx-txt { box-sizing: border-box; height: 44px; width: 100%; padding: 0 14px; border: 0; border-radius: 12px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); color: var(--heading); font: 500 14px var(--font-sans); }
+.nx-txt:focus { outline: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent), 0 0 0 4px var(--accent-fill); }
+.nx-txt[aria-invalid="true"] { box-shadow: inset 0 0 0 1px var(--danger); }
+.nx-opts { display: flex; gap: 10px; flex-wrap: wrap; padding-top: 10px; }
+.nx-opt { position: relative; flex: 1 1 170px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; border: 0; border-radius: 16px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.nx-opt:hover { box-shadow: inset 0 0 0 1px var(--line2); }
+.nx-opt.on { background: linear-gradient(180deg, var(--accent-fill), transparent 80%), var(--bg2); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.nx-opt[disabled] { opacity: .5; cursor: not-allowed; }
+.nx-opt .t { font: 600 14.5px var(--font-sans); color: var(--heading); }
+.nx-opt .d { font-size: 12.5px; line-height: 1.45; color: var(--dim); }
+.nx-opt .p { font: 500 13px var(--font-mono); color: var(--heading); }
+.nx-opt .flag { position: absolute; top: -10px; right: 12px; display: flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 6px; background: var(--accent); color: var(--on-accent); font: 700 11px var(--font-sans); }
+.nx-badge { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 7px; background: var(--raise); color: var(--text); font: 600 12px var(--font-sans); white-space: nowrap; }
+.nx-badge.pos { background: var(--accent-fill); color: var(--accent); } .nx-badge.warn { background: var(--warn-fill); color: var(--warn); } .nx-badge.neg { background: var(--danger-fill); color: var(--danger); } .nx-badge.info { background: color-mix(in srgb, var(--info) 14%, transparent); color: var(--info); }
+.nx-notice { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 16px; background: linear-gradient(90deg, var(--warn-fill), transparent 75%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--warn-bar) 25%, transparent); flex-wrap: wrap; }
+.nx-notice.pos { background: linear-gradient(90deg, var(--accent-fill), transparent 75%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent); }
+.nx-notice.neg { background: linear-gradient(90deg, var(--danger-fill), transparent 75%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--danger) 35%, transparent); }
+.nx-notice.info { background: linear-gradient(90deg, color-mix(in srgb, var(--info) 10%, transparent), transparent 75%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--info) 30%, transparent); }
+.nx-notice .ic { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; flex: none; background: var(--warn-fill); color: var(--warn); }
+.nx-notice.pos .ic { background: var(--accent-fill); color: var(--accent); } .nx-notice.neg .ic { background: var(--danger-fill); color: var(--danger); } .nx-notice.info .ic { color: var(--info); background: color-mix(in srgb, var(--info) 12%, transparent); }
+.nx-notice .ic svg { width: 18px; height: 18px; }
+.nx-notice-body { display: flex; flex-direction: column; gap: 3px; flex: 1 1 200px; min-width: 0; }
+.nx-notice-body > b { color: var(--heading); font-weight: 600; }
+.nx-tip { position: relative; display: inline-grid; place-items: center; width: 16px; height: 16px; padding: 0; border: 0; border-radius: 50%; background: var(--raise); color: var(--dim); font: 700 10px/1 var(--font-sans); cursor: help; vertical-align: 1px; margin-left: 5px; }
+.nx-tip > span { position: absolute; bottom: calc(100% + 8px); left: 50%; z-index: 30; width: 250px; max-width: 70vw; padding: 10px 12px; border-radius: 11px; background: var(--heading); color: var(--bg); font: 400 12.5px/1.45 var(--font-sans); text-align: left; opacity: 0; pointer-events: none; transform: translate(-50%, 4px); }
+.nx-tip:hover > span, .nx-tip:focus > span { opacity: 1; transform: translate(-50%, 0); }
+.nx-asset { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; }
+.nx-asset img { width: 38px; height: 38px; flex: none; }
+.nx-asset b { display: block; font: 600 14.5px var(--font-sans); color: var(--heading); }
+.nx-asset .sub { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--dim); }
+.nx-ghost-ic { width: 38px; height: 38px; flex: none; border-radius: 12px; display: grid; place-items: center; background: var(--raise); color: var(--dim); font: 700 12px var(--font-sans); }
+.nx-kvr { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.nx-kvr:first-child { border-top: 0; }
+.nx-kvr > span { color: var(--dim); }
+.nx-kvr > b { font: 500 13.5px var(--font-mono); color: var(--heading); text-align: right; overflow-wrap: anywhere; }
+.nx-code { margin: 0; padding: 16px 18px; border-radius: 14px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); font: 12.5px/1.7 var(--font-mono); color: var(--heading); overflow-x: auto; white-space: pre; max-width: 100%; }
+.nx-ring-track { stroke: var(--raise); }
+.nx-ring-fill { stroke: var(--accent); } .nx-ring.warn .nx-ring-fill { stroke: var(--warn-bar); } .nx-ring.neg .nx-ring-fill { stroke: var(--danger); }
+.nx-ring-val { fill: var(--heading); font-family: var(--font-display); font-weight: 600; }
+.nx-ring-lab { fill: var(--dim); font: 500 12px var(--font-sans); }
+.nx-promo { display: flex; gap: 20px; align-items: center; color: inherit; text-decoration: none; }
+.nx-promo:hover .nx-link { text-decoration: underline; }
+.nx-promo img, .nx-promo .ic { width: 84px; height: 84px; flex: none; }
+.nx-promo .ic { border-radius: 22px; display: grid; place-items: center; background: linear-gradient(150deg, var(--raise), var(--bg2)); box-shadow: inset 0 0 0 1px var(--line); color: var(--accent); }
+.nx-runway { position: relative; padding-top: 22px; }
+.nx-runway .mk { position: absolute; top: 0; transform: translateX(-50%); font: 500 11px var(--font-mono); white-space: nowrap; }
+.nx-runway .mk.flag { color: var(--danger); } .nx-runway .mk.now { color: var(--heading); }
+.nx-ticks { display: flex; justify-content: space-between; font: 500 11px var(--font-mono); color: var(--dim); }
+.nx-tbl-panel > .nx-ph { padding: 20px 24px 8px; }
+.nx-details > summary { cursor: pointer; color: var(--heading); font: 600 14px var(--font-sans); }
+.nx-page .card, .nx-page .banner { font-family: var(--font-sans); }
+.nx-page .badge { white-space: normal; height: auto; max-width: 100%; overflow-wrap: anywhere; }
+.nx-seg { flex-wrap: wrap; }
+.nx-grow { flex: 1 1 260px; min-width: 0; }
+.nx-hero-stats { padding-top: 18px; border-top: 1px solid var(--line); }
+.nx-chain-seg { width: 340px; }
+@media (max-width: 1040px) { .nx-split, .nx-rail, .nx-grid2 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .nx-page { padding: 22px 16px 64px; gap: 22px; }
+  .nx-title { font-size: 32px; }
+  .nx-amt input { font-size: 30px; }
+  .nx-promo img, .nx-promo .ic { width: 56px; height: 56px; }
+  .nx-tbl-panel > .nx-ph { padding: 18px 18px 6px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nx-switch, .nx-switch::after { transition: transform .25s var(--ease), background .2s; }
+  .nx-opt, .nx-amt { transition: box-shadow .2s, background .2s; }
+  .nx-tip > span { transition: opacity .15s, transform .15s; }
+  .nx-ring-fill { transition: stroke-dasharray .3s, stroke .3s; }
+}
 
 /* footer giant wordmark (landing) */
 .nx-giant { height: clamp(110px, 23vw, 320px); margin-top: 12px; background: linear-gradient(180deg, var(--wm-giant), transparent 92%); -webkit-mask-position: center top; mask-position: center top; -webkit-mask-size: min(100%, 1240px) auto; mask-size: min(100%, 1240px) auto; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }

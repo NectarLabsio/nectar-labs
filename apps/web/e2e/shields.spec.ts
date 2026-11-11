@@ -185,6 +185,7 @@ test.describe("Profit-Lock on /position/[id] (mocked v2)", () => {
   test("preview → sign modal (self_settle, 1 yocto, 300 TGas) → recorded", async ({ page }) => {
     await setup(page, { shield: { position_id: "7", kind: "Weekend", window_end_ns: NEXT_OPEN.toString(), fee_bps: 15, fee_usd_e6: "15000", active: true, committed_buyers_only: true } });
     await page.goto("/position/7");
+    await page.getByRole("tab", { name: "Profit-Lock" }).click();
     const pl = page.getByTestId("profit-lock");
     await expect(pl.getByTestId("pl-units-sold")).toHaveText("0.116 NVDAx", { timeout: 20_000 });
     await expect(pl.getByTestId("pl-units-kept")).toHaveText("1.884 NVDAx");
@@ -215,6 +216,7 @@ test.describe("Profit-Lock on /position/[id] (mocked v2)", () => {
     test(`disabled with a reason: ${name}`, async ({ page }) => {
       await setup(page, o as Opts);
       await page.goto("/position/7");
+      await page.getByRole("tab", { name: "Profit-Lock" }).click();
       const pl = page.getByTestId("profit-lock");
       await expect(pl.getByTestId("pl-reason")).toHaveAttribute("data-kind", kind, { timeout: 20_000 });
       await expect(pl.getByTestId("pl-settle")).toBeDisabled();
