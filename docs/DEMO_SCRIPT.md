@@ -1,9 +1,9 @@
 # DEMO_SCRIPT.md v4 — 3 minutes, exact clicks and commands (2026-11-11)
 
-Shows only what docs/EVIDENCE.md records (gate table as of commit 2e16f9b): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
+Shows only what docs/EVIDENCE.md records (gate table as of commit a677689): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
 G8 PASS on a fixture (no live NEAR AI answer) · re-runs after the D-027 security rollout, 2026-11-11T08:02Z–08:25Z, on `2.2.1-v7`:
 G11 PASS (every SR-1…SR-33 has a named test), G2b PASS, G3b PASS (design port; mocked remote and Notes E2E passed), G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
-Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims, and its HTTP 402 → 200 leg in a later verifier run (2026-11-11T13:54Z, recorded in 2e16f9b) · G1 gas-row check on 2.2.1 FAIL (one owner setter without a gas row; test added, re-check pending; nothing on camera depends on it) · G9 PASS (fresh-clone re-run on 0af5cdd, recorded in 89f83ee; supersedes the first run's FAIL on c5f6349).
+Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims, its HTTP 402 → 200 leg in a later verifier run (recorded in 2e16f9b), and again on HEAD with the guarded demo agent (2026-11-11T15:02Z, recorded in a677689) · G1 gas-row check on 2.2.1 PASS on re-check (67 of 67, recorded in a677689) · G9 PASS (fresh-clone re-run on 0af5cdd, recorded in 89f83ee; supersedes the first run's FAIL on c5f6349).
 The contract on camera is **`nectar-core-v2.nectar.testnet`** at `2.2.1-v7` (ids in `packages/config/config.yaml`; review findings and what
 remains open in SECURITY.md). v1 (`nectar-core.nectar.testnet`) is the earlier deployment, kept as evidence; it is not shown.
 Every number said on camera is read from the screen at recording time, never from this file. Voice-over: H11.
@@ -114,8 +114,9 @@ JSON; send it with the `ft_transfer_call` form from scripts/40-seed-demo.sh off 
   `base-uri` / `form-action 'self'`, X-Frame-Options DENY, HSTS; R2-08), and the E2E suite signs with mock wallets only. On the build you will
   record: "Connect wallet" → pick the testnet wallet in the selector → sign one small testnet action (for example a small quote as buyer2)
   → the toast and the explorer link appear. If the selector or the wallet sandbox does not load, stop and report it; do not record around it.
-- **(b) x402 top-up.** Each `pnpm --filter x402 demo:testnet` run locks 1 mock NVDAx from agent1, and the verifier runs may have used the
-  last one. Before the x402 segment (a Q&A answer or a take that shows it), re-run `bash scripts/60-x402-accounts.sh`: it keeps the existing
+- **(b) x402 top-up.** Each `pnpm --filter x402 demo:testnet` run locks 1 mock NVDAx from agent1. The verifier's run on HEAD used the
+  last one; agent1 was topped up again at about 15:26Z (evidence/G14/rerun/accounts-topup-20261111T152615Z.log) and holds 2 mock NVDAx,
+  enough for two runs. Whenever it runs short, before the x402 segment (a Q&A answer or a take that shows it), re-run `bash scripts/60-x402-accounts.sh`: it keeps the existing
   keys and accounts (skips what exists) and mints agent1 2 more mock NVDAx (signed by the owner from the keychain). Then start x402 as in step 2.
 
 ## Script
