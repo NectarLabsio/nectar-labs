@@ -2,8 +2,9 @@
 // contract views through a ViewReader and returns data or an UNSIGNED call. This module imports no fs,
 // reads no environment variable and holds no key; the agent signs with its own key (near-api-js).
 // Numbers come from contract views (`preview_borrow`, `get_exit_capacity`, `get_collateral`). The only
-// local arithmetic is the display-only health table under price shocks, done with the keeper's health
-// maths (services/keeper/src/health.ts, pinned to contracts/nectar-core/tests/model.csv).
+// local arithmetic is the health table under price shocks, done with the keeper's health maths
+// (services/keeper/src/health.ts, pinned to contracts/nectar-core/tests/model.csv). The shocks are display-only;
+// the unshocked row also applies the contract's pre-liq refusal, which `preview_borrow` cannot (SR-33).
 //
 // v1 vs v2 is detected with `contract_version()`: "2.0.0-v7" (interface-v7.md A6) is v2; anything else
 // is v1. v1 has no origination fee, referrer, pay_to or aggregate debt, so those fields are null and
@@ -20,6 +21,8 @@ const TGAS = 1_000_000_000_000n;
 export const ONE_YOCTO = '1';
 export const SHOCKS_BPS = [-500, -1000, -2000] as const;
 export const PAY_TO_MEMO_MAX = 256;
+/** check_borrow's refusal text (contracts/nectar-core/src/lib.rs). */
+export const PRE_LIQ_REFUSAL = 'borrow above pre_liq_ltv_bps';
 const V2_PREFIX = '2.';
 
 export type ContractKind = 'v1' | 'v2';
@@ -209,6 +212,10 @@ export async function openProtectedStockLoan(deps: SkillDeps, i: OpenLoanInput):
           net_proceeds_usd_e6: (borrowE6 > premium ? borrowE6 - premium : 0n).toString(),
         };
 
+  const health = healthTable(units, price, decimals, m, borrowE6, preLiq);
+  // preview_borrow takes no pre_liq_ltv_bps, so it never runs this check_borrow rule. An earlier refusal keeps its reason.
+  const preLiqRefused = pv.ok === true && health[0]?.triggerable === true;
+
   const preview = {
     source: kind === 'v2' ? 'preview_borrow (v2)' : 'v1 views (preview_borrow, get_collateral, get_exit_capacity)',
     block_height: pvView.blockHeight,
@@ -224,10 +231,10 @@ export async function openProtectedStockLoan(deps: SkillDeps, i: OpenLoanInput):
     aggregate_headroom_usd_e6: kind === 'v2' ? bigOpt(pv.aggregate_headroom_usd_e6) : null,
     multiplier_e18: kind === 'v2' ? bigOpt(pv.multiplier_e18) : null,
     session_open: typeof pv.session_open === 'boolean' ? pv.session_open : cap.session_open === true,
-    ok: pv.ok === true,
-    reason: typeof pv.reason === 'string' ? pv.reason : null,
+    ok: pv.ok === true && !preLiqRefused,
+    reason: preLiqRefused ? PRE_LIQ_REFUSAL : typeof pv.reason === 'string' ? pv.reason : null,
     pre_liq_ltv_bps: preLiq,
-    health: healthTable(units, price, decimals, m, borrowE6, preLiq),
+    health,
     absent_fields: kind === 'v1' ? [...V1_ABSENT_FEES] : [],
   };
   const contract = { account_id: coreId, version, kind };

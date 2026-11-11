@@ -5,11 +5,12 @@
 // The upstream is fetched before settlement, so a Feed outage never charges the payer.
 // No request logging of IPs, user agents or payer ids (privacy rule; logs carry outcome codes only).
 
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { createServer, type IncomingMessage, type Server } from 'node:http';
 import { createNearFacilitator, type FacilitatorNearSigner, type FacilitatorNearSignerConfig } from '@fastnear/x402/facilitator';
-import { createNearResourceServer, type NearFacilitatorClient } from '@fastnear/x402/server';
+import { createNearResourceServer, type FacilitatorEndpointConfig, type NearFacilitatorClient } from '@fastnear/x402/server';
 import { x402HTTPResourceServer, type HTTPAdapter, type HTTPRequestContext, type RoutesConfig } from '@x402/core/server';
-import { NETWORK, ROUTE, type X402Config } from './config.ts';
+import { MAX_TIMEOUT_SECONDS, NETWORK, ROUTE, SCHEME, type X402Config } from './config.ts';
 
 export type Log = (msg: string, fields?: Record<string, string | number | boolean | null>) => void;
 export const jsonLog: Log = (msg, fields = {}) => process.stdout.write(JSON.stringify({ ts: new Date().toISOString(), service: 'x402', msg, ...fields }) + '\n');
@@ -18,7 +19,7 @@ export function routes(cfg: Pick<X402Config, 'network' | 'amount' | 'asset' | 'p
   if (cfg.network !== NETWORK) throw new Error(`network must be ${NETWORK}`);
   return {
     [ROUTE]: {
-      accepts: [{ scheme: 'exact', network: cfg.network, price: { amount: cfg.amount, asset: cfg.asset }, payTo: cfg.payTo, maxTimeoutSeconds: 120 }],
+      accepts: [{ scheme: SCHEME, network: cfg.network, price: { amount: cfg.amount, asset: cfg.asset }, payTo: cfg.payTo, maxTimeoutSeconds: MAX_TIMEOUT_SECONDS }],
       description: 'Nectar Feed capacity history export (CSV; NEAR testnet, mock collateral)',
       mimeType: 'text/csv',
     },
@@ -69,7 +70,7 @@ export function feedUpstream(feedUrl: string, fetchImpl: typeof fetch = fetch): 
 
 export interface PaidServerDeps {
   cfg: Pick<X402Config, 'network' | 'amount' | 'asset' | 'payTo'>;
-  facilitator: NearFacilitatorClient | { url: string };
+  facilitator: NearFacilitatorClient | FacilitatorEndpointConfig;
   upstream: Upstream;
   log?: Log;
 }
@@ -117,13 +118,51 @@ export async function createPaidServer(d: PaidServerDeps): Promise<Server> {
   });
 }
 
-/** Facilitator over HTTP (/verify, /settle, /supported) so other resource servers can use X402_FACILITATOR_URL. */
-export function createFacilitatorHttp(f: ReturnType<typeof createNearFacilitator>, log: Log = jsonLog): Server {
+/** Remote facilitator endpoint; `secret` is the bearer token createFacilitatorHttp expects, null for none. */
+export function facilitatorEndpoint(url: string, secret: string | null): FacilitatorEndpointConfig {
+  if (secret === null) return { url };
+  const auth = { authorization: `Bearer ${secret}` };
+  return { url, createAuthHeaders: async () => ({ verify: auth, settle: auth, supported: auth }) };
+}
+
+type RouteTerms = Pick<X402Config, 'network' | 'amount' | 'asset' | 'payTo'>;
+
+/** The first field where `requirements` differs from this service's own route terms, or null when they all match. */
+export function requirementsMismatch(requirements: unknown, cfg: RouteTerms): string | null {
+  const got = typeof requirements === 'object' && requirements !== null ? (requirements as Record<string, unknown>) : {};
+  const want = { scheme: SCHEME, network: cfg.network, asset: cfg.asset, amount: cfg.amount, payTo: cfg.payTo, maxTimeoutSeconds: MAX_TIMEOUT_SECONDS };
+  for (const [field, value] of Object.entries(want)) if (got[field] !== value) return field;
+  return null;
+}
+
+const sha256 = (s: string): Buffer => createHash('sha256').update(s).digest();
+
+export interface FacilitatorHttpDeps {
+  cfg: RouteTerms;
+  /** Bearer token every request must present. There is no unauthenticated mode. */
+  secret: string;
+  log?: Log;
+}
+
+/**
+ * Facilitator over HTTP (/verify, /settle, /supported) so other resource servers can use X402_FACILITATOR_URL.
+ * SR-32: the relayer pays gas for whatever settles here, so a caller needs the shared secret and can only
+ * settle this service's own route terms. @x402/near checks the delegate against the requirements it is given,
+ * so pinning the requirements pins the transfer.
+ */
+export function createFacilitatorHttp(f: ReturnType<typeof createNearFacilitator>, d: FacilitatorHttpDeps): Server {
+  const log = d.log ?? jsonLog;
+  const expected = sha256(d.secret);
   return createServer((req, res) => {
     const path = (req.url ?? '/').split('?')[0];
     const send = (status: number, body: unknown): void => {
       res.writeHead(status, { 'content-type': 'application/json' }).end(JSON.stringify(body, (_k, v: unknown) => (typeof v === 'bigint' ? v.toString() : v)));
     };
+    const token = /^Bearer (\S+)$/i.exec(req.headers.authorization ?? '')?.[1];
+    if (token === undefined || !timingSafeEqual(sha256(token), expected)) {
+      log('facilitator_refused', { reason: 'unauthorized' });
+      return send(401, { error: 'unauthorized' });
+    }
     if (req.method === 'GET' && path === '/supported') return send(200, f.getSupported());
     if (req.method !== 'POST' || (path !== '/verify' && path !== '/settle')) return send(404, { error: 'not found' });
     const chunks: Buffer[] = [];
@@ -136,6 +175,12 @@ export function createFacilitatorHttp(f: ReturnType<typeof createNearFacilitator
     req.on('end', () => {
       void (async () => {
         const b = JSON.parse(Buffer.concat(chunks).toString('utf8')) as { paymentPayload: Parameters<typeof f.verify>[0]; paymentRequirements: Parameters<typeof f.verify>[1] };
+        const field = requirementsMismatch(b.paymentRequirements, d.cfg);
+        if (field !== null) {
+          log('facilitator_refused', { reason: 'requirements_not_allowed', field });
+          send(403, { error: 'requirements_not_allowed', field });
+          return;
+        }
         const out = path === '/verify' ? await f.verify(b.paymentPayload, b.paymentRequirements) : await f.settle(b.paymentPayload, b.paymentRequirements);
         log(path === '/verify' ? 'facilitator_verify' : 'facilitator_settle', { ok: 'isValid' in out ? out.isValid : out.success });
         send(200, out);

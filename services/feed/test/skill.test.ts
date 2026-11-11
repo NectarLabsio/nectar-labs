@@ -193,6 +193,61 @@ describe('agent skill: open_protected_stock_loan', () => {
     assert.equal(views?.calls.length, n);
   });
 
+  describe('pre_liq_ltv_bps refusal (SR-33)', () => {
+    // 65 NVDAx at $180 = $11,700 of value: LTV cap $8,190, and pre_liq 6500 allows at most $7,605 of debt.
+    const UNITS = '65000000';
+    /** v2 fixture whose preview_borrow says ok for `borrowE6`, as the real view does: it takes no pre_liq. */
+    const okPreview = (k: 'v1' | 'v2', borrowE6: string): Fixture => {
+      const fx = load(k);
+      const value = { ...(fx.views.preview_borrow?.value as Record<string, unknown>), ok: true, reason: null };
+      fx.views.preview_borrow_pre_liq = { method: 'preview_borrow', args: { symbol: 'NVDAx', units: UNITS, borrow_usd_e6: borrowE6 }, block_height: 1000, value };
+      return fx;
+    };
+    const open = async (fx: Fixture, borrow_usd: string, pre_liq_ltv_bps: number): Promise<unknown> =>
+      (await connect(fx)).c.callTool({ name: 'open_protected_stock_loan', arguments: { ...V2_OPEN, units: UNITS, borrow_usd, pre_liq_ltv_bps } });
+
+    it('v2: above pre_liq but under the LTV cap fails with the contract reason and no call', async () => {
+      const r = await open(okPreview('v2', '7800000000'), '7800', 6500); // LTV 6667 < 7000 cap
+      assert.ok(isErr(r));
+      const v = json(r);
+      assert.equal(v.error, 'borrow_would_fail');
+      assert.equal(v.call, undefined);
+      const p = v.preview as { ok: boolean; reason: string; health: Array<{ ltv_bps: string; triggerable: boolean }> };
+      assert.deepEqual([p.ok, p.reason], [false, 'borrow above pre_liq_ltv_bps']);
+      assert.deepEqual([p.health[0]?.ltv_bps, p.health[0]?.triggerable], ['6667', true]);
+    });
+
+    it('boundary matches math::triggerable: exactly at pre_liq passes, one e6 above fails', async () => {
+      const at = await open(okPreview('v2', '7605000000'), '7605', 6500);
+      assert.ok(!isErr(at), JSON.stringify(at));
+      assert.equal((json(at).preview as { ok: boolean }).ok, true);
+      const above = json(await open(okPreview('v2', '7605000001'), '7605.000001', 6500));
+      assert.equal((above.preview as { reason: string }).reason, 'borrow above pre_liq_ltv_bps');
+    });
+
+    it('the same borrow passes at a pre_liq that allows it', async () => {
+      const r = await open(okPreview('v2', '7800000000'), '7800', 7000);
+      assert.ok(!isErr(r), JSON.stringify(r));
+    });
+
+    it('v2: value uses the multiplier, as the contract does', async () => {
+      const fx = okPreview('v2', '7800000000');
+      (fx.views.get_exit_capacity?.value as Record<string, unknown>).multiplier_e18 = '2000000000000000000'; // doubles V; LTV 3334
+      assert.ok(!isErr(await open(fx, '7800', 6500)));
+    });
+
+    it('v1: the deployed contract has the same rule', async () => {
+      const v = json(await open(okPreview('v1', '4000000000'), '4000', 6500)); // 65 x $89 = $5,785; LTV 6915
+      assert.equal(v.error, 'borrow_would_fail');
+      assert.equal((v.preview as { reason: string }).reason, 'borrow above pre_liq_ltv_bps');
+    });
+
+    it('an earlier contract refusal keeps its own reason', async () => {
+      const r = await (await connect(load('v2'))).c.callTool({ name: 'open_protected_stock_loan', arguments: { ...V2_OPEN, borrow_usd: '12000', pre_liq_ltv_bps: 6500 } }); // LTV 6667 also breaches
+      assert.equal((json(r).preview as { reason: string }).reason, 'aggregate_limit');
+    });
+  });
+
   it('shield returns unsupported_until_v2_shields; no live views is a clear error', async () => {
     const { c } = await connect(load('v2'));
     assert.equal(json(await c.callTool({ name: 'open_protected_stock_loan', arguments: { ...V2_OPEN, shield: 'weekend' } })).error, 'unsupported_until_v2_shields');
