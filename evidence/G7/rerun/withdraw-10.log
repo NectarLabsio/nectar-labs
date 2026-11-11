@@ -1,0 +1,3 @@
+scripts/58-g7-v2.sh: line 19: 29213 Abort trap: 6           spl-token --version > /dev/null 2>&1
+bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+{"position_pda":"3iQ8Jrdwdt3Wy3LLarHvhzK3xxGZM19LKJbRn2dKTopz","withdrawn_to":"CxUSzmUNUFU6bPPPE45ko1VVM9aKihqeMNodv5ne5hpG","solana_tx":"<redacted>"}

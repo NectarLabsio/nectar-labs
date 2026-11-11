@@ -1,0 +1,33 @@
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+live version "2.2.0-v7"
+wasm old≈817560 new=818668 storage_usage=836516 balance=10180567378871726099999983 topup_yocto=0
+├  Unsigned transaction:
+│    signer_id:    nectar-core-v2.nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- deploy code <3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk> to a account <nectar-core-v2.nectar.testnet>
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:6tmYgY7UieFw5Krg23GnpZpX8x3iR5usy9HFbip4ZUft
+│    Signature:  ed25519:4k1GL1cK3sjrUw8n98gy1WUqZCoGH38P1XBnTdx7NZACZjJARrQ6KAmFXm1PVj8fpn9jniHVUsGdd2XBjjoYfqF1
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 59.3 Tgas
+│    Transaction fee: 0.0059027037683924 NEAR
+│    Transaction ID: EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay
+│     [0m
+
+Contract code has been successfully deployed.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract deploy nectar-core-v2.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/nectar_core/nectar_core.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+new version "2.2.1-v7"
+VIEWS IDENTICAL (except contract_version)
+remote chains now: [{"chain_id":"solana-devnet","vault_program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW","mpc_domain_id":1,"rpc_url":null,"evm_chain_id":null,"primary":true},{"chain_id":"base-sepolia","vault_program":"0xC64b733424C8d25fB574F275007ED8756e261226","mpc_domain_id":0,"rpc_url":"http://127.0.0.1:8545","evm_chain_id":84532,"primary":false}]

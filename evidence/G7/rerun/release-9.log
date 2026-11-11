@@ -1,0 +1,50 @@
+scripts/58-g7-v2.sh: line 19: 28803 Abort trap: 6           spl-token --version > /dev/null 2>&1
+├  Unsigned transaction:
+│    signer_id:    borrower1.nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  request_remote_release
+│                       args:         {
+│                                       "position_id": "9"
+│                                     }
+│                       gas:          100.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:Dpn6xupWdsxoixqi5e1kgB8ge4Ze9h9aSiiG67ic2wjV
+│    Signature:  ed25519:nGGV13WERQbEYbUevfZtghxnsiEeap3bXgqewPEZaLbiLoZWupBdDEi5CAoAnwGt2DQPgLof4DphVd1E1dND9tq
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 16.7 Tgas
+│    Transaction fee: 0.0015803720977254 NEAR
+│    Transaction ID: 5dyTY3QhkCWLHrXkYU9KHAM5dSw7QSncVq6rBCpuN53c
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/5dyTY3QhkCWLHrXkYU9KHAM5dSw7QSncVq6rBCpuN53c
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"remote_release_requested","data":[{"position_id":"9","nonce":"8","expires":"1794387130","message":"NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=9|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=8|expires=1794387130","recipient":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","path":"solana-devnet/pos/9","chain":"solana-devnet"}]}
+│    [36mLogs [v1.signer-prod.testnet]:[39m
+│      sign: predecessor=AccountId("nectar-core-v2.nectar.testnet"), request=SignRequestArgs { path: "solana-devnet/pos/9", payload: Eddsa(BoundedVec { inner: [78, 69, 67, 84, 65, 82, 95, 82, 69, 76, 69, 65, 83, 69, 95, 86, 49, 124, 99, 104, 97, 105, 110, 61, 115, 111, 108, 97, 110, 97, 45, 100, 101, 118, 110, 101, 116, 124, 118, 97, 117, 108, 116, 61, 69, 78, 90, 97, 78, 70, 72, 111, 115, 89, 101, 78, 104, 115, 106, 67, 56, 53, 75, 55, 51, 102, 101, 77, 70, 119, 88, 52, 119, 56, 105, 49, 100, 122, 117, 104, 81, 51, 80, 122, 112, 117, 98, 87, 124, 112, 111, 115, 61, 57, 124, 114, 101, 99, 105, 112, 105, 101, 110, 116, 61, 50, 115, 55, 109, 110, 87, 118, 103, 67, 57, 116, 113, 111, 55, 70, 84, 111, 75, 87, 80, 78, 99, 84, 121, 74, 54, 102, 97, 88, 87, 87, 67, 74, 55, 100, 122, 82, 100, 120, 75, 84, 122, 75, 83, 124, 110, 111, 110, 99, 101, 61, 56, 124, 101, 120, 112, 105, 114, 101, 115, 61, 49, 55, 57, 52, 51, 56, 55, 49, 51, 48], witness: PossiblyEmpty(()) }), domain_id: DomainId(1) }
+│    [36mLogs [v1.signer-prod.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"remote_release_signed","data":[{"position_id":"9","nonce":"8","expires":"1794387130","message":"NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=9|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=8|expires=1794387130","signature_hex":"5da6a1f30d5bc54a34a7cd68d778e205f07c4f01a1d7a6f32c16aba9ca7cb61c0489189e4f1aad7f70a9a4d0eeeb04fd8d85941dea5e84a126d1935544cc4105","recipient":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","path":"solana-devnet/pos/9","pubkey":"ed25519:3DAHsvVAffWXKfhk8UFPH9w8kBBHa9TreSyfBKJ4bi6o","chain":"solana-devnet"}]}
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "request_remote_release" call to <nectar-core-v2.nectar.testnet> on behalf of <borrower1.nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet request_remote_release json-args '{"position_id":"9"}' prepaid-gas '100.0 Tgas' attached-deposit '0 NEAR' sign-as borrower1.nectar.testnet network-config testnet sign-with-keychain send[39m
+

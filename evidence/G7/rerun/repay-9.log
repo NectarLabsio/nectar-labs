@@ -1,0 +1,47 @@
+scripts/58-g7-v2.sh: line 19: 28764 Abort trap: 6           spl-token --version > /dev/null 2>&1
+├  Unsigned transaction:
+│    signer_id:    borrower1.nectar.testnet
+│    receiver_id:  usdc-mock.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  ft_transfer_call
+│                       args:         {
+│                                       "amount": "370440000",
+│                                       "msg": "{\"Repay\":{\"position_id\":\"9\"}}",
+│                                       "receiver_id": "nectar-core-v2.nectar.testnet"
+│                                     }
+│                       gas:          300.0 Tgas
+│                       deposit:      1 yoctoNEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:Dpn6xupWdsxoixqi5e1kgB8ge4Ze9h9aSiiG67ic2wjV
+│    Signature:  ed25519:aHzvSTC4q86dDYrm2Tcu5wo8WkKpBxci7wmB8VVx2iMuMDhumvj7VtqQDZjxHEMBb6Ddme4n3zAKnzXEpyRJNoz
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.0 Tgas
+│    Transaction fee: 0.0007251352486986 NEAR
+│    Transaction ID: 2R9RyYJdHn4LrmyoDgT75XvHgVEL447zuoGX41Y7kj9k
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/2R9RyYJdHn4LrmyoDgT75XvHgVEL447zuoGX41Y7kj9k
+│     [0m
+├  Function execution logs:
+│    [36mLogs [usdc-mock.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"repaid","data":[{"position_id":"9","amount_usd_e6":"370440000","remaining_debt_usd_e6":"0"}]}
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [usdc-mock.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+
+Function execution return value (printed to stdout):
+
+
+The "ft_transfer_call" call to <usdc-mock.nectar.testnet> on behalf of <borrower1.nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction usdc-mock.nectar.testnet ft_transfer_call json-args '{"receiver_id":"nectar-core-v2.nectar.testnet","amount":"370440000","msg":"{\"Repay\":{\"position_id\":\"9\"}}"}' prepaid-gas '300.0 Tgas' attached-deposit '1 yoctoNEAR' sign-as borrower1.nectar.testnet network-config testnet sign-with-keychain send[39m
+
