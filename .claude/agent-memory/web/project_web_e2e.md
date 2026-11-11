@@ -16,6 +16,7 @@ Landing v2 (WO-33a): `/` uses CSS module `components/landing/landing.module.css`
 Browsers: the shared Playwright cache can lag the pinned version (1248 vs 1254 on 2026-11-11); use `PW_CHANNEL=chrome` rather than installing. design*.spec and screens.spec write to evidence/, so skip them when the work order limits writes.
 Remote spec answers `getAccountInfo` by address, deriving the PDAs with `@nectar/sdk` in the spec: a wrong seed in the app makes the card vanish, so the flow tests also cover seeds.
 /api/copilot (WO-42a) is same-origin JSON only and rate-limited (fixture 30/min, live 5/min per client + 30/min global); locally all Playwright clients share one IP key, so specs that add fixture clicks can hit 429. `request.post` needs an `origin` header or it gets 403.
+networkidle trap (WO-49): Next 16 `<Link>` to a JSON route gets RSC-prefetched; the router drops non-Flight answers without reading the body, so Chrome keeps the fetch pending forever. `/api/*` links go through plain `<a>` (SiteChrome NextLink) and route handlers can answer `rsc: 1` with an empty 204. `kill <pid>` of your own `next start` worked on 2026-11-11.
 Nav strict-mode traps: no `session-badge` testid and no role=dialog in the shell (specs use unscoped getByRole("dialog")).
 
 **Why:** gates pass at different times; the UI must be tested and must not claim "live".
