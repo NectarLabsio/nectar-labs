@@ -93,6 +93,36 @@ export function tokenTable(c: { usdc: string | null; usdcDecimals: number; colla
   return out;
 }
 
+/** config.yaml `site:` (WO-34 hosting). Operator fields are Kunal's (TODO-H-LEGAL): null until provided, never guessed. */
+export interface SiteConfig {
+  operator: string | null;
+  country: string | null;
+  contact: string | null;
+  x_handle: string | null;
+  hosted_until: string | null;
+}
+
+/** Typed `site:` section; a missing section or a non-string field reads as null (old configs keep loading). */
+export function siteConfig(c: NectarConfigYaml): SiteConfig {
+  const s = (c.site && typeof c.site === "object" ? c.site : {}) as Record<string, unknown>;
+  const str = (v: unknown): string | null => (typeof v === "string" && v.trim().length > 0 && !isPending(v) ? v.trim() : null);
+  return { operator: str(s.operator), country: str(s.country), contact: str(s.contact), x_handle: str(s.x_handle), hosted_until: str(s.hosted_until) };
+}
+
+/**
+ * Production guard (WO-34a §6): what is missing before a production build may ship. Empty list = ready.
+ * `env` needs SITE_URL and APP_URL; `site` needs operator, country and contact.
+ */
+export function productionGaps(site: SiteConfig, env: Record<string, string | undefined>): string[] {
+  const gaps: string[] = [];
+  for (const k of ["operator", "country", "contact"] as const) if (!site[k]) gaps.push(`config.yaml site.${k} is null (TODO-H-LEGAL)`);
+  for (const k of ["SITE_URL", "APP_URL"] as const) if (!env[k]) gaps.push(`${k} is unset`);
+  return gaps;
+}
+
+/** True for a production deployment: Vercel production, or NECTAR_PRODUCTION=1 anywhere else. */
+export const isProductionEnv = (env: Record<string, string | undefined>): boolean => env.VERCEL_ENV === "production" || env.NECTAR_PRODUCTION === "1";
+
 export function parseConfig(text: string): NectarConfigYaml {
   const c = parse(text) as NectarConfigYaml;
   if (!c || typeof c !== "object" || !c.accounts || !c.collateral) throw new Error("config.yaml: missing accounts/collateral");

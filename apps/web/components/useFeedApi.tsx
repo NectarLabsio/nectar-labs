@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { Banner, Button } from "@nectar/ui";
 import { docsHref } from "@/lib/env";
 
-/** The Feed API docs page (how to run services/feed and set NEXT_PUBLIC_FEED_URL). */
+/** The Feed API docs page (how to run services/feed and set FEED_URL). */
 export const FEED_DOCS = docsHref("integrate/feed-rest");
 
 /** Shown wherever indexer data would appear while NEXT_PUBLIC_FEED_URL is unset. */
 export function FeedUnconfigured({ what }: { what: string }) {
   return (
     <Banner tone="info" title="Feed indexer not configured">
-      {what} come from the Feed API (<code>services/feed</code>), which this deployment does not run. Set <code>NEXT_PUBLIC_FEED_URL</code> and run{" "}
+      {what} come from the Feed API (<code>services/feed</code>), which this deployment does not run. Set <code>FEED_URL</code> and run{" "}
       <code>pnpm --filter feed start</code>; see the <a className="link" href={FEED_DOCS}>Feed API docs</a>.
     </Banner>
   );

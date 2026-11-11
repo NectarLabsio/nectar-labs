@@ -39,6 +39,12 @@ function originMatches(req: Request, origin: string): boolean {
   } catch {
     /* relative url: fall back to headers */
   }
+  // Hosted (WO-34a): the app origin is always accepted, whatever host header the platform forwards.
+  try {
+    if (process.env.APP_URL) hosts.add(new URL(process.env.APP_URL).host.toLowerCase());
+  } catch {
+    /* bad APP_URL: ignored, like hosts.ts */
+  }
   for (const h of [req.headers.get("host"), req.headers.get("x-forwarded-host")]) {
     for (const part of (h ?? "").split(",")) if (part.trim()) hosts.add(part.trim().toLowerCase());
   }

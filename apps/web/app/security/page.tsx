@@ -1,6 +1,7 @@
 import Link from "next/link";
+import { landingMetadata } from "@/lib/site-meta";
 
-export const metadata = { title: "Security" };
+export const metadata = { title: "Security", ...landingMetadata() };
 
 export default function SecurityPage() {
   return (
