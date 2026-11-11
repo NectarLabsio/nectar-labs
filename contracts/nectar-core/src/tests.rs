@@ -141,7 +141,7 @@ fn new_sets_defaults() {
 #[test]
 fn contract_version_view() {
     let c = setup();
-    assert_eq!(c.contract_version(), "2.1.0-v7");
+    assert_eq!(c.contract_version(), "2.2.0-v7");
     assert_eq!(c.get_config().contract_version, c.contract_version());
     assert_eq!(c.get_state_version(), 2);
 }

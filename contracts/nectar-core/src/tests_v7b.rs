@@ -15,7 +15,7 @@ const E18: u128 = math::E18;
 const VAULT: &str = "Nectar1Vau1t11111111111111111111111111111111";
 const RCPT: &str = "3DTxgHcUXRb9uvpKwtasZN7YBUbbPuf3uvbBPjAGWqiV";
 const AUTH_B58: &str = "2fhY3GjCcp4LU75uiiChUqQg9fS6xCtptLYZUdKJibpN";
-const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T";
+const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB48";
 const VR_DEPOSIT: u128 = 100;
 
 fn a(s: &str) -> AccountId {
@@ -497,6 +497,10 @@ fn opted_in_quote_event_and_flag() {
 
 fn chain_base() -> Nectar {
     let mut c = base();
+    // SR-5: a $10k remote loan needs one fitting quote and fitting capacity of $13.34k at the weekend haircut
+    assert_eq!(ft(&mut c, usdc(), "buyer1.test", 4_000_000_000, r#"{"TopUpQuote":{"quote_id":"0"}}"#), 0);
+    set_ctx(a("buyer1.test"), 0, T0);
+    c.set_quote_remote_recipient(U64(0), Some(RCPT.into()));
     set_ctx(owner(), 0, T0);
     c.set_remote_chain(
         "NVDAx".into(),
@@ -508,7 +512,7 @@ fn chain_base() -> Nectar {
 }
 fn reserve_at(c: &mut Nectar, deposit: u128, borrow: u128) -> u64 {
     set_ctx(alice(), deposit, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(borrow), 7500, None, None, None, None).0
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(borrow), 7500, None, None, None, None, DEPOSITOR.into()).0
 }
 fn authority_ok(c: &mut Nectar, id: u64) {
     cb_ctx(T0 + SEC, PromiseResult::Successful(serde_json::to_vec(&format!("ed25519:{AUTH_B58}")).unwrap()));
@@ -647,6 +651,25 @@ fn remote_self_settle_needs_a_remote_recipient_covering_the_fill() {
 }
 
 #[test]
+fn sr3_self_leg_resign_keeps_kind_and_fee_without_a_second_credit() {
+    let mut c = remote_open();
+    settle_self(&mut c, alice(), T0 + 3 * SEC);
+    let d = c.get_pending_settlement(U64(0)).unwrap();
+    cb_ctx(T0 + 4 * SEC, PromiseResult::Successful(crate::tests_p2::sig_json(3, 64)));
+    c.on_signature(U64(0), U64(2), d.nonce);
+    let (avail, treasury) = (c.available_usd_e6, c.treasury_usd_e6);
+    set_ctx(a("anyone.test"), 0, d.expires.0 * SEC);
+    c.resign_remote_settlement(U64(0));
+    let e = c.get_pending_settlement(U64(0)).unwrap();
+    assert_eq!((e.kind, e.fee_usd_e6, e.repay_usd_e6, e.seize_units), (d.kind, d.fee_usd_e6, d.repay_usd_e6, d.seize_units));
+    assert!(e.nonce.0 > d.nonce.0 && e.preimage.ends_with("|kind=SELF"));
+    cb_ctx(d.expires.0 * SEC + SEC, PromiseResult::Successful(crate::tests_p2::sig_json(4, 64)));
+    c.on_resign_signature(U64(0), U64(2), e.nonce);
+    assert_eq!(c.get_pending_settlement(U64(0)).unwrap().status, PendingStatus::Signed);
+    assert_eq!((c.available_usd_e6, c.treasury_usd_e6), (avail, treasury), "no second credit");
+}
+
+#[test]
 fn shield_on_remote_reservation_counts_and_prices_at_confirm() {
     let mut c = chain_base();
     set_ctx(owner(), 0, T0);
@@ -661,7 +684,7 @@ fn shield_on_remote_reservation_counts_and_prices_at_confirm() {
             None,
             None,
             Some(ShieldInput { kind: ShieldKind::Event, window_end_ns: U64(T0 + 10 * HOUR) }),
-            None,
+            None, DEPOSITOR.into(),
         )
         .0;
     assert_eq!(c.get_shield_opens_today(alice()), 1);
@@ -684,7 +707,7 @@ fn shield_on_remote_reservation_validated() {
         None,
         None,
         Some(ShieldInput { kind: ShieldKind::Weekend, window_end_ns: U64(T0 + HOUR) }),
-        None,
+        None, DEPOSITOR.into(),
     );
 }
 

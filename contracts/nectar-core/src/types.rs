@@ -356,6 +356,11 @@ pub struct RemoteInfo {
     /// WO-23a: reservation deposit held (yocto); refunded to the borrower on confirm, refused loan, failed
     /// authority or expiry, then 0.
     pub deposit_yocto: U128,
+    /// SR-8 (WO-34a): the depositor committed at `reserve_remote_position`. Never stored in this struct (`borsh(skip)`
+    /// keeps the 2.1 layout); it lives under its own raw key and views fill it in. Absent for pre-2.2 reservations.
+    #[borsh(skip)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub committed_depositor: Option<String>,
 }
 
 #[near(serializers = [borsh, json])]
@@ -485,6 +490,8 @@ pub enum Payout {
     PayTo { position_id: U64, borrower: AccountId },
     /// v2 (A4): `withdraw_claimable`; failure restores the claimable balance.
     Claimable,
+    /// SR-17 (WO-34a): `claim_owed_collateral` units; failure restores the owed balance.
+    OwedCollateral { symbol: String },
 }
 
 // ---------- views ----------

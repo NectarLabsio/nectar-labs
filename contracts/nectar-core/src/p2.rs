@@ -30,6 +30,9 @@ use crate::{ERR_KEEPER, MAX_QUOTES_PER_ASSET, Nectar, NectarExt, ONE_YOCTO, math
 pub const SIGNER_CONFIG_KEY: &[u8] = b"__p2_signer_config";
 pub const NEXT_NONCE_KEY: &[u8] = b"__p2_next_nonce";
 pub const PENDING_PREFIX: &[u8] = b"__p2_pending:";
+/// SR-3 (WO-34a): marks a leg that has been signed at least once. Its pool credit is booked and it may have executed,
+/// so it is never rolled back, whatever its status while a re-sign is in flight.
+pub const RESIGN_PREFIX: &[u8] = b"__v7c_resign:";
 /// Own burn of `on_signature` (parse + 3 writes).
 pub const GAS_ON_SIGNATURE: Gas = Gas::from_tgas(10);
 /// Exec fees of the sign + callback receipts, charged to the creating receipt (WO-10a lesson).
@@ -50,6 +53,12 @@ pub struct SignCall {
 
 fn pending_key(position_id: u64) -> Vec<u8> {
     let mut k = PENDING_PREFIX.to_vec();
+    k.extend_from_slice(&position_id.to_le_bytes());
+    k
+}
+
+fn resign_key(position_id: u64) -> Vec<u8> {
+    let mut k = RESIGN_PREFIX.to_vec();
     k.extend_from_slice(&position_id.to_le_bytes());
     k
 }
@@ -125,26 +134,37 @@ impl Nectar {
         if left < Self::sign_leg_gas(s) { Err("attach more gas") } else { Ok(()) }
     }
 
-    /// Effects of the remote settle leg: nonce, pending record, event. Checks first; `Err` = nothing written.
-    pub(crate) fn record_remote_leg(
-        &mut self,
-        p: &mut Position,
+    /// SR-3: a leg that was signed once (booked, possibly executed); it must never be rolled back.
+    pub(crate) fn resign_marked(&self, position_id: u64) -> bool {
+        env::storage_has_key(&resign_key(position_id))
+    }
+
+    /// SR-3: the position has a settle leg that is signed, or is being re-signed.
+    pub(crate) fn signed_leg_open(&self, position_id: u64) -> bool {
+        self.pending(position_id).is_some_and(|d| {
+            d.status == PendingStatus::Signed
+                || (d.status == PendingStatus::AwaitingSignature && self.resign_marked(position_id))
+        })
+    }
+
+    /// What one settle leg signs and the `sign` args: Solana v2 preimage, or the EIP-712 `Settle` digest.
+    fn leg_message(
+        position_id: u64,
         r: &RemoteInfo,
-        s: &SignerConfig,
-        leg: RemoteLeg,
-    ) -> Result<SignCall, &'static str> {
-        let nonce = self.next_nonce();
-        let expires = (env::block_timestamp() / SEC).checked_add(s.expiry_s).ok_or("expiry overflow")?;
+        leg: &RemoteLeg,
+        nonce: u64,
+        expires: u64,
+    ) -> Result<(String, String, Option<EvmSigned>), &'static str> {
         if !chainsig::recipient_fits(r.domain_id, &leg.recipient) {
             return Err("remote settle: domain not supported");
         }
         // WO-29a: an EVM (domain 0) leg signs the EIP-712 `Settle` digest; `preimage` holds `0x<digest>`.
-        let (preimage, args, evm_rec) = if r.domain_id == chainsig::SECP256K1_DOMAIN_ID {
+        if r.domain_id == chainsig::SECP256K1_DOMAIN_ID {
             if leg.kind != chainsig::KIND_PRELIQ && leg.kind != chainsig::KIND_SELF {
                 return Err("bad kind");
             }
             let f = crate::evm::SettleFields {
-                position_id: p.position_id.0,
+                position_id,
                 quote_id: leg.quote_id,
                 repay_e6: leg.repay_usd_e6,
                 seize_raw: leg.buyer_units,
@@ -154,13 +174,13 @@ impl Nectar {
                 kind: leg.kind,
             };
             let (digest, rec) = crate::evm::settle_digest_for(r, &f)?;
-            (crate::evm::hex0x(&digest), crate::evm::ecdsa_sign_args(&r.path, &digest, r.domain_id), Some(rec))
+            Ok((crate::evm::hex0x(&digest), crate::evm::ecdsa_sign_args(&r.path, &digest, r.domain_id), Some(rec)))
         } else {
             let preimage = chainsig::build_preimage_v2(
                 &PreimageInput {
                     chain_id: &r.chain_id,
                     vault_program: &r.vault_program,
-                    position_id: p.position_id.0,
+                    position_id,
                     quote_id: leg.quote_id,
                     repay_e6: leg.repay_usd_e6,
                     seize_units: leg.buyer_units,
@@ -175,8 +195,21 @@ impl Nectar {
                 return Err("preimage too long");
             }
             let args = sign_args(&r.path, &preimage, r.domain_id);
-            (preimage, args, None)
-        };
+            Ok((preimage, args, None))
+        }
+    }
+
+    /// Effects of the remote settle leg: nonce, pending record, event. Checks first; `Err` = nothing written.
+    pub(crate) fn record_remote_leg(
+        &mut self,
+        p: &mut Position,
+        r: &RemoteInfo,
+        s: &SignerConfig,
+        leg: RemoteLeg,
+    ) -> Result<SignCall, &'static str> {
+        let nonce = self.next_nonce();
+        let expires = (env::block_timestamp() / SEC).checked_add(s.expiry_s).ok_or("expiry overflow")?;
+        let (preimage, args, evm_rec) = Self::leg_message(p.position_id.0, r, &leg, nonce, expires)?;
         let kind_name = if leg.kind == chainsig::KIND_SELF { "SELF" } else { "PRELIQ" };
         // effects
         self.take_nonce()?;
@@ -270,7 +303,8 @@ impl Nectar {
     /// `cancel_settlement` hook: roll back an unsigned leg once its preimage has expired.
     pub(crate) fn cancel_remote_leg(&mut self, p: &mut Position) {
         let Some(mut d) = self.pending(p.position_id.0) else { return };
-        if d.status == PendingStatus::AwaitingSignature {
+        // SR-3: a re-signing leg was signed before; only a leg that was never signed can be undone.
+        if d.status == PendingStatus::AwaitingSignature && !self.resign_marked(p.position_id.0) {
             require!(env::block_timestamp() / SEC >= d.expires.0, "signature pending until expiry");
             self.rollback_leg(p, &d);
             d.status = PendingStatus::Cancelled;
@@ -340,6 +374,119 @@ impl Nectar {
         }
     }
 
+    /// SR-3 (WO-34a): anyone, once a signed leg has expired unrelayed: signs the IDENTICAL leg (repay, seize, recipient,
+    /// kind) again with a fresh nonce and expiry. Safe without a vault read: if the old message landed, the vault
+    /// position is no longer open and the new one fails. No rollback, no second pool credit. 1 yocto from
+    /// `gas_reserve_yocto`. Not payable.
+    pub fn resign_remote_settlement(&mut self, position_id: U64) {
+        self.assert_not_paused();
+        let mut d = self.pending(position_id.0).unwrap_or_else(|| env::panic_str("no pending settlement"));
+        require!(self.signed_leg_open(position_id.0), "settlement not signed");
+        let now_s = env::block_timestamp() / SEC;
+        require!(now_s >= d.expires.0, "signature valid until expiry");
+        let mut p = self.position_or_panic(position_id.0);
+        let r = p.remote.clone().unwrap_or_else(|| env::panic_str("not a remote position"));
+        let s = self.signer_config().unwrap_or_else(|| env::panic_str("no signer config"));
+        let reserve = math::sub(self.gas_reserve_yocto, 1).unwrap_or_else(|_| env::panic_str("gas reserve empty"));
+        if let Err(e) = Self::check_sign_gas(&s) {
+            env::panic_str(e);
+        }
+        let nonce = self.next_nonce();
+        let expires = now_s.checked_add(s.expiry_s).unwrap_or_else(|| env::panic_str("expiry overflow"));
+        let leg = RemoteLeg {
+            quote_id: d.quote_id.0,
+            repay_usd_e6: d.repay_usd_e6.0,
+            buyer_units: d.seize_units.0,
+            keeper_units: d.keeper_units.0,
+            recipient: d.recipient.clone(),
+            kind: d.kind,
+            fee_usd_e6: d.fee_usd_e6.0,
+        };
+        let (preimage, args, evm_rec) =
+            Self::leg_message(position_id.0, &r, &leg, nonce, expires).unwrap_or_else(|e| env::panic_str(e));
+        // effects
+        self.take_nonce().unwrap_or_else(|e| env::panic_str(e));
+        self.gas_reserve_yocto = reserve;
+        env::storage_write(&resign_key(position_id.0), &[1u8]);
+        if let Some(rec) = evm_rec {
+            self.put_evm_record(crate::evm::EVM_SETTLE_PREFIX, position_id.0, rec);
+        }
+        p.nonce = U64(nonce);
+        self.put_position(p);
+        emit(
+            "settlement_resign_requested",
+            json!({ "position_id": position_id, "quote_id": d.quote_id, "previous_nonce": d.nonce, "nonce": U64(nonce),
+                    "expires": U64(expires), "preimage": preimage, "recipient": d.recipient,
+                    "repay_usd_e6": d.repay_usd_e6, "seize_units": d.seize_units, "path": r.path, "kind": d.kind,
+                    "chain": r.chain_id, "domain_id": r.domain_id }),
+        );
+        let cb = json!({ "position_id": position_id, "quote_id": d.quote_id, "nonce": U64(nonce) }).to_string();
+        d.nonce = U64(nonce);
+        d.expires = U64(expires);
+        d.preimage = preimage;
+        d.signature_hex = None;
+        d.status = PendingStatus::AwaitingSignature;
+        self.put_pending(d);
+        // interaction
+        Self::schedule_sign(SignCall {
+            account: s.account.clone(),
+            args,
+            cb_method: "on_resign_signature",
+            cb,
+            gas: Gas::from_tgas(s.gas_tgas),
+            cb_gas: Gas::from_gas(Self::on_signature_gas()),
+        });
+    }
+
+    /// MPC `sign` callback of a re-sign. Success: Signed again, no pool credit (booked by the first signature). Failure:
+    /// nothing is rolled back; the expiry is pulled to now so the re-sign can be requested at once. Never panics.
+    #[private]
+    pub fn on_resign_signature(&mut self, position_id: U64, quote_id: U64, nonce: U64) {
+        let Some(mut d) = self.pending(position_id.0) else { return };
+        if d.nonce != nonce || d.quote_id != quote_id || d.status != PendingStatus::AwaitingSignature {
+            return;
+        }
+        let p = self.position_or_panic(position_id.0);
+        let domain = p.remote.as_ref().map_or(chainsig::ED25519_DOMAIN_ID, |r| r.domain_id);
+        let sig = if env::promise_results_count() != 1 {
+            Err("no_result")
+        } else {
+            match env::promise_result_checked(0, MAX_SIGNATURE_RESULT_LEN) {
+                Ok(b) => crate::evm::parse_sign_result(&b, domain),
+                Err(PromiseError::TooLong(_)) => Err("too_long"),
+                Err(_) => Err("failed"),
+            }
+        };
+        match sig {
+            Ok((signature_hex, evm_sig)) => {
+                d.signature_hex = Some(signature_hex.clone());
+                d.status = PendingStatus::Signed;
+                let (path, authority) = p.remote.as_ref().map_or((None, None), |r| (Some(r.path.clone()), r.authority.clone()));
+                let chain = p.remote.as_ref().map(|r| r.chain_id.clone());
+                let mut ev = json!({ "position_id": position_id, "quote_id": quote_id, "nonce": nonce,
+                            "preimage": d.preimage, "signature_hex": signature_hex, "path": path,
+                            "pubkey": authority, "kind": d.kind, "chain": chain, "resign": true });
+                if let Some(es) = &evm_sig {
+                    ev["digest"] = json!(d.preimage);
+                    ev["r"] = json!(crate::evm::hex0x(&es.r));
+                    ev["s"] = json!(crate::evm::hex0x(&es.s));
+                    ev["v"] = json!(es.v);
+                    ev["s_normalised"] = json!(es.normalised);
+                    self.store_evm_sig(crate::evm::EVM_SETTLE_PREFIX, position_id.0, es);
+                }
+                emit("settlement_signed", ev);
+            }
+            Err(reason) => {
+                d.expires = U64(env::block_timestamp() / SEC);
+                emit(
+                    "settlement_resign_failed",
+                    json!({ "position_id": position_id, "quote_id": quote_id, "nonce": nonce, "reason": reason }),
+                );
+            }
+        }
+        self.put_pending(d);
+    }
+
     /// Keeper records the remote settlement tx of a signed leg (PRD §6.5): a Solana signature, or for an EVM
     /// (domain 0) position the `0x` tx hash in the same argument (the keeper key's method list is unchanged). Not payable.
     pub fn relay_settlement_result(&mut self, position_id: U64, solana_tx_sig: String) {
@@ -359,6 +506,7 @@ impl Nectar {
         }
         d.status = PendingStatus::Relayed;
         d.solana_tx_sig = Some(solana_tx_sig.clone());
+        env::storage_remove(&resign_key(position_id.0));
         emit(
             "settlement_relayed",
             json!({ "position_id": position_id, "quote_id": d.quote_id, "nonce": d.nonce,

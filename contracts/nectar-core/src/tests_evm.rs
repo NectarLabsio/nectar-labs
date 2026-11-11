@@ -43,7 +43,7 @@ fn fund_rcpt(c: &mut Nectar, buyer: &str, amt: u128, disc: u16, rcpt: &str) {
 
 fn reserve_on(c: &mut Nectar, ts: u64, chain: Option<&str>) -> u64 {
     set_ctx(borrower(), crate::remote::RESERVE_DEPOSIT_YOCTO, ts);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, chain.map(String::from)).0
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, chain.map(String::from), if chain == Some("base-sepolia") { EDEP.into() } else { DEPOSITOR.into() }).0
 }
 
 fn b58_encode(bytes: &[u8]) -> String {
@@ -111,13 +111,13 @@ fn recover(digest: &str, r: &str, s: &str, v: u8) -> String {
     addr_of(&vk)
 }
 
-/// Base chain + quotes: buyer1 $12k @250 base58 recipient, buyer2 $12k @400 0x recipient. Base position 0 reserved
+/// Base chain + quotes: buyer1 $15k @250 base58 recipient, buyer2 $15k @400 0x recipient. Base position 0 reserved
 /// with the test key as authority (AwaitingDeposit).
 fn base_reserved() -> Nectar {
     let mut c = base(true);
     with_base(&mut c);
-    fund_rcpt(&mut c, "buyer1.test", 12_000_000_000, 250, RCPT);
-    fund_rcpt(&mut c, "buyer2.test", 12_000_000_000, 400, ERCPT);
+    fund_rcpt(&mut c, "buyer1.test", 15_000_000_000, 250, RCPT);
+    fund_rcpt(&mut c, "buyer2.test", 15_000_000_000, 400, ERCPT);
     assert_eq!(reserve_on(&mut c, T0 + SEC, Some("base-sepolia")), 0);
     authority_cb(&mut c, 0, key_result(&test_key_string()));
     c
@@ -236,6 +236,7 @@ fn remote_info_base() -> RemoteInfo {
         confirming: false,
         last_confirm_ns: U64(0),
         deposit_yocto: U128(0),
+        committed_depositor: None,
     }
 }
 
@@ -425,6 +426,8 @@ fn remove_unknown_extra_chain() {
 fn base_reserve_selects_chain_and_stores_evm_authority() {
     let mut c = base(true);
     with_base(&mut c);
+    fund_rcpt(&mut c, "buyer1.test", 15_000_000_000, 250, RCPT);
+    fund_rcpt(&mut c, "buyer2.test", 15_000_000_000, 400, ERCPT);
     assert_eq!(reserve_on(&mut c, T0 + SEC, Some("base-sepolia")), 0);
     let r = remote(&c, 0);
     assert_eq!((r.chain_id.as_str(), r.domain_id, r.path.as_str(), r.vault_program.as_str()), ("base-sepolia", 0, "base-sepolia/pos/0", EVAULT));
@@ -445,6 +448,7 @@ fn base_reserve_selects_chain_and_stores_evm_authority() {
 fn base_authority_malformed_key_ends_reservation() {
     let mut c = base(true);
     with_base(&mut c);
+    fund_rcpt(&mut c, "buyer2.test", 15_000_000_000, 400, ERCPT);
     reserve_on(&mut c, T0 + SEC, Some("base-sepolia"));
     authority_cb(&mut c, 0, key_result(&format!("ed25519:{AUTH_B58}")));
     assert_eq!(remote(&c, 0).status, RemoteStatus::Expired);
@@ -577,7 +581,7 @@ fn base_settle_ed25519_answer_rolls_back() {
 fn base_settle_ignores_base58_quotes() {
     let mut c = base(true);
     with_base(&mut c);
-    fund_rcpt(&mut c, "buyer1.test", 12_000_000_000, 250, RCPT);
+    fund_rcpt(&mut c, "buyer1.test", 15_000_000_000, 250, ERCPT);
     fund(&mut c, "buyer2.test", 5_000_000_000, 400, false);
     reserve_on(&mut c, T0 + SEC, Some("base-sepolia"));
     authority_cb(&mut c, 0, key_result(&test_key_string()));
@@ -585,6 +589,9 @@ fn base_settle_ignores_base58_quotes() {
     c.set_allow_keeper_deposit_attestation(true);
     set_ctx(keeper(), 0, T0 + 2 * SEC);
     c.keeper_attest_deposit(U64(0), ETX.into(), EDEP.into());
+    // SR-5 needs a 0x quote at confirmation; the buyer then switches it to a base58 recipient
+    set_ctx(a("buyer1.test"), 0, T0 + 2 * SEC);
+    c.set_quote_remote_recipient(U64(0), Some(RCPT.into()));
     drop_price(&mut c);
     trigger(&mut c);
 }
@@ -593,14 +600,35 @@ fn base_settle_ignores_base58_quotes() {
 #[should_panic(expected = "no remote quote capacity")]
 fn solana_settle_ignores_0x_quotes() {
     let mut c = base(true);
-    fund_rcpt(&mut c, "buyer1.test", 12_000_000_000, 250, ERCPT);
+    fund_rcpt(&mut c, "buyer1.test", 15_000_000_000, 250, RCPT);
     fund(&mut c, "buyer2.test", 5_000_000_000, 400, false);
     assert_eq!(reserve(&mut c, T0 + SEC), 0);
     authority_cb(&mut c, 0, key_result(&auth()));
     confirm(&mut c, 0, T0 + 2 * SEC);
     verified(&mut c, 0, T0 + 2 * SEC, vault_json(0, UNITS, AUTH_B58, DEPOSITOR));
+    // SR-5 needs a base58 quote at confirmation; the buyer then switches it to a 0x recipient
+    set_ctx(a("buyer1.test"), 0, T0 + 2 * SEC);
+    c.set_quote_remote_recipient(U64(0), Some(ERCPT.into()));
     drop_price(&mut c);
     trigger(&mut c);
+}
+
+#[test]
+fn sr3_base_resign_signs_a_fresh_digest_of_the_same_leg() {
+    let mut c = base_signed();
+    let d = c.get_pending_settlement_evm(U64(0)).unwrap();
+    let avail = c.available_usd_e6;
+    set_ctx(a("anyone.test"), 0, d.expires.0 * SEC);
+    c.resign_remote_settlement(U64(0));
+    let e = c.get_pending_settlement_evm(U64(0)).unwrap();
+    assert!(e.digest != d.digest && e.nonce.0 > d.nonce.0 && e.expires.0 > d.expires.0);
+    assert_eq!((e.repay_e6, e.seize_raw, e.recipient.clone(), e.kind), (d.repay_e6, d.seize_raw, d.recipient.clone(), d.kind));
+    assert_eq!((e.r.clone(), e.status), (None, PendingStatus::AwaitingSignature));
+    cb_ctx(d.expires.0 * SEC + SEC, PromiseResult::Successful(ecdsa_result(&unhex32(&e.digest), false)));
+    c.on_resign_signature(U64(0), e.quote_id, e.nonce);
+    let e = c.get_pending_settlement_evm(U64(0)).unwrap();
+    assert!(e.r.is_some() && e.status == PendingStatus::Signed);
+    assert_eq!(c.available_usd_e6, avail, "no second pool credit");
 }
 
 #[test]

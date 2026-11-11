@@ -167,7 +167,7 @@ fn new_writes_v2_layout_with_p1_defaults() {
 #[test]
 fn contract_version_says_v2() {
     let c = demo_p1(false);
-    assert_eq!(c.contract_version(), "2.1.0-v7");
+    assert_eq!(c.contract_version(), "2.2.0-v7");
 }
 
 /// v2 A2 helper: a calendar window around T0 so the session opens while the price is fresh.

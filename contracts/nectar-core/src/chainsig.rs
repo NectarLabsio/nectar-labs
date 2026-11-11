@@ -132,11 +132,143 @@ pub fn valid_evm_address(s: &str) -> bool {
     s.len() == 42 && s.starts_with("0x") && s.bytes().skip(2).all(|b| b.is_ascii_hexdigit())
 }
 
+/// SR-7/SR-8 (WO-34a): a Solana wallet key the vault can pay or be signed by: base58 that decodes to exactly 32 bytes
+/// (`b58_decode` is the standard bijective codec, so the string is canonical) and is a point of the Ed25519 curve
+/// (off-curve addresses such as PDAs are refused, interface-v7 §E).
+pub fn valid_solana_pubkey(s: &str) -> bool {
+    if !valid_base58_address(s) {
+        return false;
+    }
+    let Some(bytes) = b58_decode(s) else { return false };
+    let Ok(key) = <[u8; 32]>::try_from(bytes.as_slice()) else { return false };
+    on_curve(&key)
+}
+
+/// GF(2^255-19) as 5 x 51-bit limbs. Only for the public `on_curve` predicate: no secrets, so not constant time.
+/// Bounds: inputs < 2^54 per limb keep every u128 column < 2^115; `fe_mul` returns limbs < 2^52.
+type Fe = [u64; 5];
+const FE_MASK: u64 = (1 << 51) - 1;
+const FE_ONE: Fe = [1, 0, 0, 0, 0];
+/// p - 1, so `a + FE_MINUS_ONE` = a - 1 (mod p).
+const FE_MINUS_ONE: Fe = [FE_MASK - 19, FE_MASK, FE_MASK, FE_MASK, FE_MASK];
+/// Edwards d = -121665/121666.
+const FE_D: Fe = [929955233495203, 466365720129213, 1662059464998953, 2033849074728123, 1442794654840575];
+
+fn fe_from_bytes(b: &[u8; 32]) -> Fe {
+    let w = |i: usize| {
+        let mut x = [0u8; 8];
+        x.copy_from_slice(&b[i..i + 8]);
+        u64::from_le_bytes(x)
+    };
+    // bit offsets 0, 51, 102, 153, 204; the sign bit (255) is masked off
+    [w(0) & FE_MASK, (w(6) >> 3) & FE_MASK, (w(12) >> 6) & FE_MASK, (w(19) >> 1) & FE_MASK, (w(24) >> 12) & FE_MASK]
+}
+
+fn fe_add(a: &Fe, b: &Fe) -> Fe {
+    [a[0] + b[0], a[1] + b[1], a[2] + b[2], a[3] + b[3], a[4] + b[4]]
+}
+
+fn fe_mul(a: &Fe, b: &Fe) -> Fe {
+    let m = |x: u64, y: u64| u128::from(x) * u128::from(y);
+    let (b1, b2, b3, b4) = (b[1] * 19, b[2] * 19, b[3] * 19, b[4] * 19);
+    let c = [
+        m(a[0], b[0]) + m(a[1], b4) + m(a[2], b3) + m(a[3], b2) + m(a[4], b1),
+        m(a[0], b[1]) + m(a[1], b[0]) + m(a[2], b4) + m(a[3], b3) + m(a[4], b2),
+        m(a[0], b[2]) + m(a[1], b[1]) + m(a[2], b[0]) + m(a[3], b4) + m(a[4], b3),
+        m(a[0], b[3]) + m(a[1], b[2]) + m(a[2], b[1]) + m(a[3], b[0]) + m(a[4], b4),
+        m(a[0], b[4]) + m(a[1], b[3]) + m(a[2], b[2]) + m(a[3], b[1]) + m(a[4], b[0]),
+    ];
+    let mut r = [0u64; 5];
+    let mut carry: u128 = 0;
+    for i in 0..5 {
+        let t = c[i] + carry;
+        r[i] = (t as u64) & FE_MASK;
+        carry = t >> 51;
+    }
+    let t = u128::from(r[0]) + carry * 19;
+    r[0] = (t as u64) & FE_MASK;
+    r[1] += (t >> 51) as u64;
+    r
+}
+
+fn fe_sq_n(a: &Fe, n: u32) -> Fe {
+    let mut r = *a;
+    for _ in 0..n {
+        r = fe_mul(&r, &r);
+    }
+    r
+}
+
+/// z^((p-1)/2) = z^(2^254 - 10) = (z^(2^250 - 1))^16 * z^6: the Legendre symbol of z.
+fn fe_legendre(z: &Fe) -> Fe {
+    let z2 = fe_sq_n(z, 1);
+    let z9 = fe_mul(z, &fe_sq_n(&z2, 2));
+    let z11 = fe_mul(&z2, &z9);
+    let z_5 = fe_mul(&z9, &fe_sq_n(&z11, 1)); // 2^5 - 1
+    let z_10 = fe_mul(&fe_sq_n(&z_5, 5), &z_5);
+    let z_20 = fe_mul(&fe_sq_n(&z_10, 10), &z_10);
+    let z_40 = fe_mul(&fe_sq_n(&z_20, 20), &z_20);
+    let z_50 = fe_mul(&fe_sq_n(&z_40, 10), &z_10);
+    let z_100 = fe_mul(&fe_sq_n(&z_50, 50), &z_50);
+    let z_200 = fe_mul(&fe_sq_n(&z_100, 100), &z_100);
+    let z_250 = fe_mul(&fe_sq_n(&z_200, 50), &z_50);
+    let z6 = fe_mul(&z2, &fe_sq_n(&z2, 1));
+    fe_mul(&fe_sq_n(&z_250, 4), &z6)
+}
+
+/// Unique representative in [0, p).
+fn fe_canonical(a: &Fe) -> Fe {
+    let mut l = *a;
+    for _ in 0..2 {
+        for i in 0..4 {
+            l[i + 1] += l[i] >> 51;
+            l[i] &= FE_MASK;
+        }
+        let top = l[4] >> 51;
+        l[4] &= FE_MASK;
+        l[0] += top * 19;
+    }
+    let mut q = (l[0] + 19) >> 51;
+    for limb in l.iter().skip(1) {
+        q = (limb + q) >> 51;
+    }
+    l[0] += 19 * q;
+    for i in 0..4 {
+        l[i + 1] += l[i] >> 51;
+        l[i] &= FE_MASK;
+    }
+    l[4] &= FE_MASK;
+    l
+}
+
+/// True when the 32 bytes decompress to an Ed25519 point: x^2 = (y^2 - 1)/(d y^2 + 1) has a root. u/v is a square
+/// exactly when u*v is (v is never 0, because -1/d is a non-residue). Like `CompressedEdwardsY::decompress`, the sign
+/// bit is ignored and a non-canonical y is reduced; `tests_v7c` cross-checks this against ed25519-dalek.
+pub fn on_curve(key: &[u8; 32]) -> bool {
+    let y = fe_from_bytes(key);
+    let y2 = fe_mul(&y, &y);
+    let u = fe_add(&y2, &FE_MINUS_ONE);
+    let v = fe_add(&fe_mul(&FE_D, &y2), &FE_ONE);
+    let s = fe_canonical(&fe_legendre(&fe_mul(&u, &v)));
+    s == [0, 0, 0, 0, 0] || s == FE_ONE
+}
+
+/// SR-7: an EVM recipient or depositor: a `0x` address other than the zero address.
+pub fn valid_evm_recipient(s: &str) -> bool {
+    valid_evm_address(s) && s.bytes().skip(2).any(|b| b != b'0')
+}
+
+/// SR-7: a quote's `buyer_remote_recipient` (funding, `set_quote_remote_recipient`): Solana key or EVM address.
+pub fn valid_remote_recipient(s: &str) -> bool {
+    valid_solana_pubkey(s) || valid_evm_recipient(s)
+}
+
 /// A quote's `buyer_remote_recipient` fills positions of this domain only: base58 -> Solana (1), `0x` -> EVM (0).
+/// SR-7: strict (32-byte on-curve Solana key; non-zero EVM address), so a leg no vault can pay is never signed.
 pub fn recipient_fits(domain_id: u32, recipient: &str) -> bool {
     match domain_id {
-        ED25519_DOMAIN_ID => valid_base58_address(recipient),
-        SECP256K1_DOMAIN_ID => valid_evm_address(recipient),
+        ED25519_DOMAIN_ID => valid_solana_pubkey(recipient),
+        SECP256K1_DOMAIN_ID => valid_evm_recipient(recipient),
         _ => false,
     }
 }

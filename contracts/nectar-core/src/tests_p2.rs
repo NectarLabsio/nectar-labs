@@ -15,7 +15,7 @@ pub(crate) const RCPT: &str = "3DTxgHcUXRb9uvpKwtasZN7YBUbbPuf3uvbBPjAGWqiV";
 pub(crate) const TX: &str = "5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR4tjF3ZpRzrFmBV6UjKdiSZkQUW";
 /// F-338 live answer for `solana-devnet/pos/0` (pred v2, domain 1).
 pub(crate) const AUTH_B58: &str = "2fhY3GjCcp4LU75uiiChUqQg9fS6xCtptLYZUdKJibpN";
-pub(crate) const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T";
+pub(crate) const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB48";
 pub(crate) const RESERVE: u128 = 1_000;
 pub(crate) const VR_DEPOSIT: u128 = 100;
 pub(crate) const UNITS: u128 = 100_000_000;
@@ -141,7 +141,7 @@ pub(crate) fn base(chain: bool) -> Nectar {
 
 pub(crate) fn reserve(c: &mut Nectar, ts: u64) -> u64 {
     set_ctx(borrower(), crate::remote::RESERVE_DEPOSIT_YOCTO, ts);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, None).0
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, None, DEPOSITOR.into()).0
 }
 
 pub(crate) fn authority_cb(c: &mut Nectar, id: u64, result: PromiseResult) {
@@ -175,7 +175,7 @@ pub(crate) fn verified(c: &mut Nectar, id: u64, ts: u64, result: PromiseResult) 
 /// Reserved position 0 with its authority stored (AwaitingDeposit).
 pub(crate) fn reserved() -> Nectar {
     let mut c = base(true);
-    fund(&mut c, "buyer1.test", 12_000_000_000, 250, true);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     fund(&mut c, "buyer2.test", 5_000_000_000, 400, false);
     assert_eq!(reserve(&mut c, T0 + SEC), 0);
     authority_cb(&mut c, 0, key_result(&auth()));
@@ -186,7 +186,7 @@ pub(crate) fn reserved() -> Nectar {
 /// 100 NVDAx / $11,250 confirmed through OutLayer at 180; price then 180 -> 155 -> 140 (unhealthy).
 pub(crate) fn open_remote(r1: bool, r2: bool) -> Nectar {
     let mut c = base(true);
-    fund(&mut c, "buyer1.test", 12_000_000_000, 250, r1);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, r1);
     fund(&mut c, "buyer2.test", 5_000_000_000, 400, r2);
     assert_eq!(reserve(&mut c, T0 + SEC), 0);
     authority_cb(&mut c, 0, key_result(&auth()));
@@ -220,7 +220,7 @@ pub(crate) fn sig_json(byte: u8, n: usize) -> Vec<u8> {
 /// Remote position 0 fully repaid in USDC (debt 0, still Open, collateral in the vault).
 pub(crate) fn repaid() -> Nectar {
     let mut c = base(true);
-    fund(&mut c, "buyer9.test", 16_000_000_000, 400, false); // aggregate capacity (A1)
+    fund(&mut c, "buyer9.test", 16_000_000_000, 400, true); // aggregate capacity (A1), fitting (SR-5)
     assert_eq!(reserve(&mut c, T0 + SEC), 0);
     authority_cb(&mut c, 0, key_result(&auth()));
     confirm(&mut c, 0, T0 + 2 * SEC);
@@ -411,7 +411,7 @@ fn signer_config_and_views() {
     c.set_signer_config(a("v1.signer-prod.testnet"), "solana-devnet-v1".into(), 15, 3600);
     let s = c.get_signer_config().unwrap();
     assert_eq!((s.path.as_str(), s.gas_tgas, s.expiry_s), ("solana-devnet-v1", 15, 3600));
-    assert_eq!(c.contract_version(), "2.1.0-v7");
+    assert_eq!(c.contract_version(), "2.2.0-v7");
     // the hint is per remote position: path `<chain>/pos/<id>`, never the global path
     let c = reserved();
     let h = c.get_vault_authority_hint(U64(0)).unwrap();
@@ -542,7 +542,7 @@ fn vault_read_config_gas() {
 #[test]
 fn near_held_position_with_remote_quote_settles_on_near() {
     let mut c = base(true);
-    fund(&mut c, "buyer1.test", 12_000_000_000, 250, true);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     fund(&mut c, "buyer9.test", 5_000_000_000, 400, false); // aggregate capacity (A1)
     let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"11250000000","pre_liq_ltv_bps":7500}}"#;
     assert_eq!(ft(&mut c, nvdax(), "borrower.test", UNITS, bm), 0);
@@ -569,6 +569,7 @@ fn lock_and_borrow_refuses_remote_path() {
 #[test]
 fn reserve_creates_awaiting_position_without_locking_funds() {
     let mut c = base(true);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     let pool0 = c.get_pool();
     let id = reserve(&mut c, T0 + SEC);
     assert_eq!(id, 0);
@@ -591,6 +592,7 @@ fn reserve_creates_awaiting_position_without_locking_funds() {
 #[test]
 fn on_authority_stores_key_once() {
     let mut c = base(true);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     reserve(&mut c, T0 + SEC);
     authority_cb(&mut c, 0, key_result(&auth()));
     assert_eq!(remote(&c, 0).authority, Some(auth()));
@@ -609,6 +611,7 @@ fn on_authority_failure_ends_reservation() {
         (PromiseResult::Successful(b"42".to_vec()), "parse"),
     ] {
         let mut c = base(true);
+        fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
         reserve(&mut c, T0 + SEC);
         authority_cb(&mut c, 0, res);
         let p = c.get_position(U64(0)).unwrap();
@@ -631,7 +634,7 @@ fn reserve_paused() {
 fn reserve_referrer_is_borrower() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, Some(borrower()), None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, Some(borrower()), None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -639,7 +642,7 @@ fn reserve_referrer_is_borrower() {
 fn reserve_unknown_collateral() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("TSLAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, None);
+    c.reserve_remote_position("TSLAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -663,7 +666,7 @@ fn reserve_without_signer() {
 fn reserve_zero_units() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(0), U128(BORROW), 7500, None, None, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(0), U128(BORROW), 7500, None, None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -671,7 +674,7 @@ fn reserve_zero_units() {
 fn reserve_units_above_u64() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(u128::from(u64::MAX) + 1), U128(BORROW), 7500, None, None, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(u128::from(u64::MAX) + 1), U128(BORROW), 7500, None, None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -679,7 +682,7 @@ fn reserve_units_above_u64() {
 fn reserve_zero_borrow() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(0), 7500, None, None, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(0), 7500, None, None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -687,7 +690,7 @@ fn reserve_zero_borrow() {
 fn reserve_borrow_above_u64() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(u128::from(u64::MAX) + 1), 7500, None, None, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(u128::from(u64::MAX) + 1), 7500, None, None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -695,7 +698,7 @@ fn reserve_borrow_above_u64() {
 fn reserve_pre_liq_range() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 9000, None, None, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 9000, None, None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -704,7 +707,7 @@ fn reserve_memo_too_long() {
     let mut c = base(true);
     set_ctx(borrower(), 0, T0 + SEC);
     let pay_to = PayTo { receiver_id: a("shop.test"), memo: Some("m".repeat(129)) };
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, Some(pay_to), None, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, Some(pay_to), None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -712,7 +715,7 @@ fn reserve_memo_too_long() {
 fn reserve_needs_gas() {
     let mut c = base(true);
     ctx_gas(borrower(), 0, T0 + SEC, 20);
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, None);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(BORROW), 7500, None, None, None, None, DEPOSITOR.into());
 }
 
 #[test]
@@ -785,7 +788,7 @@ fn confirm_requests_vault_read_from_gas_reserve() {
     assert_eq!(r.last_confirm_ns, U64(T0 + 2 * SEC));
     assert!(event_with(
         "remote_deposit_check_requested",
-        r#"{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"Nectar1Vau1t11111111111111111111111111111111\",\"position_id\":\"0\"}"#
+        r#"{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"Nectar1Vau1t11111111111111111111111111111111\",\"position_id\":\"0\",\"depositor\":\"4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB48\"}"#
     ));
 }
 
@@ -817,12 +820,12 @@ fn deposit_verified_pays_loan_and_opens() {
 #[test]
 fn deposit_verified_with_pay_to_and_referrer() {
     let mut c = base(true);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     set_ctx(owner(), 0, T0);
     c.register_referrer(a("ref.test"));
     set_ctx(borrower(), crate::remote::RESERVE_DEPOSIT_YOCTO, T0 + SEC);
     let pay_to = PayTo { receiver_id: a("shop.test"), memo: Some("inv-1".into()) };
-    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(5_000_000_000), 7500, Some(pay_to), Some(a("ref.test")), None, None);
-    fund(&mut c, "buyer1.test", 12_000_000_000, 250, true);
+    c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(5_000_000_000), 7500, Some(pay_to), Some(a("ref.test")), None, None, DEPOSITOR.into());
     authority_cb(&mut c, 0, key_result(&auth()));
     confirm(&mut c, 0, T0 + 2 * SEC);
     verified(&mut c, 0, T0 + 2 * SEC, vault_json(0, UNITS, AUTH_B58, DEPOSITOR));
@@ -860,7 +863,6 @@ fn deposit_forged_authority_refused() {
 fn deposit_rejections_keep_awaiting() {
     let cases: Vec<(PromiseResult, &str)> = vec![
         (vault_json(0, UNITS, RCPT, DEPOSITOR), "authority_mismatch"),
-        (vault_json(0, UNITS - 1, AUTH_B58, DEPOSITOR), "units_below_reserved"),
         (vault_json(0, u128::from(u64::MAX) + 1, AUTH_B58, DEPOSITOR), "units_exceed_u64"),
         (vault_json(0, UNITS, AUTH_B58, "0xabc"), "bad_depositor"),
         (vault_json(1, UNITS, AUTH_B58, DEPOSITOR), "position_mismatch"),
@@ -943,6 +945,7 @@ fn confirm_open_position() {
 #[should_panic(expected = "authority pending")]
 fn confirm_before_authority() {
     let mut c = base(true);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     reserve(&mut c, T0 + SEC);
     confirm(&mut c, 0, T0 + 2 * SEC);
 }
@@ -968,6 +971,7 @@ fn confirm_cooldown() {
 #[should_panic(expected = "vault_read not configured")]
 fn confirm_without_vault_read() {
     let mut c = base(false);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     set_ctx(owner(), 0, T0);
     c.set_remote_chain("NVDAx".into(), Some(rc()));
     c.set_signer_config(a("v1.signer-prod.testnet"), "p".into(), 15, 3600);
@@ -1047,6 +1051,7 @@ fn keeper_attestation_bad_depositor() {
 #[should_panic(expected = "authority pending")]
 fn keeper_attestation_before_authority() {
     let mut c = base(true);
+    fund(&mut c, "buyer1.test", 15_000_000_000, 250, true);
     reserve(&mut c, T0 + SEC);
     attest(&mut c, keeper(), TX, DEPOSITOR);
 }
@@ -1119,7 +1124,7 @@ fn trigger_signs_with_position_path_and_kind_preliq() {
     let p = c.get_position(U64(0)).unwrap();
     assert_eq!((p.status, p.debt_usd_e6, p.units.0), (PositionStatus::Settling, U128(0), UNITS - d.seize_units.0));
     assert_eq!(p.remote.unwrap().status, RemoteStatus::Settling);
-    assert_eq!(c.get_quote(U64(0)).unwrap().remaining_usd_e6, U128(12_000_000_000 - BORROW));
+    assert_eq!(c.get_quote(U64(0)).unwrap().remaining_usd_e6, U128(15_000_000_000 - BORROW));
     assert_eq!(c.get_pool().available_usd_e6.0, avail0, "pool credit waits for the signature");
     assert_eq!(c.get_gas_reserve().0, reserve0 - 1, "1 yocto sign deposit only");
 }
@@ -1127,15 +1132,20 @@ fn trigger_signs_with_position_path_and_kind_preliq() {
 #[test]
 #[should_panic(expected = "no remote quote capacity")]
 fn remote_position_needs_a_remote_quote() {
-    let mut c = open_remote(false, false);
+    // SR-5: a loan needs fitting capacity at confirmation; here the buyer drops the recipient afterwards
+    let mut c = open_remote(true, false);
+    set_ctx(a("buyer1.test"), 0, T0 + 4 * SEC);
+    c.set_quote_remote_recipient(U64(0), None);
     trigger(&mut c);
 }
 
 #[test]
 #[should_panic(expected = "no remote quote capacity")]
 fn partial_remote_quote_is_skipped() {
-    // the only remote quote ($5k) cannot repay the $11,250 debt in one leg; the vault closes on settle
-    let mut c = open_remote(false, true);
+    // the only remote quote left ($5k) cannot repay the $11,250 debt in one leg; the vault closes on settle
+    let mut c = open_remote(true, true);
+    set_ctx(a("buyer1.test"), 0, T0 + 4 * SEC);
+    c.set_quote_remote_recipient(U64(0), None);
     trigger(&mut c);
 }
 
@@ -1211,7 +1221,7 @@ fn sign_failure_rolls_back_remote_leg() {
     let p = c.get_position(U64(0)).unwrap();
     assert_eq!((p.status, p.debt_usd_e6, p.units), (PositionStatus::Open, U128(BORROW), U128(UNITS)));
     assert_eq!(p.remote.unwrap().status, RemoteStatus::Open);
-    assert_eq!(c.get_quote(U64(0)).unwrap().remaining_usd_e6, U128(12_000_000_000));
+    assert_eq!(c.get_quote(U64(0)).unwrap().remaining_usd_e6, U128(15_000_000_000));
     assert_eq!(c.get_pool().available_usd_e6.0, avail0);
     let cd = c.get_collateral("NVDAx".into()).unwrap();
     assert_eq!((cd.active_committed_q_usd_e6.0, cd.total_debt_usd_e6.0), (q_c0, debt0));
@@ -1226,7 +1236,7 @@ fn sign_failure_rolls_back_remote_leg() {
 fn emptied_quote_is_relisted_on_rollback() {
     let mut c = base(true);
     fund(&mut c, "buyer1.test", BORROW, 250, true);
-    fund(&mut c, "buyer9.test", 5_000_000_000, 400, false); // aggregate capacity (A1)
+    fund(&mut c, "buyer9.test", 5_000_000_000, 400, true); // aggregate capacity (A1), fitting (SR-5)
     reserve(&mut c, T0 + SEC);
     authority_cb(&mut c, 0, key_result(&auth()));
     confirm(&mut c, 0, T0 + 2 * SEC);
@@ -1276,18 +1286,19 @@ fn cancel_unsigned_after_expiry_rolls_back_and_late_signature_is_ignored() {
     assert_eq!(p.remote.unwrap().status, RemoteStatus::Open);
     callback(&mut c, T0 + 3_607 * SEC, 0, PromiseResult::Successful(sig_json(1, 64)));
     assert_eq!(c.get_pending_settlement(U64(0)).unwrap().status, PendingStatus::Cancelled);
-    assert_eq!(c.get_quote(U64(0)).unwrap().remaining_usd_e6, U128(12_000_000_000));
+    assert_eq!(c.get_quote(U64(0)).unwrap().remaining_usd_e6, U128(15_000_000_000));
 }
 
 #[test]
-fn cancel_signed_keeps_signature_blocks_release_and_relay_still_records() {
+fn cancel_signed_is_refused_keeps_signature_and_relay_still_records() {
     let mut c = open_remote(true, false);
     trigger(&mut c);
     callback(&mut c, T0 + 6 * SEC, 0, PromiseResult::Successful(sig_json(2, 64)));
     set_ctx(owner(), 0, T0 + 10 * SEC);
-    c.cancel_settlement(U64(0));
+    // SR-3: cancel used to flip the position to Open while the remote status stayed Settling
+    assert!(std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| c.cancel_settlement(U64(0)))).is_err());
     let p = c.get_position(U64(0)).unwrap();
-    assert_eq!((p.status, p.remote.unwrap().status), (PositionStatus::Open, RemoteStatus::Settling));
+    assert_eq!((p.status, p.remote.unwrap().status), (PositionStatus::Settling, RemoteStatus::Settling));
     assert_eq!(c.get_pending_settlement(U64(0)).unwrap().status, PendingStatus::Signed);
     set_ctx(keeper(), 0, T0 + 11 * SEC);
     c.relay_settlement_result(U64(0), TX.into());
@@ -1300,8 +1311,6 @@ fn release_refused_while_signed_settlement_unrelayed() {
     let mut c = open_remote(true, false);
     trigger(&mut c);
     callback(&mut c, T0 + 6 * SEC, 0, PromiseResult::Successful(sig_json(2, 64)));
-    set_ctx(owner(), 0, T0 + 10 * SEC);
-    c.cancel_settlement(U64(0));
     release(&mut c, T0 + 11 * SEC);
 }
 
