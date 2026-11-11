@@ -7,6 +7,9 @@ import { parseOutcome, type TxOutcome, type WalletAdapter } from "./types";
 
 const SESSION_FLAG = "nectar-wallet-connected";
 
+/** Root class near-connect 0.12.0 gives every popup it appends to <body> (wallet selector, sandboxed wallet frame); it toggles inline `display`. */
+export const NEAR_CONNECT_POPUP = ".hot-connector-popup";
+
 type Wallet = Awaited<ReturnType<NearConnector["wallet"]>>;
 
 export class NearConnectAdapter implements WalletAdapter {

@@ -2,10 +2,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CONSENT_CHANGED_EVENT, ChainMark, Chip, ConsentBanner, Footer, Nav, SessionChip, analyticsAllowed, type LinkLike, type NavLink } from "@nectar/ui";
+import { CONSENT_CHANGED_EVENT, CONSENT_YIELD_TO, ChainMark, Chip, ConsentBanner, Footer, Nav, SessionChip, analyticsAllowed, type LinkLike, type NavLink } from "@nectar/ui";
 import { sessionHeadline, sessionReasonText, sessionStatus, type ExitCapacity } from "@nectar/sdk";
 import { LandingNav } from "./landing/LandingNav";
 import { CONTACT_EMAIL, GA_ID, docsHref } from "@/lib/env";
+import { NEAR_CONNECT_POPUP } from "@/lib/wallet/near-connect";
 import { useChain, useFeature, useView, useWallet } from "./AppProvider";
 
 /** API routes (footer "Status" → /api/health) are plain anchors: the client router must never RSC-prefetch a JSON route (GATE_FAIL_G3B_R2). */
@@ -146,10 +147,13 @@ function Analytics() {
   return null;
 }
 
+/** The cookie banner steps aside while any modal or the near-connect wallet selector is open, then comes back (WO-51). */
+const CONSENT_YIELD = `${CONSENT_YIELD_TO}, ${NEAR_CONNECT_POPUP}`;
+
 export function SiteOverlays() {
   return (
     <>
-      <ConsentBanner />
+      <ConsentBanner yieldTo={CONSENT_YIELD} />
       <Analytics />
     </>
   );
