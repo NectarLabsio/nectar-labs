@@ -5,8 +5,8 @@ description: Five commands from a fresh clone, no keys.
 ---
 # Quick start (no keys needed)
 
-<p className="verified">Verified against: F-012 (2026-11-09), F-026 (2026-11-10), F-090 (2026-11-09), F-369 (2026-11-10) · D-025 · root package.json scripts, scripts/50-verify.sh, evidence/G2/demo-testnet-20261109T2049Z.log (2026-11-09) · docs/EVIDENCE.md §G9 (2026-11-11, commit c5f6349), §G3 (2026-11-09T21:15Z), §G3b re-run (2026-11-11)</p>
-<p className="status">Status on 2026-11-11: commands 2 to 5 work; command 1 needs the public repo URL (H2). In the verifier's fresh-clone run (docs/EVIDENCE.md §G9) clone to a running web app took about 3 minutes. Contracts on testnet: G2 PASS 2026-11-09T20:55Z (5f27f44), nectar-core-v2 G2b PASS. Web: G3 PASS 2026-11-09T21:15Z (176914f), G3b re-run PASS 2026-11-11.</p>
+<p className="verified">Verified against: F-012 (2026-11-09), F-026 (2026-11-10), F-090 (2026-11-09), F-369 (2026-11-10) · D-025 · root package.json scripts, scripts/50-verify.sh, evidence/G2/demo-testnet-20261109T2049Z.log (2026-11-09) · docs/EVIDENCE.md §G9 re-run (2026-11-11T08:57Z–09:00Z, tested 0af5cdd, recorded in 89f83ee), §G3 (2026-11-09T21:15Z), §G3b re-run (2026-11-11)</p>
+<p className="status">Status on 2026-11-11: commands 2 to 5 work; command 1 needs the public repo URL (H2). G9 PASS: in the verifier's fresh-clone re-run (docs/EVIDENCE.md §G9, recorded in 89f83ee) clone to all 21 listed web routes answering took under 2 minutes. Contracts on testnet: G2 PASS 2026-11-09T20:55Z (5f27f44), nectar-core-v2 G2b PASS. Web: G3 PASS 2026-11-09T21:15Z (176914f), G3b re-run PASS 2026-11-11.</p>
 
 ```bash
 git clone <repo-url> nectar-labs && cd nectar-labs   # repo URL: TODO-H2 (private until Kunal publishes it)
@@ -29,8 +29,8 @@ pnpm --filter docs-site start  # this site on http://localhost:3000
 | # | Command | Today (2026-11-11) |
 | --- | --- | --- |
 | 1 | `git clone` | works once the repo is public (H2) |
-| 2 | `pnpm i` | works; installs from `pnpm-lock.yaml` (7 s on a warm pnpm store in the G9 run; a cold machine is slower) |
-| 3 | `pnpm demo:testnet` | works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml` and prints contract version, exit capacity, pool, quotes, positions and explorer links (see [Live on testnet](/start/live-on-testnet)); 5 s in the G9 run. |
+| 2 | `pnpm i` | works; installs from `pnpm-lock.yaml` (6 s on a warm pnpm store in the G9 re-run; a cold machine is slower) |
+| 3 | `pnpm demo:testnet` | works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml` and prints contract version, exit capacity, pool, quotes, positions and explorer links (see [Live on testnet](/start/live-on-testnet)); 3 s in the G9 re-run. |
 | 4 | `pnpm --filter web dev` | starts `apps/web` on http://localhost:3100 (`next dev -p 3100`; G3 PASS). |
 | 5 | `pnpm --filter docs-site start` | works: this site on http://localhost:3000 |
 

@@ -6,7 +6,7 @@ description: Read-only MCP tools for agents sizing loans against committed capac
 # Feed MCP
 
 <p className="verified">Verified against: F-160 (2026-11-09), F-161 (2026-11-09), F-162 (2026-11-09) · spec docs/PRD.md §10.3, §10.4 · D-009 (2026-11-10) · docs/EVIDENCE.md §G9 Feed MCP step (2026-11-11) · source services/feed/src/mcp.ts, main.ts, repo-config.ts · tests `pnpm --filter feed test` (in-memory MCP transport)</p>
-<p className="status">Status on 2026-11-11: built, runs locally, no public host. In the fresh-clone run (docs/EVIDENCE.md §G9) a scripted JSON-RPC client used it over stdio and HTTP with no env: initialize answered, 8 tools listed, and `get_exit_capacity` returned the same exit capacity as `pnpm demo:testnet`. No LLM agent client has been tested.</p>
+<p className="status">Status on 2026-11-11: built, runs locally, no public host. In both fresh-clone runs (docs/EVIDENCE.md §G9; the PASS re-run is recorded in 89f83ee) a scripted JSON-RPC client used it over stdio and HTTP with no env: initialize answered, 8 tools listed, and `get_exit_capacity` returned the same exit capacity as `pnpm demo:testnet`. No LLM agent client has been tested.</p>
 
 A read-only MCP server over stdio and Streamable HTTP, built on `@modelcontextprotocol/sdk` 1.32.2 (F-160). It holds no keys and needs no env: the nectar-core id defaults to `accounts.core` in `packages/config/config.yaml` (now `nectar-core-v2.nectar.testnet`), and the tools read its views over public RPC. `CORE_ACCOUNT_ID` overrides the id. Only when no id is configured at all do the tools fall back to the local Feed store, and then `preview_borrow` returns an error.
 
