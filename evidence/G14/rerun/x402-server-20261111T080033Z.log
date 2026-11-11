@@ -1,0 +1,5 @@
+{"ts":"2026-11-11T08:00:33.847Z","service":"x402","msg":"x402_started","port":8791,"network":"near:testnet","asset":"usdc-mock.nectar.testnet","amount":"10000","pay_to":"nectar.testnet","facilitator":"in-process (relayer x402-relayer.nectar.testnet)","feed":"http://127.0.0.1:8788","facilitator_http":"off"}
+{"ts":"2026-11-11T08:00:42.918Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-11T08:00:51.355Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-11T08:00:51.357Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-11T08:01:00.496Z","service":"x402","msg":"paid","network":"near:testnet","transaction":"BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G"}

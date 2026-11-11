@@ -1,0 +1,4 @@
+{"ts":"2026-11-11T08:00:44.686Z","service":"x402","msg":"borrow_built","receiver_id":"nvdax-mock.nectar.testnet","method":"ft_transfer_call","fees":"{\"limit_premium_usd_e6\":\"0\",\"origination_fee_usd_e6\":\"30000\",\"referrer_share_usd_e6\":\"0\",\"total_fees_usd_e6\":\"30000\",\"net_proceeds_usd_e6\":\"9970000\"}"}
+{"ts":"2026-11-11T08:00:51.311Z","service":"x402","msg":"borrow_sent","tx":"HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V","ok":true,"explorer":"https://testnet.nearblocks.io/txns/HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V"}
+{"ts":"2026-11-11T08:01:00.499Z","service":"x402","msg":"challenge","status":402,"network":"near:testnet","asset":"usdc-mock.nectar.testnet","amount":"10000","pay_to":"nectar.testnet"}
+{"ts":"2026-11-11T08:01:00.499Z","service":"x402","msg":"paid_fetch","status":200,"rows":37,"transaction":"BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G"}

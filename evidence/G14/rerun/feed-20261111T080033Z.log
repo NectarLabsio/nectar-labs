@@ -1,0 +1,2 @@
+{"ts":"2026-11-11T08:00:33.864Z","level":"info","service":"feed","msg":"feed_started","port":8788,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"8789","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
+{"ts":"2026-11-11T08:00:36.352Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
