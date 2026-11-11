@@ -18,7 +18,7 @@ description: Audit status, stated plainly.
 
 Mainnet also requires a 30-day testnet soak and a legal review of the disclaimers (PRD §18). Until then the internal controls are the tests named on the [Threat table](/security/threats) and below.
 
-## Pre-submission review (2026-11-11, not an audit)
+## Pre-release review (2026-11-11, not an audit)
 
 An automated, read-only multi-agent review (report: `docs/work/security-review-v7.md`) kept **33 findings: 5 high, 8 medium, 20 low**. Most concerned remote settlement: a signed remote leg could get stuck with the buyer's escrow spent and the collateral locked. Decision D-027 fixed every high and medium finding plus the cheap lows. It was deployed on 2026-11-11 as nectar-core-v2 `2.2.1-v7` (code-only upgrades), Solana vault v2 (in-place upgrade) and a redeployed EVM vault on the local fork. The full per-finding table is in `SECURITY.md` at the repository root. The verifier re-ran the gates on the upgraded stack on 2026-11-11 and recorded PASS for G11, G2b, G7, G13 (local fork), G14 (chain claims) and G3b ([Evidence](/project/evidence)). Every finding SR-1…SR-33 has at least one test named after it, and 124 `sr*` contract tests pass (EVIDENCE §G11, recorded in 5083d30). The tests ran on the fixed code only.
 

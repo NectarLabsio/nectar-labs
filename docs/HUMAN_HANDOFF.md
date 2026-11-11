@@ -38,7 +38,7 @@ What Claude Code does then: keeper reads PYTH_API_KEY_PATH=~/.nectar/pyth.key, t
   If the key does not unlock Hermes (docs only promise it for Pyth Pro, F-056), records that and keeps the owner oracle.
 Default if silent by 2026-11-13 12:00 UTC: owner oracle stays (D-013), README/Feed show the "owner oracle" badge, G5 records the disclosed fallback.
 
-## H-NEAR-FAUCET — top up nectar.testnet with testnet NEAR     status: OPEN   needed by: P1 redeploy (WO-10 merge)
+## H-NEAR-FAUCET — top up nectar.testnet with testnet NEAR     status: DONE 2026-11-10 (Kunal replied `H-NEAR-FAUCET done`; nectar-core-v2 deployed after, EVIDENCE §G2b PASS 2026-11-10T16:52Z)   needed by: P1 redeploy (WO-10 merge)
 NOW (2026-11-10): nectar.testnet holds ~0.95 NEAR. P1 needs ~2–3 NEAR: larger nectar-core wasm storage (~+0.5–1 NEAR), OutLayer
 `create_project` 0.1 NEAR, gas reserve for executions (~0.004 NEAR each, F-046), an oracle-updater sub-account.
 What Kunal does (2 min): open https://near-faucet.io/ (F-154), request NEAR for `nectar.testnet` (repeat if allowed), reply `H-NEAR-FAUCET done`.
@@ -129,12 +129,12 @@ Nothing mainnet is created, funded or deployed during the hackathon.
 ---
 # v7 handoffs (2026-11-10, D-017). Addendum ids: H13 → **H19**, H14 → **H20** here (H13/H14 were already used); H15–H18 unchanged.
 
-## H-GUARD-V7 — install the v7 guard rules + evm agent        status: OPEN   needed by: P2b (Base) only
+## H-GUARD-V7 — install the v7 guard rules + evm agent        status: OPEN (Kunal-only; no product claim depends on it: Base runs on the local fork, D-026)   needed by: P2b (Base) only
 Why a human: the auto-mode classifier refuses to let an agent edit its own guard and settings (self-modification), which is correct.
 What Kunal does (1 min, repo root): `python3 scripts/v7-install-claude-config.py && bash scripts/test-guard-v7.sh` (every line should say `ok`).
 That blocks Base mainnet (8453), any `--private-key`, and POSTs to market.near.ai. It allows forge/cast/anvil/avm and installs `.claude/agents/evm.md`, which loads next session.
 What Claude Code does then: records it in EVIDENCE G12 prep and uses the `evm` agent for WO-27/29c.
-Default if silent: P2b does not start (Base is cut first anyway).
+Default if silent: P2b does not start (Base is cut first anyway). Superseded: P2b ran on the local fork without it (D-026, EVIDENCE §G12, §G13); if silent, the guard rules stay uninstalled.
 
 ## H15 — Base Sepolia ETH for the deployer          status: OPEN (optional since D-026)   needed by: real-Base-Sepolia G12/G13 only
 Deployer (Foundry keystore, scripts/06-base.sh): **0x4CAd440076321Da4ef05d35113aC6A58F3aDBFBd** — send ≥ 0.05 Base Sepolia ETH (CDP portal faucet ~1 min) and reply
@@ -161,7 +161,7 @@ Reply `H18 yes` or `H18 no`. Yes → WO-32 after P2a. Default: not attempted.
 Post the task text from docs/MARKET_TASK.md (written by WO-30) from your own account; reply `H20 <url>`. Then it is linked from /agents and the README.
 Default: not posted. Agents never post there.
 
-## H-NEAR-FAUCET — v7 update (2026-11-10 11:30Z)
+## H-NEAR-FAUCET — v7 update (2026-11-10 11:30Z)     status: DONE 2026-11-10 (see the entry above; v2 deployed)
 nectar.testnet holds **0.064 NEAR**. The v7 deploy (D-018) needs about **11 NEAR** (updated 20:00Z: v2 wasm is 628 KB after WO-23a, more with Notes/Reserve): the `nectar-core-v2` account + wasm storage (~9), `keeper-v2` (0.5),
 `x402-relayer` (3, only if x402 survives F-329), `agent1` (0.5), and the demo reseed. Same steps as above (https://near-faucet.io/ → `nectar.testnet`, repeat if allowed).
 Until then: v7 is built and sandbox-tested, but nothing new deploys; v1 stays the live demo.

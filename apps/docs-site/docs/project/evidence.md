@@ -5,10 +5,10 @@ description: Gate log with commands, outputs and explorer links.
 ---
 # Evidence
 
-<p className="verified">Verified against: docs/EVIDENCE.md as of 2026-11-11 (summary table, incl. the re-runs after D-027 recorded in commits b8784c1 and 5083d30) · F-001, F-004 (2026-11-09) · D-026 (2026-11-10), D-027 (2026-11-11)</p>
-<p className="status">Status on 2026-11-11: G0–G4, G6 PASS; G8 PASS (fixture); G5 FALLBACK (disclosed); v7: G1 (v7) PASS, G10 PASS with open items, G12 PASS on a local fork of Base Sepolia (D-026). After the security fix wave (D-027) the verifier re-ran G11, G2b, G7, G14 (chain claims) and G3b on contract 2.2.1-v7, and G13 on the local fork: all PASS. G9 pending. This page mirrors docs/EVIDENCE.md, which only the verifier writes. If the two ever differ, docs/EVIDENCE.md wins.</p>
+<p className="verified">Verified against: docs/EVIDENCE.md as of 2026-11-11 (summary table, incl. the re-runs after D-027 recorded in commits b8784c1 and 5083d30) · docs/EVIDENCE.md §G9 (2026-11-11T08:43Z–08:50Z, commit c5f6349) · D-026 (2026-11-10), D-027 (2026-11-11)</p>
+<p className="status">Status on 2026-11-11: G0–G4, G6 PASS; G8 PASS (fixture); G5 FALLBACK (disclosed); v7: G1 (v7) PASS, G10 PASS with open items, G12 PASS on a local fork of Base Sepolia (D-026). After the security fix wave (D-027) the verifier re-ran G11, G2b, G7, G14 (chain claims) and G3b on contract 2.2.1-v7, and G13 on the local fork: all PASS. G9: the first fresh-clone run (2026-11-11, commit c5f6349) failed on one wording issue on this page, since removed; re-run pending. This page mirrors docs/EVIDENCE.md, which only the verifier writes. If the two ever differ, docs/EVIDENCE.md wins.</p>
 
-Nectar Labs is being built for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC, F-001). Reviewers and their agents check that the repository runs and does what the README says (F-004). This page is where that claim is backed. Each gate is run by a separate verifier from a fresh clone with no secrets.
+This page backs the claim that the repository runs and does what the README says. Each gate is run by a separate verifier from a fresh clone with no secrets.
 
 | Gate | What it proves | Status | Evidence |
 | --- | --- | --- | --- |
@@ -29,11 +29,11 @@ Nectar Labs is being built for the NEAR Hackathon (development closes 2026-11-14
 | G3b | web E2E against `nectar-core-v2` | PASS (re-run after D-027 and the design port) 2026-11-11T08:24Z (tested 3ab3026, recorded in 5083d30): 392 passed / 0 failed / 82 skipped; accessibility ≥ 90 on all 22 route/theme pairs (home light 97); no horizontal scroll at 400 px. Earlier PASS 2026-11-10T17:48Z (0ed567f) | docs/EVIDENCE.md §G3b |
 | G12 | Base toolchain and collateral | PASS 2026-11-10T18:04Z (7bface5), **local fork of Base Sepolia, not Base Sepolia** (D-026) | docs/EVIDENCE.md §G12 |
 | G13 | Base round trip | PASS (re-run after D-027) 2026-11-11T08:25Z (tested 3ab3026, recorded in b8784c1), **local fork**: release and settle on the redeployed vault, replays revert `NonceUsed`. Earlier PASS 2026-11-10T18:05Z (7bface5) | docs/EVIDENCE.md §G13 |
-| G9 | fresh-clone README rehearsal under 15 min; no secrets in history | pending | — |
+| G9 | fresh-clone README rehearsal under 15 min; no secrets in history | FAIL 2026-11-11T08:50Z (c5f6349) on one wording issue on this page, since removed; re-run pending. Every other check in that run passed: quick start in about 3 min, `pnpm demo:testnet` 5 s, `pnpm verify` 18 s, docs build 9 s, gitleaks over 268 commits clean, Feed MCP over stdio and HTTP with no env, every README claim traced to an EVIDENCE row | docs/EVIDENCE.md §G9 |
 
 ## After the security fix wave (2026-11-11)
 
-On 2026-11-11 a pre-submission security review led to a fix wave (D-027): nectar-core-v2 `2.2.1-v7`, Solana vault v2, mock tokens upgraded, and the EVM vault redeployed on the local fork. The verifier then re-ran the gates on that stack from fresh clones of commit 3ab3026 and recorded them in docs/EVIDENCE.md:
+On 2026-11-11 a pre-release security review led to a fix wave (D-027): nectar-core-v2 `2.2.1-v7`, Solana vault v2, mock tokens upgraded, and the EVM vault redeployed on the local fork. The verifier then re-ran the gates on that stack from fresh clones of commit 3ab3026 and recorded them in docs/EVIDENCE.md:
 
 | Run | What the verifier checked | Recorded |
 | --- | --- | --- |
