@@ -1,0 +1,7 @@
+# WO-36c — contract — remote sizing compares remote debt, not total debt (found live at G7 re-run) (< 1 h; commit `fix(contract): remote limit uses remote debt (SR-5 regression)`)
+Live on 2.2.0-v7: `reserve → deposit → confirm` refused every remote loan with `aggregate_limit` (position 8). lib.rs ~758-770: for a remote loan `lp.q/r/d` are replaced with the fitting
+quotes only (capacity = (1-h)·Q_remote = $472), but the check still uses `c.total_debt_usd_e6` (all debt, $9,199 of NEAR-held loans). Sandbox tests had no NEAR-held debt beside remote loans.
+Fix: two checks. (a) Aggregate, unchanged: `total_debt + borrow ≤ (1-h)(Q+R+D)` with the FULL capacity (weekend params as applicable). (b) Remote: `remote_debt(symbol, chain) + borrow ≤ (1-h)·Q_remote(chain)`
+and `borrow ≤ largest fitting quote`. Track `remote_debt` per (symbol, chain) under a NEW raw key: + at payout, − at repay, settlement and write-off. Existing live remote positions have no open debt, so absent key = 0
+is correct. LTV cap uses the position value as now. Code-only upgrade over live 2.2.0-v7 → contract_version "2.2.1-v7"; add `nectar_core_v22.wasm` built from main to the upgrade test. Tests: `sr5_*` with $9k NEAR-held debt present and a remote loan
+within remote capacity passes; two remote loans on one chain cannot together exceed (1-h)·Q_remote; repay frees remote headroom; a settlement reduces it; NEAR loans are not limited by remote debt. Write only contracts/. Never --no-verify. NO Co-Authored-By line. Report ≤ 8 lines.
