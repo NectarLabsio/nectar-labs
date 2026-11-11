@@ -144,8 +144,8 @@ on a disclosed local fork of Base Sepolia (D-026).
 3. Send ≥ 0.05 Sepolia ETH to the deployer. 4. Reply `H15 done <tx hash>`.
 Then: funds keeper + borrower from the deployer, runs G12. Default if silent: P2b skipped and disclosed.
 
-## H16 — final track list                            status: OPEN   needed by: submission
-Read the proposal in docs/SUBMISSION.md (core three + each track whose gate passed) and reply `H16 <ids>`. Default: core three + passed tracks.
+## H16 — final track list                            status: DONE 2026-11-11 (Kunal: "H16 defi security agents (I'll decide nfts after item 3)"; D-028)   needed by: submission
+Applied (WO-52): docs/SUBMISSION.md `tracks` = `["defi","security","agents"]`; README "Tracks and why". `privacy` dropped by Kunal (overrides CLAUDE.md §1 "privacy always"). Still open: `nfts`. Reply `H16 nfts yes` or `H16 nfts no`; on yes the docs agent appends `"nfts"` to the `tracks` row. Default if silent: not entered.
 
 ## H17 — consumer line                               status: OPEN   needed by: landing copy (WO-20 uses the default)
 Reply `H17 fire-sales` or `H17 liquidations`. Default: "Borrow against stocks without fire-sales" (accurate; "without liquidations" is not).
