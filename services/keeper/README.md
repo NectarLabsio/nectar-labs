@@ -32,12 +32,16 @@ defaults to devnet and a mainnet URL is refused. Each tick: `Settling` positions
 `relay_settlement_result(position_id, solana_tx_sig)`. v2 only (`contract_version` 2.x): `remote.status == "Releasing"` →
 `get_pending_release` → `[Ed25519, release]` → `relay_release_result` (falls back to `relay_settlement_result` if absent);
 `remote.status == "AwaitingDeposit"` + position PDA amount ≥ reserved units and authority match → `confirm_remote_deposit`.
-Every argument is transcribed from the signed message and checked by rebuilding it byte for byte. Positions are the slot
-`["pos", vault, id, committed_depositor]` (interface-v7 §E). A leg counts as landed only when the nonce PDA is a program-owned
-`NonceRecord` matching every field, the position's status byte shows that leg, and a successful tx ran that exact instruction on
-that slot; that tx is what is relayed. A plain transfer to the nonce PDA proves nothing. Positions stay after settle or release
-until the depositor withdraws, so the status byte decides, not the account's existence. An unchanged deposit gets at most 3
-`confirm_remote_deposit` calls. The vault is pinned: `NECTAR_VAULT_PROGRAM_ID` and `NECTAR_VAULT_MINT` default to `config.yaml`
+Once a reservation has expired (including `remote.status == "Expired"` with no proven deposit), a late or short deposit is
+confirmed too, so it can be released; no loan follows. Every argument is transcribed from the signed message and checked by
+rebuilding it byte for byte. Positions are the slot `["pos", vault, id, committed_depositor]` and nonce records
+`["nonce", position, authority, nonce_le]` (interface-v7 §E). A program-owned `NonceRecord` matching every field proves the leg
+landed, whatever the slot shows now (it may be withdrawn or reopened); a plain transfer to the nonce PDA proves nothing. The tx
+relayed is the successful one that ran that vault instruction with this slot and record in their account positions, found by
+paging the nonce's history oldest first and then the slot's; the search is bounded per tick and resumes after a rate limit.
+If the slot shows the leg's end status (or is withdrawn) with no record for the current nonce, the slot's history is searched for
+an older nonce of the same leg under NEAR's authority, and that tx is relayed. An unchanged deposit is retried on a doubling
+cooldown capped at 6 h; the contract's per-position keeper budget is the hard limit. The vault is pinned: `NECTAR_VAULT_PROGRAM_ID` and `NECTAR_VAULT_MINT` default to `config.yaml`
 `solana.vault_program` / `solana.mint`, the keeper refuses to start without them, and a position naming another program is
 refused. `/healthz` gains a `solana` block.
 
@@ -61,9 +65,13 @@ For each signed `get_pending_settlement_evm` / `get_pending_release_evm` the kee
 view fields, checks it equals the signed digest and that the signature recovers to the vault position's authority, then
 sends `settle` / `release` and relays the 0x tx hash via `relay_settlement_result` / `relay_release_result`. The tx hash is
 stored before broadcast (restart-safe); a used nonce on the slot `keccak256(abi.encode(id, depositor))` relays the tx found in
-`PositionSettled` / `PositionReleased` logs on that slot, scanned from the reservation block (`BASE_LOG_LOOKBACK_BLOCKS`, default
-10000, applies only without a reservation time). The vault is pinned: `BASE_VAULT_ADDRESS`, default `config.yaml` `base.vault`.
-Deposits: `keeper_attest_deposit` with `BASE_KEEPER_ATTEST=1` (local fork; labelled). Without it, `confirm_remote_deposit` is
+`PositionSettled` / `PositionReleased` logs, scanned from the reservation block (`BASE_LOG_LOOKBACK_BLOCKS`, default 10000,
+applies only without a reservation time). The events do not name the slot: a direct call on another slot is passed over, and a
+tx sent through another contract is used only when no direct call on this slot emitted the event. A slot showing the leg's end
+status under NEAR's authority with the current nonce unused relays the older leg's log, limited to nonces that slot consumed.
+The vault is pinned: `BASE_VAULT_ADDRESS`, default `config.yaml` `base.vault`.
+Deposits: `keeper_attest_deposit` with `BASE_KEEPER_ATTEST=1` (local fork; labelled); expired reservations are covered as on
+Solana, except that a short deposit is not attested, because attestation books the reserved units. Without it, `confirm_remote_deposit` is
 unsupported because the quoter does not answer `vault_read` for base-sepolia: the keeper logs `base_deposit_confirm_unsupported`,
 reports `base.deposit_confirm: "unsupported"` on `/healthz`, and sends nothing. `BASE_OUTLAYER_VAULT_READ=1` enables it once the
 quoter does.
