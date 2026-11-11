@@ -21,6 +21,8 @@ use near_workspaces::{Account, AccountId, Contract, Worker};
 const V2_SHA256: &str = "252a6abe1803b2628b0adadb7b5ec120853ddbd8e1f698dddf4f629a29e8937a";
 /// sha256 of tests/fixtures/nectar_core_v21.wasm: 2.1.0-v7 built from main@1e7e440 before WO-34a.
 const V21_SHA256: &str = "d2fbc44b0f0335834833d0318561c4a544a397b9ca31139986acbbc464251124";
+/// sha256 of tests/fixtures/nectar_core_v22.wasm: 2.2.0-v7 built from main@5203e91 before WO-36c.
+const V22_SHA256: &str = "b261ad6b07c464955c9fbb96bcf800821b8e5735bba65f0ceed16197cf5b97ca";
 const SEC: u64 = 1_000_000_000;
 const TGAS: u64 = 1_000_000_000_000;
 const VAULT: &str = "Nectar1Vau1t11111111111111111111111111111111";
@@ -76,6 +78,12 @@ fn v2_wasm() -> Vec<u8> {
 fn v21_wasm() -> Vec<u8> {
     let w = std::fs::read(root().join("contracts/nectar-core/tests/fixtures/nectar_core_v21.wasm")).expect("v21 wasm");
     assert_eq!(hexs(&near_sdk::env::sha256(&w)), V21_SHA256, "fixture is the 2.1.0-v7 wasm");
+    w
+}
+
+fn v22_wasm() -> Vec<u8> {
+    let w = std::fs::read(root().join("contracts/nectar-core/tests/fixtures/nectar_core_v22.wasm")).expect("v22 wasm");
+    assert_eq!(hexs(&near_sdk::env::sha256(&w)), V22_SHA256, "fixture is the 2.2.0-v7 wasm");
     w
 }
 
@@ -496,7 +504,7 @@ async fn upgrade_flow(old: &[u8], old_version: &str) -> anyhow::Result<()> {
     // upgrade: code only
     let r = core.as_account().deploy(&wasm("nectar_core")).await?;
     assert!(r.is_success(), "deploy new code");
-    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.2.0-v7"));
+    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.2.1-v7"));
     assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(2), "state version unchanged");
     let after = snapshot(&core).await?;
     for (i, (b, a)) in before.iter().zip(after.iter()).enumerate() {
@@ -735,6 +743,154 @@ async fn sr5_remote_loan_refused_without_fitting_capacity() -> anyhow::Result<()
     assert_eq!(events(&r, "remote_loan_refused")[0]["reason"], "aggregate_limit");
     assert_eq!(bal(&e.usdc, borrower.id()).await?, 0);
     assert_eq!(position(&core, id).await?["remote"]["depositor"], DEPOSITOR, "still releasable");
+    Ok(())
+}
+
+// ------------------------------------------------------------------ WO-36c (2.2.1-v7)
+
+const USD: u128 = 1_000_000;
+
+/// Lender $100k; $20k NEAR-only and $2k fitting a Solana recipient: full capacity $16.5k, remote capacity $1.5k.
+async fn thin_remote(e: &Env, core: &Contract) -> anyhow::Result<Contract> {
+    let lender = user(e, 100_000_000_000, 0).await?;
+    ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    let b = user(e, 22_000 * USD, 0).await?;
+    ft_call(&e.usdc, &b, core.id(), 20_000 * USD, &fund_msg(250, None)).await?;
+    ft_call(&e.usdc, &b, core.id(), 2_000 * USD, &fund_msg(300, Some(RCPT))).await?;
+    let s = stub(e).await?;
+    chain(e, core, &s).await?;
+    Ok(s)
+}
+
+async fn near_loan(e: &Env, core: &Contract, borrow: u128) -> anyhow::Result<Account> {
+    let who = user(e, 0, UNITS).await?;
+    let m = format!(r#"{{"LockCollateralAndBorrow":{{"collateral":"NVDAx","borrow_usd_e6":"{borrow}","pre_liq_ltv_bps":7500}}}}"#);
+    let r = ft_call(&e.nvdax, &who, core.id(), UNITS, &m).await?;
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert!(bal(&e.usdc, who.id()).await? > 0, "NEAR loan paid");
+    Ok(who)
+}
+
+/// Reserve `units` / `borrow` on Solana; returns the id and the vault answer that proves the deposit.
+async fn reserve_sized(core: &Contract, who: &Account, units: u128, borrow: u128) -> anyhow::Result<(u64, String)> {
+    let r = who.call(core.id(), "reserve_remote_position")
+        .args_json(json!({ "collateral": "NVDAx", "units": units.to_string(), "borrow_usd_e6": borrow.to_string(),
+                           "pre_liq_ltv_bps": 7500, "depositor": DEPOSITOR }))
+        .gas(Gas::from_tgas(100)).deposit(NearToken::from_yoctonear(RESERVE_DEPOSIT)).transact().await?;
+    assert!(r.is_success() && r.failures().is_empty(), "reserve: {:?}", r.failures());
+    let id: u64 = r.json::<String>()?.parse()?;
+    let auth = position(core, id).await?["remote"]["authority"].as_str().unwrap().to_string();
+    Ok((id, format!(r#"{{"position_id":"{id}","units":"{units}","authority":"{auth}","depositor":"{DEPOSITOR}","slot_or_block":412345678}}"#)))
+}
+
+/// Reserve and confirm; returns the id and whether the loan was funded (a refusal must say `aggregate_limit`).
+async fn remote_loan(e: &Env, core: &Contract, s: &Contract, who: &Account, units: u128, borrow: u128) -> anyhow::Result<(u64, bool)> {
+    let (id, body) = reserve_sized(core, who, units, borrow).await?;
+    let r = confirm(e, core, s, id, &body).await?;
+    gas("confirm_remote_deposit(WO-36c)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    let funded = events(&r, "remote_deposit_confirmed")[0]["funded"] == true;
+    if !funded {
+        assert_eq!(events(&r, "remote_loan_refused")[0]["reason"], "aggregate_limit");
+    }
+    Ok((id, funded))
+}
+
+async fn repay(e: &Env, core: &Contract, who: &Account, id: u64, amount: u128) -> anyhow::Result<()> {
+    e.owner.call(e.usdc.id(), "mint").args_json(json!({ "account_id": who.id(), "amount": amount.to_string() }))
+        .transact().await?.into_result()?;
+    let r = ft_call(&e.usdc, who, core.id(), amount, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)).await?;
+    gas("ft_transfer_call:Repay(WO-36c)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    Ok(())
+}
+
+/// The live failure, through the real mock-ft: NEAR-held debt no longer blocks a remote loan; remote debt is what counts,
+/// a repayment frees it, and NEAR loans do not depend on it.
+#[tokio::test]
+async fn sr5_remote_debt_with_near_held_debt_beside_it() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    let s = thin_remote(&e, &core).await?;
+    near_loan(&e, &core, 9_000 * USD).await?;
+    let borrower = user(&e, 0, 0).await?;
+    let (first, funded) = remote_loan(&e, &core, &s, &borrower, UNITS, 1_000 * USD).await?;
+    assert!(funded, "$9k NEAR-held does not count against the $1.5k remote capacity");
+    assert!(bal(&e.usdc, borrower.id()).await? > 0);
+    let (over, funded) = remote_loan(&e, &core, &s, &borrower, UNITS, 600 * USD).await?;
+    assert!(!funded, "$1,000 + $600 exceeds the remote capacity");
+    assert_eq!(position(&core, over).await?["debt_usd_e6"], "0");
+    near_loan(&e, &core, 1_000 * USD).await?; // remote debt does not limit a NEAR loan
+    repay(&e, &core, &borrower, first, 500 * USD).await?;
+    let (_, funded) = remote_loan(&e, &core, &s, &borrower, UNITS, 600 * USD).await?;
+    assert!(funded, "the repayment freed the headroom");
+    Ok(())
+}
+
+/// A settlement takes its debt out of the remote debt: Q_remote falls by the leg, and without that the next loan would be refused.
+#[tokio::test]
+async fn sr5_settlement_reduces_remote_debt() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    let s = thin_remote(&e, &core).await?;
+    let borrower = user(&e, 0, 0).await?;
+    let (id, funded) = remote_loan(&e, &core, &s, &borrower, UNITS / 10, 1_200 * USD).await?;
+    assert!(funded);
+    let (_, funded) = remote_loan(&e, &core, &s, &borrower, UNITS, 400 * USD).await?;
+    assert!(!funded, "$1,200 + $400 exceeds $1,500");
+    price(&e, &core, 155_000_000).await?;
+    price(&e, &core, 140_000_000).await?;
+    let r = trigger(&e, &core, id).await?;
+    gas("trigger+sign(WO-36c)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    let d = view(&core, "get_pending_settlement", json!({ "position_id": id.to_string() })).await?;
+    assert_eq!((d["status"].as_str(), d["repay_usd_e6"].as_str()), (Some("Signed"), Some("1200000000")));
+    let r = relay(&e, &core, "relay_settlement_result", id, TX).await?;
+    assert!(r.is_success(), "{:?}", r.failures());
+    // Q_remote is now $800, capacity $600, remote debt 0
+    let (_, funded) = remote_loan(&e, &core, &s, &borrower, UNITS, 400 * USD).await?;
+    assert!(funded, "the settlement left the remote debt");
+    Ok(())
+}
+
+/// Code-only upgrade over the live 2.2.0-v7 layout, reproducing position 8: 2.2.0 refuses the loan with `aggregate_limit`;
+/// the same reservation funds on retry under the new code. A remote loan from before the counter repays without a trap.
+#[tokio::test]
+async fn sr5_refused_on_v22_funds_after_upgrade() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &v22_wasm()).await?;
+    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.2.0-v7"));
+    let s = thin_remote(&e, &core).await?;
+    near_loan(&e, &core, 100 * USD).await?; // #0 NEAR-held, #1 remote: the ids `snapshot` reads
+    let borrower = user(&e, 0, 0).await?;
+    let (legacy, funded) = remote_loan(&e, &core, &s, &borrower, UNITS, 500 * USD).await?;
+    assert!(funded, "a remote loan with little other debt funds on 2.2.0");
+    near_loan(&e, &core, 9_000 * USD).await?;
+    let (id, body) = reserve_sized(&core, &borrower, UNITS, 1_000 * USD).await?;
+    let r = confirm(&e, &core, &s, id, &body).await?;
+    assert_eq!(events(&r, "remote_loan_refused")[0]["reason"], "aggregate_limit", "the live failure");
+    let before = snapshot(&core).await?;
+
+    let r = core.as_account().deploy(&wasm("nectar_core")).await?;
+    assert!(r.is_success(), "deploy new code");
+    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.2.1-v7"));
+    assert_eq!(view(&core, "get_state_version", json!({})).await?, json!(2), "state version unchanged");
+    let after = snapshot(&core).await?;
+    for (i, (b, a)) in before.iter().zip(after.iter()).enumerate() {
+        assert_eq!(b, a, "view #{i} reads the same after the code-only upgrade");
+    }
+
+    repay(&e, &core, &borrower, legacy, 500 * USD).await?;
+    assert_eq!(position(&core, legacy).await?["debt_usd_e6"], "0");
+    advance(&e, 31).await?; // confirm cooldown
+    price(&e, &core, 180_000_000).await?;
+    let r = confirm(&e, &core, &s, id, &body).await?;
+    gas("confirm_remote_deposit(retry after upgrade)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(events(&r, "remote_deposit_confirmed")[0]["funded"], true);
+    assert_eq!(position(&core, id).await?["debt_usd_e6"], "1000000000");
+    let (_, funded) = remote_loan(&e, &core, &s, &borrower, UNITS, 600 * USD).await?;
+    assert!(!funded, "the funded retry is counted");
     Ok(())
 }
 

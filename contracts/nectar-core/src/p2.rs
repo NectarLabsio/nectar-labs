@@ -266,6 +266,11 @@ impl Nectar {
             .detach();
     }
 
+    /// WO-36c: a remote loan was paid out, or an unsigned leg gave its debt back.
+    pub(crate) fn remote_debt_add(symbol: &str, domain_id: u32, amount: u128) {
+        Self::set_remote_debt(symbol, domain_id, ok(math::add(Self::remote_debt(symbol, domain_id), amount)));
+    }
+
     /// Undo an unsigned leg: escrow back to the quote (re-listed if it had been emptied), debt and units back
     /// to the position, remote status back to Open. The pool and treasury were never credited. A SELF leg
     /// returns `repay + fee` to the quote; the day's voluntary-fill counter is not rolled back (conservative).
@@ -276,6 +281,7 @@ impl Nectar {
         p.units = U128(ok(math::add(p.units.0, ok(math::add(d.seize_units.0, d.keeper_units.0)))));
         if let Some(r) = p.remote.as_mut() {
             r.status = RemoteStatus::Open;
+            Self::remote_debt_add(&p.collateral, r.domain_id, repay);
         }
         // v2 A1: the leg's repayment left the aggregate in `settle_remote`; it comes back with the debt.
         let mut cd = self.coll_or_panic(&p.collateral);

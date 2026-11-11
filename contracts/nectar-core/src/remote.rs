@@ -7,9 +7,9 @@
 //!    (`expire_remote_reservation`, anyone). SR-14: the record's storage cost is kept from the deposit.
 //! 2. `confirm_remote_deposit` (borrower, keeper or owner; SR-6): OutLayer `vault_read` (deposit from
 //!    `gas_reserve_yocto` for the keeper and owner, from the held reservation deposit for the borrower)
-//!    `.then(on_deposit_verified)`: authority and committed depositor must match (SR-8), depositor recorded; then both
-//!    limits (A1), sized against fitting quotes only (SR-5), are re-checked with the stored price (must be fresh) and
-//!    the loan is paid (A4 `pay_to`, A5 fees). OutLayer failure: stays AwaitingDeposit + `remote_deposit_rejected` (no
+//!    `.then(on_deposit_verified)`: authority and committed depositor must match (SR-8), depositor recorded; then the
+//!    limits (A1 on all debt and capacity; SR-5 on remote debt and fitting quotes, WO-36c) are re-checked with the stored
+//!    price (must be fresh) and the loan is paid (A4 `pay_to`, A5 fees). OutLayer failure: stays AwaitingDeposit + `remote_deposit_rejected` (no
 //!    fallback payout). A proven deposit whose loan is refused (limits, expiry, units below reserved: SR-18) records
 //!    the depositor so the collateral can be released.
 //!    `keeper_attest_deposit` is the testnet fallback behind `allow_keeper_deposit_attestation` (`source: "keeper"`).
@@ -32,7 +32,7 @@ use crate::p2::{SEC, SignCall, sign_args};
 use crate::types::*;
 use crate::{
     ERR_CA_PENDING, ERR_KEEPER, ERR_REFERRER_IS_BORROWER, ERR_REMOTE_SETTLE_CAP, MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar,
-    NectarExt, math,
+    NectarExt, RemoteSizing, math,
 };
 
 /// SR-8 (WO-34a): the depositor committed at reservation (raw key: code-only upgrade, no struct layout change).
@@ -326,7 +326,8 @@ impl Nectar {
         };
         let terms = match refusal {
             Some(e) => Err(e),
-            None => self.remote_capacity(&p.collateral, r.domain_id).and_then(|cap| {
+            None => self.remote_capacity(&p.collateral, r.domain_id).and_then(|(q_usd_e6, largest_usd_e6)| {
+                let debt_usd_e6 = Self::remote_debt(&p.collateral, r.domain_id);
                 self.check_borrow(
                     &c,
                     units,
@@ -334,7 +335,7 @@ impl Nectar {
                     Some(p.pre_liq_ltv_bps),
                     referrer.is_some(),
                     p.shield.map(|s| s.fee_bps),
-                    Some(cap),
+                    Some(RemoteSizing { q_usd_e6, largest_usd_e6, debt_usd_e6 }),
                 )
             }),
         };
@@ -350,6 +351,7 @@ impl Nectar {
         );
         match booked {
             Ok(t) => {
+                Self::remote_debt_add(&p.collateral, r.domain_id, borrow);
                 p.debt_usd_e6 = U128(borrow);
                 p.premium_usd_e6 = U128(t.premium);
                 p.opened_ns = U64(now);
@@ -472,6 +474,7 @@ impl Nectar {
                 fee_usd_e6: 0,
             },
         )?;
+        Self::remote_debt_repaid(&p, leg.repay_usd_e6);
         if q.remaining_usd_e6.0 == 0 {
             self.remove_live(&p.collateral, q.quote_id.0);
         }
@@ -545,6 +548,7 @@ impl Nectar {
                 fee_usd_e6: plan.fee,
             },
         )?;
+        Self::remote_debt_repaid(&p, plan.debt);
         if q.remaining_usd_e6.0 == 0 {
             self.remove_live(&p.collateral, qid);
         }

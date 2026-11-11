@@ -67,7 +67,7 @@ use crate::math::{BPS, LimitParams, MathResult};
 use crate::types::*;
 
 /// interface-v7.md A6.
-pub const CONTRACT_VERSION: &str = "2.2.0-v7";
+pub const CONTRACT_VERSION: &str = "2.2.1-v7";
 /// Raw storage key holding the state layout version. Written by `new` (v2 has no migrate).
 pub const STATE_VERSION_KEY: &[u8] = b"__state_version";
 pub const STATE_VERSION: u8 = 2;
@@ -108,6 +108,19 @@ pub const OUTLAYER_CLOSED_PREFIX: &[u8] = b"__v7c_closed:";
 pub const OUTLAYER_CLOSED_TTL_NS: u64 = 3_600 * 1_000_000_000;
 /// SR-19: per symbol, total owed collateral units (raw key).
 pub const OWED_TOTAL_PREFIX: &[u8] = b"__v7c_owed:";
+/// WO-36c: per (MPC domain, symbol), open debt of remote loans (raw key: code-only upgrade over 2.2.0).
+pub const REMOTE_DEBT_PREFIX: &[u8] = b"__v7d_rdebt:";
+
+/// SR-5 sizing of a remote loan: what can settle it on its chain and what already draws on that.
+#[derive(Clone, Copy, Debug)]
+pub(crate) struct RemoteSizing {
+    /// Sum of `remaining` of the live, non-exiting quotes whose recipient fits the chain.
+    pub q_usd_e6: u128,
+    /// The largest of those quotes: settlement is one signed leg from one quote.
+    pub largest_usd_e6: u128,
+    /// Open debt of the remote loans on those quotes.
+    pub debt_usd_e6: u128,
+}
 
 pub const GAS_FT_TRANSFER: Gas = Gas::from_tgas(5); // mock-ft ft_transfer burns ~1.6 Tgas (WO-10a sandbox GAS lines)
 pub const GAS_ON_PAYOUT: Gas = Gas::from_tgas(5); // on_payout burns ~1.6 Tgas (success branch)
@@ -204,6 +217,13 @@ pub(crate) fn default_quoter() -> QuoterConfig {
 pub(crate) fn prefixed(prefix: &[u8], suffix: &[u8]) -> Vec<u8> {
     let mut k = prefix.to_vec();
     k.extend_from_slice(suffix);
+    k
+}
+
+/// `prefix ++ domain_le ++ symbol`: the fixed-width domain first keeps the key unambiguous.
+fn remote_debt_key(symbol: &str, domain_id: u32) -> Vec<u8> {
+    let mut k = prefixed(REMOTE_DEBT_PREFIX, &domain_id.to_le_bytes());
+    k.extend_from_slice(symbol.as_bytes());
     k
 }
 
@@ -746,30 +766,31 @@ impl Nectar {
         pre_liq_ltv_bps: Option<u16>,
         referrer_registered: bool,
         shield_fee_bps: Option<u16>,
-        remote: Option<(u128, u128)>,
+        remote: Option<RemoteSizing>,
     ) -> Result<BorrowTerms, &'static str> {
         if borrow < MIN_BORROW_USD_E6 {
             return Err(ERR_MIN_BORROW);
         }
         // WO-23a §4.9: a Shield is sized at weekend parameters and pays a flat fee instead of the premium.
-        let mut lp = self.limit_params_for(c, shield_fee_bps.is_some());
-        // SR-5 (WO-34a): a remote loan settles in ONE signed leg from ONE quote whose recipient fits its chain. Size it
-        // against those quotes only (`remote` = (sum, largest) of fitting non-exiting remaining): no R_c, no D_c.
-        if let Some((q_remote, _)) = remote {
-            lp.q_usd_e6 = q_remote;
-            lp.r_usd_e6 = 0;
-            lp.d_usd_e6 = 0;
-        }
+        let lp = self.limit_params_for(c, shield_fee_bps.is_some());
         let l = math::limit(units, &lp)?;
         if borrow > l.ltv_cap_usd_e6 {
             return Err("borrow above B_c");
         }
+        // A1: all debt of the asset against all of its exit capacity.
         if math::add(c.total_debt_usd_e6.0, borrow)? > l.capacity_usd_e6 {
             return Err(ERR_AGGREGATE_LIMIT);
         }
-        // SR-5: while remote settlement is single-leg, the (haircut-limited) borrow is capped at the largest fitting quote.
-        if remote.is_some_and(|(_, largest)| borrow > largest) {
-            return Err(ERR_REMOTE_SETTLE_CAP);
+        // SR-5 (WO-34a, WO-36c): a remote loan settles in ONE signed leg from ONE quote whose recipient fits its chain, so
+        // remote debt is also held to those quotes alone (no R_c, no D_c), and NEAR-held debt does not count against them.
+        if let Some(s) = remote {
+            let (_, _, cap) = math::capacity(&LimitParams { q_usd_e6: s.q_usd_e6, r_usd_e6: 0, d_usd_e6: 0, ..lp })?;
+            if math::add(s.debt_usd_e6, borrow)? > cap {
+                return Err(ERR_AGGREGATE_LIMIT);
+            }
+            if borrow > s.largest_usd_e6 {
+                return Err(ERR_REMOTE_SETTLE_CAP);
+            }
         }
         if borrow > self.available_usd_e6 {
             return Err("insufficient pool liquidity");
@@ -821,6 +842,7 @@ impl Nectar {
         self.available_usd_e6 = available;
         c.total_debt_usd_e6 = U128(total_debt);
         self.put_coll(c);
+        Self::remote_debt_repaid(&p, applied);
         p.debt_usd_e6 = U128(debt);
         emit(
             "repaid",
@@ -1103,6 +1125,28 @@ impl Nectar {
             env::storage_remove(&key);
         } else {
             env::storage_write(&key, &units.to_le_bytes());
+        }
+    }
+    /// WO-36c: open debt of remote loans on `symbol` against the quotes that fit `domain_id`. Keyed by MPC domain, like
+    /// `remote_capacity`: a recipient fits a domain, so chains of one domain draw on the same quotes. Absent = 0.
+    pub(crate) fn remote_debt(symbol: &str, domain_id: u32) -> u128 {
+        env::storage_read(&remote_debt_key(symbol, domain_id))
+            .and_then(|b| <[u8; 16]>::try_from(b.as_slice()).ok())
+            .map_or(0, u128::from_le_bytes)
+    }
+    pub(crate) fn set_remote_debt(symbol: &str, domain_id: u32, amount: u128) {
+        let key = remote_debt_key(symbol, domain_id);
+        if amount == 0 {
+            env::storage_remove(&key);
+        } else {
+            env::storage_write(&key, &amount.to_le_bytes());
+        }
+    }
+    /// WO-36c: debt of this position left the books; a NEAR-held position has no remote debt. Floors at 0 because a loan
+    /// paid out before 2.2.1 was never counted, and its repayment must not fail on that.
+    pub(crate) fn remote_debt_repaid(p: &Position, amount: u128) {
+        if let Some(r) = &p.remote {
+            Self::set_remote_debt(&p.collateral, r.domain_id, Self::remote_debt(&p.collateral, r.domain_id).saturating_sub(amount));
         }
     }
     /// SR-19: nothing is owed or escrowed in this asset's token, and nothing is valued with its decimals.
@@ -1581,6 +1625,7 @@ impl Nectar {
         c.total_debt_usd_e6 = U128(total_debt);
         self.put_coll(c);
         self.note_refs_clear(&p);
+        Self::remote_debt_repaid(&p, debt);
         p.debt_usd_e6 = U128(0);
         p.status = PositionStatus::Closed;
         emit("bad_debt_written_off", json!({ "position_id": position_id, "collateral": p.collateral, "debt_usd_e6": U128(debt) }));
@@ -1600,6 +1645,7 @@ impl Nectar {
                 // USDC never left: apply it as repayment of the same position.
                 let mut p = self.position_or_panic(position_id.0);
                 let applied = amt.min(p.debt_usd_e6.0);
+                Self::remote_debt_repaid(&p, applied);
                 p.debt_usd_e6 = U128(ok(math::sub(p.debt_usd_e6.0, applied)));
                 self.utilised_usd_e6 = ok(math::sub(self.utilised_usd_e6, applied));
                 self.available_usd_e6 = ok(math::add(self.available_usd_e6, applied));

@@ -411,7 +411,7 @@ fn signer_config_and_views() {
     c.set_signer_config(a("v1.signer-prod.testnet"), "solana-devnet-v1".into(), 15, 3600);
     let s = c.get_signer_config().unwrap();
     assert_eq!((s.path.as_str(), s.gas_tgas, s.expiry_s), ("solana-devnet-v1", 15, 3600));
-    assert_eq!(c.contract_version(), "2.2.0-v7");
+    assert_eq!(c.contract_version(), "2.2.1-v7");
     // the hint is per remote position: path `<chain>/pos/<id>`, never the global path
     let c = reserved();
     let h = c.get_vault_authority_hint(U64(0)).unwrap();
