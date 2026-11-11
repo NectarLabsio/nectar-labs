@@ -98,16 +98,19 @@ What Claude Code does then: the orchestrator fills `site:`; the legal pages (pri
   values; the production guard passes; the deploy is promoted to production.
 Default if silent by 2026-11-13 12:00 UTC: no production promotion (previews only, noindex). The submission continues without hosting.
 
-## H-KEYS — testnet signing keys as Railway secrets   status: OPEN (treated as not confirmed)   needed by: hosted keeper / x402 relayer only
+## H-KEYS — keeper testnet signing key as a Railway secret   status: OPEN (treated as not confirmed)   needed by: hosted keeper only
 Why a human: storing a signing key with a third party changes where keys live (CLAUDE.md: OS keychain or `0600` files under `~/.nectar/`). Kunal's
   paste kept the line "New testnet-only function-call keys… may be stored as Railway secrets", but the template fields around it were left unfilled, so it
   is not read as a confirmation.
-What Kunal does (1 min): reply `H-KEYS yes` (new testnet-only function-call keys, one for the keeper and one for the x402 relayer, created for this
-  purpose with a small allowance, stored only as Railway service variables) or `H-KEYS no`.
-What Claude Code does then, on yes: creates the two new function-call keys on testnet (method-restricted, never full access, never the keys in
-  `~/.nectar/`), sets them as Railway variables on the new project, deploys the keeper and x402 services, records the public keys and allowance in
-  EVIDENCE. On no: nothing leaves `~/.nectar/`.
-Default if silent: keeper and x402 stay local (they run when the operator runs them). The hosted app says when settlement runs.
+Scope (2026-11-12): the keeper only. The x402 relayer option is dropped: `@fastnear/x402` 2.5.0 needs a full-access relayer key and rejects
+  function-call keys (FACTS F-328, C-023), so a function-call key cannot settle and no full-access key goes to Railway. x402 stays on the operator's
+  machine whatever the answer here (DECISIONS D-031).
+What Kunal does (1 min): reply `H-KEYS yes` (one new testnet-only function-call key for the keeper, created for this purpose with a small allowance,
+  stored only as a Railway service variable) or `H-KEYS no`.
+What Claude Code does then, on yes: creates the new function-call key on testnet (method-restricted, never full access, never a key in
+  `~/.nectar/`), sets it as a Railway variable on the new project, deploys the keeper service, records the public key and allowance in EVIDENCE.
+  On no: nothing leaves `~/.nectar/`.
+Default if silent: the keeper stays local (it runs when the operator runs it). The hosted app says when settlement runs.
 
 ## H-HOST — Vercel and Railway CLI login, Railway plan   status: OPEN   needed by: 2026-11-13 06:00 UTC (WO-34 deploy, round 3)
 Why a human: a CLI login binds Kunal's accounts (Vercel team "kunal's projects", Hobby plan; Railway workspace "kunal drall's Projects"). The Railway
@@ -117,6 +120,11 @@ What Kunal does (5 min), in his own shell:
   2. `npx -y @railway/cli@5.71.0 login`
      (versions: F-394, npm latest on 2026-11-11; the subcommand grammar is still VERIFY there, so the orchestrator checks `--help` before scripting.)
   3. Railway: Dashboard → Workspace settings → Plan. Reply `H-HOST done, railway plan <name>`. Do not upgrade.
+Railway plan facts (FACTS F-404, F-405, F-412, read 2026-11-12): Free $0 a month ("$1 of free credit per month"), Hobby $5, Pro $20. Free allows
+  1 volume per project (0.5 GB) and 1 replica with 0.5 GB RAM per service; Hobby 10 volumes (5 GB). Since x402 is not hosted (D-031), the Feed is the
+  only hosted service that needs a volume, so **Free is enough for the Feed**. A hosted keeper (H-KEYS yes) would need its own check. Log retention:
+  Free 3 days, Hobby 7, Pro 30 (the privacy page states this). Trial accounts revert to Free after up to 30 days; an unverified GitHub account gets a
+  Limited Trial with restricted outbound network (F-404), which the Feed's chain reads would hit.
 What Claude Code does then: creates new projects only (the pre-repo Vercel projects nectar-landing, nectar-frontend, docs-site-nectar and the five
   pre-repo Railway projects stay untouched), sets env per RUNBOOK, deploys the code-final commit after the G3b re-run (scripts/deploy/*), and the
   verifier records deployment ids, URLs and headers in EVIDENCE (wo-34v).
