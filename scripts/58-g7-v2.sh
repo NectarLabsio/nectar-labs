@@ -31,7 +31,7 @@ prep)
   solana account "$ATA" --url $URL >/dev/null 2>&1 || "$SPL_TOKEN" create-account "$MINT" --owner "$DEP" --fee-payer $K/deployer.json --url $URL
   "$SPL_TOKEN" mint "$MINT" 10 "$ATA" --mint-authority $K/deployer.json --fee-payer $K/deployer.json --url $URL
   "$SPL_TOKEN" balance --address "$ATA" --url $URL
-  if view "$CORE" list_quotes '{"symbol":"NVDAx","from_index":0,"limit":20}' | jq -e '.[] | select(.buyer_remote_recipient != null)' >/dev/null; then echo "remote quote exists"; else
+  if view "$CORE" list_quotes '{"symbol":"NVDAx","from_index":0,"limit":20}' | jq -e '.[] | select(.buyer_remote_recipient != null and (.buyer_remote_recipient | startswith("0x") | not) and ((.remaining_usd_e6 | tonumber) >= 1000000000))' >/dev/null; then echo "Solana remote quote with >= \$1,000 exists"; else
     call "$USDC" mint "{\"account_id\":\"$B1\",\"amount\":\"1000000000\"}" "$OWNER" '30 Tgas'
     ftc "$USDC" "$B1" 1000000000 "$(jq -cn --arg r "$RCP" '{FundPappusQuote:{collateral:"NVDAx", max_discount_bps:300, notice_period_ns:"604800000000000", buyer_remote_recipient:$r}}')"
   fi ;;

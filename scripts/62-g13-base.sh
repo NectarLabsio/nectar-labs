@@ -25,7 +25,7 @@ setup)
   call "$CORE" set_extra_remote_chain "$(jq -cn --arg v "$VAULT" --arg r "$RPC" '{symbol:"NVDAx", remote_chain:{chain_id:"base-sepolia", vault_program:$v, mpc_domain_id:0}, rpc_url:$r}')" "$OWNER" '30 Tgas' | events
   echo "remote chains: $(view "$CORE" get_remote_chains '{"symbol":"NVDAx"}' | jq -c .)"
   RCP=$(evm buyer1)
-  if view "$CORE" list_quotes '{"symbol":"NVDAx","from_index":0,"limit":50}' | jq -e --arg r "$RCP" '.[] | select(.buyer_remote_recipient == $r)' >/dev/null; then echo "base quote exists"; else
+  if view "$CORE" list_quotes '{"symbol":"NVDAx","from_index":0,"limit":50}' | jq -e --arg r "$RCP" '.[] | select(.buyer_remote_recipient == $r and ((.remaining_usd_e6 | tonumber) >= 1000000000))' >/dev/null; then echo "base quote with >= \$1,000 exists"; else
     call "$USDC" mint "{\"account_id\":\"$B1\",\"amount\":\"1000000000\"}" "$OWNER" '30 Tgas' >/dev/null
     ftc "$USDC" "$B1" 1000000000 "$(jq -cn --arg r "$RCP" '{FundPappusQuote:{collateral:"NVDAx", max_discount_bps:300, notice_period_ns:"604800000000000", buyer_remote_recipient:$r}}')" | events
   fi
