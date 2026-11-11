@@ -69,7 +69,7 @@
     "p-8": true
   },
   "get_quote_3": {
-    "id": "3",
+    "quote_id": "3",
     "buyer": "borrower1.nectar.testnet",
     "collateral": "NVDAx",
     "committed_usd_e6": "2000000000",

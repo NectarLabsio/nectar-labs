@@ -31,6 +31,22 @@ export interface CollateralInput {
   verified_dex_depth_usd_e6: U128;
 }
 
+/** Contract `RemoteChain` (`collateral.remote_chain`). */
+export interface RemoteChain {
+  chain_id: string;
+  vault_program: string;
+  mpc_domain_id: number;
+}
+
+/**
+ * v2 `upsert_collateral(symbol, config)` input. `remote_chain` is written as given, so an edit of an existing asset must send
+ * the stored value back or the asset loses its Solana leg. `price_kind` null keeps the stored kind.
+ */
+export interface CollateralUpsertInput extends Omit<CollateralInput, "market_session_open"> {
+  remote_chain: RemoteChain | null;
+  price_kind?: PriceKind | null;
+}
+
 /** `get_collateral(symbol)` / `list_collaterals` item. Extra state fields: PRD §6.2 (confirm at G1).
  * v2 (interface-v7 §A2/A3) removes `market_session_open` and adds the weekend-guard and multiplier fields. */
 export interface CollateralView extends Omit<CollateralInput, "market_session_open"> {
@@ -61,6 +77,10 @@ export interface CollateralView extends Omit<CollateralInput, "market_session_op
   voluntary_filled_today_e6?: U128;
   /** UTC day (block_ns / 86400 s) of `voluntary_filled_today_e6`. */
   voluntary_day?: number;
+  remote_chain?: RemoteChain | null;
+  /** The OutLayer multiplier job read a change outside the `set_multiplier` bound: the owner should announce it. */
+  ca_suggested_multiplier_e18?: U128;
+  ca_suggested_ns?: U64;
 }
 
 // ---------------------------------------------------------------- v2 Shields and Profit-Lock (WO-23a, PRD §4.9–§4.11)
@@ -72,6 +92,13 @@ export interface ShieldParams {
   event_window_end_ns: U64;
 }
 export type ShieldKind = "Weekend" | "Event";
+/** Contract `Shield`: the preset stored on a position (`get_position(..).shield`); `premium_usd_e6` then holds the Shield fee. */
+export interface ShieldRecord {
+  kind: ShieldKind;
+  window_end_ns: U64;
+  fee_bps: Bps;
+  opened_ns: U64;
+}
 /** `shield` on LockCollateralAndBorrow / preview_borrow. Weekend: window_end_ns = the next calendar open, exactly. */
 export interface ShieldInput {
   kind: ShieldKind;
@@ -140,6 +167,8 @@ export interface RemoteConfigView {
   vault_read_deposit_yocto: U128 | null;
   vault_read_gas_tgas: number | null;
   reservation_expiry_s: number;
+  /** Deposit `reserve_remote_position` requires (refunded). Optional only for fixtures that predate WO-23a. */
+  reserve_deposit_yocto?: U128;
 }
 /** `set_vault_read_config` arguments (owner; contract: 1..=128-char strings, deposit > 0, gas 10..=100 Tgas). */
 export interface VaultReadConfigInput {
@@ -168,8 +197,6 @@ export interface ExitCapacity {
   limit_bps_effective: Bps;
   /** P1 (docs/work/interface-p1.md): absent on the P0 deployment, which is owner-oracle only. */
   oracle_source?: OracleSource | null;
-  /** P1, optional: confidence of the last accepted Pyth price, in bps of price. */
-  oracle_conf_bps?: Bps | null;
   /** (1 − h)(Q + R + D) in USD e6; present on the live v1 deployment and on v2. */
   capacity_usd_e6?: U128;
   // v2 additions (interface-v7 §A6); absent on v1.
@@ -203,15 +230,18 @@ export interface QuoterConfigInput {
 }
 /** `get_quoter_config()`: config plus pin (empty strings = P0 static pricing). Field set confirmed at G4. */
 export interface QuoterConfigView extends Partial<QuoterConfigInput> {
+  enabled?: boolean;
+  outlayer_account?: AccountId;
   project_id?: string;
   version_key?: string;
   max_conf_bps?: Bps;
-  [extra: string]: unknown;
+  secrets_ref?: { profile: string; account_id: AccountId } | null;
 }
 
-/** `get_quote(quote_id)` / `list_quotes`. Fields: PRD §6.2 (confirm at G1). */
+/** `get_quote(quote_id)` / `list_quotes`. The contract's key is `quote_id`; `id` is added by NectarViews (views.ts). */
 export interface QuoteView {
   id: U64;
+  quote_id: U64;
   buyer: AccountId;
   collateral: string;
   committed_usd_e6: U128;
@@ -220,26 +250,35 @@ export interface QuoteView {
   notice_period_ns: U64;
   unlock_ns: U64 | null;
   buyer_remote_recipient: string | null;
+  secrets_profile?: string | null;
   claimable_fees_usd_e6?: U128;
   fee_debt_e18?: U128;
+  created_ns?: U64;
   /** v2 (§4.10): the quote also fills Profit-Lock self-settlements. */
   accepts_voluntary_fills?: boolean;
 }
 
-/** `get_position(position_id)` / `list_positions`. Fields: PRD §6.2 + interface-p0 `status` (confirm at G1). */
+/** `get_position(position_id)` / `list_positions`. The contract's key is `position_id`; `id` is added by NectarViews (views.ts). */
 export interface PositionView {
   id: U64;
+  position_id: U64;
   borrower: AccountId;
   collateral: string;
   units: U128;
   debt_usd_e6: U128;
+  /** The limit premium paid at open, or the Shield fee when `shield` is set. */
+  premium_usd_e6?: U128;
   pre_liq_ltv_bps: Bps;
   opened_ns: U64;
+  remote_path?: string | null;
+  nonce?: U64;
   status: PositionStatus;
   /** v2, display only (interface-v7 §A3). */
   entry_multiplier_e18?: U128;
   /** v2 remote collateral (interface-v7 §B); absent or null for NEAR-held positions. */
   remote?: RemoteView | null;
+  /** v2 (§4.9): the Shield preset on this position, if any. */
+  shield?: ShieldRecord | null;
 }
 
 /** `get_health(position_id)`. */
@@ -285,11 +324,13 @@ export interface FeeSplit {
   treasury_bps: Bps;
 }
 
-/** `get_config()`. Field set is not fixed by interface-p0.md; everything beyond `owner` is optional (confirm at G1). */
+/** `get_config()` = contract `ConfigView`. Everything beyond `owner` is optional because the e2e fixtures carry a subset. */
 export interface CoreConfigView {
+  contract_version?: string;
   owner: AccountId;
   usdc_token?: AccountId;
   keeper?: AccountId;
+  keeper_fee_bps?: Bps;
   paused?: boolean;
   fee_split?: FeeSplit;
   min_notice_period_ns?: U64;
@@ -297,7 +338,13 @@ export interface CoreConfigView {
   max_age_ns_session?: U64;
   max_age_ns_closed?: U64;
   band_bps?: Bps;
-  [extra: string]: unknown;
+  gas_reserve_yocto?: U128;
+  next_quote_id?: U64;
+  next_position_id?: U64;
+  max_quotes_per_asset?: number;
+  max_quotes_per_settlement?: number;
+  /** v2 (§A5). */
+  origination_fee_bps?: Bps;
 }
 
 // ---------------------------------------------------------------- ft_on_transfer msg (externally tagged enum)

@@ -179,7 +179,8 @@
     "vault_read_version_key": "abababababababababababababababababababababababababababababababab",
     "vault_read_deposit_yocto": "10000000000000000000000",
     "vault_read_gas_tgas": 50,
-    "reservation_expiry_s": 1800
+    "reservation_expiry_s": 1800,
+    "reserve_deposit_yocto": "50000000000000000000000"
   },
   "is_referrer": true,
   "get_claimable": "150000",

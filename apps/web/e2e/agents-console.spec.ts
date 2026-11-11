@@ -50,10 +50,10 @@ test.describe("/agents", () => {
   test("flags off: install snippets, labelled example, x402 not run yet, referral stats on v2", async ({ page }) => {
     await setup(page, { account: "agent1.nectar.testnet", features: [] });
     await page.goto("/agents");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Let an agent open the loan");
-    await expect(page.getByTestId("mcp-stdio-cmd")).toContainText("pnpm -s --filter feed mcp");
-    await page.getByRole("tab", { name: "HTTP" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Agents");
     await expect(page.getByTestId("mcp-http")).toContainText("http://127.0.0.1:8789/mcp");
+    await page.getByRole("tab", { name: "Local stdio" }).click();
+    await expect(page.getByTestId("mcp-stdio-cmd")).toContainText("pnpm -s --filter feed mcp");
     const ex = page.getByTestId("agents-example");
     await expect(ex.getByText("example", { exact: true })).toBeVisible();
     await expect(page.getByTestId("example-input")).toContainText('"borrow_usd": "10"');
@@ -139,7 +139,8 @@ test.describe("/console v7 controls (v2)", () => {
     await page.getByRole("dialog").getByRole("button", { name: "Cancel" }).click();
 
     // session: clear forced close.
-    await page.getByTestId("v7-clear-forced").getByRole("button", { name: "Clear forced close" }).click();
+    await expect(page.getByRole("switch", { name: "Force the session closed" })).toBeChecked();
+    await page.getByRole("switch", { name: "Force the session closed" }).click();
     await expect(page.getByRole("dialog").getByTestId("sign-args")).toContainText('"closed": false');
     await page.getByRole("dialog").getByRole("button", { name: "Open wallet to sign" }).click();
 
@@ -197,7 +198,7 @@ test.describe("/console v7 controls (v2)", () => {
     await page.goto("/console");
     await expect(page.getByTestId("v7-ca-pending")).toBeVisible({ timeout: 20_000 });
     await expect(page.getByTestId("v7-session")).toContainText("No calendar loaded");
-    await expect(page.getByTestId("v7-force-closed").getByRole("button")).toBeDisabled();
+    await expect(page.getByRole("switch", { name: "Force the session closed" })).toBeDisabled();
     await expect(page.getByTestId("v7-attest").getByRole("button")).toBeDisabled();
     await page.getByTestId("v7-apply").getByRole("button", { name: "Apply corporate action" }).click();
     await expect(page.getByRole("dialog").getByTestId("sign-args")).toContainText('"symbol": "NVDAx"');

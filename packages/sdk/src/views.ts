@@ -38,11 +38,15 @@ export function rpcTransport(url: string | readonly string[]): ViewTransport {
   return resilientRpcTransport({ urls: rpcEndpoints(url) });
 }
 
-type RawPosition = Omit<PositionView, "id"> & { id?: U64; position_id?: U64 };
+type RawPosition = Omit<PositionView, "id">;
+type RawQuote = Omit<QuoteView, "id">;
 
-/** The contract names the key `position_id` (interface-p0 Views); `PositionView.id` is the SDK's name for it. */
+/** The contract names the keys `position_id` and `quote_id` (types.rs); `id` is the SDK's name for them. A view without the key is a shape bug, so it is not papered over. */
 function withPositionId(p: RawPosition): PositionView {
-  return { ...p, id: (p.id ?? p.position_id) as U64 };
+  return { ...p, id: p.position_id };
+}
+function withQuoteId(q: RawQuote): QuoteView {
+  return { ...q, id: q.quote_id };
 }
 
 export class NectarViews {
@@ -65,13 +69,26 @@ export class NectarViews {
   getCollateral = (symbol: string) => this.v<CollateralView | null>("get_collateral", { symbol });
   listCollaterals = (from_index = 0, limit = 50) => this.v<CollateralView[]>("list_collaterals", { from_index, limit });
   getExitCapacity = (symbol: string) => this.v<ExitCapacity>("get_exit_capacity", { symbol });
-  getQuote = (quote_id: U64) => this.v<QuoteView | null>("get_quote", { quote_id });
-  listQuotes = (symbol: string, from_index = 0, limit = 64) => this.v<QuoteView[]>("list_quotes", { symbol, from_index, limit });
+  getQuote = async (quote_id: U64): Promise<QuoteView | null> => {
+    const q = await this.v<RawQuote | null>("get_quote", { quote_id });
+    return q ? withQuoteId(q) : null;
+  };
+  listQuotes = async (symbol: string, from_index = 0, limit = 64): Promise<QuoteView[]> => (await this.v<RawQuote[]>("list_quotes", { symbol, from_index, limit })).map(withQuoteId);
   getPosition = async (position_id: U64): Promise<PositionView | null> => {
     const p = await this.v<RawPosition | null>("get_position", { position_id });
     return p ? withPositionId(p) : null;
   };
   listPositions = async (from_index = 0, limit = 50): Promise<PositionView[]> => (await this.v<RawPosition[]>("list_positions", { from_index, limit })).map(withPositionId);
+  /** Every position, in pages of 100 (the contract's MAX_PAGE). */
+  listAllPositions = async (): Promise<PositionView[]> => {
+    const out: PositionView[] = [];
+    for (let from = 0; from < 10_000; from += 100) {
+      const page = await this.listPositions(from, 100);
+      out.push(...page);
+      if (page.length < 100) break;
+    }
+    return out;
+  };
   getHealth = (position_id: U64) => this.v<HealthView>("get_health", { position_id });
   getPool = () => this.v<PoolView>("get_pool");
   /** `referrer` is a v2 argument; it is sent only when given, so v1 calls stay unchanged. */

@@ -11,7 +11,7 @@ const useSvgId = (p: string) => `${p}${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
 export type Tone = "pos" | "warn" | "neg";
 /** Series colours (DESIGN_SYSTEM §3c): Q mint, R teal, D sky, haircut amber hatch, debt ink. */
-export type SeriesTone = "q" | "r" | "d" | "h" | "used";
+export type SeriesTone = "q" | "r" | "d" | "h" | "used" | "v";
 
 // ---------------------------------------------------------------- Panel
 
@@ -135,8 +135,8 @@ export function tabPanelProps(idBase: string, id: string) {
   return { role: "tabpanel" as const, id: `${idBase}-panel-${id}`, "aria-labelledby": `${idBase}-tab-${id}`, tabIndex: 0 };
 }
 
-/** Underline tabs (Portfolio: Loans / Deposits / Notes / Activity). Roving tabindex, arrow keys move. */
-export function TabBar<T extends string>({ label, tabs, value, onChange, idBase }: { label: string; tabs: Array<TabItem<T>>; value: T; onChange: (v: T) => void; idBase: string }) {
+/** Tabs: underlined (Portfolio: Loans / Deposits / Notes / Activity) or segmented (Earn mode, Agents transport). Roving tabindex, arrow keys move. */
+export function TabBar<T extends string>({ label, tabs, value, onChange, idBase, variant = "underline", className }: { label: string; tabs: Array<TabItem<T>>; value: T; onChange: (v: T) => void; idBase: string; variant?: "underline" | "seg"; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const onKey = (e: ReactKeyboardEvent<HTMLDivElement>) => {
     const i = tabs.findIndex((t) => t.id === value);
@@ -148,7 +148,7 @@ export function TabBar<T extends string>({ label, tabs, value, onChange, idBase 
     ref.current?.querySelector<HTMLButtonElement>(`#${CSS.escape(`${idBase}-tab-${next.id}`)}`)?.focus();
   };
   return (
-    <div ref={ref} className="nx-tabs" role="tablist" aria-label={label} onKeyDown={onKey}>
+    <div ref={ref} className={cx(variant === "seg" ? "nx-seg" : "nx-tabs", className)} role="tablist" aria-label={label} onKeyDown={onKey}>
       {tabs.map((t) => {
         const on = t.id === value;
         return (
@@ -516,7 +516,7 @@ export function Ladder({ rows, caption, highlightLast = true }: { rows: LadderRo
   let wi = 0;
   const lastLive = rows.map((r) => !r.muted).lastIndexOf(true);
   return (
-    <div className="nx-tbl-wrap">
+    <div className="nx-tbl-wrap" role="region" aria-label={caption} tabIndex={0}>
       <table className="nx-tbl nx-ladder">
         <caption className="sr-only">{caption}</caption>
         <thead>
@@ -600,5 +600,73 @@ export function Donut({ segments, centerLabel, centerValue, size = 170, legend =
       </svg>
       {legend ? <Legend column items={segments.map((s) => ({ tone: s.tone, label: s.label, value: s.valueText }))} /> : null}
     </div>
+  );
+}
+
+// ---------------------------------------------------------------- Placement ladder, waterfall, agent run
+
+export interface PlacementItem {
+  key: string;
+  who: ReactNode;
+  at: ReactNode;
+  size: number;
+  sizeText: string;
+  cap: string;
+  kind: "q" | "r" | "me";
+}
+
+/** Where a new commitment would stand (Earn artboard): rows in settlement order, the new one highlighted. */
+export function PlacementLadder({ rows, label }: { rows: PlacementItem[]; label: string }) {
+  const widths = ladderWidths(rows.map((r) => r.size));
+  return (
+    <ol className="nx-place" aria-label={label}>
+      {rows.map((r, i) => (
+        <li key={r.key} className={cx("nx-place-row", r.kind === "me" && "me")} data-kind={r.kind}>
+          <span className="num nx-place-n">{i + 1}</span>
+          <span className="nx-stack nx-place-who">
+            <span className="nx-place-name">{r.who}</span>
+            <span className="nx-k">{r.at}</span>
+          </span>
+          <span className="nx-stack nx-place-size">
+            <span className="nx-v nx-place-amt">{r.sizeText}</span>
+            <span className="nx-meter" aria-hidden="true">
+              <i className={`nx-c-${r.kind === "me" ? "q" : r.kind === "r" ? "r" : "used"}`} style={{ width: `${widths[i] ?? 0}%` }} />
+            </span>
+          </span>
+          <span className="nx-v nx-place-cap">{r.cap}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/** One step of the settlement order (Earn artboard). */
+export function FallStep({ tone, title, detail, on }: { tone: "q" | "r" | "off"; title: ReactNode; detail: ReactNode; on?: boolean }) {
+  return (
+    <div className={cx("nx-fall", on && "on")}>
+      <i className={tone === "off" ? "nx-fall-off" : `nx-c-${tone}`} aria-hidden="true" />
+      <span className="nx-stack">
+        <b className="nx-strong">{title}</b>
+        <span className="nx-k">{detail}</span>
+      </span>
+    </div>
+  );
+}
+
+/** One call of a replayed agent run (Agents artboard): number or check, the call, its result, the payload on demand. */
+export function RunStep({ n, call, summary, state, open, onToggle, children }: { n: number; call: string; summary: ReactNode; state: "todo" | "now" | "done"; open: boolean; onToggle: () => void; children: ReactNode }) {
+  const done = state === "done";
+  return (
+    <article className={cx("nx-run", state)} data-state={state}>
+      <button type="button" className="nx-run-head" aria-expanded={open} onClick={onToggle} disabled={state === "todo"}>
+        <i className="nx-run-dot" aria-hidden="true">{done ? "✓" : n}</i>
+        <span className="nx-stack nx-run-t">
+          <span className="nx-run-call">{call}</span>
+          <span className="nx-k">{done ? summary : state === "now" ? "running…" : "waiting"}</span>
+        </span>
+        <span className="nx-k">{done ? (open ? "Hide" : "Show") : null}</span>
+      </button>
+      {open ? <div className="nx-run-body">{children}</div> : null}
+    </article>
   );
 }

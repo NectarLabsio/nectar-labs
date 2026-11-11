@@ -41,7 +41,6 @@ export default function PositionPage() {
   const { config } = useChain();
   const { accountId } = useWallet();
   const sign = useSign();
-  const notesOn = useFeature("notes");
   const solanaOn = useFeature("solana_remote");
   const shieldsOn = useFeature("shields");
   const profitLockOn = useFeature("profit_lock");
@@ -123,7 +122,7 @@ export default function PositionPage() {
           <>
             <div className="nx-head-row">
               <div className="nx-stack" style={{ gap: 12 }}>
-                <nav className="nx-crumb" aria-label="Breadcrumb">{notesOn ? <Link href="/notes">Portfolio</Link> : <Link href="/feed">Markets</Link>}<span aria-hidden="true">/</span><span className="nx-head" aria-current="page">Loan #{pos.id}</span></nav>
+                <nav className="nx-crumb" aria-label="Breadcrumb"><Link href="/notes">Portfolio</Link><span aria-hidden="true">/</span><span className="nx-head" aria-current="page">Loan #{pos.id}</span></nav>
                 <div className="nx-row" style={{ gap: 16 }}>
                   <img src={tokC.src} alt="" width={60} height={60} />
                   <div className="nx-stack" style={{ gap: 6 }}>

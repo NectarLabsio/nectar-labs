@@ -66,7 +66,7 @@ async function setup(page: Page, st: State) {
   );
   const views = (): Record<string, unknown> => ({
     ...FIXTURE,
-    get_position: { id: "7", borrower: BORROWER, collateral: "NVDAx", units: "2000000", debt_usd_e6: st.debt, pre_liq_ltv_bps: 7500, opened_ns: st.remote.reserved_ns, status: "Open", remote: { chain: "solana-devnet", path: "solana-devnet/pos/7", ...st.remote } },
+    get_position: { position_id: "7", borrower: BORROWER, collateral: "NVDAx", units: "2000000", debt_usd_e6: st.debt, pre_liq_ltv_bps: 7500, opened_ns: st.remote.reserved_ns, status: "Open", remote: { chain_id: "solana-devnet", path: "solana-devnet/pos/7", ...st.remote } },
     get_health: { value_usd_e6: "178000000", ltv_bps: 561, triggerable: false, oracle_fresh: true },
     get_pending_release: st.remote.status === "Releasing" ? { message: RELEASE_MSG, signature_hex: "ab".repeat(64), nonce: "11", expires: String(EXPIRES) } : null,
   });
@@ -113,7 +113,7 @@ test.describe("Solana remote borrow (mocked)", () => {
     const modal = page.getByRole("dialog");
     await expect(modal).toContainText("reserve_remote_position");
     await expect(modal.getByTestId("sign-args")).toContainText('"units": "2000000"');
-    await expect(modal.getByTestId("sign-deposit")).toHaveText("0 NEAR");
+    await expect(modal.getByTestId("sign-deposit")).toHaveText("0.05 NEAR");
     await modal.getByRole("button", { name: "Open wallet to sign" }).click();
     await expect(page).toHaveURL(/remote=7/);
     await expect(page.getByTestId("remote-authority")).toHaveText(AUTH);

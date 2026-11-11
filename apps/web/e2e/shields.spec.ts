@@ -66,7 +66,7 @@ async function setup(page: Page, o: Opts = {}) {
         return { ...(FIXTURE.preview_borrow as Record<string, unknown>), b_c_usd_e6: "47500000", premium_usd_e6: fee.toString(), shield_fee_usd_e6: fee.toString(), origination_fee_usd_e6: orig.toString(), total_fees_usd_e6: (fee + orig).toString(), net_proceeds_usd_e6: (borrow - fee - orig).toString(), ok: true, reason: null };
       }
       case "get_position":
-        return { id: "7", borrower: BORROWER, collateral: "NVDAx", units: "2000000", debt_usd_e6: "10000000", pre_liq_ltv_bps: 7500, opened_ns: NOW.toString(), status: "Open", remote: null };
+        return { position_id: "7", borrower: BORROWER, collateral: "NVDAx", units: "2000000", debt_usd_e6: "10000000", pre_liq_ltv_bps: 7500, opened_ns: NOW.toString(), status: "Open", remote: null };
       case "get_health":
         return { value_usd_e6: "178000000", debt_usd_e6: "10000000", ltv_bps: 561, pre_liq_ltv_bps: 7500, triggerable: false, oracle_fresh: true, ...o.health };
       case "get_shield":
@@ -225,14 +225,14 @@ test.describe("Profit-Lock on /position/[id] (mocked v2)", () => {
 });
 
 test.describe("/quote/new voluntary fills (mocked v2)", () => {
-  test("checkbox adds accepts_voluntary_fills to the FundPappusQuote msg", async ({ page }) => {
+  test("switch adds accepts_voluntary_fills to the FundPappusQuote msg", async ({ page }) => {
     await setup(page);
     await page.goto("/quote/new");
-    const box = page.getByLabel("Accept voluntary fills (Profit-Lock)");
+    const box = page.getByRole("switch", { name: "Accept voluntary fills" });
     await expect(box).not.toBeChecked({ timeout: 20_000 });
-    await box.check();
-    await page.getByLabel(/^Amount/).fill("100");
-    await page.getByRole("button", { name: "Fund quote" }).click();
+    await box.click();
+    await page.getByLabel("You commit").fill("100");
+    await page.getByTestId("quote-submit").click();
     const modal = page.getByRole("dialog");
     await expect(modal.getByTestId("sign-msg")).toContainText('"accepts_voluntary_fills": true');
     await modal.getByRole("button", { name: "Open wallet to sign" }).click();
@@ -241,10 +241,10 @@ test.describe("/quote/new voluntary fills (mocked v2)", () => {
     await axeClean(page);
   });
 
-  test("flag off: no checkbox", async ({ page }) => {
+  test("flag off: no switch", async ({ page }) => {
     await setup(page, { features: [] });
     await page.goto("/quote/new");
-    await expect(page.getByRole("button", { name: "Fund quote" })).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByTestId("quote-submit")).toBeVisible({ timeout: 20_000 });
     await expect(page.getByTestId("voluntary-fills")).toHaveCount(0);
   });
 });

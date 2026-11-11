@@ -54,9 +54,9 @@ async function setup(page: Page, o: Opts = {}) {
       case "nft_transfer_locked":
         return FX.nft_transfer_locked[tid] === true;
       case "get_quote":
-        return { ...FX.get_quote_3, id: String(args.quote_id) };
+        return { ...FX.get_quote_3, quote_id: String(args.quote_id) };
       case "get_position":
-        return { id: String(args.position_id), borrower: OWNER, collateral: "NVDAx", units: "2000000", debt_usd_e6: "10000000", pre_liq_ltv_bps: 7500, opened_ns: NOW.toString(), status: "Open", remote: null };
+        return { position_id: String(args.position_id), borrower: OWNER, collateral: "NVDAx", units: "2000000", debt_usd_e6: "10000000", pre_liq_ltv_bps: 7500, opened_ns: NOW.toString(), status: "Open", remote: null };
       case "get_health":
         return { value_usd_e6: "178000000", debt_usd_e6: "10000000", ltv_bps: 561, pre_liq_ltv_bps: 7500, triggerable: false, oracle_fresh: true };
       case "get_shield":
@@ -106,6 +106,7 @@ test.describe("/notes (mocked v2, notes on)", () => {
   test("grid of live SVG thumbnails as <img> data URIs; type chips filter; nav link; a11y; no h-scroll", async ({ page }) => {
     await setup(page);
     await page.goto("/notes");
+    await page.getByRole("tab", { name: /^Notes/ }).click();
     const grid = page.getByTestId("notes-grid");
     await expect(grid.locator(".note-card")).toHaveCount(5, { timeout: 20_000 });
     await expect(page.getByTestId("notes-total")).toHaveText("5 Notes");
@@ -130,7 +131,7 @@ test.describe("/notes (mocked v2, notes on)", () => {
   test("pages of 20", async ({ page }) => {
     const many = Array.from({ length: 25 }, (_, i) => ({ token_id: `q-${100 + i}`, owner_id: OWNER }));
     await setup(page, { tokens: many });
-    await page.goto("/notes");
+    await page.goto("/notes?tab=notes");
     await expect(page.getByTestId("notes-grid").locator(".note-card")).toHaveCount(20, { timeout: 20_000 });
     await expect(page.getByTestId("notes-page")).toHaveText("Page 1 of 2");
     await page.getByRole("button", { name: "Next" }).click();
@@ -140,15 +141,16 @@ test.describe("/notes (mocked v2, notes on)", () => {
 
   test("empty account", async ({ page }) => {
     await setup(page, { tokens: [] });
-    await page.goto("/notes");
+    await page.goto("/notes?tab=notes");
     await expect(page.getByTestId("notes-empty")).toBeVisible({ timeout: 20_000 });
   });
 
-  test("flags off: honest disabled states, no nav links", async ({ page }) => {
+  test("flags off: Portfolio still works, its Notes tab says so; no Notes or Reserve links", async ({ page }) => {
     await setup(page, { features: [] });
-    await page.goto("/notes");
+    await page.goto("/notes?tab=notes");
     await expect(page.getByText("Position Notes are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
-    await expect(page.locator("a[href=\"/notes\"]")).toHaveCount(0);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Portfolio");
+    await expect(page.getByRole("link", { name: "Position Notes" })).toHaveCount(0);
     await expect(page.locator("a[href=\"/reserve\"]")).toHaveCount(0);
     await page.goto("/reserve");
     await expect(page.getByText("Reserve deposits are not enabled on this deployment")).toBeVisible({ timeout: 20_000 });
@@ -257,10 +259,10 @@ test.describe("/reserve (mocked v2 views, contract shapes)", () => {
     await copyRules(page);
     expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
     await axeClean(page);
-    await page.getByLabel("Amount (USDC)").fill("9.99");
+    await page.getByLabel("You deposit").fill("9.99");
     await expect(page.getByText("The Reserve takes at least $10.00")).toBeVisible();
     await expect(page.getByTestId("reserve-join")).toBeDisabled();
-    await page.getByLabel("Amount (USDC)").fill("25");
+    await page.getByLabel("You deposit").fill("25");
     await page.getByTestId("reserve-join").click();
     const modal = page.getByRole("dialog");
     await expect(modal).toContainText("Review: Join the Nectar Reserve");
@@ -288,7 +290,7 @@ test.describe("/reserve states (contract shapes)", () => {
     await expect(page.getByTestId("reserve-disabled")).toBeVisible({ timeout: 20_000 });
     await expect(page.getByTestId("reserve-none")).toBeVisible();
     await expect(page.getByTestId("reserve-apr")).toHaveText("no active deposits");
-    await page.getByLabel("Amount (USDC)").fill("25");
+    await page.getByLabel("You deposit").fill("25");
     await expect(page.getByTestId("reserve-join")).toBeDisabled();
     await expect(page.getByTestId("reserve-notes-empty")).toBeVisible();
     expect(await calls(page)).toHaveLength(0);
@@ -301,7 +303,7 @@ test.describe("notes screenshots", () => {
   for (const theme of ["dark", "light"] as const) {
     test(`capture ${theme}`, async ({ page }, info) => {
       await setup(page, { theme });
-      for (const [name, path, ready] of [["notes", "/notes", "note-img-p-7"], ["note", "/note/p-7", "note-svg"], ["reserve", "/reserve", "reserve-rc"]] as const) {
+      for (const [name, path, ready] of [["notes", "/notes?tab=notes", "note-img-p-7"], ["note", "/note/p-7", "note-svg"], ["reserve", "/reserve", "reserve-rc"]] as const) {
         await page.goto(path);
         await expect(page.getByTestId(ready)).toBeVisible({ timeout: 20_000 });
         await page.screenshot({ path: resolve(import.meta.dirname, `../../../evidence/wo-26c/${name}-${info.project.name}-${theme}.png`), fullPage: true });

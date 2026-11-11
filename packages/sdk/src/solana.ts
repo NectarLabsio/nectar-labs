@@ -321,11 +321,19 @@ export function releasePreimage(f: { program: string; positionId: bigint; recipi
 
 /** `get_pending_release(position_id)` (interface-v7 §B). JSON numbers above 2^53 are strings. */
 export interface PendingRelease {
+  position_id?: string;
   message: string;
-  signature_hex: string;
+  /** Null until the MPC signer answered (`status` AwaitingSignature or SignFailed). */
+  signature_hex: string | null;
   nonce: string | number;
   expires: string | number;
+  recipient?: string;
+  status?: ReleaseStatus;
+  solana_tx_sig?: string | null;
 }
+
+/** Contract `ReleaseStatus`. */
+export type ReleaseStatus = "AwaitingSignature" | "Signed" | "SignFailed" | "Relayed";
 
 export interface ReleasePlan {
   positionId: bigint;
@@ -345,6 +353,7 @@ export function planRelease(pr: PendingRelease, expect: { program: string; posit
   const expires = BigInt(pr.expires);
   const rebuilt = releasePreimage({ program: expect.program, positionId: expect.positionId, recipient: expect.depositor, nonce, expires });
   if (pr.message !== rebuilt) throw new Error("The signed release message does not match this vault, position and depositor.");
+  if (!pr.signature_hex) throw new Error("The release is not signed yet.");
   const signature = hexToBytes(pr.signature_hex);
   if (signature.length !== 64) throw new Error("The release signature is not 64 bytes.");
   return { positionId: expect.positionId, nonce, expires, recipient: expect.depositor, message: enc.encode(pr.message), signature };

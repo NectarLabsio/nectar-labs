@@ -94,7 +94,7 @@ export function RemoteBorrow() {
       summary: (
         <div className="stack-sm">
           <p className="small">
-            No collateral moves on NEAR. nectar-core derives a Solana key for this position (path <span className="mono">{remotePath("<id>", config.v7.remote_path_prefix)}</span>) and holds the reservation for 30 minutes. USDC is paid only after the deposit is
+            No collateral moves on NEAR. nectar-core derives a Solana key for this position (path <span className="mono">{remotePath("<id>", config.v7.remote_path_prefix)}</span>) and holds the reservation for 30 minutes. The 0.05 NEAR deposit is refunded when the reservation confirms, is refused or expires. USDC is paid only after the deposit is
             confirmed by an attested read of the vault.
           </p>
           {fees ? <div className="kvs"><Kv k="You receive at confirmation (estimate)" v={formatUsdE6(fees.net_usd_e6)} /></div> : null}
