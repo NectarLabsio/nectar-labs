@@ -1,0 +1,2 @@
+rpc code_hash 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk block 277226659
+wasm base58   3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk

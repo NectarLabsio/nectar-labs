@@ -1,0 +1,21 @@
+tx 7UFpexpdEH2nhmDVqXar8vZHQcK1iBFXznu9rybn24wU signer=agent1.nectar.testnet pk=ed25519:3zyEtyWb2BJzYZdTEsQeBNhnoqrNFw6KeQLjJQE925hm receiver=nvdax-mock.nectar.testnet final=SuccessValue final_execution_status=FINAL receipts=10 failed_receipts=0 gas_burnt_total=14.01T
+  FunctionCall ft_transfer_call args={"receiver_id":"nectar-core-v2.nectar.testnet","amount":"1000000","msg":"{\"LockCollateralAndBorrow\":{\"collateral\":\"NVDAx\",\"borrow_usd_e6\":\"10000000\",\"pre_liq_ltv_bps\":8000}}"} deposit=1
+  receipt BXUwJLER… executor=nvdax-mock.nectar.testnet status=SuccessReceiptId
+  receipt 4xCkhjGn… executor=nectar-core-v2.nectar.testnet status=SuccessValue logs: EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"position_opened","data":[{"position_id":"14","borrower":"agent1.nectar.testnet","collateral":"NVDAx","units":"1000000","debt_usd_e6":"10000000","premium_usd_e6":"0","origination_fee_usd_e6":"30000","net_proceeds_usd_e6":"9970000","pay_to":nu ;; EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"agent1.nectar.testnet","token_ids":["p-14"]}]}
+  receipt 4ZYGAMDX… executor=usdc-mock.nectar.testnet status=SuccessValue
+  receipt 4NAEuiKW… executor=agent1.nectar.testnet status=SuccessValue
+  receipt C6bLQU7q… executor=nectar-core-v2.nectar.testnet status=SuccessValue
+  receipt GRAEYamM… executor=agent1.nectar.testnet status=SuccessValue
+  receipt 5rC2E9VD… executor=agent1.nectar.testnet status=SuccessValue
+  receipt ChvUQfxw… executor=nvdax-mock.nectar.testnet status=SuccessValue
+  receipt 47ZBQcSd… executor=agent1.nectar.testnet status=SuccessValue
+  receipt CnDyfFJT… executor=agent1.nectar.testnet status=SuccessValue
+tx EskZKj9sXxcpTWYoKRiagRvvkh3H5hjz8KQFL7qNRQQ7 signer=x402-relayer.nectar.testnet pk=ed25519:GVaHZ4FfWf3DnJXLXfnjXN3rDCjiTSfd1KT4GCdmWuXR receiver=agent1.nectar.testnet final=SuccessValue final_execution_status=FINAL receipts=4 failed_receipts=0 gas_burnt_total=3.26T
+  Delegate sender=agent1.nectar.testnet receiver=usdc-mock.nectar.testnet delegate_pk=ed25519:3zyEtyWb2BJzYZdTEsQeBNhnoqrNFw6KeQLjJQE925hm nonce=277093880000006 max_block_height=277224469
+    inner FunctionCall ft_transfer args={"receiver_id":"nectar.testnet","amount":"10000"} deposit=1
+  receipt 4TUfAyoj… executor=agent1.nectar.testnet status=SuccessValue
+  receipt 3Eb5az3o… executor=usdc-mock.nectar.testnet status=SuccessValue
+  receipt EHjYF46q… executor=x402-relayer.nectar.testnet status=SuccessValue
+  receipt 74jfrNXV… executor=x402-relayer.nectar.testnet status=SuccessValue
+keys agent1.nectar.testnet: ed25519:3zyEtyWb2BJzYZdTEsQeBNhnoqrNFw6KeQLjJQE925hm FullAccess
+keys x402-relayer.nectar.testnet: ed25519:GVaHZ4FfWf3DnJXLXfnjXN3rDCjiTSfd1KT4GCdmWuXR FullAccess

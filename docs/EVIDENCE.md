@@ -29,7 +29,8 @@
 | G2b testnet deploy v2 (after D-027) | PASS — supersedes the 16:45Z row as current state; open item: rebuild needed SDKROOT=MacOSX26.5.sdk on this host | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G2b/verifier-20261111T080154Z/ (contract_version 2.2.1-v7; rebuilt wasm sha256 2938ebf8… == view_code, byte-identical, code_hash 3mv4LRm6…; keeper-v2 one FC key, 5 methods, receiver core-v2; get_config, get_exit_capacity, list_quotes {symbol} 5, get_remote_chains {symbol} solana ENZa… + base 0xC64b…, get_quoter_config pin 5f9bb287…; see §G2b) |
 | G7 Solana + signer (re-run after D-027) | PASS — read-only, both chains | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G7/verifier-20261111T080154Z/ (pos 8/9/10 authority == live derived_public_key domain 1; confirm txs source "outlayer", funded false/true/true, pos 8 refused aggregate_limit + refund; 3 Solana txs finalized, ix0 Ed25519 → ix1 vault, pubkey == authority, sig valid, tampered msg invalid; ProgramData 426,837 B = 45 B header + 426,792 B ELF; recipient +2.386856, depositor withdrew 3 / 3 / 0.613144; PDAs closed; NEAR Closed; see §G7) |
 | G13 Base round trip (re-run after D-027) | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; earlier caveats (ERC-8021, Solana-domain revert in forge only) stand, not re-checked | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G13/verifier-20261111T080154Z/ (pos 11/12 authority == keccak addr of derived key domain 0; relay txs 0x12f5…0cd5 / 0xa2fe…c648 status 1; hashRelease/hashSettle == NEAR digest; ecrecover == authority; positionOf 3 / 2; borrower1 7→10→7.642611, buyer1 +2.357389; replay → NonceUsed(10) / NonceUsed(14); nonceUsed[slotKey] true; see §G13) |
-| G14 x402 (re-run after D-027) | PASS for the chain claims; the HTTP 402 → 200 leg was not re-run by the verifier | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G14/verifier-20261111T080154Z/ (borrow HvFX6… agent1 → nvdax-mock ft_transfer_call → core-v2 position_opened #13 $10; relay BemztvL… x402-relayer → Delegate agent1 → usdc-mock ft_transfer {nectar.testnet, 10000}, all receipts success; see §G14) |
+| G14 x402 (re-run after D-027) | PASS — chain claims (08:02Z) + 402 → 200 verifier-run 2026-11-11T13:54Z–13:55Z: own x402 server from the clone on :8891, unpaid GET → 402 (near:testnet, usdc-mock, 10000, payTo nectar.testnet), paid → 200 CSV 110 rows | 2026-11-11T08:02Z–08:25Z; 13:52Z–14:18Z | 3ab3026; 45ed1f3 (402 → 200) | evidence/G14/verifier-20261111T080154Z/ (borrow HvFX6… #13, relay BemztvL…); evidence/G14/verifier-20261111T135216Z/ (borrow 7UFpexpd… agent1 → nvdax-mock ft_transfer_call → core-v2 position_opened #14 $10, fee $0.03, 10 receipts 0 failed; relay EskZKj9s… signer x402-relayer → Delegate agent1 (pk 3zyEty…) → usdc-mock ft_transfer {nectar.testnet, 10000}, 4 receipts 0 failed; treasury usdc 20000 → 30000; see §G14) |
+| G1 (2.2.1 gas rows) | FAIL — 1 of 67 non-private change methods has no GAS row: `remove_extra_remote_chain` (evm.rs:413, unit-tested only). Every test green (608 unit + 50 sandbox, 0 failed); 66 measured, 0 rows ≥ 100 Tgas (max tx-total 78.72, max receipt 67.69); tested wasm = deployed 2.2.1-v7 code_hash 3mv4LRm6… | 2026-11-11T13:53Z–14:16Z | 45ed1f3 | evidence/G1/verifier-221-20261111T135216Z/ (method-gas-diff.tsv, gas-summary.txt; see §G1) |
 | G9 fresh-clone rehearsal (re-run after WO-38) | PASS — quick start under 2 min; demo:testnet, verify (ui 7, feed 63, keeper 293, x402 17, sdk 178; 0 failed), verify:quick (repo-wide branding check first), docs build and gitleaks (272 commits, no leaks) all exit 0; no "hackathon" in the product sources, the built docs site or search-index.json; 21 README routes 200; Feed MCP stdio + HTTP live; no unbacked claim; payload builds with `website` absent | 2026-11-11T08:57Z–09:00Z | 0af5cdd | evidence/G9/20261111T085721Z/ (see §G9 re-run) |
 | G9 (first run) | FAIL — superseded by the re-run above; one copy-rule breach: docs-site page Project › Evidence (`apps/docs-site/docs/project/evidence.md:11`, built to /project/evidence) says "built for the NEAR Hackathon". Everything else passed: quick start in about 3 min, demo:testnet / verify / docs build / gitleaks (268 commits) exit 0, Feed MCP stdio + HTTP live with no env, ids answer on RPC | 2026-11-11T08:43Z–08:50Z | c5f6349 | evidence/G9/20261111T084317Z/ (see §G9) |
 
@@ -244,6 +245,44 @@ Notes — PASS: nft_total_supply "11"; nft_tokens lists q-0…q-3, p-0…p-4, r-
 Evidence: commands and outputs in this block; G3b live-probe.log.
 
 ## G14
+
+### G14 — x402 paid call — 402 → 200 VERIFIER-RUN — PASS — 2026-11-11T13:52Z–14:18Z (demo 13:54:46Z–13:55:05Z) — commit 45ed1f3
+Fresh clone `git clone /Volumes/T7/nectar-labs /tmp/verify-g14-20261111T135216Z` (HEAD 45ed1f3; f0efa1e..45ed1f3 = docs/STATE.md only). `pnpm i --frozen-lockfile` exit 0.
+Host services untouched (keeper :8790, x402 :8791, Feed :8788/:8789, anvil :8545 still listening after the run). Host Feed /healthz: `ok:false`, last_error
+"neardata block 277097811 HTTP 429" (13:53Z and 14:17Z); its views path answered (MCP borrow build + CSV), and /healthz is not the claim under test.
+Keys read by path only (both files 0600); no key material printed, copied or committed; no .env written. Logs: evidence/G14/verifier-20261111T135216Z/.
+```
+$ X402_PORT=8891 X402_RELAYER_KEY_PATH=~/.nectar/keys/x402-relayer.json X402_RPC_URL=https://test.rpc.fastnear.com pnpm --filter x402 start   # own server, clone
+  x402_started port 8891 near:testnet asset usdc-mock.nectar.testnet amount 10000 pay_to nectar.testnet facilitator in-process (relayer x402-relayer.nectar.testnet)
+$ curl -i http://127.0.0.1:8891/api/feed/export.csv        # unpaid
+  HTTP/1.1 402 Payment Required · body {} · PAYMENT-REQUIRED (base64) → {"x402Version":2,"accepts":[{"scheme":"exact","network":"near:testnet",
+  "amount":"10000","asset":"usdc-mock.nectar.testnet","payTo":"nectar.testnet","maxTimeoutSeconds":120}]}
+$ AGENT1_KEY_PATH=~/.nectar/keys/agent1.json X402_URL=http://127.0.0.1:8891/api/feed/export.csv FEED_MCP_URL=http://127.0.0.1:8789/mcp \
+  X402_RPC_URL=https://test.rpc.fastnear.com pnpm --filter x402 demo:testnet                                                  → EXIT=0
+  borrow_built receiver nvdax-mock.nectar.testnet ft_transfer_call fees {origination 30000, total 30000, net 9970000}
+  borrow_sent tx 7UFpexpdEH2nhmDVqXar8vZHQcK1iBFXznu9rybn24wU ok true
+  challenge status 402 network near:testnet asset usdc-mock.nectar.testnet amount 10000 pay_to nectar.testnet
+  paid_fetch status 200 rows 110 transaction EskZKj9sXxcpTWYoKRiagRvvkh3H5hjz8KQFL7qNRQQ7
+  server log: payment_required 402 ×3 (my curl + demo) → paid transaction EskZKj9s… at 13:55:05Z; server stopped (kill of its own pid; :8891 free)
+$ node g14-verify.mjs <borrow> <relay>     # EXPERIMENTAL_tx_status wait_until FINAL, https://test.rpc.fastnear.com (D-025)
+tx 7UFpexpd… signer=agent1.nectar.testnet pk=ed25519:3zyEty… receiver=nvdax-mock.nectar.testnet final=SuccessValue FINAL receipts=10 failed=0 burnt 14.01T
+  FunctionCall ft_transfer_call {receiver_id nectar-core-v2.nectar.testnet, amount 1000000, msg LockCollateralAndBorrow {NVDAx, borrow 10000000, pre_liq 8000}} deposit 1
+  core-v2 EVENT_JSON position_opened {position_id 14, borrower agent1, units 1000000, debt 10000000, origination_fee 30000, net 9970000} ;; nft_mint p-14
+tx EskZKj9s… signer=x402-relayer.nectar.testnet pk=ed25519:GVaHZ4… receiver=agent1.nectar.testnet final=SuccessValue FINAL receipts=4 failed=0 burnt 3.26T
+  Delegate sender=agent1.nectar.testnet receiver=usdc-mock.nectar.testnet delegate_pk=ed25519:3zyEty… nonce 277093880000006
+    inner FunctionCall ft_transfer {"receiver_id":"nectar.testnet","amount":"10000"} deposit 1
+  receipts agent1 SuccessValue · usdc-mock SuccessValue · x402-relayer SuccessValue ×2
+keys agent1: 3zyEty… FullAccess (1 key) · x402-relayer: GVaHZ4… FullAccess (1 key)
+$ node bal.mjs before|after   # ft_balance_of, final
+  before 13:54:25Z  usdc agent1 19920000 · usdc nectar.testnet 20000 · nvdax agent1 2000000
+  after  13:55:08Z  usdc agent1 29880000 (+9970000 net −10000 paid) · usdc nectar.testnet 30000 (+10000) · nvdax agent1 1000000 (−1 NVDAx locked)
+$ curl http://127.0.0.1:8788/api/feed/export.csv   # free upstream, same Feed → 200, 111 lines = header + 110 rows (= paid count)
+```
+Explorer: opened https://testnet.nearblocks.io/txns/EskZKj9sXxcpTWYoKRiagRvvkh3H5hjz8KQFL7qNRQQ7 with WebFetch → HTTP 403 (as in §G2). The RPC output above is the proof.
+Notes: the 402 body is `{}`. The terms are in the x402 v2 `PAYMENT-REQUIRED` header, decoded above (unpaid-402-decoded.json). mock-ft emits no ft_transfer event, so the
+$0.01 transfer is proven by the decoded delegate action, the successful usdc-mock receipt and the treasury balance delta. CSV row count is the demo's own count, matched by the free upstream.
+Verdict: **PASS.** The verifier ran the HTTP leg itself: unpaid GET → 402 with the right terms, a borrow on chain, a relayed NEP-366 delegate payment, and 200 with the CSV.
+This replaces the "SELF-ATTESTED" note on the 08:02Z re-run below.
 
 ### G14 — x402 paid call — RE-RUN after D-027 — PASS (chain claims) — 2026-11-11T08:02Z–08:25Z — commit 3ab3026
 Fresh clone /tmp/verify-chain-20261111T080154Z. Read-only. No secrets. Claims checked: evidence/G14/rerun/summary.md. Command: node evidence/G14/verifier-20261111T080154Z/g14.mjs
@@ -600,6 +639,7 @@ Explorer links: none opened this run. NearBlocks returns 403 to WebFetch (§G2) 
 Claims (step 3): every PASS / live / deployed / verified statement in README.md and SECURITY.md was traced to an EVIDENCE row (summary rows G0–G8, G1 v7, G10, G11 re-run, G12,
 G2b/G7/G13/G14 re-runs, G3b re-run, §v7 module runs; Notes → §G2b `nft_tokens`/`nft_token_svg` and §G14 `nft_mint p-4`; vault slot 521021977 → evidence/G7/verifier-20261111T080154Z/chain.log).
 "Pending" is used only where EVIDENCE lacks a record: the G14 402 → 200 step, the 2.2.1 gas-row check, and G9 itself.
+[Updated 2026-11-11T14:20Z, WO-39: both are now recorded. G14 402 → 200: PASS, verifier-run 2026-11-11T13:54Z–13:55Z (§G14, evidence/G14/verifier-20261111T135216Z/). 2.2.1 gas rows: FAIL, `remove_extra_remote_chain` has no GAS row (§G1, evidence/G1/verifier-221-20261111T135216Z/).]
 One gap closed here. Before this run no EVIDENCE row recorded the mock-ft upgrade (README line 17; SECURITY SR-27 "fixed and deployed"). It is now recorded: the on-chain code_hash of
 usdc-mock and nvdax-mock, HnZj9etb…k4TrM, equals the mock_ft.wasm checksum built in the verifier's G11 re-run (evidence/G11/verifier-rerun-d027-20261111T0802Z/cargo-test-nectar-core.log:10405).
 
@@ -1224,6 +1264,33 @@ so the name suggests an e18 scale that the value does not have. relay_settlement
 that does not exist in the deployed default build.
 
 ## G1
+
+### G1 (2.2.1 gas rows) — FAIL (one change method without a GAS row) — 2026-11-11T13:53Z–14:16Z — commit 45ed1f3
+Same clone as §G14 (/tmp/verify-g14-20261111T135216Z, HEAD 45ed1f3, CONTRACT_VERSION "2.2.1-v7"). No secrets. SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk (host linker workaround, as §G11).
+Command exactly as §G11 (D-027 re-run), script run.sh: `cargo test -p nectar-core --no-fail-fast -- --nocapture`. Logs: evidence/G1/verifier-221-20261111T135216Z/.
+```
+unittests src/lib.rs 608/0 · sandbox 5/0 · sandbox_evm 19/0 · sandbox_p1 5/0 · sandbox_p2 6/0 · sandbox_reserve 2/0 · sandbox_v7 9/0 · sandbox_v7b 4/0   → 658 passed, 0 failed, EXIT=0
+nectar_core.wasm built by the sandbox harness: 818668 B, sha256 2938ebf8…2df78d = base58 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+  RPC view_account nectar-core-v2.nectar.testnet (fastnear, block 277226659) code_hash 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk → MATCH (rows measure the deployed 2.2.1 code)
+$ python3 gas.py cargo-test-nectar-core.log gas-rows.csv     # parser from §G11; 1263 GAS lines
+  label-only 212 rows / 103 labels, max 55.68 Tgas trigger_preliquidation(8 legs)
+  tx-total   175 rows /  81 labels, max 78.72 Tgas confirm_remote_deposit(64 fitting quotes)
+  receipt    872 rows /  81 labels, max 67.69 Tgas confirm_remote_deposit(64 fitting quotes)
+  rows >= 100 Tgas (4 `attached,300T` prepaid rows excluded): 0
+$ python3 methods.py contracts/nectar-core/src ; python3 diff.py methods.txt labels-max.txt     # default features = p1+p2, so every module counts
+  77 `pub fn …(&mut self` in #[near] impls + #[init] new = 78; 11 #[private] callbacks (counted in caller totals) → 67 non-private
+  measured 66/67, e.g. resign_remote_settlement+sign 19.12 · claim_owed_collateral 8.03 / (still unregistered) 8.39 · update_owner_price 2.74 ·
+    set_extra_remote_chain 2.93 · withdraw_claimable 7.71 · set_quote_remote_recipient 3.63 · set_max_voluntary_fill 2.73 · new 2.40 ·
+    ft_on_transfer via 38 ft_transfer_call/borrow labels, max 13.83 · trigger_preliquidation via 32 labels, max 72.32 tx-total
+  MISSING: remove_extra_remote_chain (evm.rs:413, owner-only) — no GAS row; called only in unit tests (tests_evm.rs:346/370/420/505), never in a sandbox target
+```
+update_owner_price band path: the in-band branch (last > 0, checked_mul band compare, accepted) is gas-measured: sandbox.rs sets 180 → 155 → 140 and asserts `true` each time
+(rows 2.73–2.74 Tgas). The out-of-band branch (emit oracle_rejected, return false, no storage write) is covered only by the unit test tests::update_owner_price_band; no gas row.
+Per-method rule (G1 gas scope): the method has rows, so this is noted, not a FAIL reason.
+Log edit: line 9895 of cargo-test-nectar-core.log (sandbox EVENT_JSON multiplier_source_set whose token is the public anvil test account #1 address) is elided, because gitleaks flags it
+as generic-api-key (false positive, same as §G11). No other change. Explorer: none (local sandbox; code hash from RPC).
+Verdict: **FAIL** — one reason: `remove_extra_remote_chain` has no GAS row. Every test is green, every measured method is < 100 Tgas, and the tested wasm equals the deployed 2.2.1 code.
+Code not changed (verifier scope).
 
 ### G1 (v7 additions) — contract tests — PASS — 2026-11-10T13:34Z–14:05Z — commit 09c4316
 Clone as §G10; SDKROOT=.../MacOSX26.5.sdk. All exit codes via bash -c (evidence/G1/verifier-v7-20261110T1334Z/summary.txt).
