@@ -5,7 +5,7 @@ description: Audit status, stated plainly.
 ---
 # Audits
 
-<p className="verified">Verified against: spec docs/PRD.md §15, §18 · docs/work/security-review-v7.md (2026-11-11) · D-026 (2026-11-10), D-027 (2026-11-11) · F-346 (2026-11-10) · tests named below · rollout logs evidence/rollout/ (2026-11-11) · docs/EVIDENCE.md re-runs after D-027: §G2b, §G7, §G13, §G14 (recorded in b8784c1), §G11, §G3b (recorded in 5083d30), §G14 402 → 200 and §G1 2.2.1 gas rows (recorded in 2e16f9b; re-runs recorded in a677689) · docs/EVIDENCE.md §G9 run 3 (2026-11-11T15:30Z–15:38Z, tested 3107a1a, recorded in 837cd12) and §G3b re-run 2 after WO-49 (PASS, 2026-11-11T17:26Z–17:44Z, tested fd6592d, recorded in 5770fa7) · docs/work/review-2-findings.md (2026-11-11)</p>
+<p className="verified">Verified against: spec docs/PRD.md §15, §18 · docs/work/security-review-v7.md (2026-11-11) · D-026 (2026-11-10), D-027 (2026-11-11), D-029 (2026-11-11) · FACTS C-020, F-380, F-381, F-382, F-383, F-384, F-385 (2026-11-11) · Note release paths: contracts/nectar-core/src/notes.rs:332-349, lib.rs:824-858, remote.rs:957 (read 2026-11-11) · F-346 (2026-11-10) · tests named below · rollout logs evidence/rollout/ (2026-11-11) · docs/EVIDENCE.md re-runs after D-027: §G2b, §G7, §G13, §G14 (recorded in b8784c1), §G11, §G3b (recorded in 5083d30), §G14 402 → 200 and §G1 2.2.1 gas rows (recorded in 2e16f9b; re-runs recorded in a677689) · docs/EVIDENCE.md §G9 run 3 (2026-11-11T15:30Z–15:38Z, tested 3107a1a, recorded in 837cd12) and §G3b re-run 2 after WO-49 (PASS, 2026-11-11T17:26Z–17:44Z, tested fd6592d, recorded in 5770fa7) · docs/work/review-2-findings.md (2026-11-11)</p>
 
 **No audit has been performed.** The contracts, the Solana program and the quoter are unaudited testnet code. Do not use them with real assets.
 
@@ -36,6 +36,7 @@ Examples of reproducing tests: `sr3_expired_signed_leg_resigns_identically_with_
 | keeper relays | **advisory.** nectar-core records the keeper's tx reference without verifying the remote transaction ([Trust model](/security/trust-model)) |
 | keeper residuals | Base events do not name the slot (heuristic match). Short Base deposits on expired reservations are not attested. The Solana landed-tx search is bounded per tick. The daemon runs locally, not continuously |
 | Base spoke | runs on a local fork of Base Sepolia, not Base Sepolia (D-026) |
+| remote Loan Notes | **by design, disclosed.** For Solana and Base positions the collateral release goes to the depositor recorded at deposit, not to the Loan Note owner, so a new owner who repays does not receive the collateral ([Position Notes](/concepts/position-notes)) |
 | lows | 18 of 20 fixed, SR-15 partial, SR-28 mitigated (the keeper reports `unsupported` instead of looping) |
 | not reviewed | callback gas on failure branches, upgrade safety (no `migrate`). The web app, SDK, copilot, reference agent and privacy claims were covered by review 2 (below) |
 
@@ -49,5 +50,5 @@ An independent, read-only review of the web app, the SDK, the copilot, the refer
 | browser security headers (R2-08) | **partial.** `frame-ancestors 'none'`, `object-src 'none'`, X-Frame-Options and HSTS are set. No full `script-src` / `connect-src` policy, the wallet-list manifest is not pinned, and the real-wallet flow under the new headers is checked by hand (E2E uses mock wallets) |
 | Solana cluster check (R2-10) | URL only; no genesis-hash check (the devnet genesis hash is not in FACTS) |
 | market-maker secrets (R2-02) | operator-set demo parameters, published; each fill reveals their product. MM-owned secrets are PROD |
-| dependencies | the zod advisory still reaches `services/x402` through `@x402/core` (needs zod 3; no patched 3.x); docs-site build-time advisories (`tinypool`, `serialize-javascript`) are build-only; `elliptic` (low) on the web server |
-| implicit-account definitions (FACTS C-020) | sources differ; the SDK accepts only 64-hex and `0x` as implicit, so other forms fail closed |
+| dependencies | the zod advisory GHSA-mrhx-c7xc-m3w5 / CVE-2023-54404 (high, CVSS 3.1 7.5; zod < 4.6.6, no patched 3.x; F-383, F-384) still reaches `services/x402` through `@x402/core` 2.18.0. Not reachable from untrusted input (F-385): the client's payment header is regex-checked and `JSON.parse`d, never zod-validated; zod runs only on facilitator responses (ours, which checks the bearer token and caps bodies at 64 KiB, or the operator-set `X402_FACILITATOR_URL`). Residual: a hostile facilitator could send a huge `kinds` array; docs-site build-time advisories (`tinypool`, `serialize-javascript`) are build-only; `elliptic` (low) on the web server |
+| implicit-account definitions (FACTS C-020) | **kept by decision** (D-029, 2026-11-11). Sources differ (F-381, F-382); the SDK accepts only 64-hex and `0x` as implicit, so `0s` / `0u` receivers must already exist (`view_account`, F-380). The web app therefore cannot send a Note to such an account before it exists: the safe direction |

@@ -114,10 +114,12 @@ JSON; send it with the `ft_transfer_call` form from scripts/40-seed-demo.sh off 
   `base-uri` / `form-action 'self'`, X-Frame-Options DENY, HSTS; R2-08), and the E2E suite signs with mock wallets only. On the build you will
   record: "Connect wallet" → pick the testnet wallet in the selector → sign one small testnet action (for example a small quote as buyer2)
   → the toast and the explorer link appear. If the selector or the wallet sandbox does not load, stop and report it; do not record around it.
-- **(b) x402 top-up.** Each `pnpm --filter x402 demo:testnet` run locks 1 mock NVDAx from agent1. The verifier's run on HEAD used the
-  last one; agent1 was topped up again at about 15:26Z (evidence/G14/rerun/accounts-topup-20261111T152615Z.log) and holds 2 mock NVDAx,
-  enough for two runs. Whenever it runs short, before the x402 segment (a Q&A answer or a take that shows it), re-run `bash scripts/60-x402-accounts.sh`: it keeps the existing
-  keys and accounts (skips what exists) and mints agent1 2 more mock NVDAx (signed by the owner from the keychain). Then start x402 as in step 2.
+- **(b) x402 top-up.** Each `pnpm --filter x402 demo:testnet` run locks 1 mock NVDAx from agent1. After the 15:26Z top-up
+  (evidence/G14/rerun/accounts-topup-20261111T152615Z.log) agent1 held 2; the owner minted it 6 more at about 18:10Z (tx
+  `36SNzV2Bzj3qJtRzmXiscHmtbpakcEMhtYy2wzKo8PdB`, evidence/G14/rerun/agent1-mint-20261111T181022Z.log), so agent1 now holds 8 mock NVDAx:
+  enough for 8 x402 demo runs at 1 each. Only after 8 runs (takes or Q&A answers that show x402), before the next x402 segment, re-run
+  `bash scripts/60-x402-accounts.sh`: it keeps the existing keys and accounts (skips what exists) and mints agent1 2 more mock NVDAx (signed by
+  the owner from the keychain). Then start x402 as in step 2.
 
 ## Script
 No hackathon name, badge or banner in any segment. Captions say "testnet", "mock collateral" and, for Base, "local fork of Base Sepolia".

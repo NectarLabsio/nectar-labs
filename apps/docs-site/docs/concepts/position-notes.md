@@ -5,7 +5,7 @@ description: Every quote, loan and Reserve deposit is an NEP-171 Note. Authority
 ---
 # Position Notes
 
-<p className="verified">Verified against: spec docs/PRD.md §6.11, §19.4 · docs/work/interface-v7.md §C · contracts/nectar-core/src/notes.rs (WO-22, merged 2026-11-10) · F-337 (near-contract-standards 5.30.1, 2026-11-10) · D-023 (2026-11-10) · tests listed below · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:34Z first run, views), §G14 (2026-11-10T16:52Z)</p>
+<p className="verified">Verified against: spec docs/PRD.md §6.11, §19.4 · docs/work/interface-v7.md §C · contracts/nectar-core/src/notes.rs (WO-22, merged 2026-11-10) · F-337 (near-contract-standards 5.30.1, 2026-11-10) · D-023 (2026-11-10) · tests listed below · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:34Z first run, views), §G14 (2026-11-10T16:52Z) · transfer and release paths read 2026-11-11: contracts/nectar-core/src/notes.rs:332-349 (`move_note`), lib.rs:824-858 (`on_repay`), remote.rs:957 (`request_remote_release`) · web app receiver check: F-380, F-381, F-382 (2026-11-11), FACTS C-020, D-029 (2026-11-11)</p>
 <p className="status">Status: live on testnet (EVIDENCE §G2b: `nft_tokens` lists `q-0`, `p-0`, `q-1`, `p-1` and `nft_token_svg p-1` renders; EVIDENCE §G14: `nft_mint p-4`). Reserve Note `r-NVDAx-0` was minted in the 2026-11-10 module run (evidence/v7-modules/summary.md). Transfer locks are tested in the sandbox only. The earlier v1 contract mints no Notes.</p>
 
 ## Three kinds of Note
@@ -22,10 +22,10 @@ The contract pays mint storage (NEP-145 storage deposits are PROD-only). There a
 
 ## Authority follows the Note
 
-The Note owner *is* the record's owner (`Quote.buyer`, `Position.borrower`, Reserve Note `owner`), and a transfer rewrites it. Every authority check therefore moves with the Note: top-up, withdrawal initiate and complete, `claim_fees`, `self_settle`, Reserve exit. Every payout goes to the current owner as well: residual collateral on repay, the settlement remainder and the self-settlement remainder. The previous owner loses access at once.
+The Note owner *is* the record's owner (`Quote.buyer`, `Position.borrower`, Reserve Note `owner`), and a transfer rewrites it. Every authority check therefore moves with the Note: top-up, withdrawal initiate and complete, `claim_fees`, `self_settle`, Reserve exit. For collateral held on NEAR, every payout goes to the current owner as well: residual collateral on full repay (lib.rs:852-858), the settlement remainder and the self-settlement remainder. The previous owner loses access at once.
 
 Two exceptions:
-- Remote collateral is released on Solana to the vault depositor, not to the Note owner.
+- **Remote Loan Notes (Solana devnet, Base local fork) do not carry the collateral.** A transfer moves the borrower's authority (`move_note` sets `position.borrower`) and anyone may repay (`on_repay`), but `request_remote_release` signs the release to the depositor recorded at deposit, and the vault pays only that depositor (`withdraw`). The remote settlement remainder also goes to the depositor. A new owner who repays a remote loan does not receive the collateral. This is a known limitation (SECURITY.md "What remains" item 12).
 - The original funder stays in the `quote_funded` and `position_opened` events. History is not rewritten.
 
 Transferring a Quote Note clears its Solana recipient (`buyer_remote_recipient`). The new owner sets one with `set_quote_remote_recipient(quote_id, recipient?)`.
@@ -42,7 +42,8 @@ A recipient therefore cannot change between the start of a settlement and its pa
 
 ## Calls, views and events
 
-- Calls (1 yoctoNEAR): `nft_transfer(receiver_id, token_id, approval_id?, memo?)`, `nft_transfer_call(.., msg)`. `approval_id` is ignored; transfer to self is refused; memo and msg lengths are bounded.
+- Calls (1 yoctoNEAR): `nft_transfer(receiver_id, token_id, approval_id?, memo?)`, `nft_transfer_call(.., msg)`. `approval_id` is ignored; transfer to self is refused; memo and msg lengths are bounded. The contract does not check whether the receiver exists.
+- Web app Transfer (R2-09): a named receiver must answer `view_account`; an `UNKNOWN_ACCOUNT` answer (F-380) or an RPC failure keeps Transfer off. Only 64-hex and `0x` + 40-hex ids count as implicit and skip the lookup (F-381). `0s` and `0u` ids are looked up too (F-382), so the web app cannot send a Note to such an account before it exists. That is the safe side of FACTS C-020, kept by decision (D-029).
 - Views: `nft_token`, `nft_tokens`, `nft_tokens_for_owner`, `nft_supply_for_owner`, `nft_total_supply`, `nft_metadata`, `nft_transfer_locked`. Pages are capped at 20.
 - `nft_token` carries a live SVG card as `data:image/svg+xml;base64,…`; `nft_token_svg(token_id)` returns the raw SVG. Only numbers and fixed words enter it, and the asset symbol and contract id are XML-escaped.
 - Events: NEP-297 standard `nep171` `nft_mint` / `nft_transfer`; nectar `quote_remote_recipient_set` / `quote_remote_recipient_cleared`.
