@@ -42,7 +42,7 @@ On 2026-11-11 a pre-submission security review led to a fix wave (D-027): nectar
 | G13 re-run | positions 11 (release) and 12 (settle) on the redeployed fork vault; on-chain digest equals the NEAR digest, `ecrecover` equals the authority; replays revert `NonceUsed(10)` / `NonceUsed(14)` | §G13, commit b8784c1 |
 | G14 re-run | borrow tx [HvFX6YRa…](https://testnet.nearblocks.io/txns/HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V) (position #13, $10) and relay tx [BemztvL9…](https://testnet.nearblocks.io/txns/BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G) (agent1's delegate paying 0.01 mock USDC to `nectar.testnet`) | §G14, commit b8784c1 |
 | G11 re-run | 608 unit + 50 sandbox, mock-ft 23, `model.csv` 132 rows, max receipt 67.69 Tgas; every SR-1…SR-33 has a named test and 124 contract `sr*` tests pass; Solana 10 cargo + 55 TS; forge 105 pass / 3 skip; keeper 293, x402 17, feed 63, sdk 178 | §G11, commit 5083d30 |
-| G3b re-run | e2e 392 pass / 82 skip; accessibility ≥ 90 on 22 route/theme pairs; no horizontal scroll at 400 px. The remote and notes screen specs were skipped (`REMOTE_SCREENS`, `NOTES_SCREENS` unset) | §G3b, commit 5083d30 |
+| G3b re-run | e2e 392 pass / 82 skip; accessibility ≥ 90 on 22 route/theme pairs; no horizontal scroll at 400 px. The vault v2 screens (withdraw, claim, Re-sign settlement, claim owed collateral) passed their **mocked** E2E tests in `e2e/remote.spec.ts` on desktop and phone. Only screenshot capture was not run: `remote screenshots` (`REMOTE_SCREENS` unset, 14 per project) and the notes screenshots (`NOTES_SCREENS` unset) | §G3b, commit 5083d30 |
 
 Not re-run by the verifier (verifier record pending):
 
