@@ -3,8 +3,9 @@
 ## Now (2026-11-11 ~08:30Z) — read this block; everything below "History" is superseded
 - **Gates:** every gate PASS except G9. After the D-027 security rollout the chain gates were re-verified from a fresh clone (EVIDENCE b8784c1):
   G2b (2.2.1-v7 wasm byte-identical on this Mac's non-reproducible build), G7 (positions 8/9/10), G13 local fork (11/12, replays revert), G14
-  (chain claims; HTTP 402→200 from the orchestrator log only). **In flight:** verifier re-running G11 + G3b + Solana/EVM suites on 2.2.1 / design v2.
-  Tags p0-green, p1-green, p2-green (local only).
+  (chain claims; HTTP 402→200 from the orchestrator log only). Test gates re-verified (EVIDENCE 5083d30): G11 PASS (608 unit + 50 sandbox, every
+  SR-1…33 has a named test), Solana/EVM suites PASS (forge 105, Solana 10 + 55), G3b PASS on design v2 (e2e 392, a11y ≥ 90 on 22 pairs; home light 97
+  from `.nx-delta.up` contrast — optional polish). G1 per-method gas-row check NOT RUN on 2.2.1. Tags p0-green, p1-green, p2-green (local only).
 - **Live on testnet:** nectar-core-v2 **2.2.1-v7** (code_hash 3mv4LRm6…, code-only upgrades 2.1→2.2.0→2.2.1, no migrate) + keeper-v2 + quoter
   version_key 5f9bb287…; Solana vault v2 ENZa…pubW (devnet, pull payouts + withdraw/claim); x402-relayer + agent1. Base spoke: vault 0xC64b…1226 +
   MockB20 0x634F…f81d on the LOCAL FORK of Base Sepolia (127.0.0.1:8545, chain 84532, anvil; D-026, disclosed). Real Base Sepolia needs H15.
@@ -12,8 +13,8 @@
   Disclosed partials: SR-5, SR-6, SR-7, SR-15, SR-4 (EVM remainder push), keeper residuals, Base local fork. Not covered by the review: web/SDK,
   copilot prompt injection, privacy claims.
 - **Design v2** (WO-33a/b/c) merged: landing + testnet app.
-- **Next (orchestrator):** (1) test-gate verifier report → (2) docs pass: 21 "verifier record pending" notes → EVIDENCE refs → (3) DEMO_SCRIPT
-  re-seed list for 2.2.1 → (4) SUBMISSION fields (H16 track proposal) → (5) verifier G9 fresh-clone rehearsal → tag `submission-rc` locally.
+- **In flight:** WO-37a (docs: pending notes → EVIDENCE refs; README, SECURITY.md, docs-site) and WO-37b (docs: DEMO_SCRIPT re-seed list +
+  SUBMISSION prose for 2.2.1). **Next:** merge both → verifier G9 fresh-clone rehearsal → tag `submission-rc` locally.
   Nothing is sent, pushed or posted without Kunal.
 - RPC default test.rpc.fastnear.com (D-025). Background: keeper-v2 daemon (Solana + Base relays), Feed :8788/:8789, x402 :8791, anvil :8545.
   Plain `cargo near build` on this Mac needs SDKROOT=…/MacOSX26.5.sdk.
@@ -72,7 +73,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T08:22:11Z · commit 25713a4
+Last activity: 2026-11-11T08:26:53Z · commit b7917f2
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
