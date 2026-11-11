@@ -245,6 +245,21 @@
       ]
     },
     {
+      "host": "near-testnet.drpc.org",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369)",
+      "when": "App pages that read the contracts, only while both FastNEAR hosts refuse or fail",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
       "host": "raw.githubusercontent.com",
       "types": [
         "fetch",
@@ -406,6 +421,21 @@
       "who": "our code",
       "purpose": "NEAR testnet RPC: contract views, transaction status",
       "when": "App pages that read the contracts; wallet selector",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "testnet-rpc.intea.rs",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369)",
+      "when": "App pages that read the contracts, only while both FastNEAR hosts refuse or fail",
       "directives": [
         "connect-src"
       ]

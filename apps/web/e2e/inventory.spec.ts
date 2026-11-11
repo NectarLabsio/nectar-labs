@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test, type Browser, type Page } from "@playwright/test";
+import { TESTNET_RPC_FALLBACKS } from "@nectar/sdk";
 import { annotateHost, annotateStorage, directives, normalizeKey, type HostUse, type StorageEntry } from "./inventory-annotations";
 
 // WO-34c data inventory. Opt-in project `inventory` (needs network; not in the default run). Real Chrome, fresh profile per test:
@@ -293,6 +294,14 @@ test.describe("data inventory (opt-in, network)", () => {
         u.directives = directives(u.types);
         byHost.set(h, u);
       }
+    }
+    // WO-34g: the non-FastNEAR RPC fallbacks are reached only while FastNEAR refuses, so a healthy run may not see them. They are
+    // in connect-src, so they are listed as declared rather than dropped.
+    for (const url of TESTNET_RPC_FALLBACKS) {
+      const h = new URL(url).host;
+      if (byHost.has(h)) continue;
+      const u = annotateHost(h, SITE, APP);
+      byHost.set(h, { ...u, types: ["fetch"], pages: ["(declared: not reached in this run, FastNEAR answered)"], directives: directives(["fetch"]) });
     }
     const report = {
       generated: new Date().toISOString(),

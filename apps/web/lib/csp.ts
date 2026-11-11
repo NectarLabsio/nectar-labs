@@ -13,9 +13,10 @@ type Hosts = Partial<Record<Directive, readonly string[]>>;
 
 /** Our code and the near-connect selector (wallet list + icons), measured 2026-11-12 in real Chrome (data-inventory.json). */
 export const BASE: Hosts = {
-  // NEAR testnet RPC (our code: lib/env.ts default + @nectar/sdk TESTNET_RPC_FALLBACKS); the near-connect wallet manifest and the
-  // sandboxed wallets' executor scripts (fetched from the manifest URLs, unpinned: a manifest change can add a host, see WO-34f).
-  connect: ["https://test.rpc.fastnear.com", "https://rpc.testnet.fastnear.com", "https://raw.githubusercontent.com"],
+  // NEAR testnet RPC (our code: lib/env.ts default + @nectar/sdk TESTNET_RPC_FALLBACKS: FastNEAR ×2, then dRPC and Intear, which are
+  // contacted only while FastNEAR refuses, WO-34g / F-369); the near-connect wallet manifest and the sandboxed wallets' executor scripts
+  // (fetched from the manifest URLs, unpinned: a manifest change can add a host, see WO-34f).
+  connect: ["https://test.rpc.fastnear.com", "https://rpc.testnet.fastnear.com", "https://near-testnet.drpc.org", "https://testnet-rpc.intea.rs", "https://raw.githubusercontent.com"],
   // Wallet icons in the selector (manifest).
   img: ["https://raw.githubusercontent.com", "https://storage.herewallet.app", "https://evm-on-near.dev"],
 };

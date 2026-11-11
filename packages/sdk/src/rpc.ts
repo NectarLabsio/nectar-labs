@@ -1,13 +1,20 @@
-// Resilient NEAR JSON-RPC view transport (WO-33b §0, G9 stability). FastNEAR answers bursts with HTTP 429 / JSON-RPC -429;
-// public endpoints also drop to 5xx. A view call retries with jittered exponential backoff on those (max 3 attempts per
-// endpoint), then falls through an ordered endpoint list. Contract errors (method not found, panics) are never retried.
+// Resilient NEAR JSON-RPC view transport (WO-33b §0, G9 stability; cross-provider fallback WO-34g). FastNEAR answers bursts with
+// HTTP 429 / JSON-RPC -429; public endpoints also drop to 5xx or hang. A view call moves to the next endpoint on 429, 5xx, a timeout or
+// a network error; each failing endpoint cools down with jittered exponential backoff (shared by every caller of the transport), and
+// the list is walked up to 3 times. Contract errors (method not found, panics) are never retried.
 // Request shape = near-api-js 7.4.0 JsonRpcProvider.callFunction (F-012): query / call_function / finality "final".
-// Both FastNEAR hosts below answer testnet `status` (F-369).
 
-/** Fallbacks after the configured endpoint (F-369: both serve NEAR testnet). */
-export const TESTNET_RPC_FALLBACKS = ["https://test.rpc.fastnear.com", "https://rpc.testnet.fastnear.com"] as const;
+/**
+ * NEAR testnet RPC endpoints in fallback order (WO-34g). FastNEAR first: `test.rpc.fastnear.com` is the documented default (D-025,
+ * F-369 providers page) and `rpc.testnet.fastnear.com` also serves testnet (F-369). Both sit behind one FastNEAR rate limiter, so the
+ * public non-FastNEAR hosts from the F-369 providers table follow: dRPC and Intear. Both probed live 2026-11-11T22:31Z
+ * (evidence/G3/rpc-probe-20261111T2231Z.log): chain_id testnet, head within 3 blocks of FastNEAR, nectar-core-v2 views byte-identical,
+ * same UNKNOWN_ACCOUNT error shape, CORS open. They are contacted only while both FastNEAR hosts refuse or fail.
+ * config.yaml is not consulted: this list is the single source for the browser, the web server routes and the tests.
+ */
+export const TESTNET_RPC_FALLBACKS = ["https://test.rpc.fastnear.com", "https://rpc.testnet.fastnear.com", "https://near-testnet.drpc.org", "https://testnet-rpc.intea.rs"] as const;
 
-/** Ordered, de-duplicated endpoint list: the configured URL(s) first, then the FastNEAR testnet hosts. */
+/** Ordered, de-duplicated endpoint list: the configured URL(s) first, then TESTNET_RPC_FALLBACKS in order. */
 export function rpcEndpoints(primary?: string | readonly string[] | null, fallbacks: readonly string[] = TESTNET_RPC_FALLBACKS): string[] {
   const first = primary == null ? [] : typeof primary === "string" ? [primary] : [...primary];
   const out: string[] = [];
@@ -49,15 +56,19 @@ export interface AccountView {
   storage_usage: number;
 }
 
-export type FetchLike = (input: string, init: { method: string; headers: Record<string, string>; body: string }) => Promise<{ status: number; ok: boolean; text(): Promise<string> }>;
+export type FetchLike = (input: string, init: { method: string; headers: Record<string, string>; body: string; signal?: AbortSignal }) => Promise<{ status: number; ok: boolean; text(): Promise<string> }>;
 
 export interface ResilientRpcOptions {
   /** Ordered endpoints; see `rpcEndpoints`. */
   urls: readonly string[];
-  /** Attempts per endpoint before moving to the next (default 3). */
+  /** Passes over the endpoint list (default 3): each endpoint is tried at most this many times per call. */
   attempts?: number;
-  /** First backoff in ms (default 250); doubles per attempt, jittered ×[0.5, 1.5). */
+  /** First cooldown in ms after an endpoint fails (default 250); doubles per consecutive failure, jittered ×[0.5, 1.5), capped by maxDelayMs. */
   baseDelayMs?: number;
+  /** Cooldown cap per endpoint in ms (default 30 000): a refusing FastNEAR is asked again at least this often. */
+  maxDelayMs?: number;
+  /** One attempt is abandoned after this many ms and counts as a retryable failure (default 8 000; 0 = no timeout). */
+  timeoutMs?: number;
   fetch?: FetchLike;
   sleep?: (ms: number) => Promise<void>;
   random?: () => number;
@@ -96,18 +107,35 @@ function decodeResult(bytes: number[]): unknown {
 }
 
 /** One `query` on one endpoint; throws RpcError with `retryable` set for 429 / 5xx / transport / timeout. `method` labels errors. */
-async function queryOnce(f: FetchLike, url: string, method: string, params: Record<string, unknown>): Promise<NonNullable<RpcBody["result"]>> {
+async function queryOnce(f: FetchLike, url: string, method: string, params: Record<string, unknown>, timeoutMs = 0): Promise<NonNullable<RpcBody["result"]>> {
   const body = JSON.stringify({ jsonrpc: "2.0", id: "nectar", method: "query", params });
   let status: number;
   let text: string;
+  const ac = timeoutMs > 0 && typeof AbortController === "function" ? new AbortController() : null;
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
-    const r = await f(url, { method: "POST", headers: { "content-type": "application/json" }, body });
-    status = r.status;
-    text = await r.text();
+    const exchange = (async () => {
+      const r = await f(url, { method: "POST", headers: { "content-type": "application/json" }, body, ...(ac ? { signal: ac.signal } : {}) });
+      return { status: r.status, text: await r.text() };
+    })();
+    const timeout =
+      timeoutMs > 0
+        ? new Promise<never>((_, reject) => {
+            timer = setTimeout(() => {
+              ac?.abort();
+              reject(new RpcError(`${method}: no answer within ${timeoutMs} ms (${url})`, method, "timeout", true, false));
+            }, timeoutMs);
+          })
+        : null;
+    if (timeout) exchange.catch(() => undefined);
+    ({ status, text } = await (timeout ? Promise.race([exchange, timeout]) : exchange));
   } catch (e) {
+    if (e instanceof RpcError) throw e;
     // In a browser a throttled FastNEAR answer (429) carries no CORS header, so it surfaces here as a TypeError, not a status:
     // treat a transport failure as throttling too, so every caller backs off (WO-34f crawl).
     throw new RpcError(`${method}: ${e instanceof Error ? e.message : String(e)} (${url})`, method, e, true, true);
+  } finally {
+    clearTimeout(timer);
   }
   let j: RpcBody | null = null;
   try {
@@ -129,8 +157,8 @@ async function queryOnce(f: FetchLike, url: string, method: string, params: Reco
 }
 
 /** One view call on one endpoint. Request shape = near-api-js 7.4.0 callFunction (F-012). */
-async function callOnce(f: FetchLike, url: string, contractId: string, method: string, args: Record<string, unknown>): Promise<unknown> {
-  const res = await queryOnce(f, url, method, { request_type: "call_function", finality: "final", account_id: contractId, method_name: method, args_base64: b64(JSON.stringify(args)) });
+async function callOnce(f: FetchLike, url: string, contractId: string, method: string, args: Record<string, unknown>, timeoutMs: number): Promise<unknown> {
+  const res = await queryOnce(f, url, method, { request_type: "call_function", finality: "final", account_id: contractId, method_name: method, args_base64: b64(JSON.stringify(args)) }, timeoutMs);
   if (res.error) throw new RpcError(`${method}: ${res.error}`, method, res, false);
   if (!Array.isArray(res.result)) throw new RpcError(`${method}: malformed RPC response`, method, res, false);
   return decodeResult(res.result);
@@ -143,9 +171,9 @@ export function isUnknownAccount(e: unknown): boolean {
   return c?.cause?.name === "UNKNOWN_ACCOUNT";
 }
 
-async function viewAccountOnce(f: FetchLike, url: string, accountId: string): Promise<AccountView | null> {
+async function viewAccountOnce(f: FetchLike, url: string, accountId: string, timeoutMs: number): Promise<AccountView | null> {
   try {
-    const res = await queryOnce(f, url, "view_account", { request_type: "view_account", finality: "final", account_id: accountId });
+    const res = await queryOnce(f, url, "view_account", { request_type: "view_account", finality: "final", account_id: accountId }, timeoutMs);
     if (typeof res.amount !== "string") throw new RpcError("view_account: malformed RPC response", "view_account", res, false);
     return { amount: res.amount, locked: String(res.locked ?? "0"), code_hash: String(res.code_hash ?? ""), storage_usage: Number(res.storage_usage ?? 0) };
   } catch (e) {
@@ -155,23 +183,27 @@ async function viewAccountOnce(f: FetchLike, url: string, accountId: string): Pr
 }
 
 /**
- * View transport with retry + endpoint fallback. The endpoint that last answered is tried first on the next call
- * (sticky), so one throttled host does not tax every read.
+ * View transport with cross-provider failover (WO-34g). Each call walks the endpoints in list order, skipping any that is cooling
+ * down; a retryable failure (429, 5xx, timeout, network error) cools that endpoint and moves on at once. When every endpoint left in
+ * this pass is cooling, the call waits for the one that frees up first. At most `attempts` passes. There is no stickiness: once
+ * FastNEAR's cooldown ends it is asked first again, so the fallback hosts are contacted only while FastNEAR refuses.
  */
 export function resilientRpcTransport(o: ResilientRpcOptions): ViewTransport {
   const urls = o.urls.length ? [...o.urls] : rpcEndpoints(null);
   const attempts = Math.max(1, o.attempts ?? 3);
   const base = o.baseDelayMs ?? 250;
+  const cap = Math.max(base, o.maxDelayMs ?? 30_000);
+  const timeoutMs = Math.max(0, o.timeoutMs ?? 8_000);
   const f: FetchLike = o.fetch ?? ((input, init) => fetch(input, init));
   const sleep = o.sleep ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
   const random = o.random ?? Math.random;
   const now = o.now ?? Date.now;
   const max = Math.max(1, o.maxConcurrent ?? 4);
-  let start = 0;
-  // WO-34f: a 429 cools that endpoint for every caller of this transport (not just the one that saw it), and at most `max`
+  // WO-34f: a failure cools that endpoint for every caller of this transport (not just the one that saw it), and at most `max`
   // requests are in flight, so a page with many views queues instead of spraying the node. Throttling is expected, so the
-  // transport never logs it; callers see an RpcError only when every endpoint stays throttled.
+  // transport never logs it; callers see an RpcError only when every endpoint keeps failing.
   const coolUntil = new Map<string, number>();
+  const failures = new Map<string, number>();
   let active = 0;
   const waiting: (() => void)[] = [];
   const acquire = async (): Promise<void> => {
@@ -186,33 +218,38 @@ export function resilientRpcTransport(o: ResilientRpcOptions): ViewTransport {
     if (next) next();
     else active--;
   };
+  const coolLeft = (url: string): number => (coolUntil.get(url) ?? 0) - now();
+  /** First endpoint (list order) not tried in this pass and not cooling; else the untried one that frees up first. */
+  const pick = (tried: ReadonlySet<string>): string => {
+    let soonest: string | null = null;
+    for (const u of urls) {
+      if (tried.has(u)) continue;
+      if (coolLeft(u) <= 0) return u;
+      if (soonest === null || coolLeft(u) < coolLeft(soonest)) soonest = u;
+    }
+    return soonest!;
+  };
   const run = async <T>(method: string, once: (url: string) => Promise<T>): Promise<T> => {
     let last: RpcError | null = null;
-    for (let k = 0; k < urls.length; k++) {
-      const i = (start + k) % urls.length;
-      const url = urls[i]!;
-      const cool = (coolUntil.get(url) ?? 0) - now();
-      if (cool > 0) await sleep(cool);
-      for (let n = 1; n <= attempts; n++) {
+    for (let pass = 0; pass < attempts; pass++) {
+      const tried = new Set<string>();
+      while (tried.size < urls.length) {
+        const url = pick(tried);
+        tried.add(url);
+        const wait = coolLeft(url);
+        if (wait > 0) await sleep(wait);
         await acquire();
         try {
           const v = await once(url);
-          start = i;
+          failures.delete(url);
           return v;
         } catch (e) {
           const re = e instanceof RpcError ? e : new RpcError(`${method}: ${String(e)}`, method, e, false);
           if (!re.retryable) throw re;
           last = re;
-          const wait = n < attempts ? backoffMs(n, base, random) : 0;
-          if (re.throttled) coolUntil.set(url, Math.max(coolUntil.get(url) ?? 0, now() + (wait || backoffMs(n, base, random))));
-          if (wait) {
-            release();
-            try {
-              await sleep(wait);
-            } finally {
-              await acquire();
-            }
-          }
+          const n = (failures.get(url) ?? 0) + 1;
+          failures.set(url, n);
+          coolUntil.set(url, Math.max(coolUntil.get(url) ?? 0, now() + Math.min(cap, backoffMs(n, base, random))));
         } finally {
           release();
         }
@@ -221,8 +258,8 @@ export function resilientRpcTransport(o: ResilientRpcOptions): ViewTransport {
     throw last ?? new RpcError(`${method}: no RPC endpoint answered`, method, undefined, true);
   };
   return {
-    call: <T>(contractId: string, method: string, args: Record<string, unknown>): Promise<T> => run(method, async (url) => (await callOnce(f, url, contractId, method, args)) as T),
-    viewAccount: (accountId: string) => run("view_account", (url) => viewAccountOnce(f, url, accountId)),
+    call: <T>(contractId: string, method: string, args: Record<string, unknown>): Promise<T> => run(method, async (url) => (await callOnce(f, url, contractId, method, args, timeoutMs)) as T),
+    viewAccount: (accountId: string) => run("view_account", (url) => viewAccountOnce(f, url, accountId, timeoutMs)),
   };
 }
 

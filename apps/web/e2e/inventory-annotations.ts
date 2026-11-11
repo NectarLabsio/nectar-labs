@@ -29,6 +29,8 @@ export function annotateStorage(e: Pick<StorageEntry, "kind" | "name" | "origin"
 const HOSTS: { re: RegExp; who: string; purpose: string; when: string }[] = [
   { re: /^test\.rpc\.fastnear\.com$/, who: "our code", purpose: "NEAR testnet RPC: contract views, transaction status", when: "App pages that read the contracts; wallet selector" },
   { re: /^rpc\.testnet\.fastnear\.com$/, who: "our code", purpose: "NEAR testnet RPC fallback (@nectar/sdk TESTNET_RPC_FALLBACKS)", when: "App pages that read the contracts" },
+  // WO-34g: non-FastNEAR providers (F-369). Declared even when a run does not reach them (FastNEAR answered): see inventory.spec.ts.
+  { re: /^near-testnet\.drpc\.org$|^testnet-rpc\.intea\.rs$/, who: "our code", purpose: "RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369)", when: "App pages that read the contracts, only while both FastNEAR hosts refuse or fail" },
   { re: /^storage\.herewallet\.app$|^evm-on-near\.dev$/, who: NC, purpose: "Wallet icons named in the wallet list", when: "After you press Connect wallet" },
   { re: /^mc\.meteorwallet\.app$/, who: "Meteor Wallet (sandboxed frame)", purpose: "Meteor Wallet's own API", when: "Only after you open Meteor Wallet in the selector" },
   { re: /^meteorwallet\.app$/, who: "Meteor Wallet (sandboxed frame)", purpose: "Meteor Wallet images", when: "Only after you open Meteor Wallet in the selector" },

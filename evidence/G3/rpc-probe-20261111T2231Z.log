@@ -1,0 +1,62 @@
+# WO-34g RPC probe 2026-11-11T22:31:42.759Z core=nectar-core-v2.nectar.testnet
+# node v22.23.4; method: POST JSON-RPC status, then query call_function get_config (finality final)
+r1 https://test.rpc.fastnear.com status HTTP 200 526ms chain_id=testnet height=277276981 nearcore=2.14.0-rc.5 acao=*
+r1 https://test.rpc.fastnear.com query get_config HTTP 200 293ms block=277276980 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r1 https://test.rpc.fastnear.com query list_quotes HTTP 200 464ms block=277276981 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r1 https://rpc.testnet.fastnear.com status HTTP 200 1117ms chain_id=testnet height=277276985 nearcore=2.14.0-rc.5 acao=*
+r1 https://rpc.testnet.fastnear.com query get_config HTTP 200 919ms block=277276984 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r1 https://rpc.testnet.fastnear.com query list_quotes HTTP 200 361ms block=277276984 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r1 https://near-testnet.drpc.org status HTTP 200 778ms chain_id=testnet height=277276988 nearcore=2.14.0 acao=*
+r1 https://near-testnet.drpc.org query get_config HTTP 200 362ms block=277276987 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r1 https://near-testnet.drpc.org query list_quotes HTTP 200 355ms block=277276987 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r1 https://testnet-rpc.intea.rs status HTTP 200 2237ms chain_id=testnet height=277276993 nearcore=2.14.0-rc.5 acao=*
+r1 https://testnet-rpc.intea.rs query get_config HTTP 200 1893ms block=277276994 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r1 https://testnet-rpc.intea.rs query list_quotes HTTP 200 1281ms block=277276997 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r2 https://test.rpc.fastnear.com status HTTP 200 438ms chain_id=testnet height=277277000 nearcore=2.14.0-rc.5 acao=*
+r2 https://test.rpc.fastnear.com query get_config HTTP 200 243ms block=277276998 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r2 https://test.rpc.fastnear.com query list_quotes HTTP 200 259ms block=277276999 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r2 https://rpc.testnet.fastnear.com status HTTP 200 503ms chain_id=testnet height=277277001 nearcore=2.14.0-rc.5 acao=*
+r2 https://rpc.testnet.fastnear.com query get_config HTTP 200 894ms block=277277001 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r2 https://rpc.testnet.fastnear.com query list_quotes HTTP 200 338ms block=277277001 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r2 https://near-testnet.drpc.org status HTTP 200 587ms chain_id=testnet height=277277005 nearcore=2.14.0 acao=*
+r2 https://near-testnet.drpc.org query get_config HTTP 200 294ms block=277277003 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r2 https://near-testnet.drpc.org query list_quotes HTTP 200 294ms block=277277003 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r2 https://testnet-rpc.intea.rs status HTTP 200 1299ms chain_id=testnet height=277277007 nearcore=2.14.0-rc.5 acao=*
+r2 https://testnet-rpc.intea.rs query get_config HTTP 200 2029ms block=277277009 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r2 https://testnet-rpc.intea.rs query list_quotes HTTP 200 1286ms block=277277012 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r3 https://test.rpc.fastnear.com status HTTP 200 379ms chain_id=testnet height=277277014 nearcore=2.14.0-rc.5 acao=*
+r3 https://test.rpc.fastnear.com query get_config HTTP 200 256ms block=277277013 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r3 https://test.rpc.fastnear.com query list_quotes HTTP 200 245ms block=277277014 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r3 https://rpc.testnet.fastnear.com status HTTP 200 535ms chain_id=testnet height=277277016 nearcore=2.14.0-rc.5 acao=*
+r3 https://rpc.testnet.fastnear.com query get_config HTTP 200 473ms block=277277015 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r3 https://rpc.testnet.fastnear.com query list_quotes HTTP 200 355ms block=277277016 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r3 https://near-testnet.drpc.org status HTTP 200 405ms chain_id=testnet height=277277018 nearcore=2.14.0 acao=*
+r3 https://near-testnet.drpc.org query get_config HTTP 200 288ms block=277277017 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r3 https://near-testnet.drpc.org query list_quotes HTTP 200 324ms block=277277017 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+r3 https://testnet-rpc.intea.rs status HTTP 200 1288ms chain_id=testnet height=277277022 nearcore=2.14.0-rc.5 acao=*
+r3 https://testnet-rpc.intea.rs query get_config HTTP 200 1881ms block=277277024 ok=true len=572 head="{\"contract_version\":\"2.2.1-v7\",\"owner\":\"nectar.testnet\",\"usdc_token\":\"usdc-mock."
+r3 https://testnet-rpc.intea.rs query list_quotes HTTP 200 1290ms block=277277026 ok=false len=0 head="" res.error=wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 26`"
+# summary
+https://test.rpc.fastnear.com: 3/6 views ok; chain testnet; status heights 277276981,277276981,277277000,277277000,277277014,277277014
+https://rpc.testnet.fastnear.com: 3/6 views ok; chain testnet; status heights 277276985,277276985,277277001,277277001,277277016,277277016
+https://near-testnet.drpc.org: 3/6 views ok; chain testnet; status heights 277276988,277276988,277277005,277277005,277277018,277277018
+https://testnet-rpc.intea.rs: 3/6 views ok; chain testnet; status heights 277276993,277276993,277277007,277277007,277277022,277277022
+get_config bytes equal to https://test.rpc.fastnear.com: https://rpc.testnet.fastnear.com true
+get_config bytes equal to https://test.rpc.fastnear.com: https://near-testnet.drpc.org true
+get_config bytes equal to https://test.rpc.fastnear.com: https://testnet-rpc.intea.rs true
+# part 2 2026-11-11T22:32:31.184Z: concurrent status (head skew), list_quotes {symbol:"NVDAx"}, view_account missing id, OPTIONS preflight
+concurrent r1: test.rpc.fastnear.com=277277068 (lag 3) rpc.testnet.fastnear.com=277277068 (lag 3) near-testnet.drpc.org=277277068 (lag 3) testnet-rpc.intea.rs=277277071 (lag 0)
+concurrent r2: test.rpc.fastnear.com=277277071 (lag 3) rpc.testnet.fastnear.com=277277071 (lag 3) near-testnet.drpc.org=277277071 (lag 3) testnet-rpc.intea.rs=277277074 (lag 0)
+concurrent r3: test.rpc.fastnear.com=277277074 (lag 2) rpc.testnet.fastnear.com=277277074 (lag 2) near-testnet.drpc.org=277277074 (lag 2) testnet-rpc.intea.rs=277277076 (lag 0)
+https://test.rpc.fastnear.com list_quotes{symbol:NVDAx} HTTP 200 ok=true len=2034 head="[{\"quote_id\":\"0\",\"buyer\":\"buyer2.nectar.testnet\",\"collateral"
+https://test.rpc.fastnear.com view_account(missing) HTTP 200 error.code=-32000 error.name=HANDLER_ERROR cause.name=UNKNOWN_ACCOUNT
+https://test.rpc.fastnear.com OPTIONS preflight HTTP 200 allow-origin=* allow-headers=*
+https://rpc.testnet.fastnear.com list_quotes{symbol:NVDAx} HTTP 200 ok=true len=2034 head="[{\"quote_id\":\"0\",\"buyer\":\"buyer2.nectar.testnet\",\"collateral"
+https://rpc.testnet.fastnear.com view_account(missing) HTTP 200 error.code=-32000 error.name=HANDLER_ERROR cause.name=UNKNOWN_ACCOUNT
+https://rpc.testnet.fastnear.com OPTIONS preflight HTTP 200 allow-origin=* allow-headers=*
+https://near-testnet.drpc.org list_quotes{symbol:NVDAx} HTTP 200 ok=true len=2034 head="[{\"quote_id\":\"0\",\"buyer\":\"buyer2.nectar.testnet\",\"collateral"
+https://near-testnet.drpc.org view_account(missing) HTTP 200 error.code=-32000 error.name=HANDLER_ERROR cause.name=UNKNOWN_ACCOUNT
+https://near-testnet.drpc.org OPTIONS preflight HTTP 204 allow-origin=https://app.example allow-headers=content-type
+https://testnet-rpc.intea.rs list_quotes{symbol:NVDAx} HTTP 200 ok=true len=2034 head="[{\"quote_id\":\"0\",\"buyer\":\"buyer2.nectar.testnet\",\"collateral"
+https://testnet-rpc.intea.rs view_account(missing) HTTP 200 error.code=-32000 error.name=HANDLER_ERROR cause.name=UNKNOWN_ACCOUNT
+https://testnet-rpc.intea.rs OPTIONS preflight HTTP 200 allow-origin=* allow-headers=content-type

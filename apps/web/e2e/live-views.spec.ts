@@ -1,19 +1,15 @@
+import { resilientRpcTransport, rpcEndpoints } from "@nectar/sdk";
 import { expect, test, type Page } from "@playwright/test";
 import { PENDING_MSG, TESTNET_PENDING, config, prime } from "./helpers";
 
 // WO-33c item 0: opens real pages against the deployed contract. Fixtures hid that live `get_quote` returns `quote_id`, so nothing here
 // is mocked. Read-only; one project, because public RPC limits per IP.
-const RPC = "https://test.rpc.fastnear.com";
+// WO-34g: the spec's own reads use the app's transport (FastNEAR ×2, then dRPC and Intear), so a FastNEAR -429 (GATE_FAIL_G3B_R3) moves to the
+// next provider; a contract error still throws.
+const rpc = resilientRpcTransport({ urls: rpcEndpoints(null) });
 
-async function view<T>(method: string, args: Record<string, unknown>): Promise<T> {
-  const r = await fetch(RPC, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "query", params: { request_type: "call_function", finality: "final", account_id: config.accounts.core, method_name: method, args_base64: Buffer.from(JSON.stringify(args)).toString("base64") } }),
-  });
-  const j = (await r.json()) as { result?: { result?: number[] } };
-  if (!j.result?.result) throw new Error(`${method}: ${JSON.stringify(j).slice(0, 200)}`);
-  return JSON.parse(Buffer.from(j.result.result).toString()) as T;
+function view<T>(method: string, args: Record<string, unknown>): Promise<T> {
+  return rpc.call<T>(config.accounts.core, method, args);
 }
 
 async function noBrokenFields(page: Page) {
@@ -24,6 +20,8 @@ async function noBrokenFields(page: Page) {
 
 test.describe("real views on testnet", () => {
   test.skip(TESTNET_PENDING, PENDING_MSG);
+  // Public RPC providers rate-limit per IP: retry twice; a product error fails all three attempts.
+  test.describe.configure({ retries: 2 });
   test.beforeEach(({}, info) => test.skip(info.project.name !== "desktop", "one read-only pass; public RPC limits per IP"));
 
   test("a real /quote/[id] renders its figures and Note link", async ({ page }) => {

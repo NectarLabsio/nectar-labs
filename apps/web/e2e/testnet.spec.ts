@@ -4,6 +4,8 @@ import { PENDING_MSG, TESTNET_PENDING, config, prime } from "./helpers";
 // Read-only flows against NEAR testnet, plus one write (borrow) signed with the demo borrower key from env.
 test.describe("testnet read-only", () => {
   test.skip(TESTNET_PENDING, PENDING_MSG);
+  // WO-34g: public RPC providers rate-limit per IP (GATE_FAIL_G3B_R3). Retry a read-only test twice; a product error fails all three.
+  test.describe.configure({ retries: 2 });
 
   test("feed lists NVDAx with live capacity", async ({ page }) => {
     await prime(page, "dark");
@@ -13,10 +15,19 @@ test.describe("testnet read-only", () => {
   });
 
   test("api health answers from the contract", async ({ request }) => {
-    const r = await request.get("/api/health");
-    const j = (await r.json()) as { ok: boolean; core: string };
-    expect(j.ok).toBe(true);
+    // The route reuses an answer for 5 s, so poll past that: a transient refusal by every provider clears, a wrong contract does not.
+    let j: { ok: boolean; core: string; error?: string; stale_s?: number } = { ok: false, core: "" };
+    await expect
+      .poll(
+        async () => {
+          j = (await (await request.get("/api/health")).json()) as typeof j;
+          return j.ok;
+        },
+        { timeout: 40_000, intervals: [2_000, 6_000, 6_000, 10_000] },
+      )
+      .toBe(true);
     expect(j.core).toBe(config.accounts.core);
+    if (j.stale_s !== undefined) expect(j.stale_s).toBeLessThanOrEqual(60);
   });
 });
 
