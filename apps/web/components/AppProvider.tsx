@@ -1,7 +1,7 @@
 "use client";
 import type { ReactNode } from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { NectarViews, contractGeneration, featureOn, type ContractGeneration, type CoreConfigView, type FeatureName, type PublicConfig, type TxIntent } from "@nectar/sdk";
+import { NectarViews, contractGeneration, describeTransferAmount, featureOn, isTestnetSigner, testnetSignerBlock, tokenTable, type ContractGeneration, type CoreConfigView, type FeatureName, type PublicConfig, type TokenInfo, type TxIntent } from "@nectar/sdk";
 import { SignModal, ToastProvider, useToast, type FeeLine } from "@nectar/ui";
 import { E2E_KEY_ADAPTER, RPC_URL, txUrl } from "@/lib/env";
 import type { TxOutcome, WalletAdapter } from "@/lib/wallet/types";
@@ -44,7 +44,8 @@ export function useFeature(name: FeatureName): boolean {
 
 interface WalletState {
   accountId: string | null;
-  network: string;
+  /** "testnet" unless the connected signer is not a testnet account (R2-10: `alice.near` → "not-testnet"; pages show WrongNetwork). */
+  network: "testnet" | "not-testnet";
   label: string;
   connecting: boolean;
   connect: () => Promise<void>;
@@ -72,7 +73,7 @@ type SignFn = (intent: TxIntent, opts: SignOptions) => Promise<TxOutcome | null>
 const SignCtx = createContext<SignFn>(async () => null);
 export const useSign = () => useContext(SignCtx);
 
-function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; accountId: string | null; children: ReactNode }) {
+function SignHost({ adapter, accountId, tokens, children }: { adapter: WalletAdapter; accountId: string | null; tokens: Readonly<Record<string, TokenInfo>>; children: ReactNode }) {
   const toast = useToast();
   const [pending, setPending] = useState<{ intent: TxIntent; opts: SignOptions; resolve: (o: TxOutcome | null) => void } | null>(null);
   const [busy, setBusy] = useState(false);
@@ -94,8 +95,10 @@ function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; ac
 
   const confirm = useCallback(async () => {
     if (!pending) return;
-    if (adapter.network() !== "testnet") {
-      setError("Your wallet is not on NEAR testnet. Switch network and try again.");
+    // R2-10: the adapter is configured for testnet, but only the signer id tells us what the wallet actually connected.
+    const refuse = testnetSignerBlock(accountId);
+    if (refuse) {
+      setError(refuse);
       return;
     }
     setBusy(true);
@@ -124,7 +127,7 @@ function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; ac
       setBusy(false);
       setError(e instanceof Error ? e.message : String(e));
     }
-  }, [adapter, pending, toast]);
+  }, [adapter, accountId, pending, toast]);
 
   return (
     <SignCtx.Provider value={sign}>
@@ -139,6 +142,7 @@ function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; ac
         onCancel={cancel}
         summary={pending?.opts.summary}
         fees={pending?.opts.fees}
+        amount={pending ? describeTransferAmount(pending.intent, tokens) : null}
       />
     </SignCtx.Provider>
   );
@@ -216,13 +220,14 @@ export function AppProvider({ config: baseConfig, children }: { config: PublicCo
 
   const generation = version === null ? null : contractGeneration(version);
   const chain: ChainState = { config, views, deployed, core, version, generation, paused: core?.paused === true, loading, rpcError, reload };
-  const wallet: WalletState = { accountId, network: adapter.network(), label: adapter.label, connecting, connect, disconnect };
+  const wallet: WalletState = { accountId, network: !accountId || isTestnetSigner(accountId) ? "testnet" : "not-testnet", label: adapter.label, connecting, connect, disconnect };
+  const tokens = useMemo(() => tokenTable(config), [config]);
 
   return (
     <ChainCtx.Provider value={chain}>
       <WalletCtx.Provider value={wallet}>
         <ToastProvider>
-          <SignHost adapter={adapter} accountId={accountId}>
+          <SignHost adapter={adapter} accountId={accountId} tokens={tokens}>
             {children}
           </SignHost>
         </ToastProvider>
@@ -240,7 +245,10 @@ export interface ViewState<T> {
   reload: () => void;
 }
 
-/** Run a view against nectar-core. `fn` receives the views client; skipped (loading=false, data undefined) when not deployed. */
+/**
+ * Run a view against nectar-core. `fn` receives the views client; skipped (loading=false, data undefined) when not deployed.
+ * When `fn` becomes null the last `data` and `error` are cleared (R2-07): a stale preview must not keep feeding fee lines.
+ */
 export function useView<T>(fn: ((v: NectarViews) => Promise<T>) | null, deps: ReadonlyArray<unknown>): ViewState<T> {
   const { views } = useChain();
   const [data, setData] = useState<T | undefined>(undefined);
@@ -249,6 +257,8 @@ export function useView<T>(fn: ((v: NectarViews) => Promise<T>) | null, deps: Re
   const [tick, setTick] = useState(0);
   useEffect(() => {
     if (!views || !fn) {
+      setData(undefined);
+      setError(null);
       setLoading(false);
       return;
     }

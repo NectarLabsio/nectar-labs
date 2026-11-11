@@ -33,6 +33,16 @@ export class RpcError extends Error {
 
 export interface ViewTransport {
   call<T>(contractId: string, method: string, args: Record<string, unknown>): Promise<T>;
+  /** `query view_account` (finality final): the account, or null when the RPC answers UNKNOWN_ACCOUNT. Optional for test transports. */
+  viewAccount?(accountId: string): Promise<AccountView | null>;
+}
+
+/** `view_account` result fields the app reads (observed on test.rpc.fastnear.com 2026-11-11; missing account = cause UNKNOWN_ACCOUNT). */
+export interface AccountView {
+  amount: string;
+  locked: string;
+  code_hash: string;
+  storage_usage: number;
 }
 
 export type FetchLike = (input: string, init: { method: string; headers: Record<string, string>; body: string }) => Promise<{ status: number; ok: boolean; text(): Promise<string> }>;
@@ -57,7 +67,7 @@ export function backoffMs(n: number, baseMs: number, random: () => number = Math
 const RETRY_CAUSES = new Set(["TIMEOUT_ERROR", "INTERNAL_ERROR", "NO_SYNCED_BLOCKS", "NOT_SYNCED_YET"]);
 
 interface RpcBody {
-  result?: { result?: number[]; error?: string; logs?: string[] };
+  result?: { result?: number[]; error?: string; logs?: string[] } & Record<string, unknown>;
   error?: { code?: number; name?: string; message?: string; data?: unknown; cause?: { name?: string; info?: unknown } };
 }
 
@@ -78,14 +88,9 @@ function decodeResult(bytes: number[]): unknown {
   }
 }
 
-/** One call on one endpoint; throws RpcError with `retryable` set for 429 / 5xx / transport / timeout. */
-async function callOnce(f: FetchLike, url: string, contractId: string, method: string, args: Record<string, unknown>): Promise<unknown> {
-  const body = JSON.stringify({
-    jsonrpc: "2.0",
-    id: "nectar",
-    method: "query",
-    params: { request_type: "call_function", finality: "final", account_id: contractId, method_name: method, args_base64: b64(JSON.stringify(args)) },
-  });
+/** One `query` on one endpoint; throws RpcError with `retryable` set for 429 / 5xx / transport / timeout. `method` labels errors. */
+async function queryOnce(f: FetchLike, url: string, method: string, params: Record<string, unknown>): Promise<NonNullable<RpcBody["result"]>> {
+  const body = JSON.stringify({ jsonrpc: "2.0", id: "nectar", method: "query", params });
   let status: number;
   let text: string;
   try {
@@ -110,10 +115,34 @@ async function callOnce(f: FetchLike, url: string, contractId: string, method: s
   }
   if (!j || status === 429 || status >= 500) throw new RpcError(`${method}: HTTP ${status} from ${url}`, method, text.slice(0, 200), status === 429 || status >= 500);
   if (status >= 400) throw new RpcError(`${method}: HTTP ${status} from ${url}`, method, text.slice(0, 200), false);
-  const res = j.result;
-  if (res?.error) throw new RpcError(`${method}: ${res.error}`, method, res, false);
-  if (!res || !Array.isArray(res.result)) throw new RpcError(`${method}: malformed RPC response`, method, j, false);
+  if (!j.result || typeof j.result !== "object") throw new RpcError(`${method}: malformed RPC response`, method, j, false);
+  return j.result;
+}
+
+/** One view call on one endpoint. Request shape = near-api-js 7.4.0 callFunction (F-012). */
+async function callOnce(f: FetchLike, url: string, contractId: string, method: string, args: Record<string, unknown>): Promise<unknown> {
+  const res = await queryOnce(f, url, method, { request_type: "call_function", finality: "final", account_id: contractId, method_name: method, args_base64: b64(JSON.stringify(args)) });
+  if (res.error) throw new RpcError(`${method}: ${res.error}`, method, res, false);
+  if (!Array.isArray(res.result)) throw new RpcError(`${method}: malformed RPC response`, method, res, false);
   return decodeResult(res.result);
+}
+
+/** True when an RpcError is the node saying the account does not exist (JSON-RPC error cause UNKNOWN_ACCOUNT). */
+export function isUnknownAccount(e: unknown): boolean {
+  if (!(e instanceof RpcError)) return false;
+  const c = e.cause as RpcBody["error"] | undefined;
+  return c?.cause?.name === "UNKNOWN_ACCOUNT";
+}
+
+async function viewAccountOnce(f: FetchLike, url: string, accountId: string): Promise<AccountView | null> {
+  try {
+    const res = await queryOnce(f, url, "view_account", { request_type: "view_account", finality: "final", account_id: accountId });
+    if (typeof res.amount !== "string") throw new RpcError("view_account: malformed RPC response", "view_account", res, false);
+    return { amount: res.amount, locked: String(res.locked ?? "0"), code_hash: String(res.code_hash ?? ""), storage_usage: Number(res.storage_usage ?? 0) };
+  } catch (e) {
+    if (isUnknownAccount(e)) return null;
+    throw e;
+  }
 }
 
 /**
@@ -128,25 +157,27 @@ export function resilientRpcTransport(o: ResilientRpcOptions): ViewTransport {
   const sleep = o.sleep ?? ((ms: number) => new Promise<void>((r) => setTimeout(r, ms)));
   const random = o.random ?? Math.random;
   let start = 0;
-  return {
-    async call<T>(contractId: string, method: string, args: Record<string, unknown>): Promise<T> {
-      let last: RpcError | null = null;
-      for (let k = 0; k < urls.length; k++) {
-        const i = (start + k) % urls.length;
-        for (let n = 1; n <= attempts; n++) {
-          try {
-            const v = await callOnce(f, urls[i]!, contractId, method, args);
-            start = i;
-            return v as T;
-          } catch (e) {
-            const re = e instanceof RpcError ? e : new RpcError(`${method}: ${String(e)}`, method, e, false);
-            if (!re.retryable) throw re;
-            last = re;
-            if (n < attempts) await sleep(backoffMs(n, base, random));
-          }
+  const run = async <T>(method: string, once: (url: string) => Promise<T>): Promise<T> => {
+    let last: RpcError | null = null;
+    for (let k = 0; k < urls.length; k++) {
+      const i = (start + k) % urls.length;
+      for (let n = 1; n <= attempts; n++) {
+        try {
+          const v = await once(urls[i]!);
+          start = i;
+          return v;
+        } catch (e) {
+          const re = e instanceof RpcError ? e : new RpcError(`${method}: ${String(e)}`, method, e, false);
+          if (!re.retryable) throw re;
+          last = re;
+          if (n < attempts) await sleep(backoffMs(n, base, random));
         }
       }
-      throw last ?? new RpcError(`${method}: no RPC endpoint answered`, method, undefined, true);
-    },
+    }
+    throw last ?? new RpcError(`${method}: no RPC endpoint answered`, method, undefined, true);
+  };
+  return {
+    call: <T>(contractId: string, method: string, args: Record<string, unknown>): Promise<T> => run(method, async (url) => (await callOnce(f, url, contractId, method, args)) as T),
+    viewAccount: (accountId: string) => run("view_account", (url) => viewAccountOnce(f, url, accountId)),
   };
 }

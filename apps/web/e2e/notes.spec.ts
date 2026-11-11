@@ -25,6 +25,7 @@ const OWNER = FX.owner;
 const NOW = BigInt(Date.now()) * 1_000_000n;
 const IN_2H = (NOW + 2n * 3600n * 1_000_000_000n).toString();
 const EVIL = FX.nft_token_svg["q-3"]!.replace("</svg>", "<script>alert(1)</script></svg>");
+const EXISTING = new Set([OWNER, "alice.testnet", "someone.testnet"]);
 
 interface Opts { features?: string[]; tokens?: Array<{ token_id: string; owner_id: string }>; account?: string; theme?: "dark" | "light"; reserve?: Record<string, unknown> }
 
@@ -76,6 +77,14 @@ async function setup(page: Page, o: Opts = {}) {
     if (req.method() === "OPTIONS") return route.fulfill({ status: 204, headers: { "access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "POST" } });
     const body = req.postDataJSON() as { id: unknown; params?: { request_type?: string; account_id?: string; method_name?: string; args_base64?: string } } | null;
     const p = body?.params;
+    // R2-09: view_account answers with the shapes observed on test.rpc.fastnear.com (2026-11-11); unknown names → UNKNOWN_ACCOUNT.
+    if (p?.request_type === "view_account" && p.account_id) {
+      const id = p.account_id;
+      const payload = EXISTING.has(id)
+        ? { result: { amount: "1000000000000000000000000", locked: "0", code_hash: "11111111111111111111111111111111", storage_usage: 182, storage_paid_at: 0, block_height: 1, block_hash: "x" } }
+        : { error: { name: "HANDLER_ERROR", cause: { name: "UNKNOWN_ACCOUNT", info: { requested_account_id: id } }, code: -32000, message: "Server error", data: `account ${id} does not exist while viewing` } };
+      return route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: JSON.stringify({ jsonrpc: "2.0", id: body!.id, ...payload }) });
+    }
     if (p?.request_type !== "call_function" || !p.method_name) return route.continue();
     const args = p.args_base64 ? (JSON.parse(Buffer.from(p.args_base64, "base64").toString("utf8") || "{}") as Record<string, unknown>) : {};
     const v = p.method_name === "ft_balance_of" ? "1000000000000" : p.account_id === CORE ? views(p.method_name, args) : undefined;
@@ -176,6 +185,9 @@ test.describe("/note/[id] (mocked v2)", () => {
     await expect(page.getByTestId("note-transfer")).toBeDisabled();
     await expect(page.getByTestId("note-transfer-reason")).toHaveText("Enter the receiving NEAR account.");
     await page.getByLabel("Receiver (NEAR account)").fill("alice.testnet");
+    await expect(page.getByTestId("note-receiver-ok")).toHaveText("alice.testnet exists on NEAR testnet.", { timeout: 20_000 });
+    await expect(page.getByTestId("note-transfer-reason")).toHaveText("Type the receiving account again to confirm.");
+    await page.getByLabel("Type the receiver again").fill("alice.testnet");
     await page.getByTestId("note-transfer").click();
     const modal = page.getByRole("dialog");
     await expect(modal).toContainText("Review: Transfer Note");
@@ -190,6 +202,24 @@ test.describe("/note/[id] (mocked v2)", () => {
     const c = await calls(page);
     expect(c).toHaveLength(1);
     expect(c[0]).toMatchObject({ receiverId: CORE, methodName: "nft_transfer", args: { receiver_id: "alice.testnet", token_id: "p-7" } });
+    await axeClean(page);
+  });
+
+  test("review 2 (R2-09): a receiver that does not exist is refused; an implicit account needs no lookup; retype must match", async ({ page }) => {
+    await setup(page);
+    await page.goto("/note/q-3");
+    await expect(page.getByTestId("note-owner")).toHaveText(OWNER, { timeout: 20_000 });
+    await page.getByLabel("Receiver (NEAR account)").fill("alise.testnet");
+    await page.getByLabel("Type the receiver again").fill("alise.testnet");
+    await expect(page.getByTestId("note-transfer-reason")).toContainText("No account alise.testnet exists on NEAR testnet", { timeout: 20_000 });
+    await expect(page.getByTestId("note-transfer")).toBeDisabled();
+    const hex = "ab".repeat(32);
+    await page.getByLabel("Receiver (NEAR account)").fill(hex);
+    await expect(page.getByTestId("note-transfer-reason")).toHaveText("Type the receiving account again to confirm.");
+    await page.getByLabel("Type the receiver again").fill(hex);
+    await expect(page.getByTestId("note-transfer")).toBeEnabled();
+    await page.getByTestId("note-transfer").click();
+    await expect(page.getByRole("dialog").getByTestId("sign-args")).toContainText(`"receiver_id": "${hex}"`);
     await axeClean(page);
   });
 

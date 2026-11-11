@@ -15,9 +15,6 @@ export class NearConnectAdapter implements WalletAdapter {
   private connector: NearConnector | null = null;
   private wallet: Wallet | null = null;
 
-  network() {
-    return "testnet";
-  }
 
   private async get(): Promise<NearConnector> {
     if (this.connector) return this.connector;
