@@ -144,15 +144,20 @@ abstract contract VaultFixture is Test {
 
     function _doSettle(NectarVaultBase.Settle memory m) internal {
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function _doRelease(NectarVaultBase.Release memory m) internal {
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
+    }
+
+    /// @dev Independent of the contract: abi.encode(uint64, address) is two left-padded words.
+    function _key(uint64 id, address depositor) internal pure returns (bytes32) {
+        return keccak256(bytes.concat(bytes32(uint256(id)), bytes32(uint256(uint160(depositor)))));
     }
 
     function _status(uint64 id) internal view returns (NectarVaultBase.Status st) {
-        (,,, st) = vault.positions(id);
+        (,,, st) = vault.positionOf(id, alice);
     }
 }
