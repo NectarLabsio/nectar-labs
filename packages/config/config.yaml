@@ -104,3 +104,10 @@ base:
   collateral: 0x634F88DAEf0a1f77645c523C3FA351Fe37aaf81d
   policy_registry: 0xc23b9Dd2a69a2fe98A315A6B2e917468294ef9c5
   network: local-fork-of-base-sepolia
+site: # WO-34 hosting. Operator fields are Kunal's (TODO-H-LEGAL); agents never guess them. null = not provided yet.
+  operator: null
+  country: null
+  contact: null
+  x_handle: null
+  hosted_until: "2026-11-25"
+  # Hosts come from env: SITE_URL, APP_URL, DOCS_URL, FEED_URL, REPO_URL. All unset = local single-host mode (G9 default).
