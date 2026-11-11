@@ -14,7 +14,8 @@ Commit what you have and report before you run out.
 3. Host check:
    - Capture every request host per page in real Chrome (fresh profile), including opening the real near-connect selector and one wallet iframe (no
      signing).
-   - Any host that is not listed on SITE `/legal/privacy` fails the gate.
+   - Any host that is not listed on SITE `/legal/privacy` fails the gate. Exempt: our own SITE and APP hosts. Use the same check as WO-34e2, which
+     looks for each host in backticks on the privacy page.
    - Cookies and storage keys must match `/legal/cookies`.
 4. Response headers per host (curl -sI): CSP (exact hosts), HSTS, `frame-ancestors 'none'`, X-Frame-Options, and noindex on the preview URL but not on
    production.
