@@ -65,8 +65,11 @@ export const positionSeeds = (vault: string, positionId: bigint, depositor: stri
   u64le(positionId),
   keyBytes(depositor),
 ];
-/** `position` is the slot's PDA address (see `positionAddress`). */
-export const nonceSeeds = (position: string, nonce: bigint): Uint8Array[] => [utf8("nonce"), keyBytes(position), u64le(nonce)];
+/** `position` is the slot's PDA address (see `positionAddress`); `authority` is the 32 raw bytes stored on the slot. */
+export const nonceSeeds = (position: string, authority: Uint8Array, nonce: bigint): Uint8Array[] => {
+  if (authority.length !== 32) throw new Error(`authority must be 32 bytes, got ${authority.length}`);
+  return [utf8("nonce"), keyBytes(position), authority, u64le(nonce)];
+};
 export const claimSeeds = (vault: string, recipient: string): Uint8Array[] => [utf8("claim"), keyBytes(vault), keyBytes(recipient)];
 export const ataSeeds = (owner: string, tokenProgram: string, mint: string): Uint8Array[] => [
   keyBytes(owner),
@@ -116,7 +119,8 @@ export const vaultAddress = (program: string, mint: string): string => find(vaul
 export const vaultTokensAddress = (program: string, vault: string): string => find(vaultTokensSeeds(vault), program);
 export const positionAddress = (program: string, vault: string, positionId: bigint, depositor: string): string =>
   find(positionSeeds(vault, positionId, depositor), program);
-export const nonceAddress = (program: string, position: string, nonce: bigint): string => find(nonceSeeds(position, nonce), program);
+export const nonceAddress = (program: string, position: string, authority: Uint8Array, nonce: bigint): string =>
+  find(nonceSeeds(position, authority, nonce), program);
 export const claimAddress = (program: string, vault: string, recipient: string): string => find(claimSeeds(vault, recipient), program);
 export const associatedTokenAddress = (owner: string, mint: string, tokenProgram: string = TOKEN_PROGRAM): string =>
   find(ataSeeds(owner, tokenProgram, mint), ASSOCIATED_TOKEN_PROGRAM);
