@@ -44,7 +44,7 @@ test.describe("hardening", () => {
     expect((await r.body()).byteLength).toBe(0);
   });
 
-  test("the footer Status link is a plain anchor (never RSC-prefetched) and /borrow reaches networkidle", async ({ page }) => {
+  test("the footer Status link opens the /status page, /api/health is never RSC-prefetched, and /borrow reaches networkidle", async ({ page }) => {
     const prefetches: string[] = [];
     page.on("request", (q) => {
       if (q.url().includes("/api/health") && q.headers()["rsc"]) prefetches.push(q.url());
@@ -52,7 +52,7 @@ test.describe("hardening", () => {
     await page.goto("/borrow");
     const status = page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: "Status", exact: true });
     await status.scrollIntoViewIfNeeded();
-    await expect(status).toHaveAttribute("href", "/api/health");
+    await expect(status).toHaveAttribute("href", "/status");
     await page.waitForLoadState("networkidle", { timeout: 30_000 });
     expect(prefetches).toEqual([]);
   });

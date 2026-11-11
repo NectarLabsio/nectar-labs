@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buyerFeeShareBps,
   parseEvidenceRows,
+  parseGateTable,
   placementLadder,
   portfolioActivity,
   portfolioSummary,
@@ -125,5 +126,27 @@ describe("Evidence table", () => {
       { label: "Nine", state: "fail", qualifier: null },
       { label: "None", state: "pending", qualifier: null },
     ]);
+  });
+});
+
+describe("parseGateTable", () => {
+  it("keeps gate, status word, qualifiers, date and the evidence path only", () => {
+    const md = [
+      "# Evidence",
+      "| Gate | Status | UTC | Commit | Evidence |",
+      "| --- | --- | --- | --- | --- |",
+      "| G5 oracle | FALLBACK (disclosed) | 2026-11-09T22:55Z | 706d940 | evidence/G5/verifier-20261109T2254Z/ (free text) |",
+      "| G13 Base round trip | PASS \u2014 local fork of Base Sepolia | 2026-11-10T18:03Z | 7bface5 | evidence/G13/x/ (a) b |",
+      "| G9 (first run) | FAIL \u2014 superseded by the re-run above; copy says something | 2026-11-11T08:43Z | c5f6349 | see \u00a7G9 |",
+      "| not a gate | PASS | x | y | z |",
+      "",
+      "| G1 | PASS | 2026 | a | b |",
+    ].join("\n");
+    expect(parseGateTable(md)).toEqual([
+      { gate: "G5 oracle", status: "FALLBACK", notes: ["disclosed"], date: "2026-11-09", evidence: "evidence/G5/verifier-20261109T2254Z/" },
+      { gate: "G13 Base round trip", status: "PASS", notes: ["local fork"], date: "2026-11-10", evidence: "evidence/G13/x/" },
+      { gate: "G9 (first run)", status: "FAIL", notes: ["superseded"], date: "2026-11-11", evidence: "\u00a7G9" },
+    ]);
+    expect(parseGateTable("no table")).toEqual([]);
   });
 });

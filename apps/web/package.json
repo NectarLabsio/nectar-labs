@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev -p 3100",
-    "build": "next build",
+    "build": "node scripts/build-changelog.mjs && next build",
+    "changelog": "node scripts/build-changelog.mjs",
     "start": "next start -p 3100",
     "typecheck": "next typegen && tsc --noEmit -p tsconfig.json",
     "lint": "node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs",

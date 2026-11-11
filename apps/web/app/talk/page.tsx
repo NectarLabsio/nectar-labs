@@ -1,34 +1,35 @@
-"use client";
-import { useState } from "react";
-import { Banner, Button, Card, Field } from "@nectar/ui";
-import { CONTACT_EMAIL } from "@/lib/env";
+import { CopyContact } from "@/components/CopyContact";
+import { getSiteConfig, guardContent } from "@/lib/config.server";
 
-// Form provider is a human decision (PRD §12 "form → provider (HUMAN)"). Until then the form composes a mailto: message.
+export const metadata = { title: "Talk to us" };
+
+// WO-34b §5: no form that pretends to send. The contact comes from config.yaml `site.contact` (TODO-H-LEGAL); null = local-only text.
 export default function TalkPage() {
-  const [name, setName] = useState("");
-  const [org, setOrg] = useState("");
-  const [msg, setMsg] = useState("");
-  const [sent, setSent] = useState(false);
-  const href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Nectar pilot: ${org || name}`)}&body=${encodeURIComponent(`${msg}\n\n${name}${org ? `, ${org}` : ""}`)}`;
+  const site = getSiteConfig();
+  const x = site.x_handle ? site.x_handle.replace(/^@/, "") : null;
+  guardContent("/talk", `${site.contact ?? ""} ${site.x_handle ?? ""}`);
   return (
     <div className="page wrap">
       <div className="page-head">
         <span className="label">Talk to us</span>
-        <h1>Nectar pilot cohort</h1>
-        <p className="lead">Market makers, curators and issuers of tokenized assets: tell us what you would commit or list.</p>
+        <h1>Talk to us</h1>
+        <p className="lead">Market makers, curators and issuers of tokenized assets: write to us about what you would commit or list. Nectar Labs runs on NEAR testnet with mock collateral.</p>
       </div>
-      <Card>
-        <form className="stack" onSubmit={(e) => { e.preventDefault(); window.location.href = href; setSent(true); }}>
-          <Field label="Name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
-          <Field label="Organisation" value={org} onChange={(e) => setOrg(e.target.value)} autoComplete="organization" />
-          <div className="field">
-            <label htmlFor="talk-msg">Message</label>
-            <textarea id="talk-msg" className="textarea" value={msg} onChange={(e) => setMsg(e.target.value)} required />
-          </div>
-          <div className="row"><Button type="submit" variant="primary">Open email to send</Button><span className="caption">Opens your mail app addressed to {CONTACT_EMAIL}. Nothing is stored here.</span></div>
-          {sent ? <Banner tone="good" title="Draft opened">If no mail app opened, write to <a className="link" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</Banner> : null}
-        </form>
-      </Card>
+      <div className="prose">
+        <h2>Email</h2>
+        <CopyContact contact={site.contact} className="row" />
+        {x ? (
+          <>
+            <h2>X</h2>
+            <p>
+              <a className="link" href={`https://x.com/${encodeURIComponent(x)}`} rel="noreferrer noopener" data-testid="x-handle">
+                @{x}
+              </a>
+            </p>
+          </>
+        ) : null}
+        <p className="caption">Nothing is collected on this page. To report a security issue, see <a className="link" href="/security">Security</a>.</p>
+      </div>
     </div>
   );
 }
