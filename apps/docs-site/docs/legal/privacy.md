@@ -19,7 +19,7 @@ Current state (2026-11-11): this documentation site, the web app (G3 PASS) and t
 | --- | --- | --- | --- | --- |
 | Theme choice, consent choice and a wallet-connected flag | your browser's localStorage (see [Cookie policy](/legal/cookies)) | remember your settings | strictly necessary / legitimate interest | until you clear it; consent re-asked after 180 days |
 | Analytics events, **only if you accept** and only if a vendor is configured (TODO-H4) | analytics vendor | understand which pages help | consent | vendor default (TODO-H4) |
-| HTTP request metadata (IP address, user agent, URL, time) | our hosting provider (TODO-H5) | deliver the site, prevent abuse | legitimate interest | per host policy (TODO-H5) |
+| HTTP request metadata (IP address, user agent, URL, time) | our hosting provider (TODO-H-HOST) | deliver the site, prevent abuse | legitimate interest | per host policy (TODO-H-HOST) |
 | IP address of copilot requests (web app) | our web app server's memory only | rate-limit the copilot route (5 live answers a minute per address, 30 overall) so nobody can run up its cost | legitimate interest | never logged or written to disk; kept in memory until the server restarts (at most 10,000 addresses per limit, oldest dropped first) |
 | Email you send us | our mailbox | reply to you | legitimate interest / contract | until resolved + 12 months |
 | Wallet account ids and on-chain activity (web app) | public blockchains | the protocol itself | — (public by nature) | permanent, outside our control |
@@ -34,7 +34,7 @@ Current state (2026-11-11): this documentation site, the web app (G3 PASS) and t
 
 | Service | Used by | When | Data it receives |
 | --- | --- | --- | --- |
-| Hosting provider (TODO-H5; default plan: Vercel preview) | all sites | every request | request metadata |
+| Hosting provider (TODO-H-HOST; planned: Vercel for the sites, Railway for the Feed; not deployed yet) | all sites | every request | request metadata |
 | Google Analytics 4 **or** Plausible (TODO-H4) | docs site, web app | **not configured in this build**: no vendor id is set, so no analytics script loads and no analytics request is sent. If H4 configures one, it loads only in production and only after you click "Accept analytics" | none today. Once H4 is decided, this row will list what the chosen vendor receives |
 | Email provider of kunal@nectarnetwork.fun | contact | when you email us | your message and address |
 | NEAR AI Cloud (`cloud-api.near.ai`) | web app copilot, from our server | **live mode only** (operator API key set, TODO-H7); not called in fixture mode | the question you type and a random nonce; not your IP address. Our `/api/copilot` route accepts requests from the web app's own pages only, and limits how often each address can ask (row above) |

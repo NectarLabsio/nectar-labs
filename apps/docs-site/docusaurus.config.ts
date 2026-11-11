@@ -14,15 +14,26 @@ const analytics = isProd && (requested === 'ga4' || requested === 'plausible') ?
 const ga4Id = process.env.DOCS_GA4_ID ?? ''; // TODO-H4: GA4 measurement id; empty keeps GA4 off
 const plausibleDomain = process.env.DOCS_PLAUSIBLE_DOMAIN ?? ''; // TODO-H4/H5: empty keeps Plausible off
 
-const APP = 'https://app.example.invalid'; // TODO-H5: web app domain
-const REPO = 'https://github.com/TODO-H2'; // TODO-H2: public repo URL (repo is private until Kunal says otherwise)
+// Hosting (WO-34, D-030). The docs are served at APP_URL + /docs: `baseUrl: '/docs/'` with docs
+// `routeBasePath: '/'` gives /docs/<slug> (F-391). `url` is the public origin only, no path (F-391), so
+// DOCS_ORIGIN_URL is the APP origin (for example https://ac.nectarlabs.io), NOT the docs deployment's own
+// host (web's DOCS_ORIGIN, the rewrite target). Fallbacks: the origin of DOCS_URL, then local.
+// The build output is flat, with no /docs folder (F-393): the APP rewrite `/docs/:path*` -> `<docs deployment>/:path*`
+// strips the prefix. Locally `pnpm --filter docs-site serve` honours baseUrl (http://localhost:3000/docs/).
+const originOf = (u: string | undefined): string | undefined => (u ? new URL(u).origin : undefined);
+const ORIGIN = originOf(process.env.DOCS_ORIGIN_URL) ?? originOf(process.env.DOCS_URL) ?? 'http://localhost:3000';
+// Web app links. Hosted: APP_URL (TODO-H-DOMAIN; *.vercel.app if H-DOMAIN is silent). Local: `pnpm --filter web dev`.
+const APP = originOf(process.env.APP_URL) ?? (process.env.DOCS_ORIGIN_URL || process.env.DOCS_URL ? ORIGIN : 'http://localhost:3100');
+// TODO-H2: public repo URL. Empty (the default while the repo is private) hides every GitHub link.
+const REPO = (process.env.REPO_URL ?? '').replace(/\/+$/, '');
+const github = <T,>(item: T): T[] => (REPO ? [item] : []);
 
 const config: Config = {
   title: 'Nectar Labs',
   tagline: 'Committed liquidity, verifiable settlement.',
   favicon: 'img/favicon.png',
-  url: process.env.DOCS_URL ?? 'https://nectar-labs-docs.vercel.app', // TODO-H5
-  baseUrl: '/',
+  url: ORIGIN,
+  baseUrl: '/docs/',
   trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
@@ -74,7 +85,7 @@ const config: Config = {
         { to: '/start/live-on-testnet', label: 'Status', position: 'left' },
         { to: '/changelog', label: 'Changelog', position: 'left' },
         { href: `${APP}/feed`, label: 'Feed', position: 'right' },
-        { href: REPO, label: 'GitHub', position: 'right' },
+        ...github({ href: REPO, label: 'GitHub', position: 'right' as const }),
       ],
     },
     footer: {
@@ -90,7 +101,7 @@ const config: Config = {
           { label: 'OutLayer', href: 'https://docs.outlayer.ai/' }, { label: 'NEAR Intents', href: 'https://docs.near-intents.org/' } ] },
         { title: 'Build', items: [
           { label: 'Docs', to: '/' }, { label: 'SDK', to: '/integrate/sdk' }, { label: 'Feed MCP', to: '/integrate/feed-mcp' },
-          { label: 'GitHub', href: REPO }, { label: 'Status', to: '/start/live-on-testnet' } ] },
+          ...github({ label: 'GitHub', href: REPO }), { label: 'Status', to: '/start/live-on-testnet' } ] },
         { title: 'Resources', items: [
           { label: 'Whitepaper', to: '/concepts/whitepaper' }, { label: 'Security', to: '/security/trust-model' },
           { label: 'Changelog', to: '/changelog' }, { label: 'Brand assets', to: '/project/brand' },

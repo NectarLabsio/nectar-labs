@@ -58,7 +58,7 @@ pnpm --filter web dev        # web app on http://localhost:3100
 Optional:
 ```
 pnpm --filter docs-site build   # static docs build (broken links fail the build)
-pnpm --filter docs-site start   # docs dev server on http://localhost:3000
+pnpm --filter docs-site start   # docs dev server on http://localhost:3000/docs/ (build + serve: same URL)
 pnpm --filter feed start        # Feed REST on :8788, MCP over HTTP at http://127.0.0.1:8789/mcp; no env needed
 pnpm -s --filter feed mcp          # Feed MCP over stdio (read-only tools; see services/feed/README.md)
 ```

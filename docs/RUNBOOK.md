@@ -52,3 +52,22 @@ PROD: Sputnik DAO owner, 48 h timelock on `upsert_collateral` / `set_oracle_sour
 
 ## Backups
 All state on-chain; SQLite rebuilt with `pnpm --filter feed index:rebuild`. Keys: `near account export-account` once → encrypted offline file (HUMAN).
+
+## Docs site under /docs (WO-34d, D-030)
+- **Local URLs changed.** Dev: `pnpm --filter docs-site start` → http://localhost:3000/docs/. Preview a build: `pnpm --filter docs-site build` then
+  `pnpm --filter docs-site serve` → http://localhost:3000/docs/ (`docusaurus serve` honours baseUrl and redirects any other path to `/docs/`, F-393).
+  Sitemap: `/docs/sitemap.xml` (F-392). Checked 2026-11-12 on a spare port: `/docs/`, `/docs/start/quick-start`, `/docs/sitemap.xml`, `/docs/changelog` 200;
+  `/start/quick-start` 302 → `/docs/`.
+- **Config** (`apps/docs-site/docusaurus.config.ts`): `baseUrl: '/docs/'`, docs `routeBasePath: '/'` → pages at `/docs/<slug>` (F-391). Env at build time:
+  `DOCS_ORIGIN_URL` = the public origin that serves `/docs`, i.e. the APP origin (for example `https://ac.<domain>`), origin only, no path (F-391); it is
+  NOT the docs deployment's own host (that is web's `DOCS_ORIGIN`, the rewrite target). Falls back to the origin of `DOCS_URL`, then `http://localhost:3000`.
+  `APP_URL` sets the web-app links (default: the docs origin when hosted, `http://localhost:3100` locally). `REPO_URL` empty (default until H2) hides
+  every GitHub link.
+- **Hosting.** The build output is flat, with no `/docs` folder (F-393). The APP rewrite therefore strips the prefix: `/docs/:path*` →
+  `<docs deployment>/:path*`. The docs deployment is reached only through APP `/docs`: opened directly, its pages load `/docs/assets/…` and break. Do not
+  add a `/` → `/docs/` redirect on the docs deployment (it would land on a path that does not exist there).
+- **VERIFY at the first deploy.** `trailingSlash: false` writes `<path>.html` files (F-392), so the docs host must answer `/start/quick-start` from
+  `start/quick-start.html`. That host behaviour is not in FACTS yet. Check `curl -sI "$APP_URL/docs/start/quick-start"` = 200; if it is 404, record the
+  host's clean-URL setting in FACTS before changing any config.
+- **Links in pages.** Markdown links (`[x](/concepts/…)`) and config `to:` items get the baseUrl automatically. Raw HTML anchors in `.md` pages do not:
+  write them as `href="/docs/…"` (three today, in protocol/solana-vault.md and start/live-on-testnet.md); the broken-link check does not see them.
