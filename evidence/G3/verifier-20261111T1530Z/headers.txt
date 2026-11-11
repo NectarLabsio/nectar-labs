@@ -1,0 +1,73 @@
+== curl -sI http://localhost:3217/
+HTTP/1.1 200 OK
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+x-nextjs-cache: HIT
+x-nextjs-prerender: 1
+x-nextjs-prerender: 1
+x-nextjs-stale-time: 300
+Cache-Control: s-maxage=31536000
+ETag: "154agzibca81e63"
+Content-Type: text/html; charset=utf-8
+Content-Length: 65042
+Date: Wed, 11 Nov 2026 15:32:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+== curl -sI http://localhost:3217/borrow
+HTTP/1.1 200 OK
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+x-nextjs-cache: HIT
+x-nextjs-prerender: 1
+x-nextjs-prerender: 1
+x-nextjs-stale-time: 300
+Cache-Control: s-maxage=31536000
+ETag: "wmhy2rrkape72"
+Content-Type: text/html; charset=utf-8
+Content-Length: 18409
+Date: Wed, 11 Nov 2026 15:32:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+== curl -sI http://localhost:3217/api/health
+HTTP/1.1 200 OK
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+cache-control: no-store
+content-type: application/json
+Date: Wed, 11 Nov 2026 15:32:16 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+== curl -sI http://localhost:3217/note/0
+HTTP/1.1 200 OK
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+Vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch, Accept-Encoding
+Link: </>; rel=preconnect; crossorigin="", </brand/mark-flat-96.png>; rel=preload; as="image", </brand/wordmark-muted-100.png>; rel=preload; as="image", </brand/wordmark-dark-100.png>; rel=preload; as="image"
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Content-Type: text/html; charset=utf-8
+Date: Wed, 11 Nov 2026 15:32:16 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+

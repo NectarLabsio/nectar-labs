@@ -1,0 +1,6 @@
+route /borrow networkidle TIMEOUT after 15118 ms
+pending: [ 'GET fetch http://localhost:3217/api/health?_rsc=jRg7zxzdxaf4jyob' ]
+[]
+route /feed networkidle yes after 2241 ms
+pending: []
+[]

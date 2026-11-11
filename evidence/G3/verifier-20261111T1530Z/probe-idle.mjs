@@ -1,0 +1,24 @@
+import { chromium, devices } from "@playwright/test";
+const route = process.argv[2] ?? "/borrow";
+const b = await chromium.launch({ channel: "chrome" });
+const ctx = await b.newContext({ ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 } });
+const p = await ctx.newPage();
+await p.addInitScript((t) => {
+  localStorage.setItem("nectar-consent", JSON.stringify({ v: 1, analytics: false, at: Date.now() }));
+  localStorage.setItem("nectar-theme", t);
+}, "dark");
+await p.emulateMedia({ reducedMotion: "reduce" });
+const pending = new Map();
+const log = [];
+p.on("request", (r) => { pending.set(r, `${r.method()} ${r.resourceType()} ${r.url().slice(0, 120)}`); });
+p.on("requestfinished", (r) => pending.delete(r));
+p.on("requestfailed", (r) => { log.push("FAILED " + r.url().slice(0, 100) + " " + r.failure()?.errorText); pending.delete(r); });
+p.on("websocket", (w) => log.push("WS " + w.url()));
+const t0 = Date.now();
+await p.goto("http://localhost:3217" + route);
+let idle = "yes";
+await p.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => { idle = "TIMEOUT"; });
+console.log("route", route, "networkidle", idle, "after", Date.now() - t0, "ms");
+console.log("pending:", [...pending.values()]);
+console.log(log.slice(0, 10));
+await b.close();
