@@ -14,12 +14,14 @@ wallet selector opened on /borrow with one wallet's sandboxed iframe (NEAR CLI),
 | fonts.cdnfonts.com | stylesheet@iframe | Meteor Wallet (sandboxed frame) | Meteor Wallet's web fonts (stylesheet + font files) | Only after you open Meteor Wallet in the selector | style-src |
 | mc.meteorwallet.app | fetch@iframe | Meteor Wallet (sandboxed frame) | Meteor Wallet's own API | Only after you open Meteor Wallet in the selector | connect-src |
 | meteorwallet.app | image@iframe | Meteor Wallet (sandboxed frame) | Meteor Wallet images | Only after you open Meteor Wallet in the selector | img-src |
+| near-testnet.drpc.org | fetch | our code | RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369) | App pages that read the contracts, only while both FastNEAR hosts refuse or fail | connect-src |
 | raw.githubusercontent.com | fetch, image | near-connect 0.12.0 (wallet selector library) | Wallet list (manifest.json) | After you press Connect wallet | connect-src, img-src |
 | rpc.testnet.fastnear.com | fetch | our code | NEAR testnet RPC fallback (@nectar/sdk TESTNET_RPC_FALLBACKS) | App pages that read the contracts | connect-src |
 | rsms.me | stylesheet@iframe, font@iframe | Meteor Wallet (sandboxed frame) | Meteor Wallet's web fonts (stylesheet + font files) | Only after you open Meteor Wallet in the selector | font-src, style-src |
 | site.localhost:3961 | document, fetch, font, image, other, script, stylesheet | our code | This site: pages, scripts, styles, fonts, same-origin API routes, docs via the /docs rewrite | Every page | connect-src, font-src, frame-src, img-src, script-src, style-src |
 | storage.herewallet.app | image, image@iframe | near-connect 0.12.0 (wallet selector library) | Wallet icons named in the wallet list | After you press Connect wallet | img-src |
 | test.rpc.fastnear.com | fetch | our code | NEAR testnet RPC: contract views, transaction status | App pages that read the contracts; wallet selector | connect-src |
+| testnet-rpc.intea.rs | fetch | our code | RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369) | App pages that read the contracts, only while both FastNEAR hosts refuse or fail | connect-src |
 | wallet.intear.tech | document@iframe, fetch | Intear Wallet (sandboxed frame, through near-connect) | Code, styles, fonts, images or API of Intear Wallet | Only after you open Intear Wallet in the selector | connect-src, frame-src |
 
 ## Cookies

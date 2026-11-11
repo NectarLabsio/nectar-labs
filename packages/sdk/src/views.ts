@@ -35,8 +35,9 @@ export { RpcError };
 export type { ViewTransport };
 
 /**
- * Retry (429 / 5xx, jittered backoff, 3 attempts, shared cooldown, 4 in flight) then fall back: `url` first, then the FastNEAR
- * testnet hosts (F-369). Answers are de-duplicated in flight and reused for 8 s (cachedTransport, WO-34f); `NectarViews.invalidate()` clears them.
+ * Cross-provider failover (WO-34g): `url` first, then TESTNET_RPC_FALLBACKS (FastNEAR ×2, dRPC, Intear; F-369); a 429 / 5xx / timeout /
+ * network error moves to the next host and cools the failing one (jittered backoff, shared by every caller, 4 in flight, 3 passes).
+ * Answers are de-duplicated in flight and reused for 8 s (cachedTransport, WO-34f); `NectarViews.invalidate()` clears them.
  */
 export function rpcTransport(url: string | readonly string[]): ViewTransport {
   return cachedTransport(resilientRpcTransport({ urls: rpcEndpoints(url) }));

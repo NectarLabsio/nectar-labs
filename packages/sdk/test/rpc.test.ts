@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { NectarViews, RpcError, TESTNET_RPC_FALLBACKS, backoffMs, capacityUsdE6, flagPriceUsdE6, healthAfterE4, healthFactor, profitLockFill, profitLockRepayFirstUsdE6, repayToHealthUsdE6, cachedTransport, resilientRpcTransport, rpcEndpoints, type FetchLike } from "../src/index";
 
-// WO-33b §0: retry with jittered backoff on 429 / 5xx (3 attempts per endpoint), then the ordered fallback list (F-369).
+// WO-33b §0 + WO-34g: on 429 / 5xx / timeout / network error move to the next endpoint (FastNEAR ×2, dRPC, Intear; F-369), each failing
+// endpoint cooling with jittered exponential backoff; up to 3 passes over the list.
 const ok = (v: unknown) => ({ status: 200, body: { jsonrpc: "2.0", id: "nectar", result: { result: Array.from(new TextEncoder().encode(JSON.stringify(v))), logs: [], block_height: 1 } } });
 type Reply = { status: number; body?: unknown; raw?: string } | Error;
 
@@ -18,13 +19,20 @@ function mockFetch(script: Record<string, Reply[]>) {
   return { f, seen };
 }
 const sleeps: number[] = [];
-const opts = (f: FetchLike, urls = ["https://a.example", "https://b.example"]) => ({ urls, fetch: f, sleep: async (ms: number) => void sleeps.push(ms), random: () => 0.5 });
+/** Deterministic clock: only the injected sleep moves time, so cooldowns are exact (random 0.5 → jitter ×1). */
+function opts(f: FetchLike, urls = ["https://a.example", "https://b.example"]) {
+  const clock = { t: 0 };
+  return { urls, fetch: f, sleep: async (ms: number) => void (sleeps.push(ms), (clock.t += ms)), random: () => 0.5, now: () => clock.t, clock };
+}
 
 describe("rpcEndpoints", () => {
-  it("puts the configured URL first, then the FastNEAR testnet hosts, de-duplicated", () => {
+  it("FastNEAR (D-025 default first), then the non-FastNEAR providers (WO-34g)", () => {
+    expect([...TESTNET_RPC_FALLBACKS]).toEqual(["https://test.rpc.fastnear.com", "https://rpc.testnet.fastnear.com", "https://near-testnet.drpc.org", "https://testnet-rpc.intea.rs"]);
+  });
+  it("puts the configured URL first, then the fallback hosts in order, de-duplicated", () => {
     expect(rpcEndpoints("https://my.rpc/")).toEqual(["https://my.rpc", ...TESTNET_RPC_FALLBACKS]);
     expect(rpcEndpoints("https://test.rpc.fastnear.com")).toEqual([...TESTNET_RPC_FALLBACKS]);
-    expect(rpcEndpoints(["https://x", "https://rpc.testnet.fastnear.com"])).toEqual(["https://x", "https://rpc.testnet.fastnear.com", "https://test.rpc.fastnear.com"]);
+    expect(rpcEndpoints(["https://x", "https://rpc.testnet.fastnear.com"])).toEqual(["https://x", "https://rpc.testnet.fastnear.com", "https://test.rpc.fastnear.com", "https://near-testnet.drpc.org", "https://testnet-rpc.intea.rs"]);
     expect(rpcEndpoints(null)).toEqual([...TESTNET_RPC_FALLBACKS]);
   });
   it("jittered exponential backoff", () => {
@@ -78,24 +86,70 @@ describe("resilientRpcTransport", () => {
     expect(JSON.parse(atob(p.args_base64!))).toEqual({ a: 1 });
   });
 
-  it("retries HTTP 429 and JSON-RPC -429 with backoff on the same endpoint", async () => {
+  it("429 → the next provider at once, without waiting", async () => {
     sleeps.length = 0;
-    const { f, seen } = mockFetch({ "https://a.example": [{ status: 429, raw: "Too Many Requests" }, { status: 200, body: { error: { code: -429, message: "rate limited" } } }, ok(7)] });
+    const { f, seen } = mockFetch({ "https://a.example": [{ status: 429, raw: "Too Many Requests" }], "https://b.example": [ok(7)] });
     const t = resilientRpcTransport(opts(f));
     await expect(t.call("c", "m", {})).resolves.toBe(7);
-    expect(seen.map((s) => s.url)).toEqual(["https://a.example", "https://a.example", "https://a.example"]);
+    expect(seen.map((s) => s.url)).toEqual(["https://a.example", "https://b.example"]);
+    expect(sleeps).toEqual([]);
+  });
+
+  it("failover order FastNEAR → FastNEAR → dRPC → Intear on HTTP 429, JSON-RPC -429 and 5xx; cooling hosts are skipped by the next call", async () => {
+    const [fa, fb, drpc, intear] = TESTNET_RPC_FALLBACKS;
+    const { f, seen } = mockFetch({
+      [fa]: [{ status: 429, raw: "Too Many Requests" }],
+      [fb]: [{ status: 200, body: { jsonrpc: "2.0", id: "nectar", error: { code: -429, message: "rate limited" } } }],
+      [drpc]: [{ status: 503, raw: "unavailable" }],
+      [intear]: [ok("one"), ok("two")],
+    });
+    const t = resilientRpcTransport(opts(f, rpcEndpoints(null)));
+    await expect(t.call("c", "m", {})).resolves.toBe("one");
+    expect(seen.map((s) => s.url)).toEqual([fa, fb, drpc, intear]);
+    await expect(t.call("c", "m", {})).resolves.toBe("two");
+    expect(seen.map((s) => s.url).slice(4)).toEqual([intear]);
+  });
+
+  it("network errors and timeouts fail over too; a timed-out attempt is aborted", async () => {
+    let signal: AbortSignal | undefined;
+    const f: FetchLike = (url, init) => {
+      if (url === "https://a.example") return Promise.reject(new TypeError("fetch failed"));
+      if (url === "https://b.example") {
+        signal = init.signal;
+        return new Promise(() => undefined);
+      }
+      return Promise.resolve({ status: 200, ok: true, text: async () => JSON.stringify(ok("c").body) });
+    };
+    const t = resilientRpcTransport({ ...opts(f, ["https://a.example", "https://b.example", "https://c.example"]), timeoutMs: 20 });
+    await expect(t.call("c", "m", {})).resolves.toBe("c");
+    expect(signal?.aborted).toBe(true);
+  });
+
+  it("asks FastNEAR first again once its cooldown ends (the fallback is contacted only while it refuses)", async () => {
+    const { f, seen } = mockFetch({ "https://a.example": [{ status: 429, raw: "" }, ok("A")], "https://b.example": [ok("B")] });
+    const o = opts(f);
+    const t = resilientRpcTransport(o);
+    await expect(t.call("c", "m", {})).resolves.toBe("B");
+    o.clock.t += 300;
+    await expect(t.call("c", "m", {})).resolves.toBe("A");
+    expect(seen.map((s) => s.url)).toEqual(["https://a.example", "https://b.example", "https://a.example"]);
+  });
+
+  it("a single endpoint is retried with jittered exponential backoff (250, 500 ms)", async () => {
+    sleeps.length = 0;
+    const { f, seen } = mockFetch({ "https://a.example": [{ status: 429, raw: "Too Many Requests" }, { status: 502, raw: "" }, ok(7)] });
+    const t = resilientRpcTransport(opts(f, ["https://a.example"]));
+    await expect(t.call("c", "m", {})).resolves.toBe(7);
+    expect(seen).toHaveLength(3);
     expect(sleeps).toEqual([250, 500]);
   });
 
-  it("after 3 failed attempts (5xx, network) falls back to the next endpoint and sticks to it", async () => {
-    const { f, seen } = mockFetch({
-      "https://a.example": [{ status: 503, raw: "unavailable" }, new TypeError("fetch failed"), { status: 502, raw: "" }],
-      "https://b.example": [ok("v1"), ok("v2")],
-    });
-    const t = resilientRpcTransport(opts(f));
-    await expect(t.call("c", "m", {})).resolves.toBe("v1");
-    await expect(t.call("c", "m", {})).resolves.toBe("v2");
-    expect(seen.map((s) => s.url)).toEqual(["https://a.example", "https://a.example", "https://a.example", "https://b.example", "https://b.example"]);
+  it("a sustained refusal grows that endpoint's cooldown, up to maxDelayMs", async () => {
+    sleeps.length = 0;
+    const { f } = mockFetch({ "https://a.example": Array(6).fill({ status: 429, raw: "" }) });
+    const t = resilientRpcTransport({ ...opts(f, ["https://a.example"]), attempts: 6, maxDelayMs: 2_000 });
+    await expect(t.call("c", "m", {})).rejects.toThrow(/HTTP 429/);
+    expect(sleeps).toEqual([250, 500, 1_000, 2_000, 2_000]);
   });
 
   it("does not retry contract errors (old and new nearcore shapes)", async () => {
@@ -113,14 +167,16 @@ describe("resilientRpcTransport", () => {
     expect(seen).toHaveLength(2);
   });
 
-  it("throws the last retryable error when every endpoint is exhausted", async () => {
+  it("throws the last retryable error when every endpoint is exhausted (3 passes over the list)", async () => {
+    sleeps.length = 0;
     const { f, seen } = mockFetch({ "https://a.example": Array(3).fill({ status: 429, raw: "" }), "https://b.example": Array(3).fill({ status: 500, raw: "" }) });
     const t = resilientRpcTransport(opts(f));
     await expect(t.call("c", "m", {})).rejects.toThrow(/HTTP 500 from https:\/\/b\.example/);
-    expect(seen).toHaveLength(6);
+    expect(seen.map((s) => s.url)).toEqual(["https://a.example", "https://b.example", "https://a.example", "https://b.example", "https://a.example", "https://b.example"]);
+    expect(sleeps).toEqual([250, 500]);
   });
 
-  it("NectarViews.fromRpc uses it (configured URL first)", async () => {
+  it("NectarViews.fromRpc uses it (configured URL first, then the fallback list)", async () => {
     const calls: string[] = [];
     const orig = globalThis.fetch;
     globalThis.fetch = (async (url: string) => {
@@ -131,8 +187,7 @@ describe("resilientRpcTransport", () => {
     try {
       const v = NectarViews.fromRpc("core.testnet", "https://primary.example");
       await expect(v.contractVersion()).resolves.toBe("2.0.0-v7");
-      expect(calls.filter((u) => u.startsWith("https://primary.example"))).toHaveLength(3);
-      expect(calls.at(-1)).toBe(TESTNET_RPC_FALLBACKS[0]);
+      expect(calls).toEqual(["https://primary.example", TESTNET_RPC_FALLBACKS[0]]);
     } finally {
       globalThis.fetch = orig;
     }

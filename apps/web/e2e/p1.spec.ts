@@ -5,6 +5,8 @@ import { PENDING_MSG, TESTNET_PENDING, prime } from "./helpers";
 
 // P1 surfaces (WO-12). Read-only: no wallet, no writes.
 test.describe("P1 read-only surfaces", () => {
+  // WO-34g: these read the chain through public RPC providers that rate-limit per IP; retry twice (a product error fails all three).
+  test.describe.configure({ retries: 2 });
   test.beforeEach(async ({ page }) => prime(page, "dark"));
 
   test("quote form offers 7 d / 30 d notice presets", async ({ page }) => {
