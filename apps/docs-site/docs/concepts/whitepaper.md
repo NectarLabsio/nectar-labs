@@ -30,7 +30,7 @@ The contract holds every rule. Off-chain parties (keeper, quoter, oracle, copilo
 
 ## 5. Why NEAR
 
-One contract holds escrow, limits and settlement. Chain Signatures let that contract authorise a release on Solana without a bridge. OutLayer runs the buyer's private pricing in a TEE. NEAR Intents is the public depth and USDC rail. For context, on 2026-11-10 NEAR Intents showed $37.006B cumulative volume and $191.14M TVL (F-110a, source: [DefiLlama](https://defillama.com/protocol/near-intents)), and Rhea Finance $237.35M TVL (F-112a, source: [DefiLlama](https://defillama.com/protocol/rhea-finance)).
+One contract holds escrow, limits and settlement. Chain Signatures let that contract authorise a release on Solana without a bridge. OutLayer runs the buyer's pricing in a TEE (in this demo on operator-set, published inputs; see [Quoter honest limits](/protocol/quoter-tee#honest-limits)). NEAR Intents is the public depth and USDC rail. For context, on 2026-11-10 NEAR Intents showed $37.006B cumulative volume and $191.14M TVL (F-110a, source: [DefiLlama](https://defillama.com/protocol/near-intents)), and Rhea Finance $237.35M TVL (F-112a, source: [DefiLlama](https://defillama.com/protocol/rhea-finance)).
 
 ## 6. Competitive position
 

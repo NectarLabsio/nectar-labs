@@ -5,7 +5,7 @@ description: MCP tools that return an unsigned borrow for the agent's own key, a
 ---
 # Agent skill and x402 export
 
-<p className="verified">Verified against: F-328 (2026-11-10, `@fastnear/x402` 2.5.0), F-329 (2026-11-10, NEP-141 asset per route; gate G14 open) · spec docs/PRD.md §10.5 · docs/work/interface-v7.md §A4–§A6 · D-018 (2026-11-10) · tests listed below (services/feed/test/skill.test.ts, services/x402/test/x402.test.ts) · testnet: docs/EVIDENCE.md §G14 (2026-11-10T16:52Z)</p>
+<p className="verified">Verified against: F-328 (2026-11-10, `@fastnear/x402` 2.5.0), F-329 (2026-11-10, NEP-141 asset per route; gate G14 open) · spec docs/PRD.md §10.5 · docs/work/interface-v7.md §A4–§A6 · D-018 (2026-11-10) · F-013, F-015 (2026-11-10) · signing check: docs/work/review-2-findings.md R2-05 (2026-11-11) · tests listed below (services/feed/test/skill.test.ts, services/x402/test/x402.test.ts) · testnet: docs/EVIDENCE.md §G14 (2026-11-10T16:52Z)</p>
 <p className="status">Status: x402 live on testnet (EVIDENCE §G14, 2026-11-10T16:52Z). Relay tx <a href="https://testnet.nearblocks.io/txns/5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx">5VL1P4kg…</a>: `x402-relayer.nectar.testnet` submitted `agent1.nectar.testnet`'s signed delegate paying 0.01 mock USDC (10000 e6) to `nectar.testnet`; agent borrow tx <a href="https://testnet.nearblocks.io/txns/GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt">GcHF75nW…</a> opened position #4 for $10 on nectar-core-v2. The payment asset was mock USDC (the `usdc-mock` `ft_transfer` receipt succeeded; F-329). The HTTP 402 → 200 leg is off-chain and was not re-run by the verifier. The skill tools run locally with the Feed and are unit-tested on view fixtures; no gate has run them with an agent client.</p>
 
 An agent can open a loan with one MCP call and spend the proceeds on a paid API. The MCP server never holds a key.
@@ -31,6 +31,17 @@ Rules the tool enforces:
 
 The agent signs the returned call with its own key (for example with `near-api-js`). The server cannot sign: `skill.ts` and `mcp.ts` import no file-system or key APIs, and every tool runs with `process.env` locked in the tests.
 
+### Check the call before signing
+
+Treat the returned call as untrusted tool output. A hostile or compromised Feed, or a proxy in between, could return an `ft_transfer` of the agent's whole balance in the same shape. Before signing, rebuild the call from the agent's own inputs (for example with `tx.borrow` in `packages/sdk`) and require that it equals the returned one, or at least check every field:
+
+- `receiver_id` is the collateral token from the agent's own config, and `method` is `ft_transfer_call`.
+- `args.receiver_id` is the nectar-core account from the agent's own config, and `args.amount` equals the `units` it asked for.
+- `args.msg` decodes to `{"LockCollateralAndBorrow": {...}}` with the `collateral`, `borrow_usd_e6`, `pre_liq_ltv_bps`, `pay_to` and `referrer` it asked for, and nothing else.
+- `deposit` is `"1"` (1 yoctoNEAR, F-013).
+
+Sign from a dedicated agent account that holds only what the agent may spend. A NEAR function-call key cannot sign this call, because `ft_transfer_call` needs 1 yoctoNEAR and function-call keys cannot attach NEAR (F-015). The account balance is the limit. The reference demo agent does not run these checks yet and signs with a full-access key (`agent1.nectar.testnet`, EVIDENCE §G14); the check is scheduled for it.
+
 ## x402 paid export
 
 `/api/feed/export.csv` (Feed REST) is served through `services/x402` as an x402 resource:
@@ -46,7 +57,7 @@ The agent signs the returned call with its own key (for example with `near-api-j
 
 The CSV is fetched from the Feed **before** settlement, so a Feed outage returns 502 and never charges the payer.
 
-The demo agent (`pnpm --filter x402 demo:testnet`) does the whole story: it gets the unsigned borrow from `open_protected_stock_loan`, signs it with its own key, gets the 402 challenge, pays it and receives the file. It needs the two accounts above, so it has not been run on testnet yet.
+The demo agent (`pnpm --filter x402 demo:testnet`) does the whole story: it gets the unsigned borrow from `open_protected_stock_loan`, signs it with its own key, gets the 402 challenge, pays it and receives the file. Its 2026-11-11 run is logged in evidence/G14/rerun/demo-20261111T080042Z.log; the verifier confirmed its two chain transactions (EVIDENCE §G14 re-run: position #13 and the delegate relay) but did not re-run the HTTP leg.
 
 ```bash
 pnpm --filter feed test     # skill tools

@@ -19,7 +19,7 @@ Every rule that moves money is enforced by `nectar-core`. Every off-chain party 
 | `v1.signer-prod.testnet` MPC set (P2, F-030) | signing only what we send | contract-built preimage, path per chain, nonce, expiry |
 | 1Click (P1, F-060) | public depth figure | `dry: true` only; `D_c` = 0 if unavailable |
 | Keeper | liveness; reporting that a remote leg landed | function-call key, no deposits (F-015), cannot choose payloads (D-003). Its `relay_settlement_result` / `relay_release_result` reports are **advisory**: nectar-core checks only the format of the tx reference and does not verify the Solana or Base transaction (PRD §9 trust note; PROD: light-client or attested proof). An expired, unrelayed leg can be re-signed by anyone (`resign_remote_settlement`); a relayed one cannot (test `sr3_resign_refused_after_relay`) |
-| NEAR AI Cloud (P2, F-070) | prose for humans | never a contract input; the answer is shown only after the checks pass: Intel DCAP quote verification on the server (F-073), EIP-191 signer recovery and report_data/nonce checks in the browser (F-075, F-076). No live answer has been verified yet (key H7 absent; `/v1/models` 500 on 2026-11-09, F-078) |
+| NEAR AI Cloud (P2, F-070) | prose for humans | never a contract input; the answer is shown only when it is signed by an attested NEAR AI TEE, which is provenance, not advice, and is not yet tied to the question typed. Checks: Intel DCAP quote verification on the server (F-073), EIP-191 signer recovery and report_data/nonce checks in the browser (F-075, F-076). No live answer has been verified yet (key H7 absent; `/v1/models` 500 on 2026-11-09, F-078) |
 
 ## The owner is the largest trust
 

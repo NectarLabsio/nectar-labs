@@ -1,1 +1,2 @@
+- [SUBMISSION idea budget](project_submission_idea_budget.md) — idea block ~1995/2000 chars; measure after every edit
 - [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python edits; plain git only; cite EVIDENCE "recorded in <commit>"; grep e2e.log per test before saying "skipped"
