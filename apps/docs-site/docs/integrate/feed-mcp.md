@@ -5,17 +5,19 @@ description: Read-only MCP tools for agents sizing loans against committed capac
 ---
 # Feed MCP
 
-<p className="verified">Verified against: F-160 (2026-11-09), F-161 (2026-11-09), F-162 (2026-11-09) · spec docs/PRD.md §10.3, §10.4 · D-009 (2026-11-10) · docs/EVIDENCE.md §G9 Feed MCP step (2026-11-11) · source services/feed/src/mcp.ts, main.ts, repo-config.ts · tests `pnpm --filter feed test` (in-memory MCP transport)</p>
-<p className="status">Status on 2026-11-11: built, runs locally, no public host. In both fresh-clone runs (docs/EVIDENCE.md §G9; the PASS re-run is recorded in 89f83ee) a scripted JSON-RPC client used it over stdio and HTTP with no env: initialize answered, 8 tools listed, and `get_exit_capacity` returned the same exit capacity as `pnpm demo:testnet`. No LLM agent client has been tested.</p>
+<p className="verified">Verified against: F-160 (2026-11-09), F-161 (2026-11-09), F-162 (2026-11-09) · spec docs/PRD.md §10.3, §10.4 · D-009 (2026-11-10) · docs/EVIDENCE.md §G9 run 3 Feed MCP step (2026-11-11T15:30Z–15:38Z, tested 3107a1a, recorded in 837cd12) · source services/feed/src/mcp.ts, main.ts, repo-config.ts · tests `pnpm --filter feed test` (in-memory MCP transport)</p>
+<p className="status">Status on 2026-11-11: built, runs locally, no public host. In every fresh-clone G9 run (docs/EVIDENCE.md §G9; latest: run 3, recorded in 837cd12) a scripted JSON-RPC client used it over stdio and HTTP with no env: initialize answered, 8 tools listed, and `get_exit_capacity` with the argument `symbol` set to NVDAx returned the same Q_c and R_c as `pnpm demo:testnet`. No LLM agent client has been tested.</p>
 
 A read-only MCP server over stdio and Streamable HTTP, built on `@modelcontextprotocol/sdk` 1.32.2 (F-160). It holds no keys and needs no env: the nectar-core id defaults to `accounts.core` in `packages/config/config.yaml` (now `nectar-core-v2.nectar.testnet`), and the tools read its views over public RPC. `CORE_ACCOUNT_ID` overrides the id. Only when no id is configured at all do the tools fall back to the local Feed store, and then `preview_borrow` returns an error.
 
 | Tool | Input | Output |
 | --- | --- | --- |
 | `get_exit_capacity` | `symbol` | the view result with USD formatting and `as_of` |
-| `preview_borrow` | `symbol`, `units`, `borrow_usd` | `limit_usd`, `premium_usd`, `ok`, `reason` |
+| `preview_borrow` | `symbol`, `units`, `borrow_usd_e6` | `limit_usd`, `premium_usd`, `ok`, `reason` |
 | `list_quotes` | `symbol`, optional `limit` | live quotes, ids and sizes only. The output leaves out the buyer, but buyers are public on chain (`list_quotes` / `get_quote` views, Quote Note owners), so this is not a privacy property |
-| `explain_limit` | `symbol` | the [Cramér formula](/concepts/cramer-limits) (PRD §4.2, D-009) with live numbers substituted |
+| `explain_limit` | `symbol`, optional `units` | the [Cramér formula](/concepts/cramer-limits) (PRD §4.2, D-009) with live numbers substituted |
+
+Example call: `get_exit_capacity` with `{"symbol":"NVDAx"}`. There is no `asset` argument; the fresh-clone run that tried it got an input validation error (docs/EVIDENCE.md §G9 run 3). Arguments come from `services/feed/src/mcp.ts`.
 
 The server also lists the four agent skill tools (8 in total): `open_protected_stock_loan`, `quote_capacity`, `get_note` and `build_self_settle`. The last two still return `not_available`. See [Agent skill and x402 export](/integrate/agent-skill-x402).
 

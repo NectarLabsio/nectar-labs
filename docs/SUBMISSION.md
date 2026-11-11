@@ -50,7 +50,7 @@ Claim → evidence (docs/EVIDENCE.md gate table as of a677689, quoted exactly; "
 | copilot | G8 PASS (fixture) (2026-11-09T23:56Z). Binding to the question typed and the announced model came after G8: test "R2-03: an exchange signed for other notes or another model is not verified, even with an accepted DCAP verdict" (apps/web/lib/copilot/verify.test.ts; `pnpm --filter web test:copilot` 12 pass, 1 skipped live, 2026-11-11) |
 | pre-submission review, SECURITY.md | not a gate: D-027, SECURITY.md, docs/work/security-review-v7.md. Fix tests recorded in 5083d30 (G11 re-run after D-027): every SR-1…SR-33 has a named test, 124 contract sr* tests, Solana 10 cargo + 55 TS, forge 105 pass / 3 skip |
 | runs repeated on the fixed contract | G7, G13 (local fork) and G14 re-run after D-027 rows above |
-| web | G3b web E2E (re-run after D-027 + design port) PASS (2026-11-11T08:24Z, recorded in 5083d30; mocked remote and Notes E2E passed, screenshot capture not run); not claimed in `idea` |
+| web | G3b web E2E (re-run after D-027 + design port) PASS (2026-11-11T08:24Z, recorded in 5083d30; mocked remote and Notes E2E passed, screenshot capture not run). Re-run after the review 2 web fixes (clone 3107a1a, recorded in b1728aa) FAIL: 40 screens.spec network-idle timeouts (footer `/api/health` prefetch), every functional / a11y / h-scroll spec passed; fix WO-49 (a2387b5), verifier re-run not yet recorded; not claimed in `idea` |
 
 ## Tracks — proposal for H16 (Kunal decides)
 Proposed: `defi`, `security`, `privacy`, `agents`, `nfts`. Not proposed: `realworld`. Each proposed track is backed by a gate.
@@ -82,7 +82,7 @@ mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3).
 ## Order of human steps (HACKATHON.md: send only once the repo is public and the post is up)
 H10 + H14 (identity, payout account, consent) → H12 (prior work) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →
 G9 PASS from the public URL → H1 (Kunal sends).
-G9 today: PASS from a local fresh clone (docs/EVIDENCE.md §G9 re-run, 2026-11-11, tested 0af5cdd, recorded in 89f83ee; the clone URL is TODO-H2,
-so the verifier used the local path). The first run's FAIL (c5f6349) is superseded. A re-run from the public URL follows H2.
-Pre-send checklist: G9 PASS (local clone: done, 89f83ee; public URL: after H2) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
+G9 today: PASS from a local fresh clone (docs/EVIDENCE.md §G9 run 3, 2026-11-11T15:30Z–15:38Z, tested 3107a1a after review 2, recorded in 837cd12; the clone URL is TODO-H2,
+so the verifier used the local path). Earlier: PASS on 0af5cdd (89f83ee); the first run's FAIL (c5f6349) is superseded. A re-run from the public URL follows H2.
+Pre-send checklist: G9 PASS (local clone: done, run 3 recorded in 837cd12; public URL: after H2) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
 matches EVIDENCE · tracks re-checked against the G9 MCP result.
