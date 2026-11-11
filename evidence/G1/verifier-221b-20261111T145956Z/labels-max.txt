@@ -1,0 +1,175 @@
+FundPappusQuote(accepts_voluntary_fills) 8.15
+FundPappusQuote+nft_mint 9.05
+LockCollateralAndBorrow(shield) 13.81
+LockCollateralAndBorrow+nft_mint 13.55
+Repay(full)->note owner 12.51
+announce_corporate_action 2.76
+apply_corporate_action 2.83
+apply_price 2.89
+borrow 13.55
+borrow(1 over) 7.40
+borrow(after repay) 13.32
+borrow(aggregate_limit) 7.40
+borrow(ca_pending) 7.34
+borrow(headroom) 13.44
+borrow(post-split) 13.45
+borrow(pre-split) 13.56
+borrow(referrer_is_borrower) 7.24
+borrow(unregistered referrer) 13.40
+borrow(weekend over) 7.53
+borrow(weekend) 13.43
+borrow_alice 13.50
+borrow_bob 13.40
+cancel_settlement 3.03
+claim_fees 7.88
+claim_fees(dust) 7.90
+claim_owed_collateral 8.03
+claim_owed_collateral(still unregistered) 8.39
+complete_quote_withdrawal 7.98
+complete_reserve_exit 13.25
+confirm_remote_deposit(64 fitting quotes) 78.60
+confirm_remote_deposit(WO-36c) 18.43
+confirm_remote_deposit(base)+vault_read+payout 16.82
+confirm_remote_deposit(borrower) 8.53
+confirm_remote_deposit(legacy reservation, after upgrade) 12.01
+confirm_remote_deposit(rejected) 9.62
+confirm_remote_deposit(retry after upgrade) 17.42
+confirm_remote_deposit(short) 10.87
+confirm_remote_deposit(squatted) 9.57
+confirm_remote_deposit+refund 18.44
+confirm_remote_deposit+vault_read+payout 18.45
+expire_remote_reservation 3.70
+expire_remote_reservation+refund 3.70
+force_session_closed 2.73
+ft_transfer_call(JoinNectarReserve) 8.01
+ft_transfer_call:FundPappusQuote 8.14
+ft_transfer_call:LockCollateralAndBorrow 13.57
+ft_transfer_call:LockCollateralAndBorrow(after upgrade) 13.48
+ft_transfer_call:LockCollateralAndBorrow(pay_to failed) 13.79
+ft_transfer_call:LockCollateralAndBorrow(referrer) 13.65
+ft_transfer_call:LockCollateralAndBorrow(v2) 13.41
+ft_transfer_call:Repay(WO-36c) 7.54
+ft_transfer_call:Repay(after upgrade) 12.41
+ft_transfer_call:Repay(partial) 7.28
+ft_transfer_call:Repay(refund) 7.18
+ft_transfer_call:SupplyLendingLiquidity 7.08
+ft_transfer_call:TopUpQuote 7.33
+ft_transfer_call:TopUpQuote(refused) 7.42
+ft_transfer_call:invalid 7.18
+fund_gas_reserve 2.38
+initiate_quote_withdrawal 2.93
+initiate_reserve_exit 3.12
+keeper_attest_deposit(base)+payout 10.93
+keeper_attest_deposit+payout 12.68
+mock-ft:ft_transfer 2.01
+mock-ft:mint 1.73
+mock-ft:new 1.53
+mock-ft:set_registration_required 1.68
+mock-ft:storage_deposit 2.44
+mock-ft:storage_deposit(paid) 2.43
+mock-ft:update_multiplier 1.77
+new 2.41
+nft_token 3.16
+nft_token_svg 2.87
+nft_token_svg(quote) 2.86
+nft_tokens 4.94
+nft_tokens_for_owner 3.32
+nft_transfer 3.76
+nft_transfer(loan) 3.69
+nft_transfer(reserve) 3.69
+nft_transfer_call(returned) 9.27
+nft_transfer_locked 2.45
+pause 2.43
+propose_price 2.68
+register_referrer 2.57
+relay_release_result 3.06
+relay_release_result(base) 3.02
+relay_settlement_result 3.35
+relay_settlement_result(base) 3.31
+remove_extra_remote_chain 2.64
+request_multiplier_read+multiplier 8.73
+request_remote_release(base)+sign 26.30
+request_remote_release(borrower, retry window) 17.79
+request_remote_release+sign 17.75
+request_session_check+calendar 8.37
+reserve_remote_position(64 fitting quotes) 11.75
+reserve_remote_position(base)+derived_public_key 13.04
+reserve_remote_position+derived_public_key 11.75
+resign_remote_settlement+sign 19.12
+self_settle(near) 13.65
+self_settle(remote)+sign 21.42
+set_allow_keeper_deposit_attestation 2.56
+set_dex_depth 2.66
+set_extra_remote_chain 2.93
+set_fee_split 2.40
+set_job_config 2.66
+set_keeper 2.40
+set_max_conf_bps 2.40
+set_max_voluntary_fill 2.73
+set_multiplier 2.77
+set_multiplier_source 2.73
+set_oracle_params 2.41
+set_oracle_source 2.66
+set_origination_fee_bps 2.45
+set_outlayer_account 2.40
+set_quote_params 2.41
+set_quote_remote_recipient 3.62
+set_quoter_config 2.48
+set_quoter_pin 2.51
+set_quoter_secrets_ref 2.60
+set_remote_chain 2.88
+set_reserve_params 2.90
+set_session_calendar 10.09
+set_shield_params 2.77
+set_signer_config 2.62
+set_vault_read_config 2.65
+set_vol_bps 2.75
+shield_open_2 13.71
+shield_open_3 13.71
+shield_open_4 13.71
+shield_open_5 13.71
+shield_over_weekend_capacity 7.66
+trigger+pyth(conf_too_wide) 8.88
+trigger+pyth(failed) 8.68
+trigger+pyth(no_price) 8.80
+trigger+pyth(non_positive) 8.88
+trigger+pyth(ok)+quoter 31.79
+trigger+pyth(ok)+static 24.49
+trigger+pyth(open,180s) 8.88
+trigger+pyth(out_of_band) 8.88
+trigger+pyth+quoter+8legs 72.19
+trigger+pyth+quoter+sign(remote, 8 buyers) 51.88
+trigger+pyth+quoter+sign(remote, near minimum) 51.88
+trigger+quoter(badhash) 25.84
+trigger+quoter(echo) 25.93
+trigger+quoter(error) 25.50
+trigger+quoter(null) 25.48
+trigger+quoter(panic) 25.55
+trigger+quoter(unknown) 25.88
+trigger+quoter+8legs 65.48
+trigger+sign(64 fitting quotes) 33.91
+trigger+sign(WO-36c) 22.05
+trigger+sign(base, Ecdsa) 27.74
+trigger+sign(base, after upgrade) 28.08
+trigger+sign(dust sweep) 22.56
+trigger+sign(remote position) 22.11
+trigger+sign(solana, after upgrade) 22.08
+trigger_preliquidation(2 legs) 23.97
+trigger_preliquidation(8 legs) 55.79
+trigger_preliquidation(dust remainder) 18.70
+trigger_preliquidation(reserve) 18.79
+trigger_preliquidation(underwater) 13.65
+trigger_preliquidation(unregistered buyer) 19.23
+trigger_preliquidation(v2) 18.76
+unpause 2.43
+unregister_referrer 2.56
+update_owner_price 2.74
+update_owner_price(oracle_rejected) 2.61
+upsert_collateral 2.98
+withdraw_claimable 7.71
+withdraw_lender_fees 7.56
+withdraw_liquidity 7.74
+withdraw_treasury 7.71
+withdraw_treasury(after upgrade) 7.74
+withdraw_treasury(transfer failed) 7.56
+write_off_bad_debt 3.08

@@ -1,0 +1,5 @@
+label-only: 212 rows, 103 labels, max 55.79 Tgas (trigger_preliquidation(8 legs)); next 23.97 (trigger_preliquidation(2 legs))
+tx-total: 179 rows, 83 labels, max 78.60 Tgas (confirm_remote_deposit(64 fitting quotes)); next 72.19 (trigger+pyth+quoter+8legs)
+receipt: 877 rows, 83 labels, max 67.61 Tgas (confirm_remote_deposit(64 fitting quotes)); next 19.78 (trigger+sign(64 fitting quotes))
+attached(prepaid,excluded): 4 rows, 4 labels, max 300.00 Tgas (trigger+quoter+8legs); next 300.00 (trigger+pyth+quoter+sign(remote, 8 buyers))
+rows >= 100 Tgas (non-attached): 0
