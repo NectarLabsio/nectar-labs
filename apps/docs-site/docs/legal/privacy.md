@@ -8,7 +8,7 @@ description: What the Nectar Labs service processes, which third parties your br
 #   jsDelivr fallback blocked: @hot-labs/near-connect 0.12.0 build/NearConnector.js l.15-16 vs apps/web/lib/csp.ts MEASURED.connect.
 # - Vercel: F-402 (Hobby), F-403 (runtime logs 1 h on Hobby; method/path/host/UA/search params; IP is derived, hence "may include").
 # - Railway: F-404, F-405 (plans, volumes), F-406 (edge adds X-Real-IP), F-412 (log retention 3/7/30 days; privacy policy quote).
-# - RPC: DECISIONS D-025, FACTS F-369. Hosting split: D-030; x402 not hosted: D-031 (F-328, C-023).
+# - RPC: DECISIONS D-025, FACTS F-369; browser + server fallbacks dRPC/Intear (WO-34g, @nectar/sdk TESTNET_RPC_FALLBACKS, /api/health, /api/feed). Hosting split: D-030; x402 not hosted: D-031 (F-328, C-023).
 # - Feed logger drops ip/user_agent: services/feed/src/log.ts. Copilot: apps/web/lib/copilot/server.ts, apps/web/lib/api/guard.ts.
 ---
 # Privacy policy
@@ -70,6 +70,8 @@ How this was measured: on 2026-11-11, real Chrome with a fresh profile visited e
 | --- | --- | --- | --- |
 | `test.rpc.fastnear.com` | FastNEAR, NEAR testnet RPC (default) | app pages that read the contracts; the wallet selector | your IP address and user agent, the contracts and accounts you query, and the transaction hashes the app checks. After you connect, your account id travels with the reads of your balances, claims and Notes. |
 | `rpc.testnet.fastnear.com` | FastNEAR, NEAR testnet RPC (fallback) | when the default does not answer; the Meteor Wallet and Intear Wallet frames also call it | the same as above |
+| `near-testnet.drpc.org` | dRPC, NEAR testnet RPC (second fallback) | only while both FastNEAR hosts refuse or fail | your IP address and user agent, the contracts and accounts you query, and any transaction the app sends or checks through it. After you connect, your account id travels with the reads of your balances, claims and Notes. |
+| `testnet-rpc.intea.rs` | Intear, NEAR testnet RPC (second fallback) | only while both FastNEAR hosts refuse or fail | the same as dRPC |
 | `raw.githubusercontent.com` | GitHub, serving the selector's wallet list (`manifest.json`) and wallet icons | after you press **Connect wallet** | your IP address and user agent; no account id |
 | `storage.herewallet.app` | host of wallet icons named in the wallet list; also images inside the Nightly Wallet frame | after you press **Connect wallet** | your IP address and user agent; no account id |
 | `evm-on-near.dev` | host of wallet icons named in the wallet list; also the Ethereum Wallets frame and the window it opens | after you press **Connect wallet**; more once you open Ethereum Wallets | your IP address and user agent; once you use Ethereum Wallets, what you do in it |
@@ -113,7 +115,7 @@ These calls come from our servers, not your browser. None of them carries your I
 | Phala PCCS (Intel DCAP collateral) | web app server (copilot) | live mode only, to check the TDX quote | the attestation quote; no personal data |
 | NVIDIA NRAS (`nras.attestation.nvidia.com`) | web app server (copilot) | live mode only, to check GPU attestation | the GPU attestation payload; no personal data |
 | FastNEAR (`test.rpc.fastnear.com`, `rpc.testnet.fastnear.com`) | web app server and the Feed | reading chain state | public contract views only |
-| dRPC (`near-testnet.drpc.org`), Intear (`testnet-rpc.intea.rs`) | the Feed | only when FastNEAR does not answer | public contract views only |
+| dRPC (`near-testnet.drpc.org`), Intear (`testnet-rpc.intea.rs`) | web app server (status and Feed routes) and the Feed | only when FastNEAR does not answer | public contract views only |
 | Neardata (`testnet.neardata.xyz`) | the Feed | indexing protocol events | requests for public testnet blocks |
 | NEAR Intents 1Click (`1click.chaindefuser.com`) | the Feed | refreshing reference depth: dry quotes only, never a deposit | a quote request for a token pair and an amount; no user data |
 
