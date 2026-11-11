@@ -49,3 +49,19 @@ export const hostHref = (href: string): string => {
   if (isSharedPath(path)) return href;
   return `${(isLandingPath(path) ? SITE_URL : APP_URL).replace(/\/$/, "")}${href}`;
 };
+
+/**
+ * WO-34f: where a link on the page at `fromPath` goes, and whether it leaves this host. Same-host links stay relative (next/link,
+ * prefetch kept). Cross-host links (SITE ↔ APP), the docs origin and external URLs are `cross`: render a plain <a>, because an RSC
+ * prefetch across hosts follows the 308 to the other origin and fails CORS in the console. The current host follows from the page
+ * path (landing paths serve on SITE, the rest on APP), so server and client agree.
+ */
+export const hostTarget = (href: string, fromPath: string): { href: string; cross: boolean } => {
+  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith("//")) return { href, cross: true };
+  const abs = hostHref(href);
+  if (abs === href) return { href, cross: false };
+  // Hosted /docs is rewritten to the docs origin (Docusaurus HTML, not RSC): never client-routed or prefetched.
+  if (/^\/docs(\/|$|[?#])/.test(href)) return { href: abs, cross: true };
+  const here = (isLandingPath(fromPath.split(/[?#]/)[0] || "/") ? SITE_URL : APP_URL).replace(/\/$/, "");
+  return abs.startsWith(`${here}/`) ? { href, cross: false } : { href: abs, cross: true };
+};

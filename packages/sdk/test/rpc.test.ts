@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NectarViews, RpcError, TESTNET_RPC_FALLBACKS, backoffMs, capacityUsdE6, flagPriceUsdE6, healthAfterE4, healthFactor, profitLockFill, profitLockRepayFirstUsdE6, repayToHealthUsdE6, resilientRpcTransport, rpcEndpoints, type FetchLike } from "../src/index";
+import { NectarViews, RpcError, TESTNET_RPC_FALLBACKS, backoffMs, capacityUsdE6, flagPriceUsdE6, healthAfterE4, healthFactor, profitLockFill, profitLockRepayFirstUsdE6, repayToHealthUsdE6, cachedTransport, resilientRpcTransport, rpcEndpoints, type FetchLike } from "../src/index";
 
 // WO-33b §0: retry with jittered backoff on 429 / 5xx (3 attempts per endpoint), then the ordered fallback list (F-369).
 const ok = (v: unknown) => ({ status: 200, body: { jsonrpc: "2.0", id: "nectar", result: { result: Array.from(new TextEncoder().encode(JSON.stringify(v))), logs: [], block_height: 1 } } });
@@ -137,4 +137,58 @@ describe("resilientRpcTransport", () => {
       globalThis.fetch = orig;
     }
   }, 20_000);
+});
+
+// WO-34f: a page must not spray the RPC.
+describe("view de-duplication, TTL cache, shared 429 cooldown", () => {
+  it("shares one request between concurrent identical views and reuses it within the TTL; clear() reads fresh", async () => {
+    let t = 1_000;
+    const { f, seen } = mockFetch({ "https://a.example": [ok(1), ok(2), ok(3)] });
+    const tr = cachedTransport(resilientRpcTransport(opts(f, ["https://a.example"])), { ttlMs: 8_000, now: () => t });
+    const [x, y] = await Promise.all([tr.call("core", "get_config", {}), tr.call("core", "get_config", {})]);
+    expect([x, y, seen.length]).toEqual([1, 1, 1]);
+    t += 7_000;
+    expect(await tr.call("core", "get_config", {})).toBe(1);
+    expect(seen.length).toBe(1);
+    t += 2_000;
+    expect(await tr.call("core", "get_config", {})).toBe(2);
+    tr.clear?.();
+    expect(await tr.call("core", "get_config", {})).toBe(3);
+    expect(seen.length).toBe(3);
+  });
+
+  it("keys on contract, method and args, and never caches errors", async () => {
+    const { f, seen } = mockFetch({ "https://a.example": [ok("A"), ok("B"), { status: 200, body: { jsonrpc: "2.0", id: "nectar", result: { error: "wasm execution failed" } } }, ok("C")] });
+    const tr = cachedTransport(resilientRpcTransport(opts(f, ["https://a.example"])));
+    expect(await tr.call("core", "get_collateral", { symbol: "NVDAx" })).toBe("A");
+    expect(await tr.call("core", "get_collateral", { symbol: "X" })).toBe("B");
+    await expect(tr.call("core", "get_quote", { quote_id: "1" })).rejects.toThrow(RpcError);
+    expect(await tr.call("core", "get_quote", { quote_id: "1" })).toBe("C");
+    expect(seen.length).toBe(4);
+  });
+
+  it("a 429 cools the endpoint for the next caller too, and at most maxConcurrent requests are in flight", async () => {
+    let t = 0;
+    let inFlight = 0;
+    let peak = 0;
+    const waits: number[] = [];
+    const replies: Reply[] = [{ status: 429, raw: "Too Many Requests" }, ok(1), ok(2), ok(3), ok(4), ok(5)];
+    const f: FetchLike = async () => {
+      inFlight++;
+      peak = Math.max(peak, inFlight);
+      await new Promise((r) => setTimeout(r, 1));
+      inFlight--;
+      const r = replies.shift()!;
+      if (r instanceof Error) throw r;
+      return { status: r.status, ok: r.status < 400, text: async () => r.raw ?? JSON.stringify(r.body) };
+    };
+    const tr = resilientRpcTransport({ urls: ["https://a.example"], fetch: f, random: () => 0.5, now: () => t, maxConcurrent: 2, sleep: async (ms) => void waits.push(ms) });
+    expect(await tr.call("core", "m", {})).toBe(1);
+    expect(waits).toEqual([250]);
+    const all = await Promise.all([1, 2, 3, 4].map((i) => tr.call("core", "m", { i })));
+    expect(all.sort()).toEqual([2, 3, 4, 5]);
+    expect(waits.filter((w) => w === 250).length).toBe(5);
+    expect(peak).toBeLessThanOrEqual(2);
+    t = 1_000;
+  });
 });

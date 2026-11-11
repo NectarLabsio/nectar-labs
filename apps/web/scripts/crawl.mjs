@@ -4,6 +4,9 @@
 // Follows every internal link on SITE, APP and DOCS (docs = APP /docs via the rewrite), asserts 200 after redirects and the WO-34a
 // redirect codes, checks external links answer < 400 (GET, 10 s timeout), and collects console errors per route in both themes at
 // 1440 and 400 px (Playwright; PW_CHANNEL=chrome uses installed Chrome). Writes crawl.json + crawl.md under --out. Exit 1 on failures.
+// WO-34f politeness: --polite = one page at a time with a 1.5 s pause between page loads (--delay <ms> overrides); otherwise the four
+// variants of a route load in parallel (--concurrency <n>, default 4). Console errors are split: "ours" (any console error except a
+// failed load from a third-party host) fail the crawl; third-party network failures (RPC 429s, wallet hosts) are listed separately.
 import { mkdirSync, writeFileSync } from "node:fs";
 import { request as httpReq } from "node:http";
 import { request as httpsReq } from "node:https";
@@ -20,6 +23,10 @@ const APP = trim(arg("app", process.env.APP_URL));
 const DOCS = trim(arg("docs", `${APP}/docs`));
 const OUT = resolve(arg("out", "crawl-report"));
 const MAX = Number(arg("max", "400"));
+const POLITE = process.argv.includes("--polite");
+const CONCURRENCY = Math.max(1, Number(arg("concurrency", POLITE ? "1" : "4")));
+const DELAY = Math.max(0, Number(arg("delay", POLITE ? "1500" : "0")));
+const pause = (ms) => (ms > 0 ? new Promise((r) => setTimeout(r, ms)) : Promise.resolve());
 if (!SITE || !APP) {
   console.error("usage: crawl.mjs --site <url> --app <url> [--docs <url>] --out <dir>");
   process.exit(2);
@@ -60,6 +67,7 @@ async function chain(url) {
 }
 
 const failures = [];
+const thirdPartyFailures = [];
 const fail = (kind, where, detail) => failures.push({ kind, where, detail });
 
 // 1. WO-34a redirect codes.
@@ -116,7 +124,7 @@ const norm = (href, base) => {
 while (queue.length && routes.length < MAX) {
   const url = queue.shift();
   const c = await chain(url);
-  const rec = { url, status: c.final, finalUrl: c.finalUrl, hops: c.hops, console: {}, links: 0 };
+  const rec = { url, status: c.final, finalUrl: c.finalUrl, hops: c.hops, console: {}, thirdParty: {}, links: 0 };
   routes.push(rec);
   if (c.final !== 200) {
     fail("status", url, `final ${c.final} after ${c.hops.map((h) => h.status).join(" → ")}`);
@@ -124,11 +132,35 @@ while (queue.length && routes.length < MAX) {
   }
   const finalU = new URL(c.finalUrl);
   if (!internal(finalU)) continue;
-  for (const { v, ctx } of contexts) {
+  const renderOne = async ({ v, ctx }) => {
     const page = await ctx.newPage();
     const errs = [];
-    page.on("console", (m) => m.type() === "error" && errs.push(m.text().slice(0, 300)));
+    const thirdParty = [];
+    const hostOfUrl = (u) => {
+      try {
+        return new URL(u);
+      } catch {
+        return null;
+      }
+    };
+    page.on("console", (m) => {
+      if (m.type() !== "error") return;
+      const text = m.text().slice(0, 300);
+      const at = hostOfUrl(m.location()?.url ?? "");
+      // Chrome logs every failed subresource as a console error; a failed load from another host (RPC, wallet) is a third-party
+      // network failure, not an error from our code. Everything else counts as ours.
+      if (/^Failed to load resource/.test(text) && at && /^(https?|wss?):$/.test(at.protocol) && !internal(at)) thirdParty.push(`console: ${text} (${at.href.slice(0, 160)})`);
+      else errs.push(text);
+    });
     page.on("pageerror", (e) => errs.push(`pageerror: ${String(e.message).slice(0, 300)}`));
+    page.on("requestfailed", (r) => {
+      const u = hostOfUrl(r.url());
+      if (u && !internal(u) && /^https?:$/.test(u.protocol)) thirdParty.push(`requestfailed: ${r.failure()?.errorText ?? "?"} ${u.host}${u.pathname.slice(0, 80)}`);
+    });
+    page.on("response", (r) => {
+      const u = hostOfUrl(r.url());
+      if (u && !internal(u) && r.status() >= 400) thirdParty.push(`HTTP ${r.status()} ${u.host}${u.pathname.slice(0, 80)}`);
+    });
     try {
       await page.goto(c.finalUrl, { waitUntil: "load", timeout: 30_000 });
       await page.waitForTimeout(800);
@@ -152,8 +184,12 @@ while (queue.length && routes.length < MAX) {
     await page.close();
     const key = `${v.theme}@${v.width}`;
     rec.console[key] = errs;
+    rec.thirdParty[key] = thirdParty;
     if (errs.length) fail("console", `${c.finalUrl} [${key}]`, errs.join(" | "));
-  }
+    if (thirdParty.length) thirdPartyFailures.push({ where: `${c.finalUrl} [${key}]`, detail: thirdParty });
+    await pause(DELAY);
+  };
+  for (let i = 0; i < contexts.length; i += CONCURRENCY) await Promise.all(contexts.slice(i, i + CONCURRENCY).map(renderOne));
 }
 await browser.close();
 
@@ -175,13 +211,25 @@ for (const [href, from] of external) {
   else if (!ok) fail("external", href, `status ${r.final} (linked from ${from})`);
 }
 
-const report = { generated: new Date().toISOString(), site: SITE, app: APP, docs: DOCS, variants: VARIANTS.map((v) => `${v.theme}@${v.width}`), redirects, routes, externals, failures, warnings, truncated: queue.length > 0 };
+const ourConsole = failures.filter((f) => f.kind === "console").length;
+const report = { generated: new Date().toISOString(), site: SITE, app: APP, docs: DOCS, variants: VARIANTS.map((v) => `${v.theme}@${v.width}`), politeness: { polite: POLITE, concurrency: CONCURRENCY, delayMs: DELAY }, ourConsoleErrors: ourConsole, thirdPartyNetworkFailures: thirdPartyFailures, redirects, routes, externals, failures, warnings, truncated: queue.length > 0 };
 mkdirSync(OUT, { recursive: true });
 writeFileSync(resolve(OUT, "crawl.json"), `${JSON.stringify(report, null, 2)}\n`);
 const md = [
   `# Crawl ${report.generated}`,
   "",
   `SITE ${SITE} · APP ${APP} · DOCS ${DOCS} · ${routes.length} internal URLs · ${externals.length} external links · variants ${report.variants.join(", ")}${report.truncated ? ` · TRUNCATED at --max ${MAX}` : ""}`,
+  `Politeness: concurrency ${CONCURRENCY}, ${DELAY} ms between page loads${POLITE ? " (--polite)" : ""}.`,
+  "",
+  `## Our console errors: ${ourConsole}`,
+  "",
+  "Console errors from our pages (scripts, same-origin loads). Each one is also a failure below.",
+  "",
+  `## Third-party network failures: ${thirdPartyFailures.reduce((n, t) => n + t.detail.length, 0)} on ${thirdPartyFailures.length} page loads`,
+  "",
+  "Failed or >= 400 loads from other hosts (RPC throttling, wallet hosts); listed, not failures.",
+  "",
+  ...thirdPartyFailures.map((t) => `- ${t.where}: ${t.detail.join(" · ").replace(/\|/g, "\\|")}`),
   "",
   `## Failures: ${failures.length}`,
   "",
@@ -199,9 +247,9 @@ const md = [
   "",
   "## Internal URLs",
   "",
-  "| URL | Chain | Final | Console errors (4 variants) |",
-  "| --- | --- | --- | --- |",
-  ...routes.map((r) => `| ${r.url} | ${r.hops.map((h) => h.status).join(" → ")} | ${r.status} | ${Object.values(r.console).reduce((n, e) => n + e.length, 0)} |`),
+  "| URL | Chain | Final | Our console errors (4 variants) | Third-party network failures |",
+  "| --- | --- | --- | --- | --- |",
+  ...routes.map((r) => `| ${r.url} | ${r.hops.map((h) => h.status).join(" → ")} | ${r.status} | ${Object.values(r.console).reduce((n, e) => n + e.length, 0)} | ${Object.values(r.thirdParty).reduce((n, e) => n + e.length, 0)} |`),
   "",
   "## External links",
   "",
@@ -211,5 +259,5 @@ const md = [
   "",
 ].join("\n");
 writeFileSync(resolve(OUT, "crawl.md"), md);
-console.log(`crawl: ${routes.length} internal, ${externals.length} external, ${failures.length} failures → ${OUT}`);
+console.log(`crawl: ${routes.length} internal, ${externals.length} external, ${failures.length} failures, ${ourConsole} our console errors, ${thirdPartyFailures.length} page loads with third-party network failures → ${OUT}`);
 process.exit(failures.length ? 1 : 0);

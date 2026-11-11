@@ -174,7 +174,10 @@ export function AppProvider({ config: baseConfig, children }: { config: PublicCo
   const [loading, setLoading] = useState(deployed);
   const [rpcError, setRpcError] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
-  const reload = useCallback(() => setTick((t) => t + 1), []);
+  const reload = useCallback(() => {
+    views?.invalidate();
+    setTick((t) => t + 1);
+  }, [views]);
 
   useEffect(() => {
     if (!views) return;
@@ -277,5 +280,13 @@ export function useView<T>(fn: ((v: NectarViews) => Promise<T>) | null, deps: Re
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [views, tick, ...deps]);
-  return { data, error, loading, reload: () => setTick((t) => t + 1) };
+  return {
+    data,
+    error,
+    loading,
+    reload: () => {
+      views?.invalidate();
+      setTick((t) => t + 1);
+    },
+  };
 }
