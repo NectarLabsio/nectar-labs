@@ -119,7 +119,7 @@ on-curve key, or EVM 0x address ≠ zero). Stored in a NEW raw-key map (code-onl
 input gains `"depositor"`.
 **Solana vault v2 layout (program upgrade in place; no open positions).**
 - Position PDA `[b"pos", vault, position_id.to_le_bytes(), depositor]` (SR-8).
-- Nonce PDA `[b"nonce", vault, position.authority, nonce.to_le_bytes()]` (SR-1). `NonceRecord` v2 = disc · `version u8 (=2)` · `vault Pubkey` ·
+- Nonce PDA `[b"nonce", position.key(), nonce.to_le_bytes()]` (SR-1; amended 2026-11-11: scoped to the depositor-bound slot, not the authority — with authority scope an attacker could open the same id with NEAR's public authority under its own wallet and relay NEAR's signature there, burning the honest slot's nonce). `NonceRecord` v2 = disc · `version u8 (=2)` · `vault Pubkey` ·
   `authority [u8;32]` · `nonce u64` · `position_id u64` · `op u8` (0 settle, 1 release) · `kind u8`. The keeper validates owner = program, length,
   discriminator and every field (SR-2).
 - Payouts never depend on an account a third party controls (SR-4): settle pays `seize_units` to the recipient's ATA when that account is valid
@@ -127,7 +127,7 @@ input gains `"depositor"`.
   (recipient-signed `claim`). The remainder (and the whole amount on release) is recorded on the position as `withdrawable`, and the depositor signs
   `withdraw(position_id)` to ANY token account of the mint. The position closes when withdrawn. Settle and release still verify the Ed25519 ix exactly as now.
   The solana agent publishes discriminators, account orders and byte layouts in solana/deploy.md.
-**EVM vault (redeploy on the fork).** `nonceUsed[authority][nonce]` (SR-1). Slots keyed `keccak256(abi.encode(id, depositor))` with depositor = msg.sender
+**EVM vault (redeploy on the fork).** `nonceUsed[slotKey][nonce]` where `slotKey = keccak256(abi.encode(id, depositor))` (SR-1, same amendment). Slots keyed `keccak256(abi.encode(id, depositor))` with depositor = msg.sender
 at `openPosition` (SR-8). `settle`/`release` take an extra `depositor` argument; the signer must equal that slot's authority (the typed data and NEAR's
 digest are UNCHANGED). View `positionOf(uint64 id, address depositor)`. Expiry valid while `block.timestamp < expires` (SR-30, aligns with NEAR/Solana).
 Phantom-token guard per the review's lost finding (keep B20 precompile tokens working: they have no code, F-347).
@@ -136,6 +136,6 @@ SR-5: remote sizing excludes R_c/D_c, uses fitting non-exiting quotes, and caps 
 settlement filters by recipient fit BEFORE the 8-candidate truncation. SR-7: recipient validity (Solana on-curve 32-byte; EVM non-zero; reject otherwise
 at funding and at `set_quote_remote_recipient`). SR-10: rounding-tolerant remote leg check. SR-17: a claim path for `owed_collateral`. SR-18: record a
 short deposit so it can be released.
-**Keeper.** New PDAs (depositor in position seeds; authority in nonce seeds), SR-2 strict nonce-record and tx validation, SR-11 (compare against
+**Keeper.** New PDAs (depositor in position seeds; nonce seeds = position PDA + nonce), SR-2 strict nonce-record and tx validation (a leg counts as landed only if the tx touched the slot `["pos", vault, id, committed_depositor]`), SR-11 (compare against
 `remote.reserved_units`), SR-12/SR-31 (vault program + mint pinned from config by default; refuse mismatches), SR-29 (log scan from the reservation block,
 not the last 10k), EVM `positionOf(id, depositor)` + extra `depositor` arg.
