@@ -13,8 +13,9 @@
   Disclosed partials: SR-5, SR-6, SR-7, SR-15, SR-4 (EVM remainder push), keeper residuals, Base local fork. Not covered by the review: web/SDK,
   copilot prompt injection, privacy claims.
 - **Design v2** (WO-33a/b/c) merged: landing + testnet app.
-- **In flight:** WO-37a (docs: pending notes → EVIDENCE refs; README, SECURITY.md, docs-site) and WO-37b (docs: DEMO_SCRIPT re-seed list +
-  SUBMISSION prose for 2.2.1). **Next:** merge both → verifier G9 fresh-clone rehearsal → tag `submission-rc` locally.
+- **Merged 2026-11-11:** WO-37a (EVIDENCE refs; 8 "pending" survive = G14 402→200 verifier re-run + G1 gas-row check on 2.2.1), WO-37b (DEMO_SCRIPT
+  re-seed list + SUBMISSION prose for 2.2.1), WO-37c (mocked remote/Notes E2E did pass in G3b). Scripts: price walk in 58/62, `42-mint-usdc.sh`.
+  **In flight:** verifier G9 final rehearsal (docs/work/g9-final.md). **Next:** G9 PASS → tag `submission-rc` locally.
   Nothing is sent, pushed or posted without Kunal.
 - RPC default test.rpc.fastnear.com (D-025). Background: keeper-v2 daemon (Solana + Base relays), Feed :8788/:8789, x402 :8791, anvil :8545.
   Plain `cargo near build` on this Mac needs SDKROOT=…/MacOSX26.5.sdk.
@@ -73,7 +74,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T08:26:53Z · commit b7917f2
+Last activity: 2026-11-11T08:42:57Z · commit 31a7bbe
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
