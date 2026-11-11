@@ -1,15 +1,27 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## v7 progress (2026-11-11 00:10 local / 18:10Z)
-- **Gates PASS:** G1(v7), G10 (open F-351/F-352/F-353), G11, G2b, G3b, G7 (v7), G14, v7 module runs, **G12 + G13 on a LOCAL FORK of Base Sepolia (D-026)**
-  (EVIDENCE 770d053; no ERC-8021 suffix — H19/F-351). Tag `p2-green` (local). Only G9 (fresh-clone package rehearsal) remains.
-- **Live on testnet:** nectar-core-v2 **2.1.0-v7** (code-only upgrade, Base signing) + keeper-v2 + quoter 5d90edb8; Solana vault ENZa…pubW (devnet);
-  x402-relayer + agent1. Base spoke: vault 0xC4f4…3d09 + MockB20 0xD83A…Ad7E on the local fork (127.0.0.1:8545; anvil, disclosed).
-- **Running:** WO-33a (design port part 1: landing v2, tokens, fonts, shared components). Next: WO-33b, WO-33c, then G3b re-run;
-  pre-submission security review (ultracode workflow); docs for P2b; G9.
+## Now (2026-11-11 ~08:30Z) — read this block; everything below "History" is superseded
+- **Gates:** every gate PASS except G9. After the D-027 security rollout the chain gates were re-verified from a fresh clone (EVIDENCE b8784c1):
+  G2b (2.2.1-v7 wasm byte-identical on this Mac's non-reproducible build), G7 (positions 8/9/10), G13 local fork (11/12, replays revert), G14
+  (chain claims; HTTP 402→200 from the orchestrator log only). **In flight:** verifier re-running G11 + G3b + Solana/EVM suites on 2.2.1 / design v2.
+  Tags p0-green, p1-green, p2-green (local only).
+- **Live on testnet:** nectar-core-v2 **2.2.1-v7** (code_hash 3mv4LRm6…, code-only upgrades 2.1→2.2.0→2.2.1, no migrate) + keeper-v2 + quoter
+  version_key 5f9bb287…; Solana vault v2 ENZa…pubW (devnet, pull payouts + withdraw/claim); x402-relayer + agent1. Base spoke: vault 0xC64b…1226 +
+  MockB20 0x634F…f81d on the LOCAL FORK of Base Sepolia (127.0.0.1:8545, chain 84532, anvil; D-026, disclosed). Real Base Sepolia needs H15.
+- **Security:** review = 33 findings (5 H / 8 M / 20 L), fix wave D-027 merged and deployed; SECURITY.md + README/docs status merged (25713a4).
+  Disclosed partials: SR-5, SR-6, SR-7, SR-15, SR-4 (EVM remainder push), keeper residuals, Base local fork. Not covered by the review: web/SDK,
+  copilot prompt injection, privacy claims.
+- **Design v2** (WO-33a/b/c) merged: landing + testnet app.
+- **Next (orchestrator):** (1) test-gate verifier report → (2) docs pass: 21 "verifier record pending" notes → EVIDENCE refs → (3) DEMO_SCRIPT
+  re-seed list for 2.2.1 → (4) SUBMISSION fields (H16 track proposal) → (5) verifier G9 fresh-clone rehearsal → tag `submission-rc` locally.
+  Nothing is sent, pushed or posted without Kunal.
 - RPC default test.rpc.fastnear.com (D-025). Background: keeper-v2 daemon (Solana + Base relays), Feed :8788/:8789, x402 :8791, anvil :8545.
+  Plain `cargo near build` on this Mac needs SDKROOT=…/MacOSX26.5.sdk.
 - Commits: no Co-Authored-By trailer (Kunal, 2026-11-10); kunal-drall sole author.
-- Human: H-GUARD-V7 (Kunal runs the script), H15 (optional: real Base Sepolia), H16 tracks, H11 video, H10/H14 team + payout, H1–H3 publish.
+- **Human (OPEN, docs/HUMAN_HANDOFF.md):** H-GUARD-V7 (Kunal runs `python3 scripts/v7-install-claude-config.py && bash scripts/test-guard-v7.sh`),
+  H15 (optional real Base Sepolia ETH), H16 tracks, H17, H18 thesis, H19 builder code, H20 market.near.ai, H11 video, H10/H14 team + payout, H1–H3 publish.
+
+## History (pre-2026-11-11, superseded by the block above)
 
 # STATE.md — one screen for a returning human
 
@@ -60,7 +72,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-10T18:05:06Z · commit 74ed593
+Last activity: 2026-11-11T08:22:11Z · commit 25713a4
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

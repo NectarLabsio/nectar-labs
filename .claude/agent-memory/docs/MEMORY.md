@@ -1,0 +1,1 @@
+- [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python scripts for multi-file edits; label non-EVIDENCE re-runs "verifier record pending"
