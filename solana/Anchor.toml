@@ -8,7 +8,7 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-nectar_vault = "GdCVqcg24RJkwNWZ2kgEaQRVhsXxEupvBSZSJy39xkrm"
+nectar_vault = "ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW"
 
 [programs.localnet]
 nectar_vault = "ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW"
