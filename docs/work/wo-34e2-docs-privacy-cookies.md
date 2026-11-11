@@ -32,5 +32,10 @@ Inputs (read; do not guess):
 4. HUMAN_HANDOFF:
    - H-KEYS now covers the keeper only. Drop the x402 relayer option: @fastnear/x402 needs a full-access key (F-328, C-023, D-031), so x402 stays local.
    - H-HOST: add the Railway plan facts (F-404/F-405: Free = 1 volume per project, enough for the Feed).
+5. Docs links (crawl findings from WO-34c):
+   - docs.outlayer.ai does not answer. Use the OutLayer URL recorded in FACTS, or remove the link.
+   - The quick-start's `localhost` URLs become code text, not links.
+6. WO-34f (web) runs in parallel and will add the hosts of every selector wallet to data-inventory. Write the wallet section so each wallet's hosts are
+   listed per wallet. When the orchestrator tells you WO-34f is merged, re-sync the host list from the new inventory before you report.
 `pnpm --filter docs-site build` exit 0. `node scripts/check-no-branding-all.mjs` exit 0. `git merge main` first. NO Co-Authored-By. Never --no-verify.
 Report ≤ 6 lines.
