@@ -49,11 +49,11 @@ oracle:
 outlayer:
   account: outlayer.testnet
   project_id: nectar.testnet/nectar-quoter
-  version_key: 5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9
-  wasm_sha256: 5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9
+  version_key: 5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062
+  wasm_sha256: 5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062
   resource_limits: {max_instructions: 100000000, max_memory_mb: 128, max_execution_seconds: 30}
   gas_tgas: 80
-  wasm_url: https://test.fastfs.io/nectar.testnet/outlayer.testnet/5d90edb8840bb2920d6356aa5ca2e519255279ab611c9dd9b367310a0f891fc9.wasm
+  wasm_url: https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm
   gas_reserve_near: "0.1"
 signer:
   account: v1.signer-prod.testnet
@@ -100,7 +100,7 @@ features:
 base:
   chain_id: 84532 # Base mainnet 8453 is blocked (guard, H-GUARD-V7)
   rpc_url: http://127.0.0.1:8545
-  vault: 0xC4f46D859f9B555D95b68DC28564C5201F743d09
-  collateral: 0xD83A1571Ac3431A498f657512439B744c35CAd7E
-  policy_registry: 0x5A87057522B19A6B757a6FB1A7888d2AF5AA52D5
+  vault: 0xC64b733424C8d25fB574F275007ED8756e261226
+  collateral: 0x634F88DAEf0a1f77645c523C3FA351Fe37aaf81d
+  policy_registry: 0xc23b9Dd2a69a2fe98A315A6B2e917468294ef9c5
   network: local-fork-of-base-sepolia
