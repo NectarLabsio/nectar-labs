@@ -59,7 +59,7 @@ emits `pay_to_failed`. `withdraw_claimable()` (1 yocto) pays all of the caller's
   - calls `<signer>.derived_public_key({path, predecessor: <nectar-core>, domain_id})` (args per addendum F-138 = F-338, G10);
   - `on_authority` stores `remote.authority`: for Solana, `"ed25519:<base58>"`; for Base, the 0x address (keccak of x‖y, last 20 bytes);
   - the reservation expires 30 min after it is made (`expire_remote_reservation(id)`, anyone).
-- `confirm_remote_deposit(position_id)` (anyone; the keeper key is allowed): calls OutLayer `vault_read` (WO-24 job; sandbox uses the stub). `on_deposit_verified`
+- `confirm_remote_deposit(position_id)` (borrower, keeper or owner since 2.2, SR-6): calls OutLayer `vault_read` (WO-24 job; sandbox uses the stub). `on_deposit_verified`
   requires `authority == remote.authority`, `units ≥ reserved units` and the depositor recorded. It re-checks both limits with a fresh price, then pays (or `pay_to`),
   sets `remote.status = "Open"` and emits `remote_deposit_confirmed{position_id, units, depositor, source: "outlayer"}`.
 - `keeper_attest_deposit(position_id, tx_ref, depositor)`: keeper only, only while the owner flag `allow_keeper_deposit_attestation` is set (owner
