@@ -141,8 +141,8 @@ export function Opt({ on, title, detail, price, flag, disabled, onClick, testId 
 }
 
 /** On/off switch (role=switch). */
-export function Switch({ checked, onChange, label, testId }: { checked: boolean; onChange: (v: boolean) => void; label: string; testId?: string }) {
-  return <button type="button" className="nx-switch" role="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)} data-testid={testId} />;
+export function Switch({ checked, onChange, label, testId, disabled }: { checked: boolean; onChange: (v: boolean) => void; label: string; testId?: string; disabled?: boolean }) {
+  return <button type="button" className="nx-switch" role="switch" aria-checked={checked} aria-label={label} disabled={disabled} onClick={() => onChange(!checked)} data-testid={testId} />;
 }
 
 /** Text field in the v2 style (label above, error below). */

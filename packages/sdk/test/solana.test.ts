@@ -226,7 +226,7 @@ describe("NEAR remote lifecycle builders (interface-v7 §B)", () => {
   it("reserve, confirm, request release, expire", () => {
     const r = txRemote.reserve("core.testnet", { collateral: "NVDAx", units: "1000000", borrow_usd_e6: "10000000", pre_liq_ltv_bps: 7500 });
     expect(r.methodName).toBe("reserve_remote_position");
-    expect(r.deposit).toBe("0");
+    expect(r.deposit).toBe("50000000000000000000000");
     expect(r.args).toEqual({ collateral: "NVDAx", units: "1000000", borrow_usd_e6: "10000000", pre_liq_ltv_bps: 7500 });
     expect(() => txRemote.reserve("c", { collateral: "NVDAx", units: (1n << 64n).toString(), borrow_usd_e6: "1", pre_liq_ltv_bps: 1 })).toThrow(/u64/);
     expect(txRemote.confirmDeposit("c", "7").methodName).toBe("confirm_remote_deposit");

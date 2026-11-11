@@ -2,6 +2,7 @@
 // NEP-141 `ft_transfer_call` requires exactly 1 yoctoNEAR (F-013).
 import type {
   Bps,
+  CollateralUpsertInput,
   FtOnTransferMsg,
   FundPappusQuoteArgs,
   LockCollateralAndBorrowArgs,
@@ -284,6 +285,14 @@ export const txV2 = {
       args.notice_ns = notice_ns;
     }
     return coreCall(core, "set_reserve_params", args, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Set Reserve params" });
+  },
+  /** `upsert_collateral`. Mirrors the contract's checks so a bad proposal never reaches the wallet; `remote_chain` is written as given. */
+  upsertCollateral: (core: string, config: CollateralUpsertInput) => {
+    for (const k of ["base_ltv_bps", "max_nectar_ltv_bps", "base_haircut_bps", "weekend_haircut_bps", "limit_premium_bps", "pre_liq_min_bps", "pre_liq_max_bps"] as const) assertInt(config[k], k, 0, 10_000);
+    if (config.base_ltv_bps > config.max_nectar_ltv_bps) throw new Error("base_ltv_bps must not exceed max_nectar_ltv_bps");
+    if (config.pre_liq_min_bps > config.pre_liq_max_bps) throw new Error("pre_liq_min_bps must not exceed pre_liq_max_bps");
+    assertU128(config.verified_dex_depth_usd_e6, "verified_dex_depth_usd_e6");
+    return coreCall(core, "upsert_collateral", { symbol: config.symbol, config }, { gasTgas: GAS_TGAS.ownerCall, deposit: "0", label: "Update market parameters" });
   },
   // remote lifecycle owner calls (interface-v7 §B, WO-21)
   setAllowKeeperDepositAttestation: (core: string, allow: boolean) =>

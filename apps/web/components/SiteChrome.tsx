@@ -43,14 +43,13 @@ function NavSession() {
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
-  const notesOn = useFeature("notes");
   if (pathname === "/") return <LandingNav />;
   const links: NavLink[] = [
     { href: "/feed", label: "Markets", match: ["/feed"] },
     { href: "/borrow", label: "Borrow", match: ["/borrow", "/shield"] },
-    { href: "/quote/new", label: "Earn", match: ["/quote", "/reserve"] },
-    // Portfolio is /notes; hidden while Position Notes are off so no link leads to a disabled page (WO-33c makes it work without Notes).
-    ...(notesOn ? [{ href: "/notes", label: "Portfolio", match: ["/notes", "/note", "/position"] }] : []),
+    { href: "/quote", label: "Earn", match: ["/quote", "/reserve"] },
+    // /notes is the Portfolio: loans and deposits work with Position Notes off; only its Notes tab depends on the flag.
+    { href: "/notes", label: "Portfolio", match: ["/notes", "/note", "/position"] },
     { href: "/agents", label: "Agents" },
     { href: "/console", label: "Curator", match: ["/console", "/keepers"] },
   ];

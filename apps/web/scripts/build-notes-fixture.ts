@@ -105,7 +105,7 @@ const fixture = {
   nft_token_svg: svgs,
   nft_tokens: tokens,
   nft_transfer_locked: { "p-8": true },
-  get_quote_3: { id: "3", buyer: OWNER, collateral: "NVDAx", committed_usd_e6: "2000000000", remaining_usd_e6: "1500000000", max_discount_bps: 250, notice_period_ns: "86400000000000", unlock_ns: null, buyer_remote_recipient: null, claimable_fees_usd_e6: "1250000" },
+  get_quote_3: { quote_id: "3", buyer: OWNER, collateral: "NVDAx", committed_usd_e6: "2000000000", remaining_usd_e6: "1500000000", max_discount_bps: 250, notice_period_ns: "86400000000000", unlock_ns: null, buyer_remote_recipient: null, claimable_fees_usd_e6: "1250000" },
   get_reserve: getReserve,
   get_reserve_note: getReserveNote,
 };

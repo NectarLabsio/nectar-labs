@@ -6,29 +6,42 @@ import type { AccountId, Bps, PayTo, U128, U64 } from "./types";
 import { assertAccountId, assertBps, assertU128, assertU64, coreCall, ONE_YOCTO, type TxIntent } from "./msg";
 import type { PendingRelease } from "./solana";
 
-export type RemoteStatus = "AwaitingDeposit" | "Open" | "Releasing" | "Released" | "Expired";
+/** Contract `RemoteStatus`: AwaitingDeposit -> Open -> (Settling | Releasing) -> Closed; AwaitingDeposit -> Expired. */
+export type RemoteStatus = "AwaitingDeposit" | "Open" | "Settling" | "Releasing" | "Closed" | "Expired";
 export type DepositSource = "outlayer" | "keeper";
 
+/** Contract `RemoteInfo` (`get_position(..).remote`). Optional because the e2e fixtures carry a subset; test/views-shape.test.ts pins the key set. */
 export interface RemoteView {
   /** "solana-devnet" (domain 1) or "base-sepolia" (domain 0, P2b). */
-  chain?: string;
+  chain_id?: string;
+  vault_program?: string;
+  domain_id?: number;
   /** `solana-devnet/pos/<id>`. */
   path?: string;
   status: RemoteStatus;
   /** `"ed25519:<base58>"` once `on_authority` stored it; null while the derived_public_key call is in flight. */
   authority?: string | null;
-  /** Reserved base units on the remote chain (u64 for Solana). */
+  reserved_units?: U128;
+  /** Units in the vault: the reserved units until a deposit is proven, then the proven units. */
   units?: U128;
+  borrow_usd_e6?: U128;
+  /** Net USDC paid at confirmation (0 until the loan is paid). */
+  paid_usd_e6?: U128 | null;
   /** Reservation time and expiry (ns). Expiry = reserved + 30 min (config v7.reservation_expiry_s). */
   reserved_ns?: U64;
   expires_ns?: U64;
+  pay_to?: PayTo | null;
+  referrer?: AccountId | null;
   /** Base58 depositor recorded at confirmation. */
   depositor?: string | null;
   /** "outlayer" (attested vault_read) or "keeper" (keeper_attest_deposit; Feed label "keeper-attested"). */
   source?: DepositSource | null;
-  tx_ref?: string | null;
-  /** Net USDC paid at confirmation (when the contract reports it). */
-  paid_usd_e6?: U128 | null;
+  /** OutLayer `slot_or_block` or the keeper's `tx_ref`. */
+  deposit_ref?: string | null;
+  confirming?: boolean;
+  last_confirm_ns?: U64;
+  /** Reservation deposit still held (yocto); refunded on confirm, refusal or expiry, then 0. */
+  deposit_yocto?: U128;
 }
 
 export interface ReserveRemoteArgs {
@@ -40,6 +53,9 @@ export interface ReserveRemoteArgs {
   referrer?: AccountId | null;
 }
 
+/** `reserve_remote_position` refuses less than this (remote.rs RESERVE_DEPOSIT_YOCTO, 0.05 NEAR; refunded). Also `get_remote_config().reserve_deposit_yocto`. */
+export const REMOTE_RESERVE_DEPOSIT_YOCTO = "50000000000000000000000";
+
 /** Gas (TGas). Re-measure at G2b. reserve: derived_public_key cross-call (signer view) + callback; confirm: OutLayer request (D-015). */
 export const REMOTE_GAS_TGAS = {
   reserve: 100,
@@ -50,7 +66,7 @@ export const REMOTE_GAS_TGAS = {
 } as const;
 
 export const txRemote = {
-  /** Borrower, 0 deposit. Returns the position id (U64). */
+  /** Borrower, attaches the refundable reservation deposit. Returns the position id (U64). */
   reserve: (core: string, a: ReserveRemoteArgs): TxIntent => {
     const args: Record<string, unknown> = {
       collateral: a.collateral,
@@ -61,7 +77,7 @@ export const txRemote = {
     if (BigInt(a.units) >= 1n << 64n) throw new Error("units must fit u64 for a Solana position");
     if (a.pay_to) args.pay_to = { receiver_id: assertAccountId(a.pay_to.receiver_id, "pay_to.receiver_id"), ...(a.pay_to.memo ? { memo: a.pay_to.memo } : {}) };
     if (a.referrer) args.referrer = assertAccountId(a.referrer, "referrer");
-    return coreCall(core, "reserve_remote_position", args, { gasTgas: REMOTE_GAS_TGAS.reserve, deposit: "0", label: "Reserve Solana position" });
+    return coreCall(core, "reserve_remote_position", args, { gasTgas: REMOTE_GAS_TGAS.reserve, deposit: REMOTE_RESERVE_DEPOSIT_YOCTO, label: "Reserve Solana position" });
   },
   /** Anyone. OutLayer reads the vault; on failure the position stays AwaitingDeposit. */
   confirmDeposit: (core: string, position_id: U64): TxIntent =>

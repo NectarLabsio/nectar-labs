@@ -116,7 +116,7 @@
 .nx-meter { display: flex; gap: 2px; height: 10px; border-radius: 10px; overflow: hidden; background: var(--raise); }
 .nx-meter.lg { height: 16px; border-radius: 8px; }
 .nx-meter i { display: block; height: 100%; flex: 0 0 auto; }
-.nx-c-q { background: var(--accent); } .nx-c-r { background: var(--teal); } .nx-c-d { background: var(--info); } .nx-c-used { background: var(--heading); }
+.nx-c-q { background: var(--accent); } .nx-c-r { background: var(--teal); } .nx-c-d { background: var(--info); } .nx-c-used { background: var(--heading); } .nx-c-v { background: var(--violet); }
 .nx-c-h { background: repeating-linear-gradient(-45deg, color-mix(in srgb, var(--warn-bar) 75%, transparent) 0 3px, transparent 3px 6px); }
 .nx-legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font: 400 12.5px var(--font-sans); color: var(--dim); }
 .nx-legend.col { flex-direction: column; gap: 10px; }
@@ -160,7 +160,7 @@
 .nx-ladder-c { width: 38%; }
 .nx-donut { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
 .nx-donut-track { stroke: var(--raise); }
-.nx-s-q { stroke: var(--accent); } .nx-s-r { stroke: var(--teal); } .nx-s-d { stroke: var(--info); } .nx-s-h { stroke: var(--warn-bar); } .nx-s-used { stroke: var(--heading); }
+.nx-s-q { stroke: var(--accent); } .nx-s-r { stroke: var(--teal); } .nx-s-d { stroke: var(--info); } .nx-s-h { stroke: var(--warn-bar); } .nx-s-used { stroke: var(--heading); } .nx-s-v { stroke: var(--violet); }
 .nx-donut-lab { fill: var(--dim); font: 500 11px var(--font-sans); }
 .nx-donut-val { fill: var(--heading); font: 600 20px var(--font-display); }
 
@@ -185,6 +185,7 @@
 .nx-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--dim); }
 .nx-switch[aria-checked="true"] { background: var(--accent); box-shadow: none; }
 .nx-switch[aria-checked="true"]::after { transform: translateX(18px); background: var(--on-accent); }
+.nx-switch[disabled] { opacity: .5; cursor: not-allowed; }
 .nx-amt { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 18px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); min-width: 0; }
 .nx-amt:focus-within { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent), 0 0 0 4px var(--accent-fill); }
 .nx-amt.err { box-shadow: inset 0 0 0 1px var(--danger), 0 0 0 4px var(--danger-fill); }
@@ -258,7 +259,69 @@
 .nx-grow { flex: 1 1 260px; min-width: 0; }
 .nx-hero-stats { padding-top: 18px; border-top: 1px solid var(--line); }
 .nx-chain-seg { width: 340px; }
-@media (max-width: 1040px) { .nx-split, .nx-rail, .nx-grid2 { grid-template-columns: minmax(0, 1fr); } }
+/* WO-33c: Portfolio holdings, Earn placement and waterfall, Curator wells, Agents run */
+.nx-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.nx-gap4 { gap: 4px; } .nx-gap12 { gap: 12px; } .nx-gap14 { gap: 14px; } .nx-gap18 { gap: 18px; } .nx-gap20 { gap: 20px; }
+.nx-between { justify-content: space-between; }
+.nx-wrap { flex-wrap: wrap; }
+.nx-avatar.lg { width: 56px; height: 56px; border-radius: 18px; }
+.nx-holding { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 20px; align-items: center; }
+.nx-flagbar { position: relative; display: block; }
+.nx-flagbar > i { position: absolute; top: -4px; width: 2px; height: 18px; border-radius: 1px; background: var(--danger); }
+.nx-tabpanel { display: flex; flex-direction: column; gap: 18px; }
+.nx-tabpanel:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 4px; border-radius: 12px; }
+.nx-actrow { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); color: inherit; text-decoration: none; }
+.nx-actrow:first-child { border-top: 0; }
+.nx-actrow .nx-ghost-ic { width: 34px; height: 34px; border-radius: 10px; }
+.nx-actrow > b { font: 500 13.5px var(--font-mono); color: var(--heading); white-space: nowrap; }
+.nx-note-promo { display: flex; flex-direction: column; gap: 12px; justify-content: center; align-items: flex-start; padding: 24px; border-radius: var(--r-panel); box-shadow: inset 0 0 0 1.5px var(--line2); }
+.nx-note-promo img { width: 64px; height: 64px; }
+.nx-place { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.nx-place-row { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); }
+.nx-place-row.me { background: var(--accent-fill); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.nx-place-n { width: 18px; flex: none; color: var(--dim); font-family: var(--font-mono); }
+.nx-place-who { flex: 1; min-width: 0; }
+.nx-place-name { font-weight: 600; color: var(--heading); overflow-wrap: anywhere; }
+.nx-place-row.me .nx-place-name { color: var(--accent); }
+.nx-place-size { width: 34%; flex: none; gap: 6px; align-items: flex-end; }
+.nx-place-size .nx-meter { width: 100%; height: 6px; }
+.nx-place-amt { font-size: 13px; }
+.nx-place-cap { width: 54px; flex: none; text-align: right; font-size: 13px; }
+.nx-fall { display: flex; gap: 14px; align-items: stretch; padding: 6px 0; }
+.nx-fall.on { padding: 12px; margin: 0 -12px; border-radius: 14px; background: var(--accent-fill); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent); }
+.nx-fall > i { display: block; width: 4px; border-radius: 4px; flex: none; }
+.nx-fall-off { background: var(--raise); }
+.nx-well { display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 16px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); min-width: 0; }
+/* --accent on --bg2 is 4.0:1 in the light theme; --accent-hover clears 4.5:1 in both. */
+.nx-well .nx-link, .nx-well .nx-badge.pos, .nx-code .nx-pos { color: var(--accent-hover); }
+.nx-well-accent { background: var(--accent-fill); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 38%, transparent); }
+.nx-hr { display: block; height: 1px; background: var(--line); }
+.nx-ruled { padding-top: 16px; border-top: 1px solid var(--line); }
+.nx-num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.nx-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.nx-action { display: flex; flex-direction: column; gap: 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+.nx-action h3 { margin: 0; font: 600 14px var(--font-sans); color: var(--heading); }
+.nx-action .nx-btn { align-self: flex-start; }
+.nx-section-h { margin: 8px 0 0; font: 600 20px/1.2 var(--font-display); letter-spacing: -.015em; color: var(--heading); }
+.nx-run { padding: 14px 16px; border-radius: 16px; background: var(--bg2); box-shadow: inset 0 0 0 1px var(--line); min-width: 0; }
+.nx-run.now { background: var(--accent-fill); box-shadow: inset 0 0 0 1.5px var(--accent); }
+.nx-run.todo { opacity: .6; }
+.nx-run-head { display: flex; align-items: center; gap: 14px; width: 100%; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.nx-run-head[disabled] { cursor: default; }
+.nx-run-head:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 3px; border-radius: 8px; }
+.nx-run-dot { display: grid; place-items: center; width: 30px; height: 30px; flex: none; border-radius: 50%; background: var(--raise); color: var(--dim); font: 600 12px var(--font-sans); font-style: normal; }
+.nx-run.done .nx-run-dot { background: var(--accent); color: var(--on-accent); }
+.nx-run.now .nx-run-dot { background: transparent; box-shadow: 0 0 0 2px var(--accent); color: var(--heading); }
+.nx-run-t { flex: 1; min-width: 0; gap: 2px; }
+.nx-run-call { font: 500 13.5px var(--font-mono); color: var(--heading); overflow-wrap: anywhere; }
+.nx-run-body { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; min-width: 0; }
+@media (max-width: 1040px) { .nx-split, .nx-rail, .nx-grid2, .nx-grid3 { grid-template-columns: minmax(0, 1fr); } }
+/* At phone width a tooltip near the right edge would widen the document even while invisible: out of the layout until asked for, then a bottom sheet. */
+@media (max-width: 760px) {
+  .nx-tip > span { display: none; position: fixed; left: 16px; right: 16px; bottom: 24px; width: auto; max-width: none; transform: none; }
+  .nx-tip:hover > span, .nx-tip:focus > span { display: block; transform: none; }
+}
+@media (max-width: 480px) { .nx-place-row { flex-wrap: wrap; } .nx-place-who { flex: 1 1 60%; } .nx-place-size { width: 100%; order: 3; } }
 @media (max-width: 760px) {
   .nx-page { padding: 22px 16px 64px; gap: 22px; }
   .nx-title { font-size: 32px; }

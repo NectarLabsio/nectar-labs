@@ -117,13 +117,13 @@ export function MarketsTable({ rows }: { rows: MarketRow[] }) {
                   return (
                     <tr key={r.c.symbol} data-chain="near">
                       <td>
-                        <span className="nx-asset">
+                        <Link className="nx-asset" href={`/feed/${encodeURIComponent(r.c.symbol)}`}>
                           <img src={tokC.src} alt="" width={38} height={38} />
                           <span>
                             <b>{r.c.symbol}</b>
                             <span className="sub"><ChainMark chain="near" />NEAR testnet, mock</span>
                           </span>
-                        </span>
+                        </Link>
                       </td>
                       <td>
                         <span className="nx-stack nx-gap6" style={{ width: 130 }}>
@@ -216,7 +216,7 @@ export function AccountDock({ rows, positions }: { rows: MarketRow[]; positions:
 export function Promos() {
   return (
     <div className="nx-grid2">
-      <Link className="nx-panel nx-pad nx-promo" href="/quote/new">
+      <Link className="nx-panel nx-pad nx-promo" href="/quote">
         <img src={tokA.src} alt="" width={84} height={84} />
         <span className="nx-stack nx-gap6">
           <span className="nx-mid">Get paid to stand behind a price</span>

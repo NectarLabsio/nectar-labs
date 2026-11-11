@@ -48,7 +48,13 @@ export interface NoteTokenMetadata {
   media?: string | null;
   media_hash?: string | null;
   copies?: number | null;
-  [extra: string]: unknown;
+  issued_at?: string | null;
+  expires_at?: string | null;
+  starts_at?: string | null;
+  updated_at?: string | null;
+  extra?: string | null;
+  reference?: string | null;
+  reference_hash?: string | null;
 }
 
 /** `nft_token(token_id)` / `nft_tokens_for_owner` items. */

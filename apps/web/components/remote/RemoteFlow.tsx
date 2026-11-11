@@ -65,13 +65,14 @@ function useVaultIds(): VaultIds | null {
 const STATUS_TEXT: Record<RemoteView["status"], string> = {
   AwaitingDeposit: "Awaiting deposit",
   Open: "Open",
+  Settling: "Settling",
   Releasing: "Releasing",
-  Released: "Released",
+  Closed: "Closed",
   Expired: "Reservation expired",
 };
 
 export function RemoteStatusBadge({ status }: { status: RemoteView["status"] }) {
-  const kind = status === "Open" ? "open" : status === "AwaitingDeposit" ? "warn" : status === "Releasing" ? "info" : status === "Expired" ? "danger" : "neutral";
+  const kind = status === "Open" ? "open" : status === "AwaitingDeposit" ? "warn" : status === "Releasing" || status === "Settling" ? "info" : status === "Expired" ? "danger" : "neutral";
   return (
     <span className={`badge ${kind}`} role="status" aria-live="polite" data-testid="remote-status" data-status={status}>
       {STATUS_TEXT[status]}
@@ -105,7 +106,7 @@ export function RemoteSteps({ current }: { current: RemoteStep }) {
 }
 
 export function stepOf(r: RemoteView, depositSeen: boolean): RemoteStep {
-  if (r.status === "Open" || r.status === "Releasing" || r.status === "Released") return "open";
+  if (r.status === "Open" || r.status === "Settling" || r.status === "Releasing" || r.status === "Closed") return "open";
   return depositSeen ? "confirm" : "deposit";
 }
 
@@ -442,7 +443,7 @@ export function RemoteRelease({ pos, onChanged }: { pos: RemotePosition; onChang
         {r.status === "Releasing" ? (
           pr.error ? (
             <Banner tone="danger" title="Testnet RPC error" actions={<Button size="sm" onClick={pr.reload}>Retry</Button>}>Could not read the pending release. <span className="mono small">{pr.error.slice(0, 160)}</span></Banner>
-          ) : !pr.data ? (
+          ) : !pr.data?.signature_hex ? (
             <p className="small dim">{pr.loading ? "Reading the signed release…" : "Waiting for the NEAR release signature (Chain Signatures)…"}</p>
           ) : released ? (
             <Banner tone="good" title="Released on Solana"><span data-testid="released">The vault paid the collateral to <span className="addr">{r.depositor}</span> and closed the position account.</span></Banner>
