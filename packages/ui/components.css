@@ -369,4 +369,5 @@ details p { padding: 0 0 14px; color: var(--text); max-width: 68ch; }
 .log-list li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; align-items: baseline; overflow-wrap: anywhere; }
 .log-list .caption { grid-column: 2; }
 .kv { display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+.prose .table-wrap > table { display: table; width: 100%; } /* the wrapper scrolls (focusable), not the table */
 .kv > div { display: contents; } .kv dt { color: var(--dim); } .kv dd { margin: 0; overflow-wrap: anywhere; }

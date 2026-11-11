@@ -24,7 +24,7 @@ test.describe("content", () => {
 
   test("/about says what it is and that no operator is configured locally", async ({ page }) => {
     await page.goto("/about");
-    await expect(page.getByText(/testnet software/)).toBeVisible();
+    await expect(page.locator("main").getByText(/Nectar Labs is testnet software/)).toBeVisible();
     await expect(page.getByTestId("operator-missing")).toHaveText("Operator not configured in this build.");
   });
 

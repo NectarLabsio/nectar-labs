@@ -24,7 +24,13 @@ function load(): { title: string; html: string } | null {
     const r = repoHref(href);
     return r ? `<a href="${r}" rel="noreferrer noopener">${text}</a>` : `<span>${text}</span>`;
   };
-  return { title, html: marked.parse(src, { async: false, renderer }) };
+  // Wide tables and code blocks scroll inside their own box at 400 px; a scrollable box must be keyboard-focusable (axe scrollable-region-focusable).
+  const html = marked
+    .parse(src, { async: false, renderer })
+    .replace(/<pre>/g, "<pre tabindex=\"0\">")
+    .replace(/<table>/g, "<div class=\"table-wrap\" tabindex=\"0\" role=\"region\" aria-label=\"Table\"><table class=\"t\">")
+    .replace(/<\/table>/g, "</table></div>");
+  return { title, html };
 }
 
 export default function SecurityPage() {

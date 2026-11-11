@@ -93,7 +93,7 @@ export function ConsentBanner({ yieldTo = CONSENT_YIELD_TO, analytics = false }:
       <strong className="heading-text">Cookies and storage</strong>
       <span>
         This site keeps your theme, this choice and a wallet-session flag in your browser&apos;s local storage; the wallet connector keeps its own session
-        there too. No cookies are set.{" "}
+        storage there too. No cookies are set.{" "}
         {analytics ? "Analytics load only if you accept." : "No analytics are configured in this build, so nothing loads if you accept."} We never join wallet
         addresses to IP addresses in logs we control. Your browser talks directly to the NEAR and Solana RPC providers, which see your IP and the accounts you query.
       </span>
