@@ -93,3 +93,25 @@ SQLite meta, so restarts resume; event inserts are idempotent. Env: `FEED_INDEXE
 `276971305` holds the G2 seed `liquidity_supplied`), `FEED_NEARDATA_MAX_BLOCKS` (per poll, default 100),
 `FEED_NEARDATA_API_KEY_PATH` (optional FastNear key, sent as Bearer). Tests use a captured block,
 `test/fixtures/neardata-block-276971305.json`.
+
+
+## Hosted mode (WO-34k; Railway-ready, generic Dockerfile + env)
+
+Railway specifics (PORT injection, Dockerfile path, volumes) are not yet in docs/FACTS.md (WO-34r): the design is generic.
+`docker build -f services/feed/Dockerfile .` from the repo root (allowlist in `services/feed/Dockerfile.dockerignore`, non-root `node`).
+
+| Env | Default (local) | Hosted (image) | Meaning |
+| --- | --- | --- | --- |
+| `FEED_SINGLE_PORT` | unset (REST :8788 + MCP :8789) | `1` | REST + `POST /mcp` on one server |
+| `PORT` | ignored unless single-port | injected | listen port (wins over `FEED_PORT` in single-port mode) |
+| `FEED_HOST` | `127.0.0.1` | `0.0.0.0` | bind address |
+| `FEED_DB_PATH` | `~/.nectar/feed.sqlite` | `/data/feed.sqlite` | SQLite on a volume mounted at `/data` |
+| `FEED_START_BLOCK` | `head` | `head` | `head`, `head-N` or a height; only used when the DB has no cursor |
+| `NEAR_RPC_URLS` | D-025 primary, then F-369 hosts | same | comma list, tried in order; `NEAR_RPC_URL` alone = single endpoint (as before) |
+| `FEED_CORS_ORIGINS` | unset (`*`, no preflight) | SITE_URL,APP_URL | exact origins; others get no allow header and a 403 preflight |
+| `NECTAR_GIT_SHA` | unset | optional | commit reported by `/health` |
+
+`GET /health` (and `/healthz`, unchanged): `last_indexed_block`, `chain_head`, `lag_blocks`, `poll_age_s`, contract ids, version;
+503 until the first poll succeeds. **History on a fresh volume:** starting at `head` (or `head-N`) means events (quotes, settlements,
+pre-liquidations) emitted before that block are not in the DB; `/api/feed` is complete (current views), `/api/asset/{id}` history and
+`/api/settlements` begin at the start block. A kept volume resumes from its cursor. No request logging (no IPs, no Origin values).

@@ -38,3 +38,17 @@ pnpm --filter x402 test                  # mocked facilitator chain + mocked NEA
   `args.amount` = `DEMO_UNITS`, msg byte-equal to `{"LockCollateralAndBorrow":{collateral, borrow_usd_e6,
   pre_liq_ltv_bps}}` (no `pay_to`, `referrer`, `shield`), deposit `"1"`, gas ≤ 300 Tgas. A mismatch exits with code 3
   and signs nothing. Agents built on this pattern should do the same, and use a limited key where they can.
+
+
+## Hosted mode (WO-34k)
+
+`docker build -f services/x402/Dockerfile .` from the repo root (allowlist `services/x402/Dockerfile.dockerignore`, non-root).
+Port: `X402_PORT` > `PORT` (injected) > 8790. `X402_HOST` = `0.0.0.0` in the image. `FEED_URL` = the Feed upstream.
+`X402_CORS_ORIGINS` = exact-origin allowlist (unset = no CORS headers, as before). `GET /health` = terms, facilitator kind,
+relayer account, Feed upstream status, version; never keys or the facilitator URL.
+
+Relayer key: `X402_RELAYER_KEY_PATH` (0600 file, as today) or `X402_RELAYER_KEY_JSON` (near-cli credentials JSON with `public_key`,
+env-held for platform secrets). An env-held key is checked with `view_access_key` and the process exits if it is **FullAccess** or the
+permission cannot be read (fail closed). **F-328 consequence:** @fastnear/x402 needs a full-access relayer key and rejects function-call
+keys, so an env-held key cannot settle in-process. A hosted x402 settles through `X402_FACILITATOR_URL` (+ `X402_FACILITATOR_SECRET_PATH`)
+pointing at a facilitator that keeps the full-access key off the platform, or it serves 402s only.

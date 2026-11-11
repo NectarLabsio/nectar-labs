@@ -173,6 +173,16 @@ paths:
       responses:
         '200': { $ref: '#/components/responses/Health' }
         '503': { $ref: '#/components/responses/Health' }
+  /health:
+    get:
+      summary: Hosted health (WO-34k) — lag against the chain head, contract ids, version. 503 until the first poll succeeds.
+      description: >-
+        With FEED_SINGLE_PORT=1 the same port also answers `POST /mcp` (Feed MCP, Streamable HTTP, stateless); that
+        route is JSON-RPC, documented in services/feed/README.md, not here. CORS: FEED_CORS_ORIGINS allowlist when set,
+        otherwise `*`.
+      responses:
+        '200': { $ref: '#/components/responses/HostedHealth' }
+        '503': { $ref: '#/components/responses/HostedHealth' }
 components:
   responses:
     Error:
@@ -184,6 +194,27 @@ components:
             required: [error]
             properties:
               error: { type: string }
+    HostedHealth:
+      description: Hosted health
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ok, last_indexed_block, chain_head, lag_blocks, last_poll_at, source, start_block, events_indexed, contracts, version]
+            properties:
+              ok: { type: boolean }
+              last_indexed_block: { type: [integer, 'null'] }
+              chain_head: { type: [integer, 'null'], description: 'latest final height seen by the Neardata tail (views mode: the view block)' }
+              lag_blocks: { type: [integer, 'null'] }
+              last_poll_at: { type: [string, 'null'], format: date-time }
+              poll_age_s: { type: [integer, 'null'] }
+              last_error: { type: [string, 'null'] }
+              source: { type: string }
+              start_block: { type: string, description: 'head | head-N | <height> (where an empty DB started)' }
+              events_indexed: { type: integer }
+              contracts: { type: object, additionalProperties: { type: [string, 'null'] } }
+              version: { type: [string, 'null'] }
+              commit: { type: [string, 'null'] }
     Health:
       description: Indexer health
       content:

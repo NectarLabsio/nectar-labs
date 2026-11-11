@@ -1,0 +1,17 @@
+# Allowlist: only what services/feed/Dockerfile copies. Everything else (.env*, evidence/, keys, ~/.nectar copies,
+# node_modules, .git) never reaches the build context.
+*
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!packages/config/config.yaml
+!services/feed/package.json
+!services/feed/openapi.yaml
+!services/feed/src/**
+!services/keeper/package.json
+!services/keeper/src/health.ts
+**/.env*
+**/*.key
+**/*key*.json
+**/*.pem
+**/node_modules

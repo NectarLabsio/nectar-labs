@@ -2,9 +2,10 @@
 // account ids in any response and no request logging of addresses or headers.
 
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
+import { corsHeaders, handlePreflight, type CorsPolicy } from './cors.ts';
 import type { AssetSnapshot, FeedDb, SettlementRow } from './db.ts';
 
-export const ROUTES = ['/api/feed', '/api/feed/export.csv', '/api/asset/{id}', '/api/settlements', '/api/oneclick', '/healthz'] as const;
+export const ROUTES = ['/api/feed', '/api/feed/export.csv', '/api/asset/{id}', '/api/settlements', '/api/oneclick', '/healthz', '/health'] as const;
 /** Columns of /api/feed/export.csv (the x402-paid export, services/x402). No account ids. */
 export const EXPORT_COLUMNS = [
   'symbol', 'block_height', 'observed_at', 'q_usd_e6', 'r_usd_e6', 'd_usd_e6', 'haircut_bps', 'session_open',
@@ -18,7 +19,17 @@ export interface ApiOptions {
   now?: () => number;
   pollMs?: number;
   source?: string;
+  /** Public contract ids reported by /health (no keys, no user accounts). */
+  contracts?: Record<string, string | null>;
+  /** Service version (package.json) and optional commit (NECTAR_GIT_SHA) for /health. */
+  version?: { version: string; commit: string | null };
+  /** Where indexing started on an empty DB (FEED_START_BLOCK), reported by /health. */
+  startBlock?: string;
+  /** CORS allowlist (FEED_CORS_ORIGINS); undefined = legacy `*`. */
+  cors?: CorsPolicy;
 }
+
+export const LEGACY_CORS: CorsPolicy = { origins: null, legacyWildcard: true, methods: 'GET, HEAD, POST, OPTIONS' };
 
 function asset(s: AssetSnapshot): Record<string, unknown> {
   const c = s.capacity;
@@ -96,10 +107,34 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
   const lastBlock = db.meta('last_block');
   const asOf = { as_of_block: lastBlock === null ? null : Number(lastBlock), as_of: new Date(now).toISOString() };
 
-  if (path === '/healthz') {
+  if (path === '/healthz' || path === '/health') {
     const lastPoll = db.meta('last_poll_at');
     const pollMs = opts.pollMs ?? 10_000;
     const fresh = lastPoll !== null && now - Number(lastPoll) <= 3 * pollMs;
+    if (path === '/health') {
+      // Chain head = the latest final height the Neardata tail saw (null in views mode, where the view block is the head).
+      const headRaw = db.meta('neardata_final');
+      const head = headRaw === null ? asOf.as_of_block : Number(headRaw);
+      return {
+        status: fresh ? 200 : 503,
+        body: {
+          ok: fresh,
+          last_indexed_block: asOf.as_of_block,
+          chain_head: head,
+          lag_blocks: head === null || asOf.as_of_block === null ? null : Math.max(0, head - asOf.as_of_block),
+          last_poll_at: lastPoll === null ? null : new Date(Number(lastPoll)).toISOString(),
+          poll_age_s: lastPoll === null ? null : Math.max(0, Math.round((now - Number(lastPoll)) / 1000)),
+          last_error: db.meta('last_error'),
+          source: opts.source ?? 'views',
+          start_block: opts.startBlock ?? 'head',
+          events_indexed: db.eventCount(),
+          contracts: opts.contracts ?? {},
+          version: opts.version?.version ?? null,
+          commit: opts.version?.commit ?? null,
+        },
+        cacheable: false,
+      };
+    }
     return {
       status: fresh ? 200 : 503,
       body: {
@@ -154,10 +189,15 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
   return { status: 404, body: { error: 'not found' }, cacheable: false };
 }
 
-export function createApi(db: FeedDb, opts: ApiOptions = {}): Server {
+export type Handler = (req: IncomingMessage, res: ServerResponse) => void;
+
+/** REST handler (cache + CORS). Also mounted by the single-port server (server.ts). */
+export function apiHandler(db: FeedDb, opts: ApiOptions = {}): Handler {
   const now = opts.now ?? Date.now;
+  const cors = opts.cors ?? LEGACY_CORS;
   const cache = new Map<string, { at: number; reply: Reply }>();
-  return createServer((req: IncomingMessage, res: ServerResponse) => {
+  return (req: IncomingMessage, res: ServerResponse) => {
+    if (handlePreflight(cors, req, res)) return;
     const key = req.url ?? '/';
     const hit = cache.get(key);
     let reply: Reply;
@@ -172,9 +212,13 @@ export function createApi(db: FeedDb, opts: ApiOptions = {}): Server {
     res.writeHead(reply.status, {
       'content-type': reply.contentType ?? 'application/json',
       'cache-control': reply.cacheable ? `public, max-age=${CACHE_MS / 1000}` : 'no-store',
-      'access-control-allow-origin': '*',
+      ...corsHeaders(cors, req),
     });
     const out = typeof reply.body === 'string' && reply.contentType !== undefined ? reply.body : JSON.stringify(reply.body);
     res.end(req.method === 'HEAD' ? undefined : out);
-  });
+  };
+}
+
+export function createApi(db: FeedDb, opts: ApiOptions = {}): Server {
+  return createServer(apiHandler(db, opts));
 }

@@ -71,6 +71,8 @@ export interface NeardataOptions {
   contractId: string;
   /** Height to start from when the DB has no cursor; null = start at the current final block. */
   startHeight: number | null;
+  /** With startHeight null: start this many blocks behind the final block (FEED_START_BLOCK=head-N). Default 0. */
+  startBack?: number;
   maxBlocksPerPoll: number;
 }
 
@@ -92,7 +94,7 @@ export class NeardataSource implements Source {
     let cursor: number;
     if (saved !== null && /^\d+$/.test(saved)) cursor = Number(saved);
     else {
-      cursor = (this.opts.startHeight ?? final) - 1;
+      cursor = (this.opts.startHeight ?? Math.max(1, final - (this.opts.startBack ?? 0))) - 1;
       db.setMeta(CURSOR_KEY, String(cursor));
       this.log.info('neardata_cursor_init', { height: cursor + 1 });
     }

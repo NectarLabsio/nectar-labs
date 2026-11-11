@@ -5,6 +5,7 @@
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { parseCorsOrigins } from '../../feed/src/cors.ts';
 import { flattenYaml } from '../../feed/src/repo-config.ts';
 
 export const NETWORK = 'near:testnet' as const;
@@ -38,6 +39,10 @@ export interface X402Config {
   facilitatorSecretPath: string | null;
   relayerAccountId: string;
   relayerKeyPath: string | null;
+  /** true when X402_RELAYER_KEY_JSON is set (the value itself stays in env, read once by main.ts). */
+  relayerKeyFromEnv: boolean;
+  /** X402_CORS_ORIGINS allowlist; null = no CORS headers (as before). */
+  corsOrigins: ReadonlySet<string> | null;
   port: number;
   host: string;
 }
@@ -90,6 +95,14 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): X402Config {
   if (facilitatorPort !== null && facilitatorSecretPath === null) {
     throw new ConfigError('X402_FACILITATOR_PORT needs X402_FACILITATOR_SECRET_PATH: the HTTP facilitator never runs without a shared secret');
   }
+  const relayerKeyPath = pick('X402_RELAYER_KEY_PATH');
+  const relayerKeyFromEnv = !placeholder(env.X402_RELAYER_KEY_JSON);
+  if (relayerKeyFromEnv && relayerKeyPath !== null) throw new ConfigError('set X402_RELAYER_KEY_PATH or X402_RELAYER_KEY_JSON, not both');
+  if (relayerKeyFromEnv && facilitatorPort !== null) throw new ConfigError('X402_FACILITATOR_PORT is not available with an env-held relayer key');
+  // Hosted: the platform injects PORT; X402_PORT (local) still wins when set.
+  const portRaw = !placeholder(env.X402_PORT) ? (env.X402_PORT as string) : !placeholder(env.PORT) ? (env.PORT as string) : '8790';
+  const port = Number(portRaw);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new ConfigError('X402_PORT / PORT must be a TCP port');
   return {
     network: NETWORK,
     rpcUrl: pick('X402_RPC_URL') ?? DEFAULT_RPC,
@@ -102,8 +115,10 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): X402Config {
     facilitatorHost: pick('X402_FACILITATOR_HOST') ?? '127.0.0.1',
     facilitatorSecretPath,
     relayerAccountId: relayer,
-    relayerKeyPath: pick('X402_RELAYER_KEY_PATH'),
-    port: Number(env.X402_PORT ?? 8790),
+    relayerKeyPath,
+    relayerKeyFromEnv,
+    corsOrigins: parseCorsOrigins(env.X402_CORS_ORIGINS, 'X402_CORS_ORIGINS'),
+    port,
     host: placeholder(env.X402_HOST) ? '127.0.0.1' : (env.X402_HOST as string),
   };
 }
