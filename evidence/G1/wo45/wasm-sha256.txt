@@ -1,0 +1,1 @@
+2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d  target/near/nectar_core/nectar_core.wasm
