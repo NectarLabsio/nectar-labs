@@ -25,12 +25,13 @@
   - WO-34e1: terms/disclaimers (TODO-H-LEGAL markers), D-031.
   - WO-34b: about/status/changelog/brand/talk/security pages, LH 100, content guard. CONTACT_EMAIL constant removed; contact comes from site.contact.
   - WO-34c: data inventory, exact-host CSP (Meteor only), crawl.mjs (96 URLs 200, redirects pass); SITE /docs/* → APP 308; local /docs/* explainer.
-- Running round 3 (worktrees):
-  - WO-34f web: every selector wallet under the CSP, no cross-host prefetch (6 CORS errors), RPC coalescing + polite crawl (~450 fastnear refusals).
-  - WO-34e2 docs: privacy + cookies from the inventory; outlayer/localhost doc links; H-KEYS keeper-only. Re-sync after WO-34f merges.
+- Round 3 MERGED (verify:quick 0):
+  - WO-34f: 6/6 selector wallets under the enforced CSP (0 violations, never signed); HostLink (no cross-host prefetch); SDK view coalescing (8 s
+    TTL, shared 429 backoff); polite crawl 89 URLs, 0 failures, 0 of our console errors; local e2e 142 pass.
+  - WO-34e2: privacy + cookies from the inventory (10 third-party hosts, all listed; per-wallet table; unpinned-manifest caveat); H-KEYS keeper-only.
+- **Code-final commit: d4218d4.** Running: G3b re-run 3 (verifier, fresh clone of d4218d4; brief g9-g3b-final-4.md + WO-34 additions a–f).
 - Then:
-  - G3b re-run 3 on the code-final commit.
-  - Deploy that commit (after H-HOST).
+  - Deploy d4218d4 once G3b passes, after H-HOST + H-LEGAL (+ H-DOMAIN or the vercel.app default).
   - WO-34v production acceptance.
   - README "Hosted demo".
   - G9 run 4.
@@ -170,7 +171,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T20:17:46Z · commit 48b3fa8
+Last activity: 2026-11-11T21:42:39Z · commit d60a507
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
