@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CONSENT_CHANGED_EVENT, CONSENT_YIELD_TO, ChainMark, Chip, ConsentBanner, Footer, Nav, SessionChip, analyticsAllowed, type LinkLike, type NavLink } from "@nectar/ui";
 import { sessionHeadline, sessionReasonText, sessionStatus, type ExitCapacity } from "@nectar/sdk";
 import { LandingNav } from "./landing/LandingNav";
-import { CONTACT_EMAIL, GA_ID, docsHref, hostHref } from "@/lib/env";
+import { GA_ID, docsHref, hostHref, repoHref } from "@/lib/env";
 import { NEAR_CONNECT_POPUP } from "@/lib/wallet/near-connect";
 import { useChain, useFeature, useView, useWallet } from "./AppProvider";
 
@@ -77,8 +77,9 @@ export function SiteHeader() {
   );
 }
 
-export function SiteFooter() {
+export function SiteFooter({ contact }: { contact: string | null }) {
   const docs = docsHref();
+  const repo = repoHref();
   const pathname = usePathname() ?? "/";
   const shieldsOn = useFeature("shields");
   const reserveOn = useFeature("reserve");
@@ -87,7 +88,7 @@ export function SiteFooter() {
     <Footer
       giant={pathname === "/"}
       Link={NextLink}
-      email={CONTACT_EMAIL}
+      email={contact}
       columns={[
         {
           title: "Products",
@@ -111,9 +112,9 @@ export function SiteFooter() {
             { href: "https://near-intents.org", label: "NEAR Intents", external: true },
           ],
         },
-        { title: "Build", links: [{ href: docs, label: "Docs" }, { href: docsHref("integrate/sdk"), label: "SDK" }, { href: docsHref("integrate/feed-mcp"), label: "Feed MCP" }, { href: "/api/health", label: "Status" }] },
-        { title: "Resources", links: [{ href: docsHref("concepts/whitepaper"), label: "Whitepaper" }, { href: "/security", label: "Security" }, { href: docsHref("project/brand"), label: "Brand assets" }, { href: docsHref("project/evidence"), label: "Evidence" }] },
-        { title: "Company", links: [{ href: "/talk", label: "Talk to us" }, { href: `mailto:${CONTACT_EMAIL}`, label: CONTACT_EMAIL }] },
+        { title: "Build", links: [{ href: docs, label: "Docs" }, { href: docsHref("integrate/sdk"), label: "SDK" }, { href: docsHref("integrate/feed-mcp"), label: "Feed MCP" }, { href: "/status", label: "Status" }, { href: "/changelog", label: "Changelog" }, ...(repo ? [{ href: repo, label: "Source", external: true }] : [])] },
+        { title: "Resources", links: [{ href: "/security", label: "Security" }, { href: "/brand", label: "Brand assets" }, { href: docsHref("project/evidence"), label: "Evidence" }] },
+        { title: "Company", links: [{ href: "/about", label: "About" }, { href: "/talk", label: "Talk to us" }, ...(contact ? [{ href: `mailto:${contact}`, label: contact }] : [])] },
         { title: "Legal", links: [{ href: "/legal/privacy", label: "Privacy" }, { href: "/legal/cookies", label: "Cookies" }, { href: "/legal/terms", label: "Terms" }, { href: "/legal/disclaimers", label: "Disclaimers" }] },
       ]}
     />
@@ -153,7 +154,7 @@ const CONSENT_YIELD = `${CONSENT_YIELD_TO}, ${NEAR_CONNECT_POPUP}`;
 export function SiteOverlays() {
   return (
     <>
-      <ConsentBanner yieldTo={CONSENT_YIELD} />
+      <ConsentBanner yieldTo={CONSENT_YIELD} analytics={Boolean(GA_ID)} />
       <Analytics />
     </>
   );

@@ -16,7 +16,7 @@ const root = resolve(here, "../../..");
 const outDir = resolve(root, "evidence/G3/lighthouse");
 const BASE = process.env.LH_BASE_URL ?? "http://localhost:3100";
 const MIN = 90;
-const ROUTES = ["/", "/feed", "/feed/NVDAx", "/borrow", "/shield", "/position/0", "/quote", "/quote/new", "/quote/0", "/reserve", "/notes", "/console", "/agents", "/keepers"];
+const ROUTES = process.env.LH_ROUTES ? process.env.LH_ROUTES.split(",") : ["/", "/feed", "/feed/NVDAx", "/borrow", "/shield", "/position/0", "/quote", "/quote/new", "/quote/0", "/reserve", "/notes", "/console", "/agents", "/keepers", "/about", "/status", "/changelog", "/brand", "/talk", "/security"];
 // Blink preferredColorScheme enum: 0 = dark, 1 = light.
 const THEMES = {
   dark: ["--force-dark-mode", "--blink-settings=preferredColorScheme=0"],

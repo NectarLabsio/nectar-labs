@@ -7,7 +7,7 @@ import "@nectar/ui/app.css";
 import { themeInitScript } from "@nectar/ui";
 import { AppProvider } from "@/components/AppProvider";
 import { SiteFooter, SiteHeader, SiteOverlays } from "@/components/SiteChrome";
-import { assertProductionReady, getPublicConfig } from "@/lib/config.server";
+import { assertProductionReady, getPublicConfig, getSiteConfig } from "@/lib/config.server";
 import { appMetadata } from "@/lib/site-meta";
 
 // WO-34a §6: a production build stops here while an operator field or SITE_URL / APP_URL is missing.
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main id="main" className="skip-target" tabIndex={-1}>
             {children}
           </main>
-          <SiteFooter />
+          <SiteFooter contact={getSiteConfig().contact} />
           <SiteOverlays />
         </AppProvider>
       </body>

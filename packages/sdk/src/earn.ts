@@ -229,6 +229,38 @@ export interface EvidenceRow {
   qualifier: string | null;
 }
 
+/** One row of the EVIDENCE.md summary table, reduced to what a public status page may show (no free text from the row). */
+export interface GateRow {
+  gate: string;
+  /** First word of the status cell: PASS, FAIL, FALLBACK, PARTIAL, RECORDED, or OTHER. */
+  status: "PASS" | "FAIL" | "FALLBACK" | "PARTIAL" | "RECORDED" | "OTHER";
+  /** Short qualifiers found in the status cell: "local fork", "fixture", "disclosed", "superseded". */
+  notes: string[];
+  /** First YYYY-MM-DD in the UTC cell, or null. */
+  date: string | null;
+  /** First `evidence/...` path or `§...` reference in the evidence cell, or null. */
+  evidence: string | null;
+}
+
+/** Every row of the first `| Gate | Status | UTC | ... | Evidence |` table, in file order. Malformed rows are skipped. */
+export function parseGateTable(md: string): GateRow[] {
+  const lines = md.split("\n");
+  const start = lines.findIndex((l) => /^\|\s*Gate\s*\|\s*Status\s*\|/.test(l));
+  if (start < 0) return [];
+  const out: GateRow[] = [];
+  for (let i = start + 2; i < lines.length && lines[i]!.startsWith("|"); i++) {
+    const cells = lines[i]!.split("|").slice(1, -1).map((c) => c.trim());
+    if (cells.length < 5 || !/^G\d/.test(cells[0]!) && !/^v7 /.test(cells[0]!)) continue;
+    const status = cells[1]!;
+    const word = /^(PASS|FAIL|FALLBACK|PARTIAL|RECORDED)\b/.exec(status)?.[1] as GateRow["status"] | undefined;
+    const notes = (["local fork", "fixture", "disclosed", "superseded"] as const).filter((n) => status.toLowerCase().includes(n));
+    const ev = cells[cells.length - 1]!;
+    const evidence = /(evidence\/[A-Za-z0-9._\-/]+|§[A-Za-z0-9 .\-]+?)(?=[\s,;()]|$)/.exec(ev)?.[1] ?? null;
+    out.push({ gate: cells[0]!, status: word ?? "OTHER", notes, date: /\d{4}-\d{2}-\d{2}/.exec(cells[2]!)?.[0] ?? null, evidence });
+  }
+  return out;
+}
+
 /** One row per `{label, gate}`; `gate` is the exact start of the first table cell. A gate with no row is pending. */
 export function parseEvidenceRows(md: string, wanted: ReadonlyArray<{ label: string; gate: string }>): EvidenceRow[] {
   const lines = md.split("\n").filter((l) => l.startsWith("|"));

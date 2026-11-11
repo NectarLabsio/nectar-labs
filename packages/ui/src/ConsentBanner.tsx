@@ -68,7 +68,8 @@ function useOverlayShown(selector: string): boolean {
 }
 
 /** `yieldTo`: CSS selector; while a match is shown the banner is hidden so it never sits under or over it, then it comes back. */
-export function ConsentBanner({ yieldTo = CONSENT_YIELD_TO }: { yieldTo?: string } = {}) {
+/** `analytics`: whether this build has an analytics id configured; the copy says so (WO-34b §9). */
+export function ConsentBanner({ yieldTo = CONSENT_YIELD_TO, analytics = false }: { yieldTo?: string; analytics?: boolean } = {}) {
   const [open, setOpen] = useState(false);
   const covered = useOverlayShown(open ? yieldTo : "");
   useEffect(() => {
@@ -91,9 +92,10 @@ export function ConsentBanner({ yieldTo = CONSENT_YIELD_TO }: { yieldTo?: string
     <div className="consent" role="dialog" aria-label="Cookie preferences" data-testid="consent">
       <strong className="heading-text">Cookies and storage</strong>
       <span>
-        This site stores your theme and this choice in your browser; the wallet connector keeps its own session storage there too. Analytics load only if you
-        accept, and only on the production site. We never join wallet addresses to IP addresses in logs we control. Your browser talks directly to the NEAR and
-        Solana RPC providers, which see your IP and the accounts you query.
+        This site keeps your theme, this choice and a wallet-session flag in your browser&apos;s local storage; the wallet connector keeps its own session
+        there too. No cookies are set.{" "}
+        {analytics ? "Analytics load only if you accept." : "No analytics are configured in this build, so nothing loads if you accept."} We never join wallet
+        addresses to IP addresses in logs we control. Your browser talks directly to the NEAR and Solana RPC providers, which see your IP and the accounts you query.
       </span>
       <div className="acts">
         <Button variant="primary" size="sm" onClick={() => choose(true)}>

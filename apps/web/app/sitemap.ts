@@ -5,9 +5,12 @@ import { isLandingPath, readHosts } from "@/lib/hosts";
 // Per-host sitemap (WO-34a §5). headers() makes this a request-time route (sitemap.md: "cached by default unless it uses a
 // Request-time API"), so SITE and APP each list only their own routes. Local mode: every route on the requesting origin.
 // Static routes only; dynamic ones (/feed/[symbol], /position/[id], /quote/[id], /note/[id]) are reached from these pages.
-// WO-34b adds /about, /status, /changelog, /brand: append them here when their pages land.
 const ROUTES = [
   "/",
+  "/about",
+  "/status",
+  "/changelog",
+  "/brand",
   "/security",
   "/talk",
   "/legal/privacy",

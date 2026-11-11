@@ -361,3 +361,12 @@ details p { padding: 0 0 14px; color: var(--text); max-width: 68ch; }
 .rsteps li[data-state="current"] { border-color: var(--accent); color: var(--heading); background: var(--accent-fill); }
 .addr { font-family: var(--font-mono); font-size: 12px; overflow-wrap: anywhere; word-break: break-all; color: var(--heading); }
 @media (max-width: 760px) { .rsteps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Site pages (WO-34b): /brand tiles, /changelog list, /status tables. Tokens only. */
+.brand-grid { list-style: none; padding: 0; margin: 0; }
+.brand-tile { display: grid; place-items: center; min-height: 128px; padding: 16px; border: 1px solid var(--border); border-radius: var(--r-card); background: var(--surface-2); }
+.log-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.log-list li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; align-items: baseline; overflow-wrap: anywhere; }
+.log-list .caption { grid-column: 2; }
+.kv { display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+.kv > div { display: contents; } .kv dt { color: var(--dim); } .kv dd { margin: 0; overflow-wrap: anywhere; }
