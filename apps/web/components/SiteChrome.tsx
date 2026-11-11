@@ -8,11 +8,17 @@ import { LandingNav } from "./landing/LandingNav";
 import { CONTACT_EMAIL, GA_ID, docsHref } from "@/lib/env";
 import { useChain, useFeature, useView, useWallet } from "./AppProvider";
 
-const NextLink: LinkLike = ({ href, children, ...rest }) => (
-  <Link href={href} {...rest}>
-    {children}
-  </Link>
-);
+/** API routes (footer "Status" → /api/health) are plain anchors: the client router must never RSC-prefetch a JSON route (GATE_FAIL_G3B_R2). */
+const NextLink: LinkLike = ({ href, children, ...rest }) =>
+  href.startsWith("/api/") ? (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ) : (
+    <Link href={href} {...rest}>
+      {children}
+    </Link>
+  );
 
 function WalletButton() {
   const w = useWallet();

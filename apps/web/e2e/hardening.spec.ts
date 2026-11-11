@@ -36,4 +36,24 @@ test.describe("hardening", () => {
     expect(b.as_of).toBe(a.as_of);
     if (a.error) expect(a.error).toBe("RPC read failed");
   });
+
+  // GATE_FAIL_G3B_R2: Next's router dropped the JSON answer to an RSC prefetch unread, so Chrome never finished the fetch.
+  test("/api/health answers a router (RSC) prefetch with an empty 204", async ({ request }) => {
+    const r = await request.get("/api/health", { headers: { rsc: "1", "next-router-prefetch": "1", "next-router-segment-prefetch": "/_tree" } });
+    expect(r.status()).toBe(204);
+    expect((await r.body()).byteLength).toBe(0);
+  });
+
+  test("the footer Status link is a plain anchor (never RSC-prefetched) and /borrow reaches networkidle", async ({ page }) => {
+    const prefetches: string[] = [];
+    page.on("request", (q) => {
+      if (q.url().includes("/api/health") && q.headers()["rsc"]) prefetches.push(q.url());
+    });
+    await page.goto("/borrow");
+    const status = page.getByRole("navigation", { name: "Footer" }).getByRole("link", { name: "Status", exact: true });
+    await status.scrollIntoViewIfNeeded();
+    await expect(status).toHaveAttribute("href", "/api/health");
+    await page.waitForLoadState("networkidle", { timeout: 30_000 });
+    expect(prefetches).toEqual([]);
+  });
 });
