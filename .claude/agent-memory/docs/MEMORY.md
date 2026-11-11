@@ -1,1 +1,1 @@
-- [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python scripts for multi-file edits; label non-EVIDENCE re-runs "verifier record pending"
+- [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python edits; plain git only; cite EVIDENCE "recorded in <commit>", pending only for NOT RUN scope
