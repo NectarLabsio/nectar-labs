@@ -44,6 +44,9 @@ pub const GAS_NFT_RESOLVE: Gas = Gas::from_tgas(10);
 pub const GAS_NFT_ON_TRANSFER_MIN: Gas = Gas::from_tgas(10);
 const MAX_MSG_LEN: usize = 4_096;
 
+/// SR-24: per position, the quotes its current settlement references (raw key: `quote_refs` keeps its layout).
+pub const CURRENT_REFS_PREFIX: &[u8] = b"__v7c_refs:";
+
 pub const ERR_NO_NOTE: &str = "unknown note";
 pub const ERR_NOTE_OWNER: &str = "note owner only";
 pub const ERR_NOTE_LOCKED: &str = "note_locked: pending settlement";
@@ -244,15 +247,39 @@ impl Nectar {
         match r {
             NoteRef::Position(id) => self.position_pending(id),
             NoteRef::Quote(id) => {
-                self.notes.quote_refs.get(&id).is_some_and(|ps| ps.iter().any(|pid| self.position_pending(*pid)))
+                // SR-24: locked only by a pending settlement that references this quote right now.
+                self.notes
+                    .quote_refs
+                    .get(&id)
+                    .is_some_and(|ps| ps.iter().any(|pid| self.position_pending(*pid) && Self::current_refs(*pid).contains(&id)))
             }
             // WO-23b: refused while a settlement that may fill from this asset's Reserve is pending.
             NoteRef::Reserve(n) => self.reserve_note(n).is_some_and(|r| self.reserve_locked(&r.collateral)),
         }
     }
 
-    /// Records that `position_id`'s settlement references `quote_ids` (called when the settlement starts).
+    /// SR-24: the quotes the position's current settlement references (raw key, removed when that settlement ends).
+    fn current_refs(position_id: u64) -> Vec<u64> {
+        env::storage_read(&crate::prefixed(CURRENT_REFS_PREFIX, &position_id.to_le_bytes()))
+            .and_then(|b| near_sdk::borsh::from_slice(&b).ok())
+            .unwrap_or_default()
+    }
+
+    /// SR-24: this position's settlement ended; its quotes and the asset's Reserve Notes no longer wait for it.
+    pub(crate) fn note_refs_clear(&mut self, p: &Position) {
+        env::storage_remove(&crate::prefixed(CURRENT_REFS_PREFIX, &p.position_id.0.to_le_bytes()));
+        let id = p.position_id.0;
+        if let Some(mut refs) = self.reserve_refs.get(&p.collateral).cloned().filter(|r| r.contains(&id)) {
+            refs.retain(|pid| *pid != id);
+            self.reserve_refs.insert(p.collateral.clone(), refs);
+        }
+    }
+
+    /// Records that `position_id`'s settlement references `quote_ids` (called when the settlement starts; the latest
+    /// call names the current set: the quoter's candidates, then the one quote of a signed leg).
     pub(crate) fn note_refs_add(&mut self, position_id: u64, quote_ids: &[u64]) {
+        let current = near_sdk::borsh::to_vec(&quote_ids.to_vec()).unwrap_or_else(|_| env::panic_str("borsh"));
+        env::storage_write(&crate::prefixed(CURRENT_REFS_PREFIX, &position_id.to_le_bytes()), &current);
         for qid in quote_ids {
             let mut refs = self.notes.quote_refs.get(qid).cloned().unwrap_or_default();
             refs.retain(|pid| *pid != position_id && self.position_pending(*pid));
@@ -430,7 +457,7 @@ impl Nectar {
     fn reserve_face(&self, n: u64, locked: bool) -> Option<NoteFace> {
         let r = self.reserve_note(n)?;
         let c = self.coll(&r.collateral)?;
-        let (value, units, fees) = self.reserve_note_live(&r);
+        let (value, units, fees) = self.reserve_note_live(n, &r);
         let one = math::pow10(c.decimals).unwrap_or(1);
         let units_txt = format!("{}.{:02}", units / one, (units % one).saturating_mul(100) / one);
         let now = env::block_timestamp();
@@ -571,7 +598,8 @@ impl Nectar {
             .into()
     }
 
-    /// NEP-171 resolver. True = the receiver keeps the Note. A Note locked by a settlement started meanwhile stays.
+    /// NEP-171 resolver. True = the receiver keeps the Note. SR-23: a refused Note always goes back, even if a settlement
+    /// started meanwhile: payouts read the current owner and a signed leg's recipient is already in its message.
     #[private]
     pub fn nft_resolve_transfer(
         &mut self,
@@ -592,17 +620,16 @@ impl Nectar {
         if owner != receiver_id || owner == previous_owner_id {
             return true;
         }
-        if self.note_locked(r) {
-            env::log_str("note kept by receiver: pending settlement");
-            return true;
-        }
         self.move_note(&token_id, r, &receiver_id, &previous_owner_id);
         Self::emit_nft_transfer(&receiver_id, &previous_owner_id, &token_id, None);
         false
     }
 
-    /// Quote Note owner sets (or clears) the Solana recipient of remote fills. Refused while the Note is locked.
+    /// Quote Note owner (1 yocto, SR-21: it redirects fill payouts) sets or clears the remote recipient of fills.
+    /// Refused while the Note is locked.
+    #[payable]
     pub fn set_quote_remote_recipient(&mut self, quote_id: U64, recipient: Option<String>) {
+        assert_one_yocto();
         let mut q = self.quote_or_panic(quote_id.0);
         require!(env::predecessor_account_id() == q.buyer, ERR_NOTE_OWNER);
         if let Some(r) = &recipient {

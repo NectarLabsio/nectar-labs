@@ -492,6 +492,12 @@ pub enum Payout {
     Claimable,
     /// SR-17 (WO-34a): `claim_owed_collateral` units; failure restores the owed balance.
     OwedCollateral { symbol: String },
+    /// Owner `withdraw_treasury`; failure restores `treasury_usd_e6`.
+    Treasury,
+    /// Owner `withdraw_lender_fees`; failure restores `lenders_fees_usd_e6`.
+    LenderFees,
+    /// Owner `withdraw_liquidity`; failure restores `available_usd_e6` and the lender's supplied balance.
+    Liquidity,
 }
 
 // ---------- views ----------

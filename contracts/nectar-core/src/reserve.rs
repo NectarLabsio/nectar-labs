@@ -11,6 +11,9 @@
 //!   through `acc_units_per_share_e18`. A shortfall after the Reserve leaves the position `Settling` for the owner
 //!   (`cancel_settlement`). NEAR-held collateral only: remote positions settle through `settle_remote`, never here.
 //! - Each Note has `unit_debt` / `fee_debt` (MasterChef, rounded up), so a late depositor gets nothing from earlier fills.
+//! - SR-22: a Reserve filled down to R_c = 0 with shares still live reopens on the next deposit: that deposit closes the
+//!   epoch (the per-share indexes are snapshotted, shares restart at 0) and mints 1:1. Older Notes keep their unit and
+//!   fee claims at the snapshot and are worth 0 of the new R_c. Epochs live in raw keys.
 //! - Exit: `initiate_reserve_exit` (Note owner; the shares leave R_c at once at their current value, pending units and
 //!   fees are checkpointed), `complete_reserve_exit` after 7 days pays USDC (value + fees) and the units; `on_payout`
 //!   restores the claim if a transfer fails. A Note transfer moves the claim; it is refused while a settlement that
@@ -34,6 +37,11 @@ pub const RESERVE_MAX_NOTICE_NS: u64 = 30 * DAY_NS;
 /// Daily fee totals kept for the realised APR (7-day window + today).
 pub const RESERVE_FEE_DAYS: usize = 8;
 pub const RESERVE_APR_WINDOW_DAYS: u32 = 7;
+
+/// SR-22: per symbol, the current epoch; per (symbol, epoch), the closing indexes; per Note, its epoch if above 0.
+pub const RESERVE_EPOCH_PREFIX: &[u8] = b"__v7c_rsv_epoch:";
+pub const RESERVE_SNAPSHOT_PREFIX: &[u8] = b"__v7c_rsv_snap:";
+pub const RESERVE_NOTE_EPOCH_PREFIX: &[u8] = b"__v7c_rsv_note:";
 
 pub const ERR_RESERVE_MIN: &str = "reserve deposit below 10 USDC";
 pub const ERR_RESERVE_DISABLED: &str = "reserve_disabled";
@@ -71,6 +79,40 @@ impl Nectar {
     }
     fn reserve_note_or_panic(&self, token_id: &str) -> (u64, ReserveNote) {
         self.reserve_note_by_id(token_id).unwrap_or_else(|| env::panic_str(ERR_NO_RESERVE_NOTE))
+    }
+
+    /// SR-22: the asset's current epoch (0 until a depleted Reserve reopens).
+    pub(crate) fn reserve_epoch(symbol: &str) -> u32 {
+        env::storage_read(&crate::prefixed(RESERVE_EPOCH_PREFIX, symbol.as_bytes()))
+            .and_then(|b| <[u8; 4]>::try_from(b.as_slice()).ok())
+            .map_or(0, u32::from_le_bytes)
+    }
+    fn reserve_snapshot_key(symbol: &str, epoch: u32) -> Vec<u8> {
+        crate::prefixed(RESERVE_SNAPSHOT_PREFIX, format!("{symbol}|{epoch}").as_bytes())
+    }
+    /// SR-22: freezes the closing indexes and starts the next epoch. Effect.
+    fn reserve_close_epoch(symbol: &str, pool: &ReservePool) {
+        let epoch = Self::reserve_epoch(symbol);
+        let mut snap = pool.acc_units_per_share_e18.0.to_le_bytes().to_vec();
+        snap.extend_from_slice(&pool.acc_fee_per_share_e18.0.to_le_bytes());
+        env::storage_write(&Self::reserve_snapshot_key(symbol, epoch), &snap);
+        let next = epoch.checked_add(1).unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
+        env::storage_write(&crate::prefixed(RESERVE_EPOCH_PREFIX, symbol.as_bytes()), &next.to_le_bytes());
+    }
+    /// SR-22: the pool as a Note of a closed epoch sees it (the indexes frozen at the close); `None` for a current Note.
+    fn reserve_frozen_pool(n: u64, note: &ReserveNote, pool: &ReservePool) -> Option<ReservePool> {
+        let epoch = env::storage_read(&crate::prefixed(RESERVE_NOTE_EPOCH_PREFIX, &n.to_le_bytes()))
+            .and_then(|b| <[u8; 4]>::try_from(b.as_slice()).ok())
+            .map_or(0, u32::from_le_bytes);
+        if note.shares.0 == 0 || epoch >= Self::reserve_epoch(&note.collateral) {
+            return None;
+        }
+        let snap = env::storage_read(&Self::reserve_snapshot_key(&note.collateral, epoch))?;
+        let (units, fees) = snap.split_at_checked(16)?;
+        let mut frozen = pool.clone();
+        frozen.acc_units_per_share_e18 = U128(u128::from_le_bytes(units.try_into().ok()?));
+        frozen.acc_fee_per_share_e18 = U128(u128::from_le_bytes(fees.try_into().ok()?));
+        Some(frozen)
     }
 
     /// Pending units and fees since the last checkpoint (O(1)).
@@ -156,7 +198,10 @@ impl Nectar {
             return Err(ERR_RESERVE_DISABLED);
         }
         let rc = Self::reserve_rc(&c);
-        let minted = math::reserve_shares_for(amount, c.reserve.shares.0, rc)?;
+        // SR-22: filled down to nothing, the old shares have no price; this deposit starts a new epoch at 1:1.
+        let close_epoch = c.reserve.shares.0 > 0 && rc == 0;
+        let live_shares = if close_epoch { 0 } else { c.reserve.shares.0 };
+        let minted = math::reserve_shares_for(amount, live_shares, rc)?;
         if minted == 0 {
             return Err("reserve deposit mints no shares");
         }
@@ -166,7 +211,7 @@ impl Nectar {
         if note_id.len() > crate::MAX_STRING_LEN {
             return Err("string too long");
         }
-        let shares = math::add(c.reserve.shares.0, minted)?;
+        let shares = math::add(live_shares, minted)?;
         let usdc = math::add(c.reserve.usdc_e6.0, amount)?;
         let note = ReserveNote {
             note_id: note_id.clone(),
@@ -185,6 +230,14 @@ impl Nectar {
             created_ns: U64(env::block_timestamp()),
         };
         // effects
+        if close_epoch {
+            Self::reserve_close_epoch(&collateral, &c.reserve);
+            emit("reserve_epoch_closed", json!({ "collateral": collateral, "epoch": Self::reserve_epoch(&collateral) }));
+        }
+        let epoch = Self::reserve_epoch(&collateral);
+        if epoch > 0 {
+            env::storage_write(&crate::prefixed(RESERVE_NOTE_EPOCH_PREFIX, &n.to_le_bytes()), &epoch.to_le_bytes());
+        }
         c.reserve.shares = U128(shares);
         c.reserve.usdc_e6 = U128(usdc);
         self.put_coll(c);
@@ -253,11 +306,14 @@ impl Nectar {
     }
 
     /// Note value, claimable units and fees including accruals since the last checkpoint.
-    pub(crate) fn reserve_note_live(&self, note: &ReserveNote) -> (u128, u128, u128) {
+    pub(crate) fn reserve_note_live(&self, n: u64, note: &ReserveNote) -> (u128, u128, u128) {
         let Some(c) = self.coll(&note.collateral) else { return (0, 0, 0) };
-        let (u, f) = Self::reserve_pending(note, &c.reserve).unwrap_or((0, 0));
+        let frozen = Self::reserve_frozen_pool(n, note, &c.reserve);
+        let (u, f) = Self::reserve_pending(note, frozen.as_ref().unwrap_or(&c.reserve)).unwrap_or((0, 0));
         let value = if note.unlock_ns.is_some() {
             note.exit_usdc_e6.0
+        } else if frozen.is_some() {
+            0
         } else {
             math::reserve_share_value(note.shares.0, c.reserve.shares.0, Self::reserve_rc(&c)).unwrap_or(0)
         };
@@ -296,13 +352,15 @@ impl Nectar {
         require!(env::predecessor_account_id() == note.owner, ERR_NOTE_OWNER);
         require!(note.unlock_ns.is_none(), "already exiting");
         let mut c = self.coll_or_panic(&note.collateral);
-        ok(Self::reserve_checkpoint(&mut note, &c.reserve));
+        // SR-22: a Note of a closed epoch keeps its claims but holds no share of the current pool.
+        let frozen = Self::reserve_frozen_pool(n, &note, &c.reserve);
+        ok(Self::reserve_checkpoint(&mut note, frozen.as_ref().unwrap_or(&c.reserve)));
         let s = note.shares.0;
-        let value = ok(math::reserve_share_value(s, c.reserve.shares.0, Self::reserve_rc(&c)));
+        let value = if frozen.is_some() { 0 } else { ok(math::reserve_share_value(s, c.reserve.shares.0, Self::reserve_rc(&c))) };
         let unlock = env::block_timestamp()
             .checked_add(Self::reserve_notice_ns(&c.reserve))
             .unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
-        let shares = ok(math::sub(c.reserve.shares.0, s));
+        let shares = if frozen.is_some() { c.reserve.shares.0 } else { ok(math::sub(c.reserve.shares.0, s)) };
         let notice = ok(math::add(c.reserve.notice_usdc_e6.0, value));
         // effects
         c.reserve.shares = U128(shares);
@@ -391,8 +449,8 @@ impl Nectar {
     }
 
     pub fn get_reserve_note(&self, note_id: String) -> Option<ReserveNoteView> {
-        let (_, note) = self.reserve_note_by_id(&note_id)?;
-        let (value, units, fees) = self.reserve_note_live(&note);
+        let (n, note) = self.reserve_note_by_id(&note_id)?;
+        let (value, units, fees) = self.reserve_note_live(n, &note);
         let can_complete =
             !note.exited && note.unlock_ns.is_some_and(|u| env::block_timestamp() >= u.0) && (value > 0 || units > 0 || fees > 0);
         let transfer_locked = self.reserve_locked(&note.collateral);

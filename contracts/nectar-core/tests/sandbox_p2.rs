@@ -496,9 +496,11 @@ async fn remote_reservation_deposit_refunds_and_self_settle_kind_self() -> anyho
     gas("confirm_remote_deposit+refund", &r);
     assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
     assert_eq!(events(&r, "reservation_deposit_refunded")[0]["reason"], "confirmed");
-    assert_eq!(events(&r, "reservation_deposit_refunded")[0]["amount_yocto"], RESERVE_DEPOSIT.to_string());
+    // SR-14: the deposit less the record's storage
+    let refunded: u128 = events(&r, "reservation_deposit_refunded")[0]["amount_yocto"].as_str().unwrap().parse()?;
+    assert!(refunded > 0 && refunded < RESERVE_DEPOSIT, "{refunded}");
     // >=: the reserve tx gas refund (to its signer, the borrower) can land in the same window
-    assert!(near_balance(&borrower).await? - before >= RESERVE_DEPOSIT, "refunded on confirm");
+    assert!(near_balance(&borrower).await? - before >= refunded, "refunded on confirm");
 
     let other = user(&e, 0, 0).await?;
     let (id2, _) = reserve(&e, &core, &other).await?;
@@ -509,7 +511,8 @@ async fn remote_reservation_deposit_refunds_and_self_settle_kind_self() -> anyho
     gas("expire_remote_reservation+refund", &r);
     assert!(r.is_success(), "{:?}", r.failures());
     assert_eq!(events(&r, "reservation_deposit_refunded")[0]["account_id"], other.id().to_string());
-    assert!(near_balance(&other).await? - before >= RESERVE_DEPOSIT, "refunded on expiry (to the borrower)");
+    let refunded: u128 = events(&r, "reservation_deposit_refunded")[0]["amount_yocto"].as_str().unwrap().parse()?;
+    assert!(near_balance(&other).await? - before >= refunded, "refunded on expiry (to the borrower)");
 
     // Profit-Lock on the remote position (price refreshed after the clock advance)
     price(&e, &core, 180_000_000).await?;

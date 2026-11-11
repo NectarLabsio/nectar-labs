@@ -345,8 +345,7 @@ async fn stub(e: &Env) -> anyhow::Result<Contract> {
 }
 async fn job(e: &Env, s: &Contract, method: &str, body: &str) -> anyhow::Result<ExecutionFinalResult> {
     s.call("set_mode").args_json(json!({ "mode": "raw", "body": body })).transact().await?.into_result()?;
-    let anyone = e.worker.dev_create_account().await?;
-    Ok(anyone.call(e.core.id(), method).args_json(json!({ "symbol": "NVDAx" })).gas(Gas::from_tgas(150)).transact().await?)
+    Ok(e.keeper.call(e.core.id(), method).args_json(json!({ "symbol": "NVDAx" })).gas(Gas::from_tgas(150)).transact().await?)
 }
 
 /// OutLayer job hooks: the calendar job's `force_closed:false` cannot open a forced-closed session, `true` closes an
@@ -358,6 +357,10 @@ async fn outlayer_calendar_cannot_open_and_multiplier_bounded() -> anyhow::Resul
     let now = now_ns(&e).await?;
     owner_call(&e, "set_session_calendar", json!({ "windows": [
         [(now - 3_600 * SEC).to_string(), (now + 6 * 3_600 * SEC).to_string()] ] })).await?;
+    // SR-6: a job spends the gas reserve, so a stranger cannot ask
+    let stranger = e.worker.dev_create_account().await?;
+    let r = stranger.call(e.core.id(), "request_session_check").args_json(json!({ "symbol": "NVDAx" })).gas(Gas::from_tgas(150)).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("keeper or owner only"), "{:?}", r.failures());
     owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": true })).await?;
     let r = job(&e, &s, "request_session_check", r#"{"force_closed":false,"reason":"open"}"#).await?;
     gas("request_session_check+calendar", &r);
@@ -379,6 +382,8 @@ async fn outlayer_calendar_cannot_open_and_multiplier_bounded() -> anyhow::Resul
     assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
     assert_eq!(events(&r, "session_forced_closed")[0]["source"], "outlayer");
     assert_eq!(cap(&e).await?["forced_closed"], true);
+    assert_eq!(view(&e, "get_collateral", json!({ "symbol": "NVDAx" })).await?["forced_closed"], false, "SR-13: never latched");
+    assert_ne!(view(&e, "get_outlayer_closed_until", json!({ "symbol": "NVDAx" })).await?, json!("0"));
 
     owner_call(&e, "set_multiplier_source", json!({ "symbol": "NVDAx", "rpc_url": "https://sepolia.base.org",
         "token": "0x1111111111111111111111111111111111111111" })).await?;
@@ -393,6 +398,12 @@ async fn outlayer_calendar_cannot_open_and_multiplier_bounded() -> anyhow::Resul
     let coll = view(&e, "get_collateral", json!({ "symbol": "NVDAx" })).await?;
     assert_eq!(coll["multiplier_e18"], "1030000000000000000", "a 2x read is never applied by the job");
     assert_eq!(coll["ca_suggested_multiplier_e18"], (2 * E18).to_string());
+
+    // SR-13: the answer expires by itself; no owner call, and the session opens again inside the same calendar window
+    advance(&e, 3_601).await?;
+    price(&e, 180_000_000).await?;
+    let c = cap(&e).await?;
+    assert_eq!((c["forced_closed"].clone(), c["session_open"].clone()), (json!(false), json!(true)), "{c}");
     Ok(())
 }
 

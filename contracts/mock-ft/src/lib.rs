@@ -2,7 +2,9 @@
 //! - `ft_transfer` / `ft_transfer_call` require exactly 1 yoctoNEAR (F-013).
 //! - `ft_transfer_call` calls `receiver.ft_on_transfer(sender_id, amount, msg)` and refunds the
 //!   unused amount it returns in `ft_resolve_transfer` (F-013).
-//! - Accounts auto-register on first receipt; `storage_deposit` exists only for script compatibility.
+//! - SR-27: `storage_deposit` charges the measured storage cost and refunds the excess (owner exempt: scripts register
+//!   demo accounts and the owner tops up the token account). Accounts auto-register on first receipt only up to
+//!   `MAX_FREE_REGISTRATIONS`, so free entries cannot exhaust the token account's stake; after that receivers register.
 //! - `mint` is owner-only.
 //! - v7 (interface-v7.md A3): `multiplier()` (default 1e18) + owner `update_multiplier`, stored under a raw
 //!   storage key so the live mock accounts take a code-only upgrade (root struct unchanged).
@@ -19,11 +21,15 @@ use near_sdk::{
 
 const GAS_FOR_RESOLVE: Gas = Gas::from_tgas(10);
 const GAS_FOR_FT_TRANSFER_CALL: Gas = Gas::from_tgas(50);
-/// Reported by `storage_balance_of` / `storage_deposit` (mock: storage is free).
+/// Reported by `storage_balance_of` / `storage_deposit`.
 const STORAGE_BOUND_YOCTO: u128 = 1_250_000_000_000_000_000_000;
 /// Raw keys outside the root struct (no migrate on the live mocks).
 const MULTIPLIER_KEY: &[u8] = b"__multiplier_e18";
 const REGISTRATION_REQUIRED_KEY: &[u8] = b"__registration_required";
+/// SR-27: count of accounts registered for free on first receipt. The cap stays under the ~95 entries the live token
+/// accounts can stake.
+const FREE_REGISTRATIONS_KEY: &[u8] = b"__free_registrations";
+const MAX_FREE_REGISTRATIONS: u32 = 64;
 const E18: u128 = 1_000_000_000_000_000_000;
 
 #[near(serializers = [borsh])]
@@ -69,8 +75,10 @@ impl MockFt {
     fn internal_transfer(&mut self, from: &AccountId, to: &AccountId, amount: u128) {
         require!(from != to, "sender and receiver must differ");
         require!(amount > 0, "amount must be > 0");
-        if self.registration_required() {
-            require!(self.balances.contains_key(to), "receiver not registered");
+        if !self.balances.contains_key(to) {
+            let used = self.free_registrations();
+            require!(!self.registration_required() && used < MAX_FREE_REGISTRATIONS, "receiver not registered");
+            env::storage_write(FREE_REGISTRATIONS_KEY, &(used + 1).to_le_bytes());
         }
         let fb = self.balance(from);
         let nf = fb.checked_sub(amount).unwrap_or_else(|| env::panic_str("insufficient balance"));
@@ -177,20 +185,41 @@ impl MockFt {
         }
     }
 
-    /// Compatibility shim: registers the account (balance 0) and keeps the deposit (mock).
+    /// SR-27: registers the account (balance 0) for its measured storage cost and refunds the rest of the attachment;
+    /// an already registered account gets the whole attachment back. The owner registers for free.
     #[payable]
     pub fn storage_deposit(&mut self, account_id: Option<AccountId>, registration_only: Option<bool>) -> StorageBalance {
         let _ = registration_only;
-        let a = account_id.unwrap_or_else(env::predecessor_account_id);
+        let caller = env::predecessor_account_id();
+        let a = account_id.unwrap_or_else(|| caller.clone());
+        let attached = env::attached_deposit().as_yoctonear();
+        let mut cost = 0;
         if !self.balances.contains_key(&a) {
+            let before = env::storage_usage();
             self.balances.insert(a, 0);
+            self.balances.flush();
+            if caller != self.owner {
+                let bytes = u128::from(env::storage_usage().saturating_sub(before));
+                cost = bytes.checked_mul(env::storage_byte_cost().as_yoctonear()).unwrap_or_else(|| env::panic_str("overflow"));
+                require!(attached >= cost, "attach the storage cost");
+            }
+        }
+        if attached > cost {
+            Promise::new(caller).transfer(NearToken::from_yoctonear(attached - cost)).detach();
         }
         StorageBalance { total: U128(STORAGE_BOUND_YOCTO), available: U128(0) }
     }
 
+    /// `None` until the account is registered (NEP-145), so a client knows to pay `storage_deposit`.
     pub fn storage_balance_of(&self, account_id: AccountId) -> Option<StorageBalance> {
-        let _ = account_id;
-        Some(StorageBalance { total: U128(STORAGE_BOUND_YOCTO), available: U128(0) })
+        self.balances.contains_key(&account_id).then_some(StorageBalance { total: U128(STORAGE_BOUND_YOCTO), available: U128(0) })
+    }
+
+    /// SR-27: accounts registered for free on first receipt so far.
+    pub fn free_registrations(&self) -> u32 {
+        env::storage_read(FREE_REGISTRATIONS_KEY)
+            .and_then(|b| <[u8; 4]>::try_from(b.as_slice()).ok())
+            .map_or(0, u32::from_le_bytes)
     }
 
     pub fn owner(&self) -> AccountId {
@@ -249,6 +278,7 @@ mod tests {
         testing_env!(ctx(accounts(0), 0).build());
         let mut t = MockFt::new(accounts(0), "Mock USDC".into(), "USDC".into(), 6);
         t.mint(accounts(1), U128(1_000));
+        t.balances.flush(); // a real call starts with an empty cache; `storage_deposit` measures one insert
         t
     }
 
@@ -379,7 +409,7 @@ mod tests {
         assert!(!t.registration_required());
         t.set_registration_required(true);
         assert!(t.registration_required());
-        testing_env!(ctx(accounts(3), 1).build());
+        testing_env!(ctx(accounts(3), STORAGE_BOUND_YOCTO).build());
         t.storage_deposit(None, None);
         testing_env!(ctx(accounts(1), 1).build());
         t.ft_transfer(accounts(3), U128(5), None); // registered
@@ -415,5 +445,75 @@ mod tests {
         assert_eq!(b.available, U128(0));
         assert!(t.storage_balance_of(accounts(3)).is_some());
         assert_eq!(t.ft_balance_of(accounts(3)), U128(0));
+    }
+
+    fn refunded(to: &AccountId) -> u128 {
+        near_sdk::test_utils::get_created_receipts()
+            .iter()
+            .filter(|r| &r.receiver_id == to)
+            .flat_map(|r| r.actions.iter())
+            .map(|a| match a {
+                near_sdk::mock::MockAction::Transfer { deposit, .. } => deposit.as_yoctonear(),
+                _ => 0,
+            })
+            .sum()
+    }
+
+    #[test]
+    #[should_panic(expected = "attach the storage cost")]
+    fn sr27_free_registration_refused() {
+        let mut t = setup();
+        testing_env!(ctx(accounts(3), 0).build());
+        t.storage_deposit(Some(accounts(4)), None);
+    }
+
+    #[test]
+    fn sr27_registration_keeps_the_measured_cost_and_refunds_the_rest() {
+        let mut t = setup();
+        let attached = 3 * STORAGE_BOUND_YOCTO;
+        testing_env!(ctx(accounts(3), attached).build());
+        t.storage_deposit(None, None);
+        let back = refunded(&accounts(3));
+        assert!(back > 0 && back < attached, "refund {back}");
+        assert!(attached - back <= STORAGE_BOUND_YOCTO, "kept at most the bound");
+    }
+
+    #[test]
+    fn sr27_already_registered_gets_everything_back() {
+        let mut t = setup();
+        testing_env!(ctx(accounts(1), 7).build());
+        t.storage_deposit(None, None);
+        assert_eq!(refunded(&accounts(1)), 7);
+    }
+
+    #[test]
+    fn sr27_owner_registers_for_free() {
+        let mut t = setup();
+        testing_env!(ctx(accounts(0), 0).build());
+        t.storage_deposit(Some(accounts(4)), None);
+        assert!(t.storage_balance_of(accounts(4)).is_some());
+        assert_eq!(t.free_registrations(), 0);
+    }
+
+    #[test]
+    fn sr27_balance_of_is_none_until_registered() {
+        let t = setup();
+        assert!(t.storage_balance_of(accounts(4)).is_none());
+        assert!(t.storage_balance_of(accounts(1)).is_some());
+    }
+
+    #[test]
+    fn sr27_free_receipts_stop_at_the_cap() {
+        let mut t = setup();
+        testing_env!(ctx(accounts(1), 1).build());
+        for i in 0..MAX_FREE_REGISTRATIONS {
+            t.ft_transfer(format!("r{i}.test").parse().unwrap(), U128(1), None);
+        }
+        assert_eq!(t.free_registrations(), MAX_FREE_REGISTRATIONS);
+        t.ft_transfer("r0.test".parse().unwrap(), U128(1), None); // known receivers still work
+        let over = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            t.ft_transfer("late.test".parse().unwrap(), U128(1), None);
+        }));
+        assert!(over.is_err(), "the 65th free entry is refused");
     }
 }

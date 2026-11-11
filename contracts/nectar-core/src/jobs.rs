@@ -1,9 +1,10 @@
 //! WO-23a OutLayer job hooks for WO-24 (PRD §4.6 P1 source, §4.7 "forced_closed by an attested OutLayer result").
 //!
-//! - `request_session_check(symbol)` (anyone, 60 s cooldown per symbol): OutLayer `{"job":"calendar","symbol","now_s"}`
-//!   `.then(on_session_check)`. The callback may only set `forced_closed = true` (`{"force_closed":true,..}`); a
-//!   `false` answer is ignored, so nothing outside the contract can open a session.
-//! - `request_multiplier_read(symbol)` (anyone, 60 s cooldown): OutLayer `{"job":"multiplier","symbol","rpc_url",
+//! - `request_session_check(symbol)` (keeper or owner, SR-6; 60 s cooldown per symbol): OutLayer
+//!   `{"job":"calendar","symbol","now_s"}` `.then(on_session_check)`. A `{"force_closed":true,..}` answer closes the session
+//!   for `OUTLAYER_CLOSED_TTL_NS` (SR-13: it expires, unlike the owner's `forced_closed`); a `false` answer is ignored,
+//!   so nothing outside the contract can open a session.
+//! - `request_multiplier_read(symbol)` (keeper or owner, SR-6; 60 s cooldown): OutLayer `{"job":"multiplier","symbol","rpc_url",
 //!   "token","decimals"}` `.then(on_multiplier_read)`. The callback applies the `set_multiplier` bound (increase only,
 //!   ≤ +5 %, not while `ca_pending`); any other change is recorded as `ca_suggested_multiplier_e18` with a
 //!   `corporate_action_suggested` event for the owner. Refused for `TokenIncludesMultiplier` (D-021).
@@ -19,7 +20,7 @@ use near_sdk::{Gas, GasWeight, NearToken, Promise, PromiseError, env, near, requ
 use crate::events::emit;
 use crate::p2::SEC;
 use crate::types::*;
-use crate::{MAX_STRING_LEN, MULTIPLIER_MAX_INCREASE_BPS, Nectar, NectarExt, math};
+use crate::{MAX_STRING_LEN, MULTIPLIER_MAX_INCREASE_BPS, Nectar, NectarExt, OUTLAYER_CLOSED_PREFIX, OUTLAYER_CLOSED_TTL_NS, math, prefixed};
 
 pub const JOB_CALENDAR: &str = "calendar";
 pub const JOB_MULTIPLIER: &str = "multiplier";
@@ -91,6 +92,11 @@ pub fn parse_multiplier(raw: &[u8]) -> Result<u128, &'static str> {
 }
 
 impl Nectar {
+    /// SR-6: job requests spend the gas reserve, so only the keeper or owner may ask.
+    fn assert_job_caller(&self) {
+        let caller = env::predecessor_account_id();
+        require!(caller == self.keeper || caller == self.owner, "keeper or owner only");
+    }
     fn job_pin(&self, job: &str) -> Option<(VaultReadConfig, &'static str)> {
         if let Some(c) = env::storage_read(&key(JOB_PREFIX, &[job])).and_then(|b| near_sdk::borsh::from_slice(&b).ok()) {
             return Some((c, "job"));
@@ -119,7 +125,7 @@ impl Nectar {
         let last = st.last_request_ns.0;
         require!(!st.in_flight || now >= last.saturating_add(JOB_STALE_S * SEC), "job in flight");
         require!(last == 0 || now >= last.saturating_add(JOB_COOLDOWN_S * SEC), "job cooldown");
-        require!(self.gas_reserve_yocto >= cfg.deposit_yocto, "gas reserve empty");
+        require!(self.reserve_spendable(cfg.deposit_yocto), "gas reserve empty");
         let exec = Gas::from_tgas(cfg.gas_tgas);
         let left = env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas());
         require!(left >= exec.as_gas() + GAS_ON_JOB.as_gas() + GAS_JOB_RECEIPTS.as_gas(), "attach more gas");
@@ -206,17 +212,19 @@ impl Nectar {
     }
 
     // ------------------------------------------------------------ anyone
-    /// OutLayer calendar check; its answer can only force the session closed. Not payable.
+    /// Keeper or owner (SR-6). OutLayer calendar check; its answer can only force the session closed. Not payable.
     pub fn request_session_check(&mut self, symbol: String) {
         self.assert_not_paused();
+        self.assert_job_caller();
         self.coll_or_panic(&symbol);
         let input = json!({ "job": JOB_CALENDAR, "symbol": symbol, "now_s": env::block_timestamp() / SEC }).to_string();
         self.start_job(JOB_CALENDAR, &symbol, input, "on_session_check");
     }
 
-    /// OutLayer multiplier read (P1 source of §4.6); bounded like `set_multiplier`. Not payable.
+    /// Keeper or owner (SR-6). OutLayer multiplier read (P1 source of §4.6); bounded like `set_multiplier`. Not payable.
     pub fn request_multiplier_read(&mut self, symbol: String) {
         self.assert_not_paused();
+        self.assert_job_caller();
         let c = self.coll_or_panic(&symbol);
         require!(c.price_kind == PriceKind::Underlying, "token_includes_multiplier");
         let src = Self::multiplier_source(&symbol).unwrap_or_else(|| env::panic_str("no multiplier source"));
@@ -230,15 +238,16 @@ impl Nectar {
     #[private]
     pub fn on_session_check(&mut self, symbol: String) {
         let res = Self::finish_job(JOB_CALENDAR, &symbol).and_then(|b| parse_calendar(&b));
-        let Some(mut c) = self.coll(&symbol) else { return };
+        let Some(c) = self.coll(&symbol) else { return };
         match res {
             Ok((true, reason)) => {
-                let was = c.forced_closed;
-                c.forced_closed = true;
-                self.put_coll(c);
+                // SR-13: an answer closes for a bounded time; it never latches `forced_closed`.
+                let until = env::block_timestamp().saturating_add(OUTLAYER_CLOSED_TTL_NS);
+                env::storage_write(&prefixed(OUTLAYER_CLOSED_PREFIX, symbol.as_bytes()), &until.to_le_bytes());
                 emit(
                     "session_forced_closed",
-                    json!({ "symbol": symbol, "closed": true, "source": "outlayer", "reason": reason, "was_forced": was }),
+                    json!({ "symbol": symbol, "closed": true, "source": "outlayer", "reason": reason,
+                            "was_forced": c.forced_closed, "until_ns": U64(until) }),
                 );
             }
             Ok((false, reason)) => {
@@ -312,6 +321,11 @@ impl Nectar {
             gas_tgas: c.gas_tgas,
             source: source.to_string(),
         })
+    }
+
+    /// SR-13: until when (ns) the last OutLayer calendar answer keeps `symbol` closed; 0 = never closed.
+    pub fn get_outlayer_closed_until(&self, symbol: String) -> U64 {
+        U64(self.outlayer_closed_until(&symbol))
     }
 
     pub fn get_job_state(&self, job: String, symbol: String) -> JobState {

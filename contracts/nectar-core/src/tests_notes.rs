@@ -316,7 +316,7 @@ fn v7_notes_transfer_clears_remote_recipient_and_new_owner_sets_one() {
     xfer(&mut c, buyer1(), bob(), "q-0");
     assert!(event_with("quote_remote_recipient_cleared", "\"quote_id\":\"0\""));
     assert_eq!(c.get_quote(U64(0)).unwrap().buyer_remote_recipient, None);
-    set_ctx(bob(), 0, T0 + 3 * SEC);
+    set_ctx(bob(), 1, T0 + 3 * SEC);
     c.set_quote_remote_recipient(U64(0), Some(DEPOSITOR.into()));
     assert!(event_with("quote_remote_recipient_set", DEPOSITOR));
     assert_eq!(c.get_quote(U64(0)).unwrap().buyer_remote_recipient.as_deref(), Some(DEPOSITOR));
@@ -328,7 +328,7 @@ fn v7_notes_transfer_clears_remote_recipient_and_new_owner_sets_one() {
 #[should_panic(expected = "note owner only")]
 fn v7_notes_set_recipient_owner_only() {
     let mut c = base();
-    set_ctx(bob(), 0, T0 + 3 * SEC);
+    set_ctx(bob(), 1, T0 + 3 * SEC);
     c.set_quote_remote_recipient(U64(0), Some(DEPOSITOR.into()));
 }
 
@@ -336,7 +336,7 @@ fn v7_notes_set_recipient_owner_only() {
 #[should_panic(expected = "bad recipient")]
 fn v7_notes_set_recipient_validates_base58() {
     let mut c = base();
-    set_ctx(buyer1(), 0, T0 + 3 * SEC);
+    set_ctx(buyer1(), 1, T0 + 3 * SEC);
     c.set_quote_remote_recipient(U64(0), Some("not<base58>".into()));
 }
 
@@ -344,7 +344,7 @@ fn v7_notes_set_recipient_validates_base58() {
 #[should_panic(expected = "unknown quote")]
 fn v7_notes_set_recipient_unknown_quote() {
     let mut c = base();
-    set_ctx(buyer1(), 0, T0 + 3 * SEC);
+    set_ctx(buyer1(), 1, T0 + 3 * SEC);
     c.set_quote_remote_recipient(U64(9), None);
 }
 
@@ -503,7 +503,7 @@ fn remote_open() -> Nectar {
     cb_ctx(T0 + SEC, PromiseResult::Successful(serde_json::to_vec(&format!("ed25519:{AUTH_B58}")).unwrap()));
     c.on_authority(U64(id));
     assert!(c.nft_token("p-0".into()).is_none(), "no Loan Note before the deposit is proven");
-    set_ctx(a("anyone.test"), 0, T0 + 2 * SEC);
+    set_ctx(a("keeper.test"), 0, T0 + 2 * SEC);
     c.confirm_remote_deposit(U64(id));
     cb_ctx(
         T0 + 2 * SEC,
@@ -557,7 +557,7 @@ fn v7_notes_set_recipient_refused_while_locked() {
     let mut c = remote_open();
     set_ctx(alice(), 1, T0 + 3 * SEC);
     c.self_settle(U64(0));
-    set_ctx(a("buyer3.test"), 0, T0 + 3 * SEC);
+    set_ctx(a("buyer3.test"), 1, T0 + 3 * SEC);
     c.set_quote_remote_recipient(U64(2), Some(DEPOSITOR.into()));
 }
 
@@ -639,13 +639,13 @@ fn v7_notes_resolve_keeps_reverts_and_respects_moves() {
 }
 
 #[test]
-fn v7_notes_resolve_keeps_note_locked_meanwhile() {
+fn sr23_a_refused_note_goes_back_even_if_a_settlement_started_meanwhile() {
     let mut c = quoter_settling();
-    // pretend p-0 went to bob by transfer_call before the trigger: the Note now cannot move back
+    // p-0 went to the receiver (alice) by transfer_call from bob before the trigger; alice refuses it
     cb_ctx(T0 + 6 * SEC, PromiseResult::Successful(b"true".to_vec()));
-    assert!(c.nft_resolve_transfer(bob(), alice(), "p-0".into(), None));
-    assert_eq!(owner_of(&c, "p-0"), alice());
-    assert!(get_logs().iter().any(|l| l == "note kept by receiver: pending settlement"));
+    assert!(!c.nft_resolve_transfer(bob(), alice(), "p-0".into(), None), "not kept");
+    assert_eq!(owner_of(&c, "p-0"), bob());
+    assert_eq!(c.get_position(U64(0)).unwrap().borrower, bob(), "the claim moves with it");
 }
 
 // ------------------------------------------------------------------ SVG

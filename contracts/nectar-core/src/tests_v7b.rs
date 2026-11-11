@@ -499,7 +499,7 @@ fn chain_base() -> Nectar {
     let mut c = base();
     // SR-5: a $10k remote loan needs one fitting quote and fitting capacity of $13.34k at the weekend haircut
     assert_eq!(ft(&mut c, usdc(), "buyer1.test", 4_000_000_000, r#"{"TopUpQuote":{"quote_id":"0"}}"#), 0);
-    set_ctx(a("buyer1.test"), 0, T0);
+    set_ctx(a("buyer1.test"), 1, T0);
     c.set_quote_remote_recipient(U64(0), Some(RCPT.into()));
     set_ctx(owner(), 0, T0);
     c.set_remote_chain(
@@ -519,7 +519,7 @@ fn authority_ok(c: &mut Nectar, id: u64) {
     c.on_authority(U64(id));
 }
 fn confirm_and_verify(c: &mut Nectar, id: u64) {
-    set_ctx(a("anyone.test"), 0, T0 + 2 * SEC);
+    set_ctx(a("keeper.test"), 0, T0 + 2 * SEC);
     c.confirm_remote_deposit(U64(id));
     cb_ctx(
         T0 + 2 * SEC,
@@ -541,12 +541,13 @@ fn reserve_refused_below_deposit() {
 fn reservation_deposit_refunded_on_confirm() {
     let mut c = chain_base();
     let id = reserve_at(&mut c, RESERVE_DEPOSIT_YOCTO, 10_000_000_000);
-    assert_eq!(c.get_position(U64(id)).unwrap().remote.unwrap().deposit_yocto, U128(RESERVE_DEPOSIT_YOCTO));
+    let held = c.get_position(U64(id)).unwrap().remote.unwrap().deposit_yocto.0; // SR-14: less the record's storage
+    assert!(held > 0 && held < RESERVE_DEPOSIT_YOCTO);
     assert_eq!(c.get_remote_config().reserve_deposit_yocto, U128(RESERVE_DEPOSIT_YOCTO));
     authority_ok(&mut c, id);
     confirm_and_verify(&mut c, id);
     assert!(event_with("reservation_deposit_refunded", "\"reason\":\"confirmed\""));
-    assert!(near_transfer_to(&alice(), RESERVE_DEPOSIT_YOCTO));
+    assert!(near_transfer_to(&alice(), held));
     assert_eq!(c.get_position(U64(id)).unwrap().remote.unwrap().deposit_yocto, U128(0));
 }
 
@@ -555,10 +556,11 @@ fn reservation_deposit_refunded_on_expiry() {
     let mut c = chain_base();
     let id = reserve_at(&mut c, RESERVE_DEPOSIT_YOCTO + 7, 10_000_000_000);
     authority_ok(&mut c, id);
+    let held = c.get_position(U64(id)).unwrap().remote.unwrap().deposit_yocto.0;
     set_ctx(a("anyone.test"), 0, T0 + SEC + 1_800 * SEC);
     c.expire_remote_reservation(U64(id));
     assert!(event_with("reservation_deposit_refunded", "\"reason\":\"expired\""));
-    assert!(near_transfer_to(&alice(), RESERVE_DEPOSIT_YOCTO + 7), "the whole attachment, to the borrower");
+    assert!(near_transfer_to(&alice(), held), "the attachment less the storage, to the borrower");
 }
 
 #[test]
@@ -570,8 +572,9 @@ fn reservation_deposit_refunded_on_authority_failure_and_refused_loan() {
     assert!(event_with("reservation_deposit_refunded", "\"reason\":\"authority_failed\""));
     // a proven deposit whose loan is refused (paused meanwhile) also returns it
     let id2 = reserve_at(&mut c, RESERVE_DEPOSIT_YOCTO, 10_000_000_000);
+    let held = c.get_position(U64(id2)).unwrap().remote.unwrap().deposit_yocto.0;
     authority_ok(&mut c, id2);
-    set_ctx(a("anyone.test"), 0, T0 + 2 * SEC);
+    set_ctx(a("keeper.test"), 0, T0 + 2 * SEC);
     c.confirm_remote_deposit(U64(id2));
     set_ctx(owner(), 0, T0 + 2 * SEC);
     c.pause();
@@ -584,7 +587,7 @@ fn reservation_deposit_refunded_on_authority_failure_and_refused_loan() {
     c.on_deposit_verified(U64(id2));
     assert!(event_with("remote_loan_refused", "paused"));
     assert!(event_with("reservation_deposit_refunded", "\"reason\":\"loan_refused\""));
-    assert!(near_transfer_to(&alice(), RESERVE_DEPOSIT_YOCTO));
+    assert!(near_transfer_to(&alice(), held));
 }
 
 #[test]
@@ -695,7 +698,7 @@ fn shield_on_remote_reservation_counts_and_prices_at_confirm() {
 }
 
 #[test]
-#[should_panic(expected = "shield below minimum")]
+#[should_panic(expected = "borrow below minimum")] // SR-14: refused before the Shield's own minimum
 fn shield_on_remote_reservation_validated() {
     let mut c = chain_base();
     set_ctx(alice(), RESERVE_DEPOSIT_YOCTO, T0 + SEC);
@@ -714,7 +717,7 @@ fn shield_on_remote_reservation_validated() {
 // ------------------------------------------------------------------ OutLayer jobs
 
 fn request_session(c: &mut Nectar, ts: u64) {
-    set_ctx(a("anyone.test"), 0, ts);
+    set_ctx(a("keeper.test"), 0, ts);
     c.request_session_check("NVDAx".into());
 }
 
@@ -743,7 +746,8 @@ fn calendar_job_can_close_but_never_open() {
     assert!(c.get_exit_capacity("NVDAx".into()).session_open);
     cb_ctx(T0 + 3 * SEC, ok_bytes(r#"{"force_closed":true,"reason":"holiday"}"#));
     c.on_session_check("NVDAx".into());
-    assert!(coll(&c).forced_closed);
+    assert!(!coll(&c).forced_closed, "SR-13: an answer never latches");
+    assert!(!c.get_exit_capacity("NVDAx".into()).session_open);
     assert!(event_with("session_forced_closed", "\"source\":\"outlayer\""));
     cb_ctx(T0 + 4 * SEC, PromiseResult::Failed);
     c.on_session_check("NVDAx".into());
@@ -864,7 +868,7 @@ fn mult_cb(c: &mut Nectar, body: &str) {
 fn multiplier_job_bounded() {
     let mut c = with_source();
     assert_eq!(c.get_multiplier_source("NVDAx".into()).unwrap().token, TOKEN);
-    set_ctx(a("anyone.test"), 0, T0 + SEC);
+    set_ctx(a("keeper.test"), 0, T0 + SEC);
     c.request_multiplier_read("NVDAx".into());
     assert!(event_with("job_requested", "sepolia.base.org"));
     mult_cb(&mut c, r#"{"multiplier_e18":"1050000000000000000"}"#);
@@ -904,14 +908,14 @@ fn multiplier_job_refused_for_token_feed() {
     let mut i = input();
     i.price_kind = Some(PriceKind::TokenIncludesMultiplier);
     c.upsert_collateral("NVDAx".into(), i);
-    set_ctx(a("anyone.test"), 0, T0 + SEC);
+    set_ctx(a("keeper.test"), 0, T0 + SEC);
     c.request_multiplier_read("NVDAx".into());
 }
 #[test]
 #[should_panic(expected = "no multiplier source")]
 fn multiplier_job_needs_source() {
     let mut c = chain_base();
-    set_ctx(a("anyone.test"), 0, T0 + SEC);
+    set_ctx(a("keeper.test"), 0, T0 + SEC);
     c.request_multiplier_read("NVDAx".into());
 }
 #[test]

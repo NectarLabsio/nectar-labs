@@ -257,6 +257,8 @@ impl Nectar {
                 q_c = math::sub(q_c, f)?;
             }
             q.remaining_usd_e6 = U128(math::sub(q.remaining_usd_e6.0, f)?);
+            let dust = self.sweep_dust(&mut q)?;
+            q_c = math::sub(q_c, dust)?;
             Self::reset_fee_debt(&mut q, acc)?;
             match buyer_transfers.iter_mut().find(|(b, _, _)| *b == q.buyer) {
                 Some(e) => e.1 = math::add(e.1, u)?,

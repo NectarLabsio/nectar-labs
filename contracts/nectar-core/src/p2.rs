@@ -286,18 +286,51 @@ impl Nectar {
             let acc = c.acc_fee_per_dollar_e18.0;
             ok(Self::checkpoint_fees(&mut q, acc));
             q.remaining_usd_e6 = U128(ok(math::add(q.remaining_usd_e6.0, escrow)));
+            let mut ids = self.live_ids(&p.collateral);
+            if !ids.contains(&q.quote_id.0) {
+                if ids.len() < MAX_QUOTES_PER_ASSET && Self::below_reserve(&q, &c) {
+                    ids.push(q.quote_id.0);
+                    self.quotes_by_collateral.insert(p.collateral.clone(), ids);
+                } else if !q.exiting() {
+                    // SR-16: it cannot be listed, so it leaves Q_c as an exit the buyer can complete at once.
+                    q.unlock_ns = Some(U64(env::block_timestamp()));
+                }
+            }
             if !q.exiting() {
                 c.active_committed_q_usd_e6 = U128(ok(math::add(c.active_committed_q_usd_e6.0, escrow)));
             }
             ok(Self::reset_fee_debt(&mut q, acc));
-            let mut ids = self.live_ids(&p.collateral);
-            if !ids.contains(&q.quote_id.0) && ids.len() < MAX_QUOTES_PER_ASSET {
-                ids.push(q.quote_id.0);
-                self.quotes_by_collateral.insert(p.collateral.clone(), ids);
-            }
             self.put_coll(c);
             self.put_quote(q);
         }
+    }
+
+    /// SR-20: once a leg is signed it can no longer be rolled back, so a dust remainder leaves the book. All arithmetic
+    /// first; `Err` = nothing written (the dust stays, the callback does not fail).
+    fn sweep_leg_dust(&mut self, quote_id: u64, symbol: &str) -> crate::math::MathResult<()> {
+        let (Some(mut q), Some(mut c)) = (self.quote(quote_id), self.coll(symbol)) else { return Ok(()) };
+        let acc = c.acc_fee_per_dollar_e18.0;
+        Self::checkpoint_fees(&mut q, acc)?;
+        let dust = self.sweep_dust(&mut q)?;
+        if dust == 0 {
+            return Ok(());
+        }
+        Self::reset_fee_debt(&mut q, acc)?;
+        c.active_committed_q_usd_e6 = U128(math::sub(c.active_committed_q_usd_e6.0, dust)?);
+        self.remove_live(symbol, quote_id);
+        self.put_coll(c);
+        self.put_quote(q);
+        Ok(())
+    }
+
+    /// SR-15: `vault_read` reports no mint, so one (chain, vault) serves one collateral: a second symbol on the same
+    /// vault would be valued from the first symbol's deposits.
+    pub(crate) fn assert_vault_unbound(&self, symbol: &str, rc: &RemoteChain) {
+        let same = |x: &RemoteChain| x.chain_id == rc.chain_id && x.vault_program == rc.vault_program;
+        let bound = self.collaterals.iter().any(|(s, VCollateral::V2(c))| {
+            s != symbol && (c.remote_chain.as_ref().is_some_and(same) || self.extra_chains(s).iter().any(|e| same(&e.chain)))
+        });
+        require!(!bound, "vault already serves another collateral");
     }
 
     /// `cancel_settlement` hook: roll back an unsigned leg once its preimage has expired.
@@ -358,10 +391,12 @@ impl Nectar {
                     self.store_evm_sig(crate::evm::EVM_SETTLE_PREFIX, position_id.0, es);
                 }
                 emit("settlement_signed", ev);
+                let _ = self.sweep_leg_dust(d.quote_id.0, &p.collateral);
                 self.put_pending(d);
             }
             Err(reason) => {
                 self.rollback_leg(&mut p, &d);
+                self.note_refs_clear(&p);
                 p.status = PositionStatus::Open;
                 d.status = PendingStatus::SignFailed;
                 emit(
@@ -507,6 +542,7 @@ impl Nectar {
         d.status = PendingStatus::Relayed;
         d.solana_tx_sig = Some(solana_tx_sig.clone());
         env::storage_remove(&resign_key(position_id.0));
+        self.note_refs_clear(&p);
         emit(
             "settlement_relayed",
             json!({ "position_id": position_id, "quote_id": d.quote_id, "nonce": d.nonce,
@@ -536,6 +572,7 @@ impl Nectar {
         let mut c = self.coll_or_panic(&symbol);
         if let Some(rc) = &remote_chain {
             require!(valid_remote_chain(rc), "bad remote_chain");
+            self.assert_vault_unbound(&symbol, rc);
         }
         c.remote_chain = remote_chain.clone();
         self.put_coll(c);

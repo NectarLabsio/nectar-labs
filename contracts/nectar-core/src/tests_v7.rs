@@ -136,9 +136,9 @@ fn two_borrowers_cannot_both_draw_full_capacity() {
     assert_eq!(coll(&c).total_debt_usd_e6, U128(11_250_000_000));
     // bob has his own 100 NVDAx: his LTV cap is 12,600 but the shared Q_c + R_c + D_c is drawn
     assert_eq!(ft(&mut c, nvdax(), "bob.test", UNITS, &borrow_msg(11_250_000_000)), UNITS, "full refund");
-    assert_eq!(ft(&mut c, nvdax(), "bob.test", UNITS, &borrow_msg(1)), UNITS);
+    assert_eq!(ft(&mut c, nvdax(), "bob.test", UNITS, &borrow_msg(5_000_000)), UNITS);
     assert!(get_logs().iter().any(|l| l.contains("refund: aggregate_limit")));
-    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(1), None, None, None);
+    let p = c.preview_borrow("NVDAx".into(), U128(UNITS), U128(5_000_000), None, None, None);
     assert_eq!(p.reason.as_deref(), Some("aggregate_limit"));
     assert_eq!(p.aggregate_headroom_usd_e6, U128(0));
     assert_eq!(p.b_c_usd_e6, U128(0));
