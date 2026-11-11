@@ -8,7 +8,7 @@ description: Public read API over committed exit capacity.
 <p className="verified">Verified against: F-018 (2026-11-10), F-021 (2026-11-10) · source services/feed/openapi.yaml (OpenAPI 3.1.0, v0.1.0) · test services/feed/test/feed.test.ts "openapi.yaml documents exactly the served routes"</p>
 <p className="status">Status: built in P0, runs locally (`pnpm --filter feed start`, default <code>http://127.0.0.1:8788</code>). No public host yet. It polls views of <code>nectar-core.nectar.testnet</code> (id from config.yaml).</p>
 
-The Feed is a read-only view of committed exit capacity on `nectar-core` (NEAR testnet, mock collateral). An indexer polls the contract views (`list_collaterals`, `get_exit_capacity`, `list_quotes`, `list_positions`) and can also read NEP-297 logs (F-021) from the keeper's own transactions. Both write to SQLite. Responses are cached for 10 s and contain no account ids or buyer identities (test "serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids").
+The Feed is a read-only view of committed exit capacity on `nectar-core` (NEAR testnet, mock collateral). An indexer polls the contract views (`list_collaterals`, `get_exit_capacity`, `list_quotes`, `list_positions`) and can also read NEP-297 logs (F-021) from the keeper's own transactions. Both write to SQLite. Responses are cached for 10 s and contain no account ids or buyer identities (test "serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids"). That is not a privacy property: every account id involved is public on chain (contract views, Note owners, events).
 
 Number formats: u128 amounts are decimal strings with suffix `_usd_e6` (USDC, 6 decimals). Basis points are integers. Timestamps are ISO 8601 date-time strings.
 
@@ -52,7 +52,7 @@ Errors return `{"error": "<message>"}`.
 
 **History point** (in `/api/asset/{id}`): `block_height`, `observed_at`, `q_usd_e6`, `limit_bps_effective`, `haircut_bps`, `session_open`.
 
-**Quote** carries no buyer identity: `quote_id`, `collateral`, `amount_usd_e6`, `max_discount_bps`, `status` (`Live`, `Exiting` or `Withdrawn`).
+**Quote** omits the buyer (public on chain all the same, via `list_quotes` / `get_quote` and the Quote Note owner): `quote_id`, `collateral`, `amount_usd_e6`, `max_discount_bps`, `status` (`Live`, `Exiting` or `Withdrawn`).
 
 **Settlement**: `position_id`, `quote_id`, `disc_bps`, `repay_usd_e6`, `seize_units`, `status` (view rows: `Settling` or `Closed`), `block_height`, `tx_hash`, `source` (`event` or `view`), `observed_at`.
 

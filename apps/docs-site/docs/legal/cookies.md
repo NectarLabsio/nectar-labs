@@ -5,7 +5,7 @@ description: Every browser storage key the Nectar Labs sites use.
 ---
 # Cookie and storage policy
 
-_Last updated 2026-11-10_
+_Last updated 2026-11-11_
 
 By default this documentation site sets **no cookies** and loads **no analytics**. It keeps two small values in your browser's localStorage. Analytics can only load in a production build where a vendor has been configured (TODO-H4), and only after you click "Accept analytics".
 
@@ -30,7 +30,7 @@ Keys checked against the web app code on 2026-11-10 (`packages/ui/src/ConsentBan
 | `nectar-theme` | localStorage | theme switch | `light` or `dark`, if you toggle it | until you clear site data | strictly necessary |
 | `nectar-wallet-connected` | localStorage | wallet adapter | `1` after you connect a wallet, removed when you disconnect | until you disconnect or clear site data | strictly necessary |
 
-The wallet connector (`@hot-labs/near-connect`) loads only after you press **Connect wallet** (or connected on an earlier visit) and may store its own keys recording the wallet you chose. Those keys are set by that library, not by our code, and are not yet listed here by name.
+The wallet connector (`@hot-labs/near-connect`) loads only after you press **Connect wallet** (or connected on an earlier visit) and keeps its own entries in localStorage and IndexedDB, recording the wallet you chose. The wallet's sandboxed code can keep its own localStorage entries too. Those entries are set by that library and the wallet, not by our code, and are not yet listed here by name.
 
 ## Cookie settings {#cookie-settings}
 
