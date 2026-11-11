@@ -1,0 +1,3 @@
+verify rc=0 18s
+docs-build rc=0 9s
+gitleaks rc=0 1s

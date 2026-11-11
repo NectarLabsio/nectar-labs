@@ -1,0 +1,24 @@
+## stdio, empty store, before feed start (FEED_DB_PATH=scratch only)
+initialize -> {"name":"nectar-feed","version":"0.3.0"} protocol 2025-06-18
+tools/list -> get_exit_capacity, preview_borrow, list_quotes, explain_limit, open_protected_stock_loan, quote_capacity, get_note, build_self_settle
+tools/call #4 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"quotes\": [\n    {\n      \"quote_id\": \"0\",\n      \"collateral\": \"NVDAx\",\n      \"committed_usd_e6\": \"5000000000\",\n      \"remaining_usd_e6\": \"5000000000\",\n      \"max_discount_bps\": 400,\n      \"notice_period_ns\": \"604800000000000\",\n      \"created_ns\": \"1794328303593920022\"\n    },\n    {\n      \"quote_id\": \"1\",\n      \"collateral\": \"NVDAx\",\n      \"committed_usd_e6\": \"10000000000\",\n      \"remaining_usd_e6\": \"5477500000\",\n      \"max_discount_bps\": 250,\n  
+tools/call #3 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"block_height\": 277192292,\n  \"q_usd_e6\": \"16119220000\",\n  \"r_usd_e6\": \"10000000\",\n  \"d_usd_e6\": \"0\",\n  \"haircut_bps\": 2500,\n  \"session_open\": false,\n  \"oracle_price_usd_e6\": \"135000000\",\n  \"oracle_age_s\": \"2855\",\n  \"oracle_fresh\": true,\n  \"b_c_usd_per_unit_e6\": \"94500000\",\n  \"limit_bps_effective\": 7000,\n  \"capacity_usd_e6\": \"12096915000\",\n  \"oracle_source\": \"Owner\",\n  \"session_reason\": \"outside_hours\",\n  \"total_debt_usd_e6\": \"9209000000\",\n 
+stderr(first 300): {"ts":"2026-11-11T08:45:35.794Z","level":"info","service":"feed-mcp","msg":"mcp_stdio_ready","live_views":true}
+
+## HTTP MCP http://127.0.0.1:8789/mcp after pnpm --filter feed start (no env except FEED_DB_PATH=scratch)
+initialize -> {"name":"nectar-feed","version":"0.3.0"} protocol 2025-06-18
+notification -> HTTP 202
+tools/list -> get_exit_capacity, preview_borrow, list_quotes, explain_limit, open_protected_stock_loan, quote_capacity, get_note, build_self_settle
+tools/call #3 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"block_height\": 277192316,\n  \"q_usd_e6\": \"16119220000\",\n  \"r_usd_e6\": \"10000000\",\n  \"d_usd_e6\": \"0\",\n  \"haircut_bps\": 2500,\n  \"session_open\": false,\n  \"oracle_price_usd_e6\": \"135000000\",\n  \"oracle_age_s\": \"2869\",\n  \"oracle_fresh\": true,\n  \"b_c_usd_per_unit_e6\": \"94500000\",\n  \"limit_bps_effective\": 7000,\n  \"capacity_usd_e6\": \"12096915000\",\n  \"oracle_source\": \"Owner\",\n  \"session_reason\": \"outside_hours\",\n  \"total_debt_usd_e6\": \"9209000000\",\n 
+tools/call #4 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"quotes\": [\n    {\n      \"quote_id\": \"0\",\n      \"collateral\": \"NVDAx\",\n      \"committed_usd_e6\": \"5000000000\",\n      \"remaining_usd_e6\": \"5000000000\",\n      \"max_discount_bps\": 400,\n      \"notice_period_ns\": \"604800000000000\",\n      \"created_ns\": \"1794328303593920022\"\n    },\n    {\n      \"quote_id\": \"1\",\n      \"collateral\": \"NVDAx\",\n      \"committed_usd_e6\": \"10000000000\",\n      \"remaining_usd_e6\": \"5477500000\",\n      \"max_discount_bps\": 250,\n  
+## REST
+{"ok":false,"last_block_seen":277192149,"last_poll_at":"2026-11-11T08:04:01.087Z","last_error":"neardata: neardata block 277095524 HTTP 429","source":"views+neardata","events_indexed":0} HTTP 503
+NOTE: first HTTP attempt above hit a pre-existing host Feed (pid 30818, ports 8788/8789 already bound; my start got EADDRINUSE). That process was stopped; re-run below is against the fresh clone's own Feed.
+## HTTP MCP (fresh-clone Feed, pnpm --filter feed start)
+initialize -> {"name":"nectar-feed","version":"0.3.0"} protocol 2025-06-18
+notification -> HTTP 202
+tools/list -> get_exit_capacity, preview_borrow, list_quotes, explain_limit, open_protected_stock_loan, quote_capacity, get_note, build_self_settle
+tools/call #3 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"block_height\": 277192360,\n  \"q_usd_e6\": \"16119220000\",\n  \"r_usd_e6\": \"10000000\",\n  \"d_usd_e6\": \"0\",\n  \"haircut_bps\": 2500,\n  \"session_open\": false,\n  \"oracle_price_usd_e6\": \"135000000\",\n  \"oracle_age_s\": \"2895\",\n  \"oracle_fresh\": true,\n  \"b_c_usd_per_un
+tools/call #4 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"quotes\": [\n    {\n      \"quote_id\": \"0\",\n      \"collateral\": \"NVDAx\",\n      \"committed_usd_e6\": \"5000000000\",\n      \"remaining_usd_e6\": \"5000000000\",\n      \"max_discount_bps\": 400,\n      \"notice_period_ns\": \"604800000000000\",\n      \"created_ns\": \"1794328303
+## REST healthz
+{"ok":true,"last_block_seen":277192344,"last_poll_at":"2026-11-11T08:46:07.652Z","last_error":"","source":"views+neardata","events_indexed":0} HTTP 200

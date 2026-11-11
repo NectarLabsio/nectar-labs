@@ -30,7 +30,7 @@
 | G7 Solana + signer (re-run after D-027) | PASS — read-only, both chains | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G7/verifier-20261111T080154Z/ (pos 8/9/10 authority == live derived_public_key domain 1; confirm txs source "outlayer", funded false/true/true, pos 8 refused aggregate_limit + refund; 3 Solana txs finalized, ix0 Ed25519 → ix1 vault, pubkey == authority, sig valid, tampered msg invalid; ProgramData 426,837 B = 45 B header + 426,792 B ELF; recipient +2.386856, depositor withdrew 3 / 3 / 0.613144; PDAs closed; NEAR Closed; see §G7) |
 | G13 Base round trip (re-run after D-027) | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; earlier caveats (ERC-8021, Solana-domain revert in forge only) stand, not re-checked | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G13/verifier-20261111T080154Z/ (pos 11/12 authority == keccak addr of derived key domain 0; relay txs 0x12f5…0cd5 / 0xa2fe…c648 status 1; hashRelease/hashSettle == NEAR digest; ecrecover == authority; positionOf 3 / 2; borrower1 7→10→7.642611, buyer1 +2.357389; replay → NonceUsed(10) / NonceUsed(14); nonceUsed[slotKey] true; see §G13) |
 | G14 x402 (re-run after D-027) | PASS for the chain claims; the HTTP 402 → 200 leg was not re-run by the verifier | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G14/verifier-20261111T080154Z/ (borrow HvFX6… agent1 → nvdax-mock ft_transfer_call → core-v2 position_opened #13 $10; relay BemztvL… x402-relayer → Delegate agent1 → usdc-mock ft_transfer {nectar.testnet, 10000}, all receipts success; see §G14) |
-| G9 fresh-clone rehearsal | pending | | | |
+| G9 fresh-clone rehearsal | FAIL — one copy-rule breach: docs-site page Project › Evidence (`apps/docs-site/docs/project/evidence.md:11`, built to /project/evidence) says "built for the NEAR Hackathon". Everything else passed: quick start in about 3 min, demo:testnet / verify / docs build / gitleaks (268 commits) exit 0, Feed MCP stdio + HTTP live with no env, ids answer on RPC | 2026-11-11T08:43Z–08:50Z | c5f6349 | evidence/G9/20261111T084317Z/ (see §G9) |
 
 Block format (one per run, newest first within a gate):
 
@@ -505,6 +505,71 @@ Explorer: none opened (G10 is facts + read-only RPC).
 Result: PASS with open items F-351 (ERC-8021 format, G12/G13 scope), F-352 (xStocks multiplier, G11), F-353 (Rhea ids). None used in code.
 
 ## G9
+
+### G9 — final fresh-clone rehearsal — FAIL (one copy-rule breach in the docs site; every command and claim check passed) — 2026-11-11T08:43Z–08:50Z — commit c5f6349
+Fresh clone `/tmp/verify-G9-1794386597` of the local repo (`git clone /Volumes/T7/nectar-labs`, main HEAD c5f6349; no remote, nothing pushed). Node v22.23.4, pnpm 10.34.9,
+PATH per the gates.md host notes. No keys or env, except `FEED_DB_PATH=<scratch>` for the Feed so this host's ~/.nectar store was not used (a new machine has none). Full logs: evidence/G9/20261111T084317Z/.
+```
+quick start (README §Quick start, followed in order; clone 08:43:20Z → web app answering ~08:47Z, about 3 min of wall clock including reading)
+$ pnpm i                              exit 0   7 s   (pnpm store already warm on this host)             pnpm-i.log
+$ pnpm demo:testnet                   exit 0   5 s   2.2.1-v7; Q_c $16,119.22 R_c $10 D_c $0; owner oracle $135 fresh;   demo-testnet.log
+                                                    pool $40,791 / $9,209; quotes #0–#4; positions #0–#13 (#1 #4 #5 #13 Open)
+$ pnpm verify                         exit 0  18 s   lint + typecheck + tests: ui 7/0, feed 63/0, keeper 293/0, x402 17/0,        verify.log
+                                                    sdk 178/0; then the testnet views again
+$ pnpm --filter web dev               GET / 200 (75 kB; "testnet" ×38, "mock collateral" ×12, "hackathon" 0) · GET /feed 200   web-dev-curl.txt
+optional
+$ pnpm --filter docs-site build       exit 0   9 s   "[SUCCESS] Generated static files in build"                docs-build.log
+$ gitleaks detect --log-opts=--all    exit 0   1 s   "268 commits scanned … no leaks found"                   gitleaks.log
+$ node scripts/build-submission.mjs   exit 0   dry run, --send NOT used; `website` key absent (= empty)       build-submission.log
+```
+Guesses a stranger has to make:
+1. The clone URL is `TODO-H2`; I used the local path from the host notes.
+2. README line 68 is out of date. It says that without `CORE_ACCOUNT_ID` the Feed does not poll and MCP reads the local SQLite store. In fact the Feed falls back to
+   `accounts.core` in config.yaml (`feed_started core nectar-core-v2.nectar.testnet`, healthz `ok:true`, source `views+neardata`). This understates what works; it does not overclaim.
+3. The root README names no port or DB variables. On this host 8788/8789 were already held by an older Feed process (pid 30818, last poll 08:04Z), so my
+   `pnpm --filter feed start` failed with EADDRINUSE and my first HTTP probe reached that older process. I stopped it and re-ran against the clone's own Feed (feed-mcp.log notes this).
+4. The root README shows no MCP client snippet; it points to services/feed/README.md. I used a minimal JSON-RPC client. HTTP needs `accept: application/json, text/event-stream`.
+5. Which web routes exist: the README names only http://localhost:3100. /markets and /earn (my guesses) return 404.
+6. "What works today (2026-11-10)" and "`pnpm verify` 39 s" are a day old. Today verify took 18 s.
+
+Feed MCP (step 5, decides `agents`): **PASS.** Using only the root README commands:
+- stdio `pnpm -s --filter feed mcp`, before any `feed start`, on an empty store: initialize → nectar-feed 0.3.0, protocol 2025-06-18.
+  tools/list returns 8 tools. get_exit_capacity {NVDAx} → source "view", block 277192292, q_usd_e6 16119220000 (= demo:testnet).
+- HTTP http://127.0.0.1:8789/mcp, served by the clone's `pnpm --filter feed start`: same initialize and tools/list answers. get_exit_capacity block 277192360, list_quotes live; notification HTTP 202; REST /healthz 200 `ok:true`.
+- README lines 31 and 101 ("no gate has run the MCP server with an agent client") are now conservative. G9 ran a scripted client, not an LLM agent.
+
+Live ids (step 3): README ids == packages/config/config.yaml and all answer on public RPC (https://test.rpc.fastnear.com, devnet api.devnet.solana.com):
+nectar-core-v2 code_hash 3mv4LRm6…ovFvk (= README) · keeper-v2 no code, one FunctionCall key → nectar-core-v2, 5 methods (trigger_preliquidation, relay_settlement_result,
+confirm_remote_deposit, keeper_attest_deposit, relay_release_result) · usdc-mock + nvdax-mock code_hash HnZj9etb…k4TrM · nectar.testnet, x402-relayer, agent1 exist ·
+v1.signer-prod.testnet code CpGX8ywX… · v1 nectar-core CFTfzY4A… (= README) · keeper (v1) exists · ENZaNF…pubW executable, BPFLoaderUpgradeable, ProgramData authority 3pF3vKew… ·
+nft_tokens on v2: 19 Notes (q-0…q-4, p-0…p-7, p-9…p-13, r-NVDAx-0; position 8 was refused and has no Note) · Base ids == config `base.*`, which is disclosed as `local-fork-of-base-sepolia` (not checked on chain, by design).
+Explorer links: none opened this run. NearBlocks returns 403 to WebFetch (§G2) and H-EXPLORER is still OPEN. Every id above is proven by RPC instead.
+
+Claims (step 3): every PASS / live / deployed / verified statement in README.md and SECURITY.md was traced to an EVIDENCE row (summary rows G0–G8, G1 v7, G10, G11 re-run, G12,
+G2b/G7/G13/G14 re-runs, G3b re-run, §v7 module runs; Notes → §G2b `nft_tokens`/`nft_token_svg` and §G14 `nft_mint p-4`; vault slot 521021977 → evidence/G7/verifier-20261111T080154Z/chain.log).
+"Pending" is used only where EVIDENCE lacks a record: the G14 402 → 200 step, the 2.2.1 gas-row check, and G9 itself.
+One gap closed here. Before this run no EVIDENCE row recorded the mock-ft upgrade (README line 17; SECURITY SR-27 "fixed and deployed"). It is now recorded: the on-chain code_hash of
+usdc-mock and nvdax-mock, HnZj9etb…k4TrM, equals the mock_ft.wasm checksum built in the verifier's G11 re-run (evidence/G11/verifier-rerun-d027-20261111T0802Z/cargo-test-nectar-core.log:10405).
+
+Copy rules (step 4): no "insurance" and no "without liquidations" in README, SECURITY, SUBMISSION, apps/, landing/ or packages/ui; the only hits are code comments and e2e assertions that check the words are absent.
+apps/web and landing/ have no hackathon wording; only the check-no-branding script and the e2e negative assertions mention it. Disclosures say "testnet" and "mock collateral" (landing, SiteChrome, layout).
+**FAIL:** `apps/docs-site/docs/project/evidence.md:11` reads "Nectar Labs is being built for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC, F-001)…". The page sits in the docs-site
+sidebar (Project › Evidence, sidebars.ts:12) and ships in build/project/evidence.html and search-index.json. Hackathon context may appear only in README.md, docs/EVIDENCE.md and docs/SUBMISSION.md.
+apps/web/scripts/check-no-branding.mjs scans web/ui sources only, so it does not cover the docs site.
+
+Submission dry run (step 6): payload keys requestId, projectName, leadName, email, size, tracks, nearAddress, projectUrl, demoUrl, idea, consent. `website` is absent.
+Open fields: leadName / email / size = TODO-H10 · nearAddress / consent = TODO-H14 · projectUrl = TODO-H2 · demoUrl = TODO-H3. The tracks field holds the core three (defi, security, privacy); README proposes
+five pending H16.
+
+Handoffs (step 7), 26 entries:
+- DONE 3: H-TOOLCHAIN, H-TOOLCHAIN-SOLANA, H-SOL-AIRDROP.
+- KUNAL-ONLY 7: H1 send, H2 publish, H3 X post, H10 team, H11 video, H14 payout, H16 tracks.
+- DEFAULT-AT-DEADLINE 13: H-EXPLORER (RPC proof; README says a browser check is open), H4, H5, H7, H8, H9, H12, H13, H15, H17, H18, H19, H20.
+- Not in scope 1: H6.
+- OTHER-OPEN 2: H-NEAR-FAUCET (still OPEN although v2 deployed) and H-GUARD-V7 (default "P2b does not start", yet P2b ran on the fork). Both are stale bookkeeping and no README claim depends on them.
+
+Result: **FAIL** for one reason: NEAR Hackathon copy on a docs-site page (step 4). Steps 1–3 and 5–7 pass.
+Host side effect: I stopped the older Feed process that held :8788/:8789 (pid 30818).
 
 ### G9 rehearsal (pre-check) — NOT the G9 gate (G9 row stays pending) — 2026-11-10T00:23Z–00:28Z — commit 5cd7364
 Fresh clone `/tmp/verify-G9pre-1794270192` of the local repo (main HEAD 5cd7364). PATH per gates.md host notes. No keys. Logs: evidence/G9/rehearsal-20261110T0027Z/

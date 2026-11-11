@@ -1,0 +1,24 @@
+
+> web@0.1.0 dev /private/tmp/verify-G9-1794386597/apps/web
+> next dev -p 3100
+
+▲ Next.js 16.4.5 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://192.168.1.7:3100
+✓ Ready in 225ms
+✓ Running next.config.ts took 22ms
+- Experiments (use with caution):
+  ⨯ turbopackFileSystemCacheForBuild
+  ⨯ turbopackFileSystemCacheForDev
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3100". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 246ms (next.js: 86ms, application-code: 160ms)
+ GET / 200 in 27ms (next.js: 0.6ms, application-code: 27ms)
+ GET /feed 200 in 29ms (next.js: 3ms, application-code: 26ms)
+ GET /markets 404 in 118ms (next.js: 103ms, application-code: 15ms)
+ GET /earn 404 in 20ms (next.js: 2ms, application-code: 18ms)
+[?25h
+/private/tmp/verify-G9-1794386597/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 dev: `next dev -p 3100`
+Exit status 143
