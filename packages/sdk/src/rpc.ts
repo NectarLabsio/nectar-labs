@@ -105,7 +105,9 @@ async function queryOnce(f: FetchLike, url: string, method: string, params: Reco
     status = r.status;
     text = await r.text();
   } catch (e) {
-    throw new RpcError(`${method}: ${e instanceof Error ? e.message : String(e)} (${url})`, method, e, true);
+    // In a browser a throttled FastNEAR answer (429) carries no CORS header, so it surfaces here as a TypeError, not a status:
+    // treat a transport failure as throttling too, so every caller backs off (WO-34f crawl).
+    throw new RpcError(`${method}: ${e instanceof Error ? e.message : String(e)} (${url})`, method, e, true, true);
   }
   let j: RpcBody | null = null;
   try {

@@ -149,7 +149,11 @@ while (queue.length && routes.length < MAX) {
       const at = hostOfUrl(m.location()?.url ?? "");
       // Chrome logs every failed subresource as a console error; a failed load from another host (RPC, wallet) is a third-party
       // network failure, not an error from our code. Everything else counts as ours.
-      if (/^Failed to load resource/.test(text) && at && /^(https?|wss?):$/.test(at.protocol) && !internal(at)) thirdParty.push(`console: ${text} (${at.href.slice(0, 160)})`);
+      // Chrome also logs a CORS refusal when a throttled third-party answer (FastNEAR 429) has no CORS header; the text names the target.
+      const cors = /^Access to fetch at '([^']+)'.*blocked by CORS policy/.exec(text);
+      const corsAt = cors ? hostOfUrl(cors[1]) : null;
+      if (corsAt && !internal(corsAt)) thirdParty.push(`console: CORS refusal of a ${corsAt.host} answer (throttled: no CORS header on the 429)`);
+      else if (/^Failed to load resource/.test(text) && at && /^(https?|wss?):$/.test(at.protocol) && !internal(at)) thirdParty.push(`console: ${text} (${at.href.slice(0, 160)})`);
       else errs.push(text);
     });
     page.on("pageerror", (e) => errs.push(`pageerror: ${String(e.message).slice(0, 300)}`));
