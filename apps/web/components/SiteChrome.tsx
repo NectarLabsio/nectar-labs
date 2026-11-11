@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CONSENT_CHANGED_EVENT, CONSENT_YIELD_TO, ChainMark, Chip, ConsentBanner, Footer, Nav, SessionChip, analyticsAllowed, type LinkLike, type NavLink } from "@nectar/ui";
 import { sessionHeadline, sessionReasonText, sessionStatus, type ExitCapacity } from "@nectar/sdk";
 import { LandingNav } from "./landing/LandingNav";
-import { CONTACT_EMAIL, GA_ID, docsHref } from "@/lib/env";
+import { CONTACT_EMAIL, GA_ID, docsHref, hostHref } from "@/lib/env";
 import { NEAR_CONNECT_POPUP } from "@/lib/wallet/near-connect";
 import { useChain, useFeature, useView, useWallet } from "./AppProvider";
 
@@ -16,7 +16,7 @@ const NextLink: LinkLike = ({ href, children, ...rest }) =>
       {children}
     </a>
   ) : (
-    <Link href={href} {...rest}>
+    <Link href={hostHref(href)} {...rest}>
       {children}
     </Link>
   );

@@ -9,4 +9,5 @@ In worktree-isolated runs the Bash guard refuses commands it cannot verify: `git
 
 **Why:** the harness must prove git ops target the worktree; complex commands fail and waste turns (WO-26a lost ~4 calls).
 `git -C <worktree>` is refused too; plain `git ...` already runs in the worktree. Multi-line patches: Write a script to the scratchpad, then run it alone.
-**How to apply:** run `git add`/`git commit` as standalone commands; append to files with Edit; use `python3 -c '...'` alone. Coordinators also enforce a turn budget, so WIP-commit early.
+Also refused (WO-34a): any bash heredoc (`cat > f <<EOF`, `python3 - <<EOF`), and grep patterns containing "github" (read as git). The scratchpad is shared with other agents: name scripts uniquely (another agent overwrote edit1.py).
+**How to apply:** run `git add`/`git commit` as standalone commands; new files via Write, multi-file edits via a uniquely named scratchpad script; append to files with Edit; use `python3 -c '...'` alone. Coordinators also enforce a turn budget, so WIP-commit early.

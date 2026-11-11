@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = { title: "Docs" };
 
-// Shown only when NEXT_PUBLIC_DOCS_URL is unset (hosted docs domain pending, TODO-H5).
+// Local mode only. Hosted (WO-34a): APP /docs and /docs/* are rewritten to DOCS_ORIGIN (next.config.ts) before this page is reached.
 export default function DocsPage() {
   return (
     <div className="page wrap">

@@ -7,13 +7,19 @@ import "@nectar/ui/app.css";
 import { themeInitScript } from "@nectar/ui";
 import { AppProvider } from "@/components/AppProvider";
 import { SiteFooter, SiteHeader, SiteOverlays } from "@/components/SiteChrome";
-import { getPublicConfig } from "@/lib/config.server";
+import { assertProductionReady, getPublicConfig } from "@/lib/config.server";
+import { appMetadata } from "@/lib/site-meta";
+
+// WO-34a §6: a production build stops here while an operator field or SITE_URL / APP_URL is missing.
+assertProductionReady();
 
 export const metadata: Metadata = {
   title: { default: "Nectar Labs", template: "%s · Nectar Labs" },
   description: "Committed market-maker quotes raise borrowing limits on thin-exit collateral. NEAR testnet, mock collateral.",
-  icons: { icon: "/brand/mark.svg" },
+  // Favicon and OG image: packages/ui/logo artwork already copied to public/brand (no new artwork).
+  icons: { icon: "/brand/mark.svg", apple: "/brand/mark-256.png" },
   openGraph: { title: "Nectar Labs", description: "Committed buyers. Higher limits. NEAR testnet, mock collateral.", images: ["/brand/mark-256.png"] },
+  ...appMetadata(),
 };
 
 export const viewport: Viewport = {
