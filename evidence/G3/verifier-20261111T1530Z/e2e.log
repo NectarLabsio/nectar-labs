@@ -1,0 +1,2583 @@
+
+> web@0.1.0 e2e /private/tmp/verify-g3b-20261111T1530Z/apps/web
+> playwright test
+
+
+Running 488 tests using 1 worker
+
+  ✓    1 [desktop] › e2e/agents-console.spec.ts:50:3 › /agents › flags off: install snippets, labelled example, x402 not run yet, referral stats on v2 (1.9s)
+  ✓    2 [desktop] › e2e/agents-console.spec.ts:79:3 › /agents › flags on: x402 marked testnet (no 'not run' notice), withdraw control on v2 (1.3s)
+  ✓    3 [desktop] › e2e/agents-console.spec.ts:95:3 › /agents › v1 contract: referral stats explain that v2 is needed (390ms)
+  ✓    4 [desktop] › e2e/agents-console.spec.ts:103:3 › /console v7 controls (v2) › owner: multiplier, corporate action, session, referrers, remote — each write opens the sign modal (5.5s)
+  ✓    5 [desktop] › e2e/agents-console.spec.ts:194:3 › /console v7 controls (v2) › non-owner: read-only, apply works for anyone once effective (3.3s)
+  ✓    6 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (848ms)
+  ✓    7 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (707ms)
+  ✓    8 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px dark: no h-scroll, axe clean, screenshot (1.5s)
+  ✓    9 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px dark: no h-scroll, axe clean, screenshot (1.2s)
+  ✓   10 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px dark: no h-scroll, axe clean, screenshot (1.3s)
+  ✓   11 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px dark: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   12 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px dark: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   13 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px dark: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   14 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px dark: no h-scroll, axe clean, screenshot (1.0s)
+  ✓   15 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px dark: no h-scroll, axe clean, screenshot (2.3s)
+  ✓   16 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px dark: no h-scroll, axe clean, screenshot (1.3s)
+  ✓   17 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px dark: no h-scroll, axe clean, screenshot (1.4s)
+  ✓   18 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px dark: no h-scroll, axe clean, screenshot (1.5s)
+  ✓   19 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px dark: no h-scroll, axe clean, screenshot (1.3s)
+  ✓   20 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px dark: no h-scroll, axe clean, screenshot (1.4s)
+  ✓   21 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 400px dark: no h-scroll, axe clean, screenshot (1.4s)
+  ✓   22 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px dark: no h-scroll, axe clean, screenshot (2.1s)
+  ✓   23 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px dark: no h-scroll, axe clean, screenshot (1.7s)
+  ✓   24 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px dark: no h-scroll, axe clean, screenshot (1.6s)
+  ✓   25 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 400px dark: no h-scroll, axe clean, screenshot (2.9s)
+  ✓   26 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px dark: no h-scroll, axe clean, screenshot (1.5s)
+  ✓   27 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 400px dark: no h-scroll, axe clean, screenshot (1.5s)
+  ✓   28 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px light: no h-scroll, axe clean, screenshot (1.5s)
+  ✓   29 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   30 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px light: no h-scroll, axe clean, screenshot (1.3s)
+  ✓   31 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px light: no h-scroll, axe clean, screenshot (1.0s)
+  ✓   32 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   33 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   34 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   35 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px light: no h-scroll, axe clean, screenshot (2.3s)
+  ✓   36 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   37 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   38 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px light: no h-scroll, axe clean, screenshot (1.3s)
+  ✓   39 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   40 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px light: no h-scroll, axe clean, screenshot (1.2s)
+  ✓   41 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 400px light: no h-scroll, axe clean, screenshot (1.0s)
+  ✓   42 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px light: no h-scroll, axe clean, screenshot (1.0s)
+  ✓   43 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   44 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px light: no h-scroll, axe clean, screenshot (1.0s)
+  ✓   45 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 400px light: no h-scroll, axe clean, screenshot (2.3s)
+  ✓   46 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px light: no h-scroll, axe clean, screenshot (1.0s)
+  ✓   47 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 400px light: no h-scroll, axe clean, screenshot (1.1s)
+  ✓   48 [desktop] › e2e/design-app.spec.ts:156:3 › design v2 flows (mocked) › markets: hero from views, schedule labelled as not history, chain filter, account dock (528ms)
+  ✓   49 [desktop] › e2e/design-app.spec.ts:170:3 › design v2 flows (mocked) › borrow with a Weekend Shield: review drawer → wallet payload → sign modal → recorded, confirmed state (1.6s)
+  ✓   50 [desktop] › e2e/design-app.spec.ts:196:3 › design v2 flows (mocked) › review 2 (R2-06, R2-07): decimal comma refused; review shows the parsed amount; a change under an open review closes it (2.8s)
+  ✓   51 [desktop] › e2e/design-app.spec.ts:222:3 › design v2 flows (mocked) › review 2 (R2-10): a signer that is not a testnet account sees Wrong network and the sign modal refuses (1.6s)
+  ✓   52 [desktop] › e2e/design-app.spec.ts:237:3 › design v2 flows (mocked) › position DI-1: Profit-Lock over the daily cap offers Repay $X first, which pre-fills Repay (482ms)
+  ✓   53 [desktop] › e2e/design-app.spec.ts:249:3 › design v2 flows (mocked) › position states come from real state: at risk pre-fills the repay that restores health 1 (437ms)
+  ✓   54 [desktop] › e2e/design-app.spec.ts:263:3 › design v2 flows (mocked) › position settling: notice, no repay form (330ms)
+  ✓   55 [desktop] › e2e/design-app.spec.ts:271:3 › design v2 flows (mocked) › position closed: closed panel, no actions (316ms)
+  ✓   56 [desktop] › e2e/design-app.spec.ts:279:3 › design v2 flows (mocked) › portfolio: net value, weekend outlook, tabs from views (641ms)
+  ✓   57 [desktop] › e2e/design-app.spec.ts:298:3 › design v2 flows (mocked) › portfolio at risk warns; no debt says nothing to do (394ms)
+  ✓   58 [desktop] › e2e/design-app.spec.ts:305:3 › design v2 flows (mocked) › portfolio empty account: empty states and the faucet link (456ms)
+  ✓   59 [desktop] › e2e/design-app.spec.ts:317:3 › design v2 flows (mocked) › earn: ladder in settlement order from views, share and last week's fees, sign modal (533ms)
+  ✓   60 [desktop] › e2e/design-app.spec.ts:345:3 › design v2 flows (mocked) › earn: mode tabs keep the address; Reserve waterfall (457ms)
+  ✓   61 [desktop] › e2e/design-app.spec.ts:357:3 › design v2 flows (mocked) › quote page: the contract's quote_id drives actions and the Note link (501ms)
+  ✓   62 [desktop] › e2e/design-app.spec.ts:367:3 › design v2 flows (mocked) › curator: what-if impact before signing, full upsert in the sign modal, keeps remote_chain (1.4s)
+  ✓   63 [desktop] › e2e/design-app.spec.ts:392:3 › design v2 flows (mocked) › curator read-only: sliders move, signing does not; a closed-capacity shortfall warns; evidence from EVIDENCE.md (1.2s)
+  ✓   64 [desktop] › e2e/design-app.spec.ts:407:3 › design v2 flows (mocked) › market: ladder and limit from views, session toggle, unknown symbol (441ms)
+  ✓   65 [desktop] › e2e/design-app.spec.ts:422:3 › design v2 flows (mocked) › market: unknown symbol is an empty state (304ms)
+  ✓   66 [desktop] › e2e/design-app.spec.ts:428:3 › design v2 flows (mocked) › agents: replay steps through four labelled calls (5.2s)
+  ✓   67 [desktop] › e2e/design.spec.ts:13:5 › landing v2 1440px dark: reduced motion leaves everything visible, no h-scroll, axe clean (4.1s)
+  ✓   68 [desktop] › e2e/design.spec.ts:13:5 › landing v2 400px dark: reduced motion leaves everything visible, no h-scroll, axe clean (2.9s)
+  ✓   69 [desktop] › e2e/design.spec.ts:13:5 › landing v2 1440px light: reduced motion leaves everything visible, no h-scroll, axe clean (3.4s)
+  ✓   70 [desktop] › e2e/design.spec.ts:13:5 › landing v2 400px light: reduced motion leaves everything visible, no h-scroll, axe clean (2.8s)
+  ✓   71 [desktop] › e2e/design.spec.ts:34:1 › landing v2 with motion: intro runs, 3D mark replaces the first frame when WebGL is available (3.4s)
+  ✓   72 [desktop] › e2e/hardening.spec.ts:7:3 › hardening › pages carry X-Frame-Options, HSTS and a CSP with frame-ancestors/object-src/base-uri/form-action (27ms)
+  ✓   73 [desktop] › e2e/hardening.spec.ts:16:3 › hardening › /api/copilot refuses cross-origin, non-JSON and oversized bodies before doing any work (15ms)
+  ✓   74 [desktop] › e2e/hardening.spec.ts:28:3 › hardening › /api/indexer refuses '.' and '..' id segments (16ms)
+  ✓   75 [desktop] › e2e/hardening.spec.ts:32:3 › hardening › /api/health answers with an age and reuses a fresh read (534ms)
+  ✓   76 [desktop] › e2e/live-views.spec.ts:29:3 › real views on testnet › a real /quote/[id] renders its figures and Note link (2.0s)
+  ✓   77 [desktop] › e2e/live-views.spec.ts:42:3 › real views on testnet › a real open /position/[id] renders status and health (2.3s)
+  ✓   78 [desktop] › e2e/live-views.spec.ts:53:3 › real views on testnet › a real closed remote position shows the contract's remote status (2.1s)
+  ✓   79 [desktop] › e2e/notes.spec.ts:115:3 › /notes (mocked v2, notes on) › grid of live SVG thumbnails as <img> data URIs; type chips filter; nav link; a11y; no h-scroll (1.2s)
+  ✓   80 [desktop] › e2e/notes.spec.ts:140:3 › /notes (mocked v2, notes on) › pages of 20 (518ms)
+  ✓   81 [desktop] › e2e/notes.spec.ts:151:3 › /notes (mocked v2, notes on) › empty account (326ms)
+  ✓   82 [desktop] › e2e/notes.spec.ts:157:3 › /notes (mocked v2, notes on) › flags off: Portfolio still works, its Notes tab says so; no Notes or Reserve links (684ms)
+  ✓   83 [desktop] › e2e/notes.spec.ts:173:3 › /note/[id] (mocked v2) › loan note: svg, owner, history fallback, share link; transfer → sign modal (nft_transfer, 1 yocto, 50 TGas) → recorded (1.9s)
+  ✓   84 [desktop] › e2e/notes.spec.ts:208:3 › /note/[id] (mocked v2) › review 2 (R2-09): a receiver that does not exist is refused; an implicit account needs no lookup; retype must match (1.8s)
+  ✓   85 [desktop] › e2e/notes.spec.ts:226:3 › /note/[id] (mocked v2) › locked note: transfer disabled with the reason (338ms)
+  ✓   86 [desktop] › e2e/notes.spec.ts:234:3 › /note/[id] (mocked v2) › not the owner: transfer disabled, no recipient card (340ms)
+  ✓   87 [desktop] › e2e/notes.spec.ts:241:3 › /note/[id] (mocked v2) › quote note owned by the viewer: set_quote_remote_recipient with 1 yocto (930ms)
+  ✓   88 [desktop] › e2e/notes.spec.ts:258:3 › /note/[id] (mocked v2) › an SVG that fails the allow-list is not rendered; a bad id is refused (459ms)
+  ✓   89 [desktop] › e2e/notes.spec.ts:267:3 › /note/[id] (mocked v2) › position and quote pages link their Notes (440ms)
+  ✓   90 [desktop] › e2e/notes.spec.ts:278:3 › /reserve (mocked v2 views, contract shapes) › R_c, realised fee APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice (1.2s)
+  ✓   91 [desktop] › e2e/notes.spec.ts:317:3 › /reserve states (contract shapes) › disabled Reserve (discount_bps 0) refuses deposits before the wallet; empty pool shows no APR (376ms)
+  -   92 [desktop] › e2e/notes.spec.ts:334:5 › notes screenshots › capture dark
+  -   93 [desktop] › e2e/notes.spec.ts:334:5 › notes screenshots › capture light
+  ✓   94 [desktop] › e2e/oneclick.spec.ts:14:3 › 1Click reference depth on /feed › renders pair samples, signature status and NVDAx route status from the API (371ms)
+  ✓   95 [desktop] › e2e/oneclick.spec.ts:32:3 › 1Click reference depth on /feed › shows '1Click data unavailable' and no route badge when the API is unreachable (316ms)
+  ✓   96 [desktop] › e2e/oneclick.spec.ts:42:3 › 1Click reference depth on /feed › Feed indexer not configured: one notice with the docs link, no 5xx fetches (also with a mocked unset indexer) (329ms)
+  ✓   97 [desktop] › e2e/oneclick.spec.ts:64:3 › 1Click reference depth on /feed › the proxy itself answers 200 configured:false when the build has no Feed URL (135ms)
+  ✓   98 [desktop] › e2e/oneclick.spec.ts:71:3 › 1Click reference depth on /feed › empty pair list is stated, not faked (340ms)
+  ✓   99 [desktop] › e2e/p1.spec.ts:10:3 › P1 read-only surfaces › quote form offers 7 d / 30 d notice presets (1.6s)
+  ✓  100 [desktop] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (1.7s)
+  ✓  101 [desktop] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview (2.8s)
+  ✓  102 [desktop] › e2e/p1.spec.ts:41:3 › P1 read-only surfaces › keepers page shows triggers section and run-a-keeper snippet (284ms)
+  ✓  103 [desktop] › e2e/p1.spec.ts:47:3 › P1 read-only surfaces › /api/feed is read per request and labelled with its age, never a build-time snapshot (1.0s)
+  ✓  104 [desktop] › e2e/p1.spec.ts:60:3 › P1 read-only surfaces › indexer proxy only passes documented paths (127ms)
+  ✓  105 [desktop] › e2e/remote.spec.ts:199:3 › Solana remote borrow (mocked) › reserve → Phantom deposit → waiting for attested deposit → OutLayer confirm failed (1.5s)
+  ✓  106 [desktop] › e2e/remote.spec.ts:240:3 › Solana remote borrow (mocked) › no Phantom (339ms)
+  ✓  107 [desktop] › e2e/remote.spec.ts:246:3 › Solana remote borrow (mocked) › wrong cluster (452ms)
+  ✓  108 [desktop] › e2e/remote.spec.ts:253:3 › Solana remote borrow (mocked) › no SOL (450ms)
+  ✓  109 [desktop] › e2e/remote.spec.ts:260:3 › Solana remote borrow (mocked) › reservation expired (327ms)
+  ✓  110 [desktop] › e2e/remote.spec.ts:266:3 › Solana remote borrow (mocked) › open, keeper-attested, repaid → request release (1.0s)
+  ✓  111 [desktop] › e2e/remote.spec.ts:281:3 › Solana remote borrow (mocked) › releasing → Send release on Solana sends [ed25519 verify, release] (601ms)
+  ✓  112 [desktop] › e2e/remote.spec.ts:308:3 › Solana remote borrow (mocked) › reserve needs one quote that covers the loan; the refusal reason is shown (567ms)
+  ✓  113 [desktop] › e2e/remote.spec.ts:328:3 › Solana remote borrow (mocked) › deposit from a wallet other than the committed one is stopped (453ms)
+  ✓  114 [desktop] › e2e/remote.spec.ts:336:3 › Solana remote borrow (mocked) › a slot that is no longer Open is not a deposit (455ms)
+  ✓  115 [desktop] › e2e/remote.spec.ts:344:3 › Solana remote borrow (mocked) › only the borrower can request the confirmation (377ms)
+  ✓  116 [desktop] › e2e/remote.spec.ts:352:3 › Solana remote borrow (mocked) › the borrower cannot request a read the held deposit no longer covers (407ms)
+  ✓  117 [desktop] › e2e/remote.spec.ts:358:3 › Solana remote borrow (mocked) › a refused loan inside the retry window: the borrower can give up and release (424ms)
+  ✓  118 [desktop] › e2e/remote.spec.ts:365:3 › Solana remote borrow (mocked) › expired and closed, but the deposit landed: it is shown for recovery (361ms)
+  ✓  119 [desktop] › e2e/remote.spec.ts:373:3 › Solana remote borrow (mocked) › short deposit: Loan refused — release your deposit (349ms)
+  ✓  120 [desktop] › e2e/remote.spec.ts:382:3 › Solana remote borrow (mocked) › released on Solana → the depositor withdraws (1.1s)
+  ✓  121 [desktop] › e2e/remote.spec.ts:401:3 › Solana remote borrow (mocked) › settled and closed → withdraw the remainder; only the depositor can (423ms)
+  ✓  122 [desktop] › e2e/remote.spec.ts:411:3 › Solana remote borrow (mocked) › a claim exists → the buyer claims to its token account (562ms)
+  ✓  123 [desktop] › e2e/remote.spec.ts:424:3 › Solana remote borrow (mocked) › the buyer's token account is frozen → it must name another token account (522ms)
+  ✓  124 [desktop] › e2e/remote.spec.ts:437:3 › Solana remote borrow (mocked) › a claim for another wallet: only the recipient can claim (427ms)
+  ✓  125 [desktop] › e2e/remote.spec.ts:446:3 › Solana remote borrow (mocked) › no claim: no Claim card (322ms)
+  ✓  126 [desktop] › e2e/remote.spec.ts:453:3 › Solana remote borrow (mocked) › a signed leg expired unrelayed → Re-sign settlement (493ms)
+  ✓  127 [desktop] › e2e/remote.spec.ts:465:3 › Solana remote borrow (mocked) › a signed leg still valid, or already landed: no Re-sign (391ms)
+  ✓  128 [desktop] › e2e/remote.spec.ts:472:3 › Solana remote borrow (mocked) › owed collateral → Claim owed collateral, 1 yocto (427ms)
+  ✓  129 [desktop] › e2e/remote.spec.ts:483:3 › Solana remote borrow (mocked) › flag off (no E2E override): no chain selector (286ms)
+  -  130 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting dark
+  -  131 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing dark
+  -  132 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper dark
+  -  133 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw dark
+  -  134 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim dark
+  -  135 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign dark
+  -  136 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused dark
+  -  137 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting light
+  -  138 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing light
+  -  139 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper light
+  -  140 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw light
+  -  141 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim light
+  -  142 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign light
+  -  143 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused light
+  ✓  144 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / dark (2.9s)
+  ✓  145 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (2.3s)
+  ✘  146 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark (1.0m)
+  ✘  147 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark (retry #1) (1.0m)
+  ✘  148 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (1.0m)
+  ✘  149 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (retry #1) (1.0m)
+  ✘  150 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (1.0m)
+  ✘  151 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (retry #1) (1.0m)
+  ✘  152 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote dark (1.0m)
+  ✘  153 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote dark (retry #1) (1.0m)
+  ✘  154 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (1.0m)
+  ✘  155 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (retry #1) (1.0m)
+  ✘  156 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (1.0m)
+  ✘  157 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (retry #1) (1.0m)
+  ✘  158 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve dark (1.0m)
+  ✘  159 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve dark (retry #1) (1.0m)
+  ✘  160 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes dark (1.0m)
+  ✘  161 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes dark (retry #1) (1.0m)
+  ✘  162 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (1.0m)
+  ✘  163 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (retry #1) (1.0m)
+  ✘  164 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark (1.0m)
+  ✘  165 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark (retry #1) (1.0m)
+  ✓  166 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /agents dark (1.9s)
+  ✘  167 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (1.0m)
+  ✘  168 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (retry #1) (1.0m)
+  ✘  169 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (1.0m)
+  ✘  170 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (retry #1) (1.0m)
+  ✘  171 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark (1.0m)
+  ✘  172 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark (retry #1) (1.0m)
+  ✓  173 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (2.0s)
+  ✓  174 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (1.8s)
+  ✘  175 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (1.0m)
+  ✘  176 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (retry #1) (1.0m)
+  ✓  177 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / light (4.0s)
+  ✓  178 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed light (2.2s)
+  ✘  179 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light (1.0m)
+  ✘  180 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light (retry #1) (1.0m)
+  ✘  181 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (1.0m)
+  ✘  182 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (retry #1) (1.0m)
+  ✘  183 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield light (1.0m)
+  ✘  184 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield light (retry #1) (1.0m)
+  ✘  185 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote light (1.0m)
+  ✘  186 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote light (retry #1) (1.0m)
+  ✘  187 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (1.0m)
+  ✘  188 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (retry #1) (1.0m)
+  ✘  189 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (1.0m)
+  ✘  190 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (retry #1) (1.0m)
+  ✘  191 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve light (1.0m)
+  ✘  192 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve light (retry #1) (1.0m)
+  ✘  193 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes light (1.0m)
+  ✘  194 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes light (retry #1) (1.0m)
+  ✘  195 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (1.0m)
+  ✘  196 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (retry #1) (1.0m)
+  ✘  197 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light (1.0m)
+  ✘  198 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light (retry #1) (1.0m)
+  ✓  199 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /agents light (1.9s)
+  ✘  200 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (1.0m)
+  ✘  201 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (retry #1) (1.0m)
+  ✘  202 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light (1.0m)
+  ✘  203 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light (retry #1) (1.0m)
+  ✘  204 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light (1.0m)
+  ✘  205 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light (retry #1) (1.0m)
+  ✓  206 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (2.1s)
+  ✓  207 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (1.7s)
+  ✘  208 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light (1.0m)
+  ✘  209 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light (retry #1) (1.0m)
+  ✓  210 [desktop] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean (1.4s)
+  ✓  211 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (876ms)
+  ✓  212 [desktop] › e2e/shell.spec.ts:8:5 › /feed/NVDAx renders in dark, no horizontal scroll, axe clean (803ms)
+  ✓  213 [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean (831ms)
+  ✓  214 [desktop] › e2e/shell.spec.ts:8:5 › /shield renders in dark, no horizontal scroll, axe clean (809ms)
+  ✓  215 [desktop] › e2e/shell.spec.ts:8:5 › /quote renders in dark, no horizontal scroll, axe clean (819ms)
+  ✓  216 [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean (797ms)
+  ✓  217 [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (830ms)
+  ✓  218 [desktop] › e2e/shell.spec.ts:8:5 › /reserve renders in dark, no horizontal scroll, axe clean (803ms)
+  ✓  219 [desktop] › e2e/shell.spec.ts:8:5 › /notes renders in dark, no horizontal scroll, axe clean (791ms)
+  ✓  220 [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean (789ms)
+  ✓  221 [desktop] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean (840ms)
+  ✓  222 [desktop] › e2e/shell.spec.ts:8:5 › /agents renders in dark, no horizontal scroll, axe clean (892ms)
+  ✓  223 [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean (812ms)
+  ✓  224 [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean (806ms)
+  ✓  225 [desktop] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean (801ms)
+  ✓  226 [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (923ms)
+  ✓  227 [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (813ms)
+  ✓  228 [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean (777ms)
+  ✓  229 [desktop] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean (1.2s)
+  ✓  230 [desktop] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (856ms)
+  ✓  231 [desktop] › e2e/shell.spec.ts:8:5 › /feed/NVDAx renders in light, no horizontal scroll, axe clean (794ms)
+  ✓  232 [desktop] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean (826ms)
+  ✓  233 [desktop] › e2e/shell.spec.ts:8:5 › /shield renders in light, no horizontal scroll, axe clean (790ms)
+  ✓  234 [desktop] › e2e/shell.spec.ts:8:5 › /quote renders in light, no horizontal scroll, axe clean (808ms)
+  ✓  235 [desktop] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean (806ms)
+  ✓  236 [desktop] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean (807ms)
+  ✓  237 [desktop] › e2e/shell.spec.ts:8:5 › /reserve renders in light, no horizontal scroll, axe clean (798ms)
+  ✓  238 [desktop] › e2e/shell.spec.ts:8:5 › /notes renders in light, no horizontal scroll, axe clean (799ms)
+  ✓  239 [desktop] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean (784ms)
+  ✓  240 [desktop] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean (814ms)
+  ✓  241 [desktop] › e2e/shell.spec.ts:8:5 › /agents renders in light, no horizontal scroll, axe clean (901ms)
+  ✓  242 [desktop] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean (794ms)
+  ✓  243 [desktop] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean (779ms)
+  ✓  244 [desktop] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean (783ms)
+  ✓  245 [desktop] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (911ms)
+  ✓  246 [desktop] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean (801ms)
+  ✓  247 [desktop] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean (798ms)
+  ✓  248 [desktop] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off (607ms)
+  ✓  249 [desktop] › e2e/shell.spec.ts:42:1 › theme toggle switches data-theme (567ms)
+  ✓  250 [desktop] › e2e/shields.spec.ts:106:3 › /shield (mocked v2, shields on) › weekend and event cards: fee, countdown, weekend limit, backing, opens left, faucet beside the dry quote; copy rules (1.1s)
+  ✓  251 [desktop] › e2e/shields.spec.ts:136:3 › /shield (mocked v2, shields on) › open a Weekend Shield: sign modal shows the shield msg, 250 TGas, 1 yocto, fee stack; then the mock wallet records it (1.5s)
+  ✓  252 [desktop] › e2e/shields.spec.ts:165:3 › /shield (mocked v2, shields on) › daily limit reached disables both cards with the reason (429ms)
+  ✓  253 [desktop] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (311ms)
+  ✓  254 [desktop] › e2e/shields.spec.ts:185:3 › Profit-Lock on /position/[id] (mocked v2) › preview → sign modal (self_settle, 1 yocto, 300 TGas) → recorded (1.2s)
+  ✓  255 [desktop] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: health < 1 (402ms)
+  ✓  256 [desktop] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: corporate action pending (418ms)
+  ✓  257 [desktop] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: no opted-in capacity (422ms)
+  ✓  258 [desktop] › e2e/shields.spec.ts:228:3 › /quote/new voluntary fills (mocked v2) › switch adds accepts_voluntary_fills to the FundPappusQuote msg (1.1s)
+  ✓  259 [desktop] › e2e/shields.spec.ts:244:3 › /quote/new voluntary fills (mocked v2) › flag off: no switch (321ms)
+  ✓  260 [desktop] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (2.1s)
+  ✓  261 [desktop] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (620ms)
+  -  262 [desktop] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✓  263 [desktop] › e2e/v7.spec.ts:45:3 › landing v7 › flags off: hero, live card, how it works, FAQ, footer; no module sections; copy rules (506ms)
+  ✓  264 [desktop] › e2e/v7.spec.ts:63:3 › landing v7 › flags on: every module section renders with its data-feature tag; copy rules still hold (563ms)
+  ✓  265 [desktop] › e2e/v7.spec.ts:78:3 › landing v7 › one flag on: only that module renders (345ms)
+  ✓  266 [desktop] › e2e/v7.spec.ts:86:3 › landing v7 › live card shows in-session vs weekend parameters from testnet (2.3s)
+  ✓  267 [desktop] › e2e/v7.spec.ts:105:3 › v1 path (mocked v1 contract, every flag on) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (402ms)
+  ✓  268 [desktop] › e2e/v7.spec.ts:119:3 › v1 path (mocked v1 contract, every flag on) › borrow: fee stack with total, no v7 controls even with ?ref= (398ms)
+  ✓  269 [desktop] › e2e/v7.spec.ts:142:3 › v2 path (mocked view fixture), flags off › feed shows total debt, aggregate headroom and the contract's session reason (443ms)
+  ✓  270 [desktop] › e2e/v7.spec.ts:154:3 › v2 path (mocked view fixture), flags off › borrow uses the contract fee stack; pay_to and referrer stay hidden while their flags are off (411ms)
+  ✓  271 [desktop] › e2e/v7.spec.ts:176:3 › v2 path (mocked view fixture), flags on › feed shows the multiplier line (M = 1.02 on the fixture) (399ms)
+  ✓  272 [desktop] › e2e/v7.spec.ts:182:3 › v2 path (mocked view fixture), flags on › borrow shows pay_to and the referrer from ?ref= (424ms)
+  ✓  273 [phone] › e2e/agents-console.spec.ts:50:3 › /agents › flags off: install snippets, labelled example, x402 not run yet, referral stats on v2 (1.2s)
+  ✓  274 [phone] › e2e/agents-console.spec.ts:79:3 › /agents › flags on: x402 marked testnet (no 'not run' notice), withdraw control on v2 (952ms)
+  ✓  275 [phone] › e2e/agents-console.spec.ts:95:3 › /agents › v1 contract: referral stats explain that v2 is needed (313ms)
+  ✓  276 [phone] › e2e/agents-console.spec.ts:103:3 › /console v7 controls (v2) › owner: multiplier, corporate action, session, referrers, remote — each write opens the sign modal (13.4s)
+  ✓  277 [phone] › e2e/agents-console.spec.ts:194:3 › /console v7 controls (v2) › non-owner: read-only, apply works for anyone once effective (2.2s)
+  ✓  278 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (475ms)
+  ✓  279 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (468ms)
+  -  280 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px dark: no h-scroll, axe clean, screenshot
+  -  281 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px dark: no h-scroll, axe clean, screenshot
+  -  282 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px dark: no h-scroll, axe clean, screenshot
+  -  283 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px dark: no h-scroll, axe clean, screenshot
+  -  284 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px dark: no h-scroll, axe clean, screenshot
+  -  285 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px dark: no h-scroll, axe clean, screenshot
+  -  286 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px dark: no h-scroll, axe clean, screenshot
+  -  287 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px dark: no h-scroll, axe clean, screenshot
+  -  288 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px dark: no h-scroll, axe clean, screenshot
+  -  289 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px dark: no h-scroll, axe clean, screenshot
+  -  290 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px dark: no h-scroll, axe clean, screenshot
+  -  291 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px dark: no h-scroll, axe clean, screenshot
+  -  292 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px dark: no h-scroll, axe clean, screenshot
+  -  293 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 400px dark: no h-scroll, axe clean, screenshot
+  -  294 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px dark: no h-scroll, axe clean, screenshot
+  -  295 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px dark: no h-scroll, axe clean, screenshot
+  -  296 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px dark: no h-scroll, axe clean, screenshot
+  -  297 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 400px dark: no h-scroll, axe clean, screenshot
+  -  298 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px dark: no h-scroll, axe clean, screenshot
+  -  299 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 400px dark: no h-scroll, axe clean, screenshot
+  -  300 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px light: no h-scroll, axe clean, screenshot
+  -  301 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px light: no h-scroll, axe clean, screenshot
+  -  302 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px light: no h-scroll, axe clean, screenshot
+  -  303 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px light: no h-scroll, axe clean, screenshot
+  -  304 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px light: no h-scroll, axe clean, screenshot
+  -  305 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px light: no h-scroll, axe clean, screenshot
+  -  306 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px light: no h-scroll, axe clean, screenshot
+  -  307 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px light: no h-scroll, axe clean, screenshot
+  -  308 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px light: no h-scroll, axe clean, screenshot
+  -  309 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px light: no h-scroll, axe clean, screenshot
+  -  310 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px light: no h-scroll, axe clean, screenshot
+  -  311 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px light: no h-scroll, axe clean, screenshot
+  -  312 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px light: no h-scroll, axe clean, screenshot
+  -  313 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 400px light: no h-scroll, axe clean, screenshot
+  -  314 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px light: no h-scroll, axe clean, screenshot
+  -  315 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px light: no h-scroll, axe clean, screenshot
+  -  316 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px light: no h-scroll, axe clean, screenshot
+  -  317 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 400px light: no h-scroll, axe clean, screenshot
+  -  318 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px light: no h-scroll, axe clean, screenshot
+  -  319 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 400px light: no h-scroll, axe clean, screenshot
+  ✓  320 [phone] › e2e/design-app.spec.ts:156:3 › design v2 flows (mocked) › markets: hero from views, schedule labelled as not history, chain filter, account dock (499ms)
+  ✓  321 [phone] › e2e/design-app.spec.ts:170:3 › design v2 flows (mocked) › borrow with a Weekend Shield: review drawer → wallet payload → sign modal → recorded, confirmed state (1.6s)
+  ✓  322 [phone] › e2e/design-app.spec.ts:196:3 › design v2 flows (mocked) › review 2 (R2-06, R2-07): decimal comma refused; review shows the parsed amount; a change under an open review closes it (3.3s)
+  ✓  323 [phone] › e2e/design-app.spec.ts:222:3 › design v2 flows (mocked) › review 2 (R2-10): a signer that is not a testnet account sees Wrong network and the sign modal refuses (553ms)
+  ✓  324 [phone] › e2e/design-app.spec.ts:237:3 › design v2 flows (mocked) › position DI-1: Profit-Lock over the daily cap offers Repay $X first, which pre-fills Repay (446ms)
+  ✓  325 [phone] › e2e/design-app.spec.ts:249:3 › design v2 flows (mocked) › position states come from real state: at risk pre-fills the repay that restores health 1 (448ms)
+  ✓  326 [phone] › e2e/design-app.spec.ts:263:3 › design v2 flows (mocked) › position settling: notice, no repay form (346ms)
+  ✓  327 [phone] › e2e/design-app.spec.ts:271:3 › design v2 flows (mocked) › position closed: closed panel, no actions (368ms)
+  ✓  328 [phone] › e2e/design-app.spec.ts:279:3 › design v2 flows (mocked) › portfolio: net value, weekend outlook, tabs from views (666ms)
+  ✓  329 [phone] › e2e/design-app.spec.ts:298:3 › design v2 flows (mocked) › portfolio at risk warns; no debt says nothing to do (385ms)
+  ✓  330 [phone] › e2e/design-app.spec.ts:305:3 › design v2 flows (mocked) › portfolio empty account: empty states and the faucet link (533ms)
+  ✓  331 [phone] › e2e/design-app.spec.ts:317:3 › design v2 flows (mocked) › earn: ladder in settlement order from views, share and last week's fees, sign modal (556ms)
+  ✓  332 [phone] › e2e/design-app.spec.ts:345:3 › design v2 flows (mocked) › earn: mode tabs keep the address; Reserve waterfall (436ms)
+  ✓  333 [phone] › e2e/design-app.spec.ts:357:3 › design v2 flows (mocked) › quote page: the contract's quote_id drives actions and the Note link (434ms)
+  ✓  334 [phone] › e2e/design-app.spec.ts:367:3 › design v2 flows (mocked) › curator: what-if impact before signing, full upsert in the sign modal, keeps remote_chain (1.4s)
+  ✓  335 [phone] › e2e/design-app.spec.ts:392:3 › design v2 flows (mocked) › curator read-only: sliders move, signing does not; a closed-capacity shortfall warns; evidence from EVIDENCE.md (1.2s)
+  ✓  336 [phone] › e2e/design-app.spec.ts:407:3 › design v2 flows (mocked) › market: ladder and limit from views, session toggle, unknown symbol (456ms)
+  ✓  337 [phone] › e2e/design-app.spec.ts:422:3 › design v2 flows (mocked) › market: unknown symbol is an empty state (297ms)
+  ✓  338 [phone] › e2e/design-app.spec.ts:428:3 › design v2 flows (mocked) › agents: replay steps through four labelled calls (5.2s)
+  -  339 [phone] › e2e/design.spec.ts:13:5 › landing v2 1440px dark: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  340 [phone] › e2e/design.spec.ts:13:5 › landing v2 400px dark: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  341 [phone] › e2e/design.spec.ts:13:5 › landing v2 1440px light: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  342 [phone] › e2e/design.spec.ts:13:5 › landing v2 400px light: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  343 [phone] › e2e/design.spec.ts:34:1 › landing v2 with motion: intro runs, 3D mark replaces the first frame when WebGL is available
+  -  344 [phone] › e2e/hardening.spec.ts:7:3 › hardening › pages carry X-Frame-Options, HSTS and a CSP with frame-ancestors/object-src/base-uri/form-action
+  -  345 [phone] › e2e/hardening.spec.ts:16:3 › hardening › /api/copilot refuses cross-origin, non-JSON and oversized bodies before doing any work
+  -  346 [phone] › e2e/hardening.spec.ts:28:3 › hardening › /api/indexer refuses '.' and '..' id segments
+  -  347 [phone] › e2e/hardening.spec.ts:32:3 › hardening › /api/health answers with an age and reuses a fresh read
+  -  348 [phone] › e2e/live-views.spec.ts:29:3 › real views on testnet › a real /quote/[id] renders its figures and Note link
+  -  349 [phone] › e2e/live-views.spec.ts:42:3 › real views on testnet › a real open /position/[id] renders status and health
+  -  350 [phone] › e2e/live-views.spec.ts:53:3 › real views on testnet › a real closed remote position shows the contract's remote status
+  ✓  351 [phone] › e2e/notes.spec.ts:115:3 › /notes (mocked v2, notes on) › grid of live SVG thumbnails as <img> data URIs; type chips filter; nav link; a11y; no h-scroll (1.2s)
+  ✓  352 [phone] › e2e/notes.spec.ts:140:3 › /notes (mocked v2, notes on) › pages of 20 (521ms)
+  ✓  353 [phone] › e2e/notes.spec.ts:151:3 › /notes (mocked v2, notes on) › empty account (391ms)
+  ✓  354 [phone] › e2e/notes.spec.ts:157:3 › /notes (mocked v2, notes on) › flags off: Portfolio still works, its Notes tab says so; no Notes or Reserve links (617ms)
+  ✓  355 [phone] › e2e/notes.spec.ts:173:3 › /note/[id] (mocked v2) › loan note: svg, owner, history fallback, share link; transfer → sign modal (nft_transfer, 1 yocto, 50 TGas) → recorded (2.0s)
+  ✓  356 [phone] › e2e/notes.spec.ts:208:3 › /note/[id] (mocked v2) › review 2 (R2-09): a receiver that does not exist is refused; an implicit account needs no lookup; retype must match (1.9s)
+  ✓  357 [phone] › e2e/notes.spec.ts:226:3 › /note/[id] (mocked v2) › locked note: transfer disabled with the reason (344ms)
+  ✓  358 [phone] › e2e/notes.spec.ts:234:3 › /note/[id] (mocked v2) › not the owner: transfer disabled, no recipient card (343ms)
+  ✓  359 [phone] › e2e/notes.spec.ts:241:3 › /note/[id] (mocked v2) › quote note owned by the viewer: set_quote_remote_recipient with 1 yocto (1.4s)
+  ✓  360 [phone] › e2e/notes.spec.ts:258:3 › /note/[id] (mocked v2) › an SVG that fails the allow-list is not rendered; a bad id is refused (427ms)
+  ✓  361 [phone] › e2e/notes.spec.ts:267:3 › /note/[id] (mocked v2) › position and quote pages link their Notes (416ms)
+  ✓  362 [phone] › e2e/notes.spec.ts:278:3 › /reserve (mocked v2 views, contract shapes) › R_c, realised fee APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice (1.2s)
+  ✓  363 [phone] › e2e/notes.spec.ts:317:3 › /reserve states (contract shapes) › disabled Reserve (discount_bps 0) refuses deposits before the wallet; empty pool shows no APR (367ms)
+  -  364 [phone] › e2e/notes.spec.ts:334:5 › notes screenshots › capture dark
+  -  365 [phone] › e2e/notes.spec.ts:334:5 › notes screenshots › capture light
+  ✓  366 [phone] › e2e/oneclick.spec.ts:14:3 › 1Click reference depth on /feed › renders pair samples, signature status and NVDAx route status from the API (364ms)
+  ✓  367 [phone] › e2e/oneclick.spec.ts:32:3 › 1Click reference depth on /feed › shows '1Click data unavailable' and no route badge when the API is unreachable (302ms)
+  ✓  368 [phone] › e2e/oneclick.spec.ts:42:3 › 1Click reference depth on /feed › Feed indexer not configured: one notice with the docs link, no 5xx fetches (also with a mocked unset indexer) (332ms)
+  ✓  369 [phone] › e2e/oneclick.spec.ts:64:3 › 1Click reference depth on /feed › the proxy itself answers 200 configured:false when the build has no Feed URL (136ms)
+  ✓  370 [phone] › e2e/oneclick.spec.ts:71:3 › 1Click reference depth on /feed › empty pair list is stated, not faked (314ms)
+  ✓  371 [phone] › e2e/p1.spec.ts:10:3 › P1 read-only surfaces › quote form offers 7 d / 30 d notice presets (1.1s)
+  ✓  372 [phone] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (1.7s)
+  ✓  373 [phone] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview (3.7s)
+  ✓  374 [phone] › e2e/p1.spec.ts:41:3 › P1 read-only surfaces › keepers page shows triggers section and run-a-keeper snippet (320ms)
+  ✓  375 [phone] › e2e/p1.spec.ts:47:3 › P1 read-only surfaces › /api/feed is read per request and labelled with its age, never a build-time snapshot (1.1s)
+  ✓  376 [phone] › e2e/p1.spec.ts:60:3 › P1 read-only surfaces › indexer proxy only passes documented paths (137ms)
+  ✓  377 [phone] › e2e/remote.spec.ts:199:3 › Solana remote borrow (mocked) › reserve → Phantom deposit → waiting for attested deposit → OutLayer confirm failed (9.8s)
+  ✓  378 [phone] › e2e/remote.spec.ts:240:3 › Solana remote borrow (mocked) › no Phantom (351ms)
+  ✓  379 [phone] › e2e/remote.spec.ts:246:3 › Solana remote borrow (mocked) › wrong cluster (447ms)
+  ✓  380 [phone] › e2e/remote.spec.ts:253:3 › Solana remote borrow (mocked) › no SOL (449ms)
+  ✓  381 [phone] › e2e/remote.spec.ts:260:3 › Solana remote borrow (mocked) › reservation expired (322ms)
+  ✓  382 [phone] › e2e/remote.spec.ts:266:3 › Solana remote borrow (mocked) › open, keeper-attested, repaid → request release (1.0s)
+  ✓  383 [phone] › e2e/remote.spec.ts:281:3 › Solana remote borrow (mocked) › releasing → Send release on Solana sends [ed25519 verify, release] (626ms)
+  ✓  384 [phone] › e2e/remote.spec.ts:308:3 › Solana remote borrow (mocked) › reserve needs one quote that covers the loan; the refusal reason is shown (584ms)
+  ✓  385 [phone] › e2e/remote.spec.ts:328:3 › Solana remote borrow (mocked) › deposit from a wallet other than the committed one is stopped (475ms)
+  ✓  386 [phone] › e2e/remote.spec.ts:336:3 › Solana remote borrow (mocked) › a slot that is no longer Open is not a deposit (571ms)
+  ✓  387 [phone] › e2e/remote.spec.ts:344:3 › Solana remote borrow (mocked) › only the borrower can request the confirmation (487ms)
+  ✓  388 [phone] › e2e/remote.spec.ts:352:3 › Solana remote borrow (mocked) › the borrower cannot request a read the held deposit no longer covers (402ms)
+  ✓  389 [phone] › e2e/remote.spec.ts:358:3 › Solana remote borrow (mocked) › a refused loan inside the retry window: the borrower can give up and release (423ms)
+  ✓  390 [phone] › e2e/remote.spec.ts:365:3 › Solana remote borrow (mocked) › expired and closed, but the deposit landed: it is shown for recovery (342ms)
+  ✓  391 [phone] › e2e/remote.spec.ts:373:3 › Solana remote borrow (mocked) › short deposit: Loan refused — release your deposit (378ms)
+  ✓  392 [phone] › e2e/remote.spec.ts:382:3 › Solana remote borrow (mocked) › released on Solana → the depositor withdraws (1.5s)
+  ✓  393 [phone] › e2e/remote.spec.ts:401:3 › Solana remote borrow (mocked) › settled and closed → withdraw the remainder; only the depositor can (559ms)
+  ✓  394 [phone] › e2e/remote.spec.ts:411:3 › Solana remote borrow (mocked) › a claim exists → the buyer claims to its token account (675ms)
+  ✓  395 [phone] › e2e/remote.spec.ts:424:3 › Solana remote borrow (mocked) › the buyer's token account is frozen → it must name another token account (529ms)
+  ✓  396 [phone] › e2e/remote.spec.ts:437:3 › Solana remote borrow (mocked) › a claim for another wallet: only the recipient can claim (456ms)
+  ✓  397 [phone] › e2e/remote.spec.ts:446:3 › Solana remote borrow (mocked) › no claim: no Claim card (355ms)
+  ✓  398 [phone] › e2e/remote.spec.ts:453:3 › Solana remote borrow (mocked) › a signed leg expired unrelayed → Re-sign settlement (605ms)
+  ✓  399 [phone] › e2e/remote.spec.ts:465:3 › Solana remote borrow (mocked) › a signed leg still valid, or already landed: no Re-sign (388ms)
+  ✓  400 [phone] › e2e/remote.spec.ts:472:3 › Solana remote borrow (mocked) › owed collateral → Claim owed collateral, 1 yocto (451ms)
+  ✓  401 [phone] › e2e/remote.spec.ts:483:3 › Solana remote borrow (mocked) › flag off (no E2E override): no chain selector (317ms)
+  -  402 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting dark
+  -  403 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing dark
+  -  404 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper dark
+  -  405 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw dark
+  -  406 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim dark
+  -  407 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign dark
+  -  408 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused dark
+  -  409 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting light
+  -  410 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing light
+  -  411 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper light
+  -  412 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw light
+  -  413 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim light
+  -  414 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign light
+  -  415 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused light
+  ✓  416 [phone] › e2e/screens.spec.ts:12:5 › screenshot / dark (6.8s)
+  ✓  417 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (2.7s)
+  ✘  418 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark (1.0m)
+  ✘  419 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark (retry #1) (1.0m)
+  ✓  420 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (3.3s)
+  ✘  421 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (1.0m)
+  ✘  422 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (retry #1) (1.0m)
+  ✓  423 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote dark (2.4s)
+  ✓  424 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (2.4s)
+  ✘  425 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (1.0m)
+  ✘  426 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (retry #1) (1.0m)
+  ✓  427 [phone] › e2e/screens.spec.ts:12:5 › screenshot /reserve dark (3.0s)
+  ✘  428 [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes dark (1.0m)
+  ✘  429 [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes dark (retry #1) (1.0m)
+  ✘  430 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (1.0m)
+  ✘  431 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (retry #1) (1.0m)
+  ✓  432 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console dark (4.2s)
+  ✓  433 [phone] › e2e/screens.spec.ts:12:5 › screenshot /agents dark (2.0s)
+  ✓  434 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (2.8s)
+  ✓  435 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (2.1s)
+  ✓  436 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security dark (1.7s)
+  ✓  437 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (2.5s)
+  ✓  438 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (2.0s)
+  ✘  439 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (1.0m)
+  ✘  440 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (retry #1) (1.0m)
+  ✓  441 [phone] › e2e/screens.spec.ts:12:5 › screenshot / light (7.2s)
+  ✓  442 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed light (3.4s)
+  ✘  443 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light (1.0m)
+  ✘  444 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light (retry #1) (1.0m)
+  ✓  445 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (3.1s)
+  ✘  446 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield light (1.0m)
+  ✘  447 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield light (retry #1) (1.0m)
+  ✓  448 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote light (2.3s)
+  ✓  449 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (2.3s)
+  ✘  450 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (1.0m)
+  ✘  451 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (retry #1) (1.0m)
+  ✓  452 [phone] › e2e/screens.spec.ts:12:5 › screenshot /reserve light (2.3s)
+  ✘  453 [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes light (1.0m)
+  ✘  454 [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes light (retry #1) (1.0m)
+  ✘  455 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (1.0m)
+  ✘  456 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (retry #1) (1.0m)
+  ✓  457 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console light (3.6s)
+  ✓  458 [phone] › e2e/screens.spec.ts:12:5 › screenshot /agents light (2.3s)
+  ✓  459 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (2.4s)
+  ✓  460 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk light (1.9s)
+  ✓  461 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security light (1.8s)
+  ✓  462 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (2.4s)
+  ✓  463 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (2.4s)
+  ✘  464 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light (1.0m)
+  ✘  465 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light (retry #1) (1.0m)
+  ✓  466 [phone] › e2e/shell.spec.ts:8:5 › / renders in dark, no horizontal scroll, axe clean (1.3s)
+  ✓  467 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in dark, no horizontal scroll, axe clean (918ms)
+  ✓  468 [phone] › e2e/shell.spec.ts:8:5 › /feed/NVDAx renders in dark, no horizontal scroll, axe clean (781ms)
+  ✓  469 [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in dark, no horizontal scroll, axe clean (816ms)
+  ✓  470 [phone] › e2e/shell.spec.ts:8:5 › /shield renders in dark, no horizontal scroll, axe clean (782ms)
+  ✓  471 [phone] › e2e/shell.spec.ts:8:5 › /quote renders in dark, no horizontal scroll, axe clean (798ms)
+  ✓  472 [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in dark, no horizontal scroll, axe clean (803ms)
+  ✓  473 [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (799ms)
+  ✓  474 [phone] › e2e/shell.spec.ts:8:5 › /reserve renders in dark, no horizontal scroll, axe clean (788ms)
+  ✓  475 [phone] › e2e/shell.spec.ts:8:5 › /notes renders in dark, no horizontal scroll, axe clean (776ms)
+  ✓  476 [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in dark, no horizontal scroll, axe clean (778ms)
+  ✓  477 [phone] › e2e/shell.spec.ts:8:5 › /console renders in dark, no horizontal scroll, axe clean (821ms)
+  ✓  478 [phone] › e2e/shell.spec.ts:8:5 › /agents renders in dark, no horizontal scroll, axe clean (887ms)
+  ✓  479 [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in dark, no horizontal scroll, axe clean (806ms)
+  ✓  480 [phone] › e2e/shell.spec.ts:8:5 › /talk renders in dark, no horizontal scroll, axe clean (787ms)
+  ✓  481 [phone] › e2e/shell.spec.ts:8:5 › /security renders in dark, no horizontal scroll, axe clean (777ms)
+  ✓  482 [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (895ms)
+  ✓  483 [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (807ms)
+  ✓  484 [phone] › e2e/shell.spec.ts:8:5 › /docs renders in dark, no horizontal scroll, axe clean (787ms)
+  ✓  485 [phone] › e2e/shell.spec.ts:8:5 › / renders in light, no horizontal scroll, axe clean (1.2s)
+  ✓  486 [phone] › e2e/shell.spec.ts:8:5 › /feed renders in light, no horizontal scroll, axe clean (868ms)
+  ✓  487 [phone] › e2e/shell.spec.ts:8:5 › /feed/NVDAx renders in light, no horizontal scroll, axe clean (798ms)
+  ✓  488 [phone] › e2e/shell.spec.ts:8:5 › /borrow renders in light, no horizontal scroll, axe clean (803ms)
+  ✓  489 [phone] › e2e/shell.spec.ts:8:5 › /shield renders in light, no horizontal scroll, axe clean (795ms)
+  ✓  490 [phone] › e2e/shell.spec.ts:8:5 › /quote renders in light, no horizontal scroll, axe clean (793ms)
+  ✓  491 [phone] › e2e/shell.spec.ts:8:5 › /quote/new renders in light, no horizontal scroll, axe clean (808ms)
+  ✓  492 [phone] › e2e/shell.spec.ts:8:5 › /quote/0 renders in light, no horizontal scroll, axe clean (789ms)
+  ✓  493 [phone] › e2e/shell.spec.ts:8:5 › /reserve renders in light, no horizontal scroll, axe clean (802ms)
+  ✓  494 [phone] › e2e/shell.spec.ts:8:5 › /notes renders in light, no horizontal scroll, axe clean (767ms)
+  ✓  495 [phone] › e2e/shell.spec.ts:8:5 › /position/0 renders in light, no horizontal scroll, axe clean (770ms)
+  ✓  496 [phone] › e2e/shell.spec.ts:8:5 › /console renders in light, no horizontal scroll, axe clean (896ms)
+  ✓  497 [phone] › e2e/shell.spec.ts:8:5 › /agents renders in light, no horizontal scroll, axe clean (900ms)
+  ✓  498 [phone] › e2e/shell.spec.ts:8:5 › /keepers renders in light, no horizontal scroll, axe clean (832ms)
+  ✓  499 [phone] › e2e/shell.spec.ts:8:5 › /talk renders in light, no horizontal scroll, axe clean (786ms)
+  ✓  500 [phone] › e2e/shell.spec.ts:8:5 › /security renders in light, no horizontal scroll, axe clean (787ms)
+  ✓  501 [phone] › e2e/shell.spec.ts:8:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (892ms)
+  ✓  502 [phone] › e2e/shell.spec.ts:8:5 › /legal/terms renders in light, no horizontal scroll, axe clean (785ms)
+  ✓  503 [phone] › e2e/shell.spec.ts:8:5 › /docs renders in light, no horizontal scroll, axe clean (775ms)
+  ✓  504 [phone] › e2e/shell.spec.ts:29:1 › consent banner is shown by default and analytics stay off (591ms)
+  ✓  505 [phone] › e2e/shell.spec.ts:42:1 › theme toggle switches data-theme (554ms)
+  ✓  506 [phone] › e2e/shields.spec.ts:106:3 › /shield (mocked v2, shields on) › weekend and event cards: fee, countdown, weekend limit, backing, opens left, faucet beside the dry quote; copy rules (1.1s)
+  ✓  507 [phone] › e2e/shields.spec.ts:136:3 › /shield (mocked v2, shields on) › open a Weekend Shield: sign modal shows the shield msg, 250 TGas, 1 yocto, fee stack; then the mock wallet records it (1.5s)
+  ✓  508 [phone] › e2e/shields.spec.ts:165:3 › /shield (mocked v2, shields on) › daily limit reached disables both cards with the reason (382ms)
+  ✓  509 [phone] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (308ms)
+  ✓  510 [phone] › e2e/shields.spec.ts:185:3 › Profit-Lock on /position/[id] (mocked v2) › preview → sign modal (self_settle, 1 yocto, 300 TGas) → recorded (1.1s)
+  ✓  511 [phone] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: health < 1 (399ms)
+  ✓  512 [phone] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: corporate action pending (385ms)
+  ✓  513 [phone] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: no opted-in capacity (385ms)
+  ✓  514 [phone] › e2e/shields.spec.ts:228:3 › /quote/new voluntary fills (mocked v2) › switch adds accepts_voluntary_fills to the FundPappusQuote msg (1.1s)
+  ✓  515 [phone] › e2e/shields.spec.ts:244:3 › /quote/new voluntary fills (mocked v2) › flag off: no switch (325ms)
+  ✓  516 [phone] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (3.1s)
+  ✓  517 [phone] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (19ms)
+  -  518 [phone] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✓  519 [phone] › e2e/v7.spec.ts:45:3 › landing v7 › flags off: hero, live card, how it works, FAQ, footer; no module sections; copy rules (495ms)
+  ✓  520 [phone] › e2e/v7.spec.ts:63:3 › landing v7 › flags on: every module section renders with its data-feature tag; copy rules still hold (564ms)
+  ✓  521 [phone] › e2e/v7.spec.ts:78:3 › landing v7 › one flag on: only that module renders (366ms)
+  ✓  522 [phone] › e2e/v7.spec.ts:86:3 › landing v7 › live card shows in-session vs weekend parameters from testnet (1.8s)
+  ✓  523 [phone] › e2e/v7.spec.ts:105:3 › v1 path (mocked v1 contract, every flag on) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (380ms)
+  ✓  524 [phone] › e2e/v7.spec.ts:119:3 › v1 path (mocked v1 contract, every flag on) › borrow: fee stack with total, no v7 controls even with ?ref= (361ms)
+  ✓  525 [phone] › e2e/v7.spec.ts:142:3 › v2 path (mocked view fixture), flags off › feed shows total debt, aggregate headroom and the contract's session reason (370ms)
+  ✓  526 [phone] › e2e/v7.spec.ts:154:3 › v2 path (mocked view fixture), flags off › borrow uses the contract fee stack; pay_to and referrer stay hidden while their flags are off (363ms)
+  ✓  527 [phone] › e2e/v7.spec.ts:176:3 › v2 path (mocked view fixture), flags on › feed shows the multiplier line (M = 1.02 on the fixture) (359ms)
+  ✓  528 [phone] › e2e/v7.spec.ts:182:3 › v2 path (mocked view fixture), flags on › borrow shows pay_to and the referrer from ?ref= (323ms)
+
+
+  1) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark ────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark ────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-borrow-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-borrow-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-borrow-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-borrow-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-borrow-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-borrow-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield dark ────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote dark ─────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-new-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-new-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-new-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-new-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-new-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-new-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark ───────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve dark ───────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-reserve-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-reserve-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-reserve-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-reserve-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-reserve-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-reserve-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes dark ─────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark ────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark ──────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-console-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-console-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-console-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-console-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-console-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-console-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark ──────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-keepers-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-keepers-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-keepers-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-keepers-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-keepers-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-keepers-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark ─────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-talk-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-talk-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-talk-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-talk-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-talk-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-talk-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-security-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-security-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-security-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-security-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-security-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-security-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark ─────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-dark-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-dark-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-dark-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-dark-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-dark-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-dark-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light ──────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light ──────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-borrow-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-borrow-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-borrow-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-borrow-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-borrow-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-borrow-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield light ──────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote light ───────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light ───────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-new-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-new-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-new-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-new-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-new-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-new-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve light ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-reserve-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-reserve-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-reserve-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-reserve-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-reserve-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-reserve-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes light ───────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light ──────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-console-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-console-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-console-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-console-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-console-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-console-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-keepers-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-keepers-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-keepers-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-keepers-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-keepers-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-keepers-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light ────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-talk-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-talk-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-talk-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-talk-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-talk-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-talk-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light ────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-security-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-security-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-security-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-security-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-security-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-security-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light ────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-light-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-light-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-light-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-light-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-light-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-light-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  29) [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-dark-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-dark-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-dark-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-dark-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-dark-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-dark-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  30) [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield dark ─────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-dark-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-dark-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-dark-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-dark-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-dark-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-dark-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  31) [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark ────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-dark-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-dark-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-dark-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-dark-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-dark-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-dark-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  32) [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes dark ──────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-dark-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-dark-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-dark-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-dark-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-dark-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-dark-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  33) [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark ─────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-dark-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-dark-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-dark-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-dark-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-dark-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-dark-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  34) [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark ───────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-dark-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-dark-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-dark-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-dark-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-dark-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-dark-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  35) [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light ────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-light-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-light-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-light-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-feed-NVDAx-light-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-feed-NVDAx-light-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-feed-NVDAx-light-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  36) [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield light ────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-light-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-light-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-light-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-shield-light-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-shield-light-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-shield-light-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  37) [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light ───────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-light-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-light-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-light-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-quote-0-light-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-quote-0-light-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-quote-0-light-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  38) [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes light ─────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-light-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-light-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-light-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-notes-light-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-notes-light-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-notes-light-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  39) [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light ────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-light-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-light-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-light-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-position-0-light-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-position-0-light-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-position-0-light-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  40) [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light ──────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-light-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-light-phone/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-light-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 60000ms exceeded.
+
+      14 |       await page.emulateMedia({ reducedMotion: "reduce" });
+      15 |       await page.goto(route);
+    > 16 |       await page.waitForLoadState("networkidle");
+         |                  ^
+      17 |       const name = route === "/" ? "home" : route.slice(1).replace(/\//g, "_");
+      18 |       await page.screenshot({ path: `${OUT}/${name}-${info.project.name}-${theme}.png`, fullPage: true });
+      19 |     });
+        at /private/tmp/verify-g3b-20261111T1530Z/apps/web/e2e/screens.spec.ts:16:18
+
+    Error Context: test-results/screens-screenshot-docs-light-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/screens-screenshot-docs-light-phone-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/screens-screenshot-docs-light-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  40 failed
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark ─────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark ─────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield dark ─────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote dark ──────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark ──────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark ────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve dark ────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes dark ──────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark ─────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark ────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark ────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark ───────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark ───────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark ───────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light ────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light ────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield light ────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote light ─────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light ─────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light ───────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve light ───────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes light ─────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light ────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light ───────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light ───────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light ──────────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light ──────────────────────────────
+    [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light ──────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark ───────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield dark ───────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark ──────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes dark ────────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark ───────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark ─────────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light ──────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield light ──────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light ─────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes light ───────────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light ──────────────────────────────
+    [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light ────────────────────────────────────
+  86 skipped
+  362 passed (1.5h)
+/private/tmp/verify-g3b-20261111T1530Z/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 e2e: `playwright test`
+Exit status 1

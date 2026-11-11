@@ -1,0 +1,226 @@
+[
+ {
+  "file": "agents-dark.json",
+  "url": "http://localhost:3217/agents",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:34.389Z"
+ },
+ {
+  "file": "agents-light.json",
+  "url": "http://localhost:3217/agents",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:48:06.572Z"
+ },
+ {
+  "file": "borrow-dark.json",
+  "url": "http://localhost:3217/borrow",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:45:37.382Z"
+ },
+ {
+  "file": "borrow-light.json",
+  "url": "http://localhost:3217/borrow",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:07.705Z"
+ },
+ {
+  "file": "console-dark.json",
+  "url": "http://localhost:3217/console",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:27.354Z"
+ },
+ {
+  "file": "console-light.json",
+  "url": "http://localhost:3217/console",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:59.207Z"
+ },
+ {
+  "file": "feed-dark.json",
+  "url": "http://localhost:3217/feed",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:45:24.617Z"
+ },
+ {
+  "file": "feed-light.json",
+  "url": "http://localhost:3217/feed",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:54.140Z"
+ },
+ {
+  "file": "feed_NVDAx-dark.json",
+  "url": "http://localhost:3217/feed/NVDAx",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:45:30.891Z"
+ },
+ {
+  "file": "feed_NVDAx-light.json",
+  "url": "http://localhost:3217/feed/NVDAx",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:00.850Z"
+ },
+ {
+  "file": "home-dark.json",
+  "url": "http://localhost:3217/",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:45:16.153Z"
+ },
+ {
+  "file": "home-light.json",
+  "url": "http://localhost:3217/",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:47.520Z"
+ },
+ {
+  "file": "keepers-dark.json",
+  "url": "http://localhost:3217/keepers",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:40.562Z"
+ },
+ {
+  "file": "keepers-light.json",
+  "url": "http://localhost:3217/keepers",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:48:12.604Z"
+ },
+ {
+  "file": "notes-dark.json",
+  "url": "http://localhost:3217/notes",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:21.575Z"
+ },
+ {
+  "file": "notes-light.json",
+  "url": "http://localhost:3217/notes",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:53.225Z"
+ },
+ {
+  "file": "position_0-dark.json",
+  "url": "http://localhost:3217/position/0",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:45:50.991Z"
+ },
+ {
+  "file": "position_0-light.json",
+  "url": "http://localhost:3217/position/0",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:21.966Z"
+ },
+ {
+  "file": "quote-dark.json",
+  "url": "http://localhost:3217/quote/new",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:45:57.191Z"
+ },
+ {
+  "file": "quote-light.json",
+  "url": "http://localhost:3217/quote/new",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:28.183Z"
+ },
+ {
+  "file": "quote_0-dark.json",
+  "url": "http://localhost:3217/quote/0",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:09.579Z"
+ },
+ {
+  "file": "quote_0-light.json",
+  "url": "http://localhost:3217/quote/0",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:41.044Z"
+ },
+ {
+  "file": "quote_new-dark.json",
+  "url": "http://localhost:3217/quote/new",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:03.415Z"
+ },
+ {
+  "file": "quote_new-light.json",
+  "url": "http://localhost:3217/quote/new",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:34.558Z"
+ },
+ {
+  "file": "reserve-dark.json",
+  "url": "http://localhost:3217/reserve",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:46:15.482Z"
+ },
+ {
+  "file": "reserve-light.json",
+  "url": "http://localhost:3217/reserve",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:46.893Z"
+ },
+ {
+  "file": "shield-dark.json",
+  "url": "http://localhost:3217/shield",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:45:44.139Z"
+ },
+ {
+  "file": "shield-light.json",
+  "url": "http://localhost:3217/shield",
+  "score": 100,
+  "failing": [],
+  "lh": "13.6.0",
+  "fetchTime": "2026-11-11T15:47:14.791Z"
+ }
+]
