@@ -43,9 +43,7 @@ import {
   POSITION_LAYOUT,
   POSITION_STATUS_RELEASED,
   POSITION_STATUS_SETTLED,
-  RELEASE_ACCOUNT_ORDER,
   RELEASE_DISCRIMINATOR,
-  SETTLE_ACCOUNT_ORDER,
   SYSTEM_PROGRAM_ADDRESS,
   SolanaRelay,
   VAULT_DISCRIMINATOR,
@@ -291,14 +289,12 @@ describe('solana: instruction bytes and account order (solana/deploy.md)', () =>
     const payer = address('11111111111111111111111111111112');
     const pos = await positionPda(PROGRAM, v.vault, 7n, DEPOSITOR);
     assert.equal(pos, positionAddress(PROGRAM_ID, v.vault, 7n, DEPOSITOR));
-    // The nonce account is pinned to §E's literal seeds above; WO-35s moves the client to the same seeds in parallel.
-    const exceptNonce = <T>(accounts: readonly T[], order: typeof SETTLE_ACCOUNT_ORDER): T[] => accounts.filter((_a, i) => order[i]?.[0] !== 'nonceRecord');
     const f = parseSettlePreimage(V.preimage.replace('|pos=0|', '|pos=7|'));
-    const settle = settleInstruction(ids, payer, DEPOSITOR, f);
-    assert.deepEqual(exceptNonce(await settleAccounts(v, payer, pos, AUTH, f), SETTLE_ACCOUNT_ORDER), exceptNonce(settle.accounts, SETTLE_ACCOUNT_ORDER));
+    const settle = settleInstruction(ids, payer, DEPOSITOR, AUTH, f);
+    assert.deepEqual(await settleAccounts(v, payer, pos, AUTH, f), settle.accounts);
     assert.deepEqual(settleIxData(f), settle.data);
-    const release = releaseInstruction(ids, payer, DEPOSITOR, { positionId: 7n, nonce: 9n, expires: 1700003600n });
-    assert.deepEqual(exceptNonce(await releaseAccounts(v, payer, pos, AUTH, 9n), RELEASE_ACCOUNT_ORDER), exceptNonce(release.accounts, RELEASE_ACCOUNT_ORDER));
+    const release = releaseInstruction(ids, payer, DEPOSITOR, AUTH, { positionId: 7n, nonce: 9n, expires: 1700003600n });
+    assert.deepEqual(await releaseAccounts(v, payer, pos, AUTH, 9n), release.accounts);
     assert.deepEqual(releaseIxData(7n, 9n, 1700003600n), release.data);
     assert.deepEqual([...NONCE_RECORD_DISCRIMINATOR], ACCOUNT_DISCRIMINATOR.NonceRecord);
     assert.equal(NONCE_RECORD_LEN, NONCE_RECORD_V2.len);
