@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-11T20:13:47.524Z",
+  "generated": "2026-11-11T20:34:35.253Z",
   "how": "apps/web/e2e/inventory.spec.ts (real Chrome, fresh profile per combo, hosted mode, docs via the /docs rewrite)",
   "site": "http://site.localhost:3741",
   "app": "http://app.localhost:3741",
@@ -137,30 +137,30 @@
         "fetch"
       ],
       "pages": [
-        "site.localhost:3741/about",
-        "site.localhost:3741/security",
-        "site.localhost:3741/status",
-        "site.localhost:3741/changelog",
-        "site.localhost:3741/brand",
-        "site.localhost:3741/talk",
-        "site.localhost:3741/legal/privacy",
-        "site.localhost:3741/legal/cookies",
-        "site.localhost:3741/legal/terms",
-        "app.localhost:3741/feed",
-        "app.localhost:3741/feed/NVDAx",
-        "app.localhost:3741/borrow",
-        "app.localhost:3741/shield",
-        "app.localhost:3741/quote/new",
-        "app.localhost:3741/quote/0",
-        "app.localhost:3741/reserve",
+        "app.localhost:3741/notes",
         "app.localhost:3741/note/0",
         "app.localhost:3741/position/0",
         "app.localhost:3741/console",
-        "app.localhost:3741/agents",
         "app.localhost:3741/keepers",
         "app.localhost:3741/borrow (wallet selector + Meteor Wallet iframe)",
+        "site.localhost:3741/about",
+        "site.localhost:3741/status",
+        "site.localhost:3741/changelog",
+        "site.localhost:3741/brand",
+        "site.localhost:3741/legal/cookies",
+        "site.localhost:3741/legal/terms",
         "site.localhost:3741/legal/disclaimers",
-        "app.localhost:3741/notes"
+        "app.localhost:3741/feed/NVDAx",
+        "app.localhost:3741/borrow",
+        "app.localhost:3741/shield",
+        "app.localhost:3741/reserve",
+        "site.localhost:3741/security",
+        "site.localhost:3741/talk",
+        "site.localhost:3741/legal/privacy",
+        "app.localhost:3741/quote/new",
+        "app.localhost:3741/quote/0",
+        "app.localhost:3741/agents",
+        "app.localhost:3741/feed"
       ],
       "who": "our code",
       "purpose": "NEAR testnet RPC fallback (@nectar/sdk TESTNET_RPC_FALLBACKS)",
@@ -172,7 +172,6 @@
     {
       "host": "rsms.me",
       "types": [
-        "font@iframe",
         "stylesheet@iframe"
       ],
       "pages": [
@@ -182,7 +181,6 @@
       "purpose": "Meteor Wallet's web fonts (stylesheet + font files)",
       "when": "Only after you open Meteor Wallet in the selector",
       "directives": [
-        "font-src",
         "style-src"
       ]
     },
@@ -308,124 +306,7 @@
     },
     {
       "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::__usedKeys__",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::clientPerId",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::localExchangeKeyPair",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::localVerifyKeyPair",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::session_create_channel::__usedKeys__",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::session_create_channel::localExchangeKeyPair",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::session_create_channel::localVerifyKeyPair",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::session_partner_context::__usedKeys__",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::session_partner_context::contextIndex",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::session_partner_context::currentTurn::<random id>",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::ws_channel::__usedKeys__",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::ws_channel::localExchangeKeyPair",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::<random id>::v1::<random id>::partner::ws_channel::localVerifyKeyPair",
-      "origin": "http://app.localhost:3741",
-      "who": "the wallet you opened (through near-connect)",
-      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
-      "lifetime": "Until disconnect or you clear site data",
-      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
-    },
-    {
-      "kind": "localStorage",
-      "name": "meteor-wallet:met_bridge_partner::<random id>=::coordination::live_session::<random id>",
+      "name": "meteor-wallet:met_bridge_partner::<per-session ids>",
       "origin": "http://app.localhost:3741",
       "who": "the wallet you opened (through near-connect)",
       "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
@@ -478,196 +359,7 @@
       "source": "packages/ui/src/theme.tsx"
     }
   ],
-  "cspViolations": [
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/shield' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXkAA8AAAABSUgAAGWCAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgdxqHJFIBmAAiE4RCAqC1FyB+1sLiF4AATYCJAOROAQgBYhXB583W2AXkQO67VNIklCjdCfAWq9V3V/3ATZnXlbcueG/O3Fp0KHFFdNtxiG9WYpv5vcYZ/b/////vyJZyNj+Dve/3w82QRExyaxKlJmZZFFxl+KuIR5ZvRYZo07SSotoXcWl+Sh+1qzEpRZsOIMVtAQVC1ji1mS5hGM+YXGq3HivdIqq1/Um20b7SLOxpllJ7sas8k7vYR0nyTASpdNubDJjpo22AdfHR+K2kEVqzKB"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGusAA8AAAABSkwAAGtLAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqC1HyB/TkLiF4AATYCJAOROAQgBYhIB583WyUZkQKq1+3PIQh0k0EQOXV7tlf9a5RtO4aY3myE/41ccIl421/gdogtn7Szzv7/////9GQyxtoOvDHARI1Mqqp/IaKZJBfLXlJhnS9F/CJlaeuy7epac14zu6w595s08UM1qrpPtmuSeoZ36q62CAmSkJFOPY4qRTxmCSY+xnkZrh7hCXZsEbos1L5i7pDTq2oBtyIV5IAnZtykXiu8pr3TVAromJi4hm9Ceav"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGloAA8AAAABR9wAAGkFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCz2yB+RkLiF4AATYCJAOROAQgBYhmB583WyMXkQG6bbtiBQW5bQDE59ld/cmtUW57JKDbUO1JrIwgq4IbQz1sHIDA029c9v/////pSUXGbDOWbh2FAcC9Kr+aQJpmKay1ehvHsYWQVhjTPEtvbQldpKybmBTvFFJCdl2K+OHjKXsMSIcTLvhHV6rbL2Q+Xd0J1nmpD5Mpv4ZN9idYuzhoCRVzWFNP7NaPRdeEHZ/pkT7BF59xHLrm+3J31y1fd3c/1ZXfH4y"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGpYAA8AAAABRdwAAGn1AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCzCiB9S0LiF4AATYCJAOROAQgBYgqB583W/sUcQfdtj1NKCI9t20MpyJVHVrCGFfaODdktpwLeyfK1Yi37yhuB8HX7rda9v///5+eVIbMpoy00AFsqs7f6f8LNZo5FNZCk1jFCxtW64wxN9kixLG7l9bnvhZx5RJwpVJY7Ab3EnJFPrRDiu5aTWiwEle9QFOY34SnYplWOPS9rdpVj4wML7B9bUebO3wnv7j8qfJorbUGNb+qDkpEBLTs7lPtlKExX+t7L8d"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXMAA8AAAABQVQAAGVrAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCwlSB7CwLiF4AATYCJAOROAQgBYh1B583W8UQcQZrt13+CgHlDWB/ftVqVYkH2KawzH692f2GGVX9XKHcdhHQHaD2ywtZs////39FMpHDcqle2gZgw2z/eL9NqFkyyUIpybOXGtxLQ6hzrtl2OWGLZu51PxQfCxUDw0mh3ExSBXeVnUqrbnZxSFWWYOoLOKthMIUaAxpYGbg8ljyNMMbr2/P14/Ab3642PM6/q4YS3S6HnPCEWwP/kubtAAtJkykFBoXgsKN"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/32d706d328508b0c4e8037daead37a4ec48cc660a788e94314435646175c4aa1/partner:8320ed6a3e4113036644d9a993a1dc7e133bfbf5f38842a9e31bf96e6605fbe3/ws?bridgeLease=AjLXBtMoUIsMToA32urTek7EjMZgp4jpQxRDVkYXXEqhavTNEvzO13f0ELKfcoRZgx9j41Q' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/32d706d328508b0c4e8037daead37a4ec48cc660a788e94314435646175c4aa1/partner:8320ed6a3e4113036644d9a993a1dc7e133bfbf5f38842a9e31bf96e6605fbe3/ws?bridgeLease=AjLXBtMoUIsMToA32urTek7EjMZgp4jpQxRDVkYXXEqhavTNEvzO13f0ELKfcoRZgx9j41Q' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXkAA8AAAABSUgAAGWCAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgdxqHJFIBmAAiE4RCAqC1FyB+1sLiF4AATYCJAOROAQgBYhXB583W2AXkQO67VNIklCjdCfAWq9V3V/3ATZnXlbcueG/O3Fp0KHFFdNtxiG9WYpv5vcYZ/b/////vyJZyNj+Dve/3w82QRExyaxKlJmZZFFxl+KuIR5ZvRYZo07SSotoXcWl+Sh+1qzEpRZsOIMVtAQVC1ji1mS5hGM+YXGq3HivdIqq1/Um20b7SLOxpllJ7sas8k7vYR0nyTASpdNubDJjpo22AdfHR+K2kEVqzKB"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGusAA8AAAABSkwAAGtLAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqC1HyB/TkLiF4AATYCJAOROAQgBYhIB583WyUZkQKq1+3PIQh0k0EQOXV7tlf9a5RtO4aY3myE/41ccIl421/gdogtn7Szzv7/////9GQyxtoOvDHARI1Mqqp/IaKZJBfLXlJhnS9F/CJlaeuy7epac14zu6w595s08UM1qrpPtmuSeoZ36q62CAmSkJFOPY4qRTxmCSY+xnkZrh7hCXZsEbos1L5i7pDTq2oBtyIV5IAnZtykXiu8pr3TVAromJi4hm9Ceav"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGloAA8AAAABR9wAAGkFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCz2yB+RkLiF4AATYCJAOROAQgBYhmB583WyMXkQG6bbtiBQW5bQDE59ld/cmtUW57JKDbUO1JrIwgq4IbQz1sHIDA029c9v/////pSUXGbDOWbh2FAcC9Kr+aQJpmKay1ehvHsYWQVhjTPEtvbQldpKybmBTvFFJCdl2K+OHjKXsMSIcTLvhHV6rbL2Q+Xd0J1nmpD5Mpv4ZN9idYuzhoCRVzWFNP7NaPRdeEHZ/pkT7BF59xHLrm+3J31y1fd3c/1ZXfH4y"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGpYAA8AAAABRdwAAGn1AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCzCiB9S0LiF4AATYCJAOROAQgBYgqB583W/sUcQfdtj1NKCI9t20MpyJVHVrCGFfaODdktpwLeyfK1Yi37yhuB8HX7rda9v///5+eVIbMpoy00AFsqs7f6f8LNZo5FNZCk1jFCxtW64wxN9kixLG7l9bnvhZx5RJwpVJY7Ab3EnJFPrRDiu5aTWiwEle9QFOY34SnYplWOPS9rdpVj4wML7B9bUebO3wnv7j8qfJorbUGNb+qDkpEBLTs7lPtlKExX+t7L8d"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXMAA8AAAABQVQAAGVrAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCwlSB7CwLiF4AATYCJAOROAQgBYh1B583W8UQcQZrt13+CgHlDWB/ftVqVYkH2KawzH692f2GGVX9XKHcdhHQHaD2ywtZs////39FMpHDcqle2gZgw2z/eL9NqFkyyUIpybOXGtxLQ6hzrtl2OWGLZu51PxQfCxUDw0mh3ExSBXeVnUqrbnZxSFWWYOoLOKthMIUaAxpYGbg8ljyNMMbr2/P14/Ab3642PM6/q4YS3S6HnPCEWwP/kubtAAtJkykFBoXgsKN"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/d92ca2eefa856f264035570ab9826a4016c66157e4a998888ae1403df25bec52/partner:0f180eb113706f2e23a532184b73f97a0177eddfed1e5c8556eb78516b4a8cc6/ws?bridgeLease=Atksou76hW8mQDVXCrmCakAWxmFX5KmYiIrhQD3yW-xSavTNQms_uxXmM5MWfVhdlO-fbFw' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/d92ca2eefa856f264035570ab9826a4016c66157e4a998888ae1403df25bec52/partner:0f180eb113706f2e23a532184b73f97a0177eddfed1e5c8556eb78516b4a8cc6/ws?bridgeLease=Atksou76hW8mQDVXCrmCakAWxmFX5KmYiIrhQD3yW-xSavTNQms_uxXmM5MWfVhdlO-fbFw' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/shield' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXkAA8AAAABSUgAAGWCAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgdxqHJFIBmAAiE4RCAqC1FyB+1sLiF4AATYCJAOROAQgBYhXB583W2AXkQO67VNIklCjdCfAWq9V3V/3ATZnXlbcueG/O3Fp0KHFFdNtxiG9WYpv5vcYZ/b/////vyJZyNj+Dve/3w82QRExyaxKlJmZZFFxl+KuIR5ZvRYZo07SSotoXcWl+Sh+1qzEpRZsOIMVtAQVC1ji1mS5hGM+YXGq3HivdIqq1/Um20b7SLOxpllJ7sas8k7vYR0nyTASpdNubDJjpo22AdfHR+K2kEVqzKB"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGusAA8AAAABSkwAAGtLAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqC1HyB/TkLiF4AATYCJAOROAQgBYhIB583WyUZkQKq1+3PIQh0k0EQOXV7tlf9a5RtO4aY3myE/41ccIl421/gdogtn7Szzv7/////9GQyxtoOvDHARI1Mqqp/IaKZJBfLXlJhnS9F/CJlaeuy7epac14zu6w595s08UM1qrpPtmuSeoZ36q62CAmSkJFOPY4qRTxmCSY+xnkZrh7hCXZsEbos1L5i7pDTq2oBtyIV5IAnZtykXiu8pr3TVAromJi4hm9Ceav"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGloAA8AAAABR9wAAGkFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCz2yB+RkLiF4AATYCJAOROAQgBYhmB583WyMXkQG6bbtiBQW5bQDE59ld/cmtUW57JKDbUO1JrIwgq4IbQz1sHIDA029c9v/////pSUXGbDOWbh2FAcC9Kr+aQJpmKay1ehvHsYWQVhjTPEtvbQldpKybmBTvFFJCdl2K+OHjKXsMSIcTLvhHV6rbL2Q+Xd0J1nmpD5Mpv4ZN9idYuzhoCRVzWFNP7NaPRdeEHZ/pkT7BF59xHLrm+3J31y1fd3c/1ZXfH4y"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGpYAA8AAAABRdwAAGn1AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCzCiB9S0LiF4AATYCJAOROAQgBYgqB583W/sUcQfdtj1NKCI9t20MpyJVHVrCGFfaODdktpwLeyfK1Yi37yhuB8HX7rda9v///5+eVIbMpoy00AFsqs7f6f8LNZo5FNZCk1jFCxtW64wxN9kixLG7l9bnvhZx5RJwpVJY7Ab3EnJFPrRDiu5aTWiwEle9QFOY34SnYplWOPS9rdpVj4wML7B9bUebO3wnv7j8qfJorbUGNb+qDkpEBLTs7lPtlKExX+t7L8d"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXMAA8AAAABQVQAAGVrAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCwlSB7CwLiF4AATYCJAOROAQgBYh1B583W8UQcQZrt13+CgHlDWB/ftVqVYkH2KawzH692f2GGVX9XKHcdhHQHaD2ywtZs////39FMpHDcqle2gZgw2z/eL9NqFkyyUIpybOXGtxLQ6hzrtl2OWGLZu51PxQfCxUDw0mh3ExSBXeVnUqrbnZxSFWWYOoLOKthMIUaAxpYGbg8ljyNMMbr2/P14/Ab3642PM6/q4YS3S6HnPCEWwP/kubtAAtJkykFBoXgsKN"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/6d8ba910bb63669679afa3128d60bf7ad5b03dbb5e78bab3f5c803d4f24d0ecd/partner:4fb67a188c5a981d0429b669e72d19d080b9aa09f07abf16a8e82d3abd23bae5/ws?bridgeLease=Am2LqRC7Y2aWea-jEo1gv3rVsD27Xni6s_XIA9TyTQ7NavTNdKHKEHOQdduYTFJfdEyyf48' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/6d8ba910bb63669679afa3128d60bf7ad5b03dbb5e78bab3f5c803d4f24d0ecd/partner:4fb67a188c5a981d0429b669e72d19d080b9aa09f07abf16a8e82d3abd23bae5/ws?bridgeLease=Am2LqRC7Y2aWea-jEo1gv3rVsD27Xni6s_XIA9TyTQ7NavTNdKHKEHOQdduYTFJfdEyyf48' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/shield' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXkAA8AAAABSUgAAGWCAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgdxqHJFIBmAAiE4RCAqC1FyB+1sLiF4AATYCJAOROAQgBYhXB583W2AXkQO67VNIklCjdCfAWq9V3V/3ATZnXlbcueG/O3Fp0KHFFdNtxiG9WYpv5vcYZ/b/////vyJZyNj+Dve/3w82QRExyaxKlJmZZFFxl+KuIR5ZvRYZo07SSotoXcWl+Sh+1qzEpRZsOIMVtAQVC1ji1mS5hGM+YXGq3HivdIqq1/Um20b7SLOxpllJ7sas8k7vYR0nyTASpdNubDJjpo22AdfHR+K2kEVqzKB"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGusAA8AAAABSkwAAGtLAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqC1HyB/TkLiF4AATYCJAOROAQgBYhIB583WyUZkQKq1+3PIQh0k0EQOXV7tlf9a5RtO4aY3myE/41ccIl421/gdogtn7Szzv7/////9GQyxtoOvDHARI1Mqqp/IaKZJBfLXlJhnS9F/CJlaeuy7epac14zu6w595s08UM1qrpPtmuSeoZ36q62CAmSkJFOPY4qRTxmCSY+xnkZrh7hCXZsEbos1L5i7pDTq2oBtyIV5IAnZtykXiu8pr3TVAromJi4hm9Ceav"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGloAA8AAAABR9wAAGkFAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCz2yB+RkLiF4AATYCJAOROAQgBYhmB583WyMXkQG6bbtiBQW5bQDE59ld/cmtUW57JKDbUO1JrIwgq4IbQz1sHIDA029c9v/////pSUXGbDOWbh2FAcC9Kr+aQJpmKay1ehvHsYWQVhjTPEtvbQldpKybmBTvFFJCdl2K+OHjKXsMSIcTLvhHV6rbL2Q+Xd0J1nmpD5Mpv4ZN9idYuzhoCRVzWFNP7NaPRdeEHZ/pkT7BF59xHLrm+3J31y1fd3c/1ZXfH4y"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGpYAA8AAAABRdwAAGn1AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCzCiB9S0LiF4AATYCJAOROAQgBYgqB583W/sUcQfdtj1NKCI9t20MpyJVHVrCGFfaODdktpwLeyfK1Yi37yhuB8HX7rda9v///5+eVIbMpoy00AFsqs7f6f8LNZo5FNZCk1jFCxtW64wxN9kixLG7l9bnvhZx5RJwpVJY7Ab3EnJFPrRDiu5aTWiwEle9QFOY34SnYplWOPS9rdpVj4wML7B9bUebO3wnv7j8qfJorbUGNb+qDkpEBLTs7lPtlKExX+t7L8d"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Loading the font 'data:font/woff2;base64,d09GMgABAAAAAGXMAA8AAAABQVQAAGVrAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGkIbgd5gHJFIBmAAiE4RCAqCwlSB7CwLiF4AATYCJAOROAQgBYh1B583W8UQcQZrt13+CgHlDWB/ftVqVYkH2KawzH692f2GGVX9XKHcdhHQHaD2ywtZs////39FMpHDcqle2gZgw2z/eL9NqFkyyUIpybOXGtxLQ6hzrtl2OWGLZu51PxQfCxUDw0mh3ExSBXeVnUqrbnZxSFWWYOoLOKthMIUaAxpYGbg8ljyNMMbr2/P14/Ab3642PM6/q4YS3S6HnPCEWwP/kubtAAtJkykFBoXgsKN"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/322fd4212f97de5786b7a35774e753874e1164132eacc9b85be5e84a588e3ba2/partner:4464924dfacb943e8ec7c5f2461448af3cb99e63163cfed0a8fd9097aa77008f/ws?bridgeLease=AjIv1CEvl95XhrejV3TnU4dOEWQTLqzJuFvl6EpYjjuiavTNpfxrkzyBtU54qj0q_-6tEcA' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://app.localhost:3741/borrow",
-      "text": "Connecting to 'wss://mc.meteorwallet.app/api/bridge/action/322fd4212f97de5786b7a35774e753874e1164132eacc9b85be5e84a588e3ba2/partner:4464924dfacb943e8ec7c5f2461448af3cb99e63163cfed0a8fd9097aa77008f/ws?bridgeLease=AjIv1CEvl95XhrejV3TnU4dOEWQTLqzJuFvl6EpYjjuiavTNpfxrkzyBtU54qj0q_-6tEcA' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https:/"
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/feed' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    },
-    {
-      "page": "http://site.localhost:3741/",
-      "text": "Connecting to 'http://app.localhost:3741/borrow' violates the following Content Security Policy directive: \"connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://raw.githubusercontent.com https://mc.meteorwallet.app https://api.devnet.solana.com\". The action has been blocked."
-    }
-  ],
+  "cspViolations": [],
   "pages": [
     {
       "url": "http://site.localhost:3741/",
@@ -693,7 +385,7 @@
     },
     {
       "url": "http://site.localhost:3741/about",
-      "status": 404,
+      "status": 200,
       "combo": "dark/accept",
       "hosts": {
         "site.localhost:3741": [
@@ -706,9 +398,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -729,15 +418,12 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/status",
-      "status": 404,
+      "status": 200,
       "combo": "dark/accept",
       "hosts": {
         "site.localhost:3741": [
@@ -750,16 +436,13 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/changelog",
-      "status": 404,
+      "status": 200,
       "combo": "dark/accept",
       "hosts": {
         "site.localhost:3741": [
@@ -772,16 +455,13 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/brand",
-      "status": 404,
+      "status": 200,
       "combo": "dark/accept",
       "hosts": {
         "site.localhost:3741": [
@@ -794,9 +474,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -817,9 +494,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -839,9 +513,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -850,9 +521,6 @@
       "status": 200,
       "combo": "dark/accept",
       "hosts": {
-        "rpc.testnet.fastnear.com": [
-          "fetch"
-        ],
         "site.localhost:3741": [
           "document",
           "fetch",
@@ -882,9 +550,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -924,9 +589,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -945,9 +607,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -968,9 +627,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -987,9 +643,6 @@
           "other",
           "script",
           "stylesheet"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ],
         "test.rpc.fastnear.com": [
           "fetch"
@@ -1012,9 +665,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -1033,9 +683,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1056,9 +703,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -1077,6 +721,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1108,6 +755,9 @@
       "status": 200,
       "combo": "dark/accept",
       "hosts": {
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
         "app.localhost:3741": [
           "document",
           "fetch",
@@ -1118,9 +768,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1152,9 +799,6 @@
       "status": 200,
       "combo": "dark/accept",
       "hosts": {
-        "rpc.testnet.fastnear.com": [
-          "fetch"
-        ],
         "app.localhost:3741": [
           "document",
           "fetch",
@@ -1253,9 +897,6 @@
         "test.rpc.fastnear.com": [
           "fetch"
         ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
-        ],
         "raw.githubusercontent.com": [
           "fetch",
           "image"
@@ -1270,7 +911,6 @@
           "image@iframe"
         ],
         "rsms.me": [
-          "font@iframe",
           "stylesheet@iframe"
         ],
         "fonts.cdnfonts.com": [
@@ -1278,6 +918,9 @@
         ],
         "mc.meteorwallet.app": [
           "fetch@iframe"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -1305,7 +948,7 @@
     },
     {
       "url": "http://site.localhost:3741/about",
-      "status": 404,
+      "status": 200,
       "combo": "light/decline",
       "hosts": {
         "site.localhost:3741": [
@@ -1341,15 +984,12 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/status",
-      "status": 404,
+      "status": 200,
       "combo": "light/decline",
       "hosts": {
         "site.localhost:3741": [
@@ -1371,9 +1011,12 @@
     },
     {
       "url": "http://site.localhost:3741/changelog",
-      "status": 404,
+      "status": 200,
       "combo": "light/decline",
       "hosts": {
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
         "site.localhost:3741": [
           "document",
           "fetch",
@@ -1390,7 +1033,7 @@
     },
     {
       "url": "http://site.localhost:3741/brand",
-      "status": 404,
+      "status": 200,
       "combo": "light/decline",
       "hosts": {
         "site.localhost:3741": [
@@ -1403,6 +1046,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1423,9 +1069,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -1445,9 +1088,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -1465,10 +1105,10 @@
           "script",
           "stylesheet"
         ],
-        "test.rpc.fastnear.com": [
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ],
-        "rpc.testnet.fastnear.com": [
+        "test.rpc.fastnear.com": [
           "fetch"
         ]
       }
@@ -1510,6 +1150,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1615,9 +1258,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -1636,9 +1276,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1679,6 +1316,9 @@
           "script",
           "stylesheet"
         ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
         "test.rpc.fastnear.com": [
           "fetch"
         ]
@@ -1700,9 +1340,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -1721,6 +1358,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1761,9 +1401,6 @@
           "script",
           "stylesheet"
         ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
-        ],
         "test.rpc.fastnear.com": [
           "fetch"
         ]
@@ -1774,6 +1411,9 @@
       "status": 200,
       "combo": "light/decline",
       "hosts": {
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
         "app.localhost:3741": [
           "document",
           "fetch",
@@ -1784,9 +1424,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -1853,9 +1490,6 @@
         "test.rpc.fastnear.com": [
           "fetch"
         ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
-        ],
         "raw.githubusercontent.com": [
           "fetch",
           "image"
@@ -1870,7 +1504,6 @@
           "image@iframe"
         ],
         "rsms.me": [
-          "font@iframe",
           "stylesheet@iframe"
         ],
         "fonts.cdnfonts.com": [
@@ -1878,6 +1511,9 @@
         ],
         "mc.meteorwallet.app": [
           "fetch@iframe"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -1905,7 +1541,7 @@
     },
     {
       "url": "http://site.localhost:3741/about",
-      "status": 404,
+      "status": 200,
       "combo": "light/accept",
       "hosts": {
         "site.localhost:3741": [
@@ -1941,12 +1577,15 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/status",
-      "status": 404,
+      "status": 200,
       "combo": "light/accept",
       "hosts": {
         "site.localhost:3741": [
@@ -1959,35 +1598,13 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/changelog",
-      "status": 404,
-      "combo": "light/accept",
-      "hosts": {
-        "site.localhost:3741": [
-          "document",
-          "fetch",
-          "font",
-          "image",
-          "other",
-          "script",
-          "stylesheet"
-        ],
-        "test.rpc.fastnear.com": [
-          "fetch"
-        ]
-      }
-    },
-    {
-      "url": "http://site.localhost:3741/brand",
-      "status": 404,
+      "status": 200,
       "combo": "light/accept",
       "hosts": {
         "site.localhost:3741": [
@@ -2003,6 +1620,25 @@
           "fetch"
         ],
         "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3741/brand",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3741": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
           "fetch"
         ]
       }
@@ -2045,6 +1681,9 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -2063,9 +1702,6 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
-          "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -2105,9 +1741,6 @@
           "other",
           "script",
           "stylesheet"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ],
         "test.rpc.fastnear.com": [
           "fetch"
@@ -2193,9 +1826,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -2259,9 +1889,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -2303,9 +1930,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -2323,10 +1947,10 @@
           "script",
           "stylesheet"
         ],
-        "rpc.testnet.fastnear.com": [
+        "test.rpc.fastnear.com": [
           "fetch"
         ],
-        "test.rpc.fastnear.com": [
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -2347,9 +1971,6 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
-        ],
-        "rpc.testnet.fastnear.com": [
-          "fetch"
         ]
       }
     },
@@ -2368,6 +1989,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -2466,11 +2090,13 @@
         "evm-on-near.dev": [
           "image"
         ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
         "meteorwallet.app": [
           "image@iframe"
         ],
         "rsms.me": [
-          "font@iframe",
           "stylesheet@iframe"
         ],
         "fonts.cdnfonts.com": [
@@ -2505,7 +2131,7 @@
     },
     {
       "url": "http://site.localhost:3741/about",
-      "status": 404,
+      "status": 200,
       "combo": "dark/decline",
       "hosts": {
         "site.localhost:3741": [
@@ -2518,6 +2144,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -2538,12 +2167,15 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/status",
-      "status": 404,
+      "status": 200,
       "combo": "dark/decline",
       "hosts": {
         "site.localhost:3741": [
@@ -2556,13 +2188,16 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/changelog",
-      "status": 404,
+      "status": 200,
       "combo": "dark/decline",
       "hosts": {
         "site.localhost:3741": [
@@ -2576,12 +2211,15 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
     {
       "url": "http://site.localhost:3741/brand",
-      "status": 404,
+      "status": 200,
       "combo": "dark/decline",
       "hosts": {
         "site.localhost:3741": [
@@ -2633,6 +2271,9 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -2641,6 +2282,9 @@
       "status": 200,
       "combo": "dark/decline",
       "hosts": {
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
         "site.localhost:3741": [
           "document",
           "fetch",
@@ -2690,6 +2334,9 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -2706,6 +2353,9 @@
           "other",
           "script",
           "stylesheet"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ],
         "test.rpc.fastnear.com": [
           "fetch"
@@ -2728,6 +2378,9 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -2747,6 +2400,9 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -2765,6 +2421,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -2803,6 +2462,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -2861,6 +2523,9 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -2879,6 +2544,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -2918,6 +2586,9 @@
         ],
         "test.rpc.fastnear.com": [
           "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
         ]
       }
     },
@@ -2936,6 +2607,9 @@
           "stylesheet"
         ],
         "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
           "fetch"
         ]
       }
@@ -3012,11 +2686,13 @@
         "evm-on-near.dev": [
           "image"
         ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
         "meteorwallet.app": [
           "image@iframe"
         ],
         "rsms.me": [
-          "font@iframe",
           "stylesheet@iframe"
         ],
         "fonts.cdnfonts.com": [
