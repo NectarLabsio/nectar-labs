@@ -15,8 +15,11 @@
   WO-46r FACTS F-380…382 + C-020 (bde7269; implicit-account definitions differ, SDK safe side — surface in gate report), WO-42c (0bd0cb3), WO-42a web
   (2111b71; CSP frame-ancestors/object-src/base-uri/form-action, XFO, HSTS; full script-src CSP + manifest pin NOT done), WO-45 contract tests (98a0691;
   remove_extra_remote_chain 2.65 Tgas, oracle reject 2.61; src unchanged, wasm = deployed).
-- Running: WO-47 verifier (G1 2.2.1 gas-row re-check + G14 on HEAD), WO-43b docs (SECURITY.md review 2, G14 wording, copilot binding, DEMO_SCRIPT).
-  Next: G9 run 3 (docs/work/g9-final-2.md) → move submission-rc → STATE. agent1 will have 0 NVDAx after WO-47 → re-run 60-x402-accounts.sh before recording.
+- MERGED: WO-43b docs (1cb5479; SECURITY.md "Review 2" table + residuals), WO-47 verifier (dd5657c; **G1 2.2.1 gas rows PASS** 67/67 max 78.60 Tgas,
+  **G14 PASS on HEAD** with borrow_verified: E2suM2LC… #15, relay 4vW2tPF5…) → GATE_FAIL_G1_221 RESOLVED (7f5bd68); WO-43c docs (9fe4c2e). agent1 topped
+  up again ~15:26Z (2 mock NVDAx).
+- Running (parallel, own ports): WO-48 verifier G3b re-run after the review 2 web fixes; G9 run 3 (docs/work/g9-final-2.md). Then: SECURITY.md "web fixes not
+  yet through a verifier gate" line → result; move submission-rc; STATE.
 - Then: G9 re-run from a fresh clone → move `submission-rc` → STATE. Findings so far: WO-33a/b/c merged (e18ba08, 6727643, e17f17e); apps/web NOT
   deployed anywhere (no deploy config in repo; Vercel team has nectar-landing / nectar-frontend / docs-site-nectar, all created before this repo
   (2026-10-31 and earlier), 0 deployments since 2026-11-09; Railway nectar-network* also pre-date it). H5 (Vercel) still OPEN. Five stale WO-33c
@@ -101,7 +104,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T14:50:15Z · commit 0bd0cb3
+Last activity: 2026-11-11T15:27:01Z · commit efc86a1
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
