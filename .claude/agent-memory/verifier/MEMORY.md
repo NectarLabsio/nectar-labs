@@ -6,3 +6,9 @@
 - [G8 copilot recipe](reference_g8_copilot.md) — fixture is Phala sample + throwaway key; loose Key-missing spec; README overclaim trap
 - [G7 signer recipe](reference_g7_signer.md) — tx_status sign-args decode, neg control, code hash; gates.md G7 cmds absent pre-Solana
 - [G9 rehearsal recipe](reference_g9_rehearsal.md) — fresh-clone steps, Feed CORE_ACCOUNT_ID trap, docs-server kill, handoff blocker rule
+- [G11 v7 contract recipe](reference_g11_v7_contract.md) — single --nocapture run, sr test naming, gitleaks anvil-address trap, GAS formats
+- [G2b v2 deploy recipe](reference_g2b_v2_deploy.md) — code-hash rebuild proof, view arg traps, calendar paging, state drift, stale v1 ids in tests
+- [G3b v2 web recipe](reference_g3b_v2_web.md) — flags-off specs fail with v7 flags on; LH script lacks v7 routes; no tx hashes in module logs
+- [G7 v7 + G14 recipe](reference_g7_v7_g14.md) — RPC -429 → fastnear; Ed25519 ix decode; mock-ft no events
+- [G12/G13 Base fork recipe](reference_g12_g13_base_fork.md) — zsh split trap, U64 string ids, ecrecover precompile, ERC-8021 gap
+- [D-027 chain re-run](reference_chain_rerun_d027.md) — SDKROOT linker trap, bash 3.2 trap, keeper-log tx hashes, PDA history for withdraws
