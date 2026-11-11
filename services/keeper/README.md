@@ -32,9 +32,14 @@ defaults to devnet and a mainnet URL is refused. Each tick: `Settling` positions
 `relay_settlement_result(position_id, solana_tx_sig)`. v2 only (`contract_version` 2.x): `remote.status == "Releasing"` →
 `get_pending_release` → `[Ed25519, release]` → `relay_release_result` (falls back to `relay_settlement_result` if absent);
 `remote.status == "AwaitingDeposit"` + position PDA amount ≥ reserved units and authority match → `confirm_remote_deposit`.
-Every argument is transcribed from the signed message and checked by rebuilding it byte for byte. Idempotent: a used nonce PDA
-means the leg landed (the tx that created it is relayed); a closed position PDA is skipped. Optional: `NECTAR_VAULT_PROGRAM_ID`
-(cross-check), `NECTAR_VAULT_MINT` (else the Vault account is found by symbol). `/healthz` gains a `solana` block.
+Every argument is transcribed from the signed message and checked by rebuilding it byte for byte. Positions are the slot
+`["pos", vault, id, committed_depositor]` (interface-v7 §E). A leg counts as landed only when the nonce PDA is a program-owned
+`NonceRecord` matching every field, the position's status byte shows that leg, and a successful tx ran that exact instruction on
+that slot; that tx is what is relayed. A plain transfer to the nonce PDA proves nothing. Positions stay after settle or release
+until the depositor withdraws, so the status byte decides, not the account's existence. An unchanged deposit gets at most 3
+`confirm_remote_deposit` calls. The vault is pinned: `NECTAR_VAULT_PROGRAM_ID` and `NECTAR_VAULT_MINT` default to `config.yaml`
+`solana.vault_program` / `solana.mint`, the keeper refuses to start without them, and a position naming another program is
+refused. `/healthz` gains a `solana` block.
 
 ## Oracle updater (P1, D-013 — disabled until H13)
 
@@ -55,6 +60,11 @@ and the chain id is checked on the wire). Signer: Foundry keystore `BASE_KEYSTOR
 For each signed `get_pending_settlement_evm` / `get_pending_release_evm` the keeper rebuilds the EIP-712 digest from the
 view fields, checks it equals the signed digest and that the signature recovers to the vault position's authority, then
 sends `settle` / `release` and relays the 0x tx hash via `relay_settlement_result` / `relay_release_result`. The tx hash is
-stored before broadcast (restart-safe); a used vault nonce relays the tx found in `PositionSettled` / `PositionReleased` logs.
-Deposits: `confirm_remote_deposit`, or `keeper_attest_deposit` with `BASE_KEEPER_ATTEST=1` (local fork; labelled).
+stored before broadcast (restart-safe); a used nonce on the slot `keccak256(abi.encode(id, depositor))` relays the tx found in
+`PositionSettled` / `PositionReleased` logs on that slot, scanned from the reservation block (`BASE_LOG_LOOKBACK_BLOCKS`, default
+10000, applies only without a reservation time). The vault is pinned: `BASE_VAULT_ADDRESS`, default `config.yaml` `base.vault`.
+Deposits: `keeper_attest_deposit` with `BASE_KEEPER_ATTEST=1` (local fork; labelled). Without it, `confirm_remote_deposit` is
+unsupported because the quoter does not answer `vault_read` for base-sepolia: the keeper logs `base_deposit_confirm_unsupported`,
+reports `base.deposit_confirm: "unsupported"` on `/healthz`, and sends nothing. `BASE_OUTLAYER_VAULT_READ=1` enables it once the
+quoter does.
 ERC-8021 suffix: not appended while the format is unverified (F-351); `/healthz` `base.builder_suffix` says so (TODO-H19).

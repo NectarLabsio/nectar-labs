@@ -22,6 +22,12 @@ export interface RetryState {
   next_attempt_at: number;
 }
 
+export interface ConfirmState {
+  fingerprint: string;
+  attempts: number;
+  at: number;
+}
+
 export class KeeperDb {
   readonly db: DatabaseSync;
 
@@ -57,6 +63,13 @@ export class KeeperDb {
         key TEXT PRIMARY KEY,
         tx_hash TEXT NOT NULL,
         sent_at INTEGER NOT NULL
+      );
+      -- SR-11: what the vault showed when confirm_remote_deposit was last sent, so an unchanged deposit is not re-confirmed.
+      CREATE TABLE IF NOT EXISTS keeper_confirm (
+        key TEXT PRIMARY KEY,
+        fingerprint TEXT NOT NULL,
+        attempts INTEGER NOT NULL,
+        at INTEGER NOT NULL
       );
     `);
   }
@@ -127,6 +140,19 @@ export class KeeperDb {
 
   clearEvmTx(key: string): void {
     this.db.prepare('DELETE FROM keeper_evm_tx WHERE key = ?').run(key);
+  }
+
+  confirmState(key: string): ConfirmState | null {
+    const row = this.db.prepare('SELECT fingerprint, attempts, at FROM keeper_confirm WHERE key = ?').get(key);
+    return row === undefined ? null : (row as unknown as ConfirmState);
+  }
+
+  setConfirmState(key: string, fingerprint: string, attempts: number, at: number): void {
+    this.db
+      .prepare(
+        'INSERT INTO keeper_confirm (key, fingerprint, attempts, at) VALUES (?, ?, ?, ?) ON CONFLICT(key) DO UPDATE SET fingerprint = excluded.fingerprint, attempts = excluded.attempts, at = excluded.at',
+      )
+      .run(key, fingerprint, attempts, at);
   }
 
   close(): void {

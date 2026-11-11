@@ -1,5 +1,6 @@
 // Zero-config defaults for a fresh clone: account ids from packages/config/config.yaml (accounts.core,
-// usdc_mock, nvdax_mock, keeper; collateral.nvdax.token). Environment variables still override. Only
+// usdc_mock, nvdax_mock, keeper; collateral.nvdax.token; solana.vault_program, solana.mint; base.vault).
+// Environment variables still override. Only
 // indented `key: scalar` lines are read (no YAML dependency); NECTAR_CONFIG_PATH points elsewhere.
 
 import { readFileSync } from 'node:fs';
@@ -11,6 +12,14 @@ export interface RepoIds {
   nvdaxMock: string | null;
   keeper: string | null;
   nvdaxToken: string | null;
+  /** SR-31: `NECTAR_VAULT_PROGRAM_ID`, else `solana.vault_program`. */
+  solanaVaultProgram: string | null;
+  /** `solana.program_id`; must agree with `solana.vault_program` unless the env var pins the program. */
+  solanaProgramId: string | null;
+  /** SR-12: `NECTAR_VAULT_MINT`, else `solana.mint`. */
+  solanaMint: string | null;
+  /** SR-31: `BASE_VAULT_ADDRESS`, else `base.vault`. */
+  baseVault: string | null;
 }
 
 const DEFAULT_PATH = fileURLToPath(new URL('../../../packages/config/config.yaml', import.meta.url));
@@ -55,5 +64,9 @@ export function loadRepoIds(env: NodeJS.ProcessEnv = process.env): RepoIds {
     nvdaxMock: pick('NVDAX_ACCOUNT_ID', 'accounts.nvdax_mock'),
     keeper: pick('KEEPER_ACCOUNT_ID', 'accounts.keeper'),
     nvdaxToken: pick('NVDAX_TOKEN_ID', 'collateral.nvdax.token'),
+    solanaVaultProgram: pick('NECTAR_VAULT_PROGRAM_ID', 'solana.vault_program'),
+    solanaProgramId: pick('NECTAR_VAULT_PROGRAM_ID', 'solana.program_id'),
+    solanaMint: pick('NECTAR_VAULT_MINT', 'solana.mint'),
+    baseVault: pick('BASE_VAULT_ADDRESS', 'base.vault'),
   };
 }

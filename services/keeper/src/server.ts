@@ -36,6 +36,7 @@ export interface HealthBody {
     chain_id: number | null;
     signer: string;
     attest_mode: boolean;
+    deposit_confirm: string;
     builder_suffix: string;
     last_block_seen: string | null;
     last_tick_ok: boolean;
@@ -97,6 +98,7 @@ export function healthBody(s: KeeperStatus, pollMs: number, now: number, relay: 
             chain_id: base.chainId,
             signer: base.signer,
             attest_mode: base.attestMode,
+            deposit_confirm: base.depositConfirm,
             builder_suffix: base.builderSuffix,
             last_block_seen: base.lastBlockSeen,
             last_tick_ok: base.lastTickOk,
