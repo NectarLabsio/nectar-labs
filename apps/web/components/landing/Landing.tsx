@@ -507,7 +507,7 @@ export function Landing() {
             <div className={s.copy}>
               <span className={s.tag}><b />For market makers</span>
               <h2>Get paid to stand behind a price.</h2>
-              <p>Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers&apos; limit premiums fund your commitment fees, and your private parameters are read inside a TEE instead of being published.</p>
+              <p>Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers&apos; limit premiums fund your commitment fees. In this testnet build the OutLayer TEE prices with operator-set demo parameters (published in the docs), and each settlement&apos;s discount reveals their product.</p>
               <dl className={s.spec}>
                 <div><dt>Escrow</dt><dd>USDC, held by nectar-core</dd></div>
                 <div><dt>Exit</dt><dd>After the notice period</dd></div>
@@ -620,7 +620,7 @@ export function Landing() {
           <p className={s.hubcap}>Each link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.</p>
           <div className={s.seq} id="settle">
             <div><span className={s.k}>01 Flag</span><h3>Health falls below 1</h3><p>Any keeper calls <code>trigger_preliquidation(position_id)</code> with a function-call key. No deposit, no price, no hash.</p><span className={s.who}>nectar-core on NEAR testnet</span></div>
-            <div><span className={s.k}>02 Price</span><h3>A TEE computes the discount</h3><p>A pinned OutLayer program reads private market-maker parameters and returns <code>disc_bps</code>, clamped to the quote&apos;s ceiling.</p><span className={s.who}>OutLayer, attested</span></div>
+            <div><span className={s.k}>02 Price</span><h3>A TEE computes the discount</h3><p>A pinned OutLayer program returns <code>disc_bps</code>, clamped to the quote&apos;s ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement&apos;s discount reveals their product.</p><span className={s.who}>OutLayer, attested</span></div>
             <div><span className={s.k}>03 Sign</span><h3>Chain Signatures signs</h3><p>The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base). The keeper never holds a key.</p><span className={s.who}>v1.signer-prod.testnet</span></div>
             <div><span className={s.k}>04 Settle</span><h3>The vault verifies, then pays</h3><p>Solana checks the Ed25519 instruction before <code>settle</code>. Base checks EIP-712 with <code>ecrecover</code>. Then the buyer is paid and the result is relayed home.</p><span className={s.who}>nectar_vault, NectarVaultBase</span></div>
           </div>
@@ -649,7 +649,7 @@ export function Landing() {
             {sol || base ? (
               <div><svg className={s.glyph} viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M22 6l13 7.5v15L22 36 9 28.5v-15z" /><path d="M16 22l4 4 8-8" /></svg><h3>Remote deposits</h3><p>No remote loan pays out until an attested read of the vault matches the key NEAR derived for that position.</p></div>
             ) : (
-              <div><svg className={s.glyph} viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M22 6l13 7.5v15L22 36 9 28.5v-15z" /><path d="M16 22l4 4 8-8" /></svg><h3>Your data</h3><p>Analytics load only after consent; wallet addresses are never joined to IPs.</p></div>
+              <div><svg className={s.glyph} viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M22 6l13 7.5v15L22 36 9 28.5v-15z" /><path d="M16 22l4 4 8-8" /></svg><h3>Your data</h3><p>Analytics load only after consent. We never join wallet addresses to IP addresses in logs we control. Your browser talks directly to the NEAR and Solana RPC providers, which see your IP and the accounts you query.</p></div>
             )}
           </div>
           <p className={s.trustnote}>Every deployment and test run is recorded with commands, outputs and explorer links on the <a href={docsHref("project/evidence")}>Evidence</a> page.</p>

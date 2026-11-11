@@ -193,6 +193,47 @@ test.describe("design v2 flows (mocked)", () => {
     expect(JSON.parse(String(c[0]!.args.msg)).LockCollateralAndBorrow.shield).toEqual({ kind: "Weekend", window_end_ns: NEXT_OPEN.toString() });
   });
 
+  test("review 2 (R2-06, R2-07): decimal comma refused; review shows the parsed amount; a change under an open review closes it", async ({ page }) => {
+    await setup(page);
+    await page.goto("/borrow");
+    await page.getByLabel("You lock").fill("1,5");
+    await expect(page.getByText("Use a dot for decimals; commas only group thousands (1,234.5)")).toBeVisible({ timeout: 20_000 });
+    await page.getByLabel("You lock").fill("300");
+    await page.getByLabel("You borrow").fill("20,000");
+    await expect(page.getByTestId("preview-fees")).toBeVisible({ timeout: 20_000 });
+    await page.getByTestId("review-borrow").click();
+    const drawer = page.getByRole("dialog");
+    await expect(drawer.getByTestId("review-units")).toHaveText("300 NVDAx");
+    await drawer.getByTestId("show-wallet-payload").click();
+    await expect(drawer.getByTestId("review-amount")).toHaveText("300 NVDAx (300000000 base units)");
+    await expect(drawer.getByTestId("confirm-in-wallet")).toBeEnabled();
+    // The loan changes while the review is open: the review closes and nothing can be signed from the stale one.
+    await page.getByLabel("You borrow").fill("10000");
+    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(page.getByTestId("review-stale")).toContainText("Nothing was signed");
+    await page.getByTestId("review-borrow").click();
+    await page.getByRole("dialog").getByTestId("confirm-in-wallet").click();
+    const modal = page.getByRole("dialog");
+    await expect(modal.getByTestId("sign-amount")).toHaveText("300 NVDAx (300000000 base units)");
+    await expect(modal.getByTestId("sign-msg")).toContainText('"borrow_usd_e6": "10000000000"');
+    expect(await page.evaluate(() => (window.__NECTAR_E2E_CALLS__ ?? []).length)).toBe(0);
+  });
+
+  test("review 2 (R2-10): a signer that is not a testnet account sees Wrong network and the sign modal refuses", async ({ page }) => {
+    await setup(page, "dark", {}, "alice.near");
+    await page.goto("/borrow");
+    await expect(page.getByTestId("wrong-network")).toContainText("alice.near is not a NEAR testnet account", { timeout: 20_000 });
+    await page.getByLabel("You lock").fill("300");
+    await page.getByLabel("You borrow").fill("20000");
+    await expect(page.getByTestId("preview-fees")).toBeVisible({ timeout: 20_000 });
+    await page.getByTestId("review-borrow").click();
+    await page.getByRole("dialog").getByTestId("confirm-in-wallet").click();
+    const modal = page.getByRole("dialog");
+    await modal.getByRole("button", { name: "Open wallet to sign" }).click();
+    await expect(modal.getByRole("alert")).toContainText("alice.near is not a NEAR testnet account");
+    expect(await page.evaluate(() => (window.__NECTAR_E2E_CALLS__ ?? []).length)).toBe(0);
+  });
+
   test("position DI-1: Profit-Lock over the daily cap offers Repay $X first, which pre-fills Repay", async ({ page }) => {
     await setup(page);
     await page.goto("/position/7");

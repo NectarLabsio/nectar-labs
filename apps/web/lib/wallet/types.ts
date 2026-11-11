@@ -13,8 +13,6 @@ export interface TxOutcome {
 export interface WalletAdapter {
   readonly id: string;
   readonly label: string;
-  /** Network the wallet signs on. Pages refuse to sign when this is not "testnet". */
-  network(): string;
   /** Restore a previous session without UI. Must not hit the network unless the user connected before. */
   restore(): Promise<string | null>;
   connect(): Promise<string | null>;

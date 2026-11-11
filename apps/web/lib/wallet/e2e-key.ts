@@ -13,9 +13,6 @@ declare global {
 export class E2EKeyAdapter implements WalletAdapter {
   readonly id = "e2e-key";
   readonly label = "Demo key (E2E)";
-  network() {
-    return "testnet";
-  }
   private key(): E2EKey | null {
     return typeof window !== "undefined" ? (window.__NECTAR_E2E__ ?? null) : null;
   }

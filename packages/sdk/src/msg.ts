@@ -15,6 +15,7 @@ import type {
   U64,
   VaultReadConfigInput,
 } from "./types";
+import { formatUnits, formatUnitsTrim } from "./format";
 
 export const ONE_YOCTO = "1";
 export const TGAS = 1_000_000_000_000n;
@@ -137,6 +138,42 @@ export interface TxIntent {
   label: string;
   /** The decoded ft_on_transfer msg, when this is an ft_transfer_call (shown verbatim in the sign modal). */
   msg?: FtOnTransferMsg;
+}
+
+/** Token metadata the sign modal needs to decode an `amount` (config.yaml collaterals + USDC). `usd`: 1 unit = $1. */
+export interface TokenInfo {
+  symbol: string;
+  decimals: number;
+  usd?: boolean;
+}
+
+/**
+ * R2-06: the `amount` of an `ft_transfer_call` / `ft_transfer` in token units, next to the base units the wallet shows
+ * ("15 NVDAx (15000000 base units)"). Null for any other method. An unknown token is said so, never guessed.
+ */
+export function describeTransferAmount(i: Pick<TxIntent, "receiverId" | "methodName" | "args">, tokens: Readonly<Record<string, TokenInfo>>): string | null {
+  if (i.methodName !== "ft_transfer_call" && i.methodName !== "ft_transfer") return null;
+  const amt = i.args.amount;
+  if (typeof amt !== "string" || !DEC.test(amt)) return null;
+  const t = tokens[i.receiverId];
+  if (!t) return `${amt} base units of ${i.receiverId} (decimals unknown)`;
+  const usd = t.usd ? ` ($${formatUnits(amt, t.decimals, 2)})` : "";
+  return `${formatUnitsTrim(amt, t.decimals)} ${t.symbol}${usd} (${amt} base units)`;
+}
+
+function canonical(v: unknown): unknown {
+  if (Array.isArray(v)) return v.map(canonical);
+  if (v && typeof v === "object") return Object.fromEntries(Object.keys(v as Record<string, unknown>).sort().map((k) => [k, canonical((v as Record<string, unknown>)[k])]));
+  return v;
+}
+
+/**
+ * R2-07: fingerprint of exactly what the wallet would sign (receiver, method, args incl. the encoded msg, gas, deposit), as
+ * canonical JSON. Captured when a review opens; a different value later means the review is stale.
+ */
+export function intentHash(i: Pick<TxIntent, "receiverId" | "methodName" | "args" | "gas" | "deposit"> | null | undefined): string | null {
+  if (!i) return null;
+  return JSON.stringify(canonical({ receiverId: i.receiverId, methodName: i.methodName, args: i.args, gas: i.gas, deposit: i.deposit }));
 }
 
 export function tgas(n: number): string {

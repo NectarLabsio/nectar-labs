@@ -14,7 +14,10 @@ import {
   msgNotes,
   noteHref,
   noteSvgDataUri,
+  noteNeedsRetype,
   noteTransferBlock,
+  receiverNeedsLookup,
+  type ReceiverCheck,
   parseNoteId,
   positionNoteId,
   quoteNoteId,
@@ -96,13 +99,38 @@ describe("note calls", () => {
     expect(() => txNotes.setQuoteRemoteRecipient(CORE, "2", "not-base58-0OIl")).toThrow();
   });
   it("transfer block reasons", () => {
-    const base = { viewer: "a.testnet", owner: "a.testnet", locked: false, receiver: "b.testnet" };
+    const base = { viewer: "a.testnet", owner: "a.testnet", locked: false, receiver: "b.testnet", receiverCheck: "exists" as ReceiverCheck, retyped: null };
     expect(noteTransferBlock(base)).toBeNull();
     expect(noteTransferBlock({ ...base, viewer: null })).toMatch(/Connect/);
     expect(noteTransferBlock({ ...base, viewer: "c.testnet" })).toMatch(/owner/);
     expect(noteTransferBlock({ ...base, locked: true })).toMatch(/settlement/);
     expect(noteTransferBlock({ ...base, receiver: "a.testnet" })).toMatch(/already owns/);
     expect(noteTransferBlock({ ...base, receiver: "Bad" })).toMatch(/NEAR account/);
+  });
+  it("R2-09: refuses a receiver that does not exist; implicit accounts excepted; retype to confirm", () => {
+    const base = { viewer: "a.testnet", owner: "a.testnet", locked: false, receiver: "alise.testnet", receiverCheck: "exists" as ReceiverCheck, retyped: "alise.testnet" };
+    expect(noteTransferBlock(base)).toBeNull();
+    expect(noteTransferBlock({ ...base, receiverCheck: "unknown" })).toMatch(/No account alise\.testnet exists on NEAR testnet/);
+    expect(noteTransferBlock({ ...base, receiverCheck: "checking" })).toMatch(/Checking that alise\.testnet exists/);
+    expect(noteTransferBlock({ ...base, receiverCheck: { error: "HTTP 503" } })).toMatch(/Could not check .*HTTP 503.*stays off/);
+    // a named account can never pass as "implicit"
+    expect(noteTransferBlock({ ...base, receiverCheck: "implicit" })).toMatch(/Checking/);
+    const hex = "ab".repeat(32);
+    const eth = "0x" + "cd".repeat(20);
+    expect(receiverNeedsLookup(hex)).toBe(false);
+    expect(receiverNeedsLookup(eth)).toBe(false);
+    expect(receiverNeedsLookup("alice.testnet")).toBe(true);
+    expect(receiverNeedsLookup("AB".repeat(32))).toBe(true);
+    expect(noteTransferBlock({ ...base, receiver: hex, receiverCheck: "implicit", retyped: hex })).toBeNull();
+    expect(noteTransferBlock({ ...base, receiver: eth, receiverCheck: "implicit", retyped: eth })).toBeNull();
+    // retype
+    expect(noteTransferBlock({ ...base, retyped: "" })).toMatch(/again to confirm/);
+    expect(noteTransferBlock({ ...base, retyped: "alice.testnet" })).toMatch(/again to confirm/);
+    expect(noteTransferBlock({ ...base, retyped: " alise.testnet " })).toBeNull();
+    expect(noteNeedsRetype("LOAN")).toBe(true);
+    expect(noteNeedsRetype("QUOTE")).toBe(true);
+    expect(noteNeedsRetype("RESERVE")).toBe(true);
+    expect(noteNeedsRetype(null)).toBe(false);
   });
   it("share link is a tweet intent with testnet + mock collateral copy", () => {
     const u = new URL(shareToXUrl("q-3", "https://nectar.example/note/q-3"));

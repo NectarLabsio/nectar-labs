@@ -14,14 +14,25 @@ export function formatUnits(v: bigint | string, decimals: number, dp = 2): strin
   return `${neg ? "-" : ""}${whole}.${frac}`;
 }
 
+/** Every decimal place the token has, trailing zeros dropped ("15", "1.5"): the exact amount, for review screens (R2-06). */
+export function formatUnitsTrim(v: bigint | string, decimals: number): string {
+  const s = formatUnits(v, decimals, decimals);
+  return s.includes(".") ? s.replace(/\.?0+$/, "") : s;
+}
+
 export function formatUsdE6(v: bigint | string, dp = 2): string {
   const s = formatUnits(v, 6, dp);
   return s.startsWith("-") ? `-$${s.slice(1)}` : `$${s}`;
 }
 
+/** Commas are accepted only as thousands separators: "1,234.5" yes, "1,5" (decimal comma) no. */
+const GROUPED = /^\d{1,3}(,\d{3})+(\.\d*)?$/;
+
 /** Parse a user decimal string ("1,234.5") into a fixed-point integer. Throws on bad input. */
 export function parseUnits(input: string, decimals: number): bigint {
-  const s = input.trim().replace(/,/g, "");
+  const t = input.trim();
+  if (t.includes(",") && !GROUPED.test(t)) throw new Error("Use a dot for decimals; commas only group thousands (1,234.5)");
+  const s = t.replace(/,/g, "");
   if (!/^\d+(\.\d*)?$|^\.\d+$/.test(s)) throw new Error("Enter a positive number");
   const [w = "0", f = ""] = s.split(".");
   if (f.length > decimals) throw new Error(`At most ${decimals} decimal places`);

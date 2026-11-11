@@ -7,6 +7,7 @@
 import type { AccountId, Bps, FtOnTransferMsg, U128, U64 } from "./types";
 import { ONE_YOCTO, assertAccountId, assertU128, assertU64, coreCall, ftTransferCall, type TxIntent } from "./msg";
 import { isSolanaAddress } from "./solana";
+import { isImplicitAccount } from "./network";
 
 // ---------------------------------------------------------------- ids
 
@@ -290,13 +291,38 @@ export function shareToXUrl(token_id: string, pageUrl: string): string {
   return `https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(pageUrl)}`;
 }
 
-/** Why the transfer button is disabled, or null. */
-export function noteTransferBlock(o: { viewer: string | null; owner: string | null | undefined; locked: boolean | undefined; receiver: string }): string | null {
+/**
+ * R2-09: what the page knows about the receiving account. `implicit` (64-hex or `0x` + 40-hex) needs no on-chain account yet;
+ * a named account must answer `view_account` (UNKNOWN_ACCOUNT = `unknown`). An RPC failure keeps the transfer off (fail closed).
+ */
+export type ReceiverCheck = "exists" | "implicit" | "unknown" | "checking" | { error: string };
+
+/** Whether a receiver needs a `view_account` lookup before a transfer can be enabled (implicit accounts do not). */
+export const receiverNeedsLookup = (receiver: string): boolean => !isImplicitAccount(receiver);
+
+/** Every Note kind carries value (the loan, the quote's escrow and fees, the Reserve claim): the receiver is typed twice. */
+export const noteNeedsRetype = (kind: NoteKind | null | undefined): boolean => kind === "LOAN" || kind === "QUOTE" || kind === "RESERVE";
+
+/** Why the transfer button is disabled, or null. `retyped` = the confirmation field (null when no retype is required). */
+export function noteTransferBlock(o: {
+  viewer: string | null;
+  owner: string | null | undefined;
+  locked: boolean | undefined;
+  receiver: string;
+  receiverCheck: ReceiverCheck;
+  retyped: string | null;
+}): string | null {
   if (!o.viewer) return "Connect the owner's wallet to transfer this Note.";
   if (o.owner && o.viewer !== o.owner) return "Only the Note's owner can transfer it.";
   if (o.locked) return "A settlement that references this Note is in flight; transfers reopen once it completes.";
   if (!o.receiver) return "Enter the receiving NEAR account.";
   if (!/^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$/.test(o.receiver) || o.receiver.length < 2 || o.receiver.length > 64) return "Not a NEAR account id.";
   if (o.receiver === o.owner) return "The receiver already owns this Note.";
+  const c = o.receiverCheck;
+  if (c === "checking") return `Checking that ${o.receiver} exists on NEAR testnet.`;
+  if (c === "unknown") return `No account ${o.receiver} exists on NEAR testnet. A Note sent there would be stranded, or taken by whoever registers that name first.`;
+  if (typeof c === "object") return `Could not check that ${o.receiver} exists (${c.error}). Transfer stays off until the check passes.`;
+  if (c === "implicit" && receiverNeedsLookup(o.receiver)) return `Checking that ${o.receiver} exists on NEAR testnet.`;
+  if (o.retyped !== null && o.retyped.trim() !== o.receiver) return "Type the receiving account again to confirm.";
   return null;
 }

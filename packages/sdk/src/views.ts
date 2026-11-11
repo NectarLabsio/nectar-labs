@@ -65,6 +65,11 @@ export class NectarViews {
     return this.t.call<T>(this.core, method, args);
   }
 
+  /** R2-09: does `accountId` exist on chain? false = UNKNOWN_ACCOUNT. Throws on transport errors (callers fail closed). */
+  accountExists = async (accountId: string): Promise<boolean> => {
+    if (!this.t.viewAccount) throw new Error("this RPC transport cannot run view_account");
+    return (await this.t.viewAccount(accountId)) !== null;
+  };
   contractVersion = () => this.v<string>("contract_version");
   getConfig = () => this.v<CoreConfigView>("get_config");
   getCollateral = (symbol: string) => this.v<CollateralView | null>("get_collateral", { symbol });
