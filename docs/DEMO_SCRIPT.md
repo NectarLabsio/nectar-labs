@@ -1,59 +1,135 @@
-# DEMO_SCRIPT.md v3 — 3 minutes, exact clicks and commands (2026-11-10)
+# DEMO_SCRIPT.md v4 — 3 minutes, exact clicks and commands (2026-11-11)
 
-Shows only what docs/EVIDENCE.md records (gate table, 2026-11-10T16:52Z): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
-G8 PASS on a fixture (no live NEAR AI answer) · v7: G2b (`nectar-core-v2.nectar.testnet`) PASS · G7 (v7) PASS: Solana devnet release +
-settle round trip · G14 x402 PASS. The contract on camera is **`nectar-core-v2.nectar.testnet`** (the ids in `packages/config/config.yaml`).
-v1 (`nectar-core.nectar.testnet`) is the earlier deployment, kept as evidence; it is not shown.
+Shows only what docs/EVIDENCE.md records (gate table as of commit 5083d30): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
+G8 PASS on a fixture (no live NEAR AI answer) · re-runs after the D-027 security rollout, 2026-11-11T08:02Z–08:25Z, on `2.2.1-v7`:
+G11 PASS (every SR-1…SR-33 has a named test), G2b PASS, G3b PASS (design port; mocked remote and Notes E2E passed), G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
+Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims (the HTTP 402 → 200 leg was not re-run by the verifier) · G9 pending.
+The contract on camera is **`nectar-core-v2.nectar.testnet`** at `2.2.1-v7` (ids in `packages/config/config.yaml`; review findings and what
+remains open in SECURITY.md). v1 (`nectar-core.nectar.testnet`) is the earlier deployment, kept as evidence; it is not shown.
 Every number said on camera is read from the screen at recording time, never from this file. Voice-over: H11.
 
 ## Before recording: v2 state and re-seed
-State after the 2026-11-10 runs (EVIDENCE §G2b re-run, §G7, §G14; evidence/v7-modules/summary.md): positions #0 self-settled, #1 open,
-#2/#3 closed by G7, #4 open (G14 agent borrow, $10), #5 Weekend Shield; quotes #0–#3; Reserve Note `r-NVDAx-0`; owner price last set to $150
-(G7 demo control; the guard calls it stale after 900 s). Run the steps that apply, in order. Each script prints what it did; keep the logs in `evidence/demo/`.
-1. `pnpm demo:testnet` → write down price, quotes, positions, pool, session state. If the owner account is short of testnet NEAR, that is
-   H-NEAR-FAUCET (Kunal); nothing below that signs runs without it.
-2. `scripts/21-deploy-v2.sh` — **only if v2 must be rebuilt from scratch** (it creates `nectar-core-v2` + `keeper-v2` and configures
-   collateral, owner price, session calendar, signer, Solana vault and keeper attestation). The live v2 does not need it.
-3. `scripts/30-quoter-publish.sh pin` — re-pins the quoter version (`5d90edb8…`) and, on v2, the vault-read, calendar and multiplier job
-   configs to the same version. Run it only if `pnpm demo:testnet` shows the quoter disabled or a different version_key.
-4. Seed: `bash scripts/40-seed-demo.sh` (pool, buyer1 $10,000 @ 250 bps, buyer2 $5,000 @ 400 bps, borrower1 100 NVDAx) then
-   `bash scripts/41-seed-v2-fixup.sh` (funds buyer1's opted-in quote if missing, opens borrower1's second position; idempotent).
-   New ids are higher than the existing ones; note them as `#P` (position) and `#Q` (quote).
-5. Price for the session: `scripts/58-g7-v2.sh price 180000000`, moving in steps inside the 1,500 bps band (150 → 172 → 180).
-6. Solana leg (one fresh remote position for the 2:05 segment), `scripts/58-g7-v2.sh`:
-   `prep` → `reserve <units>` (prints `#R`) → `check #R` (stored authority == live derived key) → `deposit #R` → wait for the keeper's
-   `confirm_remote_deposit` (OutLayer vault read) → `show #R`. Leave `#R` open; it is pre-liquidated on camera.
-   If any step fails, use the recorded G7 run instead (positions #2/#3, links in step 9) and say "recorded run".
-7. Modules (only if the Shield / Profit-Lock / Reserve screens need fresh state): `bash scripts/61-v7-modules-testnet.sh shield`,
-   `… profitlock`, `… reserve` (refreshes the owner price first).
-8. Terminals: `pnpm --filter web dev` (:3100) · `pnpm --filter feed start` (REST :8788) · the keeper (typed, not started; it triggers
-   every triggerable position):
-   `KEEPER_KEY_PATH=~/.nectar/keys/keeper-v2.function-call.json KEEPER_SOLANA_KEYPAIR=~/.nectar/solana/keeper-fee-payer.json pnpm --filter keeper start`
-   (account ids come from config.yaml; NEAR RPC defaults to `https://test.rpc.fastnear.com`, D-025).
-9. Browser tabs: `/feed`, `/quote/new`, `/borrow`, `/console`, `/keepers`, `/position/#R`,
-   https://explorer.solana.com/tx/3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6?cluster=devnet (G7 settle),
-   https://explorer.solana.com/tx/5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv?cluster=devnet (G7 release),
-   https://testnet.nearblocks.io/txns/HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u (G7 trigger), README "Live on testnet" table.
-   The verifier got 403/429 from these explorers; open each one before recording.
-10. Wallet: near-connect with a testnet wallet holding the demo accounts (D-011). If a wallet cannot import them, the sign modal shows
-    the exact `msg` JSON; send it with the `ft_transfer_call` form from scripts/40-seed-demo.sh off camera and cut.
+Run the steps that apply, in order. Each script prints what it did; keep every log in `evidence/demo/`. Testnet, devnet and the local fork only.
+
+### 1. Live state snapshot (2026-11-11T08:25Z)
+Public read-only views on `nectar-core-v2.nectar.testnet` through `https://test.rpc.fastnear.com` (D-025), blocks 277190229–277190233:
+`contract_version`, `list_quotes {"symbol":"NVDAx"}`, `list_positions`, `get_pool`; `get_exit_capacity {"symbol":"NVDAx"}` and `ft_balance_of` at 08:28Z.
+| What | State |
+| --- | --- |
+| contract | `2.2.1-v7` |
+| local quotes | #1 buyer1 $5,477.50 @ 250 bps (opted into voluntary fills) · #0 buyer2 $5,000 @ 400 · #3 buyer2 $5,000 @ 450 |
+| remote quotes | #2 buyer1, Solana recipient `FtWQ…MU2q`, $259.12 @ 300 · #4 buyer1, Base recipient `0xcA61…1fa1`, $382.60 @ 300. Both are under $1,000, so step 4 funds fresh ones |
+| open positions | #1 borrower1, 100 NVDAx, debt $9,000 · #5 borrower1 Weekend Shield, 2 NVDAx, $189 · #4 and #13 agent1, $10 each (G14 runs) |
+| closed positions | #0 (Profit-Lock self-settle) · #2, #3 (G7, 2026-11-10) · #6, #7 (G13, 2026-11-10) · #8–#10 (G7 re-run) · #11, #12 (G13 re-run) |
+| pool | $40,791 available, $9,209 utilised |
+| oracle and limits | owner price $135 (last set in the G13 re-run) · session closed (`outside_hours`, weekend haircut 2,500 bps) · aggregate headroom $2,887.9 |
+| balances | buyer1 and buyer2: 0 mock USDC · borrower1: 29,431.10 mock USDC, 91.16 NVDAx |
+
+Repeat the read with `pnpm demo:testnet` (pool, first 16 quotes, first 16 positions, same RPC). If the owner account is short of testnet NEAR,
+that is H-NEAR-FAUCET (Kunal); nothing below that signs runs without it.
+
+### 2. Background services (start before anything that signs)
+Env var names only. Every key file is a `0600` file under `~/.nectar/`; never paste key contents into a terminal on camera.
+- **Local fork of Base Sepolia** (anvil, chain id 84532, :8545): `bash scripts/27-base-fork.sh start`, then `bash scripts/27-base-fork.sh fund`
+  (balances on the fork only). If `start` printed `fork up` instead of `fork already running`, the fork is new: do step 3 before step 4.
+- **keeper-v2 daemon**, in the terminal shown at 1:30: `pnpm --filter keeper start` with `KEEPER_KEY_PATH` (keeper-v2 function-call key),
+  `KEEPER_SOLANA_KEYPAIR` (devnet fee payer), `BASE_RPC_URL` (`http://127.0.0.1:8545`), `BASE_KEYSTORE_DIR` + `BASE_ACCOUNT` + `BASE_PASSWORD_FILE`
+  (Foundry keystore), `BASE_KEEPER_ATTEST=1` (labelled keeper attestation, because OutLayer cannot read a local fork) and `KEEPER_HEALTH_PORT=8790`
+  (as in the 2026-11-11 rollout run, evidence/rollout/keeper-20261111T070745Z.log; default 8787). Account ids, vault program, mint and Base vault
+  default to config.yaml; `NEAR_RPC_URL` defaults to `https://test.rpc.fastnear.com`. The keeper refuses to start if any `*PRIVATE_KEY*`,
+  `*SECRET_KEY*` or `MNEMONIC` variable is set (services/keeper/README.md). Startup logs `solana_relay_enabled` and `base_relay_enabled`.
+  Check: `curl -s localhost:8790/healthz`. It triggers every triggerable position, so move the price down only in the 1:15 segment.
+- **Feed**: `pnpm --filter feed start` (REST :8788, MCP :8789).
+- **x402** (not on camera; for questions only): `X402_PORT=8791` and `X402_RELAYER_KEY_PATH`, then `pnpm --filter x402 start`. Its default port
+  8790 collides with the keeper health port above (the G14 re-run used :8791, evidence/G14/rerun/summary.md).
+- **Web**: `pnpm --filter web dev` (:3100).
+
+### 3. Only if the fork was restarted: redeploy the Base vault
+The fork lives in anvil's memory. After a restart, vault `0xC64b…1226` and MockB20 `0x634F…af81d` are gone, and the Base remote chain on
+nectar-core-v2 points at an address with no code.
+1. `bash scripts/29-security-upgrade.sh 6`. Step 6 runs `scripts/26-deploy-base.sh` (registry, MockB20 and vault on the fork; it writes the new
+   addresses into config.yaml `base.*`) and swaps the extra remote chain (`remove_extra_remote_chain`, then `set_extra_remote_chain`). The script
+   continues into step 7 (clears a latched `forced_closed`, SR-13), which changes nothing when none is set.
+2. `bash scripts/62-g13-base.sh setup`.
+3. Restart the keeper: it reads `base.vault` at startup. The new vault address differs from README and SECURITY.md. Write it into
+   `evidence/demo/` and say "redeployed on the local fork" on camera.
+The G13 re-run record on the fork (positions 11 and 12) is gone with the old fork; their NEAR side still answers.
+
+### 4. Price walk and remote quotes
+- Owner price (the owner oracle, a disclosed testnet demo control): one update may move it at most 1,500 bps (config.yaml `oracle.band_bps`).
+  `reserve` and `price` in `58-g7-v2.sh` and `62-g13-base.sh` walk to the target in ≤ 14% steps, print each step and exit non-zero if a step
+  is rejected, so no manual walk is needed. `58 … reserve` targets $180 and `62 … reserve` $150. Run any Base leg before the Solana reservation:
+  a Base reserve after `#R` is open walks the price down to $150 and can trigger `#R` early (the G7 re-run triggered at $160).
+- `bash scripts/58-g7-v2.sh prep` (Solana) and `bash scripts/62-g13-base.sh setup` (Base) each fund a fresh $1,000 quote for buyer1, after an
+  owner mint, when the matching remote quote has less than $1,000 left. With the snapshot above both fund one. Note the new quote ids.
+
+### 5. Remote lifecycle on 2.2.1 (one fresh Solana position `#R` for the 1:15–2:30 segments)
+Subcommands of `bash scripts/58-g7-v2.sh` (Solana devnet). `scripts/62-g13-base.sh` has the same `reserve`, `check`, `deposit`, `show`, `repay`,
+`release` and `price` for the local fork.
+1. `reserve 3000000` (3 NVDAx, as in the G7 re-run): borrower1 calls `reserve_remote_position` with a `depositor` (its devnet wallet) and a
+   0.05 NEAR deposit; the borrow is 98% of `preview_borrow`. It prints `remote_reserved`; note the id as `#R`. Deposit before the reservation
+   expires (1,800 s, config.yaml `v7.reservation_expiry_s`).
+2. `check #R` → `AUTHORITY MATCH` (stored authority == live `derived_public_key(solana-devnet/pos/#R)`, domain 1).
+3. `deposit #R`: borrower1 opens the vault slot with the stored authority. Only the committed depositor's deposit can confirm the reservation (SR-8).
+4. Keeper: `remote_deposit_confirm_requested` → `confirm_remote_deposit` (OutLayer `vault_read`, `remote_deposit_confirmed {source: "outlayer"}`)
+   → the loan is funded, or refused with the reservation deposit refunded (`remote_loan_refused` → `reservation_deposit_refunded`). On Base the
+   keeper sends `keeper_attest_deposit` instead (labelled). Then `show #R`.
+5. The leg ends one of two ways:
+   - repay: `repay #R` → `release #R` → the keeper relays `[Ed25519 verify, release]` and calls `relay_release_result` → `withdraw #R`;
+   - price drop (the camera path): `price <usd_e6>`, walked in ≤ 14% steps (G7 re-run: 180 → 160) → keeper `preliq_triggered` → `quoter_result` →
+     `settlement_signed` → the keeper relays `[Ed25519 verify, settle]` and calls `relay_settlement_result` → `withdraw #R`. The depositor pulls the
+     remainder; if the settle took every unit, `withdraw` closes the slot and returns its rent.
+   Vault v2 pays by pull: nothing reaches the depositor until `withdraw`. On Base, `settle` and `release` still push the tokens (SR-4 is open for
+   the EVM vault, SECURITY.md), so `62` has no `withdraw`.
+6. `resign #R` only when a signed leg expired without a relay (keeper down past `expires`): `resign_remote_settlement` re-signs the same leg with a
+   fresh nonce. Anyone may call it, and the keeper relays the new signature. It only calls NEAR, so it also works for a Base position id.
+Before recording, run 1–4 only and leave `#R` Open and deposited. If any step fails, use the G7 re-run (positions 9 and 10, tabs in step 7) and say
+"recorded run".
+Base for the 2:30 segment: if the fork kept its state, `bash scripts/62-g13-base.sh show 12` (G13 re-run settle) is enough. Otherwise run a release
+leg with `62` before the Solana reservation: `reserve 3000000` → `check` → `deposit` → keeper attestation → `repay` → `release` → `show`.
+
+### 6. Other state, only when needed
+- Local quotes only if drained: `bash scripts/40-seed-demo.sh` (registers accounts, supplies $50,000 to the pool, buyer1 $10,000 @ 250 bps, buyer2
+  $5,000 @ 400 bps, a borrower1 position on 100 NVDAx), then `bash scripts/41-seed-v2-fixup.sh` (skips buyer1's quote when a 250 bps one exists, and
+  always opens one more borrower1 position). Both add state on top of what is there; skip them while the local quotes above remain.
+- **buyer2 needs mock USDC for the 0:30 segment** (0 in the snapshot): `bash scripts/42-mint-usdc.sh buyer2 <amount_usd_e6>`, for example
+  `5000000000` = $5,000. It mints mock USDC to that one account (owner key) and prints the new balance; nothing else is seeded.
+- Modules: `bash scripts/61-v7-modules-testnet.sh shield` or `… reserve` only if those screens need fresh state. `profitlock <id>` needs an open
+  position (its default #0 is closed).
+- Quoter: `bash scripts/30-quoter-publish.sh pin` only if `get_quoter_config` shows the quoter disabled or a version_key other than config.yaml
+  `outlayer.version_key` (`5f9bb287…`).
+
+### 7. Browser tabs and wallet
+Tabs: `/feed`, `/quote/new`, `/borrow`, `/console`, `/keepers`, `/position/#R`, the README "Live on testnet" table, and the G7 re-run backups
+(EVIDENCE §G7 re-run after D-027):
+- trigger, position 10: https://testnet.nearblocks.io/txns/6TKH53XpeanuU1G2ekWAF1PFpxEKs3ZvXYFu3MVyZboP
+- settle, position 10: https://explorer.solana.com/tx/3Qm6H4sWiBkrrHYyZKJaWfcn8ak1E9NBD3Cnum412E1u2VFrNRD9ccowMTD6EFaDGZdatvQ79h5XQEfw6QRvizA4?cluster=devnet
+- release, position 9: https://explorer.solana.com/tx/5vF6HxQTSPK19KyZYpqs9kGtFkNqxxCvbErTQs9ZVLYGz29eGHsf4yupyrfZCgcs4aMenF25LhSCNs2GTQTaN51d?cluster=devnet
+The verifier got 403 (NearBlocks) and 429 (Solana Explorer) from these explorers; open each one before recording.
+Wallet: near-connect with a testnet wallet holding the demo accounts (D-011). If a wallet cannot import them, the sign modal shows the exact `msg`
+JSON; send it with the `ft_transfer_call` form from scripts/40-seed-demo.sh off camera and cut.
 
 ## Script
+No hackathon name, badge or banner in any segment. Captions say "testnet", "mock collateral" and, for Base, "local fork of Base Sepolia".
 | t | Screen / command | Say / show |
 | --- | --- | --- |
 | 0:00 | `/feed` | "Lenders cap tokenized-stock LTV because DEX exit is revocable. Here market makers escrowed committed exit capacity." Point to `Q_c`, the equation card `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))`, the shared capacity and headroom (aggregate limit), and the session badge (Weekend Oracle Guard). Oracle badge: "owner oracle, disclosed". 1Click panel: NVDAx has no route, so `D_c` = 0. Nothing is deposited. |
-| 0:30 | `/quote/new` (buyer2) | $10,000, 200 bps, 7-day notice. Sign `FundPappusQuote` → toast "Quote funded" → `Q_c` is higher on `/feed`; the Quote Note `q-…` is listed under `/notes`. |
-| 0:50 | `/borrow` (borrower1) | 50 NVDAx. Static limit vs Nectar limit, premium, origination fee (30 bps), health preview. Borrow between the two bars (check before recording). Sign `LockCollateralAndBorrow` → position page with its Note `p-…`. |
-| 1:15 | `/console` (owner) | "Testnet demo control, disclosed." Lower the owner price in band-sized steps until `#R` is triggerable (read the health on `/position/#R`). |
-| 1:30 | terminal | Start the keeper (step 8). Log lines `trigger_preliquidation` for `#R`. "The keeper has a function-call key. It sends a position id, nothing else." `curl -s localhost:8787/runs`. |
-| 1:45 | nearblocks (trigger tx from the keeper log) | `quoter_requested` → OutLayer `execution_completed` → `quoter_result` (fills per quote) → `settlement_signed`. "The TEE priced the fill; the contract built the message; Chain Signatures signed it with this position's own key." If the run differs, open the G7 trigger tab `HrpQsuMW…` and say "recorded run". |
-| 2:05 | keeper log → Solana Explorer | The keeper relays `[Ed25519 verify, settle]` to `nectar_vault` on devnet and reports the tx back. In the Solana tx: ix0 Ed25519SigVerify (pubkey = the position's derived key, message = the NEAR preimage), ix1 "Instruction: Settle". `/position/#R` shows the Solana tx and Closed. Backup: the G7 settle and release tabs. |
-| 2:35 | `/console` copilot panel → terminal | Banner "Key missing": no NEAR AI key on this server, so live answers are off. `pnpm --filter web test:copilot` → 10 pass, 1 skipped (live). "The verifier hides any answer whose attestation or signature fails. Tested on a fixture, not on a live answer." |
-| 2:50 | README "Live on testnet" | "Testnet and Solana devnet. Mock collateral and mock USDC. Owner oracle. Every row links to docs/EVIDENCE.md." |
+| 0:30 | `/quote/new` (buyer2) | An amount buyer2 holds (step 6), 200 bps, 7-day notice. Sign `FundPappusQuote` → toast "Quote funded" → `Q_c` is higher on `/feed`; the Quote Note `q-…` is listed under `/notes`. |
+| 0:50 | `/borrow` (borrower1) | 50 NVDAx. Static limit vs Nectar limit, premium, origination fee (30 bps), health preview. Borrow between the two bars and inside the aggregate headroom shown on `/feed` (check before recording). Sign `LockCollateralAndBorrow` → position page with its Note `p-…`. |
+| 1:15 | `/console` (owner) | "Testnet demo control, disclosed." Say: "`#R` was reserved before recording. The borrower named its Solana wallet as the depositor and paid a 0.05 NEAR reservation deposit; OutLayer read the vault deposit before the loan was funded." Lower the owner price in band-sized steps until `#R` is triggerable (read the health on `/position/#R`; off camera, `bash scripts/58-g7-v2.sh price <usd_e6>` walks there in ≤ 14% steps). |
+| 1:30 | keeper terminal (running since step 2) | Log line `preliq_triggered` for `#R`. "The keeper has a function-call key. It sends a position id, nothing else." `curl -s localhost:8790/runs`. |
+| 1:45 | nearblocks (trigger tx from the keeper log) | `quoter_requested` → OutLayer `execution_completed` → `quoter_result` (fills per quote) → `settlement_signed`. "The TEE priced the fill; the contract built the message; Chain Signatures signed it with this position's own key." If the run differs, open the trigger tab `6TKH53Xp…` and say "recorded run". |
+| 2:05 | keeper log → Solana Explorer → terminal | Keeper `solana_tx_sending` → `solana_tx_confirmed` → `solana_leg_relayed`: `[Ed25519 verify, settle]` to `nectar_vault` on devnet. In the Solana tx: ix0 Ed25519SigVerify (pubkey = the position's derived key, message = the NEAR preimage), ix1 the vault's settle. Then `bash scripts/58-g7-v2.sh withdraw #R`: "The buyer was paid in the settle. The vault pays the depositor by pull, so the borrower withdraws the remainder." `/position/#R` shows the Solana tx and Closed. Backup: the settle tab `3Qm6H4sW…` (position 10, then withdraw 0.613144 NVDAx). |
+| 2:30 | terminal, caption "Local fork of Base Sepolia (chain id 84532), not Base Sepolia" | `bash scripts/62-g13-base.sh show 12` (or the Base id from step 5). "The same flow on an EVM vault. NEAR derives a secp256k1 key per position and the MPC signer signs the EIP-712 message on NEAR testnet. The vault runs on a local fork because no Base Sepolia faucet works without a login." |
+| 2:40 | `/console` copilot panel → terminal | Banner "Key missing": no NEAR AI key on this server, so live answers are off. `pnpm --filter web test:copilot` output (run just before) → 10 pass, 1 skipped (live). "Answers whose attestation or signature fails are hidden. Tested on a fixture, not on a live answer." |
+| 2:50 | README "Live on testnet" | "Testnet, Solana devnet and a local fork of Base Sepolia. Mock collateral and mock USDC. Owner oracle. Not audited: SECURITY.md lists what was fixed and what remains. Every row links to docs/EVIDENCE.md." |
 
-Not in the video (not verified by a gate, or not on testnet): Feed MCP with an agent client, a live NEAR AI answer, a live Pyth price,
-the corporate-action multiplier, `pay_to`, referrers, a Base spoke. The x402 payment (G14) and the Shield / Profit-Lock / Reserve runs are
-on testnet but are left out for time; the Shield / Profit-Lock / Reserve runs are not yet verifier-recorded.
+Not in the video (not verified by a gate, or not on testnet): Feed MCP with an agent client, a live NEAR AI answer, a live Pyth price, the
+corporate-action multiplier, `pay_to`, referrers, real Base Sepolia (H15), the Base web screens (`features.base: false`). On testnet but left out
+for time: the x402 payment (G14 re-run PASS for the chain claims), the Shield / Profit-Lock / Reserve runs (chain-checked by the verifier, EVIDENCE
+§v7 module runs; the Profit-Lock event is not chain-confirmed), and the web withdraw / claim / Re-sign screens (mocked E2E passed in the G3b re-run; the real-chain flow is in the G7/G13 re-runs).
 
 Capture: `pnpm demo:capture` (Playwright `e2e/screens.spec.ts`) gives silent screens; the full take above is screen-recorded by Kunal (H11).
-Note: no web E2E record against v2 is in EVIDENCE yet; rehearse every screen on v2 before recording.
+Note: the mocked E2E for the remote screens (withdraw, claim, Re-sign, owed collateral) and the Notes screens passed in the G3b re-run
+(2026-11-11T08:24Z, 5083d30; desktop and phone). Screenshot capture was not run (`REMOTE_SCREENS`, `NOTES_SCREENS` unset), and the real-chain
+flow is only in the G7/G13 re-runs, so rehearse every screen before recording.
