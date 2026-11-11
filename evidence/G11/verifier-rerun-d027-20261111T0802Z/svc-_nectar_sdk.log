@@ -1,0 +1,14 @@
+
+> @nectar/sdk@0.1.0 test /private/tmp/verify-G11-G3b-20261111T080207Z/packages/sdk
+> vitest run
+
+
+ RUN  v5.1.0 /private/tmp/verify-G11-G3b-20261111T080207Z/packages/sdk
+
+
+ Test Files  10 passed (10)
+      Tests  178 passed (178)
+   Start at  13:35:06
+   Duration  10.22s (import 58%, transform 32%, tests 9%, worker 1%)
+
+EXIT=0

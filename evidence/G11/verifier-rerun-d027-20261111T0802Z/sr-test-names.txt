@@ -1,0 +1,165 @@
+contracts/nectar-core/src/tests_notes.rs:642:fn sr23_a_refused_note_goes_back_even_if_a_settlement_started_meanwhile() {
+contracts/nectar-core/src/tests_v7b.rs:631:fn sr5_self_settle_reduces_remote_debt_and_sign_failure_restores_it() {
+contracts/nectar-core/src/tests_v7b.rs:669:fn sr3_self_leg_resign_keeps_kind_and_fee_without_a_second_credit() {
+contracts/nectar-core/src/tests_v7c.rs:56:fn sr3_expired_signed_leg_resigns_identically_with_a_fresh_nonce() {
+contracts/nectar-core/src/tests_v7c.rs:81:fn sr3_expired_signed_leg_still_blocks_release() {
+contracts/nectar-core/src/tests_v7c.rs:89:fn sr3_cancel_never_rolls_back_a_signed_leg() {
+contracts/nectar-core/src/tests_v7c.rs:98:fn sr3_resign_refused_before_expiry() {
+contracts/nectar-core/src/tests_v7c.rs:106:fn sr3_resign_refused_for_a_never_signed_leg() {
+contracts/nectar-core/src/tests_v7c.rs:115:fn sr3_resign_without_a_leg() {
+contracts/nectar-core/src/tests_v7c.rs:122:fn sr3_resign_refused_while_paused() {
+contracts/nectar-core/src/tests_v7c.rs:131:fn sr3_resign_needs_gas_reserve() {
+contracts/nectar-core/src/tests_v7c.rs:140:fn sr3_resign_refused_after_relay() {
+contracts/nectar-core/src/tests_v7c.rs:149:fn sr3_resign_failure_rolls_nothing_back_and_can_retry_at_once() {
+contracts/nectar-core/src/tests_v7c.rs:171:fn sr3_stale_callbacks_are_ignored() {
+contracts/nectar-core/src/tests_v7c.rs:185:fn sr3_malformed_resign_answer_is_a_failure() {
+contracts/nectar-core/src/tests_v7c.rs:198:fn sr5_live_seed_refuses_the_reservation() {
+contracts/nectar-core/src/tests_v7c.rs:209:fn sr5_aggregate_sizing_counts_fitting_quotes_only() {
+contracts/nectar-core/src/tests_v7c.rs:226:fn sr5_borrow_capped_at_the_largest_fitting_quote() {
+contracts/nectar-core/src/tests_v7c.rs:242:fn sr5_capacity_counts_fitting_non_exiting_quotes_only() {
+contracts/nectar-core/src/tests_v7c.rs:257:fn sr5_sizing_excludes_reserve_and_depth() {
+contracts/nectar-core/src/tests_v7c.rs:270:fn sr5_unfit_quotes_cannot_crowd_out_a_fitting_one() {
+contracts/nectar-core/src/tests_v7c.rs:317:fn sr5_near_held_debt_does_not_consume_remote_capacity() {
+contracts/nectar-core/src/tests_v7c.rs:328:fn sr5_two_remote_loans_cannot_exceed_remote_capacity() {
+contracts/nectar-core/src/tests_v7c.rs:339:fn sr5_remote_loan_still_bounded_by_the_aggregate() {
+contracts/nectar-core/src/tests_v7c.rs:350:fn sr5_repay_frees_remote_headroom() {
+contracts/nectar-core/src/tests_v7c.rs:367:fn sr5_overpaying_repay_counts_only_the_applied_amount() {
+contracts/nectar-core/src/tests_v7c.rs:376:fn sr5_settlement_reduces_remote_debt() {
+contracts/nectar-core/src/tests_v7c.rs:389:fn sr5_sign_failure_gives_the_debt_back() {
+contracts/nectar-core/src/tests_v7c.rs:398:fn sr5_cancelled_leg_gives_the_debt_back() {
+contracts/nectar-core/src/tests_v7c.rs:408:fn sr5_write_off_clears_remote_debt() {
+contracts/nectar-core/src/tests_v7c.rs:428:fn sr5_failed_proceeds_transfer_reduces_remote_debt() {
+contracts/nectar-core/src/tests_v7c.rs:436:fn sr5_near_loans_are_not_limited_by_remote_debt() {
+contracts/nectar-core/src/tests_v7c.rs:447:fn sr5_repaying_a_loan_from_before_the_counter_does_not_trap() {
+contracts/nectar-core/src/tests_v7c.rs:456:fn sr5_remote_debt_is_per_symbol_and_domain() {
+contracts/nectar-core/src/tests_v7c.rs:466:fn sr5_chains_of_one_domain_share_their_quotes() {
+contracts/nectar-core/src/tests_v7c.rs:486:fn sr5_remote_limit_boundary() {
+contracts/nectar-core/src/tests_v7c.rs:499:fn sr5_remote_limit_uses_the_position_value_for_ltv() {
+contracts/nectar-core/src/tests_v7c.rs:508:fn sr5_remote_haircut_follows_the_session_and_the_shield() {
+contracts/nectar-core/src/tests_v7c.rs:524:fn sr7_recipient_validity() {
+contracts/nectar-core/src/tests_v7c.rs:537:fn sr7_on_curve_matches_ed25519_dalek() {
+contracts/nectar-core/src/tests_v7c.rs:573:fn sr7_funding_refuses_a_recipient_no_vault_can_pay() {
+contracts/nectar-core/src/tests_v7c.rs:584:fn sr7_set_recipient_refuses_and_accepts() {
+contracts/nectar-core/src/tests_v7c.rs:598:fn sr7_legacy_quote_with_a_bad_recipient_is_never_signed() {
+contracts/nectar-core/src/tests_v7c.rs:611:fn sr8_reserve_refuses_an_off_curve_depositor() {
+contracts/nectar-core/src/tests_v7c.rs:618:fn sr8_depositor_validity_and_matching() {
+contracts/nectar-core/src/tests_v7c.rs:626:fn sr8_squatted_slot_never_confirms_the_reservation() {
+contracts/nectar-core/src/tests_v7c.rs:642:fn sr8_keeper_attestation_must_name_the_commitment() {
+contracts/nectar-core/src/tests_v7c.rs:651:fn sr8_commitment_is_exposed_sent_to_vault_read_and_off_the_struct() {
+contracts/nectar-core/src/tests_v7c.rs:666:fn sr8_pre_upgrade_reservation_without_commitment_still_confirms() {
+contracts/nectar-core/src/tests_v7c.rs:677:fn sr10_underwater_rounding_seizes_every_unit() {
+contracts/nectar-core/src/tests_v7c.rs:694:fn sr10_a_partial_quote_still_does_not_close() {
+contracts/nectar-core/src/tests_v7c.rs:701:fn sr10_contract_settles_an_odd_unit_underwater_position() {
+contracts/nectar-core/src/tests_v7c.rs:729:fn sr17_owed_collateral_is_claimable() {
+contracts/nectar-core/src/tests_v7c.rs:741:fn sr17_failed_claim_restores_the_balance() {
+contracts/nectar-core/src/tests_v7c.rs:752:fn sr17_nothing_to_claim() {
+contracts/nectar-core/src/tests_v7c.rs:760:fn sr17_claim_needs_one_yocto() {
+contracts/nectar-core/src/tests_v7c.rs:768:fn sr17_claim_refused_while_paused() {
+contracts/nectar-core/src/tests_v7c.rs:785:fn sr18_short_deposit_is_recorded_refused_and_releasable() {
+contracts/nectar-core/src/tests_v7c.rs:804:fn sr18_short_deposit_cannot_be_retried_into_a_loan() {
+contracts/nectar-core/src/tests_v7c.rs:810:fn sr18_zero_units_or_a_foreign_slot_are_not_recorded() {
+contracts/nectar-core/src/tests_evm.rs:617:fn sr3_base_resign_signs_a_fresh_digest_of_the_same_leg() {
+contracts/nectar-core/src/tests_v7d.rs:80:fn sr6_stranger_cannot_confirm() {
+contracts/nectar-core/src/tests_v7d.rs:87:fn sr6_borrower_confirm_spends_the_held_deposit_not_the_reserve() {
+contracts/nectar-core/src/tests_v7d.rs:97:fn sr6_expired_reservation_is_not_free_for_the_borrower() {
+contracts/nectar-core/src/tests_v7d.rs:106:fn sr6_keeper_reads_are_budgeted_per_position_and_the_owner_is_not() {
+contracts/nectar-core/src/tests_v7d.rs:121:fn sr6_non_liquidation_spends_keep_the_reserve_floor() {
+contracts/nectar-core/src/tests_v7d.rs:134:fn sr6_job_requests_are_keeper_or_owner_only() {
+contracts/nectar-core/src/tests_v7d.rs:148:fn sr6_short_reserve_falls_back_to_p0_instead_of_blocking_the_rescue() {
+contracts/nectar-core/src/tests_v7d.rs:161:fn sr9_no_collateral_left_parks_for_the_owner() {
+contracts/nectar-core/src/tests_v7d.rs:170:fn sr9_trigger_refused_without_collateral() {
+contracts/nectar-core/src/tests_v7d.rs:180:fn sr9_write_off_is_the_terminal_state() {
+contracts/nectar-core/src/tests_v7d.rs:196:fn sr9_write_off_refusals() {
+contracts/nectar-core/src/tests_v7d.rs:212:fn sr9_a_settle_that_cannot_succeed_never_spends_the_deposit() {
+contracts/nectar-core/src/tests_v7d.rs:225:fn sr9_aborted_run_costs_one_deposit_then_uses_static_pricing_until_the_cooldown_ends() {
+contracts/nectar-core/src/tests_v7d.rs:246:fn sr9_quoter_runs_again_after_the_cooldown() {
+contracts/nectar-core/src/tests_v7d.rs:263:fn sr13_an_outlayer_answer_closes_for_a_bounded_time() {
+contracts/nectar-core/src/tests_v7d.rs:286:fn sr14_the_record_storage_is_kept_from_the_deposit() {
+contracts/nectar-core/src/tests_v7d.rs:296:fn sr14_near_borrow_below_the_minimum_is_refunded() {
+contracts/nectar-core/src/tests_v7d.rs:307:fn sr14_remote_borrow_below_the_minimum_is_refused() {
+contracts/nectar-core/src/tests_v7d.rs:315:fn sr14_open_reservations_are_capped_per_account() {
+contracts/nectar-core/src/tests_v7d.rs:331:fn sr14_a_refused_retry_counts_as_one_end() {
+contracts/nectar-core/src/tests_v7d.rs:357:fn sr15_a_vault_serves_one_collateral() {
+contracts/nectar-core/src/tests_v7d.rs:369:fn sr15_extra_chains_too() {
+contracts/nectar-core/src/tests_v7d.rs:386:fn sr16_top_up_cannot_relist_above_the_reserve_discount() {
+contracts/nectar-core/src/tests_v7d.rs:402:fn sr16_sign_failure_leaves_a_too_expensive_quote_as_an_exit() {
+contracts/nectar-core/src/tests_v7d.rs:420:fn sr16_failed_withdrawal_restores_without_relisting_above_the_reserve() {
+contracts/nectar-core/src/tests_v7d.rs:441:fn sr19_token_change_refused_with_open_debt() {
+contracts/nectar-core/src/tests_v7d.rs:451:fn sr19_decimals_change_refused_with_live_quotes() {
+contracts/nectar-core/src/tests_v7d.rs:462:fn sr19_token_change_refused_with_owed_collateral() {
+contracts/nectar-core/src/tests_v7d.rs:472:fn sr19_idempotent_upsert_and_an_empty_book_are_fine() {
+contracts/nectar-core/src/tests_v7d.rs:487:fn sr19_a_claim_clears_the_owed_total() {
+contracts/nectar-core/src/tests_v7d.rs:499:fn sr20_dust_q_collects_no_premium_and_never_moves_the_index() {
+contracts/nectar-core/src/tests_v7d.rs:521:fn sr20_a_fill_delists_a_dust_remainder_and_credits_it() {
+contracts/nectar-core/src/tests_v7d.rs:534:fn sr20_a_signed_leg_delists_a_dust_remainder() {
+contracts/nectar-core/src/tests_v7d.rs:547:fn sr20_a_failed_signature_sweeps_nothing() {
+contracts/nectar-core/src/tests_v7d.rs:556:fn sr20_a_top_up_cannot_relist_dust() {
+contracts/nectar-core/src/tests_v7d.rs:569:fn sr21_recipient_change_needs_one_yocto() {
+contracts/nectar-core/src/tests_v7d.rs:579:fn sr24_an_aborted_run_leaves_no_lock_on_its_quotes() {
+contracts/nectar-core/src/tests_v7d.rs:596:fn sr24_a_signed_leg_locks_its_quote_until_relayed() {
+contracts/nectar-core/src/tests_v7d.rs:608:fn sr24_a_failed_signature_frees_the_quote() {
+contracts/nectar-core/src/tests_v7d.rs:619:fn sr25_withdraw_claimable_refused_while_paused() {
+contracts/nectar-core/src/tests_v7d.rs:641:fn sr26_stranger_cannot_kill_the_retry() {
+contracts/nectar-core/src/tests_v7d.rs:647:fn sr26_borrower_may_give_up_the_retry() {
+contracts/nectar-core/src/tests_v7d.rs:655:fn sr26_anyone_may_release_after_expiry() {
+contracts/nectar-core/src/tests_p1.rs:302:fn sr6_trigger_short_reserve_settles_at_static_pricing() {
+contracts/nectar-core/src/tests_p1.rs:766:fn sr6_pyth_callback_short_reserve_settles_at_static_pricing() {
+contracts/nectar-core/src/tests_reserve.rs:230:fn sr22_join_on_a_depleted_reserve_mints_one_to_one() {
+contracts/nectar-core/src/tests_reserve.rs:242:fn sr22_old_notes_keep_their_claims_and_get_nothing_from_the_new_epoch() {
+contracts/nectar-core/src/tests_reserve.rs:274:fn sr22_a_second_depletion_closes_a_second_epoch() {
+services/x402/test/x402.test.ts:169:describe('HTTP facilitator (SR-32)', () => {
+solana/tests/nectar_vault.test.ts:329:describe("SR-1 slot-scoped nonces", () => {
+solana/tests/nectar_vault.test.ts:433:describe("SR-4 pull payouts", () => {
+solana/tests/nectar_vault.test.ts:594:describe("SR-8 depositor-bound slots", () => {
+evm/test/SecurityV7.t.sol:85:    function test_SR1_v1_nonceBurnLocksCollateral() public {
+evm/test/SecurityV7.t.sol:100:    function test_SR1_v2_nonceBurnedElsewhereDoesNotBlockSlot() public {
+evm/test/SecurityV7.t.sol:114:    function test_SR1_v2_sameIdSameAuthorityRelayDoesNotBurnHonestNonce() public {
+evm/test/SecurityV7.t.sol:131:    function test_SR1_v2_nonceStillSingleUseWithinSlot() public {
+evm/test/SecurityV7.t.sol:141:    function test_SR8_v1_squatterBlocksDeposit() public {
+evm/test/SecurityV7.t.sol:150:    function test_SR8_v2_squatterDoesNotBlockDeposit() public {
+evm/test/SecurityV7.t.sol:169:    function test_SR8_v2_unknownSlotReadsEmpty() public view {
+evm/test/SecurityV7.t.sol:177:    function test_SR8_v2_squatterKeyCannotMoveHonestSlot() public {
+evm/test/SecurityV7.t.sol:184:    function test_SR8_v2_honestSignatureRefusedOnSquatterKeySlot() public {
+evm/test/SecurityV7.t.sol:193:    function test_SR8_v2_settleOnSlotNobodyOpened_reverts() public {
+evm/test/SecurityV7.t.sol:200:    function test_SR8_v2_seizeBoundedByThatSlotsDeposit() public {
+evm/test/SecurityV7.t.sol:210:    function test_SR8_v2_closedSlotCannotReopenButOtherDepositorCan() public {
+evm/test/SecurityV7.t.sol:221:    function test_SR30_v1_acceptsAtExactExpiry() public {
+evm/test/SecurityV7.t.sol:228:    function test_SR30_v2_settleAtExactExpiry_reverts() public {
+evm/test/SecurityV7.t.sol:235:    function test_SR30_v2_releaseAtExactExpiry_reverts() public {
+evm/test/SecurityV7.t.sol:242:    function test_SR30_v2_releaseOneSecondBeforeExpiry_ok() public {
+packages/sdk/test/solana.test.ts:484:  it("constants match the contract (SR-14)", () => {
+services/keeper/test/base.test.ts:504:  it('SR-8: a squatter slot under another depositor is invisible to the deposit watcher', async () => {
+services/keeper/test/base.test.ts:511:  it('SR-28: without attestation or an OutLayer read, a deposit is reported unsupported and never confirmed', async () => {
+services/keeper/test/base.test.ts:641:  it('SR-29: a used nonce scans logs from the reservation block, however long the keeper was down', async () => {
+services/keeper/test/base.test.ts:654:  it('SR-29: a used nonce with no log yet is retried after backoff, not dropped', async () => {
+services/keeper/test/base.test.ts:664:  it('SR-1: a nonce burned on another slot does not count as landed', async () => {
+services/keeper/test/base.test.ts:682:  it('SR-31: a position naming a vault other than the pinned one is refused before any signing', async () => {
+contracts/nectar-core/tests/sandbox_evm.rs:637:async fn sr3_leg_signed_on_v21_resigned_after_upgrade() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:689:async fn sr8_sr18_committed_depositor_and_short_deposit() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:726:async fn sr5_remote_loan_refused_without_fitting_capacity() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:811:async fn sr5_remote_debt_with_near_held_debt_beside_it() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:832:async fn sr5_settlement_reduces_remote_debt() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:859:async fn sr5_refused_on_v22_funds_after_upgrade() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:899:async fn sr5_gas_with_64_fitting_quotes() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:934:async fn sr7_bad_recipient_refunded_and_refused() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:960:async fn sr17_owed_collateral_claim_round_trip() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:1023:async fn sr6_sr14_sr15_sr26_remote_confirm_and_release_callers() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:1084:async fn sr9_bad_debt_parks_then_writes_off() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:1126:async fn sr16_sr19_sr20_dust_relist_and_token_guard() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:1171:async fn sr20_signed_leg_sweeps_dust() -> anyhow::Result<()> {
+contracts/nectar-core/tests/sandbox_evm.rs:1247:async fn sr27_mock_ft_charges_registration() -> anyhow::Result<()> {
+contracts/mock-ft/src/lib.rs:464:    fn sr27_free_registration_refused() {
+contracts/mock-ft/src/lib.rs:471:    fn sr27_registration_keeps_the_measured_cost_and_refunds_the_rest() {
+contracts/mock-ft/src/lib.rs:482:    fn sr27_already_registered_gets_everything_back() {
+contracts/mock-ft/src/lib.rs:490:    fn sr27_owner_registers_for_free() {
+contracts/mock-ft/src/lib.rs:499:    fn sr27_balance_of_is_none_until_registered() {
+contracts/mock-ft/src/lib.rs:506:    fn sr27_free_receipts_stop_at_the_cap() {
+services/keeper/test/solana.test.ts:606:describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
+services/keeper/test/solana.test.ts:817:  it('SR-1: a nonce burned on another slot is a different PDA and does not block the leg', async () => {
+services/keeper/test/solana.test.ts:950:describe('SR-8: depositor-bound slots', () => {
+services/keeper/test/solana.test.ts:977:describe('SR-11: deposits below the reserved units do not trigger confirm', () => {
+services/keeper/test/solana.test.ts:1126:describe('SR-12 / SR-31: program and mint are pinned', () => {
+services/keeper/test/solana.test.ts:1127:  it('SR-12: a look-alike vault under another mint changes nothing', async () => {
+services/keeper/test/solana.test.ts:1151:  it('SR-31: a lying RPC pointing at another program is refused before the fee payer signs (pinned position)', async () => {
+services/keeper/test/solana.test.ts:1168:  it('SR-31: the same through the collateral primary remote_chain', async () => {
+services/feed/test/skill.test.ts:196:  describe('pre_liq_ltv_bps refusal (SR-33)', () => {

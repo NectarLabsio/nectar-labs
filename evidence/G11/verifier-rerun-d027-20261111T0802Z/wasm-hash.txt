@@ -1,0 +1,4 @@
+wasm=target/near/nectar_core/nectar_core.wasm
+818668 bytes
+2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d  target/near/nectar_core/nectar_core.wasm
+base58 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk

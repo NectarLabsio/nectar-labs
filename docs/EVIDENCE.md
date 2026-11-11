@@ -15,10 +15,12 @@
 | G1 (v7 additions) | PASS | 2026-11-10T13:34Z–14:05Z | 09c4316 | evidence/G1/verifier-v7-20261110T1334Z/ (unit 318/0, sandbox 5/0, sandbox_p1 5/0, sandbox_p2 3/0, sandbox_v7 4/0, mock-ft 17/0, model.csv OK 87 rows; all 9 v7.rs methods gas-measured, max 8.93 Tgas; 10 owner setters (2 remote.rs, 8 p1/p2) lack a gas row, G11 scope, see §G1) |
 | G10 v7 facts + toolchain | PASS with open items (F-351, F-352, F-353) | 2026-11-10T13:44Z | 09c4316 | evidence/G10/verifier-20261110T1334Z/g10.log (FACTS F-328/329/337/338/339/340–361 present; calendar source+retrieved; solana 2.3.0 / anchor 0.32.1 / forge 1.9.0 == F-340/F-341/F-343; live derived_public_key == F-338) |
 | G7 prep (not G7) | RECORDED: vault deployed + 25 anchor tests | 2026-11-10T13:44Z | 09c4316 | evidence/G7/prep-verifier-20261110T1334Z/ (program ENZa… on devnet, vault PDA HGSF… owned by it; test:unit 7/0, test:anchor 25/0; G7 stays pending: needs v2 on testnet) |
+| G11 v7 contract (re-run after D-027) | PASS — 608 unit + 50 sandbox + mock-ft 23 green; wasm hash = deployed 2.2.1-v7; max receipt 67.69 Tgas; every SR-1…33 has an sr-named test | 2026-11-11T08:02Z–08:20Z | 3ab3026 | evidence/G11/verifier-rerun-d027-20261111T0802Z/ (forge 105/0/3, Solana 10 cargo + 55 TS, keeper 293, x402 17, feed 63, sdk 178) |
 | G11 v7 contract | PASS with open item (F-352) — re-run after WO-23c; prior FAIL block kept | 2026-11-10T15:47Z–16:12Z | 53f1e63 | evidence/G11/verifier-rerun-20261110T1547Z/ (unit 453/0 incl. tests_p2::deposit_forged_authority_refused, sandbox 5+5+4+2+9+4 = 29/0, mock-ft 17/0, model --v7 OK 132 rows; 81 v7_* + 103 tests_v7/v7b; wasm 734784 B sha256 252a6abe… (unchanged); set_shield_params 2.67 / set_job_config 2.57 Tgas; every non-private change method gas-measured, max 68.94 Tgas; see §G11) |
 | G2b testnet deploy v2 | PASS (re-run after WO-16b; prior FAIL block kept) | 2026-11-10T16:45Z–16:52Z | 91db9ea | evidence/G2b/verifier-rerun-20261110T1645Z/ (pnpm i exit 0; pnpm verify exit 0: keeper 168/0, feed 57/0, x402 9/0, sdk 77/0 + lint/typecheck; demo:testnet exit 0; code_hash 3W5bif…31ey unchanged, contract_version 2.0.0-v7; live state 3 quotes / 4 positions (#2,#3 Closed = G7 v2, expected); see §G2b) |
 | G2b (first run) | FAIL — superseded by re-run above | 2026-11-10T16:34Z–16:45Z | 1c4cdb3 | evidence/G2b/verifier-20261110T163415Z/ (rebuild sha256 252a6abe… == view_code == code_hash 3W5bif…; keeper-v2 one FC key, 5 methods; views OK; calendar 287; demo:testnet exit 0; live state drifted to 3 quotes / 3 positions during run (concurrent G7 v2 work); nearblocks 403; see §G2b) |
 | G14 x402 | PASS (1–2 hold; F-328 keys hold) | 2026-11-10T16:48Z–16:52Z | 91db9ea (clone; tests) / 6ba1b09 (summary) | evidence/G14/verifier-20261110T1645Z/ (borrow tx GcHF… agent1 → nvdax-mock ft_transfer_call → v2 position_opened #4 $10, fee $0.03; relay tx 5VL1… signer x402-relayer, Delegate by agent1 (pk 3zyEty…) → usdc-mock ft_transfer 10000 → nectar.testnet, 0 failed receipts; no ft_transfer event log (mock-ft emits none) — transfer proven by the receipt; agent1 + x402-relayer each 1 FullAccess key; x402 test 9/0; rpc.testnet.near.org returned -429 deprecation, fastnear used; see §G14) |
+| G3b web E2E (re-run after D-027 + design port) | PASS — e2e 392/0/82 exit 0; LH 22/22 ≥ 90 (21×100, home-light 97); 400 px no h-scroll 22/22 | 2026-11-11T08:08Z–08:24Z | 3ab3026 | evidence/G3b/verifier-rerun-d027-20261111T0802Z/ |
 | G3b web E2E (v2) | PASS (re-run after WO-26f; prior FAIL block kept) | 2026-11-10T17:39Z–17:48Z | 0ed567f | evidence/G3b/verifier-rerun-20261110T1740Z/ (e2e exit 0: 244 passed / 0 failed / 18 skipped, 0 flaky; write spec ×2 skipped, no key; LH a11y 20/20 = 100 on 10 routes × 2 themes; 400 px no-scroll; /api/feed live (as_of = request time, age_s 0, matches RPC get_exit_capacity); /feed 0 5xx, 0 console errors without NEXT_PUBLIC_FEED_URL; see §G3b) |
 | G3b (first run) | FAIL — superseded by re-run above; e2e 214/14/18 (7 flags-off/v1 specs × 2 projects); LH 20/20 ≥ 90; live v2 data OK | 2026-11-10T16:56Z–17:25Z | 2bf99e1 | evidence/G3b/verifier-20261110T1656Z/ (failing specs listed in §G3b; write spec skipped, no key; /notes list needs wallet) |
 | v7 module runs | PASS (Profit-Lock state only; self_settled tx hash not recorded) | 2026-11-10T17:20Z | 2bf99e1 | §v7 module runs (pos 0 Closed, quote 1 −$4,522.50; reserve r 10,000,000, r-NVDAx-0 → buyer2; shield pos 5 Weekend 15 bps) |
@@ -141,6 +143,36 @@ Verdict: **PASS on the local fork of Base Sepolia (D-026), not Base Sepolia.** f
 - "addresses on explorer": N/A for a local fork of Base Sepolia (D-026).
 
 ## G3b
+
+### G3b — web E2E after the design port (WO-33a/b/c, WO-34w) — RE-RUN after D-027 — PASS — 2026-11-11T08:08Z–08:24Z — commit 3ab3026
+
+- Same fresh clone as the G11 re-run (main@3ab3026). No secrets: no NECTAR_E2E_BORROWER_KEY, no Feed URL. Live testnet reads went through FastNEAR. Runs were sequential, never overlapping.
+- Commands:
+```
+pnpm i && pnpm --filter web build
+PW_CHANNEL=chrome pnpm --filter web e2e
+cd apps/web && npx next start -p 3100 &
+node scripts/lh-d027.mjs     # copy of scripts/lighthouse.mjs: ROUTES = the 11 gate routes, outDir evidence/G3b/rerun-d027/lighthouse (evidence/G3b/verifier-rerun-d027-20261111T0802Z/lh-d027.mjs)
+node probe-d027.mjs          # 400x860, colorScheme dark + light, documentElement.scrollWidth <= clientWidth (evidence/G3b/verifier-rerun-d027-20261111T0802Z/probe-d027.mjs)
+```
+- Output (trimmed):
+```
+pnpm i EXIT=0 · web build EXIT=0 (30 app routes)
+e2e: 392 passed, 0 failed, 82 skipped (9.5m)  EXIT=0   08:08:58Z → 08:18:28Z
+  skips (e2e-skips-by-spec.txt): testnet write spec 1 desktop + 1 phone (no key) · remote.spec 14x2 (REMOTE_SCREENS unset) ·
+  notes.spec 2x2 (NOTES_SCREENS unset) · phone copies of desktop-only specs: design-app 40, design 5, live-views 3
+  live reads passed on desktop: live-views x3 (real /quote/[id], open /position/[id], closed remote position), testnet read-only x2
+/api/health: deployed true · core nectar-core-v2.nectar.testnet · version 2.2.1-v7
+Lighthouse a11y          dark  light
+  /                       100    97   (only deduction: color-contrast on <span class="nx-delta up">)
+  /feed /feed/NVDAx /borrow /shield /position/10 /notes /quote /reserve /console /agents   100 / 100 each
+  lighthouse.log EXIT=0 (22/22 >= 90)
+400 px probe: 22/22 route x theme noHScroll=true (scrollW 400 = clientW 400); 0 responses >= 500
+  dark body-bg rgb(13, 15, 18) · light body-bg rgb(249, 250, 251)  -> both themes render
+```
+- Screenshot: evidence/G3b/verifier-rerun-d027-20261111T0802Z/borrow-400px-dark.png. The 22 LH JSON reports (4.8 MB) stay in the clone. Scores are in lighthouse-scores.tsv.
+- Explorer links opened: none (this gate sends no transactions).
+- Verdict: **PASS**. Advisory: the home page fails light-theme contrast on `.nx-delta.up` (97, above the 90 threshold).
 
 ### G3b — web E2E against nectar-core-v2 — PASS (re-run after WO-26f) — 2026-11-10T17:39Z–17:48Z — commit 0ed567f
 Fresh clone /tmp/verify-G3b-20261110T173957Z (git clone /Volumes/T7/nectar-labs, main HEAD 0ed567f), no secrets; NECTAR_E2E_BORROWER_KEY, NEXT_PUBLIC_E2E_KEY_ADAPTER, NEXT_PUBLIC_FEED_URL all unset. Config unchanged: core nectar-core-v2, 8 flags on.
@@ -333,6 +365,46 @@ Verdict: FAIL — reason: `pnpm verify` exits 1 (2 stale v1-id assertions in ser
   live state moves under concurrent G7 work, so later checks will see ≥ 3 quotes/positions.
 
 ## G11
+
+### G11 — v7 contract — RE-RUN after the D-027 security wave — PASS — 2026-11-11T08:02Z–08:20Z — commit 3ab3026
+
+- Fresh clone `/tmp/verify-G11-G3b-20261111T080207Z` (APFS) of main@3ab3026. Main later moved to 54cca8d; 3ab3026..54cca8d changes no code outside apps/docs-site. No secrets. SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk.
+- Commands (scripts: evidence/G11/verifier-rerun-d027-20261111T0802Z/g11.sh, solevm.sh):
+```
+cargo test -p nectar-core --no-fail-fast -- --nocapture      # unit + all 7 sandbox targets
+cargo test -p mock-ft
+python3 contracts/nectar-core/tests/model.py --check --v7
+(cd contracts/nectar-core && cargo near build non-reproducible-wasm); shasum -a 256 target/near/nectar_core/nectar_core.wasm
+curl rpc.testnet.fastnear.com view_account nectar-core-v2.nectar.testnet          # deployed code_hash
+cd evm && find . -name '._*' -delete && forge test
+cd solana && pnpm install --ignore-workspace && pnpm run test:unit && pnpm run test:anchor   # PATH += ~/.avm/bin, solana active_release/bin
+pnpm --filter keeper|x402|feed|@nectar/sdk test                                    # SR tests outside contracts/
+```
+- Output (trimmed):
+```
+unittests src/lib.rs        608 passed; 0 failed
+sandbox.rs 5 · sandbox_evm.rs 19 · sandbox_p1.rs 5 · sandbox_p2.rs 6 · sandbox_reserve.rs 2 · sandbox_v7.rs 9 · sandbox_v7b.rs 4   (50, 0 failed)
+cargo test -p nectar-core   EXIT=0   (08:02:40Z → ~08:19Z)
+mock-ft                     23 passed; 0 failed   EXIT=0
+model.py --check --v7       model.csv OK (132 rows)   EXIT=0
+cargo near build            EXIT=0   nectar_core.wasm 818668 bytes
+  sha256 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d = base58 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+  RPC view_account nectar-core-v2 (block 277189948) code_hash 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk  -> MATCH (/api/health version 2.2.1-v7)
+GAS (1264 rows, gas-summary.txt / gas-rows.csv):
+  per-receipt max 67.69 Tgas confirm_remote_deposit(64 fitting quotes); next 19.86 trigger+sign(64 fitting quotes)
+  tx-total max 78.72 Tgas (same call); label-only max 55.73 Tgas trigger_preliquidation(8 legs)
+  rows >= 100 Tgas: 0   (4 `attached,300T` prepaid rows excluded)
+forge test                  105 passed, 0 failed, 3 skipped (108)   EXIT=0   incl. 16 test_SR* (SR-1 x4, SR-8 x8, SR-30 x4)
+solana test:unit            10 passed (cargo)   EXIT=0
+solana test:anchor          # tests 55 # pass 55 # fail 0   EXIT=0
+keeper 293/0 · x402 17/0 · feed 63/0 · @nectar/sdk 178/0   (all EXIT=0)
+sr*-named contract tests that ran and printed ok: 124
+```
+- Security findings → reproducing tests (names in evidence/G11/verifier-rerun-d027-20261111T0802Z/sr-test-names.txt, counts in sr-map.txt; status per SECURITY.md at 54cca8d). Every finding SR-1…SR-33 has at least one test named after it, so **no fixed finding lacks a test**. Counts: SR-1 3 TS + 4 forge · SR-2 1 · SR-3 15 · SR-4 1 (Solana; EVM part open) · SR-5 29 (partial) · SR-6 10 (partial) · SR-7 6 (partial) · SR-8 10 + 8 forge · SR-9 8 · SR-10 3 · SR-11 1 · SR-12 2 · SR-13 1 · SR-14 6 · SR-15 2 · SR-16 4 · SR-17 6 · SR-18 3 · SR-19 5 · SR-20 6 · SR-21 1 · SR-22 3 · SR-23 1 · SR-24 3 · SR-25 1 · SR-26 3 · SR-27 7 · SR-28 1 · SR-29 2 · SR-30 4 forge · SR-31 4 · SR-32 1 · SR-33 1.
+- Notes: (1) SR-28 is mitigated only on the keeper side (base.test.ts:511 "deposit reported unsupported, never confirmed"). quoter/src/jobs.rs:9 still says "base-sepolia (SR-28 not implemented)". (2) I ran the tests on the fixed code only. I did not re-run them on the pre-fix code to show they fail there. The EVM `_v1_` variants (SR-1, SR-8, SR-30) are the only in-suite old-path reproductions. (3) The G1 method-vs-GAS-label coverage diff was NOT RUN in this re-run. Only the 100 Tgas ceiling was checked.
+- Log edit: line 9893 of cargo-test-nectar-core.log (a sandbox EVENT_JSON with the public anvil test account #1 address as `token`) is elided, because gitleaks flagged it as generic-api-key, a false positive. It is not a secret. No other change.
+- Explorer links opened: none. The code hash comes from RPC (nearblocks returns 403 to WebFetch).
+- Verdict: **PASS**.
 
 ### G11 — v7 contract — RE-RUN — PASS with open item F-352 — 2026-11-10T15:47Z–16:12Z — commit 53f1e63
 Clone: git clone /Volumes/T7/nectar-labs /tmp/verify-G11-20261110T154726Z (HEAD 53f1e63); SDKROOT=.../MacOSX26.5.sdk; no secrets.

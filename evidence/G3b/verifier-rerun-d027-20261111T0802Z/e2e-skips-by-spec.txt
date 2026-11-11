@@ -1,0 +1,9 @@
+   2 [desktop] › e2e/notes.spec.ts
+  14 [desktop] › e2e/remote.spec.ts
+   1 [desktop] › e2e/testnet.spec.ts
+  40 [phone] › e2e/design-app.spec.ts
+   5 [phone] › e2e/design.spec.ts
+   3 [phone] › e2e/live-views.spec.ts
+   2 [phone] › e2e/notes.spec.ts
+  14 [phone] › e2e/remote.spec.ts
+   1 [phone] › e2e/testnet.spec.ts

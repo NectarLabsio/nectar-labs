@@ -1,0 +1,17 @@
+
+| route | dark | light |
+| --- | --- | --- |
+| / | 100 | 97 |
+| /feed | 100 | 100 |
+| /feed/NVDAx | 100 | 100 |
+| /borrow | 100 | 100 |
+| /shield | 100 | 100 |
+| /position/10 | 100 | 100 |
+| /notes | 100 | 100 |
+| /quote | 100 | 100 |
+| /reserve | 100 | 100 |
+| /console | 100 | 100 |
+| /agents | 100 | 100 |
+
+reports: /private/tmp/verify-G11-G3b-20261111T080207Z/evidence/G3b/rerun-d027/lighthouse
+EXIT=0

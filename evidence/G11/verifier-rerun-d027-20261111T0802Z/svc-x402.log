@@ -1,0 +1,146 @@
+
+> x402@0.1.0 test /private/tmp/verify-G11-G3b-20261111T080207Z/services/x402
+> node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+
+TAP version 13
+# Subtest: x402 paid export (mocked facilitator chain + mocked RPC)
+    # Subtest: 402 challenge names usdc-mock, 10000, near:testnet, treasury
+    ok 1 - 402 challenge names usdc-mock, 10000, near:testnet, treasury
+      ---
+      duration_ms: 51.909833
+      type: 'test'
+      ...
+    # Subtest: 402 -> NEP-366 SignedDelegate payment -> 200 with the CSV
+    ok 2 - 402 -> NEP-366 SignedDelegate payment -> 200 with the CSV
+      ---
+      duration_ms: 215.267417
+      type: 'test'
+      ...
+    # Subtest: insufficient balance is refused by the facilitator (no settlement)
+    ok 3 - insufficient balance is refused by the facilitator (no settlement)
+      ---
+      duration_ms: 43.63625
+      type: 'test'
+      ...
+    # Subtest: feed down -> 502 and the payment is not settled
+    ok 4 - feed down -> 502 and the payment is not settled
+      ---
+      duration_ms: 45.679625
+      type: 'test'
+      ...
+    1..4
+ok 1 - x402 paid export (mocked facilitator chain + mocked RPC)
+  ---
+  duration_ms: 368.638917
+  type: 'suite'
+  ...
+# Subtest: HTTP facilitator (SR-32)
+    # Subtest: every endpoint answers 401 without the shared secret and nothing settles
+    ok 1 - every endpoint answers 401 without the shared secret and nothing settles
+      ---
+      duration_ms: 61.196125
+      type: 'test'
+      ...
+    # Subtest: a stranger payment that settles unpinned is refused here, even with the secret
+    ok 2 - a stranger payment that settles unpinned is refused here, even with the secret
+      ---
+      duration_ms: 55.471083
+      type: 'test'
+      ...
+    # Subtest: pins each route term; missing requirements are refused
+    ok 3 - pins each route term; missing requirements are refused
+      ---
+      duration_ms: 1.220041
+      type: 'test'
+      ...
+    # Subtest: malformed body with the secret is a 400 and settles nothing
+    ok 4 - malformed body with the secret is a 400 and settles nothing
+      ---
+      duration_ms: 3.308875
+      type: 'test'
+      ...
+    # Subtest: our own paid route settles through the HTTP facilitator with the secret
+    ok 5 - our own paid route settles through the HTTP facilitator with the secret
+      ---
+      duration_ms: 56.917375
+      type: 'test'
+      ...
+# Failed to fetch supported kinds from facilitator: Error: Facilitator getSupported failed (401): {"error":"unauthorized"}
+    # Subtest: a resource server without the secret cannot start against it
+    ok 6 - a resource server without the secret cannot start against it
+      ---
+      duration_ms: 5.792125
+      type: 'test'
+      ...
+    # Subtest: config: in-process by default; the listener needs a secret and ignores X402_HOST
+    ok 7 - config: in-process by default; the listener needs a secret and ignores X402_HOST
+      ---
+      duration_ms: 3.617125
+      type: 'test'
+      ...
+    # Subtest: shared secret: 0600 file only, long enough, errors carry no contents
+    ok 8 - shared secret: 0600 file only, long enough, errors carry no contents
+      ---
+      duration_ms: 1.631625
+      type: 'test'
+      ...
+    1..8
+ok 2 - HTTP facilitator (SR-32)
+  ---
+  duration_ms: 191.605791
+  type: 'suite'
+  ...
+# Subtest: wrong network refused
+    # Subtest: config refuses mainnet hints and non-testnet network ids
+    ok 1 - config refuses mainnet hints and non-testnet network ids
+      ---
+      duration_ms: 0.659209
+      type: 'test'
+      ...
+    # Subtest: the agent refuses a near:mainnet challenge before signing
+    ok 2 - the agent refuses a near:mainnet challenge before signing
+      ---
+      duration_ms: 8.931166
+      type: 'test'
+      ...
+    # Subtest: loadConfig: usdc-mock asset, 0.01 USDC, near:testnet from config.yaml
+    ok 3 - loadConfig: usdc-mock asset, 0.01 USDC, near:testnet from config.yaml
+      ---
+      duration_ms: 0.900834
+      type: 'test'
+      ...
+    1..3
+ok 3 - wrong network refused
+  ---
+  duration_ms: 10.72875
+  type: 'suite'
+  ...
+# Subtest: key paths
+    # Subtest: missing key path is a clear error naming the env variable
+    ok 1 - missing key path is a clear error naming the env variable
+      ---
+      duration_ms: 0.550666
+      type: 'test'
+      ...
+    # Subtest: loads a 0600 near-cli file, refuses a group-readable one and a mismatched account; errors carry no key
+    ok 2 - loads a 0600 near-cli file, refuses a group-readable one and a mismatched account; errors carry no key
+      ---
+      duration_ms: 2.294042
+      type: 'test'
+      ...
+    1..2
+ok 4 - key paths
+  ---
+  duration_ms: 2.98725
+  type: 'suite'
+  ...
+1..4
+# tests 17
+# suites 4
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1512.183417
+EXIT=0

@@ -1,0 +1,146 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling borsh v1.8.1
+   Compiling semver v1.0.28
+   Compiling aws-lc-sys v0.47.0
+   Compiling base64 v0.23.1
+   Compiling fnv v1.0.7
+   Compiling aws-lc-rs v1.19.0
+   Compiling smallvec v1.16.5
+   Compiling lock_api v0.4.14
+   Compiling secp256k1 v0.27.0
+   Compiling rustc_version v0.4.1
+   Compiling parking_lot_core v0.9.12
+   Compiling serde_core v1.0.229
+   Compiling getrandom v0.4.3
+   Compiling rand_chacha v0.3.1
+   Compiling parking_lot v0.12.5
+   Compiling curve25519-dalek v4.1.3
+   Compiling errno v0.3.14
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling rustix v1.1.6
+   Compiling rand v0.8.8
+   Compiling syn v2.0.119
+   Compiling syn v3.0.10
+   Compiling syn v1.0.109
+   Compiling dashmap v6.2.1
+   Compiling zeropool-bn v0.5.11
+   Compiling tempfile v3.27.0
+   Compiling Inflector v0.11.4
+   Compiling strum_macros v0.24.3
+   Compiling darling_core v0.20.11
+   Compiling darling_core v0.24.1
+   Compiling strum v0.24.1
+   Compiling zeroize_derive v1.5.0
+   Compiling derive_more-impl v2.1.1
+   Compiling enum-map-derive v0.17.0
+   Compiling tracing-attributes v0.1.31
+   Compiling enum-map v2.7.3
+   Compiling zeroize v1.9.1
+   Compiling serde_derive v1.0.229
+   Compiling borsh-derive v1.8.1
+   Compiling thiserror-impl v2.0.21
+   Compiling generic-array v0.14.9
+   Compiling derive_arbitrary v1.5.0
+   Compiling crypto-common v0.1.6
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling arbitrary v1.5.0
+   Compiling der v0.7.10
+   Compiling thiserror v2.0.21
+   Compiling sha2 v0.10.9
+   Compiling signature v2.2.0
+   Compiling serde_repr v0.1.21
+   Compiling ed25519 v2.2.3
+   Compiling darling_macro v0.20.11
+   Compiling tracing v0.1.44
+   Compiling darling v0.20.11
+   Compiling darling_macro v0.24.1
+   Compiling darling v0.24.1
+   Compiling near-config-utils v0.38.0
+   Compiling derive_more v2.1.1
+   Compiling ed25519-dalek v2.2.0
+   Compiling sec1 v0.7.3
+   Compiling sha3 v0.10.9
+   Compiling blake2 v0.10.6
+   Compiling crypto-bigint v0.5.5
+   Compiling hmac v0.12.1
+   Compiling ripemd v0.1.3
+   Compiling rfc6979 v0.4.0
+   Compiling derive_builder_core v0.20.2
+   Compiling serde_with_macros v3.24.0
+   Compiling spki v0.7.3
+   Compiling blst v0.3.17
+   Compiling strum_macros v0.26.4
+   Compiling derive_builder_macro v0.20.2
+   Compiling near-sdk-env v0.1.9
+   Compiling cfg_eval v0.1.2
+   Compiling smart-default v0.7.1
+   Compiling derive_builder v0.20.2
+   Compiling elliptic-curve v0.13.8
+   Compiling hex v0.4.3
+   Compiling near-account-id v3.0.0
+   Compiling num-rational v0.3.2
+   Compiling near-gas v0.3.7
+   Compiling near-token v0.3.6
+   Compiling serde_yaml v0.9.34+deprecated
+   Compiling ecdsa v0.16.9
+   Compiling primeorder v0.13.6
+   Compiling serde_with v3.24.0
+   Compiling uint v0.9.5
+   Compiling bytesize v1.3.3
+   Compiling near-time v0.38.0
+   Compiling chrono v0.4.45
+   Compiling primitive-types v0.10.1
+   Compiling ordered-float v4.6.0
+   Compiling p256 v0.13.2
+   Compiling near-sdk-macros v5.30.1
+   Compiling near-primitives-core v0.38.0
+   Compiling near-parameters v0.38.0
+   Compiling near-fmt v0.38.0
+   Compiling near-crypto v0.38.0
+   Compiling near-sdk-core v4.4.2
+   Compiling near-primitives v0.38.0
+   Compiling near-vm-runner v0.38.0
+   Compiling near-global-contracts v0.3.3
+   Compiling near-sdk v5.30.1
+   Compiling mock-ft v0.1.0 (/private/tmp/verify-G11-G3b-20261111T080207Z/contracts/mock-ft)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 40.49s
+     Running unittests src/lib.rs (target/debug/deps/mock_ft-648b8e621fe13b6e)
+
+running 23 tests
+test tests::multiplier_default_and_update ... ok
+test tests::new_and_metadata ... ok
+test tests::mint_owner_only ... ok
+test tests::registration_required_panics_for_unknown - should panic ... ok
+test tests::ft_transfer_call_debits_sender ... ok
+test tests::ft_transfer_insufficient - should panic ... ok
+test tests::ft_transfer_moves_balance ... ok
+test tests::ft_transfer_requires_one_yocto - should panic ... ok
+test tests::mint_rejects_non_owner - should panic ... ok
+test tests::sr27_balance_of_is_none_until_registered ... ok
+test tests::registration_required_blocks_unregistered_receiver ... ok
+test tests::set_registration_required_owner_only - should panic ... ok
+test tests::resolve_refunds_all_on_failure ... ok
+test tests::sr27_already_registered_gets_everything_back ... ok
+test tests::resolve_keeps_all_when_used ... ok
+test tests::resolve_refunds_unused ... ok
+test tests::sr27_free_registration_refused - should panic ... ok
+test tests::sr27_free_receipts_stop_at_the_cap ... ok
+test tests::sr27_owner_registers_for_free ... ok
+test tests::sr27_registration_keeps_the_measured_cost_and_refunds_the_rest ... ok
+test tests::update_multiplier_rejects_zero - should panic ... ok
+test tests::storage_shims ... ok
+test tests::update_multiplier_owner_only - should panic ... ok
+
+test result: ok. 23 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+
+   Doc-tests mock_ft
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+EXIT=0
