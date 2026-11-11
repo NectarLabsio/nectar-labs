@@ -1,0 +1,82 @@
+method	location	private	n_labels	max_Tgas	max_label
+set_extra_remote_chain	evm.rs:390	False	1	2.93	set_extra_remote_chain
+remove_extra_remote_chain	evm.rs:413	False	1	2.64	remove_extra_remote_chain
+set_job_config	jobs.rs:183	False	1	2.66	set_job_config
+set_multiplier_source	jobs.rs:203	False	1	2.73	set_multiplier_source
+request_session_check	jobs.rs:216	False	1	8.37	request_session_check+calendar
+request_multiplier_read	jobs.rs:225	False	1	8.73	request_multiplier_read+multiplier
+on_session_check	jobs.rs:239	True	0	-	-
+on_multiplier_read	jobs.rs:263	True	0	-	-
+ft_on_transfer	lib.rs:1219	False	38	13.81	LockCollateralAndBorrow(shield)
+upsert_collateral	lib.rs:1294	False	1	2.98	upsert_collateral
+set_keeper	lib.rs:1398	False	1	2.40	set_keeper
+set_fee_split	lib.rs:1403	False	1	2.40	set_fee_split
+set_dex_depth	lib.rs:1411	False	1	2.66	set_dex_depth
+set_quote_params	lib.rs:1418	False	1	2.41	set_quote_params
+set_oracle_params	lib.rs:1424	False	1	2.41	set_oracle_params
+update_owner_price	lib.rs:1434	False	2	2.74	update_owner_price
+propose_price	lib.rs:1459	False	1	2.68	propose_price
+apply_price	lib.rs:1467	False	1	2.89	apply_price
+pause	lib.rs:1480	False	1	2.43	pause
+unpause	lib.rs:1486	False	1	2.43	unpause
+fund_gas_reserve	lib.rs:1493	False	1	2.38	fund_gas_reserve
+initiate_quote_withdrawal	lib.rs:1502	False	1	2.93	initiate_quote_withdrawal
+complete_quote_withdrawal	lib.rs:1523	False	1	7.98	complete_quote_withdrawal
+claim_fees	lib.rs:1552	False	2	7.90	claim_fees(dust)
+trigger_preliquidation	lib.rs:1573	False	32	72.19	trigger+pyth+quoter+8legs
+write_off_bad_debt	lib.rs:1610	False	1	3.08	write_off_bad_debt
+on_payout	lib.rs:1638	True	0	-	-
+nft_transfer	notes.rs:557	False	3	3.76	nft_transfer
+nft_transfer_call	notes.rs:565	False	1	9.27	nft_transfer_call(returned)
+nft_resolve_transfer	notes.rs:604	True	0	-	-
+set_quote_remote_recipient	notes.rs:631	False	1	3.62	set_quote_remote_recipient
+on_quoter_result	p1.rs:441	True	0	-	-
+on_pyth_price	p1.rs:497	True	0	-	-
+cancel_settlement	p1.rs:568	False	1	3.03	cancel_settlement
+set_quoter_secrets_ref	p1.rs:585	False	1	2.60	set_quoter_secrets_ref
+set_quoter_pin	p1.rs:601	False	1	2.51	set_quoter_pin
+set_quoter_config	p1.rs:611	False	1	2.48	set_quoter_config
+set_outlayer_account	p1.rs:634	False	1	2.40	set_outlayer_account
+set_vol_bps	p1.rs:639	False	1	2.75	set_vol_bps
+set_oracle_source	p1.rs:652	False	1	2.66	set_oracle_source
+set_max_conf_bps	p1.rs:670	False	1	2.40	set_max_conf_bps
+on_signature	p2.rs:361	True	0	-	-
+resign_remote_settlement	p2.rs:422	False	1	19.12	resign_remote_settlement+sign
+on_resign_signature	p2.rs:485	True	0	-	-
+relay_settlement_result	p2.rs:533	False	2	3.35	relay_settlement_result
+set_signer_config	p2.rs:564	False	1	2.62	set_signer_config
+set_remote_chain	p2.rs:576	False	1	2.88	set_remote_chain
+reserve_remote_position	remote.rs:582	False	3	13.04	reserve_remote_position(base)+derived_public_key
+on_authority	remote.rs:720	True	0	-	-
+expire_remote_reservation	remote.rs:761	False	2	3.70	expire_remote_reservation
+confirm_remote_deposit	remote.rs:785	False	11	78.60	confirm_remote_deposit(64 fitting quotes)
+on_deposit_verified	remote.rs:874	True	0	-	-
+keeper_attest_deposit	remote.rs:931	False	2	12.68	keeper_attest_deposit+payout
+request_remote_release	remote.rs:957	False	3	26.30	request_remote_release(base)+sign
+on_release_signature	remote.rs:1042	True	0	-	-
+relay_release_result	remote.rs:1088	False	2	3.06	relay_release_result
+set_allow_keeper_deposit_attestation	remote.rs:1110	False	1	2.56	set_allow_keeper_deposit_attestation
+set_vault_read_config	remote.rs:1117	False	1	2.65	set_vault_read_config
+set_reserve_params	reserve.rs:330	False	1	2.90	set_reserve_params
+initiate_reserve_exit	reserve.rs:349	False	1	3.12	initiate_reserve_exit
+complete_reserve_exit	reserve.rs:386	False	1	13.25	complete_reserve_exit
+set_shield_params	shields.rs:339	False	1	2.77	set_shield_params
+set_max_voluntary_fill	shields.rs:378	False	1	2.73	set_max_voluntary_fill
+self_settle	shields.rs:389	False	2	21.42	self_settle(remote)+sign
+set_session_calendar	v7.rs:25	False	1	10.09	set_session_calendar
+force_session_closed	v7.rs:39	False	1	2.73	force_session_closed
+set_multiplier	v7.rs:58	False	1	2.77	set_multiplier
+announce_corporate_action	v7.rs:80	False	1	2.76	announce_corporate_action
+apply_corporate_action	v7.rs:100	False	1	2.83	apply_corporate_action
+register_referrer	v7.rs:126	False	1	2.57	register_referrer
+unregister_referrer	v7.rs:133	False	1	2.56	unregister_referrer
+set_origination_fee_bps	v7.rs:145	False	1	2.45	set_origination_fee_bps
+withdraw_claimable	v7.rs:155	False	1	7.71	withdraw_claimable
+claim_owed_collateral	v7.rs:171	False	2	8.39	claim_owed_collateral(still unregistered)
+withdraw_treasury	v7.rs:190	False	3	7.74	withdraw_treasury(after upgrade)
+withdraw_lender_fees	v7.rs:204	False	1	7.56	withdraw_lender_fees
+withdraw_liquidity	v7.rs:219	False	1	7.74	withdraw_liquidity
+new	lib.rs:1167 (#[init], -> Self)	False	1	2.41	new
+# methods: 78 (67 non-private incl. new, 11 #[private] callbacks)
+# non-private methods without a GAS row: 0 []
+# non-private methods with a row >= 100 Tgas: 0

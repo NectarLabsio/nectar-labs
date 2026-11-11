@@ -1,0 +1,11 @@
+clone HEAD 48b5c5abc966444e5043d734063a87e36ecafe06 (/tmp/verify-g1g14-20261111T145956Z)
+$ git log -S'2.2.1-v7' -- contracts/nectar-core/src          -> 4a67bd6 (introduces CONTRACT_VERSION "2.2.1-v7")
+$ git log -1 -- contracts/{mock-ft,nectar-core,test-stubs}/src
+4a67bd6 2026-11-11T13:18:32+05:30 fix(contract): remote limit uses remote debt (SR-5 regression)
+$ git diff --stat 4a67bd6 HEAD -- contracts/{mock-ft,nectar-core,test-stubs}/src
+(empty)
+$ git diff --stat 45ed1f3 HEAD -- contracts
+ contracts/nectar-core/tests/sandbox_evm.rs | 45 ++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+$ git diff --stat 45ed1f3 HEAD -- contracts/{mock-ft,nectar-core,test-stubs}/src contracts/nectar-core/Cargo.toml Cargo.lock
+(empty)

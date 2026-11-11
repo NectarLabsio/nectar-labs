@@ -1,0 +1,269 @@
+
+> x402@0.1.0 test /private/tmp/verify-g1g14-20261111T145956Z/services/x402
+> node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+
+TAP version 13
+# Subtest: borrow guard: expectation from the agent inputs + config.yaml
+    # Subtest: defaults: NVDAx token and core from config, 1 NVDAx, $10, pre-liq range from the collateral entry
+    ok 1 - defaults: NVDAx token and core from config, 1 NVDAx, $10, pre-liq range from the collateral entry
+      ---
+      duration_ms: 0.909042
+      type: 'test'
+      ...
+    # Subtest: env overrides (the inputs it sends); DEMO_PRE_LIQ_LTV_BPS pins an exact value
+    ok 2 - env overrides (the inputs it sends); DEMO_PRE_LIQ_LTV_BPS pins an exact value
+      ---
+      duration_ms: 0.249958
+      type: 'test'
+      ...
+    # Subtest: refuses bad inputs and missing or non-testnet ids before any network call
+    ok 3 - refuses bad inputs and missing or non-testnet ids before any network call
+      ---
+      duration_ms: 0.584042
+      type: 'test'
+      ...
+    1..3
+ok 1 - borrow guard: expectation from the agent inputs + config.yaml
+  ---
+  duration_ms: 2.413208
+  type: 'suite'
+  ...
+# Subtest: borrow guard: verifyBorrowCall
+    # Subtest: the honest Feed call passes and the agent signs its own byte-identical rebuild
+    ok 1 - the honest Feed call passes and the agent signs its own byte-identical rebuild
+      ---
+      duration_ms: 0.687458
+      type: 'test'
+      ...
+    # Subtest: accepts an explicit memo: null (SDK tx.borrow shape)
+    ok 2 - accepts an explicit memo: null (SDK tx.borrow shape)
+      ---
+      duration_ms: 0.121042
+      type: 'test'
+      ...
+    # Subtest: refuses the review scenario: ft_transfer of the whole balance to an attacker on usdc-mock
+    ok 3 - refuses the review scenario: ft_transfer of the whole balance to an attacker on usdc-mock
+      ---
+      duration_ms: 0.208375
+      type: 'test'
+      ...
+    # Subtest: refuses ft_transfer_call to another receiver
+    ok 4 - refuses ft_transfer_call to another receiver
+      ---
+      duration_ms: 0.239041
+      type: 'test'
+      ...
+    # Subtest: refuses a bigger amount than requested
+    ok 5 - refuses a bigger amount than requested
+      ---
+      duration_ms: 0.328417
+      type: 'test'
+      ...
+    # Subtest: refuses a call addressed to another token
+    ok 6 - refuses a call addressed to another token
+      ---
+      duration_ms: 0.314292
+      type: 'test'
+      ...
+    # Subtest: refuses a msg that redirects proceeds (pay_to) or adds a referrer or shield
+    ok 7 - refuses a msg that redirects proceeds (pay_to) or adds a referrer or shield
+      ---
+      duration_ms: 0.456334
+      type: 'test'
+      ...
+    # Subtest: refuses a different borrow amount, collateral or msg variant
+    ok 8 - refuses a different borrow amount, collateral or msg variant
+      ---
+      duration_ms: 0.289583
+      type: 'test'
+      ...
+    # Subtest: refuses a msg whose bytes differ from the rebuild (duplicate keys, whitespace)
+    ok 9 - refuses a msg whose bytes differ from the rebuild (duplicate keys, whitespace)
+      ---
+      duration_ms: 0.108125
+      type: 'test'
+      ...
+    # Subtest: refuses pre-liq outside the collateral range, or not the pinned value
+    ok 10 - refuses pre-liq outside the collateral range, or not the pinned value
+      ---
+      duration_ms: 0.157708
+      type: 'test'
+      ...
+    # Subtest: refuses deposit other than 1 yocto, gas above 300 Tgas, extra fields and non-objects
+    ok 11 - refuses deposit other than 1 yocto, gas above 300 Tgas, extra fields and non-objects
+      ---
+      duration_ms: 0.210125
+      type: 'test'
+      ...
+    1..11
+ok 2 - borrow guard: verifyBorrowCall
+  ---
+  duration_ms: 3.553125
+  type: 'suite'
+  ...
+# Subtest: demo-agent subprocess: verifies the MCP call before signing
+    # Subtest: hostile MCP (ft_transfer to an attacker on usdc-mock): exit 3, clear message, zero RPC requests
+    ok 1 - hostile MCP (ft_transfer to an attacker on usdc-mock): exit 3, clear message, zero RPC requests
+      ---
+      duration_ms: 406.432667
+      type: 'test'
+      ...
+    # Subtest: hostile MCP (honest call with a bigger amount and pay_to): exit 3, zero RPC requests
+    ok 2 - hostile MCP (honest call with a bigger amount and pay_to): exit 3, zero RPC requests
+      ---
+      duration_ms: 383.707666
+      type: 'test'
+      ...
+    # Subtest: honest MCP: passes the guard and signs exactly the rebuilt call
+    ok 3 - honest MCP: passes the guard and signs exactly the rebuilt call
+      ---
+      duration_ms: 396.101334
+      type: 'test'
+      ...
+    1..3
+ok 3 - demo-agent subprocess: verifies the MCP call before signing
+  ---
+  duration_ms: 1195.65675
+  type: 'suite'
+  ...
+# Subtest: x402 paid export (mocked facilitator chain + mocked RPC)
+    # Subtest: 402 challenge names usdc-mock, 10000, near:testnet, treasury
+    ok 1 - 402 challenge names usdc-mock, 10000, near:testnet, treasury
+      ---
+      duration_ms: 21.332417
+      type: 'test'
+      ...
+    # Subtest: 402 -> NEP-366 SignedDelegate payment -> 200 with the CSV
+    ok 2 - 402 -> NEP-366 SignedDelegate payment -> 200 with the CSV
+      ---
+      duration_ms: 75.050209
+      type: 'test'
+      ...
+    # Subtest: insufficient balance is refused by the facilitator (no settlement)
+    ok 3 - insufficient balance is refused by the facilitator (no settlement)
+      ---
+      duration_ms: 13.670709
+      type: 'test'
+      ...
+    # Subtest: feed down -> 502 and the payment is not settled
+    ok 4 - feed down -> 502 and the payment is not settled
+      ---
+      duration_ms: 10.414583
+      type: 'test'
+      ...
+    1..4
+ok 4 - x402 paid export (mocked facilitator chain + mocked RPC)
+  ---
+  duration_ms: 127.519042
+  type: 'suite'
+  ...
+# Subtest: HTTP facilitator (SR-32)
+    # Subtest: every endpoint answers 401 without the shared secret and nothing settles
+    ok 1 - every endpoint answers 401 without the shared secret and nothing settles
+      ---
+      duration_ms: 18.404292
+      type: 'test'
+      ...
+    # Subtest: a stranger payment that settles unpinned is refused here, even with the secret
+    ok 2 - a stranger payment that settles unpinned is refused here, even with the secret
+      ---
+      duration_ms: 17.519375
+      type: 'test'
+      ...
+    # Subtest: pins each route term; missing requirements are refused
+    ok 3 - pins each route term; missing requirements are refused
+      ---
+      duration_ms: 0.4305
+      type: 'test'
+      ...
+    # Subtest: malformed body with the secret is a 400 and settles nothing
+    ok 4 - malformed body with the secret is a 400 and settles nothing
+      ---
+      duration_ms: 1.7395
+      type: 'test'
+      ...
+    # Subtest: our own paid route settles through the HTTP facilitator with the secret
+    ok 5 - our own paid route settles through the HTTP facilitator with the secret
+      ---
+      duration_ms: 14.989958
+      type: 'test'
+      ...
+# Failed to fetch supported kinds from facilitator: Error: Facilitator getSupported failed (401): {"error":"unauthorized"}
+    # Subtest: a resource server without the secret cannot start against it
+    ok 6 - a resource server without the secret cannot start against it
+      ---
+      duration_ms: 1.810708
+      type: 'test'
+      ...
+    # Subtest: config: in-process by default; the listener needs a secret and ignores X402_HOST
+    ok 7 - config: in-process by default; the listener needs a secret and ignores X402_HOST
+      ---
+      duration_ms: 2.411583
+      type: 'test'
+      ...
+    # Subtest: shared secret: 0600 file only, long enough, errors carry no contents
+    ok 8 - shared secret: 0600 file only, long enough, errors carry no contents
+      ---
+      duration_ms: 1.007458
+      type: 'test'
+      ...
+    1..8
+ok 5 - HTTP facilitator (SR-32)
+  ---
+  duration_ms: 59.160667
+  type: 'suite'
+  ...
+# Subtest: wrong network refused
+    # Subtest: config refuses mainnet hints and non-testnet network ids
+    ok 1 - config refuses mainnet hints and non-testnet network ids
+      ---
+      duration_ms: 0.255042
+      type: 'test'
+      ...
+    # Subtest: the agent refuses a near:mainnet challenge before signing
+    ok 2 - the agent refuses a near:mainnet challenge before signing
+      ---
+      duration_ms: 1.86375
+      type: 'test'
+      ...
+    # Subtest: loadConfig: usdc-mock asset, 0.01 USDC, near:testnet from config.yaml
+    ok 3 - loadConfig: usdc-mock asset, 0.01 USDC, near:testnet from config.yaml
+      ---
+      duration_ms: 0.245541
+      type: 'test'
+      ...
+    1..3
+ok 6 - wrong network refused
+  ---
+  duration_ms: 2.448041
+  type: 'suite'
+  ...
+# Subtest: key paths
+    # Subtest: missing key path is a clear error naming the env variable
+    ok 1 - missing key path is a clear error naming the env variable
+      ---
+      duration_ms: 0.227959
+      type: 'test'
+      ...
+    # Subtest: loads a 0600 near-cli file, refuses a group-readable one and a mismatched account; errors carry no key
+    ok 2 - loads a 0600 near-cli file, refuses a group-readable one and a mismatched account; errors carry no key
+      ---
+      duration_ms: 1.128167
+      type: 'test'
+      ...
+    1..2
+ok 7 - key paths
+  ---
+  duration_ms: 1.416667
+  type: 'suite'
+  ...
+1..7
+# tests 34
+# suites 7
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1605.321708
+EXIT=0

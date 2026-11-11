@@ -1,0 +1,9 @@
+
+> x402@0.1.0 start /private/tmp/verify-g1g14-20261111T145956Z/services/x402
+> node --disable-warning=ExperimentalWarning src/main.ts
+
+{"ts":"2026-11-11T15:02:15.807Z","service":"x402","msg":"x402_started","port":8891,"network":"near:testnet","asset":"usdc-mock.nectar.testnet","amount":"10000","pay_to":"nectar.testnet","facilitator":"in-process (relayer x402-relayer.nectar.testnet)","feed":"http://127.0.0.1:8788","facilitator_http":"off"}
+{"ts":"2026-11-11T15:02:23.663Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-11T15:02:37.859Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-11T15:02:37.865Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-11T15:02:48.530Z","service":"x402","msg":"paid","network":"near:testnet","transaction":"4vW2tPF5Gqemkm5uoafQE6eaXidSMSCuqLcDVMTTB77b"}
