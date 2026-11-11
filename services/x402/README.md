@@ -17,9 +17,16 @@ pnpm --filter x402 test                  # mocked facilitator chain + mocked NEA
 
 - `src/server.ts`: resource server (`x402HTTPResourceServer` over `node:http`). The CSV is fetched from the Feed
   **before** settlement, so a Feed outage never charges the payer. `createFacilitatorHttp` exposes our
-  facilitator at `/verify`, `/settle`, `/supported` (`X402_FACILITATOR_PORT`).
+  facilitator at `/verify`, `/settle`, `/supported` (`X402_FACILITATOR_PORT`, default off; see below).
 - Facilitator: `createNearFacilitator`, relayer `x402-relayer.nectar.testnet`, key from the 0600 file at
-  `X402_RELAYER_KEY_PATH` (full-access; never logged). `X402_FACILITATOR_URL` uses a remote one instead.
+  `X402_RELAYER_KEY_PATH` (full-access; never logged). In-process is the default. `X402_FACILITATOR_URL` uses a
+  remote one instead; set `X402_FACILITATOR_SECRET_PATH` as well to send it a bearer token.
+- HTTP facilitator (SR-32): the relayer pays gas for every settle, so the listener refuses to start without
+  `X402_FACILITATOR_SECRET_PATH`, a 0600 file holding one token of at least 32 characters (`openssl rand -hex 32`).
+  Every request needs `Authorization: Bearer <token>` (else 401). `/verify` and `/settle` accept only this service's
+  route terms: scheme, network, asset, amount, `payTo`, timeout (else 403). It binds `127.0.0.1` whatever `X402_HOST`
+  says; `X402_FACILITATOR_HOST` overrides that, and a non-loopback bind needs TLS in front because the token is a
+  plain header.
 - `src/demo-agent.ts`: gets the unsigned borrow from the Feed MCP tool `open_protected_stock_loan`, signs it with
   `AGENT1_KEY_PATH` (near-api-js 7.4.0), then pays the 402 with a NEP-366 SignedDelegate. Env: `FEED_MCP_URL`,
   `X402_URL`, `X402_RPC_URL` (default `https://test.rpc.fastnear.com`), `DEMO_UNITS` (1000000 = 1 NVDAx),

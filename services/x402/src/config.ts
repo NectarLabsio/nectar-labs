@@ -1,7 +1,7 @@
 // x402 configuration (PRD v7 §10.5, F-328/F-329). Testnet only: the network id is fixed to `near:testnet`
 // and anything that names mainnet is refused. Ids come from env, else packages/config/config.yaml (read with
-// the feed's dependency-free flattener). Keys are PATHS (X402_RELAYER_KEY_PATH, AGENT1_KEY_PATH), loaded by
-// keys.ts and never logged.
+// the feed's dependency-free flattener). Keys and secrets are PATHS (X402_RELAYER_KEY_PATH, AGENT1_KEY_PATH,
+// X402_FACILITATOR_SECRET_PATH), loaded by keys.ts and never logged.
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -11,6 +11,8 @@ export const NETWORK = 'near:testnet' as const;
 /** 0.01 mock USDC (6 decimals) in smallest units. */
 export const PRICE_AMOUNT = '10000';
 export const ROUTE = 'GET /api/feed/export.csv';
+export const SCHEME = 'exact' as const;
+export const MAX_TIMEOUT_SECONDS = 120;
 export const DEFAULT_RPC = 'https://test.rpc.fastnear.com';
 
 const DEFAULT_CONFIG = fileURLToPath(new URL('../../../packages/config/config.yaml', import.meta.url));
@@ -28,6 +30,12 @@ export interface X402Config {
   feedUrl: string;
   /** Remote facilitator; null = in-process facilitator with our relayer. */
   facilitatorUrl: string | null;
+  /** HTTP listener for our facilitator; null = in-process only (the default). Never set with facilitatorUrl. */
+  facilitatorPort: number | null;
+  /** 127.0.0.1 unless X402_FACILITATOR_HOST is set; X402_HOST does not apply (SR-32). */
+  facilitatorHost: string;
+  /** 0600 file with the bearer token: required by the listener, sent to facilitatorUrl when set. */
+  facilitatorSecretPath: string | null;
   relayerAccountId: string;
   relayerKeyPath: string | null;
   port: number;
@@ -53,6 +61,13 @@ export function yamlIds(env: NodeJS.ProcessEnv): Map<string, string> {
   }
 }
 
+function listenerPort(v: string | undefined): number | null {
+  if (placeholder(v) || v === 'off') return null;
+  const port = Number(v);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new ConfigError('X402_FACILITATOR_PORT must be a TCP port or "off"');
+  return port;
+}
+
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): X402Config {
   assertTestnet(env);
   const y = yamlIds(env);
@@ -69,6 +84,12 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): X402Config {
   if (asset === null) throw new ConfigError('no mock USDC token id (X402_ASSET or accounts.usdc_mock)');
   if (payTo === null) throw new ConfigError('no treasury account (X402_PAY_TO or accounts.treasury/accounts.owner)');
   if (relayer === null) throw new ConfigError('no relayer account (X402_RELAYER_ACCOUNT_ID or v7.x402_relayer)');
+  const facilitatorUrl = pick('X402_FACILITATOR_URL');
+  const facilitatorSecretPath = pick('X402_FACILITATOR_SECRET_PATH');
+  const facilitatorPort = facilitatorUrl === null ? listenerPort(env.X402_FACILITATOR_PORT) : null;
+  if (facilitatorPort !== null && facilitatorSecretPath === null) {
+    throw new ConfigError('X402_FACILITATOR_PORT needs X402_FACILITATOR_SECRET_PATH: the HTTP facilitator never runs without a shared secret');
+  }
   return {
     network: NETWORK,
     rpcUrl: pick('X402_RPC_URL') ?? DEFAULT_RPC,
@@ -76,7 +97,10 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): X402Config {
     amount: PRICE_AMOUNT,
     payTo,
     feedUrl: pick('FEED_URL') ?? 'http://127.0.0.1:8788',
-    facilitatorUrl: pick('X402_FACILITATOR_URL'),
+    facilitatorUrl,
+    facilitatorPort,
+    facilitatorHost: pick('X402_FACILITATOR_HOST') ?? '127.0.0.1',
+    facilitatorSecretPath,
     relayerAccountId: relayer,
     relayerKeyPath: pick('X402_RELAYER_KEY_PATH'),
     port: Number(env.X402_PORT ?? 8790),
