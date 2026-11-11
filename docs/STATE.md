@@ -1,6 +1,27 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## In flight (2026-11-11 ~18:10Z) — Kunal's second request (no push / post / send)
+## In flight (2026-11-11 ~19:50Z) — WO-34 hosting + rest of the second request (no push / post / send)
+- Kunal confirmed in session: deploy to production on Vercel (frontend, docs) and Railway (backend). Master WO: docs/work/wo-34-deploy.md.
+- **Pre-check:**
+  - nectarlabs.io is UNREGISTERED (NXDOMAIN; Vercel shows it available, $14.99 / $46 renewal) → H-DOMAIN.
+  - Vercel plan Hobby. Railway plan not readable → H-HOST.
+  - No CLI logged in → H-HOST.
+  - Key line treated as unconfirmed (template fields left blank) → H-KEYS.
+  - Operator fields null in config.yaml `site:` → H-LEGAL.
+  - No deploy has happened.
+- WO-51 MERGED (banner under the wallet selector; verify:quick 0). Orders committed 518dc6e.
+- Running round 1 (worktrees): WO-34r researcher (hosting FACTS, C-022 domain), WO-34a web (hosts/rewrite/env/CSP/guard), WO-34k keeper (Railway-ready
+  Feed + x402), WO-34d docs (docs-site /docs/, handoffs, D-030).
+- Then:
+  - Round 2: WO-34b web site pages + inventory, WO-34e docs legal.
+  - G3b re-run 3 on the code-final commit.
+  - Deploy that commit (after H-HOST).
+  - WO-34v production acceptance.
+  - README "Hosted demo".
+  - G9 run 4.
+  - submission-rc. One G3b + G9 covers both requests (Kunal).
+
+## Earlier in flight (2026-11-11 ~18:10Z) — Kunal's second request (no push / post / send)
 - Kunal decided: **H16 tracks = defi, security, agents** (nfts after the Position Note answer); **C-020 kept** → SECURITY.md known limitation.
 - Running: WO-51 web (consent banner under the wallet selector), WO-52 docs (tracks field, privacy-track framing out of SUBMISSION/README/X_POST, C-020 +
   remote Loan Note release-to-depositor limitation, HUMAN_HANDOFF H16, DECISIONS, DEMO_SCRIPT agent1 = 8), WO-53r researcher (zod GHSA-mrhx-c7xc-m3w5,
@@ -134,7 +155,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T17:48:32Z · commit 54d6054
+Last activity: 2026-11-11T18:26:54Z · commit f2d7a92
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
