@@ -1,0 +1,43 @@
+
+> web@0.1.0 dev /private/tmp/verify-G9r-1794387441/apps/web
+> next dev -p 3100
+
+▲ Next.js 16.4.5 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://192.168.1.7:3100
+✓ Ready in 234ms
+✓ Running next.config.ts took 23ms
+- Experiments (use with caution):
+  ⨯ turbopackFileSystemCacheForBuild
+  ⨯ turbopackFileSystemCacheForDev
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3100". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 245ms (next.js: 85ms, application-code: 159ms)
+ GET / 200 in 28ms (next.js: 0.6ms, application-code: 28ms)
+ GET /borrow 200 in 40ms (next.js: 3ms, application-code: 37ms)
+ GET /feed 200 in 27ms (next.js: 4ms, application-code: 24ms)
+ GET /feed/NVDAx 200 in 206ms (next.js: 187ms, application-code: 20ms)
+ GET /quote/new 200 in 23ms (next.js: 3ms, application-code: 20ms)
+ GET /console 200 in 48ms (next.js: 11ms, application-code: 37ms)
+ GET /notes 200 in 20ms (next.js: 3ms, application-code: 17ms)
+ GET /reserve 200 in 20ms (next.js: 4ms, application-code: 17ms)
+ GET /shield 200 in 23ms (next.js: 3ms, application-code: 20ms)
+ GET /agents 200 in 19ms (next.js: 3ms, application-code: 16ms)
+ GET /keepers 200 in 18ms (next.js: 3ms, application-code: 15ms)
+ GET /security 200 in 18ms (next.js: 3ms, application-code: 15ms)
+ GET /talk 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /docs 200 in 16ms (next.js: 3ms, application-code: 13ms)
+ GET /legal/privacy 200 in 231ms (next.js: 6ms, generate-params: 191ms, application-code: 34ms)
+ GET /legal/cookies 200 in 16ms (next.js: 0.4ms, generate-params: 1.4ms, application-code: 14ms)
+ GET /legal/terms 200 in 21ms (next.js: 0.3ms, generate-params: 0.0ms, application-code: 20ms)
+ GET /legal/disclaimers 200 in 15ms (next.js: 0.3ms, generate-params: 0.0ms, application-code: 15ms)
+ GET /position/1 200 in 206ms (next.js: 185ms, application-code: 21ms)
+ GET /quote/0 200 in 201ms (next.js: 186ms, application-code: 15ms)
+ GET /note/q-0 200 in 203ms (next.js: 186ms, application-code: 17ms)
+ GET /markets 404 in 103ms (next.js: 90ms, application-code: 13ms)
+ GET /earn 404 in 14ms (next.js: 2ms, application-code: 11ms)
+[?25h
+/private/tmp/verify-G9r-1794387441/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 dev: `next dev -p 3100`
+Exit status 143

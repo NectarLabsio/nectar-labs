@@ -1,0 +1,7 @@
+
+> feed@0.1.0 start /private/tmp/verify-G9r-1794387441/services/feed
+> node --disable-warning=ExperimentalWarning src/main.ts
+
+{"ts":"2026-11-11T08:58:13.672Z","level":"info","service":"feed","msg":"feed_started","port":18788,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"18789","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
+{"ts":"2026-11-11T08:58:15.947Z","level":"info","service":"feed","msg":"neardata_cursor_init","height":277193578}
+{"ts":"2026-11-11T08:58:16.066Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}

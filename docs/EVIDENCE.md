@@ -30,7 +30,8 @@
 | G7 Solana + signer (re-run after D-027) | PASS — read-only, both chains | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G7/verifier-20261111T080154Z/ (pos 8/9/10 authority == live derived_public_key domain 1; confirm txs source "outlayer", funded false/true/true, pos 8 refused aggregate_limit + refund; 3 Solana txs finalized, ix0 Ed25519 → ix1 vault, pubkey == authority, sig valid, tampered msg invalid; ProgramData 426,837 B = 45 B header + 426,792 B ELF; recipient +2.386856, depositor withdrew 3 / 3 / 0.613144; PDAs closed; NEAR Closed; see §G7) |
 | G13 Base round trip (re-run after D-027) | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; earlier caveats (ERC-8021, Solana-domain revert in forge only) stand, not re-checked | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G13/verifier-20261111T080154Z/ (pos 11/12 authority == keccak addr of derived key domain 0; relay txs 0x12f5…0cd5 / 0xa2fe…c648 status 1; hashRelease/hashSettle == NEAR digest; ecrecover == authority; positionOf 3 / 2; borrower1 7→10→7.642611, buyer1 +2.357389; replay → NonceUsed(10) / NonceUsed(14); nonceUsed[slotKey] true; see §G13) |
 | G14 x402 (re-run after D-027) | PASS for the chain claims; the HTTP 402 → 200 leg was not re-run by the verifier | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G14/verifier-20261111T080154Z/ (borrow HvFX6… agent1 → nvdax-mock ft_transfer_call → core-v2 position_opened #13 $10; relay BemztvL… x402-relayer → Delegate agent1 → usdc-mock ft_transfer {nectar.testnet, 10000}, all receipts success; see §G14) |
-| G9 fresh-clone rehearsal | FAIL — one copy-rule breach: docs-site page Project › Evidence (`apps/docs-site/docs/project/evidence.md:11`, built to /project/evidence) says "built for the NEAR Hackathon". Everything else passed: quick start in about 3 min, demo:testnet / verify / docs build / gitleaks (268 commits) exit 0, Feed MCP stdio + HTTP live with no env, ids answer on RPC | 2026-11-11T08:43Z–08:50Z | c5f6349 | evidence/G9/20261111T084317Z/ (see §G9) |
+| G9 fresh-clone rehearsal (re-run after WO-38) | PASS — quick start under 2 min; demo:testnet, verify (ui 7, feed 63, keeper 293, x402 17, sdk 178; 0 failed), verify:quick (repo-wide branding check first), docs build and gitleaks (272 commits, no leaks) all exit 0; no "hackathon" in the product sources, the built docs site or search-index.json; 21 README routes 200; Feed MCP stdio + HTTP live; no unbacked claim; payload builds with `website` absent | 2026-11-11T08:57Z–09:00Z | 0af5cdd | evidence/G9/20261111T085721Z/ (see §G9 re-run) |
+| G9 (first run) | FAIL — superseded by the re-run above; one copy-rule breach: docs-site page Project › Evidence (`apps/docs-site/docs/project/evidence.md:11`, built to /project/evidence) says "built for the NEAR Hackathon". Everything else passed: quick start in about 3 min, demo:testnet / verify / docs build / gitleaks (268 commits) exit 0, Feed MCP stdio + HTTP live with no env, ids answer on RPC | 2026-11-11T08:43Z–08:50Z | c5f6349 | evidence/G9/20261111T084317Z/ (see §G9) |
 
 Block format (one per run, newest first within a gate):
 
@@ -505,6 +506,57 @@ Explorer: none opened (G10 is facts + read-only RPC).
 Result: PASS with open items F-351 (ERC-8021 format, G12/G13 scope), F-352 (xStocks multiplier, G11), F-353 (Rhea ids). None used in code.
 
 ## G9
+
+### G9 — final fresh-clone rehearsal — RE-RUN after WO-38 — PASS — 2026-11-11T08:57Z–09:00Z — commit 0af5cdd
+Fresh clone `/tmp/verify-G9r-1794387441` of the local repo (main HEAD 0af5cdd: WO-38 b143b72 merged as d0e8465, plus 0af5cdd, which adds `scripts/check-no-branding-all.mjs` to `verify:quick`). No remote, nothing pushed, no keys.
+Since c5f6349 nothing changed in packages/config, contracts/, services/ or apps/web. The changes are in README, docs-site pages, HUMAN_HANDOFF and the new scan script.
+The host Feed on :8788/:8789 (pid 56878) was left running. My Feed used FEED_PORT=18788, FEED_MCP_PORT=18789 and FEED_DB_PATH inside the clone. Full logs: evidence/G9/20261111T085721Z/.
+```
+quick start (README §Quick start; clone 08:57:25Z → every README route answering 08:58:43Z)
+$ pnpm i                              exit 0   6 s                                                                pnpm-i.log
+$ pnpm demo:testnet                   exit 0   3 s   2.2.1-v7; Q_c $16,119.22 R_c $10; pool $40,791 / $9,209;       demo-testnet.log
+                                                    quotes #0–#4; positions #0–#13, Open #1 #4 #5 #13 (= README line 47)
+$ pnpm verify                         exit 0  15 s   check-no-branding-all ("no hackathon branding in landing, web app   verify.log
+                                                    or docs site") → lint → typecheck → ui 7/0, feed 63/0, keeper 293/0, x402 17/0, sdk 178/0 → views
+$ pnpm --filter web dev               21 README routes 200 (/, /borrow, /feed, /feed/NVDAx, /quote/new, /console, /notes, /reserve,   web-dev-curl.txt
+                                      /shield, /agents, /keepers, /security, /talk, /docs, /legal/{privacy,cookies,terms,disclaimers},
+                                      /position/1, /quote/0, /note/q-0); /markets and /earn 404 as README says; every page: hackathon 0, testnet ≥ 16, "mock collateral" ≥ 8
+optional / gate
+$ pnpm verify:quick                   exit 0   8 s   branding scan runs first                                           verify-quick.log
+$ pnpm --filter docs-site build       exit 0  10 s   "[SUCCESS] Generated static files in build"                        docs-build.log
+$ gitleaks detect --log-opts=--all    exit 0   1 s   "272 commits scanned … no leaks found"                            gitleaks.log
+$ node scripts/build-submission.mjs   exit 0   dry run, no --send; `website` key absent                         build-submission.log
+```
+Guesses: one. The clone URL is TODO-H2, so I used the local path. The other five guesses from the first run are now answered in the README:
+the Feed env line, the optional FEED_PORT / FEED_MCP_PORT / FEED_DB_PATH variables and the EADDRINUSE behaviour, a pointer to the MCP client snippets plus the accept header, the route list, and current timings.
+
+Copy rules / branding (step 4): **PASS.**
+- `grep -ri hackathon` over apps/web, apps/docs-site, landing and packages/ui (excluding node_modules and build output) finds only apps/web/scripts/check-no-branding.mjs and the e2e negative assertions.
+- The built docs site, including build/search-index.json (971 kB) and build/project/evidence.html, has 0 files containing "hackathon".
+- "insurance" and "without liquidations" appear only in code comments and e2e negative assertions; the built docs site has 0 hits.
+- The new check-no-branding-all.mjs covers landing, apps/web/{app,components,lib,public}, packages/ui and the docs-site docs/blog/src/static/sidebars/config.
+
+Feed MCP (step 5): **PASS** using only the README commands.
+- stdio `pnpm -s --filter feed mcp` on an empty store: initialize nectar-feed 0.3.0 (2025-06-18). tools/list returns 8 tools. get_exit_capacity source "view", block 277193574, q_usd_e6 16119220000. list_quotes is live.
+- HTTP :18789/mcp from the clone's own `pnpm --filter feed start` (pid 59708, cwd = clone): the same answers, block 277193596. `feed_started core nectar-core-v2.nectar.testnet` with no CORE_ACCOUNT_ID. REST /healthz 200 `ok:true`.
+
+Claims (step 3): **PASS.**
+- The README and docs-site wording added in WO-38 (Feed env, routes, timings, demo state, the `agents` line "scripted JSON-RPC client, not an LLM agent", G9 FAIL / re-run pending) matches §G9 and this run.
+- Ids and config are unchanged since the first run. Spot check: nectar-core-v2 code_hash is still 3mv4LRm6…ovFvk.
+- The first-run claim trace still holds, including the mock-ft code_hash record.
+- README and docs-site still say "G9 FAIL … re-run pending". That understates this result; it does not overclaim.
+
+Submission (step 6): the payload builds and `website` is absent. Tracks are defi, security, privacy. Open fields: leadName / email / size = TODO-H10 · nearAddress / consent = TODO-H14 · projectUrl = TODO-H2 · demoUrl = TODO-H3.
+
+Handoffs (step 7), 26 entries:
+- DONE 4: H-TOOLCHAIN, H-TOOLCHAIN-SOLANA, H-SOL-AIRDROP, H-NEAR-FAUCET (now DONE, citing the §G2b deploy).
+- KUNAL-ONLY 7: H1, H2, H3, H10, H11, H14, H16.
+- DEFAULT-AT-DEADLINE 13: H-EXPLORER, H4, H5, H7, H8, H9, H12, H13, H15, H17, H18, H19, H20.
+- Not in scope 1: H6.
+- OTHER-OPEN 1: H-GUARD-V7, marked "Kunal-only; no product claim depends on it". No README claim rests on it.
+
+Explorer links: none opened. Ids were proven by RPC, as in the first run.
+Result: **PASS.** The only reason for the first run's FAIL (hackathon copy on a docs-site page) is fixed. Every other step passes again.
 
 ### G9 — final fresh-clone rehearsal — FAIL (one copy-rule breach in the docs site; every command and claim check passed) — 2026-11-11T08:43Z–08:50Z — commit c5f6349
 Fresh clone `/tmp/verify-G9-1794386597` of the local repo (`git clone /Volumes/T7/nectar-labs`, main HEAD c5f6349; no remote, nothing pushed). Node v22.23.4, pnpm 10.34.9,

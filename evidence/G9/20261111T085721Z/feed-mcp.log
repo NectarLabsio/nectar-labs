@@ -1,0 +1,15 @@
+## stdio (pnpm -s --filter feed mcp), FEED_DB_PATH in temp clone, empty store
+initialize -> {"name":"nectar-feed","version":"0.3.0"} protocol 2025-06-18
+tools/list -> get_exit_capacity, preview_borrow, list_quotes, explain_limit, open_protected_stock_loan, quote_capacity, get_note, build_self_settle
+tools/call #3 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"block_height\": 277193574,\n  \"q_usd_e6\": \"16119220000\",\n  \"r_usd_e6\": \"10000000\",\n  \"d_usd_e6\": \"0\",\n  \"haircut_bps\": 2500,\n  \"session_open\": false,\n  \"oracle_price_usd_e6\": \"135000000\",\n  \"or
+tools/call #4 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"quotes\": [\n    {\n      \"quote_id\": \"0\",\n      \"collateral\": \"NVDAx\",\n      \"committed_usd_e6\": \"5000000000\",\n      \"remaining_usd_e6\": \"5000000000\",\n      \"max_discount_bps\": 400,\n      \"notice
+stderr(first 300): {"ts":"2026-11-11T08:58:12.845Z","level":"info","service":"feed-mcp","msg":"mcp_stdio_ready","live_views":true}
+
+## HTTP http://127.0.0.1:18789/mcp (pnpm --filter feed start, FEED_PORT=18788 FEED_MCP_PORT=18789)
+initialize -> {"name":"nectar-feed","version":"0.3.0"} protocol 2025-06-18
+notification -> HTTP 202
+tools/list -> get_exit_capacity, preview_borrow, list_quotes, explain_limit, open_protected_stock_loan, quote_capacity, get_note, build_self_settle
+tools/call #3 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"block_height\": 277193596,\n  \"q_usd_e6\": \"16119220000\",\n  \"r_usd_e6\": \"10000000\",\n  \"d_usd_e6\": \"0\",\n  \"haircut_bps\": 2500,\n  \"session_open\": false,\n  \"oracle_price_usd_e6\": \"135000000\",\n  \"or
+tools/call #4 -> {"content":[{"type":"text","text":"{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"quotes\": [\n    {\n      \"quote_id\": \"0\",\n      \"collateral\": \"NVDAx\",\n      \"committed_usd_e6\": \"5000000000\",\n      \"remaining_usd_e6\": \"5000000000\",\n      \"max_discount_bps\": 400,\n      \"notice
+## REST healthz :18788
+{"ok":true,"last_block_seen":277193578,"last_poll_at":"2026-11-11T08:58:17.230Z","last_error":"","source":"views+neardata","events_indexed":0} HTTP 200
