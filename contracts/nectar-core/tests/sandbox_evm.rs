@@ -1268,3 +1268,48 @@ async fn sr27_mock_ft_charges_registration() -> anyhow::Result<()> {
     assert_eq!(view(&e.usdc, "free_registrations", json!({})).await?, json!(0));
     Ok(())
 }
+
+/// G1 gas rows (WO-45, GATE_FAIL_G1_221): `remove_extra_remote_chain` (owner only; the chain is gone afterwards; an
+/// unknown chain is refused) and the `update_owner_price` band-reject branch (returns false, emits `oracle_rejected`,
+/// leaves price and timestamp untouched).
+#[tokio::test]
+async fn wo45_remove_extra_remote_chain_and_oracle_band_reject() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    let stranger = e.worker.dev_create_account().await?;
+    base_chain(&e, &core).await?;
+    let chains = view(&core, "get_remote_chains", json!({ "symbol": "NVDAx" })).await?;
+    assert_eq!(chains.as_array().map(Vec::len), Some(1), "{chains}");
+    assert_eq!(chains[0]["chain_id"], "base-sepolia");
+    assert_eq!(chains[0]["primary"], false);
+
+    let args = json!({ "symbol": "NVDAx", "chain_id": "base-sepolia" });
+    let r = stranger.call(core.id(), "remove_extra_remote_chain").args_json(args.clone()).transact().await?;
+    fails_with(&r, "owner only");
+    assert_eq!(view(&core, "get_remote_chains", json!({ "symbol": "NVDAx" })).await?.as_array().map(Vec::len), Some(1));
+
+    let r = e.owner.call(core.id(), "remove_extra_remote_chain").args_json(args.clone()).transact().await?;
+    gas("remove_extra_remote_chain", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    let ev = events(&r, "extra_remote_chain_removed");
+    assert_eq!(ev, vec![json!({ "symbol": "NVDAx", "chain_id": "base-sepolia" })]);
+    assert_eq!(view(&core, "get_remote_chains", json!({ "symbol": "NVDAx" })).await?, json!([]));
+    let r = e.owner.call(core.id(), "remove_extra_remote_chain").args_json(args).transact().await?;
+    fails_with(&r, "unknown remote chain");
+
+    // init_core set 180 USD; 100 USD is -44 %, outside the default band.
+    let before = view(&core, "get_collateral", json!({ "symbol": "NVDAx" })).await?;
+    assert_eq!(before["oracle_price_usd_e6"], "180000000");
+    let r = e.owner.call(core.id(), "update_owner_price")
+        .args_json(json!({ "symbol": "NVDAx", "price_usd_e6": "100000000" })).transact().await?;
+    gas("update_owner_price(oracle_rejected)", &r);
+    assert!(r.is_success(), "{:?}", r.failures());
+    let ev = events(&r, "oracle_rejected");
+    assert_eq!(ev, vec![json!({ "symbol": "NVDAx", "price_usd_e6": "100000000", "last_usd_e6": "180000000" })]);
+    assert!(events(&r, "oracle_updated").is_empty());
+    assert!(!r.json::<bool>()?, "out-of-band price returns false");
+    let after = view(&core, "get_collateral", json!({ "symbol": "NVDAx" })).await?;
+    assert_eq!(after["oracle_price_usd_e6"], before["oracle_price_usd_e6"]);
+    assert_eq!(after["oracle_updated_ns"], before["oracle_updated_ns"], "rejection does not refresh the timestamp");
+    Ok(())
+}

@@ -1,0 +1,1308 @@
+     Running unittests src/lib.rs (target/debug/deps/nectar_core-996c11a5ebe5f07d)
+test result: ok. 608 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 30.05s
+     Running tests/sandbox.rs (target/debug/deps/sandbox-2716a3e82299b19e)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+GAS,mock-ft:new,1531876311971
+GAS,mock-ft:new,1531876311971
+GAS,mock-ft:new,1531876311971
+GAS,mock-ft:new,1531876311971
+GAS,mock-ft:new,1531876311971
+GAS,mock-ft:new,1534302246819
+GAS,mock-ft:new,1534302246819
+GAS,mock-ft:new,1534302246819
+GAS,mock-ft:new,1534302246819
+GAS,mock-ft:new,1534302246819
+GAS,new,2396677785391
+GAS,new,2396677785391
+GAS,upsert_collateral,2939861708598
+GAS,new,2396677785391
+GAS,upsert_collateral,2939861708598
+GAS,update_owner_price,2729494006845
+GAS,upsert_collateral,2939861708598
+GAS,update_owner_price,2729494006845
+GAS,new,2396677785391
+GAS,fund_gas_reserve,2375507263265
+GAS,update_owner_price,2729494006845
+GAS,fund_gas_reserve,2375507263265
+GAS,upsert_collateral,2939861708598
+GAS,set_quote_params,2396718379511
+GAS,fund_gas_reserve,2375507263265
+GAS,update_owner_price,2729494006845
+GAS,fund_gas_reserve,2375507263265
+GAS,ft_transfer_call:invalid,7204203766026
+GAS,mock-ft:new,1534156311971
+GAS,set_oracle_params,2400672391430
+GAS,ft_transfer_call:SupplyLendingLiquidity,7093152842450
+GAS,ft_transfer_call:TopUpQuote,7338055891937
+GAS,ft_transfer_call:FundPappusQuote,8120641362003
+GAS,pause,2424401303225
+GAS,ft_transfer_call:Repay(partial),7280238384045
+GAS,unpause,2425220325473
+GAS,ft_transfer_call:LockCollateralAndBorrow,13548337011915
+GAS,update_owner_price,2729921017209
+GAS,update_owner_price,2729921017209
+GAS,ft_transfer_call:Repay(refund),7205747815126
+GAS,initiate_quote_withdrawal,2921229941839
+GAS,new,2396677785391
+GAS,upsert_collateral,2939861708598
+GAS,update_owner_price,2729494006845
+GAS,fund_gas_reserve,2375507263265
+GAS,complete_quote_withdrawal,7974867151596
+GAS,set_keeper,2393057698925
+GAS,set_fee_split,2393423191142
+GAS,force_session_closed,2717466514560
+GAS,set_dex_depth,2651432905233
+GAS,set_reserve_params,2801234693339
+GAS,propose_price,2667399024776
+GAS,apply_price,2876721682868
+GAS,mock-ft:mint,1744005786040
+GAS,trigger_preliquidation(2 legs),23938965992095
+GAS,mock-ft:storage_deposit,2453685263435
+GAS,mock-ft:ft_transfer,2019071308639
+GAS,claim_fees,7884587269977
+GAS,update_owner_price,2729921017209
+GAS,update_owner_price,2729921017209
+GAS,trigger_preliquidation(8 legs),55743470488619
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 66.49s
+     Running tests/sandbox_evm.rs (target/debug/deps/sandbox_evm-6c1d04de8546b389)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+GAS,mock-ft:storage_deposit(paid),total,2432496834224
+GAS,mock-ft:storage_deposit(paid),dev-20261111143158-36489647763264.test.near,1674495930599
+GAS,mock-ft:storage_deposit(paid),dev-20261111143200-58824966211613.test.near,223182562500
+GAS,mock-ft:storage_deposit(paid),dev-20261111143200-58824966211613.test.near,223182562500
+GAS,upsert_collateral,total,2869657049438
+GAS,upsert_collateral,dev-20261111143201-46261511938873.test.near,2541045868273
+GAS,upsert_collateral,total,2961094823430
+GAS,upsert_collateral,dev-20261111143201-25382020080437.test.near,2632483642265
+GAS,upsert_collateral,total,2961094823430
+GAS,upsert_collateral,dev-20261111143200-52498316900022.test.near,2632483642265
+GAS,upsert_collateral,total,2961094823430
+GAS,upsert_collateral,dev-20261111143201-27092291012275.test.near,2632483642265
+GAS,upsert_collateral,total,2961131024694
+GAS,upsert_collateral,dev-20261111143208-61119901558114.test.near,2632519843529
+GAS,set_remote_chain,total,2723258312663
+GAS,set_remote_chain,dev-20261111143201-46261511938873.test.near,2407617101978
+GAS,set_signer_config,total,2527768311019
+GAS,set_signer_config,dev-20261111143201-46261511938873.test.near,2213509928069
+GAS,set_outlayer_account,total,2312563827415
+GAS,set_outlayer_account,dev-20261111143201-46261511938873.test.near,2000689630215
+GAS,set_vault_read_config,total,2570008461388
+GAS,set_vault_read_config,dev-20261111143201-46261511938873.test.near,2252459902103
+GAS,set_remote_chain,total,2889270290036
+GAS,set_remote_chain,dev-20261111143200-52498316900022.test.near,2573629079351
+GAS,set_signer_config,total,2619161656187
+GAS,set_signer_config,dev-20261111143200-52498316900022.test.near,2304903273237
+GAS,set_outlayer_account,total,2403948122267
+GAS,set_outlayer_account,dev-20261111143200-52498316900022.test.near,2092073925067
+GAS,withdraw_treasury(transfer failed),total,7570162325575
+GAS,withdraw_treasury(transfer failed),dev-20261111143201-27092291012275.test.near,2993911163059
+GAS,withdraw_treasury(transfer failed),dev-20261111143158-49037308751090.test.near,1386716926233
+GAS,withdraw_treasury(transfer failed),dev-20261111143201-27092291012275.test.near,223182562500
+GAS,withdraw_treasury(transfer failed),dev-20261111143020-21858556641177.test.near,223182562500
+GAS,withdraw_treasury(transfer failed),dev-20261111143201-27092291012275.test.near,2206920258708
+GAS,withdraw_treasury(transfer failed),dev-20261111143020-21858556641177.test.near,223182562500
+GAS,set_vault_read_config,total,2662217980508
+GAS,set_vault_read_config,dev-20261111143200-52498316900022.test.near,2344669421223
+GAS,set_remote_chain,total,2889270290036
+GAS,set_remote_chain,dev-20261111143201-25382020080437.test.near,2573629079351
+GAS,set_extra_remote_chain,total,2936052152266
+GAS,set_extra_remote_chain,dev-20261111143200-52498316900022.test.near,2618503592981
+GAS,set_signer_config,total,2619161656187
+GAS,set_signer_config,dev-20261111143201-25382020080437.test.near,2304903273237
+GAS,withdraw_treasury,total,7716127891881
+GAS,withdraw_treasury,dev-20261111143201-27092291012275.test.near,2993911163059
+GAS,withdraw_treasury,dev-20261111143158-49037308751090.test.near,1849542270659
+GAS,withdraw_treasury,dev-20261111143020-21858556641177.test.near,223182562500
+GAS,withdraw_treasury,dev-20261111143201-27092291012275.test.near,2113243043088
+GAS,withdraw_treasury,dev-20261111143020-21858556641177.test.near,223182562500
+GAS,set_outlayer_account,total,2403948122267
+GAS,set_outlayer_account,dev-20261111143201-25382020080437.test.near,2092073925067
+GAS,upsert_collateral,total,2905763945071
+GAS,upsert_collateral,dev-20261111143201-76066731808293.test.near,2577152763906
+GAS,set_vault_read_config,total,2662217980508
+GAS,set_vault_read_config,dev-20261111143201-25382020080437.test.near,2344669421223
+GAS,upsert_collateral,total,2942891024694
+GAS,upsert_collateral,dev-20261111143200-64127241211931.test.near,2614279843529
+GAS,withdraw_lender_fees,total,7572278423330
+GAS,withdraw_lender_fees,dev-20261111143201-27092291012275.test.near,2995082767860
+GAS,withdraw_lender_fees,dev-20261111143158-49037308751090.test.near,1704449482470
+GAS,withdraw_lender_fees,dev-20261111143020-21858556641177.test.near,223182562500
+GAS,withdraw_lender_fees,dev-20261111143201-27092291012275.test.near,2113171706780
+GAS,withdraw_lender_fees,dev-20261111143020-21858556641177.test.near,223182562500
+GAS,set_extra_remote_chain,total,2936052152266
+GAS,set_extra_remote_chain,dev-20261111143201-25382020080437.test.near,2618503592981
+GAS,upsert_collateral,total,2961094823430
+GAS,upsert_collateral,dev-20261111143201-15890214891806.test.near,2632483642265
+GAS,upsert_collateral,total,2905763945071
+GAS,upsert_collateral,dev-20261111143201-62082638652959.test.near,2577152763906
+GAS,withdraw_liquidity,total,7751271645596
+GAS,withdraw_liquidity,dev-20261111143201-27092291012275.test.near,3174580415686
+GAS,withdraw_liquidity,dev-20261111143158-49037308751090.test.near,1704392590574
+GAS,withdraw_liquidity,dev-20261111143020-21858556641177.test.near,223182562500
+GAS,withdraw_liquidity,dev-20261111143201-27092291012275.test.near,2113105642836
+GAS,withdraw_liquidity,dev-20261111143020-21858556641177.test.near,223182562500
+GAS,reserve_remote_position(base)+derived_public_key,total,13075136463569
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261111143201-25382020080437.test.near,4336575521881
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261111143213-31255165426189.test.near,5365358894268
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261111143217-97393901861254.test.near,223182562500
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261111143201-25382020080437.test.near,2609336046850
+GAS,reserve_remote_position(base)+derived_public_key,dev-20261111143217-97393901861254.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,total,16860936757051
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143200-52498316900022.test.near,3868778888344
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143213-62032357731517.test.near,1635063084865
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143200-52498316900022.test.near,5732958363829
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143158-57390756047300.test.near,1849870092743
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143200-52498316900022.test.near,2125156419955
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143216-14013472185540.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,confirm_remote_deposit(base)+vault_read+payout,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,upsert_collateral,total,2961094823430
+GAS,upsert_collateral,dev-20261111143201-56327034978495.test.near,2632483642265
+GAS,pause,total,2424501142523
+GAS,pause,dev-20261111143201-27092291012275.test.near,2116107856518
+GAS,set_allow_keeper_deposit_attestation,total,2573865443918
+GAS,set_allow_keeper_deposit_attestation,dev-20261111143201-25382020080437.test.near,2263421758168
+GAS,keeper_attest_deposit(base)+payout,total,10964430023007
+GAS,keeper_attest_deposit(base)+payout,dev-20261111143201-25382020080437.test.near,5780269110184
+GAS,keeper_attest_deposit(base)+payout,dev-20261111143158-73477681432664.test.near,1849870092743
+GAS,keeper_attest_deposit(base)+payout,dev-20261111143021-98940129496261.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261111143201-25382020080437.test.near,2125156419955
+GAS,keeper_attest_deposit(base)+payout,dev-20261111143217-97393901861254.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261111143021-98940129496261.test.near,223182562500
+GAS,keeper_attest_deposit(base)+payout,dev-20261111143021-98940129496261.test.near,223182562500
+GAS,request_remote_release(base)+sign,total,26346539974635
+GAS,request_remote_release(base)+sign,dev-20261111143200-52498316900022.test.near,4123436065401
+GAS,request_remote_release(base)+sign,dev-20261111143213-62032357731517.test.near,2658585052067
+GAS,request_remote_release(base)+sign,dev-20261111143213-62032357731517.test.near,1393967826688
+GAS,request_remote_release(base)+sign,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261111143213-62032357731517.test.near,13600232495562
+GAS,request_remote_release(base)+sign,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261111143200-52498316900022.test.near,3144391190102
+GAS,request_remote_release(base)+sign,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,request_remote_release(base)+sign,dev-20261111143021-19856164653547.test.near,223182562500
+GAS,relay_release_result(base),total,3030062277939
+GAS,relay_release_result(base),dev-20261111143200-52498316900022.test.near,2716089997279
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),total,12045305260151
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143201-46261511938873.test.near,3715522606110
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143212-55608500856651.test.near,1656313378613
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143201-46261511938873.test.near,5470724493113
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143216-82190154247209.test.near,223182562500
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,set_remote_chain,total,2759375904124
+GAS,set_remote_chain,dev-20261111143201-76066731808293.test.near,2443734693439
+GAS,set_remote_chain,total,2880150290036
+GAS,set_remote_chain,dev-20261111143200-64127241211931.test.near,2564509079351
+GAS,set_signer_config,total,2563840650900
+GAS,set_signer_config,dev-20261111143201-76066731808293.test.near,2249582267950
+GAS,trigger_preliquidation(unregistered buyer),total,19280236675431
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143201-15890214891806.test.near,5789937168207
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143200-99772279138127.test.near,1386769369741
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143201-15890214891806.test.near,223182562500
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143021-61919886338666.test.near,223182562500
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143201-15890214891806.test.near,2657412437689
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143200-99772279138127.test.near,1386637485317
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143201-15890214891806.test.near,223182562500
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143021-61919886338666.test.near,223182562500
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143201-15890214891806.test.near,2609534638646
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143200-99772279138127.test.near,1709205048976
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143021-61919886338666.test.near,223182562500
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143201-15890214891806.test.near,2091630619540
+GAS,trigger_preliquidation(unregistered buyer),dev-20261111143021-61919886338666.test.near,223182562500
+GAS,set_signer_config,total,2610041656187
+GAS,set_signer_config,dev-20261111143200-64127241211931.test.near,2295783273237
+GAS,set_outlayer_account,total,2348627116980
+GAS,set_outlayer_account,dev-20261111143201-76066731808293.test.near,2036752919780
+GAS,ft_transfer_call:Repay(after upgrade),total,12421928434366
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143158-80166644074194.test.near,2536426123680
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143201-46261511938873.test.near,3519091514429
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143200-11643524451288.test.near,1722946877408
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143214-25553309479947.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143201-46261511938873.test.near,2125038887579
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143214-25553309479947.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143158-80166644074194.test.near,1310816510025
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143214-25553309479947.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143214-25553309479947.test.near,223182562500
+GAS,set_remote_chain,total,2759375904124
+GAS,set_remote_chain,dev-20261111143201-62082638652959.test.near,2443734693439
+GAS,claim_owed_collateral(still unregistered),total,8419571927186
+GAS,claim_owed_collateral(still unregistered),dev-20261111143201-15890214891806.test.near,3475611052696
+GAS,claim_owed_collateral(still unregistered),dev-20261111143200-99772279138127.test.near,1386769369741
+GAS,claim_owed_collateral(still unregistered),dev-20261111143201-15890214891806.test.near,223182562500
+GAS,claim_owed_collateral(still unregistered),dev-20261111143220-70985022809543.test.near,223182562500
+GAS,claim_owed_collateral(still unregistered),dev-20261111143201-15890214891806.test.near,2577724652364
+GAS,claim_owed_collateral(still unregistered),dev-20261111143220-70985022809543.test.near,223182562500
+GAS,set_outlayer_account,total,2399388122267
+GAS,set_outlayer_account,dev-20261111143200-64127241211931.test.near,2087513925067
+GAS,set_vault_read_config,total,2606896975221
+GAS,set_vault_read_config,dev-20261111143201-76066731808293.test.near,2289348415936
+GAS,set_signer_config,total,2563840650900
+GAS,set_signer_config,dev-20261111143201-62082638652959.test.near,2249582267950
+GAS,trigger+sign(base, Ecdsa),total,27810890237820
+GAS,trigger+sign(base, Ecdsa),dev-20261111143201-25382020080437.test.near,5571460544694
+GAS,trigger+sign(base, Ecdsa),dev-20261111143213-31255165426189.test.near,2576239265288
+GAS,trigger+sign(base, Ecdsa),dev-20261111143213-31255165426189.test.near,1377820722994
+GAS,trigger+sign(base, Ecdsa),dev-20261111143021-98940129496261.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261111143213-31255165426189.test.near,13520837111799
+GAS,trigger+sign(base, Ecdsa),dev-20261111143021-98940129496261.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261111143021-98940129496261.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261111143201-25382020080437.test.near,3338605248230
+GAS,trigger+sign(base, Ecdsa),dev-20261111143021-98940129496261.test.near,223182562500
+GAS,trigger+sign(base, Ecdsa),dev-20261111143021-98940129496261.test.near,223182562500
+GAS,set_quote_params,total,2406063077498
+GAS,set_quote_params,dev-20261111143201-56327034978495.test.near,2093950461723
+GAS,set_vault_read_config,total,2653097980508
+GAS,set_vault_read_config,dev-20261111143200-64127241211931.test.near,2335549421223
+GAS,set_outlayer_account,total,2348627116980
+GAS,set_outlayer_account,dev-20261111143201-62082638652959.test.near,2036752919780
+GAS,relay_settlement_result(base),total,3329622037617
+GAS,relay_settlement_result(base),dev-20261111143201-25382020080437.test.near,3015506705812
+GAS,set_vault_read_config,total,2606896975221
+GAS,set_vault_read_config,dev-20261111143201-62082638652959.test.near,2289348415936
+GAS,claim_owed_collateral,total,8062312931249
+GAS,claim_owed_collateral,dev-20261111143201-15890214891806.test.near,3475611052696
+GAS,claim_owed_collateral,dev-20261111143200-99772279138127.test.near,1713765048976
+GAS,claim_owed_collateral,dev-20261111143220-70985022809543.test.near,223182562500
+GAS,claim_owed_collateral,dev-20261111143201-15890214891806.test.near,2116652539692
+GAS,claim_owed_collateral,dev-20261111143220-70985022809543.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),total,13524084459994
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143200-11643524451288.test.near,2567978194851
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143201-46261511938873.test.near,4454689986368
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143158-80166644074194.test.near,1845175861783
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143225-88951715605475.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143201-46261511938873.test.near,2124981873951
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143225-88951715605475.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143200-11643524451288.test.near,1319930692026
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143225-88951715605475.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143225-88951715605475.test.near,223182562500
+GAS,set_signer_config,total,2579205991638
+GAS,set_signer_config,dev-20261111143201-62082638652959.test.near,2265042976118
+GAS,trigger_preliquidation(dust remainder),total,18757143669796
+GAS,trigger_preliquidation(dust remainder),dev-20261111143201-56327034978495.test.near,5924133482403
+GAS,trigger_preliquidation(dust remainder),dev-20261111143200-70015650780381.test.near,1879377837165
+GAS,trigger_preliquidation(dust remainder),dev-20261111143030-50203718042685.test.near,223182562500
+GAS,trigger_preliquidation(dust remainder),dev-20261111143201-56327034978495.test.near,2123677117844
+GAS,trigger_preliquidation(dust remainder),dev-20261111143200-70015650780381.test.near,1782999703945
+GAS,trigger_preliquidation(dust remainder),dev-20261111143030-50203718042685.test.near,223182562500
+GAS,trigger_preliquidation(dust remainder),dev-20261111143201-56327034978495.test.near,2091255077608
+GAS,trigger_preliquidation(dust remainder),dev-20261111143200-70015650780381.test.near,1661325048976
+GAS,trigger_preliquidation(dust remainder),dev-20261111143030-50203718042685.test.near,223182562500
+GAS,trigger_preliquidation(dust remainder),dev-20261111143201-56327034978495.test.near,2091630619540
+GAS,trigger_preliquidation(dust remainder),dev-20261111143030-50203718042685.test.near,223182562500
+GAS,claim_fees(dust),total,7890864801673
+GAS,claim_fees(dust),dev-20261111143201-56327034978495.test.near,3313953723965
+GAS,claim_fees(dust),dev-20261111143158-15937759148296.test.near,1700083073594
+GAS,claim_fees(dust),dev-20261111143221-88238558248385.test.near,223182562500
+GAS,claim_fees(dust),dev-20261111143201-56327034978495.test.near,2121163602524
+GAS,claim_fees(dust),dev-20261111143221-88238558248385.test.near,223182562500
+GAS,set_reserve_params,total,2829072148072
+GAS,set_reserve_params,dev-20261111143201-56327034978495.test.near,2518390043747
+GAS,set_quote_params,total,2405088571973
+GAS,set_quote_params,dev-20261111143200-64127241211931.test.near,2092975956198
+GAS,set_quote_params,total,2405838379511
+GAS,set_quote_params,dev-20261111143201-56327034978495.test.near,2093773447451
+GAS,upsert_collateral,total,2941682996539
+GAS,upsert_collateral,dev-20261111143224-27488792739887.test.near,2613071815374
+GAS,upsert_collateral,total,2942891024694
+GAS,upsert_collateral,dev-20261111143225-89536204842119.test.near,2614279843529
+GAS,ft_transfer_call:TopUpQuote(refused),total,7389659760512
+GAS,ft_transfer_call:TopUpQuote(refused),dev-20261111143158-15937759148296.test.near,2531823658301
+GAS,ft_transfer_call:TopUpQuote(refused),dev-20261111143201-56327034978495.test.near,2423604457655
+GAS,ft_transfer_call:TopUpQuote(refused),dev-20261111143221-88238558248385.test.near,223182562500
+GAS,ft_transfer_call:TopUpQuote(refused),dev-20261111143158-15937759148296.test.near,1672940564596
+GAS,ft_transfer_call:TopUpQuote(refused),dev-20261111143221-88238558248385.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),total,22145052138065
+GAS,trigger+sign(solana, after upgrade),dev-20261111143201-46261511938873.test.near,7994889926948
+GAS,trigger+sign(solana, after upgrade),dev-20261111143212-55608500856651.test.near,2760198423623
+GAS,trigger+sign(solana, after upgrade),dev-20261111143212-55608500856651.test.near,1465296444064
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143212-55608500856651.test.near,5443771541833
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143201-46261511938873.test.near,3054968456782
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,set_extra_remote_chain,total,2936052152266
+GAS,set_extra_remote_chain,dev-20261111143201-46261511938873.test.near,2618503592981
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),total,12045305260151
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143201-76066731808293.test.near,3715522606110
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143222-84839874870652.test.near,1656313378613
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143201-76066731808293.test.near,5470724493113
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143227-21336198369087.test.near,223182562500
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,confirm_remote_deposit(legacy reservation, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,upsert_collateral,total,2942891024694
+GAS,upsert_collateral,dev-20261111143230-96312681562706.test.near,2614279843529
+GAS,upsert_collateral,total,2942927225958
+GAS,upsert_collateral,dev-20261111143230-34904456106324.test.near,2614316044793
+GAS,set_remote_chain,total,2878942261881
+GAS,set_remote_chain,dev-20261111143224-27488792739887.test.near,2563301051196
+GAS,trigger+sign(dust sweep),total,22572888636498
+GAS,trigger+sign(dust sweep),dev-20261111143200-64127241211931.test.near,7969204861465
+GAS,trigger+sign(dust sweep),dev-20261111143222-11147251218000.test.near,2765539303586
+GAS,trigger+sign(dust sweep),dev-20261111143222-11147251218000.test.near,1465253959859
+GAS,trigger+sign(dust sweep),dev-20261111143021-42281642857661.test.near,223182562500
+GAS,trigger+sign(dust sweep),dev-20261111143222-11147251218000.test.near,5448775063628
+GAS,trigger+sign(dust sweep),dev-20261111143021-42281642857661.test.near,223182562500
+GAS,trigger+sign(dust sweep),dev-20261111143021-42281642857661.test.near,223182562500
+GAS,trigger+sign(dust sweep),dev-20261111143200-64127241211931.test.near,3498188103145
+GAS,trigger+sign(dust sweep),dev-20261111143021-42281642857661.test.near,223182562500
+GAS,trigger+sign(dust sweep),dev-20261111143021-42281642857661.test.near,223182562500
+GAS,set_signer_config,total,2608833628032
+GAS,set_signer_config,dev-20261111143224-27488792739887.test.near,2294575245082
+GAS,ft_transfer_call:Repay(after upgrade),total,12417368434366
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143158-87734269054789.test.near,2531866123680
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143201-76066731808293.test.near,3519091514429
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143200-83719269716772.test.near,1722946877408
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143225-33187096824055.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143201-76066731808293.test.near,2125038887579
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143225-33187096824055.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143158-87734269054789.test.near,1310816510025
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143225-33187096824055.test.near,223182562500
+GAS,ft_transfer_call:Repay(after upgrade),dev-20261111143225-33187096824055.test.near,223182562500
+GAS,set_remote_chain,total,2880150290036
+GAS,set_remote_chain,dev-20261111143225-89536204842119.test.near,2564509079351
+GAS,set_outlayer_account,total,2398180094112
+GAS,set_outlayer_account,dev-20261111143224-27488792739887.test.near,2086305896912
+GAS,upsert_collateral,total,2942891024694
+GAS,upsert_collateral,dev-20261111143232-46478555176687.test.near,2614279843529
+GAS,set_vault_read_config,total,2651889952353
+GAS,set_vault_read_config,dev-20261111143224-27488792739887.test.near,2334341393068
+GAS,set_signer_config,total,2610041656187
+GAS,set_signer_config,dev-20261111143225-89536204842119.test.near,2295783273237
+GAS,set_outlayer_account,total,2399388122267
+GAS,set_outlayer_account,dev-20261111143225-89536204842119.test.near,2087513925067
+GAS,set_vault_read_config,total,2653097980508
+GAS,set_vault_read_config,dev-20261111143225-89536204842119.test.near,2335549421223
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),total,13519524459994
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143200-83719269716772.test.near,2567978194851
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143201-76066731808293.test.near,4454689986368
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143158-87734269054789.test.near,1840615861783
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143234-73797370620408.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143201-76066731808293.test.near,2124981873951
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143234-73797370620408.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143200-83719269716772.test.near,1319930692026
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143234-73797370620408.test.near,223182562500
+GAS,ft_transfer_call:LockCollateralAndBorrow(after upgrade),dev-20261111143234-73797370620408.test.near,223182562500
+GAS,set_allow_keeper_deposit_attestation,total,2573865443918
+GAS,set_allow_keeper_deposit_attestation,dev-20261111143201-46261511938873.test.near,2263421758168
+GAS,withdraw_treasury(after upgrade),total,7726616262907
+GAS,withdraw_treasury(after upgrade),dev-20261111143201-46261511938873.test.near,2999660399142
+GAS,withdraw_treasury(after upgrade),dev-20261111143158-80166644074194.test.near,1846880024947
+GAS,withdraw_treasury(after upgrade),dev-20261111143020-21750902541140.test.near,223182562500
+GAS,withdraw_treasury(after upgrade),dev-20261111143201-46261511938873.test.near,2120835158603
+GAS,withdraw_treasury(after upgrade),dev-20261111143020-21750902541140.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),total,18205989568545
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143224-27488792739887.test.near,3756828344663
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143232-99453845928056.test.near,1626879001989
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143224-27488792739887.test.near,7186213222143
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-73369287449861.test.near,1867844099091
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143224-27488792739887.test.near,2119114993344
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143236-84693193726696.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),total,18439451631460
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,3758000171554
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143233-11999920419070.test.near,1626879001989
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,7417295430012
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-62085295454430.test.near,1867844099091
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,2120323021499
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143237-48038332084874.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,set_remote_chain,total,2880150290036
+GAS,set_remote_chain,dev-20261111143230-96312681562706.test.near,2564509079351
+GAS,set_remote_chain,total,2880150290036
+GAS,set_remote_chain,dev-20261111143230-34904456106324.test.near,2564509079351
+GAS,set_signer_config,total,2610041656187
+GAS,set_signer_config,dev-20261111143230-96312681562706.test.near,2295783273237
+GAS,upsert_collateral,total,2961131024694
+GAS,upsert_collateral,dev-20261111143236-70067877769413.test.near,2632519843529
+GAS,set_signer_config,total,2610041656187
+GAS,set_signer_config,dev-20261111143230-34904456106324.test.near,2295783273237
+GAS,set_outlayer_account,total,2399388122267
+GAS,set_outlayer_account,dev-20261111143230-96312681562706.test.near,2087513925067
+GAS,set_outlayer_account,total,2399388122267
+GAS,set_outlayer_account,dev-20261111143230-34904456106324.test.near,2087513925067
+GAS,set_vault_read_config,total,2653097980508
+GAS,set_vault_read_config,dev-20261111143230-96312681562706.test.near,2335549421223
+GAS,set_vault_read_config,total,2653097980508
+GAS,set_vault_read_config,dev-20261111143230-34904456106324.test.near,2335549421223
+GAS,confirm_remote_deposit(WO-36c),total,12121296978195
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,3762560171554
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143233-11999920419070.test.near,1664261550404
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,5491730473922
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143237-48038332084874.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,set_remote_chain,total,2880150290036
+GAS,set_remote_chain,dev-20261111143232-46478555176687.test.near,2564509079351
+GAS,set_signer_config,total,2610041656187
+GAS,set_signer_config,dev-20261111143232-46478555176687.test.near,2295783273237
+GAS,trigger+sign(solana, after upgrade),total,22140464451248
+GAS,trigger+sign(solana, after upgrade),dev-20261111143201-76066731808293.test.near,7994889926948
+GAS,trigger+sign(solana, after upgrade),dev-20261111143222-84839874870652.test.near,2760136716923
+GAS,trigger+sign(solana, after upgrade),dev-20261111143222-84839874870652.test.near,1462952495149
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143222-84839874870652.test.near,5442579660553
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143201-76066731808293.test.near,3053978306860
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(solana, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,set_outlayer_account,total,2399388122267
+GAS,set_outlayer_account,dev-20261111143232-46478555176687.test.near,2087513925067
+GAS,set_vault_read_config,total,2653097980508
+GAS,set_vault_read_config,dev-20261111143232-46478555176687.test.near,2335549421223
+GAS,set_extra_remote_chain,total,2936052152266
+GAS,set_extra_remote_chain,dev-20261111143201-76066731808293.test.near,2618503592981
+GAS,confirm_remote_deposit(WO-36c),total,18417353939771
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,3753476372818
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143237-15991285855281.test.near,1631271698921
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,7406498224983
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143229-33462801040905.test.near,1856575861783
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,2120421873951
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143240-29057204652888.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,ft_transfer_call:Repay(WO-36c),total,7553943635406
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143223-62085295454430.test.near,2549848549925
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143225-89536204842119.test.near,2927724247431
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143237-48038332084874.test.near,223182562500
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143223-62085295454430.test.near,1315175125520
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143237-48038332084874.test.near,223182562500
+GAS,upsert_collateral,total,2982867661521
+GAS,upsert_collateral,dev-20261111143232-46478555176687.test.near,2654256480356
+GAS,trigger+sign(base, after upgrade),total,28146396809985
+GAS,trigger+sign(base, after upgrade),dev-20261111143201-46261511938873.test.near,5706378406485
+GAS,trigger+sign(base, after upgrade),dev-20261111143212-55608500856651.test.near,2685246870576
+GAS,trigger+sign(base, after upgrade),dev-20261111143212-55608500856651.test.near,1392690083534
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143212-55608500856651.test.near,13593003665953
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143201-46261511938873.test.near,3343150438622
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-89254001580151.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),total,12125893179459
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,3762596372818
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143237-15991285855281.test.near,1668821550404
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,5491730473922
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143240-29057204652888.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,ft_transfer_call:Repay(WO-36c),total,7518411807634
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143222-73369287449861.test.near,2549848549925
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143224-27488792739887.test.near,2892192419659
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143236-84693193726696.test.near,223182562500
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143222-73369287449861.test.near,1315175125520
+GAS,ft_transfer_call:Repay(WO-36c),dev-20261111143236-84693193726696.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,total,11750396144798
+GAS,reserve_remote_position+derived_public_key,dev-20261111143232-46478555176687.test.near,5868726083992
+GAS,reserve_remote_position+derived_public_key,dev-20261111143240-19671501472608.test.near,2607274478306
+GAS,reserve_remote_position+derived_public_key,dev-20261111143244-57811946517902.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,dev-20261111143232-46478555176687.test.near,2511530939945
+GAS,reserve_remote_position+derived_public_key,dev-20261111143244-57811946517902.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),total,18394336038232
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,3764840171554
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143233-11999920419070.test.near,1664261550404
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,7477610076558
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-62085295454430.test.near,1718191310902
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143225-89536204842119.test.near,2120323021499
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143237-48038332084874.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143223-76293653142980.test.near,223182562500
+GAS,set_allow_keeper_deposit_attestation,total,2573865443918
+GAS,set_allow_keeper_deposit_attestation,dev-20261111143201-76066731808293.test.near,2263421758168
+GAS,confirm_remote_deposit(borrower),total,8527513758815
+GAS,confirm_remote_deposit(borrower),dev-20261111143232-46478555176687.test.near,3646524680407
+GAS,confirm_remote_deposit(borrower),dev-20261111143240-19671501472608.test.near,1601963391473
+GAS,confirm_remote_deposit(borrower),dev-20261111143244-57811946517902.test.near,223182562500
+GAS,confirm_remote_deposit(borrower),dev-20261111143232-46478555176687.test.near,2522646029620
+GAS,confirm_remote_deposit(borrower),dev-20261111143244-57811946517902.test.near,223182562500
+GAS,set_oracle_params,total,2404257885905
+GAS,set_oracle_params,dev-20261111143232-46478555176687.test.near,2092240637560
+GAS,upsert_collateral,total,2961131024694
+GAS,upsert_collateral,dev-20261111143245-19227135205284.test.near,2632519843529
+GAS,withdraw_treasury(after upgrade),total,7722056262907
+GAS,withdraw_treasury(after upgrade),dev-20261111143201-76066731808293.test.near,2999660399142
+GAS,withdraw_treasury(after upgrade),dev-20261111143158-87734269054789.test.near,1842320024947
+GAS,withdraw_treasury(after upgrade),dev-20261111143020-80145787335181.test.near,223182562500
+GAS,withdraw_treasury(after upgrade),dev-20261111143201-76066731808293.test.near,2120835158603
+GAS,withdraw_treasury(after upgrade),dev-20261111143020-80145787335181.test.near,223182562500
+GAS,upsert_collateral,total,2942891024694
+GAS,upsert_collateral,dev-20261111143247-25399551494999.test.near,2614279843529
+GAS,trigger+sign(WO-36c),total,22115887759007
+GAS,trigger+sign(WO-36c),dev-20261111143230-34904456106324.test.near,7967690268441
+GAS,trigger+sign(WO-36c),dev-20261111143237-15991285855281.test.near,2764631616678
+GAS,trigger+sign(WO-36c),dev-20261111143237-15991285855281.test.near,1465053328153
+GAS,trigger+sign(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,trigger+sign(WO-36c),dev-20261111143237-15991285855281.test.near,5448287379552
+GAS,trigger+sign(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,trigger+sign(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,trigger+sign(WO-36c),dev-20261111143230-34904456106324.test.near,3044297821368
+GAS,trigger+sign(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,trigger+sign(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,upsert_collateral,total,2961131024694
+GAS,upsert_collateral,dev-20261111143247-14181195195814.test.near,2632519843529
+GAS,confirm_remote_deposit(WO-36c),total,18355669968168
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,3762596372818
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143237-15991285855281.test.near,1673381550404
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,7436627805230
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143229-33462801040905.test.near,1713631310902
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143230-34904456106324.test.near,2120323021499
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143240-29057204652888.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143228-46037978375071.test.near,223182562500
+GAS,set_extra_remote_chain,total,2913391786117
+GAS,set_extra_remote_chain,dev-20261111143247-14181195195814.test.near,2595843226832
+GAS,trigger+sign(base, after upgrade),total,28149638468625
+GAS,trigger+sign(base, after upgrade),dev-20261111143201-76066731808293.test.near,5706378406485
+GAS,trigger+sign(base, after upgrade),dev-20261111143222-84839874870652.test.near,2685308577276
+GAS,trigger+sign(base, after upgrade),dev-20261111143222-84839874870652.test.near,1392690083534
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143222-84839874870652.test.near,13596183617893
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143201-76066731808293.test.near,3343150438622
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,trigger+sign(base, after upgrade),dev-20261111143021-10806522543738.test.near,223182562500
+GAS,set_remote_chain,total,2889270290036
+GAS,set_remote_chain,dev-20261111143245-19227135205284.test.near,2573629079351
+GAS,remove_extra_remote_chain,total,2646293202202
+GAS,remove_extra_remote_chain,dev-20261111143247-14181195195814.test.near,2334943525867
+GAS,set_signer_config,total,2619161656187
+GAS,set_signer_config,dev-20261111143245-19227135205284.test.near,2304903273237
+GAS,set_outlayer_account,total,2403948122267
+GAS,set_outlayer_account,dev-20261111143245-19227135205284.test.near,2092073925067
+GAS,update_owner_price(oracle_rejected),total,2611040552316
+GAS,update_owner_price(oracle_rejected),dev-20261111143247-14181195195814.test.near,2299976978271
+GAS,set_vault_read_config,total,2662217980508
+GAS,set_vault_read_config,dev-20261111143245-19227135205284.test.near,2344669421223
+GAS,set_remote_chain,total,2889270290036
+GAS,set_remote_chain,dev-20261111143208-61119901558114.test.near,2573629079351
+GAS,set_signer_config,total,2619161656187
+GAS,set_signer_config,dev-20261111143208-61119901558114.test.near,2304903273237
+GAS,trigger_preliquidation(underwater),total,13628840176280
+GAS,trigger_preliquidation(underwater),dev-20261111143247-25399551494999.test.near,4821775014115
+GAS,trigger_preliquidation(underwater),dev-20261111143246-86683010876453.test.near,1842959665597
+GAS,trigger_preliquidation(underwater),dev-20261111143245-91203016908233.test.near,223182562500
+GAS,trigger_preliquidation(underwater),dev-20261111143247-25399551494999.test.near,2114739891408
+GAS,trigger_preliquidation(underwater),dev-20261111143246-86683010876453.test.near,1778548307737
+GAS,trigger_preliquidation(underwater),dev-20261111143245-91203016908233.test.near,223182562500
+GAS,trigger_preliquidation(underwater),dev-20261111143247-25399551494999.test.near,2091255077608
+GAS,trigger_preliquidation(underwater),dev-20261111143245-91203016908233.test.near,223182562500
+GAS,set_outlayer_account,total,2403948122267
+GAS,set_outlayer_account,dev-20261111143208-61119901558114.test.near,2092073925067
+GAS,confirm_remote_deposit(squatted),total,9593333957415
+GAS,confirm_remote_deposit(squatted),dev-20261111143245-19227135205284.test.near,3767120171554
+GAS,confirm_remote_deposit(squatted),dev-20261111143252-10060522476694.test.near,1626879001989
+GAS,confirm_remote_deposit(squatted),dev-20261111143244-40536418651790.test.near,223182562500
+GAS,confirm_remote_deposit(squatted),dev-20261111143245-19227135205284.test.near,3442955126557
+GAS,confirm_remote_deposit(squatted),dev-20261111143244-40536418651790.test.near,223182562500
+GAS,set_vault_read_config,total,2662217980508
+GAS,set_vault_read_config,dev-20261111143208-61119901558114.test.near,2344669421223
+GAS,cancel_settlement,total,2916804627636
+GAS,cancel_settlement,dev-20261111143247-25399551494999.test.near,2607028513896
+GAS,reserve_remote_position(64 fitting quotes),total,11798699261914
+GAS,reserve_remote_position(64 fitting quotes),dev-20261111143208-61119901558114.test.near,5908321401864
+GAS,reserve_remote_position(64 fitting quotes),dev-20261111143254-65988769407804.test.near,2607182329634
+GAS,reserve_remote_position(64 fitting quotes),dev-20261111143257-98881907529522.test.near,223182562500
+GAS,reserve_remote_position(64 fitting quotes),dev-20261111143208-61119901558114.test.near,2520330887861
+GAS,reserve_remote_position(64 fitting quotes),dev-20261111143257-98881907529522.test.near,223182562500
+GAS,write_off_bad_debt,total,3077685086100
+GAS,write_off_bad_debt,dev-20261111143247-25399551494999.test.near,2767861288645
+GAS,confirm_remote_deposit(64 fitting quotes),total,78717662095464
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143208-61119901558114.test.near,3767120171554
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143254-65988769407804.test.near,1626879001989
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143208-61119901558114.test.near,67690406501908
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143207-59741351233439.test.near,1858990092743
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143208-61119901558114.test.near,2125156419955
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143257-98881907529522.test.near,223182562500
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,confirm_remote_deposit(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,confirm_remote_deposit(short),total,10897251725147
+GAS,confirm_remote_deposit(short),dev-20261111143245-19227135205284.test.near,3784027309800
+GAS,confirm_remote_deposit(short),dev-20261111143252-10060522476694.test.near,1664094247336
+GAS,confirm_remote_deposit(short),dev-20261111143244-40536418651790.test.near,223182562500
+GAS,confirm_remote_deposit(short),dev-20261111143245-19227135205284.test.near,4246385385696
+GAS,confirm_remote_deposit(short),dev-20261111143255-86318251621194.test.near,223182562500
+GAS,confirm_remote_deposit(short),dev-20261111143244-40536418651790.test.near,223182562500
+GAS,confirm_remote_deposit(short),dev-20261111143244-40536418651790.test.near,223182562500
+GAS,trigger+sign(64 fitting quotes),total,34007890039980
+GAS,trigger+sign(64 fitting quotes),dev-20261111143208-61119901558114.test.near,19862884445511
+GAS,trigger+sign(64 fitting quotes),dev-20261111143254-65988769407804.test.near,2756604423686
+GAS,trigger+sign(64 fitting quotes),dev-20261111143254-65988769407804.test.near,1464485807650
+GAS,trigger+sign(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,trigger+sign(64 fitting quotes),dev-20261111143254-65988769407804.test.near,5443845743572
+GAS,trigger+sign(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,trigger+sign(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,trigger+sign(64 fitting quotes),dev-20261111143208-61119901558114.test.near,3054142274746
+GAS,trigger+sign(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,trigger+sign(64 fitting quotes),dev-20261111143207-25070358547764.test.near,223182562500
+GAS,request_remote_release(borrower, retry window),total,17562505360945
+GAS,request_remote_release(borrower, retry window),dev-20261111143232-46478555176687.test.near,3920466677940
+GAS,request_remote_release(borrower, retry window),dev-20261111143240-19671501472608.test.near,2733837148304
+GAS,request_remote_release(borrower, retry window),dev-20261111143240-19671501472608.test.near,1464500617258
+GAS,request_remote_release(borrower, retry window),dev-20261111143244-57811946517902.test.near,223182562500
+GAS,request_remote_release(borrower, retry window),dev-20261111143240-19671501472608.test.near,5421137435596
+GAS,request_remote_release(borrower, retry window),dev-20261111143244-57811946517902.test.near,223182562500
+GAS,request_remote_release(borrower, retry window),dev-20261111143244-57811946517902.test.near,223182562500
+GAS,request_remote_release(borrower, retry window),dev-20261111143232-46478555176687.test.near,2819818699532
+GAS,request_remote_release(borrower, retry window),dev-20261111143244-57811946517902.test.near,223182562500
+GAS,resign_remote_settlement+sign,total,19166961753820
+GAS,resign_remote_settlement+sign,dev-20261111143201-62082638652959.test.near,5193342895399
+GAS,resign_remote_settlement+sign,dev-20261111143223-23262608933899.test.near,2794026542285
+GAS,resign_remote_settlement+sign,dev-20261111143223-23262608933899.test.near,1463448435880
+GAS,resign_remote_settlement+sign,dev-20261111143236-27130209968277.test.near,223182562500
+GAS,resign_remote_settlement+sign,dev-20261111143223-23262608933899.test.near,5442859997365
+GAS,resign_remote_settlement+sign,dev-20261111143236-27130209968277.test.near,223182562500
+GAS,resign_remote_settlement+sign,dev-20261111143236-27130209968277.test.near,223182562500
+GAS,resign_remote_settlement+sign,dev-20261111143201-62082638652959.test.near,2847261170646
+GAS,resign_remote_settlement+sign,dev-20261111143236-27130209968277.test.near,223182562500
+GAS,resign_remote_settlement+sign,dev-20261111143236-27130209968277.test.near,223182562500
+GAS,confirm_remote_deposit(retry after upgrade),total,17406738384122
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143224-27488792739887.test.near,3795459987341
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143232-99453845928056.test.near,1664261550404
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143224-27488792739887.test.near,6905757731661
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143222-73369287449861.test.near,1718191310902
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143224-27488792739887.test.near,2120323021499
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(retry after upgrade),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),total,12123317421811
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143224-27488792739887.test.near,3764776944053
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143232-99453845928056.test.near,1664094247336
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143224-27488792739887.test.near,5491701448107
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143236-84693193726696.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+GAS,confirm_remote_deposit(WO-36c),dev-20261111143222-31825790947976.test.near,223182562500
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 259.87s
+     Running tests/sandbox_p1.rs (target/debug/deps/sandbox_p1-3383fa2012d584df)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+GAS,trigger+pyth(no_price),total,8801492812094
+GAS,trigger+pyth(no_price),dev-20261111143541-17560991251909.test.near,3889200004214
+GAS,trigger+pyth(no_price),dev-20261111143557-33327201215261.test.near,1416379560090
+GAS,trigger+pyth(no_price),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(no_price),dev-20261111143541-17560991251909.test.near,2739533590475
+GAS,trigger+pyth(no_price),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(conf_too_wide),total,8883173477486
+GAS,trigger+pyth(conf_too_wide),dev-20261111143541-17560991251909.test.near,3889200004214
+GAS,trigger+pyth(conf_too_wide),dev-20261111143557-33327201215261.test.near,1426044618694
+GAS,trigger+pyth(conf_too_wide),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(conf_too_wide),dev-20261111143541-17560991251909.test.near,2811549197263
+GAS,trigger+pyth(conf_too_wide),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(out_of_band),total,8880710072114
+GAS,trigger+pyth(out_of_band),dev-20261111143541-17560991251909.test.near,3889200004214
+GAS,trigger+pyth(out_of_band),dev-20261111143557-33327201215261.test.near,1424584965418
+GAS,trigger+pyth(out_of_band),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(out_of_band),dev-20261111143541-17560991251909.test.near,2810545445167
+GAS,trigger+pyth(out_of_band),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(non_positive),total,8880326344741
+GAS,trigger+pyth(non_positive),dev-20261111143541-17560991251909.test.near,3889200004214
+GAS,trigger+pyth(non_positive),dev-20261111143557-33327201215261.test.near,1424919571554
+GAS,trigger+pyth(non_positive),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(non_positive),dev-20261111143541-17560991251909.test.near,2809827111658
+GAS,trigger+pyth(non_positive),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(no_price),total,8778534355042
+GAS,trigger+pyth(no_price),dev-20261111143541-17560991251909.test.near,3889200004214
+GAS,trigger+pyth(no_price),dev-20261111143557-33327201215261.test.near,1393421103038
+GAS,trigger+pyth(no_price),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(no_price),dev-20261111143541-17560991251909.test.near,2739533590475
+GAS,trigger+pyth(no_price),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+quoter(echo),total,25943022223826
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,4751475773984
+GAS,trigger+quoter(echo),dev-20261111143601-20467921227596.test.near,1889505921609
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,5978445665547
+GAS,trigger+quoter(echo),dev-20261111143540-59672793542425.test.near,1879450239693
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,2137064972475
+GAS,trigger+quoter(echo),dev-20261111143540-59672793542425.test.near,1782865472985
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,2104465917967
+GAS,trigger+quoter(echo),dev-20261111143540-59672793542425.test.near,1665773855184
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,2104864497067
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+pyth(failed),total,8676513233776
+GAS,trigger+pyth(failed),dev-20261111143541-17560991251909.test.near,3889200004214
+GAS,trigger+pyth(failed),dev-20261111143557-33327201215261.test.near,1302162882413
+GAS,trigger+pyth(failed),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(failed),dev-20261111143541-17560991251909.test.near,2728770689834
+GAS,trigger+pyth(failed),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+quoter(echo),total,25994158690691
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,5011539205429
+GAS,trigger+quoter(echo),dev-20261111143601-20467921227596.test.near,1934641840574
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,5979811352568
+GAS,trigger+quoter(echo),dev-20261111143540-59672793542425.test.near,1741179350872
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,2137064972475
+GAS,trigger+quoter(echo),dev-20261111143540-59672793542425.test.near,1661147791240
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,2104465917967
+GAS,trigger+quoter(echo),dev-20261111143540-59672793542425.test.near,1670333855184
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143541-22992581589411.test.near,2104864497067
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(echo),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter+8legs,total,65601182476326
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,6547910012787
+GAS,trigger+quoter+8legs,dev-20261111143602-63608530953087.test.near,2197385981219
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,14705249683718
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1879339045901
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2136910995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1788066643373
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2107270995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1788066643373
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2107270995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1788066643373
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2107270995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1788066643373
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2107270995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1788066643373
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2107270995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1788066643373
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2107270995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1788066643373
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2107270995371
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1785145472985
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2104465917967
+GAS,trigger+quoter+8legs,dev-20261111143540-61250484381503.test.near,1661159553288
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143541-73868812419587.test.near,2104864497067
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,dev-20261111143443-47996115334690.test.near,223182562500
+GAS,trigger+quoter+8legs,attached,300000000000000
+GAS,trigger+pyth(open,180s),total,8877581267974
+GAS,trigger+pyth(open,180s),dev-20261111143541-17560991251909.test.near,3961064054002
+GAS,trigger+pyth(open,180s),dev-20261111143557-33327201215261.test.near,1420603966182
+GAS,trigger+pyth(open,180s),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(open,180s),dev-20261111143541-17560991251909.test.near,2739533590475
+GAS,trigger+pyth(open,180s),dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+quoter(null),total,25546780011516
+GAS,trigger+quoter(null),dev-20261111143541-22992581589411.test.near,5011539205429
+GAS,trigger+quoter(null),dev-20261111143601-20467921227596.test.near,1669845071775
+GAS,trigger+quoter(null),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(null),dev-20261111143541-22992581589411.test.near,5797229442192
+GAS,trigger+quoter(null),dev-20261111143540-59672793542425.test.near,1741179350872
+GAS,trigger+quoter(null),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(null),dev-20261111143541-22992581589411.test.near,2137064972475
+GAS,trigger+quoter(null),dev-20261111143540-59672793542425.test.near,1661147791240
+GAS,trigger+quoter(null),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(null),dev-20261111143541-22992581589411.test.near,2104465917967
+GAS,trigger+quoter(null),dev-20261111143540-59672793542425.test.near,1670333855184
+GAS,trigger+quoter(null),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(null),dev-20261111143541-22992581589411.test.near,2104864497067
+GAS,trigger+quoter(null),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(null),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+pyth(ok)+static,total,24452750696183
+GAS,trigger+pyth(ok)+static,dev-20261111143541-17560991251909.test.near,3899137389877
+GAS,trigger+pyth(ok)+static,dev-20261111143557-33327201215261.test.near,1425674634050
+GAS,trigger+pyth(ok)+static,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+static,dev-20261111143541-17560991251909.test.near,5876427373463
+GAS,trigger+pyth(ok)+static,dev-20261111143540-45615027591323.test.near,1861210239693
+GAS,trigger+pyth(ok)+static,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+static,dev-20261111143541-17560991251909.test.near,2119117117844
+GAS,trigger+pyth(ok)+static,dev-20261111143540-45615027591323.test.near,1778305472985
+GAS,trigger+pyth(ok)+static,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+static,dev-20261111143541-17560991251909.test.near,2091078063336
+GAS,trigger+pyth(ok)+static,dev-20261111143540-45615027591323.test.near,1661213855184
+GAS,trigger+pyth(ok)+static,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+static,dev-20261111143541-17560991251909.test.near,2091476642436
+GAS,trigger+pyth(ok)+static,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+static,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+quoter(badhash),total,25901684533356
+GAS,trigger+quoter(badhash),dev-20261111143541-22992581589411.test.near,5011539205429
+GAS,trigger+quoter(badhash),dev-20261111143601-20467921227596.test.near,1936272181101
+GAS,trigger+quoter(badhash),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(badhash),dev-20261111143541-22992581589411.test.near,5885706854706
+GAS,trigger+quoter(badhash),dev-20261111143540-59672793542425.test.near,1741179350872
+GAS,trigger+quoter(badhash),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(badhash),dev-20261111143541-22992581589411.test.near,2137064972475
+GAS,trigger+quoter(badhash),dev-20261111143540-59672793542425.test.near,1661147791240
+GAS,trigger+quoter(badhash),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(badhash),dev-20261111143541-22992581589411.test.near,2104465917967
+GAS,trigger+quoter(badhash),dev-20261111143540-59672793542425.test.near,1670333855184
+GAS,trigger+quoter(badhash),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(badhash),dev-20261111143541-22992581589411.test.near,2104864497067
+GAS,trigger+quoter(badhash),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(badhash),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(unknown),total,25944700626928
+GAS,trigger+quoter(unknown),dev-20261111143541-22992581589411.test.near,5011539205429
+GAS,trigger+quoter(unknown),dev-20261111143601-20467921227596.test.near,1958151231088
+GAS,trigger+quoter(unknown),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(unknown),dev-20261111143541-22992581589411.test.near,5906843898291
+GAS,trigger+quoter(unknown),dev-20261111143540-59672793542425.test.near,1741179350872
+GAS,trigger+quoter(unknown),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(unknown),dev-20261111143541-22992581589411.test.near,2137064972475
+GAS,trigger+quoter(unknown),dev-20261111143540-59672793542425.test.near,1661147791240
+GAS,trigger+quoter(unknown),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(unknown),dev-20261111143541-22992581589411.test.near,2104465917967
+GAS,trigger+quoter(unknown),dev-20261111143540-59672793542425.test.near,1670333855184
+GAS,trigger+quoter(unknown),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(unknown),dev-20261111143541-22992581589411.test.near,2104864497067
+GAS,trigger+quoter(unknown),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(unknown),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(panic),total,25608917989374
+GAS,trigger+quoter(panic),dev-20261111143541-22992581589411.test.near,5011539205429
+GAS,trigger+quoter(panic),dev-20261111143601-20467921227596.test.near,1518286282050
+GAS,trigger+quoter(panic),dev-20261111143541-22992581589411.test.near,223182562500
+GAS,trigger+quoter(panic),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(panic),dev-20261111143541-22992581589411.test.near,5787743647275
+GAS,trigger+quoter(panic),dev-20261111143540-59672793542425.test.near,1741179350872
+GAS,trigger+quoter(panic),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(panic),dev-20261111143541-22992581589411.test.near,2137064972475
+GAS,trigger+quoter(panic),dev-20261111143540-59672793542425.test.near,1661147791240
+GAS,trigger+quoter(panic),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(panic),dev-20261111143541-22992581589411.test.near,2104465917967
+GAS,trigger+quoter(panic),dev-20261111143540-59672793542425.test.near,1670333855184
+GAS,trigger+quoter(panic),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(panic),dev-20261111143541-22992581589411.test.near,2104864497067
+GAS,trigger+quoter(panic),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(panic),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(error),total,25559060948654
+GAS,trigger+quoter(error),dev-20261111143541-22992581589411.test.near,5011539205429
+GAS,trigger+quoter(error),dev-20261111143601-20467921227596.test.near,1671228767450
+GAS,trigger+quoter(error),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(error),dev-20261111143541-22992581589411.test.near,5808126683655
+GAS,trigger+quoter(error),dev-20261111143540-59672793542425.test.near,1741179350872
+GAS,trigger+quoter(error),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(error),dev-20261111143541-22992581589411.test.near,2137064972475
+GAS,trigger+quoter(error),dev-20261111143540-59672793542425.test.near,1661147791240
+GAS,trigger+quoter(error),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(error),dev-20261111143541-22992581589411.test.near,2104465917967
+GAS,trigger+quoter(error),dev-20261111143540-59672793542425.test.near,1670333855184
+GAS,trigger+quoter(error),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(error),dev-20261111143541-22992581589411.test.near,2104864497067
+GAS,trigger+quoter(error),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+quoter(error),dev-20261111143443-54040373928332.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,total,31777239466869
+GAS,trigger+pyth(ok)+quoter,dev-20261111143541-17560991251909.test.near,3996234972263
+GAS,trigger+pyth(ok)+quoter,dev-20261111143557-33327201215261.test.near,1430234634050
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,dev-20261111143541-17560991251909.test.near,4926890352425
+GAS,trigger+pyth(ok)+quoter,dev-20261111143608-17333274345196.test.near,1920965039801
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,dev-20261111143541-17560991251909.test.near,5988383051210
+GAS,trigger+pyth(ok)+quoter,dev-20261111143540-45615027591323.test.near,1741179350872
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,dev-20261111143541-17560991251909.test.near,2137064972475
+GAS,trigger+pyth(ok)+quoter,dev-20261111143540-45615027591323.test.near,1661147791240
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,dev-20261111143541-17560991251909.test.near,2104465917967
+GAS,trigger+pyth(ok)+quoter,dev-20261111143540-45615027591323.test.near,1670333855184
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,dev-20261111143541-17560991251909.test.near,2104864497067
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,trigger+pyth(ok)+quoter,dev-20261111143443-48271682569628.test.near,223182562500
+GAS,cancel_settlement,total,2972252194333
+GAS,cancel_settlement,dev-20261111143541-17560991251909.test.near,2662476080593
+GAS,trigger+pyth+quoter+8legs,total,72132312836093
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,4527647213974
+GAS,trigger+pyth+quoter+8legs,dev-20261111143615-12119256886156.test.near,1425886571094
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,6675337016614
+GAS,trigger+pyth+quoter+8legs,dev-20261111143612-49190546305328.test.near,2201896351739
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,14705122979294
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1879266643373
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2136910995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1787994240845
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2107270995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1787994240845
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2107270995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1787994240845
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2107270995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1787994240845
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2107270995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1787994240845
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2107270995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1787994240845
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2107270995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1787994240845
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2107270995371
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1785145472985
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2104465917967
+GAS,trigger+pyth+quoter+8legs,dev-20261111143540-25369402994112.test.near,1661159553288
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143541-62385067212328.test.near,2104864497067
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,dev-20261111143443-54298768004234.test.near,223182562500
+GAS,trigger+pyth+quoter+8legs,attached,300000000000000
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 95.31s
+     Running tests/sandbox_p2.rs (target/debug/deps/sandbox_p2-cf70ac93d6b227f6)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+GAS,reserve_remote_position+derived_public_key,total,11749458202958
+GAS,reserve_remote_position+derived_public_key,dev-20261111143904-26785140416077.test.near,5868726083992
+GAS,reserve_remote_position+derived_public_key,dev-20261111143916-81787849044674.test.near,2607067143794
+GAS,reserve_remote_position+derived_public_key,dev-20261111143919-78179140069706.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,dev-20261111143904-26785140416077.test.near,2510800332617
+GAS,reserve_remote_position+derived_public_key,dev-20261111143919-78179140069706.test.near,223182562500
+GAS,confirm_remote_deposit+refund,total,18426863230622
+GAS,confirm_remote_deposit+refund,dev-20261111143904-36129839312944.test.near,3753440171554
+GAS,confirm_remote_deposit+refund,dev-20261111143915-59962116887619.test.near,1626879001989
+GAS,confirm_remote_deposit+refund,dev-20261111143623-30642022449408.test.near,223182562500
+GAS,confirm_remote_deposit+refund,dev-20261111143904-36129839312944.test.near,7413287637066
+GAS,confirm_remote_deposit+refund,dev-20261111143901-13958921567532.test.near,1863550092743
+GAS,confirm_remote_deposit+refund,dev-20261111143623-30642022449408.test.near,223182562500
+GAS,confirm_remote_deposit+refund,dev-20261111143904-36129839312944.test.near,2120596419955
+GAS,confirm_remote_deposit+refund,dev-20261111143918-51754715721234.test.near,223182562500
+GAS,confirm_remote_deposit+refund,dev-20261111143623-30642022449408.test.near,223182562500
+GAS,confirm_remote_deposit+refund,dev-20261111143623-30642022449408.test.near,223182562500
+GAS,confirm_remote_deposit+refund,dev-20261111143623-30642022449408.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,total,18426899431886
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143904-26785140416077.test.near,3753476372818
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143916-81787849044674.test.near,1626879001989
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143904-26785140416077.test.near,7413287637066
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143901-58864467726445.test.near,1863550092743
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143904-26785140416077.test.near,2120596419955
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143919-78179140069706.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,total,11752831502558
+GAS,reserve_remote_position+derived_public_key,dev-20261111143911-28466051012506.test.near,5868726083992
+GAS,reserve_remote_position+derived_public_key,dev-20261111143919-73985165117786.test.near,2607297515474
+GAS,reserve_remote_position+derived_public_key,dev-20261111143922-80202171195780.test.near,223182562500
+GAS,reserve_remote_position+derived_public_key,dev-20261111143911-28466051012506.test.near,2513943260537
+GAS,reserve_remote_position+derived_public_key,dev-20261111143922-80202171195780.test.near,223182562500
+GAS,request_remote_release+sign,total,17759795800157
+GAS,request_remote_release+sign,dev-20261111143904-26785140416077.test.near,3906995134788
+GAS,request_remote_release+sign,dev-20261111143916-81787849044674.test.near,2724655441604
+GAS,request_remote_release+sign,dev-20261111143916-81787849044674.test.near,1465195604562
+GAS,request_remote_release+sign,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261111143916-81787849044674.test.near,5416965204864
+GAS,request_remote_release+sign,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261111143904-26785140416077.test.near,2820057069524
+GAS,request_remote_release+sign,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,request_remote_release+sign,dev-20261111143623-95620662946931.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,total,18420023230622
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143911-28466051012506.test.near,3753440171554
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143919-73985165117786.test.near,1631439001989
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-29412769454945.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143911-28466051012506.test.near,7408727637066
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143901-23627442621976.test.near,1856710092743
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-29412769454945.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143911-28466051012506.test.near,2120596419955
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143922-80202171195780.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-29412769454945.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-29412769454945.test.near,223182562500
+GAS,confirm_remote_deposit+vault_read+payout,dev-20261111143623-29412769454945.test.near,223182562500
+GAS,relay_release_result,total,3061327946174
+GAS,relay_release_result,dev-20261111143904-26785140416077.test.near,2746306623784
+GAS,trigger+sign(remote position),total,22115996027421
+GAS,trigger+sign(remote position),dev-20261111143911-28466051012506.test.near,7966005122993
+GAS,trigger+sign(remote position),dev-20261111143919-73985165117786.test.near,2765601010286
+GAS,trigger+sign(remote position),dev-20261111143919-73985165117786.test.near,1464768775335
+GAS,trigger+sign(remote position),dev-20261111143623-29412769454945.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261111143919-73985165117786.test.near,5448597097140
+GAS,trigger+sign(remote position),dev-20261111143623-29412769454945.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261111143623-29412769454945.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261111143911-28466051012506.test.near,3045096676852
+GAS,trigger+sign(remote position),dev-20261111143623-29412769454945.test.near,223182562500
+GAS,trigger+sign(remote position),dev-20261111143623-29412769454945.test.near,223182562500
+GAS,relay_settlement_result,total,3349935932940
+GAS,relay_settlement_result,dev-20261111143911-28466051012506.test.near,3034771559405
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),total,51882319224340
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143903-96742676731572.test.near,11560320546989
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143929-87783255531138.test.near,1425886571094
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143903-96742676731572.test.near,13536443393810
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143923-50409405626493.test.near,2241287112402
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143903-96742676731572.test.near,7987850179188
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143923-50409405626493.test.near,2801788665640
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143923-50409405626493.test.near,1471403449306
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143923-50409405626493.test.near,5485182171850
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143903-96742676731572.test.near,3053499539246
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),dev-20261111143623-55248757726308.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, 8 buyers),attached,300000000000000
+GAS,trigger+pyth+quoter+sign(remote, near minimum),total,51857400298921
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143904-26599650603844.test.near,11560320546989
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143931-17337510314501.test.near,1421326571094
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143904-26599650603844.test.near,13536443393810
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143924-93417724143730.test.near,2236727112402
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143904-26599650603844.test.near,7987850179188
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143924-93417724143730.test.near,2792853785740
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143924-93417724143730.test.near,1470122961625
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143924-93417724143730.test.near,5480032924750
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143904-26599650603844.test.near,3053065228508
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),dev-20261111143623-21451782332419.test.near,223182562500
+GAS,trigger+pyth+quoter+sign(remote, near minimum),attached,185000000000000
+GAS,expire_remote_reservation+refund,total,3700508083464
+GAS,expire_remote_reservation+refund,dev-20261111143904-36129839312944.test.near,2943985375004
+GAS,expire_remote_reservation+refund,dev-20261111143920-37012612867574.test.near,223182562500
+GAS,expire_remote_reservation+refund,dev-20261111143623-30642022449408.test.near,223182562500
+GAS,self_settle(remote)+sign,total,21424691432223
+GAS,self_settle(remote)+sign,dev-20261111143904-36129839312944.test.near,7290705099463
+GAS,self_settle(remote)+sign,dev-20261111143915-59962116887619.test.near,2755573323378
+GAS,self_settle(remote)+sign,dev-20261111143915-59962116887619.test.near,1465027762338
+GAS,self_settle(remote)+sign,dev-20261111143918-51754715721234.test.near,223182562500
+GAS,self_settle(remote)+sign,dev-20261111143915-59962116887619.test.near,5443625009228
+GAS,self_settle(remote)+sign,dev-20261111143918-51754715721234.test.near,223182562500
+GAS,self_settle(remote)+sign,dev-20261111143918-51754715721234.test.near,223182562500
+GAS,self_settle(remote)+sign,dev-20261111143904-36129839312944.test.near,3044357413866
+GAS,self_settle(remote)+sign,dev-20261111143918-51754715721234.test.near,223182562500
+GAS,self_settle(remote)+sign,dev-20261111143918-51754715721234.test.near,223182562500
+GAS,confirm_remote_deposit(rejected),total,9618932640530
+GAS,confirm_remote_deposit(rejected),dev-20261111143904-29392375645727.test.near,3770347309800
+GAS,confirm_remote_deposit(rejected),dev-20261111143915-28876196594546.test.near,1663004578704
+GAS,confirm_remote_deposit(rejected),dev-20261111143623-52679686290598.test.near,223182562500
+GAS,confirm_remote_deposit(rejected),dev-20261111143904-29392375645727.test.near,3429201094711
+GAS,confirm_remote_deposit(rejected),dev-20261111143623-52679686290598.test.near,223182562500
+GAS,keeper_attest_deposit+payout,total,12660349701890
+GAS,keeper_attest_deposit+payout,dev-20261111143904-29392375645727.test.near,7465924379907
+GAS,keeper_attest_deposit+payout,dev-20261111143901-44696800468349.test.near,1863550092743
+GAS,keeper_attest_deposit+payout,dev-20261111143623-52679686290598.test.near,223182562500
+GAS,keeper_attest_deposit+payout,dev-20261111143904-29392375645727.test.near,2120596419955
+GAS,keeper_attest_deposit+payout,dev-20261111143918-53358191436308.test.near,223182562500
+GAS,keeper_attest_deposit+payout,dev-20261111143623-52679686290598.test.near,223182562500
+GAS,keeper_attest_deposit+payout,dev-20261111143623-52679686290598.test.near,223182562500
+GAS,expire_remote_reservation,total,3700508083464
+GAS,expire_remote_reservation,dev-20261111143904-29392375645727.test.near,2943985375004
+GAS,expire_remote_reservation,dev-20261111143918-53358191436308.test.near,223182562500
+GAS,expire_remote_reservation,dev-20261111144115-78965051308014.test.near,223182562500
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 457.16s
+     Running tests/sandbox_reserve.rs (target/debug/deps/sandbox_reserve-1874bd94a3a8f64b)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+GAS,upsert_collateral,2936848024866
+GAS,upsert_collateral,2936848024866
+GAS,update_owner_price,2729494006845
+GAS,update_owner_price,2729494006845
+GAS,set_reserve_params,2901566887407
+GAS,set_reserve_params,2901566887407
+GAS,ft_transfer_call(JoinNectarReserve),7985672476258
+GAS,update_owner_price,2733585546481
+GAS,update_owner_price,2733585546481
+GAS,update_owner_price,2733585546481
+GAS,update_owner_price,2733585546481
+GAS,trigger_preliquidation(reserve),13992816967200
+GAS,trigger_preliquidation(reserve),18761077716053
+GAS,cancel_settlement,3025604260176
+GAS,nft_transfer(reserve),3713745079419
+GAS,initiate_reserve_exit,3121097598765
+GAS,complete_reserve_exit,13230994971927
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 103.15s
+     Running tests/sandbox_v7.rs (target/debug/deps/sandbox_v7-c35188d42f3e62e2)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+GAS,upsert_collateral,2958065507334
+GAS,update_owner_price,2738614006845
+GAS,upsert_collateral,2939825507334
+GAS,upsert_collateral,2939825507334
+GAS,upsert_collateral,2939825507334
+GAS,update_owner_price,2729494006845
+GAS,upsert_collateral,2939825507334
+GAS,upsert_collateral,2939825507334
+GAS,update_owner_price,2729494006845
+GAS,update_owner_price,2729494006845
+GAS,update_owner_price,2729494006845
+GAS,update_owner_price,2729494006845
+GAS,set_allow_keeper_deposit_attestation,2549748430859
+GAS,set_vault_read_config,2639874812303
+GAS,set_quoter_secrets_ref,2607147636005
+GAS,mock-ft:set_registration_required,1668893057915
+GAS,set_quoter_pin,2508139562138
+GAS,set_outlayer_account,2409190482423
+GAS,set_quote_params,2396718379511
+GAS,set_vol_bps,2748470169075
+GAS,set_oracle_source,2663571260502
+GAS,set_max_conf_bps,2406293051358
+GAS,LockCollateralAndBorrow+nft_mint,13497190260406
+GAS,FundPappusQuote+nft_mint,9017669953631
+GAS,set_signer_config,2625709510818
+GAS,borrow(pre-split),13501750260406
+GAS,set_remote_chain,2893594914831
+GAS,ft_transfer_call:LockCollateralAndBorrow(pay_to failed),13756641921421
+GAS,nft_transfer(loan),3673892573256
+GAS,set_multiplier,2767695817458
+GAS,ft_transfer_call:LockCollateralAndBorrow(v2),13357490321251
+GAS,nft_transfer,3745447791657
+GAS,withdraw_claimable,7690085431406
+GAS,borrow(aggregate_limit),7377469377942
+GAS,upsert_collateral,2939825507334
+GAS,Repay(full)->note owner,12478389209594
+GAS,update_owner_price,2729494006845
+GAS,borrow(headroom),13396321361168
+GAS,set_quote_remote_recipient,3621505397075
+GAS,announce_corporate_action,2762978464791
+GAS,upsert_collateral,2939825507334
+GAS,upsert_collateral,2939825507334
+GAS,update_owner_price,2729494006845
+GAS,borrow(1 over),7371266622951
+GAS,borrow(ca_pending),7312362467227
+GAS,update_owner_price,2729494006845
+GAS,nft_transfer_call(returned),9245504345684
+GAS,register_referrer,2563039796807
+GAS,borrow(after repay),13282334526524
+GAS,mock-ft:update_multiplier,1764464462951
+GAS,register_referrer,2565319796807
+GAS,update_owner_price,2729921017209
+GAS,update_owner_price,2729921017209
+GAS,borrow(referrer_is_borrower),7216705636917
+GAS,update_owner_price,2729921017209
+GAS,ft_transfer_call:LockCollateralAndBorrow(referrer),13609731792002
+GAS,trigger_preliquidation(v2),18734180518248
+GAS,unregister_referrer,2560332765317
+GAS,set_dex_depth,2651432905233
+GAS,set_session_calendar,10094870758889
+GAS,borrow(unregistered referrer),13363964264861
+GAS,set_session_calendar,2937640096103
+GAS,set_origination_fee_bps,2445325366412
+GAS,update_owner_price,2729921017209
+GAS,force_session_closed,2717466514560
+GAS,borrow,13506310260406
+GAS,force_session_closed,2717885430066
+GAS,borrow,13506310260406
+GAS,update_owner_price,2729921017209
+GAS,nft_token_svg,2866626200358
+GAS,update_owner_price,2729921017209
+GAS,nft_token_svg(quote),2861589240366
+GAS,update_owner_price,2729921017209
+GAS,nft_token,3155723570424
+GAS,nft_tokens,4943286052989
+GAS,nft_tokens_for_owner,3315967760195
+GAS,nft_transfer_locked,2450058795896
+GAS,set_outlayer_account,2399388122267
+GAS,set_quoter_config,2482829653625
+GAS,set_quoter_pin,2511799927409
+GAS,upsert_collateral,2978567406702
+GAS,set_vol_bps,2748470169075
+GAS,force_session_closed,2717885430066
+GAS,borrow(weekend over),7497758318497
+GAS,borrow(weekend),13389207817942
+GAS,set_session_calendar,2593393636439
+GAS,update_owner_price,2729921017209
+GAS,force_session_closed,2717885430066
+GAS,update_owner_price,2729921017209
+GAS,apply_corporate_action,2830692372932
+GAS,borrow(post-split),13397005800014
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 477.48s
+     Running tests/sandbox_v7b.rs (target/debug/deps/sandbox_v7b-40afd2c9c29c8e0a)
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+GAS,upsert_collateral,2939825507334
+GAS,upsert_collateral,2939825507334
+GAS,upsert_collateral,2939825507334
+GAS,upsert_collateral,2939825507334
+GAS,update_owner_price,2729494006845
+GAS,update_owner_price,2729494006845
+GAS,update_owner_price,2729494006845
+GAS,update_owner_price,2729494006845
+GAS,set_dex_depth,2651432905233
+GAS,set_shield_params,2765056506252
+GAS,set_session_calendar,2597721830651
+GAS,set_outlayer_account,2399388122267
+GAS,set_job_config,2650944514445
+GAS,update_owner_price,2729921017209
+GAS,set_vault_read_config,2648200029140
+GAS,set_job_config,2657685526457
+GAS,set_session_calendar,2597891878796
+GAS,borrow_alice,13510870260406
+GAS,set_max_voluntary_fill,2732717771175
+GAS,shield_over_weekend_capacity,7657660838905
+GAS,force_session_closed,2730172009035
+GAS,request_session_check+calendar,8384557304564
+GAS,update_owner_price,2729921017209
+GAS,FundPappusQuote(accepts_voluntary_fills),8156286744940
+GAS,force_session_closed,2730590924541
+GAS,set_max_voluntary_fill,2732717771175
+GAS,LockCollateralAndBorrow(shield),13824401677862
+GAS,update_owner_price,2729921017209
+GAS,set_max_voluntary_fill,2732717771175
+GAS,shield_open_2,13711700152325
+GAS,update_owner_price,2729921017209
+GAS,shield_open_3,13718540152325
+GAS,borrow_bob,13401963604607
+GAS,update_owner_price,2729921017209
+GAS,self_settle(near),13648048905336
+GAS,update_owner_price,2729921017209
+GAS,shield_open_4,13718540152325
+GAS,update_owner_price,2729921017209
+GAS,shield_open_5,13718540152325
+GAS,update_owner_price,2742626511684
+GAS,set_multiplier_source,2743770219111
+GAS,request_multiplier_read+multiplier,8754070558690
+GAS,update_owner_price,2742626511684
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 186.46s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+exit=0
