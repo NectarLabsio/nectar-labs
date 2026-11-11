@@ -12,14 +12,14 @@ export interface CopilotDeps {
   live: (requestBody: string, nonceHex: string) => Promise<CopilotBundle>;
   /** Recorded fixture response, DCAP verdict computed once and cached by the caller. */
   fixture: () => Promise<Record<string, unknown>>;
-  /** Live calls spend NEAR AI credit; fixture calls are served from memory. Separate buckets, both per client. */
-  buckets: { live: TokenBucket; fixture: TokenBucket };
+  /** Live calls spend NEAR AI credit; fixture calls are served from memory. Per-client buckets, plus a global ceiling on live calls. */
+  buckets: { live: TokenBucket; liveGlobal: TokenBucket; fixture: TokenBucket };
   /** Server-side log for upstream failures (no client address, no request body). */
   log?: (msg: string) => void;
 }
 
-/** 5 live calls per minute per client; 30 fixture calls per minute (no outbound requests, cached verdict). */
-export const defaultBuckets = (): CopilotDeps["buckets"] => ({ live: new TokenBucket(5, 60_000), fixture: new TokenBucket(30, 60_000) });
+/** 5 live calls per minute per client and 30 across all clients; 30 fixture calls per minute per client (no outbound requests, cached verdict). */
+export const defaultBuckets = (): CopilotDeps["buckets"] => ({ live: new TokenBucket(5, 60_000), liveGlobal: new TokenBucket(30, 60_000), fixture: new TokenBucket(30, 60_000) });
 
 const json = (body: unknown, status = 200): Response => Response.json(body, { status, headers: { "cache-control": "no-store" } });
 
@@ -38,7 +38,7 @@ export async function handleCopilotPost(req: Request, d: CopilotDeps): Promise<R
   const notes = typeof body.notes === "string" ? body.notes.trim() : "";
   if (!/^[0-9a-f]{64}$/.test(nonce)) return json({ status: "bad_request", error: "nonce must be 64 hex chars" }, 400);
   if (!notes || notes.length > NOTES_MAX_CHARS) return json({ status: "bad_request", error: `notes must be 1–${NOTES_MAX_CHARS} characters` }, 400);
-  const limited = rateLimit(d.buckets.live, req);
+  const limited = rateLimit(d.buckets.live, req) ?? rateLimit(d.buckets.liveGlobal, req, Date.now(), "*");
   if (limited) return limited;
   try {
     // Same builder the browser uses to rebuild the expected request (R2-03), with max_tokens (R2-04).

@@ -26,7 +26,7 @@ function deps(over: Partial<CopilotDeps> = {}): CopilotDeps & { liveCalls: strin
       d.fixtureCalls++;
       return { status: "ok", nonce: "00" };
     },
-    buckets: { live: new TokenBucket(5, 60_000), fixture: new TokenBucket(30, 60_000) },
+    buckets: { live: new TokenBucket(5, 60_000), liveGlobal: new TokenBucket(30, 60_000), fixture: new TokenBucket(30, 60_000) },
     log: (m: string) => d.logs.push(m),
     ...over,
   };
@@ -82,7 +82,19 @@ test("token bucket: 5 per minute per client, refills, separate keys, bounded mem
   b.take("c", 12_000);
   b.take("d", 12_000);
   assert.equal(b.take("e", 12_000), 0, "new keys still admitted at the key cap");
-  assert.equal(clientKey(post("{}", SAME, "203.0.113.9, 10.0.0.1")), "203.0.113.9");
+  // The nearest proxy appends the real peer last; earlier hops are whatever the client sent.
+  assert.equal(clientKey(post("{}", SAME, "6.6.6.6, 203.0.113.9")), "203.0.113.9");
+  assert.equal(clientKey(post("{}", { ...SAME, "x-real-ip": "192.0.2.1" }, "6.6.6.6")), "192.0.2.1");
+  assert.equal(clientKey(new Request(URL_)), "unknown");
+});
+
+test("POST /api/copilot: a global ceiling holds when clients rotate x-forwarded-for", async () => {
+  const d = deps({ buckets: { live: new TokenBucket(5, 60_000), liveGlobal: new TokenBucket(3, 60_000), fixture: new TokenBucket(30, 60_000) } });
+  const body = JSON.stringify({ nonce, notes: "n" });
+  const codes: number[] = [];
+  for (let i = 0; i < 5; i++) codes.push((await handleCopilotPost(post(body, SAME, `203.0.113.${i}`), d)).status);
+  assert.deepEqual(codes, [200, 200, 200, 429, 429]);
+  assert.equal(d.liveCalls.length, 3);
 });
 
 test("POST /api/copilot: 429 after 5 live calls from one client, other clients still served; fixture has its own bucket", async () => {

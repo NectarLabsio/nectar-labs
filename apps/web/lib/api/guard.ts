@@ -95,10 +95,16 @@ export async function guardJsonPost(req: Request, maxBytes = MAX_JSON_BODY_BYTES
   }
 }
 
-/** Client key for rate limiting: first `x-forwarded-for` hop, else `x-real-ip`, else one shared bucket. Never logged. */
+/**
+ * Client key for rate limiting, never logged: `x-real-ip` (set by the proxy), else the last `x-forwarded-for` hop (the one the
+ * nearest proxy appended; earlier hops are client-supplied), else one shared bucket. Spoofable without a trusted proxy, so
+ * costly routes also apply a global bucket (lib/copilot/handler.ts).
+ */
 export function clientKey(req: Request): string {
-  const fwd = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  return fwd || req.headers.get("x-real-ip")?.trim() || "unknown";
+  const real = req.headers.get("x-real-ip")?.trim();
+  if (real) return real;
+  const hops = (req.headers.get("x-forwarded-for") ?? "").split(",").map((h) => h.trim()).filter(Boolean);
+  return hops[hops.length - 1] ?? "unknown";
 }
 
 /** In-memory token bucket per key: `capacity` requests, refilled continuously over `perMs`. */
@@ -140,9 +146,9 @@ export class TokenBucket {
   }
 }
 
-/** 429 with Retry-After, or null when the request may proceed. */
-export function rateLimit(bucket: TokenBucket, req: Request, now = Date.now()): Response | null {
-  const waitMs = bucket.take(clientKey(req), now);
+/** 429 with Retry-After, or null when the request may proceed. `key` defaults to the client key; pass "*" for a global bucket. */
+export function rateLimit(bucket: TokenBucket, req: Request, now = Date.now(), key = clientKey(req)): Response | null {
+  const waitMs = bucket.take(key, now);
   if (waitMs === 0) return null;
   return reject(429, "rate_limited", "Too many requests. Wait a minute and try again.", { "retry-after": String(Math.max(1, Math.ceil(waitMs / 1000))) }).response;
 }
