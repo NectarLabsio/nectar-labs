@@ -323,7 +323,7 @@ impl Nectar {
     /// Pyth path (D-013, D-015): Settling, then `get_price_no_older_than(price_id, age)` (F-173)
     /// `.then(on_pyth_price)` with all remaining gas. Our own age/conf/band checks still run in the callback.
     pub(crate) fn start_pyth_read(&mut self, position_id: U64, mut p: Position, account: AccountId, price_identifier: String) {
-        let cands = self.select_quotes(&p.collateral);
+        let cands = self.select_quotes_for(&p, &self.coll_or_panic(&p.collateral));
         let n = self.n_transfers(&cands);
         let downstream = if self.quoter_enabled() && self.vol_bps.get(&p.collateral).is_some() {
             self.quoter_leg_gas(n) + self.remote_extra_gas(&p)
@@ -478,7 +478,7 @@ impl Nectar {
         if !self.is_triggerable(&p, &c) {
             return self.abort_settlement(p, "position healthy");
         }
-        let cands = self.select_quotes(&p.collateral);
+        let cands = self.select_quotes_for(&p, &c);
         if self.quoter_enabled() {
             match self.vol_bps.get(&p.collateral).copied() {
                 Some(vol) => {
@@ -503,6 +503,9 @@ impl Nectar {
         self.assert_owner();
         let mut p = self.position_or_panic(position_id.0);
         require!(p.status == PositionStatus::Settling, "position not settling");
+        // SR-3: a signed remote leg may have executed; it is never rolled back here (`resign_remote_settlement`).
+        #[cfg(feature = "p2")]
+        require!(!self.signed_leg_open(position_id.0), "signed remote leg: resign_remote_settlement");
         #[cfg(feature = "p2")]
         self.cancel_remote_leg(&mut p);
         p.status = PositionStatus::Open;

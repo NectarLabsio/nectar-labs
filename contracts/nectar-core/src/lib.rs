@@ -49,6 +49,8 @@ mod tests_v7b;
 mod tests_notes;
 #[cfg(all(test, feature = "p2"))]
 mod tests_reserve;
+#[cfg(all(test, feature = "p2"))]
+mod tests_v7c;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
@@ -63,7 +65,7 @@ use crate::math::{BPS, LimitParams, MathResult};
 use crate::types::*;
 
 /// interface-v7.md A6.
-pub const CONTRACT_VERSION: &str = "2.1.0-v7";
+pub const CONTRACT_VERSION: &str = "2.2.0-v7";
 /// Raw storage key holding the state layout version. Written by `new` (v2 has no migrate).
 pub const STATE_VERSION_KEY: &[u8] = b"__state_version";
 pub const STATE_VERSION: u8 = 2;
@@ -119,6 +121,8 @@ const ERR_NO_POSITION: &str = "unknown position";
 const ERR_BUYER: &str = "buyer only";
 // v2 reason codes (interface-v7.md A6)
 pub(crate) const ERR_AGGREGATE_LIMIT: &str = "aggregate_limit";
+/// SR-5: a remote loan above the largest single quote that could settle it.
+pub(crate) const ERR_REMOTE_SETTLE_CAP: &str = "remote_settle_capacity";
 pub(crate) const ERR_CA_PENDING: &str = "ca_pending";
 pub(crate) const ERR_REFERRER_IS_BORROWER: &str = "referrer_is_borrower";
 
@@ -448,6 +452,10 @@ impl Nectar {
             return Err("quote below minimum");
         }
         Self::validate_string(&buyer_remote_recipient)?;
+        // SR-7: only a recipient a vault can pay (32-byte on-curve Solana key or non-zero 0x address).
+        if buyer_remote_recipient.as_deref().is_some_and(|r| !chainsig::valid_remote_recipient(r)) {
+            return Err("bad recipient");
+        }
         Self::validate_string(&secrets_profile)?;
         let mut ids = self.live_ids(&collateral);
         if ids.len() >= MAX_QUOTES_PER_ASSET {
@@ -566,7 +574,7 @@ impl Nectar {
             Some(s) => Some(self.validate_shield(&c, &s, borrow, sender)?),
             None => None,
         };
-        let t = self.check_borrow(&c, units, borrow, Some(pre_liq_ltv_bps), referrer.is_some(), shield.map(|s| s.fee_bps))?;
+        let t = self.check_borrow(&c, units, borrow, Some(pre_liq_ltv_bps), referrer.is_some(), shield.map(|s| s.fee_bps), None)?;
         let id = self.next_position_id;
         let next = id.checked_add(1).ok_or(math::ERR_OVERFLOW)?;
         let entry_m = c.multiplier_e18;
@@ -702,14 +710,27 @@ impl Nectar {
         pre_liq_ltv_bps: Option<u16>,
         referrer_registered: bool,
         shield_fee_bps: Option<u16>,
+        remote: Option<(u128, u128)>,
     ) -> Result<BorrowTerms, &'static str> {
         // WO-23a §4.9: a Shield is sized at weekend parameters and pays a flat fee instead of the premium.
-        let l = math::limit(units, &self.limit_params_for(c, shield_fee_bps.is_some()))?;
+        let mut lp = self.limit_params_for(c, shield_fee_bps.is_some());
+        // SR-5 (WO-34a): a remote loan settles in ONE signed leg from ONE quote whose recipient fits its chain. Size it
+        // against those quotes only (`remote` = (sum, largest) of fitting non-exiting remaining): no R_c, no D_c.
+        if let Some((q_remote, _)) = remote {
+            lp.q_usd_e6 = q_remote;
+            lp.r_usd_e6 = 0;
+            lp.d_usd_e6 = 0;
+        }
+        let l = math::limit(units, &lp)?;
         if borrow > l.ltv_cap_usd_e6 {
             return Err("borrow above B_c");
         }
         if math::add(c.total_debt_usd_e6.0, borrow)? > l.capacity_usd_e6 {
             return Err(ERR_AGGREGATE_LIMIT);
+        }
+        // SR-5: while remote settlement is single-leg, the (haircut-limited) borrow is capped at the largest fitting quote.
+        if remote.is_some_and(|(_, largest)| borrow > largest) {
+            return Err(ERR_REMOTE_SETTLE_CAP);
         }
         if borrow > self.available_usd_e6 {
             return Err("insufficient pool liquidity");
@@ -786,6 +807,30 @@ impl Nectar {
     pub(crate) fn is_triggerable(&self, p: &Position, c: &CollateralConfig) -> bool {
         let value = ok(Self::value_of(p.units.0, c));
         ok(math::triggerable(p.debt_usd_e6.0, value, p.pre_liq_ltv_bps))
+    }
+
+    /// SR-5 (WO-34a): settlement candidates for this position. A remote position (one signed leg, one quote) keeps only
+    /// quotes whose recipient fits its chain and whose remaining closes it in one leg at their ceiling, filtered BEFORE
+    /// the 8-candidate cut so cheap unfit quotes cannot crowd out a fitting one. NEAR-held: `select_quotes`. <= 64 reads.
+    pub(crate) fn select_quotes_for(&self, p: &Position, c: &CollateralConfig) -> Vec<(u16, u64)> {
+        #[cfg(feature = "p2")]
+        if let Some(r) = &p.remote {
+            return self.select_remote_quotes(p, r.domain_id, c);
+        }
+        let _ = c;
+        self.select_quotes(&p.collateral)
+    }
+
+    /// SR-8: views show the remote depositor commitment (own raw key; `#[borsh(skip)]` field of `RemoteInfo`).
+    fn with_commitment(&self, mut p: Position) -> Position {
+        #[cfg(feature = "p2")]
+        {
+            let id = p.position_id.0;
+            if let Some(r) = p.remote.as_mut() {
+                r.committed_depositor = self.committed_depositor(id);
+            }
+        }
+        p
     }
 
     /// <= 8 live quotes with capacity: ascending max_discount_bps, then oldest (lowest id). <= 64 reads.
@@ -1402,7 +1447,7 @@ impl Nectar {
         require!(self.is_triggerable(&p, &c), "position healthy");
         let keeper = env::predecessor_account_id();
         emit("preliq_triggered", json!({ "position_id": position_id, "keeper": keeper }));
-        let cands = self.select_quotes(&p.collateral);
+        let cands = self.select_quotes_for(&p, &c);
 
         #[cfg(feature = "p1")]
         if self.quoter_enabled() {
@@ -1454,6 +1499,8 @@ impl Nectar {
                 let p = self.position_or_panic(position_id.0);
                 self.record_owed(&account_id, &p.collateral, amt);
             }
+            // SR-17: the claim failed again; the units stay owed.
+            Payout::OwedCollateral { symbol } => self.record_owed(&account_id, symbol, amt),
             Payout::QuoteWithdrawal { quote_id, principal_usd_e6, fees_usd_e6 } => {
                 let mut q = self.quote_or_panic(quote_id.0);
                 q.remaining_usd_e6 = U128(ok(math::add(q.remaining_usd_e6.0, principal_usd_e6.0)));
@@ -1589,14 +1636,14 @@ impl Nectar {
     }
 
     pub fn get_position(&self, position_id: U64) -> Option<Position> {
-        self.position(position_id.0)
+        self.position(position_id.0).map(|p| self.with_commitment(p))
     }
 
     pub fn list_positions(&self, from_index: Option<u32>, limit: Option<u32>) -> Vec<Position> {
         let from = from_index.unwrap_or(0) as u64;
         let lim = limit.unwrap_or(MAX_PAGE).min(MAX_PAGE) as u64;
         let end = from.saturating_add(lim).min(self.next_position_id);
-        (from..end).filter_map(|id| self.position(id)).collect()
+        (from..end).filter_map(|id| self.position(id)).map(|p| self.with_commitment(p)).collect()
     }
 
     pub fn get_health(&self, position_id: U64) -> HealthView {
@@ -1685,7 +1732,7 @@ impl Nectar {
         } else if let Some(Err(e)) = shield_checked {
             Some(e)
         } else {
-            self.check_borrow(&c, units.0, borrow, None, registered, shield_bps).err()
+            self.check_borrow(&c, units.0, borrow, None, registered, shield_bps, None).err()
         };
         PreviewBorrowView {
             b_c_usd_e6: U128(l.b_c_usd_e6),

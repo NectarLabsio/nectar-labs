@@ -209,7 +209,7 @@ async fn relay(e: &Env, core: &Contract, pos: u64, sig: &str) -> anyhow::Result<
 
 
 const SEC: u64 = 1_000_000_000;
-const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T";
+const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB48";
 const UNITS: u128 = 100_000_000;
 const BORROW: u128 = 11_250_000_000;
 
@@ -230,13 +230,13 @@ async fn chain(e: &Env, core: &Contract, s: &Contract) -> anyhow::Result<()> {
         "version_key": "ab".repeat(32), "deposit_yocto": DEPOSIT.to_string(), "gas_tgas": 50 })).await
 }
 
-/// Lender $100k; buyer1 $12k @250 with a Solana recipient; buyer2 $5k @400 NEAR-only.
+/// Lender $100k; buyer1 $15k @250 with a Solana recipient (SR-5 sizing); buyer2 $5k @400 NEAR-only.
 async fn seed(e: &Env, core: &Contract) -> anyhow::Result<Account> {
     let lender = user(e, 100_000_000_000, 0).await?;
     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
-    let b1 = user(e, 12_000_000_000, 0).await?;
+    let b1 = user(e, 15_000_000_000, 0).await?;
     let b2 = user(e, 5_000_000_000, 0).await?;
-    ft_call(&e.usdc, &b1, core.id(), 12_000_000_000, &fund_msg(250, true)).await?;
+    ft_call(&e.usdc, &b1, core.id(), 15_000_000_000, &fund_msg(250, true)).await?;
     ft_call(&e.usdc, &b2, core.id(), 5_000_000_000, &fund_msg(400, false)).await?;
     Ok(b1)
 }
@@ -245,7 +245,7 @@ async fn reserve(_e: &Env, core: &Contract, borrower: &Account) -> anyhow::Resul
     let r = borrower
         .call(core.id(), "reserve_remote_position")
         .args_json(json!({ "collateral": "NVDAx", "units": UNITS.to_string(), "borrow_usd_e6": BORROW.to_string(),
-                           "pre_liq_ltv_bps": 7500 }))
+                           "pre_liq_ltv_bps": 7500, "depositor": DEPOSITOR }))
         .gas(Gas::from_tgas(100))
         .deposit(NearToken::from_yoctonear(RESERVE_DEPOSIT))
         .transact()
@@ -333,7 +333,7 @@ async fn remote_reserve_confirm_borrow_settle_signed_with_position_path() -> any
     old.as_account().deploy(&wasm("nectar_core")).await?.into_result()?;
     assert!(old.view("get_config").await.is_err(), "v2 code over V1c state fails closed");
     let (core, s, borrower, id) = open_remote(&e).await?;
-    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.1.0-v7"));
+    assert_eq!(view(&core, "contract_version", json!({})).await?, json!("2.2.0-v7"));
     let p = position(&core, id).await?;
     assert_eq!((p["remote"]["status"].clone(), p["debt_usd_e6"].clone()), (json!("Open"), json!(BORROW.to_string())));
     assert!(bal(&e.usdc, borrower.id()).await? > 0, "borrow paid after the attested read");
@@ -433,7 +433,8 @@ async fn remote_refusals_attestation_and_expiry() -> anyhow::Result<()> {
     assert_eq!(events(&r, "remote_deposit_rejected")[0]["reason"], "authority_mismatch");
     assert_eq!(bal(&e.usdc, borrower.id()).await?, 0, "forged attestation pays nothing");
     advance(&e, 31).await?;
-    let r = confirm(&e, &core, &s, id, &vault_body(id, UNITS - 1, &auth)).await?;
+    // SR-18: 0 < units < reserved is now recorded; an empty slot is still rejected
+    let r = confirm(&e, &core, &s, id, &vault_body(id, 0, &auth)).await?;
     gas("confirm_remote_deposit(rejected)", &r);
     assert_eq!(events(&r, "remote_deposit_rejected")[0]["reason"], "units_below_reserved");
     assert_eq!(position(&core, id).await?["remote"]["status"], "AwaitingDeposit");
@@ -484,7 +485,7 @@ async fn remote_reservation_deposit_refunds_and_self_settle_kind_self() -> anyho
     let borrower = user(&e, 0, 0).await?;
     let r = borrower.call(core.id(), "reserve_remote_position")
         .args_json(json!({ "collateral": "NVDAx", "units": UNITS.to_string(), "borrow_usd_e6": BORROW.to_string(),
-                           "pre_liq_ltv_bps": 7500 }))
+                           "pre_liq_ltv_bps": 7500, "depositor": DEPOSITOR }))
         .deposit(NearToken::from_yoctonear(RESERVE_DEPOSIT - 1)).gas(Gas::from_tgas(100)).transact().await?;
     assert!(format!("{:?}", r.failures()).contains("attach the reservation deposit"));
 

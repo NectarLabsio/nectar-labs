@@ -6,10 +6,11 @@
 //!    `.then(on_authority)`. No pool funds are locked; the reservation expires after 30 min
 //!    (`expire_remote_reservation`, anyone).
 //! 2. `confirm_remote_deposit` (anyone): OutLayer `vault_read` (deposit from `gas_reserve_yocto`)
-//!    `.then(on_deposit_verified)`: authority must match, units ≥ reserved, depositor recorded; then both limits (A1)
-//!    are re-checked with the stored price (must be fresh) and the loan is paid (A4 `pay_to`, A5 fees). OutLayer
-//!    failure: stays AwaitingDeposit + `remote_deposit_rejected` (no fallback payout). A proven deposit whose
-//!    loan is refused (limits, expiry) records the depositor so the collateral can be released.
+//!    `.then(on_deposit_verified)`: authority and committed depositor must match (SR-8), depositor recorded; then both
+//!    limits (A1), sized against fitting quotes only (SR-5), are re-checked with the stored price (must be fresh) and
+//!    the loan is paid (A4 `pay_to`, A5 fees). OutLayer failure: stays AwaitingDeposit + `remote_deposit_rejected` (no
+//!    fallback payout). A proven deposit whose loan is refused (limits, expiry, units below reserved: SR-18) records
+//!    the depositor so the collateral can be released.
 //!    `keeper_attest_deposit` is the testnet fallback behind `allow_keeper_deposit_attestation` (`source: "keeper"`).
 //! 3. Settlement: `settle_remote` (one signed leg, `|kind=PRELIQ`, the position's own path; src/p2.rs).
 //! 4. `request_remote_release` (anyone, after debt = 0): signs `NECTAR_RELEASE_V1` with the position's path;
@@ -28,7 +29,13 @@ use crate::events::emit;
 use crate::evm;
 use crate::p2::{SEC, SignCall, sign_args};
 use crate::types::*;
-use crate::{ERR_CA_PENDING, ERR_KEEPER, ERR_REFERRER_IS_BORROWER, MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar, NectarExt, math};
+use crate::{
+    ERR_CA_PENDING, ERR_KEEPER, ERR_REFERRER_IS_BORROWER, ERR_REMOTE_SETTLE_CAP, MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar,
+    NectarExt, math,
+};
+
+/// SR-8 (WO-34a): the depositor committed at reservation (raw key: code-only upgrade, no struct layout change).
+pub const COMMITTED_DEPOSITOR_PREFIX: &[u8] = b"__v7c_depositor:";
 
 pub const ALLOW_KEEPER_ATTEST_KEY: &[u8] = b"__v7_allow_keeper_attest";
 pub const VAULT_READ_KEY: &[u8] = b"__v7_vault_read";
@@ -40,8 +47,10 @@ pub const CONFIRM_COOLDOWN_S: u64 = 30;
 /// `derived_public_key` is pure math (F-338). TODO-G10: confirm the live burn on `v1.signer-prod.testnet`.
 pub const GAS_DERIVE_KEY: Gas = Gas::from_tgas(10);
 pub const GAS_ON_AUTHORITY: Gas = Gas::from_tgas(10);
-/// Own burn of `on_deposit_verified` (parse, limits, ~6 writes), on top of one USDC transfer pair.
-pub const GAS_ON_DEPOSIT_BASE: Gas = Gas::from_tgas(20);
+/// Own burn of `on_deposit_verified` (parse, limits, ~6 writes, SR-5 recipient checks over up to 64 quotes), on top of
+/// one USDC transfer pair. Measured 67 Tgas at 64 fitting quotes. It must cover that worst case: anyone chooses the
+/// attached gas, and a callback that runs out leaves `confirming` set, which would block the reservation for good.
+pub const GAS_ON_DEPOSIT_BASE: Gas = Gas::from_tgas(70);
 pub const GAS_ON_RELEASE_SIG: Gas = Gas::from_tgas(10);
 /// Exec fees of the receipts a method creates, charged to it (WO-10a lesson).
 pub const GAS_CREATE_RECEIPTS: Gas = Gas::from_tgas(5);
@@ -61,14 +70,37 @@ fn release_key(position_id: u64) -> Vec<u8> {
     k
 }
 
-/// Vault depositor of the position's chain: Solana base58 (domain 1) or a 0x address (domain 0).
+fn committed_key(position_id: u64) -> Vec<u8> {
+    let mut k = COMMITTED_DEPOSITOR_PREFIX.to_vec();
+    k.extend_from_slice(&position_id.to_le_bytes());
+    k
+}
+
+/// Vault depositor of the position's chain. SR-8: a 32-byte on-curve Solana key (domain 1) or a non-zero 0x address
+/// (domain 0).
 pub fn valid_depositor(s: &str, domain_id: u32) -> bool {
     match domain_id {
-        chainsig::ED25519_DOMAIN_ID => chainsig::valid_base58_address(s),
-        chainsig::SECP256K1_DOMAIN_ID => {
-            s.len() == 42 && s.starts_with("0x") && s.bytes().skip(2).all(|b| b.is_ascii_hexdigit())
-        }
+        chainsig::ED25519_DOMAIN_ID => chainsig::valid_solana_pubkey(s),
+        chainsig::SECP256K1_DOMAIN_ID => chainsig::valid_evm_recipient(s),
         _ => false,
+    }
+}
+
+/// SR-8: a reported depositor equals the commitment (EVM addresses compare case-insensitively).
+pub fn depositor_matches(committed: &str, reported: &str, domain_id: u32) -> bool {
+    if domain_id == chainsig::SECP256K1_DOMAIN_ID { committed.eq_ignore_ascii_case(reported) } else { committed == reported }
+}
+
+/// SR-10 (WO-34a): the units a remote leg signs, or `None` if the leg cannot close the vault position in one message. It
+/// closes when it repays the whole debt or takes every unit. A leg below both the debt and the quote's remaining came
+/// from the underwater cap branch of `settle_leg_m`: the units ran out and only rounding is left, so it seizes them all.
+pub(crate) fn remote_leg_seize(leg: &math::Leg, debt: u128, units: u128, remaining: u128) -> Option<u128> {
+    if leg.repay_usd_e6 == debt || leg.buyer_units == units {
+        Some(leg.buyer_units)
+    } else if leg.repay_usd_e6 < remaining {
+        Some(units)
+    } else {
+        None
     }
 }
 
@@ -144,6 +176,55 @@ impl Nectar {
     fn gas_left() -> u64 {
         env::prepaid_gas().as_gas().saturating_sub(env::used_gas().as_gas())
     }
+    /// SR-8: the depositor committed at reservation; `None` for a reservation made before 2.2.
+    pub(crate) fn committed_depositor(&self, position_id: u64) -> Option<String> {
+        env::storage_read(&committed_key(position_id)).and_then(|b| String::from_utf8(b).ok())
+    }
+    /// SR-5: (sum, largest) `remaining` of the live, non-exiting quotes whose recipient fits `domain_id`. <= 64 reads.
+    pub(crate) fn remote_capacity(&self, symbol: &str, domain_id: u32) -> Result<(u128, u128), &'static str> {
+        let (mut sum, mut largest) = (0u128, 0u128);
+        for id in self.live_ids(symbol) {
+            let Some(q) = self.quote(id) else { continue };
+            let rem = q.remaining_usd_e6.0;
+            if rem == 0 || q.exiting() || q.collateral != symbol {
+                continue;
+            }
+            if q.buyer_remote_recipient.as_deref().is_some_and(|x| chainsig::recipient_fits(domain_id, x)) {
+                sum = math::add(sum, rem)?;
+                largest = largest.max(rem);
+            }
+        }
+        Ok((sum, largest))
+    }
+    /// SR-5: <= 8 quotes that can settle this remote position alone, ascending discount then oldest. Unfit quotes are
+    /// dropped before the cut, so they cannot take a candidate slot. The cheap checks run before the curve check.
+    pub(crate) fn select_remote_quotes(&self, p: &Position, domain_id: u32, c: &CollateralConfig) -> Vec<(u16, u64)> {
+        let (debt, units) = (p.debt_usd_e6.0, p.units.0);
+        let (m, price) = (Self::eff_multiplier(c), c.oracle_price_usd_e6.0);
+        let mut closing: Vec<(u16, u64, String)> = Vec::new();
+        for id in self.live_ids(&p.collateral) {
+            let Some(q) = self.quote(id) else { continue };
+            let rem = q.remaining_usd_e6.0;
+            if rem == 0 || q.collateral != p.collateral {
+                continue;
+            }
+            let closes = matches!(
+                math::settle_leg_m(debt, rem, units, m, price, c.decimals, q.max_discount_bps, 0),
+                Ok(Some(leg)) if remote_leg_seize(&leg, debt, units, rem).is_some()
+            );
+            if let (true, Some(rcpt)) = (closes, q.buyer_remote_recipient) {
+                closing.push((q.max_discount_bps, id, rcpt));
+            }
+        }
+        closing.sort_unstable();
+        // lazy: the curve check stops once 8 candidates fit
+        closing
+            .into_iter()
+            .filter(|(_, _, rcpt)| chainsig::recipient_fits(domain_id, rcpt))
+            .take(MAX_QUOTES_PER_SETTLEMENT)
+            .map(|(disc, id, _)| (disc, id))
+            .collect()
+    }
     fn remote_or_panic(p: &Position) -> RemoteInfo {
         p.remote.clone().unwrap_or_else(|| env::panic_str("not a remote position"))
     }
@@ -168,8 +249,17 @@ impl Nectar {
     }
 
     /// A deposit is proven (attested read or keeper attestation): record it, then pay the loan if both limits
-    /// still hold with a fresh price. Never panics on business failures (callback path).
-    pub(crate) fn accept_deposit(&mut self, mut p: Position, units: u128, depositor: String, source: &str, deposit_ref: String) {
+    /// still hold with a fresh price. Never panics on business failures (callback path). SR-18: `short` = the proven
+    /// units are below the reserved units: recorded so they can be released, loan refused, no retry (no vault top-up).
+    pub(crate) fn accept_deposit(
+        &mut self,
+        mut p: Position,
+        units: u128,
+        depositor: String,
+        source: &str,
+        deposit_ref: String,
+        short: bool,
+    ) {
         let id = p.position_id.0;
         let Some(mut r) = p.remote.take() else { return };
         let now = env::block_timestamp();
@@ -184,7 +274,9 @@ impl Nectar {
         let referrer = r.referrer.clone().filter(|x| self.referrers.contains(x));
         // WO-23a: a proven deposit (funded or refused) returns the reservation deposit.
         let refund = Self::take_reservation_deposit(&mut r);
-        let refusal = if late {
+        let refusal = if short {
+            Some("units_below_reserved")
+        } else if late {
             Some("reservation_expired")
         } else if self.paused {
             Some("paused")
@@ -199,14 +291,17 @@ impl Nectar {
         };
         let terms = match refusal {
             Some(e) => Err(e),
-            None => self.check_borrow(
-                &c,
-                units,
-                borrow,
-                Some(p.pre_liq_ltv_bps),
-                referrer.is_some(),
-                p.shield.map(|s| s.fee_bps),
-            ),
+            None => self.remote_capacity(&p.collateral, r.domain_id).and_then(|cap| {
+                self.check_borrow(
+                    &c,
+                    units,
+                    borrow,
+                    Some(p.pre_liq_ltv_bps),
+                    referrer.is_some(),
+                    p.shield.map(|s| s.fee_bps),
+                    Some(cap),
+                )
+            }),
         };
         let entry_m = c.multiplier_e18;
         let booked = match terms {
@@ -243,8 +338,8 @@ impl Nectar {
             }
             Err(reason) => {
                 // The collateral is in the vault under our key: it stays releasable (debt 0). Before expiry the
-                // borrower may retry the confirmation; after it, the position is Open with no loan.
-                if late {
+                // borrower may retry the confirmation; after it, or for a short deposit, the position is Open with no loan.
+                if late || short {
                     r.status = RemoteStatus::Open;
                     p.status = PositionStatus::Open;
                 }
@@ -296,8 +391,9 @@ impl Nectar {
             let Some(leg) = math::settle_leg_m(debt, q.remaining_usd_e6.0, units, m, price, c.decimals, disc, 0)? else {
                 continue;
             };
-            if leg.repay_usd_e6 == debt || leg.buyer_units == units {
-                chosen = Some((q, leg, rcpt));
+            // SR-10: rounding can leave dust units in the underwater branch; the leg then seizes every unit.
+            if let Some(buyer_units) = remote_leg_seize(&leg, debt, units, q.remaining_usd_e6.0) {
+                chosen = Some((q, math::Leg { buyer_units, ..leg }, rcpt));
                 break;
             }
         }
@@ -441,6 +537,7 @@ impl Nectar {
     /// (`AwaitingDeposit`) and asks the signer for the position's vault authority. Limits run at confirmation,
     /// not here (a reservation locks no pool funds). A `shield` is validated and counted here (§4.9).
     /// WO-29a: `chain` (optional) selects the remote chain by id (`"base-sepolia"`); `None` = the primary chain.
+    /// SR-8: `depositor` is the borrower's remote address; only a deposit from it can confirm this reservation.
     #[payable]
     #[allow(clippy::too_many_arguments)]
     pub fn reserve_remote_position(
@@ -453,6 +550,7 @@ impl Nectar {
         referrer: Option<AccountId>,
         shield: Option<ShieldInput>,
         chain: Option<String>,
+        depositor: String,
     ) -> U64 {
         self.assert_not_paused();
         let borrower = env::predecessor_account_id();
@@ -464,6 +562,7 @@ impl Nectar {
         require!(units.0 <= U64_MAX, "units exceed u64");
         require!(borrow_usd_e6.0 > 0, "borrow is zero");
         require!(borrow_usd_e6.0 <= U64_MAX, "borrow exceeds u64");
+        require!(valid_depositor(&depositor, rc.mpc_domain_id), "bad depositor");
         require!(
             (c.pre_liq_min_bps..=c.pre_liq_max_bps).contains(&pre_liq_ltv_bps),
             "pre_liq_ltv_bps out of range"
@@ -478,6 +577,14 @@ impl Nectar {
         let shield = shield.map(|s| self.validate_shield(&c, &s, borrow_usd_e6.0, &borrower).unwrap_or_else(|e| env::panic_str(e)));
         let deposit = env::attached_deposit().as_yoctonear();
         require!(deposit >= RESERVE_DEPOSIT_YOCTO, "attach the reservation deposit (0.05 NEAR)");
+        // SR-5: refuse before the borrower deposits a loan no single fitting quote could settle. This check needs no
+        // price; the full sizing runs at confirmation, against the quotes and the price of that moment.
+        let settleable = self.live_ids(&collateral).into_iter().filter_map(|id| self.quote(id)).any(|q| {
+            q.remaining_usd_e6.0 >= borrow_usd_e6.0
+                && !q.exiting()
+                && q.buyer_remote_recipient.as_deref().is_some_and(|x| chainsig::recipient_fits(rc.mpc_domain_id, x))
+        });
+        require!(settleable, ERR_REMOTE_SETTLE_CAP);
         let id = self.next_position_id;
         let next = id.checked_add(1).unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
         let path = chainsig::position_path(&rc.chain_id, id);
@@ -525,15 +632,17 @@ impl Nectar {
                 confirming: false,
                 last_confirm_ns: U64(0),
                 deposit_yocto: U128(deposit),
+                committed_depositor: None,
             }),
             shield,
         });
+        env::storage_write(&committed_key(id), depositor.as_bytes());
         emit(
             "remote_reserved",
             json!({ "position_id": U64(id), "borrower": borrower, "collateral": collateral, "chain": rc.chain_id,
                     "vault_program": rc.vault_program, "path": path, "domain_id": rc.mpc_domain_id,
                     "units": units, "borrow_usd_e6": borrow_usd_e6, "expires_ns": U64(expires_ns),
-                    "deposit_yocto": U128(deposit), "shield": shield }),
+                    "deposit_yocto": U128(deposit), "shield": shield, "depositor": depositor }),
         );
         // interaction (F-338: always pass predecessor and domain_id)
         let args = json!({ "path": path, "predecessor": env::current_account_id(), "domain_id": rc.mpc_domain_id });
@@ -636,14 +745,18 @@ impl Nectar {
             "attach more gas"
         );
         // WO-29a: an EVM vault is read over the chain's RPC (`vault_read` job, Base input shape).
-        let input = if r.domain_id == chainsig::SECP256K1_DOMAIN_ID {
+        let mut input = if r.domain_id == chainsig::SECP256K1_DOMAIN_ID {
             let rpc = self.chain_rpc_url(&p.collateral, &r.chain_id).unwrap_or_else(|| env::panic_str(evm::ERR_NO_RPC));
             json!({ "job": "vault_read", "chain": r.chain_id, "vault": r.vault_program, "position_id": position_id,
                     "rpc_url": rpc })
         } else {
             json!({ "job": "vault_read", "chain": r.chain_id, "program": r.vault_program, "position_id": position_id })
+        };
+        // SR-8: the slot is keyed by the depositor too.
+        if let Some(d) = self.committed_depositor(position_id.0) {
+            input["depositor"] = json!(d);
         }
-        .to_string();
+        let input = input.to_string();
         let q = &self.quoter;
         let args = json!({
             "source": { "Project": { "project_id": cfg.project_id, "version_key": cfg.version_key } },
@@ -696,26 +809,33 @@ impl Nectar {
                 Err(_) => Err("failed"),
             }
         };
+        let committed = self.committed_depositor(position_id.0);
         let checked = read.and_then(|v| {
             let stored = r.authority.as_deref().ok_or("authority_pending")?;
             if !chainsig::authority_matches(stored, &v.authority) {
                 return Err("authority_mismatch");
             }
-            if v.units < r.reserved_units.0 {
+            if !valid_depositor(&v.depositor, r.domain_id) {
+                return Err("bad_depositor");
+            }
+            // SR-8: only the committed depositor's slot proves this deposit; a squatter's slot is never recorded.
+            if committed.as_deref().is_some_and(|c| !depositor_matches(c, &v.depositor, r.domain_id)) {
+                return Err("depositor_mismatch");
+            }
+            if v.units == 0 {
                 return Err("units_below_reserved");
             }
             if v.units > U64_MAX {
                 return Err("units_exceed_u64");
             }
-            if !valid_depositor(&v.depositor, r.domain_id) {
-                return Err("bad_depositor");
-            }
             Ok(v)
         });
         match checked {
             Ok(v) => {
+                // SR-18: a proven deposit below the reserved units is recorded, so it stays releasable.
+                let short = v.units < r.reserved_units.0;
                 p.remote = Some(r);
-                self.accept_deposit(p, v.units, v.depositor, SOURCE_OUTLAYER, v.slot_or_block);
+                self.accept_deposit(p, v.units, v.depositor, SOURCE_OUTLAYER, v.slot_or_block, short);
             }
             Err(reason) => {
                 emit(
@@ -744,8 +864,12 @@ impl Nectar {
         require!(!r.confirming, "deposit check in flight");
         require!(valid_tx_ref(&tx_ref), "bad tx_ref");
         require!(valid_depositor(&depositor, r.domain_id), "bad depositor");
+        // SR-8: the attestation must name the committed depositor.
+        if let Some(c) = self.committed_depositor(position_id.0) {
+            require!(depositor_matches(&c, &depositor, r.domain_id), "depositor mismatch");
+        }
         let units = r.reserved_units.0;
-        self.accept_deposit(p, units, depositor, SOURCE_KEEPER, tx_ref);
+        self.accept_deposit(p, units, depositor, SOURCE_KEEPER, tx_ref, false);
     }
 
     // ------------------------------------------------------------ 4. release

@@ -14,7 +14,7 @@ const UNITS: u128 = 100_000_000;
 const VAULT: &str = "Nectar1Vau1t11111111111111111111111111111111";
 const RCPT: &str = "3DTxgHcUXRb9uvpKwtasZN7YBUbbPuf3uvbBPjAGWqiV";
 const AUTH_B58: &str = "2fhY3GjCcp4LU75uiiChUqQg9fS6xCtptLYZUdKJibpN";
-const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T";
+const DEPOSITOR: &str = "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB48";
 const TX: &str = "5VERv8NMvzbJMEkV8xnrLkEaWRtSz9CosKDYjCJjBRnbJLgp8uirBgmQpjKhoR4tjF3ZpRzrFmBV6UjKdiSZkQUW";
 
 fn a(s: &str) -> AccountId {
@@ -489,6 +489,8 @@ fn v7_notes_transfer_locked_view_unknown() {
 /// Remote p-0 (alice, $10k on 100 units in the vault); q-2 buyer3 $12k @200 opted in with a Solana recipient.
 fn remote_open() -> Nectar {
     let mut c = base();
+    // SR-5: the $10k loan needs fitting capacity of $13.34k at the weekend haircut
+    assert_eq!(ft(&mut c, usdc(), "buyer1.test", 4_000_000_000, r#"{"TopUpQuote":{"quote_id":"0"}}"#), 0);
     set_ctx(owner(), 0, T0);
     c.set_remote_chain(
         "NVDAx".into(),
@@ -497,7 +499,7 @@ fn remote_open() -> Nectar {
     c.set_signer_config(a("v1.signer-prod.testnet"), "solana-devnet-v1".into(), 15, 3600);
     c.set_vault_read_config("nectar.testnet/vault-read".into(), "ab".repeat(32), U128(100), 50);
     set_ctx(alice(), RESERVE_DEPOSIT_YOCTO, T0 + SEC);
-    let id = c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(10_000_000_000), 7500, None, None, None, None).0;
+    let id = c.reserve_remote_position("NVDAx".into(), U128(UNITS), U128(10_000_000_000), 7500, None, None, None, None, DEPOSITOR.into()).0;
     cb_ctx(T0 + SEC, PromiseResult::Successful(serde_json::to_vec(&format!("ed25519:{AUTH_B58}")).unwrap()));
     c.on_authority(U64(id));
     assert!(c.nft_token("p-0".into()).is_none(), "no Loan Note before the deposit is proven");

@@ -164,6 +164,24 @@ impl Nectar {
         Self::transfer(&self.usdc_token, &account, amount, Payout::Claimable)
     }
 
+    /// SR-17 (WO-34a): pays the caller's owed collateral of `symbol` (units of a failed settlement, release or proceeds
+    /// rollback transfer; 1 yocto). `on_payout` restores the balance if this transfer fails too (still unregistered).
+    #[payable]
+    pub fn claim_owed_collateral(&mut self, symbol: String) -> Promise {
+        assert_one_yocto();
+        self.assert_not_paused();
+        let account = env::predecessor_account_id();
+        let key = Self::owed_key(&account, &symbol);
+        let amount = self.owed_collateral.get(&key).copied().unwrap_or(0);
+        require!(amount > 0, "nothing owed");
+        let token = self.coll_or_panic(&symbol).token;
+        // effects
+        self.owed_collateral.remove(&key);
+        emit("owed_collateral_claimed", json!({ "account_id": account, "symbol": symbol, "units": U128(amount) }));
+        // interaction
+        Self::transfer(&token, &account, amount, Payout::OwedCollateral { symbol })
+    }
+
     pub fn get_claimable(&self, account_id: AccountId) -> U128 {
         U128(self.claimable(&account_id))
     }
