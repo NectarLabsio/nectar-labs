@@ -82,5 +82,7 @@ mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3).
 ## Order of human steps (HACKATHON.md: send only once the repo is public and the post is up)
 H10 + H14 (identity, payout account, consent) → H12 (prior work) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →
 G9 PASS from the public URL → H1 (Kunal sends).
-Pre-send checklist: G9 PASS · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
+G9 today: PASS from a local fresh clone (docs/EVIDENCE.md §G9 re-run, 2026-11-11, tested 0af5cdd, recorded in 89f83ee; the clone URL is TODO-H2,
+so the verifier used the local path). The first run's FAIL (c5f6349) is superseded. A re-run from the public URL follows H2.
+Pre-send checklist: G9 PASS (local clone: done, 89f83ee; public URL: after H2) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
 matches EVIDENCE · tracks re-checked against the G9 MCP result.

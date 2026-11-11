@@ -1,9 +1,9 @@
 # DEMO_SCRIPT.md v4 — 3 minutes, exact clicks and commands (2026-11-11)
 
-Shows only what docs/EVIDENCE.md records (gate table as of commit 5083d30): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
+Shows only what docs/EVIDENCE.md records (gate table as of commit 89f83ee): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
 G8 PASS on a fixture (no live NEAR AI answer) · re-runs after the D-027 security rollout, 2026-11-11T08:02Z–08:25Z, on `2.2.1-v7`:
 G11 PASS (every SR-1…SR-33 has a named test), G2b PASS, G3b PASS (design port; mocked remote and Notes E2E passed), G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
-Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims (the HTTP 402 → 200 leg was not re-run by the verifier) · G9 pending.
+Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims (the HTTP 402 → 200 leg was not re-run by the verifier) · G9 PASS (fresh-clone re-run on 0af5cdd, recorded in 89f83ee; supersedes the first run's FAIL on c5f6349).
 The contract on camera is **`nectar-core-v2.nectar.testnet`** at `2.2.1-v7` (ids in `packages/config/config.yaml`; review findings and what
 remains open in SECURITY.md). v1 (`nectar-core.nectar.testnet`) is the earlier deployment, kept as evidence; it is not shown.
 Every number said on camera is read from the screen at recording time, never from this file. Voice-over: H11.
