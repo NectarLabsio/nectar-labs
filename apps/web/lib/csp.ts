@@ -41,8 +41,9 @@ export const WALLETS: Record<string, Hosts> = {
   Ledger: {},
   // Browser extension: the frame only checks for it, no extra host.
   "Nightly Wallet": {},
-  // Opens its own window on evm-on-near.dev (not under this policy); icon host already in BASE.
-  "Ethereum Wallets": {},
+  // Executor script fetched from evm-on-near.dev (measured: refused before WO-34f listed it); it then opens its own window there,
+  // which runs under that site's policy, not this one. Its icon host is already in BASE.
+  "Ethereum Wallets": { connect: ["https://evm-on-near.dev"] },
 };
 
 const merged = (d: Directive): string[] => [...new Set([...(BASE[d] ?? []), ...Object.values(WALLETS).flatMap((w) => w[d] ?? [])])];

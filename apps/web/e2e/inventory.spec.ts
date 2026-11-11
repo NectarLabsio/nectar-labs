@@ -36,6 +36,8 @@ const BYPASS = process.env.INV_BYPASS_CSP === "1";
 interface WalletRecord { name: string; reached: string; hosts: Record<string, string[]>; windows: { url: string; hosts: string[] }[]; storage: string[]; violations: string[] }
 const walletRuns: WalletRecord[] = [];
 let selectorHosts: string[] = [];
+/** host|request type pairs the selector alone produced; a wallet keeps a host when it adds a new type (evm-on-near.dev: icon vs executor fetch). */
+const selectorSeen = new Set<string>();
 
 function hostOf(u: string): string {
   if (!/^https?:|^wss?:/.test(u)) return `${u.split(":")[0]}:`;
@@ -94,7 +96,16 @@ async function listWallets(browser: Browser): Promise<string[]> {
   const ctx = await browser.newContext({ bypassCSP: BYPASS });
   const page = await ctx.newPage();
   const hosts = new Set<string>();
-  ctx.on("request", (r) => hosts.add(hostOf(r.url())));
+  ctx.on("request", (r) => {
+    hosts.add(hostOf(r.url()));
+    let inFrame = false;
+    try {
+      inFrame = !!r.frame().parentFrame();
+    } catch {
+      /* detached */
+    }
+    selectorSeen.add(`${hostOf(r.url())}|${r.resourceType()}${inFrame ? "@iframe" : ""}`);
+  });
   await page.goto(`${APP}/borrow`, { waitUntil: "load" });
   await chooseConsent(page, "decline");
   await page.getByRole("button", { name: "Connect wallet" }).first().click();
@@ -180,7 +191,11 @@ async function openOneWallet(browser: Browser, idx: number, name: string): Promi
   return {
     name,
     reached,
-    hosts: Object.fromEntries(Object.entries(hosts).filter(([h]) => !selectorHosts.includes(h)).map(([h, t]) => [h, [...t].sort()])),
+    hosts: Object.fromEntries(
+      Object.entries(hosts)
+        .map(([h, t]) => [h, [...t].filter((x) => !selectorSeen.has(`${h}|${x}`)).sort()] as const)
+        .filter(([, t]) => t.length),
+    ),
     windows: windows.map((w) => ({ url: w.url.replace(/[?#].*$/, ""), hosts: [...w.hosts].sort() })),
     storage: [...new Set(keys.map(normalizeKey))].sort(),
     violations,
