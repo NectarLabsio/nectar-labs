@@ -145,3 +145,86 @@ Capture: `pnpm demo:capture` (Playwright `e2e/screens.spec.ts`) gives silent scr
 Note: the mocked E2E for the remote screens (withdraw, claim, Re-sign, owed collateral) and the Notes screens passed in the G3b re-run
 (2026-11-11T08:24Z, 5083d30; desktop and phone). Screenshot capture was not run (`REMOTE_SCREENS`, `NOTES_SCREENS` unset), and the real-chain
 flow is only in the G7/G13 re-runs, so rehearse every screen before recording.
+
+## Real-wallet borrow on the hosted app
+Kunal runs this once after the deploy (WO-34 acceptance). `<APP_URL>` is the hosted app; the orchestrator fills it in after the deploy.
+Nothing here is in docs/EVIDENCE.md yet, and no wallet has signed a borrow on the hosted app: this run is the first. NEAR testnet only,
+mock collateral, mock USDC. Tick each box.
+
+### Prerequisites
+- [ ] **A testnet wallet from the near-connect selector.** The selector (near-connect 0.12.0) shows near-connect's wallet manifest, fetched
+  unpinned at runtime, so the list can change. The data-inventory run (apps/web/content/data-inventory.md, "Wallets in the selector";
+  frames opened, nothing signed) saw: Meteor Wallet (frame loaded), Intear Wallet (connection-method screen), Ledger (needs the NEAR app on
+  the device), Nightly Wallet (download screen only), Ethereum Wallets (opens evm-on-near.dev; not a NEAR testnet account) and NEAR CLI
+  ("Enter your NEAR account ID"). Use one that holds a NEAR testnet account `<you>.testnet`.
+- [ ] **Testnet NEAR for gas.** The borrow attaches at most 200 TGas (unused gas is refunded; `GAS_TGAS.borrow` in packages/sdk/src/msg.ts)
+  and a 1 yoctoNEAR deposit. Faucet: https://near-faucet.io/ (F-154); a new funded account: `near account create-account
+  sponsor-by-faucet-service <id> autogenerate-new-keypair save-to-keychain network-config testnet create` (F-016).
+- [ ] **Mock NVDAx.** Only the owner `nectar.testnet` can mint (`mint` is owner-only in contracts/mock-ft/src/lib.rs); there is no public
+  faucet. Kunal runs this on the machine whose keychain holds the owner key (same call shape as scripts/60-x402-accounts.sh). Registering on
+  mock USDC matters: free registration on first receipt stops after 64 accounts (`MAX_FREE_REGISTRATIONS`), and then a transfer to an
+  unregistered account fails with `receiver not registered`. The owner registers accounts for free.
+```bash
+ACCT=<you>.testnet
+for T in usdc-mock.nectar.testnet nvdax-mock.nectar.testnet; do
+  near contract call-function as-transaction "$T" storage_deposit json-args "{\"account_id\":\"$ACCT\"}" prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send
+done
+# 2 mock NVDAx (6 decimals)
+near contract call-function as-transaction nvdax-mock.nectar.testnet mint json-args "{\"account_id\":\"$ACCT\",\"amount\":\"2000000\"}" prepaid-gas '30 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send
+# check: "2000000"
+near contract call-function as-read-only nvdax-mock.nectar.testnet ft_balance_of json-args "{\"account_id\":\"$ACCT\"}" network-config testnet now
+```
+
+### Path
+1. [ ] Open `<APP_URL>/borrow` in a fresh browser profile.
+2. [ ] Banner "Cookies and storage": press **Decline** or **Accept analytics**. Either works; analytics load only after Accept and only when a
+   GA id is configured (apps/web/components/SiteChrome.tsx). The choice is stored as `localStorage nectar-consent`.
+3. [ ] Press **Connect wallet** (top bar) or **Connect a wallet to borrow** (composer button).
+4. [ ] Pick the wallet in the selector and approve the connection. The composer now offers 25% / 50% / Max chips from your NVDAx balance.
+5. [ ] Values: **You lock** `1` NVDAx, **You borrow** `10` USDC (contract minimum $5, `MIN_BORROW_USD_E6` in contracts/nectar-core/src/lib.rs),
+   Protection **Standard**, flag line at its default, "Pay a merchant directly" off. Read the **Limit** next to You borrow: $10 must be under
+   it. The Outcome panel lists the fees, "You receive" and health after, with no red "The contract would refuse this" banner.
+6. [ ] **Review borrow** opens the drawer "Review borrow": Collateral locked `1 NVDAx`, Protection `Standard`, Fees, You receive, Health
+   after. Press **Show what your wallet signs** and tick each row:
+
+   | Row | Expected |
+   | --- | --- |
+   | Network | NEAR testnet |
+   | Signer | `<you>.testnet` |
+   | Receiver | `nvdax-mock.nectar.testnet` (the token; `args.receiver_id` is `nectar-core-v2.nectar.testnet`) |
+   | Method | `ft_transfer_call` |
+   | Amount | `1 NVDAx` |
+   | Gas (max, unused is refunded) | `200 TGas` |
+   | Deposit | `1 yoctoNEAR` |
+   | msg | `{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"10000000","pre_liq_ltv_bps":<flag line>}}` |
+
+7. [ ] **Confirm in wallet** opens the sign modal "Review: Lock collateral and borrow" with the same rows. Press **Open wallet to sign**.
+8. [ ] In the wallet, check receiver, method and deposit against step 6, then approve.
+9. [ ] Wait. The modal button reads "Waiting for wallet"; on success the drawer title turns to "Loan opened" and the toast "Position opened" appears.
+10. [ ] **View loan #`<id>`** opens `/position/<id>`: breadcrumb "Loan #`<id>`", the collateral and debt, and the Note link `p-<id>`. The Note page
+    `/note/p-<id>` says "History not indexed yet": expected, because the Feed API has no Note route (`ROUTES` in services/feed/src/api.ts).
+
+### What success looks like
+- [ ] **Explorer.** The toast shows "View transaction `<hash>`…" as a link only if the deploy sets `NEXT_PUBLIC_EXPLORER_TX`
+  (apps/web/.env.example leaves it unset); otherwise it prints `tx <hash>`, so open `https://testnet.nearblocks.io/txns/<hash>`. Look for
+  `ft_transfer_call` on `nvdax-mock.nectar.testnet`, then a `position_opened` event in the nectar-core receipt logs. Note the block height.
+- [ ] **`<APP_URL>/status`.** "Contract (NEAR testnet RPC)" reads Answering. "Feed indexer" reads Indexing, with Last indexed block,
+  Chain head, Lag (blocks) and Last poll.
+- [ ] **Feed lag.** On an empty database the hosted Feed starts at the chain head (`FEED_START_BLOCK` default `head`,
+  services/feed/src/hosted.ts). With the defaults it polls every 10 s (`FEED_POLL_MS`) and reads up to 100 final blocks per poll
+  (`FEED_NEARDATA_MAX_BLOCKS`, services/feed/README.md). So with Lag under 100 blocks, the borrow is indexed by the first poll after its block
+  is final. A larger Lag shrinks by up to 100 blocks per poll. Done when Last indexed block ≥ the tx's block height. The borrow form and the
+  position page read the contract over RPC, so they do not wait for the Feed.
+
+### If something fails
+- Capture: the tx hash (the error toast "Lock collateral and borrow failed" stays until closed and carries the failure text; the drawer shows
+  "The transaction failed"), screenshots of the drawer and the wallet screen, the browser console (DevTools → Console → Save as…), a
+  screenshot of `/status`, the wallet name and version, the browser, and the time in UTC. Send them to the orchestrator.
+- If the wallet never opened, nothing was signed and nothing was sent.
+- Any code fix means a new build, then G3b and G9 re-run by the verifier before the README or this file says the flow works. Do not work
+  around a failure on the hosted app.
+
+### Settlement needs the operator's keeper
+Opening a loan needs no keeper. Flagging (pre-liquidation trigger) and settlement run only while the operator's keeper runs on the operator's
+machine (`pnpm --filter keeper start`, step 2 of "Before recording"). The keeper key is not hosted: H-KEYS is OPEN, and its default is that the
+keeper stays local. A loan that becomes flaggable while the keeper is off waits until the keeper runs again.
