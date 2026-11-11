@@ -1,0 +1,19 @@
+tx HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V signer=agent1.nectar.testnet receiver=nvdax-mock.nectar.testnet final=SuccessValue failed_receipts=0
+  FunctionCall ft_transfer_call args={"receiver_id":"nectar-core-v2.nectar.testnet","amount":"1000000","msg":"{\"LockCollateralAndBorrow\":{\"collateral\":\"NVDAx\",\"borrow_usd_e6\":\"10000000\",\"pre_liq_ltv_bps\":8000}}"} deposit=1
+  receipt executor=nvdax-mock.nectar.testnet status=SuccessReceiptId
+  receipt executor=nectar-core-v2.nectar.testnet status=SuccessValue logs: EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"position_opened","data":[{"position_id":"13","borrower":"agent1.nectar.testnet","collateral":"NVDAx","units":"1000000","debt_usd_e6":"10000000","premium_usd_e6":"0","origination_fee_usd_e6":"30000","ne ;; EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"owner_id":"agent1.nectar.testnet","token_ids":["p-13"]}]}
+  receipt executor=usdc-mock.nectar.testnet status=SuccessValue
+  receipt executor=agent1.nectar.testnet status=SuccessValue
+  receipt executor=nectar-core-v2.nectar.testnet status=SuccessValue
+  receipt executor=agent1.nectar.testnet status=SuccessValue
+  receipt executor=agent1.nectar.testnet status=SuccessValue
+  receipt executor=nvdax-mock.nectar.testnet status=SuccessValue
+  receipt executor=agent1.nectar.testnet status=SuccessValue
+  receipt executor=agent1.nectar.testnet status=SuccessValue
+tx BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G signer=x402-relayer.nectar.testnet receiver=agent1.nectar.testnet final=SuccessValue failed_receipts=0
+  Delegate sender=agent1.nectar.testnet receiver=usdc-mock.nectar.testnet nonce=277093880000004 max_block_height=277187802
+    inner FunctionCall ft_transfer args={"receiver_id":"nectar.testnet","amount":"10000"} deposit=1
+  receipt executor=agent1.nectar.testnet status=SuccessValue
+  receipt executor=usdc-mock.nectar.testnet status=SuccessValue
+  receipt executor=x402-relayer.nectar.testnet status=SuccessValue
+  receipt executor=x402-relayer.nectar.testnet status=SuccessValue

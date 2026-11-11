@@ -1,0 +1,24 @@
+fork chain-id 84532 block 57050724 vault code bytes 5805 token code bytes 3771
+## position 11
+derived_public_key(base-sepolia/pos/11, domain 0) = secp256k1:4FUssYkR16utUccRvftUJvVyTWHoc2kTsAu4mHnKRnQzDoForH4hUv6jcfANeLN6TQstLnhZHQZXMpN2y3qvvWD1 -> keccak addr 0x9de489d16f5cf59f168b0fda16e5342d977246fe ; NEAR authority 0x9de489d16f5cf59f168b0fda16e5342d977246fe ; MATCH
+relay tx 0x12f5c29b6c57b46d8ca7540d49b7227f82b8d4971f24baed01d2b4dc00600cd5 status=0x1 block=57050721 from=0xe4a5fb078aead3d67c7acdb7d0c2895bdb47c991 to=0xc64b733424c8d25fb574f275007ed8756e261226
+decoded: struct=(11, 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A, 10, 1794387383) depositor=0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A v=27 r=0x42cf45fb2f921e6c05ad6b1edb86d720e49309e0cab8412c12f8e1e5e666651d s=0x0fab6c2cb509490debe3e2aed4dcea0936d407840ea55d42bb36da4ea335939c
+vault digest 0xfc9d2e23c34bb318153bbf72c4687fd8c0c71fca2fd56aafb2a2944b945d1c49 ; NEAR signed message 0xfc9d2e23c34bb318153bbf72c4687fd8c0c71fca2fd56aafb2a2944b945d1c49 ; EQUAL
+ecrecover(digest,v,r,s) = 0x9de489d16f5cf59f168b0fda16e5342d977246fe ; authority 0x9de489d16f5cf59f168b0fda16e5342d977246fe ; MATCH
+positionOf(11, depositor) = 0x9DE489D16F5Cf59f168B0FdA16E5342D977246fE 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A 3000000 [3e6] 3 
+nonceUsed(slotKey=0xa62713aff237a0121884fe42e5fef86e6d6eb1150f10be96ad76268889e96269, nonce=10) = true
+token balance 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A @57050720 7000000 [7e6] -> @57050721 10000000 [1e7] ; latest 7642611 [7.642e6]
+token balance 0xcA61FE6F57a6A36Dedf2b99E1D4D8923b1D71fa1 @57050720 0 -> @57050721 0 ; latest 2357389 [2.357e6]
+replay relay calldata from 0xe4a5fb078aead3d67c7acdb7d0c2895bdb47c991: Error: execution reverted: NonceUsed(10)  Context: - server returned an error response: error code 3: execution reverted: custom error 0x6d9650be:  , data: "0x6d9650be00000000000000000000000000000000000000000000000000000
+## position 12
+derived_public_key(base-sepolia/pos/12, domain 0) = secp256k1:4RuhNCkkDrwoiR5Ux3fHB4WD4AtMian3ZGmikqQoXNN5rvV6eCvZxrXpmVqW7dqyvApmYZZj5TcPY7oQwf6D5xQP -> keccak addr 0x8a8a0125c5b3c1085ba3c4bd5e3da8628c98c313 ; NEAR authority 0x8a8a0125c5b3c1085ba3c4bd5e3da8628c98c313 ; MATCH
+relay tx 0xa2fea901d3798eceb466a50007568b481db96858971fb4981d25cf477839c648 status=0x1 block=57050724 from=0xe4a5fb078aead3d67c7acdb7d0c2895bdb47c991 to=0xc64b733424c8d25fb574f275007ed8756e261226
+decoded: struct=(12, 4, 308700000, 2357389, 0xcA61FE6F57a6A36Dedf2b99E1D4D8923b1D71fa1, 14, 1794387594, 1) depositor=0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A v=27 r=0x759a974292bb08cf21a9a2efbf0ad059a4351c191f77268db89f88d17bc49678 s=0x3b30b924a7e59777e1b51427895ccab027e653d6a2d5ffba5caafb1b39c51555
+vault digest 0x088c5a6f6c392396a0cf9d936cac49ab59e8c56703f4a2bead8f687fbe1a4153 ; NEAR signed message 0x088c5a6f6c392396a0cf9d936cac49ab59e8c56703f4a2bead8f687fbe1a4153 ; EQUAL
+ecrecover(digest,v,r,s) = 0x8a8a0125c5b3c1085ba3c4bd5e3da8628c98c313 ; authority 0x8a8a0125c5b3c1085ba3c4bd5e3da8628c98c313 ; MATCH
+positionOf(12, depositor) = 0x8A8A0125C5b3C1085ba3C4BD5E3Da8628C98c313 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A 3000000 [3e6] 2 
+nonceUsed(slotKey=0x5a836a98f3a6663c0d8dd0e226422d77a597804a1ca84738bb6c9b18b5223960, nonce=14) = true
+token balance 0x85D051D8CD3fEe54FdE043499C75fa95eeB9F30A @57050723 7000000 [7e6] -> @57050724 7642611 [7.642e6] ; latest 7642611 [7.642e6]
+token balance 0xcA61FE6F57a6A36Dedf2b99E1D4D8923b1D71fa1 @57050723 0 -> @57050724 2357389 [2.357e6] ; latest 2357389 [2.357e6]
+replay relay calldata from 0xe4a5fb078aead3d67c7acdb7d0c2895bdb47c991: Error: execution reverted: NonceUsed(14)  Context: - server returned an error response: error code 3: execution reverted: custom error 0x6d9650be: , data: "0x6d9650be000000000000000000000000000000000000000000000000000000
+NonceUsed(uint64) selector: 0x6d9650be

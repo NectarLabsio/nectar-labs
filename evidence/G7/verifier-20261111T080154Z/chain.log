@@ -1,0 +1,87 @@
+# NEAR positions
+pos 8: status=Closed owner=undefined debt=0 remote.chain=solana-devnet authority=ed25519:3N1d7fSwT4QD7a23MwVuCWrEUYeMdeKNyqfnyjwwVftK committed_depositor=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS deposit_state=undefined
+  derived_public_key(solana-devnet/pos/8, nectar-core-v2.nectar.testnet, 1)="ed25519:3N1d7fSwT4QD7a23MwVuCWrEUYeMdeKNyqfnyjwwVftK" → AUTHORITY MATCH
+  remote keys: chain_id,vault_program,domain_id,path,authority,status,reserved_units,units,borrow_usd_e6,paid_usd_e6,reserved_ns,pay_to,referrer,expires_ns,depositor,source,deposit_ref,confirming,last_confirm_ns,deposit_yocto,committed_depositor
+  pending_release: {"position_id":"8","message":"NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=8|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=7|expires=1794384870","signature_hex":"0c0460126ca1c7e3932042365fbf0f99dfecc18595f94076b293980527386918ea29eb9a84849a14aebf240733881ce55f503bd2101d0eb2afa66e8dcc478a0e","nonce":"7","expires":"1794384870","recipient":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","status":"Relayed","solana_tx_sig":"4rn4VdeKDAX3Zahdk1xwsiycGpqCWuchxh7Cc2zmsobYGCufLfxSD3pWQLPNqzRBz9g94nDGTtB9YLftRCEvdtPE"}
+  pending_settlement: null
+pos 9: status=Closed owner=undefined debt=0 remote.chain=solana-devnet authority=ed25519:3DAHsvVAffWXKfhk8UFPH9w8kBBHa9TreSyfBKJ4bi6o committed_depositor=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS deposit_state=undefined
+  derived_public_key(solana-devnet/pos/9, nectar-core-v2.nectar.testnet, 1)="ed25519:3DAHsvVAffWXKfhk8UFPH9w8kBBHa9TreSyfBKJ4bi6o" → AUTHORITY MATCH
+  remote keys: chain_id,vault_program,domain_id,path,authority,status,reserved_units,units,borrow_usd_e6,paid_usd_e6,reserved_ns,pay_to,referrer,expires_ns,depositor,source,deposit_ref,confirming,last_confirm_ns,deposit_yocto,committed_depositor
+  pending_release: {"position_id":"9","message":"NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=9|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=8|expires=1794387130","signature_hex":"5da6a1f30d5bc54a34a7cd68d778e205f07c4f01a1d7a6f32c16aba9ca7cb61c0489189e4f1aad7f70a9a4d0eeeb04fd8d85941dea5e84a126d1935544cc4105","nonce":"8","expires":"1794387130","recipient":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","status":"Relayed","solana_tx_sig":"5vF6HxQTSPK19KyZYpqs9kGtFkNqxxCvbErTQs9ZVLYGz29eGHsf4yupyrfZCgcs4aMenF25LhSCNs2GTQTaN51d"}
+  pending_settlement: null
+pos 10: status=Closed owner=undefined debt=0 remote.chain=solana-devnet authority=ed25519:BCnWuATGjXzEbHcgUrPNzAjV9Y7k69Nqiu5B7sU2aJXV committed_depositor=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS deposit_state=undefined
+  derived_public_key(solana-devnet/pos/10, nectar-core-v2.nectar.testnet, 1)="ed25519:BCnWuATGjXzEbHcgUrPNzAjV9Y7k69Nqiu5B7sU2aJXV" → AUTHORITY MATCH
+  remote keys: chain_id,vault_program,domain_id,path,authority,status,reserved_units,units,borrow_usd_e6,paid_usd_e6,reserved_ns,pay_to,referrer,expires_ns,depositor,source,deposit_ref,confirming,last_confirm_ns,deposit_yocto,committed_depositor
+  pending_release: null
+  pending_settlement: {"position_id":"10","quote_id":"2","nonce":"9","expires":"1794387252","preimage":"NECTAR_SETTLE_V1|chain=solana-devnet|program=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=10|quote=2|repay_e6=370440000|seize_units=2386856|recipient=FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q|nonce=9|expires=1794387252|kind=PRELIQ","signature_hex":"e429375cd7c8a8de24088a4e8b6df40874ca293ae2226d82d0e080ac537f66ca1d0f835615b43a1054ce97478dde5865daec9c9bea17bdca907d996d85743401","repay_usd_e6":"370440000","seize_units":"2386856","keeper_units":"0","recipient":"FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q","status":"Relayed","solana_tx_sig":"3Qm6H4sWiBkrrHYyZKJaWfcn8ak1E9NBD3Cnum412E1u2VFrNRD9ccowMTD6EFaDGZd
+# NEAR keeper txs (confirm / trigger / relay)
+remote_deposit_confirm_requested pos=8 tx=9ykovXkmV1MqUBsUkRDkMtfv3LS8ALqqn9f3dB5cxgn1 signer=keeper-v2.nectar.testnet method=confirm_remote_deposit status=SuccessValue failed_receipts=0
+   EVENT remote_deposit_check_requested [{"position_id":"8","input":"{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"8\",\"depositor\":\"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS\"}","deposit_yocto":"10000000000000000000000"}]
+   EVENT execution_requested [{"request_data":"{\"request_id\":20571,\"sender_id\":\"keeper-v2.nectar.testnet\",\"predecessor_id\":\"nectar-core-v2.nectar.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm\",\"hash\":\"5f9bb28796c6c355
+   EVENT execution_completed [{"sender_id":"keeper-v2.nectar.testnet","code_source":{"WasmUrl":{"url":"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm","hash":"5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062","build_target":"wasm32-wasip2"}},"resources_used":{"inst
+   EVENT remote_deposit_confirmed [{"position_id":"8","units":"3000000","depositor":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","source":"outlayer","deposit_ref":"521022807","funded":false}]
+   EVENT remote_loan_refused [{"position_id":"8","reason":"aggregate_limit"}]
+   EVENT reservation_deposit_refunded [{"position_id":"8","account_id":"borrower1.nectar.testnet","amount_yocto":"44030000000000000000000","reason":"loan_refused"}]
+solana_leg_relayed pos=8 tx=E7qpZ3keiYY7PjhMBccZPdrc1f9HMhGLq3L9Z9v6MBsQ signer=keeper-v2.nectar.testnet method=relay_release_result status=SuccessValue failed_receipts=0
+   EVENT remote_release_relayed [{"position_id":"8","nonce":"7","solana_tx_sig":"4rn4VdeKDAX3Zahdk1xwsiycGpqCWuchxh7Cc2zmsobYGCufLfxSD3pWQLPNqzRBz9g94nDGTtB9YLftRCEvdtPE"}]
+remote_deposit_confirm_requested pos=9 tx=9R8BdfVH6Wc9kMBPSBVYbA3NxCddJhm7LqHc4TjTPTNP signer=keeper-v2.nectar.testnet method=confirm_remote_deposit status=SuccessValue failed_receipts=0
+   EVENT remote_deposit_check_requested [{"position_id":"9","input":"{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"9\",\"depositor\":\"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS\"}","deposit_yocto":"10000000000000000000000"}]
+   EVENT execution_requested [{"request_data":"{\"request_id\":20848,\"sender_id\":\"keeper-v2.nectar.testnet\",\"predecessor_id\":\"nectar-core-v2.nectar.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm\",\"hash\":\"5f9bb28796c6c355
+   EVENT execution_completed [{"sender_id":"keeper-v2.nectar.testnet","code_source":{"WasmUrl":{"url":"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm","hash":"5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062","build_target":"wasm32-wasip2"}},"resources_used":{"inst
+   EVENT remote_deposit_confirmed [{"position_id":"9","units":"3000000","depositor":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","source":"outlayer","deposit_ref":"521033501","funded":true}]
+   EVENT position_opened [{"position_id":"9","borrower":"borrower1.nectar.testnet","collateral":"NVDAx","units":"3000000","debt_usd_e6":"370440000","premium_usd_e6":"4633200","origination_fee_usd_e6":"1111320","net_proceeds_usd_e6":"364695480","pay_to":null,"referrer":null,"remote":true}]
+   EVENT nft_mint [{"owner_id":"borrower1.nectar.testnet","token_ids":["p-9"]}]
+   EVENT reservation_deposit_refunded [{"position_id":"9","account_id":"borrower1.nectar.testnet","amount_yocto":"44030000000000000000000","reason":"confirmed"}]
+solana_leg_relayed pos=9 tx=7t1tg7tUSwud8Lqmfee5zdiqfZkUZyGme8Jr4G5x5k1i signer=keeper-v2.nectar.testnet method=relay_release_result status=SuccessValue failed_receipts=0
+   EVENT remote_release_relayed [{"position_id":"9","nonce":"8","solana_tx_sig":"5vF6HxQTSPK19KyZYpqs9kGtFkNqxxCvbErTQs9ZVLYGz29eGHsf4yupyrfZCgcs4aMenF25LhSCNs2GTQTaN51d"}]
+remote_deposit_confirm_requested pos=10 tx=DkYpnmFArhEuazUMV23szKyEf47JtsVCAv1VCZxLdiPG signer=keeper-v2.nectar.testnet method=confirm_remote_deposit status=SuccessValue failed_receipts=0
+   EVENT remote_deposit_check_requested [{"position_id":"10","input":"{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"10\",\"depositor\":\"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS\"}","deposit_yocto":"10000000000000000000000"}]
+   EVENT execution_requested [{"request_data":"{\"request_id\":20860,\"sender_id\":\"keeper-v2.nectar.testnet\",\"predecessor_id\":\"nectar-core-v2.nectar.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm\",\"hash\":\"5f9bb28796c6c355
+   EVENT execution_completed [{"sender_id":"keeper-v2.nectar.testnet","code_source":{"WasmUrl":{"url":"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm","hash":"5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062","build_target":"wasm32-wasip2"}},"resources_used":{"inst
+   EVENT remote_deposit_confirmed [{"position_id":"10","units":"3000000","depositor":"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS","source":"outlayer","deposit_ref":"521033929","funded":true}]
+   EVENT position_opened [{"position_id":"10","borrower":"borrower1.nectar.testnet","collateral":"NVDAx","units":"3000000","debt_usd_e6":"370440000","premium_usd_e6":"4633200","origination_fee_usd_e6":"1111320","net_proceeds_usd_e6":"364695480","pay_to":null,"referrer":null,"remote":true}]
+   EVENT nft_mint [{"owner_id":"borrower1.nectar.testnet","token_ids":["p-10"]}]
+   EVENT reservation_deposit_refunded [{"position_id":"10","account_id":"borrower1.nectar.testnet","amount_yocto":"44010000000000000000000","reason":"confirmed"}]
+preliq_triggered pos=10 tx=6TKH53XpeanuU1G2ekWAF1PFpxEKs3ZvXYFu3MVyZboP signer=keeper-v2.nectar.testnet method=trigger_preliquidation status=SuccessValue failed_receipts=0
+   EVENT preliq_triggered [{"position_id":"10","keeper":"keeper-v2.nectar.testnet"}]
+   EVENT quoter_requested [{"position_id":"10","input_sha256":"cc039c0c49544156cf12c307780add1ff6125b9bdfccf9061312e7357ed0c195","deposit_yocto":"10000000000000000000000","quotes":1}]
+   EVENT execution_requested [{"request_data":"{\"request_id\":20865,\"sender_id\":\"keeper-v2.nectar.testnet\",\"predecessor_id\":\"nectar-core-v2.nectar.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm\",\"hash\":\"5f9bb28796c6c355
+   EVENT execution_completed [{"sender_id":"keeper-v2.nectar.testnet","code_source":{"WasmUrl":{"url":"https://test.fastfs.io/nectar.testnet/outlayer.testnet/5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062.wasm","hash":"5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062","build_target":"wasm32-wasip2"}},"resources_used":{"inst
+   EVENT quoter_result [{"position_id":"10","input_sha256":"cc039c0c49544156cf12c307780add1ff6125b9bdfccf9061312e7357ed0c195","fills":[{"quote_id":"2","disc_bps":300}]}]
+   EVENT settlement_sign_requested [{"position_id":"10","quote_id":"2","nonce":"9","expires":"1794387252","preimage":"NECTAR_SETTLE_V1|chain=solana-devnet|program=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=10|quote=2|repay_e6=370440000|seize_units=2386856|recipient=FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q|nonce=9|expires=1794387252|kind=PRELIQ","recipie
+   EVENT settlement_signed [{"position_id":"10","quote_id":"2","nonce":"9","preimage":"NECTAR_SETTLE_V1|chain=solana-devnet|program=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=10|quote=2|repay_e6=370440000|seize_units=2386856|recipient=FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q|nonce=9|expires=1794387252|kind=PRELIQ","signature_hex":"e429375cd7c8a8
+solana_leg_relayed pos=10 tx=9s8HDeaqRhP13ZPYvB3jn6uRLpTppjfdXVE8n6CRmU1a signer=keeper-v2.nectar.testnet method=relay_settlement_result status=SuccessValue failed_receipts=0
+   EVENT settlement_relayed [{"position_id":"10","quote_id":"2","nonce":"9","solana_tx_sig":"3Qm6H4sWiBkrrHYyZKJaWfcn8ak1E9NBD3Cnum412E1u2VFrNRD9ccowMTD6EFaDGZdatvQ79h5XQEfw6QRvizA4","status":"Closed"}]
+# Solana
+program ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW executable=true programData=55ZD9n58bZKC9PfVcsiuRMoDyGVkJSPQX2AtTvUL1vzR space=426837 lastDeploySlot=521021977 upgradeAuthority=3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS
+release pos=8 sig=4rn4VdeKDAX3Zahdk1xwsiycGpqCWuchxh7Cc2zmsobYGCufLfxSD3pWQLPNqzRBz9g94nDGTtB9YLftRCEvdtPE slot=521024256 err=null confirmation=finalized
+  programs=[Ed25519, VAULT] ed25519_idx=0 next_is_vault=true vault_accounts_include_pda=true
+  ed25519 pubkey=3N1d7fSwT4QD7a23MwVuCWrEUYeMdeKNyqfnyjwwVftK == authority(pos 8): true sig_valid=true tampered_valid=false
+  msg=NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=8|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=7|expires=1794384870
+  sig_hex=0c0460126ca1c7e3932042365fbf0f99… token: 
+  logs: Program log: Instruction: Release
+release pos=9 sig=5vF6HxQTSPK19KyZYpqs9kGtFkNqxxCvbErTQs9ZVLYGz29eGHsf4yupyrfZCgcs4aMenF25LhSCNs2GTQTaN51d slot=521033668 err=null confirmation=finalized
+  programs=[Ed25519, VAULT] ed25519_idx=0 next_is_vault=true vault_accounts_include_pda=true
+  ed25519 pubkey=3DAHsvVAffWXKfhk8UFPH9w8kBBHa9TreSyfBKJ4bi6o == authority(pos 9): true sig_valid=true tampered_valid=false
+  msg=NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=9|recipient=2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS|nonce=8|expires=1794387130
+  sig_hex=5da6a1f30d5bc54a34a7cd68d778e205… token: 
+  logs: Program log: Instruction: Release
+settle pos=10 sig=3Qm6H4sWiBkrrHYyZKJaWfcn8ak1E9NBD3Cnum412E1u2VFrNRD9ccowMTD6EFaDGZdatvQ79h5XQEfw6QRvizA4 slot=521034149 err=null confirmation=finalized
+  programs=[Ed25519, VAULT] ed25519_idx=0 next_is_vault=true vault_accounts_include_pda=true
+  ed25519 pubkey=BCnWuATGjXzEbHcgUrPNzAjV9Y7k69Nqiu5B7sU2aJXV == authority(pos 10): true sig_valid=true tampered_valid=false
+  msg=NECTAR_SETTLE_V1|chain=solana-devnet|program=ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW|pos=10|quote=2|repay_e6=370440000|seize_units=2386856|recipient=FtWQZk7KAXFjt9pXZsTtYFgBHx64RFMEmhnPtenWMU2q|nonce=9|expires=1794387252|kind=PRELIQ
+  sig_hex=e429375cd7c8a8de24088a4e8b6df408… token: HGSFKMWW…[3] 3→0.613144 | FtWQZk7K…[5] 2.54598→4.932836
+  logs: Program log: Instruction: Settle
+# position PDAs (closed?) and their history
+pos 8 pda=At266CuJkL3qv266TbH81ZmQGkWZmW1jmZMuSrbcxirz account=null (closed)
+  m1An73xfWwTb5mfr… slot=521022774 err=null OpenPosition :: HGSFKMWW…[1] 0→3 | 2s7mnWvg…[3] 7.45402→4.45402
+  4rn4VdeKDAX3Zahd… slot=521024256 err=null Release :: 
+  5n5btAJX4vWHZe6M… slot=521024372 err=null Withdraw :: HGSFKMWW…[1] 3→0 | 2s7mnWvg…[3] 4.45402→7.45402
+pos 9 pda=7weJCk7VhZRmtdTAimKD4Bk3KNiBGyMJgvDuVVYw24ip account=null (closed)
+  54jHye95jzDEL8TB… slot=521033479 err=null OpenPosition :: HGSFKMWW…[2] 0→3 | 2s7mnWvg…[3] 7.45402→4.45402
+  5vF6HxQTSPK19KyZ… slot=521033668 err=null Release :: 
+  4WnyV4H7CLokKzdm… slot=521033741 err=null Withdraw :: HGSFKMWW…[2] 3→0 | 2s7mnWvg…[3] 4.45402→7.45402
+pos 10 pda=3iQ8Jrdwdt3Wy3LLarHvhzK3xxGZM19LKJbRn2dKTopz account=null (closed)
+  3SN2Dz96XQ8LXWqB… slot=521033887 err=null OpenPosition :: HGSFKMWW…[2] 0→3 | 2s7mnWvg…[3] 7.45402→4.45402
+  3Qm6H4sWiBkrrHYy… slot=521034149 err=null Settle :: HGSFKMWW…[3] 3→0.613144 | FtWQZk7K…[5] 2.54598→4.932836
+  5NtX2kof9bTX5Bop… slot=521034206 err=null Withdraw :: HGSFKMWW…[2] 0.613144→0 | 2s7mnWvg…[3] 4.45402→5.067164

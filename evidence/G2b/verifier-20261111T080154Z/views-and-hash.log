@@ -1,0 +1,40 @@
+## contract_version
+"2.2.1-v7"
+## get_config
+{"contract_version":"2.2.1-v7","owner":"nectar.testnet","usdc_token":"usdc-mock.nectar.testnet","keeper":"keeper-v2.nectar.testnet","keeper_fee_bps":50,"fee_split":{"buyers_bps":7000,"lenders_bps":2000,"treasury_bps":1000},"paused":false,"min_notice_period_ns":"604800000000000","min_quote_usd_e6":"100000000","max_age_ns_session":"120000000000","max_age_ns_closed":"86400000000000","band_bps":1500,"gas_reserve_yocto":"1049999999999999999999983","next_quote_id":"5","next_position_id":"14","max_quotes_per_asset":64,"max_quotes_per_settlement":8,"origination_fee_bps":30}
+## get_exit_capacity
+{"q_usd_e6":"16119220000","r_usd_e6":"10000000","d_usd_e6":"0","haircut_bps":2500,"session_open":false,"oracle_price_usd_e6":"135000000","oracle_age_s":"264","oracle_fresh":true,"b_c_usd_per_unit_e6":"94500000","limit_bps_effective":7000,"capacity_usd_e6":"12096915000","oracle_source":"Owner","session_reason":"outside_hours","total_debt_usd_e6":"9209000000","aggregate_capacity_usd_e6":"12096915000","aggregate_headroom_usd_e6":"2887915000","multiplier_e18":"1000000000000000000","price_kind":"Underlying","ca_pending":false,"ca_effective_ns":"0","forced_closed":false}
+## list_quotes
+wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 2`" })
+## get_remote_chains
+wasm execution failed with error: HostError(GuestPanic { panic_msg: "Failed to deserialize input from JSON. Error: `missing field `symbol` at line 1 column 2`" })
+## get_quoter_config
+{"enabled":true,"outlayer_account":"outlayer.testnet","project_id":"nectar.testnet/nectar-quoter","version_key":"5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062","deposit_yocto":"10000000000000000000000","gas_tgas":80,"max_instructions":"100000000","max_memory_mb":128,"max_execution_seconds":30,"max_conf_bps":100,"secrets_ref":{"profile":"mm-demo","account_id":"nectar.testnet"}}
+## view_account
+{"code_hash":"3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk","storage_usage":844370,"block_height":277187853}
+## keeper-v2 access keys
+{"pk":"ed25519:7GknDBk6wX5S","perm":{"FunctionCall":{"allowance":"350608834307281100000000","method_names":["trigger_preliquidation","relay_settlement_result","confirm_remote_deposit","keeper_attest_deposit","relay_release_result"],"receiver_id":"nectar-core-v2.nectar.testnet"}}}
+## list_quotes {symbol:NVDAx}
+{"count":5,"ids":[null,null,null,null,null]}
+## get_remote_chains {symbol:NVDAx}
+[{"chain_id":"solana-devnet","vault_program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW","mpc_domain_id":1,"rpc_url":null,"evm_chain_id":null,"primary":true},{"chain_id":"base-sepolia","vault_program":"0xC64b733424C8d25fB574F275007ED8756e261226","mpc_domain_id":0,"rpc_url":"http://127.0.0.1:8545","evm_chain_id":84532,"primary":false}]
+## build log tail
+cargo near build non-reproducible-wasm
+
+Error: 
+   0: [91m`cd "/private/tmp/verify-chain-20261111T080154Z/contracts/nectar-core" && env -u CARGO_ENCODED_RUSTFLAGS CARGO_NEAR_ABI_GENERATION="true" CARGO_NEAR_ABI_SCHEMA_VERSION="0.4.0" CARGO_NEAR_VERSION="cargo-near-build 0.11.5" CARGO_PROFILE_DEV_DEBUG="0" CARGO_PROFILE_DEV_LTO="off" CARGO_PROFILE_DEV_OPT_LEVEL="0" CARGO_TARGET_DIR="/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi" NEP330_BUILD_INFO_BUILD_COMMAND="[\"cargo\",\"near\",\"build\",\"non-reproducible-wasm\"]" NEP330_BUILD_INFO_OUTPUT_WASM_PATH="/private/tmp/verify-chain-20261111T080154Z/target/near/nectar_core/nectar_core.wasm" NEP330_VERSION="0.1.0" RUSTFLAGS="-Awarnings" RUSTUP_TOOLCHAIN="1.95.0-aarch64-apple-darwin" "/Users/lemmalabs/.rustup/toolchains/1.95.0-aarch64-apple-darwin/bin/cargo" "build" "--message-format=json-render-diagnostics" "--features" "near-sdk/__abi-generate" "--color" "never"` failed with exit code: Some(101)[0m
+
+Location:
+   [35mcargo-near-build/src/cargo_native/compile.rs[0m:[35m216[0m
+exit=1
+(eval):6: no matches found: /tmp/verify-chain-20261111T080154Z/contracts/nectar-core/target/near/*.wasm
+local wasm: 
+local sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+deployed sha256: 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+deployed sha256 base58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+usage: cmp [-l | -s | -x] [-bhz] [-i num1[:num2] | --ignore-initial=num1[:num2]] [-n num | --bytes=num] file1 file2 [skip1 [skip2]]
+## rebuild (SDKROOT=MacOSX26.5.sdk; default SDK 27.0 tbd unreadable by host ld-1267)
+local  sha256 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+deploy sha256 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+BYTE-IDENTICAL
+size 818668

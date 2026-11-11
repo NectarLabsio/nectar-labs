@@ -24,6 +24,10 @@
 | v7 module runs | PASS (Profit-Lock state only; self_settled tx hash not recorded) | 2026-11-10T17:20Z | 2bf99e1 | §v7 module runs (pos 0 Closed, quote 1 −$4,522.50; reserve r 10,000,000, r-NVDAx-0 → buyer2; shield pos 5 Weekend 15 bps) |
 | G12 Base toolchain + collateral | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; scripts/06 + 26 NOT RUN by verifier; real Base Sepolia deploy pending H15 | 2026-11-10T18:03Z–18:04Z | 7bface5 | evidence/G12/verifier-20261110T180307Z/ (forge test 74 pass / 0 fail / 1 skip = test_createB20_localPrecompiles "B20 precompiles absent"; local fork of Base Sepolia (D-026) chain-id 84532; vault/MockB20/registry have code on the local fork of Base Sepolia (D-026); createB20 eth_call re-run on real Base Sepolia: no revert from 0x…dEaD and 0x1111…; no explorer for a local fork; see §G12) |
 | G13 Base round trip | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; ERC-8021 suffix not appended (D-026/H19); Solana-domain revert via forge tests only | 2026-11-10T18:03Z–18:05Z | 7bface5 | evidence/G13/verifier-20261110T180307Z/ ((a) authority pos 6/7 == last20(keccak(x‖y)) of live derived_public_key domain 0; (b) relay txs 0x759a…694b / 0x20d1…e4bb status 1 on the local fork of Base Sepolia (D-026), to vault, release/settle selectors, vault hashRelease/hashSettle == NEAR digest, ecrecover 0x01 == authority; (c) positions(6) status 3 Released, positions(7) status 2 Settled, buyer1 2357389, borrower1 7642611; (d) replay → NonceUsed(2) / NonceUsed(6); (e) NEAR pos 6/7 Closed, contract_version 2.1.0-v7; see §G13) |
+| G2b testnet deploy v2 (after D-027) | PASS — supersedes the 16:45Z row as current state; open item: rebuild needed SDKROOT=MacOSX26.5.sdk on this host | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G2b/verifier-20261111T080154Z/ (contract_version 2.2.1-v7; rebuilt wasm sha256 2938ebf8… == view_code, byte-identical, code_hash 3mv4LRm6…; keeper-v2 one FC key, 5 methods, receiver core-v2; get_config, get_exit_capacity, list_quotes {symbol} 5, get_remote_chains {symbol} solana ENZa… + base 0xC64b…, get_quoter_config pin 5f9bb287…; see §G2b) |
+| G7 Solana + signer (re-run after D-027) | PASS — read-only, both chains | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G7/verifier-20261111T080154Z/ (pos 8/9/10 authority == live derived_public_key domain 1; confirm txs source "outlayer", funded false/true/true, pos 8 refused aggregate_limit + refund; 3 Solana txs finalized, ix0 Ed25519 → ix1 vault, pubkey == authority, sig valid, tampered msg invalid; ProgramData 426,837 B = 45 B header + 426,792 B ELF; recipient +2.386856, depositor withdrew 3 / 3 / 0.613144; PDAs closed; NEAR Closed; see §G7) |
+| G13 Base round trip (re-run after D-027) | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; earlier caveats (ERC-8021, Solana-domain revert in forge only) stand, not re-checked | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G13/verifier-20261111T080154Z/ (pos 11/12 authority == keccak addr of derived key domain 0; relay txs 0x12f5…0cd5 / 0xa2fe…c648 status 1; hashRelease/hashSettle == NEAR digest; ecrecover == authority; positionOf 3 / 2; borrower1 7→10→7.642611, buyer1 +2.357389; replay → NonceUsed(10) / NonceUsed(14); nonceUsed[slotKey] true; see §G13) |
+| G14 x402 (re-run after D-027) | PASS for the chain claims; the HTTP 402 → 200 leg was not re-run by the verifier | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evidence/G14/verifier-20261111T080154Z/ (borrow HvFX6… agent1 → nvdax-mock ft_transfer_call → core-v2 position_opened #13 $10; relay BemztvL… x402-relayer → Delegate agent1 → usdc-mock ft_transfer {nectar.testnet, 10000}, all receipts success; see §G14) |
 | G9 fresh-clone rehearsal | pending | | | |
 
 Block format (one per run, newest first within a gate):
@@ -38,6 +42,36 @@ Notes: faucet rate-limited once; retried after 90 s.
 ```
 
 ## G13
+
+### G13 — Base round trip — RE-RUN after D-027 — PASS, local fork of Base Sepolia (D-026), not Base Sepolia — 2026-11-11T08:02Z–08:25Z — commit 3ab3026
+Fresh clone /tmp/verify-chain-20261111T080154Z. Read-only. No secrets. EVM = local fork at http://127.0.0.1:8545, chain 84532, block 57050724; redeployed vault 0xC64b…1226 (5,805 B code), MockB20 0x634F…af81d. NEAR via https://test.rpc.fastnear.com.
+Claims checked: evidence/G13/rerun/summary.md. Commands: evidence/G13/verifier-20261111T080154Z/g13.sh (+ nv.sh). Output: fork.log.
+```
+derived_public_key(base-sepolia/pos/11, domain 0) = secp256k1:4FUssYkR… -> keccak addr 0x9de489d1…77246fe ; NEAR authority 0x9de489d1…77246fe ; MATCH
+relay tx 0x12f5c29b…00600cd5 status=0x1 block=57050721 from=0xe4a5…c991 to=vault
+decoded: struct=(11, 0x85D0…F30A, 10, 1794387383) depositor=0x85D0…F30A v=27
+vault digest 0xfc9d2e23…945d1c49 ; NEAR signed message 0xfc9d2e23…945d1c49 ; EQUAL
+ecrecover(digest,v,r,s) = 0x9de489d1…77246fe ; MATCH
+positionOf(11, depositor) = 0x9DE4… 0x85D0… 3000000 3            (3 = Released)
+nonceUsed(slotKey=0xa627…6269, nonce=10) = true
+token balance borrower1 0x85D0… @57050720 7000000 -> @57050721 10000000
+replay relay calldata from keeper EOA: execution reverted: NonceUsed(10)
+derived_public_key(base-sepolia/pos/12, domain 0) = secp256k1:4RuhNCkk… -> keccak addr 0x8a8a0125…98c313 ; MATCH
+relay tx 0xa2fea901…7839c648 status=0x1 block=57050724
+decoded: struct=(12, 4, 308700000, 2357389, 0xcA61…1fa1, 14, 1794387594, 1) depositor=0x85D0…F30A v=27
+vault digest 0x088c5a6f…1a4153 ; NEAR signed message 0x088c5a6f…1a4153 ; EQUAL
+ecrecover(digest,v,r,s) = 0x8a8a0125…98c313 ; MATCH
+positionOf(12, depositor) = 0x8A8A… 0x85D0… 3000000 2            (2 = Settled)
+nonceUsed(slotKey=0x5a83…3960, nonce=14) = true
+token balance borrower1 @57050723 7000000 -> @57050724 7642611 ; buyer1 0xcA61… 0 -> 2357389 (latest same)
+replay relay calldata from keeper EOA: execution reverted: NonceUsed(14)   (selector 0x6d9650be = NonceUsed(uint64))
+NEAR: get_position 11/12 status Closed, remote.source "keeper" (attest mode, as labelled), committed_depositor 0x85D0…F30A
+```
+Explorer: N/A (local fork).
+Verdict: **PASS on the local fork of Base Sepolia (D-026), not Base Sepolia.** Every claim in the summary holds: authorities (domain 0), relay status 1, on-chain digest == NEAR digest,
+ecrecover == authority, positionOf 3/2, balances (borrower1 back to 10.000000, then 7.642611; buyer1 +2.357389), replay → NonceUsed(14) (and NonceUsed(10) for the release).
+The new slot-scoped nonce map (D-027 SR-1) is set for both slots. Notes: positionOf keeps amount 3000000 after a terminal status (status field is the guard). Earlier caveats are not
+re-checked this run and still stand: no ERC-8021 suffix (D-026/H19), Solana-domain revert shown only in forge tests, real Base Sepolia pending H15.
 
 ### G13 — Base round trip — PASS, local fork of Base Sepolia (D-026), not Base Sepolia — 2026-11-10T18:03Z–18:05Z — commit 7bface5
 Fresh clone /tmp/verify-G12G13-20261110T180307Z. Read-only. No secrets. EVM = local fork of Base Sepolia (D-026) at 127.0.0.1:8545, chain 84532, block 57050713. NEAR = public testnet via https://test.rpc.fastnear.com (finality final). Each claim in evidence/G13/summary.md was checked against the chains, not taken from the summary.
@@ -178,6 +212,23 @@ Evidence: commands and outputs in this block; G3b live-probe.log.
 
 ## G14
 
+### G14 — x402 paid call — RE-RUN after D-027 — PASS (chain claims) — 2026-11-11T08:02Z–08:25Z — commit 3ab3026
+Fresh clone /tmp/verify-chain-20261111T080154Z. Read-only. No secrets. Claims checked: evidence/G14/rerun/summary.md. Command: node evidence/G14/verifier-20261111T080154Z/g14.mjs
+(EXPERIMENTAL_tx_status on https://test.rpc.fastnear.com). Output: chain.log.
+```
+tx HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V signer=agent1.nectar.testnet receiver=nvdax-mock.nectar.testnet final=SuccessValue failed_receipts=0
+  FunctionCall ft_transfer_call args={"receiver_id":"nectar-core-v2.nectar.testnet","amount":"1000000","msg":"{\"LockCollateralAndBorrow\":{\"collateral\":\"NVDAx\",\"borrow_usd_e6\":\"10000000\",\"pre_liq_ltv_bps\":8000}}"} deposit=1
+  receipt executor=nectar-core-v2.nectar.testnet status=SuccessValue logs: EVENT_JSON position_opened {position_id 13, borrower agent1, units 1000000, debt_usd_e6 10000000, origination_fee 30000} ;; nft_mint
+tx BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G signer=x402-relayer.nectar.testnet receiver=agent1.nectar.testnet final=SuccessValue failed_receipts=0
+  Delegate sender=agent1.nectar.testnet receiver=usdc-mock.nectar.testnet nonce=277093880000004 max_block_height=277187802
+    inner FunctionCall ft_transfer args={"receiver_id":"nectar.testnet","amount":"10000"} deposit=1
+  receipt executor=agent1.nectar.testnet SuccessValue · usdc-mock.nectar.testnet SuccessValue · x402-relayer.nectar.testnet SuccessValue ×2
+```
+Explorer: not opened this run (nearblocks returns 403 to WebFetch, see §G2); RPC proof above.
+Verdict: **PASS for the chain claims.** The borrow (position #13, $10, agent1) and the NEP-366 delegate relay (ft_transfer of 10000 usdc-mock base units = $0.01 to nectar.testnet,
+signed by agent1, relayed by x402-relayer) are on chain and succeeded. Not re-run by the verifier: the HTTP leg (unpaid GET → 402, paid → 200 CSV 37 rows); that rests on
+evidence/G14/rerun/demo-20261111T080042Z.log. mock-ft emits no ft_transfer event, so the transfer is proven by the decoded delegate action plus the successful usdc-mock receipt.
+
 ### G14 — x402 paid call — PASS — 2026-11-10T16:48Z–16:52Z — clone 91db9ea (tests), summary at 6ba1b09
 Verified evidence/G14/summary.md against the chain, read-only. rpc.testnet.near.org answered `-429 "THIS ENDPOINT IS DEPRECATED"`, so
 the reads used https://rpc.testnet.fastnear.com (the repo's other configured RPC). Logs: evidence/G14/verifier-20261110T1645Z/.
@@ -200,6 +251,28 @@ proven by the successful usdc-mock `ft_transfer` receipt with the decoded args. 
 **PASS** — (1) borrow tx opened position #4 for $10; (2) relay tx carries agent1's SignedDelegate paying 10000 usdc-mock e6 to nectar.testnet; (3) one FullAccess key each.
 
 ## G2b
+
+### G2b — testnet deploy v2 — RE-RUN after D-027 (2.2.1-v7) — PASS — 2026-11-11T08:02Z–08:25Z — commit 3ab3026
+Fresh clone /tmp/verify-chain-20261111T080154Z. Read-only. No secrets. NEAR RPC https://test.rpc.fastnear.com. Scope as asked: version, code-hash rebuild, keeper key, views (pnpm verify not re-run).
+```
+$ cd contracts/nectar-core && cargo near build non-reproducible-wasm
+  exit 1: host build scripts fail to link — ld-1267: "/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd: unknown architecture arm64e.x1-macos"
+  (build-default-sdk-FAILED.log; this host's default SDK, not the repo)
+$ SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk cargo near build non-reproducible-wasm   → exit 0, 1m 23s (build-sdk26.5.log)
+local  sha256 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d  (818,668 B)
+deploy sha256 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d  (view_code) → cmp: BYTE-IDENTICAL; base58 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk == view_account code_hash
+contract_version → "2.2.1-v7"; get_config.contract_version "2.2.1-v7", keeper keeper-v2.nectar.testnet, paused false
+get_exit_capacity {symbol:NVDAx} → q 16119220000, oracle 135000000 (Owner, fresh, age 264 s), session_open false (outside_hours), capacity 12096915000, total_debt 9209000000
+list_quotes {} → panics "missing field symbol"; list_quotes {symbol:NVDAx} → 5 quotes
+get_remote_chains {} → panics "missing field symbol"; {symbol:NVDAx} → solana-devnet ENZa…pubW domain 1 primary; base-sepolia 0xC64b…1226 domain 0, 84532, rpc 127.0.0.1:8545
+get_quoter_config → enabled, outlayer.testnet, nectar.testnet/nectar-quoter, version_key 5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062
+keeper-v2 access keys → 1 key ed25519:7GknDBk6…, FunctionCall receiver nectar-core-v2.nectar.testnet, methods [trigger_preliquidation, relay_settlement_result,
+  confirm_remote_deposit, keeper_attest_deposit, relay_release_result]
+```
+Explorer: not opened this run (nearblocks 403 to WebFetch, §G2); code proven by view_code above.
+Verdict: **PASS.** Deployed code is byte-identical to the clone's build; version, keeper key and every requested view hold. Open item (host, not repo): on this Mac the default
+Command Line Tools SDK 27.0 cannot be read by the installed linker, so the plain build command fails until SDKROOT points at an older SDK; a stranger on the same setup hits this.
+list_quotes and get_remote_chains need `{"symbol":"NVDAx"}`.
 
 ### G2b — testnet deploy v2 — RE-RUN — PASS — 2026-11-10T16:45Z–16:52Z — commit 91db9ea
 Fresh clone /tmp/verify-G2b-G7-20261110T164524Z (main 91db9ea, includes WO-16b 12e8347). No secrets. Logs: evidence/G2b/verifier-rerun-20261110T1645Z/.
@@ -396,6 +469,35 @@ Guesses / confusion a stranger hits:
 Rehearsal verdict: quick start PASS in time; gitleaks clean; claims backed. Final G9 is not yet passable: 11 handoff blockers above, plus the Feed env gap if `agents` is to be claimed.
 
 ## G7
+
+### G7 — Solana + signer — RE-RUN after D-027 (2.2.1-v7, vault v2) — PASS — 2026-11-11T08:02Z–08:25Z — commit 3ab3026
+Fresh clone /tmp/verify-chain-20261111T080154Z. Read-only. No secrets. NEAR https://test.rpc.fastnear.com · Solana https://api.devnet.solana.com. Claims: evidence/G7/rerun/summary.md.
+Command: node evidence/G7/verifier-20261111T080154Z/g7.mjs <clone> (tx hashes from evidence/rollout/keeper-20261111T070745Z.log; Solana sigs cross-checked with get_pending_*). Output: chain.log.
+```
+pos 8/9/10: status=Closed; remote.authority == derived_public_key(solana-devnet/pos/<id>, nectar-core-v2.nectar.testnet, domain 1): 3N1d7fSw… / 3DAHsvVA… / BCnWuATG… MATCH ×3
+  committed_depositor 2s7mnWvg…zKS (all three)
+confirm_remote_deposit (keeper-v2) 9ykov…/9R8Bd…/DkYpn… SuccessValue, 0 failed receipts; OutLayer execution_completed wasm hash 5f9bb287…
+  remote_deposit_confirmed pos 8 source "outlayer" funded false → remote_loan_refused aggregate_limit → reservation_deposit_refunded 0.04403 NEAR (loan_refused)
+  remote_deposit_confirmed pos 9 / pos 10 source "outlayer" funded true → position_opened debt 370440000, net_proceeds 364695480 (×2)
+trigger_preliquidation 6TKH… → quoter_result fills [{quote 2, disc 300 bps}] → settlement_signed preimage NECTAR_SETTLE_V1|…|pos=10|quote=2|repay_e6=370440000|seize_units=2386856|…|nonce=9|…|kind=PRELIQ
+relay_release_result E7qp… (8), 7t1t… (9); relay_settlement_result 9s8H… (10, status Closed) — all SuccessValue
+get_pending_release(8/9).solana_tx_sig, get_pending_settlement(10).solana_tx_sig == keeper-log sigs 4rn4VdeK…, 5vF6HxQT…, 3Qm6H4sW…; status Relayed
+program ENZa…pubW executable; programData 55ZD9n58… space 426837 (= 45 B header + 426,792 B ELF); last deploy slot 521021977 (< first re-run tx slot 521022774)
+release pos=8 4rn4VdeK…dtPE slot 521024256 err null finalized; programs [Ed25519, VAULT]; pubkey 3N1d… == authority; sig_valid true; tampered false
+  msg NECTAR_RELEASE_V1|chain=solana-devnet|vault=ENZa…|pos=8|recipient=2s7mn…|nonce=7|expires=1794384870 (== get_pending_release message)
+release pos=9 5vF6HxQT…N51d slot 521033668 finalized; [Ed25519, VAULT]; pubkey 3DAH… == authority; valid true; tampered false; nonce=8
+settle pos=10 3Qm6H4sW…izA4 slot 521034149 finalized; [Ed25519, VAULT]; pubkey BCnW… == authority; valid true; tampered false
+  token: vault HGSF… 3 → 0.613144 | recipient FtWQZk7K… 2.54598 → 4.932836 (+2.386856)
+PDAs (from deposit-<id>.log; included in the vault ix accounts): At266Cu… / 7weJCk7… / 3iQ8Jrd… → getAccountInfo null (closed)
+  pos 8: OpenPosition depositor 7.45402→4.45402 · Release · Withdraw 4.45402→7.45402
+  pos 9: OpenPosition 7.45402→4.45402 · Release · Withdraw 4.45402→7.45402
+  pos 10: OpenPosition 7.45402→4.45402 · Settle · Withdraw 4.45402→5.067164 (+0.613144)
+```
+Explorer: WebFetch https://explorer.solana.com/tx/3Qm6H4sW…izA4?cluster=devnet → HTTP 429 (no content). NEAR explorer not opened (403, §G2). RPC proof above.
+Verdict: **PASS.** Every claim in the summary holds from the chains: authorities (domain 1) for 8/9/10; OutLayer-sourced confirms, pos 8 refused (aggregate_limit) and refunded,
+9/10 funded at $364.695480; three finalized Solana txs with the Ed25519 verify ix at index 0 right before the vault ix, signed by the stored authority over the exact NEAR preimage;
+vault v2 program 426,792 B ELF upgraded before the runs; recipient +2.386856 ≈ 370.44 / (160 × 0.97) = 2.3868557 (rounded up at the 6th decimal); depositor withdrawals 3 / 3 / 0.613144; slots closed; NEAR Closed.
+The 180 → 160 owner price move is a disclosed demo control (current owner price 135 after G13).
 
 ### G7 — Solana + signer (v7) — PASS — 2026-11-10T16:45Z–16:52Z — commit 91db9ea
 Every claim in evidence/G7/v2-roundtrip-summary.md re-derived from public RPC (NEAR rpc.testnet.near.org, Solana api.devnet.solana.com, finalized),

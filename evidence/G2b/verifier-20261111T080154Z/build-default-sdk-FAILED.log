@@ -1,0 +1,139 @@
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling proc-macro2 v1.0.107
+ │    Compiling quote v1.0.47
+ │    Compiling unicode-ident v1.0.27
+ │    Compiling typenum v1.20.1
+ │    Compiling hashbrown v0.17.1
+ │    Compiling equivalent v1.0.3
+ │    Compiling zmij v1.0.23
+ │    Compiling serde_core v1.0.229
+ │    Compiling ident_case v1.0.1
+ │    Compiling memchr v2.8.3
+ │    Compiling winnow v1.0.5
+ │    Compiling itoa v1.0.19
+ │    Compiling serde_json v1.0.154
+ │ error: linking with `cc` failed: exit status: 1
+ │   |
+ │   = note:  "cc" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/zmij-62e06be6e83d66e7/rustcwGuvnl/symbols.o" "<2 object files omitted>" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/zmij-62e06be6e83d66e7/build_script_build-62e06be6e83d66e7" "-Wl,-dead_strip" "-nodefaultlibs"
+ │   = note: some arguments are omitted. use `--verbose` to show all linker arguments
+ │   = note: ld: multiple errors: tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libc.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libm.tbd'
+ │           clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ │           
+ │ 
+ │ error: linking with `cc` failed: exit status: 1
+ │   |
+ │   = note:  "cc" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/quote-7fde55ae68bb1fc6/rustc3V1dcA/symbols.o" "<2 object files omitted>" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/quote-7fde55ae68bb1fc6/build_script_build-7fde55ae68bb1fc6" "-Wl,-dead_strip" "-nodefaultlibs"
+ │   = note: some arguments are omitted. use `--verbose` to show all linker arguments
+ │   = note: ld: multiple errors: tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libm.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libc.tbd'
+ │           clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ │           
+ │ 
+ │ error: linking with `cc` failed: exit status: 1
+ │   |
+ │   = note:  "cc" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/serde_json-f72e0489044076f5/rustcYxy9pY/symbols.o" "<2 object files omitted>" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/serde_json-f72e0489044076f5/build_script_build-f72e0489044076f5" "-Wl,-dead_strip" "-nodefaultlibs"
+ │   = note: some arguments are omitted. use `--verbose` to show all linker arguments
+ │   = note: ld: multiple errors: tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libm.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libc.tbd'
+ │           clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ │           
+ │ 
+ │ error: linking with `cc` failed: exit status: 1
+ │   |
+ │   = note:  "cc" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/proc-macro2-d7fc831e4d90c110/rustcSLvv3o/symbols.o" "<3 object files omitted>" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/proc-macro2-d7fc831e4d90c110/build_script_build-d7fc831e4d90c110" "-Wl,-dead_strip" "-nodefaultlibs"
+ │   = note: some arguments are omitted. use `--verbose` to show all linker arguments
+ │   = note: ld: multiple errors: tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libm.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libc.tbd'
+ │           clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ │           
+ │ 
+ │ error: linking with `cc` failed: exit status: 1
+ │   |
+ │   = note:  "cc" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/serde_core-76a080f2c3949f2b/rustcDT8q4g/symbols.o" "<3 object files omitted>" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi/debug/build/serde_core-76a080f2c3949f2b/build_script_build-76a080f2c3949f2b" "-Wl,-dead_strip" "-nodefaultlibs"
+ │   = note: some arguments are omitted. use `--verbose` to show all linker arguments
+ │   = note: ld: multiple errors: tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libc.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libm.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd'
+ │           clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ │           
+ │ 
+ │ error: could not compile `zmij` (build script) due to 1 previous error
+ │ warning: build failed, waiting for other jobs to finish...
+ │ error: could not compile `serde_json` (build script) due to 1 previous error
+ │ error: could not compile `quote` (build script) due to 1 previous error
+ │ error: could not compile `proc-macro2` (build script) due to 1 previous error
+ │ error: could not compile `serde_core` (build script) due to 1 previous error
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+
+Error: 
+   0: `cd "/private/tmp/verify-chain-20261111T080154Z/contracts/nectar-core" && env -u CARGO_ENCODED_RUSTFLAGS CARGO_NEAR_ABI_GENERATION="true" CARGO_NEAR_ABI_SCHEMA_VERSION="0.4.0" CARGO_NEAR_VERSION="cargo-near-build 0.11.5" CARGO_PROFILE_DEV_DEBUG="0" CARGO_PROFILE_DEV_LTO="off" CARGO_PROFILE_DEV_OPT_LEVEL="0" CARGO_TARGET_DIR="/private/tmp/verify-chain-20261111T080154Z/target/cargo-near-abi" NEP330_BUILD_INFO_BUILD_COMMAND="[\"cargo\",\"near\",\"build\",\"non-reproducible-wasm\"]" NEP330_BUILD_INFO_OUTPUT_WASM_PATH="/private/tmp/verify-chain-20261111T080154Z/target/near/nectar_core/nectar_core.wasm" NEP330_VERSION="0.1.0" RUSTFLAGS="-Awarnings" RUSTUP_TOOLCHAIN="1.95.0-aarch64-apple-darwin" "/Users/lemmalabs/.rustup/toolchains/1.95.0-aarch64-apple-darwin/bin/cargo" "build" "--message-format=json-render-diagnostics" "--features" "near-sdk/__abi-generate" "--color" "never"` failed with exit code: Some(101)
+
+Location:
+   cargo-near-build/src/cargo_native/compile.rs:216
+exit=1
