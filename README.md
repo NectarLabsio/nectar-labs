@@ -1,6 +1,6 @@
 # Nectar Labs: committed buyers, higher limits
 
-> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Gates (docs/EVIDENCE.md): G1, G2, G3 PASS (P0) · G4 OutLayer PASS · G6 1Click depth PASS · G5 oracle FALLBACK (disclosed): owner oracle in use · G8 copilot PASS (fixture) · v7: G1 (v7) PASS, G10 PASS (open items), G12 Base toolchain PASS on a local fork of Base Sepolia (not Base Sepolia, D-026) · after the 2026-11-11 security fix wave (D-027, [SECURITY.md](SECURITY.md)) the verifier re-ran on contract `2.2.1-v7`: G11 PASS, G2b nectar-core-v2 deploy PASS, G7 Solana + signer round trip PASS, G14 x402 PASS for the chain claims (its HTTP 402 → 200 step was not re-run by the verifier), G3b web PASS, G13 Base round trip PASS on the local fork · G9 pending. Not audited.**
+> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Gates (docs/EVIDENCE.md): G1, G2, G3 PASS (P0) · G4 OutLayer PASS · G6 1Click depth PASS · G5 oracle FALLBACK (disclosed): owner oracle in use · G8 copilot PASS (fixture) · v7: G1 (v7) PASS, G10 PASS (open items), G12 Base toolchain PASS on a local fork of Base Sepolia (not Base Sepolia, D-026) · after the 2026-11-11 security fix wave (D-027, [SECURITY.md](SECURITY.md)) the verifier re-ran on contract `2.2.1-v7`: G11 PASS, G2b nectar-core-v2 deploy PASS, G7 Solana + signer round trip PASS, G14 x402 PASS for the chain claims (its HTTP 402 → 200 step was not re-run by the verifier), G3b web PASS, G13 Base round trip PASS on the local fork · G9: first fresh-clone run FAIL (2026-11-11, c5f6349) for one reason, NEAR Hackathon wording on a docs-site page, since removed; every command and claim check in it passed; re-run pending. Not audited.**
 
 Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nectar Labs makes exit liquidity
 *committed*. Market makers escrow time-locked quotes (Pappus) on NEAR. Borrowers get a higher limit
@@ -28,7 +28,7 @@ The current contract is `nectar-core-v2.nectar.testnet` (v7, deployed beside v1,
 | oracle | owner oracle on nectar-core-v2 (`update_owner_price`) | **owner oracle (disclosed)**, badge in UI | in use for NVDAx. The Pyth path is built and sandbox-tested (staleness, confidence and band checks; F-173, D-015) but is not live: Hermes returns 401 without an API key (C-007, handoff H13) and `price-oracle.testnet` does not serve NVDA (C-012). **G5: FALLBACK (disclosed).** Current value: run `pnpm demo:testnet` |
 | settlement discount fallback | quote's `max_discount_bps` | **fallback** | used when the quoter fails or is denied (G4 addendum run C, request 15145; G4 run A) |
 | 1Click depth | `dry: true` quotes on the 1Click API (F-060) | read-only, signed quotes | **G6 PASS.** NVDAx has no 1Click route (F-063), so `D_c` = 0. The Feed shows signed dry-quote depth for a reference pair (wNEAR → USDC) at $500, $1,000 and $2,000. Nothing is ever deposited (Q-007) |
-| Feed REST / MCP + agent skill tools | local (`pnpm --filter feed start`) | read-only, no keys | built and runs locally; no public host. Tools: `get_exit_capacity`, `preview_borrow`, `list_quotes`, `explain_limit`, `open_protected_stock_loan` (returns an unsigned call), `quote_capacity`; `get_note` and `build_self_settle` still return `not_available`. No gate has run the MCP server with an agent client |
+| Feed REST / MCP + agent skill tools | local (`pnpm --filter feed start`) | read-only, no keys | built and runs locally; no public host. Tools: `get_exit_capacity`, `preview_borrow`, `list_quotes`, `explain_limit`, `open_protected_stock_loan` (returns an unsigned call), `quote_capacity`; `get_note` and `build_self_settle` still return `not_available`. In the G9 fresh-clone run a scripted JSON-RPC client used it over stdio and HTTP with no env: 8 tools listed, `get_exit_capacity` equal to `pnpm demo:testnet` (EVIDENCE §G9, Feed MCP step PASS). No LLM agent client has been tested |
 | NEAR AI copilot | web app panel (`apps/web/lib/copilot/`) | P2; NEAR AI Cloud (F-070) | **built; no live NEAR AI answer has been verified yet.** Live mode needs key H7, and NEAR AI Cloud returned 500 on 2026-11-09 (F-078). The panel shows an answer only after the signature and attestation checks pass; otherwise it shows "unverified — hidden". Tests (`pnpm --filter web test:copilot`, `e2e/copilot.spec.ts`) run on a fixture built from a real Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording. Intel DCAP quote verification runs on the server (F-073); EIP-191 signer recovery and report_data/nonce checks run in the browser (F-075, F-076). **G8: PASS (fixture), 2026-11-09T23:56Z** |
 | Web app on v2 | `pnpm --filter web dev` | UI | G3b re-run after D-027 and the design port (WO-33): PASS (EVIDENCE §G3b, 2026-11-11, recorded in 5083d30): e2e 392 passed / 0 failed / 82 skipped, accessibility ≥ 90 on all 22 route/theme pairs (home light 97), no horizontal scroll at 400 px. The vault v2 screens (withdraw, claim, Re-sign settlement, claim owed collateral; WO-34w) passed their **mocked** E2E tests in that run on desktop and phone (`e2e/remote.spec.ts`, describe "Solana remote borrow (mocked)": :382 withdraw, :401 withdraw remainder, :411/:437/:446 claim, :453/:465 Re-sign, :472 owed collateral; log `evidence/G3b/verifier-rerun-d027-20261111T0802Z/e2e.log`). Only screenshot capture was not run: the `remote screenshots` block (`REMOTE_SCREENS` unset, 14 per project) and the notes screenshots in `e2e/notes.spec.ts` (`NOTES_SCREENS` unset) |
 | Mainnet, real xStocks, keeper bonds, DAO owner | — | **PROD-only** | not in this repo |
@@ -44,12 +44,13 @@ The current contract is `nectar-core-v2.nectar.testnet` (v7, deployed beside v1,
 Demo state on v2 (EVIDENCE §G2b re-run, 2026-11-10T16:52Z): pool $36,500 available / $13,500 utilised; quotes #0 $5,000 @ 400 bps, #1 $10,000 @ 250 bps,
 #2 $629.56 @ 300 bps; positions #0 and #1 Open, #2 and #3 Closed (the G7 round trip). Since then: position #4 (G14 agent borrow), and the module runs (evidence/v7-modules/summary.md) self-settled
 position #0 and added quote #3 ($5,000 @ 450 bps), Shield position #5 and Reserve Note `r-NVDAx-0`. Live state is not hard-coded here;
-current value: run `pnpm demo:testnet`. All tokens are mocks with no value.
+current value: run `pnpm demo:testnet`. On 2026-11-11 it showed pool $40,791 available / $9,209 utilised, quotes #0–#4, positions #0–#13 with #1, #4, #5 and #13 Open
+(EVIDENCE §G9). All tokens are mocks with no value.
 
 ## Quick start (5 commands, no keys needed)
 ```
 git clone <repo-url> nectar-labs && cd nectar-labs   # repo URL TODO-H2 (private until published)
-pnpm i                       # warm store: 9 s in the rehearsal; a cold machine takes longer
+pnpm i                       # warm store: 7 s in the G9 run; a cold machine takes longer
 pnpm demo:testnet            # read-only nectar-core views over public testnet RPC
 pnpm verify                  # lint + typecheck + unit tests, then the testnet views again
 pnpm --filter web dev        # web app on http://localhost:3100
@@ -61,13 +62,21 @@ pnpm --filter docs-site start   # docs dev server on http://localhost:3000
 pnpm --filter feed start        # Feed REST on :8788, MCP over HTTP at http://127.0.0.1:8789/mcp; no env needed
 pnpm -s --filter feed mcp          # Feed MCP over stdio (read-only tools; see services/feed/README.md)
 ```
-What works today (2026-11-10): all five commands (the repo URL in the first one is TODO-H2). Rehearsal timings are in
-[docs/EVIDENCE.md](docs/EVIDENCE.md): `pnpm i` 9 s on a warm pnpm store (a cold machine is slower), `pnpm verify` 39 s.
+What works today (2026-11-11, [docs/EVIDENCE.md](docs/EVIDENCE.md) §G9, fresh clone of c5f6349): all five commands (the repo URL in the first one is TODO-H2);
+clone to a running web app took about 3 min. Timings: `pnpm i` 7 s on a warm pnpm store (a cold machine is slower), `pnpm demo:testnet` 5 s, `pnpm verify` 18 s,
+`pnpm --filter docs-site build` 9 s. G9 was recorded FAIL for one docs-site wording issue, not for any of these commands.
 `pnpm demo:testnet` runs `scripts/50-verify.sh`, which runs `scripts/demo-testnet.mjs`: it reads the ids from `config.yaml`
 and calls nectar-core views over public testnet RPC (default `https://test.rpc.fastnear.com`, D-025; no keys, no near CLI; override the RPC with `NEAR_RPC_URL`).
-`pnpm --filter web dev` starts the web app on port 3100 (G3 PASS). Without `CORE_ACCOUNT_ID` the Feed does not poll the
-contract and its MCP tools read the local Feed SQLite store; registering the MCP server with a client is described in
-services/feed/README.md and the docs-site page "Feed MCP". Node ≥ 22.22.2, pnpm 10.34.9.
+`pnpm --filter web dev` starts the web app on port 3100 (G3 PASS). Pages: `/` (landing), `/borrow`, `/feed`, `/feed/NVDAx`, `/quote/new`, `/console`,
+`/notes`, `/reserve`, `/shield`, `/agents`, `/keepers`, `/security`, `/talk`, `/docs`, `/legal/privacy` (also `cookies`, `terms`, `disclaimers`), and per-object
+pages `/position/<id>`, `/quote/<id>`, `/note/<token id>` (e.g. `/note/q-0`). There is no `/markets` or `/earn`.
+The Feed needs no env: it takes the nectar-core id from `accounts.core` in `packages/config/config.yaml` (now `nectar-core-v2.nectar.testnet`; `CORE_ACCOUNT_ID`
+overrides it) and polls that contract over public RPC (EVIDENCE §G9: `feed_started` with `core nectar-core-v2.nectar.testnet`). Optional: `FEED_PORT` (REST,
+default 8788), `FEED_MCP_PORT` (MCP over HTTP, default 8789; `off` disables it), `FEED_DB_PATH` (default `~/.nectar/feed.sqlite`). If a port is already taken,
+`feed start` exits with `EADDRINUSE`. All variables: services/feed/README.md.
+MCP client: the registration snippets (Claude Code stdio and HTTP, Claude Desktop JSON) are in
+[services/feed/README.md § Register the MCP server](services/feed/README.md#register-the-mcp-server), also on the docs-site page Integrate › Feed MCP.
+A raw HTTP client must send `accept: application/json, text/event-stream`. Node ≥ 22.22.2, pnpm 10.34.9.
 
 
 ## v7 in progress (not on testnet)
@@ -98,12 +107,12 @@ Proposed track list for the submission (Kunal decides, handoff H16): `defi`, `se
 `defi`: a new credit primitive (committed exit liquidity as a limit input).
 `security`: contract-built preimage, pinned TEE program, keeper with a function-call key only, oracle staleness and band checks, weekend guard that can only close; a pre-submission review whose high and medium findings were fixed or are disclosed as partial in SECURITY.md (not an audit).
 `privacy`: market-maker parameters stay inside the TEE; the copilot shows an answer only after signature and attestation checks pass (G8 PASS on a fixture; no live NEAR AI answer verified yet: key H7 absent, NEAR AI Cloud 500 on 2026-11-09); analytics off by default and consent-gated; self-hosted fonts.
-`agents`: an agent account borrowed and paid for a Feed export with x402 on testnet (G14 PASS). The Feed MCP server is built and read-only, but no gate has run it with an agent client.
+`agents`: an agent account borrowed and paid for a Feed export with x402 on testnet (G14 PASS). The Feed MCP server is built and read-only; G9 ran it with a scripted JSON-RPC client over stdio and HTTP (EVIDENCE §G9), not with an LLM agent.
 `nfts`: Position Notes (NEP-171) are minted on testnet for every quote, position and Reserve deposit (EVIDENCE §G2b, §G14).
 `realworld` is not proposed: `pay_to` has no testnet run.
 
 ## Evidence
-[docs/EVIDENCE.md](docs/EVIDENCE.md) records every gate with its commands, outputs and explorer links. Status on 2026-11-11: G0–G4 and G6 PASS, G8 PASS (fixture), G5 FALLBACK (disclosed; live Pyth waits on H13), G1 (v7) PASS, G10 PASS with open items, G12 PASS (local fork of Base Sepolia, D-026), G9 pending. After the security fix wave (D-027) the verifier re-ran on contract 2.2.1-v7: G2b, G7, G13 (local fork) and G14 PASS (recorded in commit b8784c1; the G14 HTTP 402 → 200 step was not re-run by the verifier and rests on the orchestrator log in evidence/G14/rerun/, verifier record pending), then G11 and G3b PASS (recorded in commit 5083d30; the G1 check that every contract method has a gas row was not run on 2.2.1, verifier record pending). The Shields / Profit-Lock / Reserve runs (evidence/v7-modules/summary.md) have their resulting state checked in EVIDENCE §v7 module runs (2bf99e1); the Profit-Lock event is not chain-confirmed.
+[docs/EVIDENCE.md](docs/EVIDENCE.md) records every gate with its commands, outputs and explorer links. Status on 2026-11-11: G0–G4 and G6 PASS, G8 PASS (fixture), G5 FALLBACK (disclosed; live Pyth waits on H13), G1 (v7) PASS, G10 PASS with open items, G12 PASS (local fork of Base Sepolia, D-026), G9 FAIL (2026-11-11T08:43Z–08:50Z, c5f6349) for one reason only: NEAR Hackathon wording on the docs-site Evidence page, now removed; the quick start, `pnpm verify`, docs build, gitleaks (268 commits), Feed MCP and claim checks passed; re-run pending. After the security fix wave (D-027) the verifier re-ran on contract 2.2.1-v7: G2b, G7, G13 (local fork) and G14 PASS (recorded in commit b8784c1; the G14 HTTP 402 → 200 step was not re-run by the verifier and rests on the orchestrator log in evidence/G14/rerun/, verifier record pending), then G11 and G3b PASS (recorded in commit 5083d30; the G1 check that every contract method has a gas row was not run on 2.2.1, verifier record pending). The Shields / Profit-Lock / Reserve runs (evidence/v7-modules/summary.md) have their resulting state checked in EVIDENCE §v7 module runs (2bf99e1); the Profit-Lock event is not chain-confirmed.
 The docs site (`apps/docs-site`) carries the spec, and every protocol page has a "Verified against" line citing FACTS ids.
 
 ## Security
