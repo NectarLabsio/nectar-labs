@@ -1621,3 +1621,167 @@ fn relay_release_without_request() {
     set_ctx(keeper(), 0, T0 + 12 * SEC);
     c.relay_release_result(U64(0), TX.into());
 }
+
+// WO-35c (reviewer N1): a remote settlement makes no ft_transfer, so its trigger budget carries none.
+
+const QUOTER_DEPOSIT: u128 = 100;
+const PYTH_FEED: &str = "B1073854ED24CBC755DC527418F52B7D271F6CC967BBF8D8129112B18860A593";
+
+/// Remote position 0, unhealthy at 140, with 8 distinct-buyer candidates that each close it alone. Deployed gas settings
+/// (quoter 80, signer 30), quoter pinned. Budgets: Pyth 10 + callback 10 + quoter leg 105 + sign leg 45 + margin 5.
+fn remote_eight_buyers(pyth: bool) -> Nectar {
+    let mut c = base(true);
+    for i in 0..8u16 {
+        fund(&mut c, &format!("buyer{i}.test"), 15_000_000_000, 250 + i * 10, true);
+    }
+    assert_eq!(reserve(&mut c, T0 + SEC), 0);
+    authority_cb(&mut c, 0, key_result(&auth()));
+    confirm(&mut c, 0, T0 + 2 * SEC);
+    verified(&mut c, 0, T0 + 2 * SEC, vault_json(0, UNITS, AUTH_B58, DEPOSITOR));
+    drop_price(&mut c);
+    set_ctx(owner(), 0, T0 + 4 * SEC);
+    c.set_signer_config(a("v1.signer-prod.testnet"), "solana-devnet-v1".into(), 30, 3600);
+    c.set_quoter_config(U128(QUOTER_DEPOSIT), 80, U64(100_000_000), 128, 30);
+    c.set_quoter_pin("owner.testnet/nectar-quoter".into(), "ab".repeat(32));
+    c.set_vol_bps("NVDAx".into(), 420);
+    if pyth {
+        c.set_oracle_source("NVDAx".into(), OracleSource::Pyth { account: a("pyth.test"), price_identifier: PYTH_FEED.into() });
+    }
+    c
+}
+
+fn trigger_tgas(c: &mut Nectar, tgas: u64) {
+    ctx_gas(keeper(), 0, T0 + 5 * SEC, tgas);
+    c.trigger_preliquidation(U64(0));
+}
+
+fn cb_ctx_gas(tgas: u64, result: PromiseResult) {
+    let mut b = VMContextBuilder::new();
+    b.current_account_id(core()).predecessor_account_id(core()).block_timestamp(T0 + 5 * SEC).prepaid_gas(Gas::from_tgas(tgas));
+    testing_env!(
+        b.build(),
+        near_sdk::test_vm_config(),
+        near_sdk::RuntimeFeesConfig::test(),
+        Default::default(),
+        vec![result]
+    );
+}
+
+/// The store maps flush on Drop: end a tight-gas test on a fresh context, or the test's own teardown runs out of gas.
+fn fresh_ctx_for_drop() {
+    set_ctx(owner(), 0, T0 + 6 * SEC);
+}
+
+fn remote_pyth_callback(c: &mut Nectar, tgas: u64) {
+    let body = format!(r#"{{"price":"14000000000","conf":"1000000","expo":-8,"publish_time":{}}}"#, (T0 + 5 * SEC) / SEC);
+    cb_ctx_gas(tgas, PromiseResult::Successful(body.into_bytes()));
+    c.on_pyth_price(U64(0));
+}
+
+#[test]
+fn settlement_cost_is_one_yocto_and_no_transfer_for_remote() {
+    let c = remote_eight_buyers(false);
+    let p = c.position(0).unwrap();
+    let cands = c.select_quotes_for(&p, &c.coll("NVDAx").unwrap());
+    assert_eq!(cands.len(), 8);
+    assert_eq!(c.settlement_cost(&p, &cands), (0, 1));
+    let mut near_held = p;
+    near_held.remote = None;
+    assert_eq!(c.settlement_cost(&near_held, &cands), (10, 10), "8 distinct buyers + keeper + borrower");
+}
+
+#[test]
+fn remote_pyth_quoter_budget_carries_no_transfers() {
+    let mut c = remote_eight_buyers(true);
+    trigger_tgas(&mut c, 190); // floor 175 + the two receipts' fees; was 325 with 10 transfers, above the 300 cap
+    assert!(event_with("pyth_price_requested", ""));
+    assert_eq!(c.position(0).unwrap().status, PositionStatus::Settling);
+    fresh_ctx_for_drop();
+}
+
+#[test]
+#[should_panic(expected = "attach more gas")]
+fn remote_pyth_quoter_budget_still_covers_quoter_and_sign() {
+    let mut c = remote_eight_buyers(true);
+    trigger_tgas(&mut c, 175);
+}
+
+#[test]
+fn remote_pyth_static_budget_carries_no_transfers() {
+    let mut c = remote_eight_buyers(true);
+    set_ctx(owner(), 0, T0 + 4 * SEC);
+    c.set_quoter_pin(String::new(), String::new());
+    trigger_tgas(&mut c, 85); // floor 70 (Pyth 10 + callback 10 + sign leg 45 + margin 5) + receipt fees; was 220
+    assert!(event_with("pyth_price_requested", ""));
+    fresh_ctx_for_drop();
+}
+
+#[test]
+#[should_panic(expected = "attach more gas")]
+fn remote_pyth_static_budget_still_covers_sign() {
+    let mut c = remote_eight_buyers(true);
+    set_ctx(owner(), 0, T0 + 4 * SEC);
+    c.set_quoter_pin(String::new(), String::new());
+    trigger_tgas(&mut c, 70);
+}
+
+#[test]
+fn remote_quoter_budget_carries_no_transfers() {
+    let mut c = remote_eight_buyers(false);
+    trigger_tgas(&mut c, 200); // floor 150 (quoter leg 105 + sign leg 45); was 300
+    assert!(event_with("quoter_requested", "\"quotes\":8"));
+    fresh_ctx_for_drop();
+}
+
+#[test]
+#[should_panic(expected = "attach more gas")]
+fn remote_quoter_budget_still_covers_quoter_and_sign() {
+    let mut c = remote_eight_buyers(false);
+    trigger_tgas(&mut c, 150);
+}
+
+#[test]
+fn remote_pyth_callback_starts_quoter_within_budget() {
+    let mut c = remote_eight_buyers(true);
+    trigger_tgas(&mut c, 300);
+    remote_pyth_callback(&mut c, 200); // floor 150; was 300
+    assert!(event_with("quoter_requested", "\"quotes\":8"));
+    assert_eq!(c.position(0).unwrap().status, PositionStatus::Settling);
+    fresh_ctx_for_drop();
+}
+
+#[test]
+fn remote_pyth_callback_short_of_gas_aborts_unspent() {
+    let mut c = remote_eight_buyers(true);
+    trigger_tgas(&mut c, 300);
+    let before = c.gas_reserve_yocto;
+    remote_pyth_callback(&mut c, 150);
+    assert!(event_with("settlement_aborted", "attach more gas"));
+    assert_eq!(c.position(0).unwrap().status, PositionStatus::Open);
+    assert_eq!(c.gas_reserve_yocto, before, "no deposit spent");
+}
+
+#[test]
+fn remote_quoter_run_leaves_the_sign_yocto() {
+    let mut c = remote_eight_buyers(false);
+    c.gas_reserve_yocto = QUOTER_DEPOSIT + 1;
+    trigger_tgas(&mut c, 300);
+    assert!(event_with("quoter_requested", "\"quotes\":8"));
+    assert_eq!(c.gas_reserve_yocto, 1);
+    cb_ctx_gas(65, PromiseResult::Failed); // the callback's minimum: base 20 + sign leg 45
+    c.on_quoter_result(U64(0), "00".into(), (0..8).map(U64).collect());
+    assert!(event_with("quoter_fallback", "failed"));
+    assert_eq!(c.gas_reserve_yocto, 0);
+    assert_eq!(c.pending(0).unwrap().status, PendingStatus::AwaitingSignature);
+    fresh_ctx_for_drop();
+}
+
+#[test]
+fn remote_quoter_one_yocto_short_falls_back_and_signs() {
+    let mut c = remote_eight_buyers(false);
+    c.gas_reserve_yocto = QUOTER_DEPOSIT;
+    trigger_tgas(&mut c, 300);
+    assert!(event_with("quoter_fallback", "gas_reserve_short"));
+    assert_eq!(c.gas_reserve_yocto, QUOTER_DEPOSIT - 1);
+    assert_eq!(c.pending(0).unwrap().status, PendingStatus::AwaitingSignature);
+}
