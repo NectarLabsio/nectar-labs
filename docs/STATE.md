@@ -31,8 +31,11 @@
   - WO-34e2: privacy + cookies from the inventory (10 third-party hosts, all listed; per-wallet table; unpinned-manifest caveat); H-KEYS keeper-only.
 - **G3b re-run 3 on d4218d4: FAIL** (fdd2cee). Live e2e: 1 failure per run, both FastNEAR -429 (/api/health, list_quotes). Every WO-34 addition
   passed: hosts 6/6, inventory 0 CSP violations 6/6 wallets, crawl 0/0, LH 20×2 = 100, guard refuses null fields. → docs/GATE_FAIL_G3B_R3.md.
-- Running: WO-34g web (cross-provider RPC fallback dRPC/Intear per F-369, health ≤ 60 s stale snapshot, live-spec retries). Then docs adds the
-  fallback hosts to privacy, then G3b re-run 4 on the new code-final commit.
+- MERGED:
+  - WO-34g: SDK order FastNEAR ×2 → dRPC → Intear; health ≤ 60 s stale snapshot; live-spec retries. The agent's e2e: 476/0 twice with host services
+    running.
+  - Privacy lists the fallbacks (14 hosts, 12 third-party). F-413 (providers page re-read + probe).
+- **Code-final commit: fd06e11.** Running: G3b re-run 4 (verifier, fresh clone).
 - Deploy scripts ready: scripts/deploy/deploy-{vercel,railway}.sh (598a4a3). They need H-HOST logins.
 - Then:
   - Deploy the G3b-passed commit, after H-HOST + H-LEGAL (+ H-DOMAIN or the vercel.app default).
@@ -175,7 +178,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T22:13:35Z · commit 598a4a3
+Last activity: 2026-11-11T22:58:54Z · commit d0e2fbc
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
