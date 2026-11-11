@@ -38,8 +38,17 @@
 - **G3b re-run 4 on fd06e11: PASS**. GATE_FAIL_G3B_R3 RESOLVED.
   - e2e 476/0/106 twice with no retries; site-pages 38/38; screens 46/46 ×2; hosts 6/6.
   - Inventory: 14 hosts = privacy, 0 CSP violations, 6/6 wallets. Polite crawl 0/0. LH 40/40 = 100. Guard OK. `pnpm verify` 0.
-  - **fd06e11 is the deploy commit.** Waiting on Kunal: H-HOST (logins + Railway plan), H-LEGAL, H-DOMAIN, H-KEYS.
-  - Running: WO-34h docs (real-wallet borrow steps, `<APP_URL>` placeholder).
+  - Waiting on Kunal: H-HOST (logins + Railway plan), H-LEGAL, H-DOMAIN, H-KEYS.
+  - WO-34h MERGED (4d113a1): DEMO_SCRIPT "Real-wallet borrow on the hosted app". The owner (nectar.testnet) must storage_deposit usdc-mock + nvdax-mock
+    and mint 2 NVDAx for Kunal's account first.
+- **On H-LEGAL:**
+  1. Orchestrator fills config.yaml `site:`.
+  2. Docs agent replaces every `TODO-H-LEGAL` in legal/*.md.
+  3. G3b re-run 5 on that commit. Operator text changes rendered pages, so fd06e11 alone is not deployable because the production guard refuses null
+     fields.
+  4. Deploy that commit.
+- Deploy env, non-secret: SITE_URL, APP_URL, DOCS_URL, DOCS_ORIGIN (web) / DOCS_ORIGIN_URL (docs build, = APP origin), FEED_URL, REPO_URL="",
+  NEXT_PUBLIC_EXPLORER_TX (explorer tx link). NEAR_AI_API_KEY only if Kunal adds it himself.
 - Deploy scripts ready: scripts/deploy/deploy-{vercel,railway}.sh (598a4a3). They need H-HOST logins.
 - Then:
   - Deploy the G3b-passed commit, after H-HOST + H-LEGAL (+ H-DOMAIN or the vercel.app default).
@@ -182,7 +191,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T23:02:38Z · commit f7ba775
+Last activity: 2026-11-11T23:45:31Z · commit dd06cb7
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
