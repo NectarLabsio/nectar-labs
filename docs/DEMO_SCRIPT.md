@@ -1,8 +1,8 @@
 # DEMO_SCRIPT.md v4 — 3 minutes, exact clicks and commands (2026-11-11)
 
-Shows only what docs/EVIDENCE.md records (gate table as of commit b8784c1): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
-G8 PASS on a fixture (no live NEAR AI answer) · G3b web on v2 PASS (2026-11-10T17:48Z, before the vault v2 screens) · re-runs after the
-D-027 security rollout, 2026-11-11T08:02Z–08:25Z, on `2.2.1-v7`: G2b PASS, G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
+Shows only what docs/EVIDENCE.md records (gate table as of commit 5083d30): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
+G8 PASS on a fixture (no live NEAR AI answer) · re-runs after the D-027 security rollout, 2026-11-11T08:02Z–08:25Z, on `2.2.1-v7`:
+G11 PASS (every SR-1…SR-33 has a named test), G2b PASS, G3b PASS (design port; remote screen spec skipped), G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
 Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims (the HTTP 402 → 200 leg was not re-run by the verifier) · G9 pending.
 The contract on camera is **`nectar-core-v2.nectar.testnet`** at `2.2.1-v7` (ids in `packages/config/config.yaml`; review findings and what
 remains open in SECURITY.md). v1 (`nectar-core.nectar.testnet`) is the earlier deployment, kept as evidence; it is not shown.
@@ -56,10 +56,10 @@ nectar-core-v2 points at an address with no code.
 The G13 re-run record on the fork (positions 11 and 12) is gone with the old fork; their NEAR side still answers.
 
 ### 4. Price walk and remote quotes
-- The owner price moves at most 1,500 bps per call (config.yaml `oracle.band_bps`). An out-of-band call emits `oracle_rejected` and leaves the
-  price unchanged. Both `reserve` subcommands set a price without printing the result (`58 … reserve` sets $180, `62 … reserve` sets $150), so walk
-  there first with `bash scripts/58-g7-v2.sh price <usd_e6>`: from $135, `155000000` then `178000000`; from $150 (after a Base reserve), `172000000`.
-  $150 is in band from $135, so run any Base leg before the Solana reservation. This is the owner oracle, a disclosed testnet demo control.
+- Owner price (the owner oracle, a disclosed testnet demo control): one update may move it at most 1,500 bps (config.yaml `oracle.band_bps`).
+  `reserve` and `price` in `58-g7-v2.sh` and `62-g13-base.sh` walk to the target in ≤ 14% steps, print each step and exit non-zero if a step
+  is rejected, so no manual walk is needed. `58 … reserve` targets $180 and `62 … reserve` $150. Run any Base leg before the Solana reservation:
+  a Base reserve after `#R` is open walks the price down to $150 and can trigger `#R` early (the G7 re-run triggered at $160).
 - `bash scripts/58-g7-v2.sh prep` (Solana) and `bash scripts/62-g13-base.sh setup` (Base) each fund a fresh $1,000 quote for buyer1, after an
   owner mint, when the matching remote quote has less than $1,000 left. With the snapshot above both fund one. Note the new quote ids.
 
@@ -76,7 +76,7 @@ Subcommands of `bash scripts/58-g7-v2.sh` (Solana devnet). `scripts/62-g13-base.
    keeper sends `keeper_attest_deposit` instead (labelled). Then `show #R`.
 5. The leg ends one of two ways:
    - repay: `repay #R` → `release #R` → the keeper relays `[Ed25519 verify, release]` and calls `relay_release_result` → `withdraw #R`;
-   - price drop (the camera path): `price <usd_e6>` in band steps (G7 re-run: 180 → 160) → keeper `preliq_triggered` → `quoter_result` →
+   - price drop (the camera path): `price <usd_e6>`, walked in ≤ 14% steps (G7 re-run: 180 → 160) → keeper `preliq_triggered` → `quoter_result` →
      `settlement_signed` → the keeper relays `[Ed25519 verify, settle]` and calls `relay_settlement_result` → `withdraw #R`. The depositor pulls the
      remainder; if the settle took every unit, `withdraw` closes the slot and returns its rent.
    Vault v2 pays by pull: nothing reaches the depositor until `withdraw`. On Base, `settle` and `release` still push the tokens (SR-4 is open for
@@ -92,8 +92,8 @@ leg with `62` before the Solana reservation: `reserve 3000000` → `check` → `
 - Local quotes only if drained: `bash scripts/40-seed-demo.sh` (registers accounts, supplies $50,000 to the pool, buyer1 $10,000 @ 250 bps, buyer2
   $5,000 @ 400 bps, a borrower1 position on 100 NVDAx), then `bash scripts/41-seed-v2-fixup.sh` (skips buyer1's quote when a 250 bps one exists, and
   always opens one more borrower1 position). Both add state on top of what is there; skip them while the local quotes above remain.
-- **buyer2 needs mock USDC for the 0:30 segment** (0 in the snapshot). No script mints for buyer2 alone: the owner faucet call is the usdc-mock
-  `mint` in `scripts/40-seed-demo.sh` ("mint mocks"). Running the whole script also seeds the pool, two quotes and a position.
+- **buyer2 needs mock USDC for the 0:30 segment** (0 in the snapshot): `bash scripts/42-mint-usdc.sh buyer2 <amount_usd_e6>`, for example
+  `5000000000` = $5,000. It mints mock USDC to that one account (owner key) and prints the new balance; nothing else is seeded.
 - Modules: `bash scripts/61-v7-modules-testnet.sh shield` or `… reserve` only if those screens need fresh state. `profitlock <id>` needs an open
   position (its default #0 is closed).
 - Quoter: `bash scripts/30-quoter-publish.sh pin` only if `get_quoter_config` shows the quoter disabled or a version_key other than config.yaml
@@ -116,7 +116,7 @@ No hackathon name, badge or banner in any segment. Captions say "testnet", "mock
 | 0:00 | `/feed` | "Lenders cap tokenized-stock LTV because DEX exit is revocable. Here market makers escrowed committed exit capacity." Point to `Q_c`, the equation card `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))`, the shared capacity and headroom (aggregate limit), and the session badge (Weekend Oracle Guard). Oracle badge: "owner oracle, disclosed". 1Click panel: NVDAx has no route, so `D_c` = 0. Nothing is deposited. |
 | 0:30 | `/quote/new` (buyer2) | An amount buyer2 holds (step 6), 200 bps, 7-day notice. Sign `FundPappusQuote` → toast "Quote funded" → `Q_c` is higher on `/feed`; the Quote Note `q-…` is listed under `/notes`. |
 | 0:50 | `/borrow` (borrower1) | 50 NVDAx. Static limit vs Nectar limit, premium, origination fee (30 bps), health preview. Borrow between the two bars and inside the aggregate headroom shown on `/feed` (check before recording). Sign `LockCollateralAndBorrow` → position page with its Note `p-…`. |
-| 1:15 | `/console` (owner) | "Testnet demo control, disclosed." Say: "`#R` was reserved before recording. The borrower named its Solana wallet as the depositor and paid a 0.05 NEAR reservation deposit; OutLayer read the vault deposit before the loan was funded." Lower the owner price in band-sized steps until `#R` is triggerable (read the health on `/position/#R`; off camera, `scripts/58-g7-v2.sh price` does the same). |
+| 1:15 | `/console` (owner) | "Testnet demo control, disclosed." Say: "`#R` was reserved before recording. The borrower named its Solana wallet as the depositor and paid a 0.05 NEAR reservation deposit; OutLayer read the vault deposit before the loan was funded." Lower the owner price in band-sized steps until `#R` is triggerable (read the health on `/position/#R`; off camera, `bash scripts/58-g7-v2.sh price <usd_e6>` walks there in ≤ 14% steps). |
 | 1:30 | keeper terminal (running since step 2) | Log line `preliq_triggered` for `#R`. "The keeper has a function-call key. It sends a position id, nothing else." `curl -s localhost:8790/runs`. |
 | 1:45 | nearblocks (trigger tx from the keeper log) | `quoter_requested` → OutLayer `execution_completed` → `quoter_result` (fills per quote) → `settlement_signed`. "The TEE priced the fill; the contract built the message; Chain Signatures signed it with this position's own key." If the run differs, open the trigger tab `6TKH53Xp…` and say "recorded run". |
 | 2:05 | keeper log → Solana Explorer → terminal | Keeper `solana_tx_sending` → `solana_tx_confirmed` → `solana_leg_relayed`: `[Ed25519 verify, settle]` to `nectar_vault` on devnet. In the Solana tx: ix0 Ed25519SigVerify (pubkey = the position's derived key, message = the NEAR preimage), ix1 the vault's settle. Then `bash scripts/58-g7-v2.sh withdraw #R`: "The buyer was paid in the settle. The vault pays the depositor by pull, so the borrower withdraws the remainder." `/position/#R` shows the Solana tx and Closed. Backup: the settle tab `3Qm6H4sW…` (position 10, then withdraw 0.613144 NVDAx). |
@@ -127,7 +127,8 @@ No hackathon name, badge or banner in any segment. Captions say "testnet", "mock
 Not in the video (not verified by a gate, or not on testnet): Feed MCP with an agent client, a live NEAR AI answer, a live Pyth price, the
 corporate-action multiplier, `pay_to`, referrers, real Base Sepolia (H15), the Base web screens (`features.base: false`). On testnet but left out
 for time: the x402 payment (G14 re-run PASS for the chain claims), the Shield / Profit-Lock / Reserve runs (chain-checked by the verifier, EVIDENCE
-§v7 module runs; the Profit-Lock event is not chain-confirmed), and the web withdraw / claim / Re-sign screens (no verifier E2E record).
+§v7 module runs; the Profit-Lock event is not chain-confirmed), and the web withdraw / claim / Re-sign screens (the remote screen spec was skipped in the G3b re-run).
 
 Capture: `pnpm demo:capture` (Playwright `e2e/screens.spec.ts`) gives silent screens; the full take above is screen-recorded by Kunal (H11).
-Note: G3b (2026-11-10) predates the design port and the vault v2 screens; rehearse every screen on 2.2.1-v7 before recording.
+Note: the G3b re-run (2026-11-11T08:24Z) covers the design port on 2.2.1-v7, but its remote and Notes screen specs were skipped (`REMOTE_SCREENS`,
+`NOTES_SCREENS` unset), so those screens have no E2E record. Rehearse every screen before recording.

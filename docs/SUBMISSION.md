@@ -1,6 +1,6 @@
 # SUBMISSION.md — payload draft, never sent by an agent
 
-Status: **DRAFT, 2026-11-11** (prose refreshed to docs/EVIDENCE.md as of commit b8784c1). Fields follow "Submission API" in docs/HACKATHON.md (verified 2026-11-09; re-read the live
+Status: **DRAFT, 2026-11-11** (prose refreshed to docs/EVIDENCE.md as of commit 5083d30). Fields follow "Submission API" in docs/HACKATHON.md (verified 2026-11-09; re-read the live
 https://nearhackathon.com/HACKATHON.md on Nov 14 before sending, F-001). Only Kunal sends it (H1). Agents run the submit
 script with `--dry-run` only. The JSON payload holds personal data (name, email, payout account), so it is printed, never committed.
 
@@ -34,30 +34,30 @@ How NEAR fits: nectar-core-v2 (Rust, near-sdk 5.30.1, 2.2.1-v7) on NEAR testnet 
 Disclosed: collateral and USDC are mock tokens; the price comes from an owner oracle (Pyth path built and tested, no live NVDA price); testnet only, no token, no mainnet. Not audited: a pre-submission review found 33 issues (5 high); highs and mediums are fixed or listed as partial or open in SECURITY.md; Solana, Base-fork and x402 runs were repeated after the fixes. Evidence: docs/EVIDENCE.md.
 ```
 
-Claim → evidence (docs/EVIDENCE.md gate table as of b8784c1, quoted exactly; "re-run after D-027" rows are 2026-11-11T08:02Z–08:25Z, clone 3ab3026):
+Claim → evidence (docs/EVIDENCE.md gate table as of 5083d30, quoted exactly; "re-run after D-027" rows are 2026-11-11T08:02Z–08:25Z, clone 3ab3026):
 | Claim in `idea` | Gate / test |
 | --- | --- |
 | nectar-core-v2 at 2.2.1-v7 on testnet | G2b testnet deploy v2 (after D-027) PASS: `contract_version` 2.2.1-v7, rebuilt wasm byte-identical to `view_code`, code_hash `3mv4LRm6…` (open item: the rebuild needed an SDKROOT override on the verifier's host) |
-| quotes, positions, pool, fee index | G1 PASS (2026-11-09T20:43Z) · G2 PASS (20:55Z) · G1 (v7 additions) PASS (2026-11-10T14:05Z) · G11 PASS (2026-11-10T16:12Z) on earlier v7 code. G11 on 2.2.1-v7: verifier record pending |
+| quotes, positions, pool, fee index | G1 PASS (2026-11-09T20:43Z) · G2 PASS (20:55Z) · G1 (v7 additions) PASS (2026-11-10T14:05Z) · G11 v7 contract (re-run after D-027) PASS (2026-11-11T08:20Z), recorded in 5083d30: 608 unit + 50 sandbox, wasm hash = deployed 2.2.1-v7 |
 | TEE discount, cap fallback | G4 PASS (2026-11-09T22:10Z) + G4 addendum PASS (22:51Z): runs A/C fallback, run D request 15148 = 159 bps vs 400 cap. On 2.2.1-v7: G7 re-run `quoter_result` fills quote 2 at 300 bps |
 | keeper function-call key | G2b (after D-027): keeper-v2 one FunctionCall key, 5 methods, receiver nectar-core-v2 (D-019) |
 | 1Click dry, never deposited | G6 PASS (2026-11-09T22:58Z), Q-007 |
 | oracle | G5 FALLBACK (disclosed) (2026-11-09T22:55Z) |
 | Chain Signatures + Solana vault, per-position key, OutLayer deposit read | G7 Solana + signer (re-run after D-027) PASS: positions 8/9/10, authority == live `derived_public_key` (domain 1), confirms `source "outlayer"`, three finalized Solana txs with the Ed25519 ix before the vault ix, depositor withdrawals 3 / 3 / 0.613144 (vault v2). Earlier: G7 (v7) PASS (2026-11-10T16:52Z) |
 | EVM vault on a local fork of Base Sepolia | G13 Base round trip (re-run after D-027) PASS on the local fork of Base Sepolia (D-026), not Base Sepolia: positions 11 released / 12 settled, replay → `NonceUsed(14)`. G12 PASS on the fork (2026-11-10T18:04Z). ERC-8021 suffix not appended (H19); real Base Sepolia pending H15 |
-| x402 | G14 x402 (re-run after D-027) PASS for the chain claims: borrow `HvFX6…` (position #13), relay `BemztvL…`. The HTTP 402 → 200 leg was not re-run by the verifier (evidence/G14/rerun/summary.md) |
+| x402 | G14 x402 (re-run after D-027) PASS for the chain claims: borrow `HvFX6…` (position #13), relay `BemztvL…`. The HTTP 402 → 200 leg was not re-run by the verifier: verifier record pending (evidence/G14/rerun/summary.md) |
 | NEP-171 Notes | G2b PASS (2026-11-10T16:52Z) `nft_tokens` · G14 PASS (16:52Z) `nft_mint p-4` · G14 re-run `nft_mint` for position #13 |
 | copilot | G8 PASS (fixture) (2026-11-09T23:56Z) |
-| pre-submission review, SECURITY.md | not a gate: D-027, SECURITY.md, docs/work/security-review-v7.md. The fix tests (`srN_*`, `test_SR*`, keeper and x402 tests) on the deployed versions: verifier record pending |
+| pre-submission review, SECURITY.md | not a gate: D-027, SECURITY.md, docs/work/security-review-v7.md. Fix tests recorded in 5083d30 (G11 re-run after D-027): every SR-1…SR-33 has a named test, 124 contract sr* tests, Solana 10 cargo + 55 TS, forge 105 pass / 3 skip |
 | runs repeated on the fixed contract | G7, G13 (local fork) and G14 re-run after D-027 rows above |
-| web | G3b PASS (2026-11-10T17:48Z), before the vault v2 screens; not claimed in `idea` |
+| web | G3b web E2E (re-run after D-027 + design port) PASS (2026-11-11T08:24Z, recorded in 5083d30; remote screen spec skipped); not claimed in `idea` |
 
 ## Tracks — proposal for H16 (Kunal decides)
 Proposed: `defi`, `security`, `privacy`, `agents`, `nfts`. Not proposed: `realworld`. Each proposed track is backed by a gate.
 - `defi` (lending): committed exit liquidity as a limit input; G1, G2, G2b (re-run after D-027, 2.2.1-v7), G4, G6, G7 (re-run after D-027).
-- `security`: function-call keeper key (D-010/D-012/D-019; G2b re-run: 5 methods), pinned TEE program, contract-built signing preimage with a per-position derived key (D-003, D-016, F-338), oracle staleness/confidence/band checks (G5 sandbox tests), weekend guard that can only close. Pre-submission review (33 findings: 5 high, 8 medium, 20 low; D-027): highs and mediums fixed or disclosed as partial or open in SECURITY.md, not an audit. Slot-scoped nonces shown on chain: replay → `NonceUsed(14)` on the local fork (G13 re-run); fix tests on the deployed versions: verifier record pending.
+- `security`: function-call keeper key (D-010/D-012/D-019; G2b re-run: 5 methods), pinned TEE program, contract-built signing preimage with a per-position derived key (D-003, D-016, F-338), oracle staleness/confidence/band checks (G5 sandbox tests), weekend guard that can only close. Pre-submission review (33 findings: 5 high, 8 medium, 20 low; D-027): highs and mediums fixed or disclosed as partial or open in SECURITY.md, not an audit. Slot-scoped nonces shown on chain: replay → `NonceUsed(14)` on the local fork (G13 re-run); fix tests recorded in 5083d30 (G11 re-run after D-027: every SR-1…SR-33 has a named test).
 - `privacy`: market-maker inputs encrypted for the TEE (G4 addendum; disclosed: demo values, plaintext seen by OutLayer's `/secrets/pubkey`, F-167); copilot verification gate (G8 PASS fixture).
-- `agents`: an agent account opened a loan and paid 0.01 mock USDC for a Feed export through x402 on testnet (G14 PASS; re-run after D-027 PASS for the chain claims, HTTP leg not re-run by the verifier). The Feed MCP server is built and read-only, but no gate has run it with an agent client; say so if asked.
+- `agents`: an agent account opened a loan and paid 0.01 mock USDC for a Feed export through x402 on testnet (G14 PASS; re-run after D-027 PASS for the chain claims; HTTP 402 → 200 leg: verifier record pending). The Feed MCP server is built and read-only, but no gate has run it with an agent client; say so if asked.
 - `nfts`: Position Notes (NEP-171) are minted on testnet for every quote, position and Reserve deposit (EVIDENCE §G2b `nft_tokens`, §G14 `nft_mint p-4` and the re-run's `nft_mint` for position #13).
 - `realworld`: **not proposed.** The real-world payout path (`pay_to`) is built and sandbox-tested but has no testnet run, and the collateral is a mock.
 
