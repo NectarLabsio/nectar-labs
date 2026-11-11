@@ -1,9 +1,12 @@
 //! v7 OutLayer jobs (WO-24), selected by the stdin `job` field. Absent `job` ⇒ the quote job (lib.rs), unchanged.
 //!
-//! * `vault_read {chain:"solana-devnet", program, position_id, rpc_url?, mint?}` → Solana `getAccountInfo` on the
-//!   position PDA → `{"position_id":"<id>","units":"<u64>","authority":"ed25519:<b58>","depositor":"<b58>",
-//!   "slot_or_block":<slot>}`, the shape `contracts/nectar-core/src/remote.rs::parse_vault_read` accepts.
+//! * `vault_read {chain:"solana-devnet", program, position_id, depositor, rpc_url?, mint?}` → Solana `getAccountInfo`
+//!   on the v2 position PDA `["pos", vault, u64le(id), depositor]` → `{"position_id":"<id>","units":"<u64>",
+//!   "authority":"ed25519:<b58>","depositor":"<b58>","slot_or_block":<slot>}`, the shape
+//!   `contracts/nectar-core/src/remote.rs::parse_vault_read` accepts. Only an open position (status 1) answers: a v2
+//!   position outlives settle/release until `withdraw`, so any other status is `position_not_open`.
 //!   A missing account prints `{"position_id":"<id>","found":false}` (remote.rs rejects it: no `units`).
+//!   Any other chain is `unsupported_chain`, including `base-sepolia` (SR-28 not implemented).
 //! * `calendar {symbol, now_s}` → `{"force_closed":bool,"reason":"weekend|holiday|early_close|open"}`.
 //! * `multiplier {rpc_url, token, decimals}` → `eth_call multiplier()` → `{"multiplier_e18":"<u128>"}`. D-021: the
 //!   value is returned as read; the contract never applies it to a `TokenIncludesMultiplier` feed.
@@ -104,6 +107,7 @@ pub struct VaultReadReq {
     pub program: [u8; 32],
     pub mint: [u8; 32],
     pub position_id: u64,
+    pub depositor: [u8; 32],
     pub rpc_url: String,
 }
 
@@ -113,19 +117,20 @@ pub fn parse_vault_read(obj: &Map<String, Value>) -> Result<VaultReadReq, &'stat
     }
     let program = obj.get("program").and_then(Value::as_str).and_then(solana::b58_decode32).ok_or("bad_program")?;
     let position_id = u64_field(obj, "position_id").ok_or("bad_position_id")?;
+    let depositor = obj.get("depositor").and_then(Value::as_str).and_then(solana::b58_decode32).ok_or("bad_depositor")?;
     let mint = match obj.get("mint") {
         None | Some(Value::Null) => DEVNET_MINT,
         Some(v) => v.as_str().ok_or("bad_mint")?,
     };
     let mint = solana::b58_decode32(mint).ok_or("bad_mint")?;
     let rpc_url = url_field(obj, "rpc_url", Some(DEFAULT_SOLANA_RPC))?.to_string();
-    Ok(VaultReadReq { program, mint, position_id, rpc_url })
+    Ok(VaultReadReq { program, mint, position_id, depositor, rpc_url })
 }
 
 /// (vault PDA, position PDA).
 pub fn vault_read_pdas(req: &VaultReadReq) -> Result<([u8; 32], [u8; 32]), &'static str> {
     let vault = solana::vault_pda(&req.mint, &req.program).ok_or("no_pda")?;
-    let pos = solana::position_pda(&vault, req.position_id, &req.program).ok_or("no_pda")?;
+    let pos = solana::position_pda(&vault, req.position_id, &req.depositor, &req.program).ok_or("no_pda")?;
     Ok((vault, pos))
 }
 
@@ -137,8 +142,8 @@ pub fn get_account_info_body(pos: &[u8; 32]) -> String {
     )
 }
 
-/// Turns a `getAccountInfo` response into the job's stdout. Checks owner, length, discriminator, status,
-/// the stored vault and position id against what was derived.
+/// Turns a `getAccountInfo` response into the job's stdout. Checks owner, length, discriminator, version, status,
+/// and the stored vault, position id and depositor against what was derived.
 pub fn render_vault_read(resp: &[u8], req: &VaultReadReq, vault: &[u8; 32]) -> Result<String, &'static str> {
     let result = rpc_result(resp)?;
     let slot = result["context"]["slot"].as_u64().ok_or("bad_rpc_response")?;
@@ -164,6 +169,9 @@ pub fn render_vault_read(resp: &[u8], req: &VaultReadReq, vault: &[u8; 32]) -> R
     }
     if p.position_id != id {
         return Err("position_mismatch");
+    }
+    if p.depositor != req.depositor {
+        return Err("depositor_mismatch");
     }
     Ok(format!(
         "{{\"position_id\":\"{id}\",\"units\":\"{}\",\"authority\":\"ed25519:{}\",\"depositor\":\"{}\",\"slot_or_block\":{slot}}}",

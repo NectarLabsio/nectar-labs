@@ -48,6 +48,10 @@ fn required_job_vectors_present() {
     let names: Vec<String> = cases().iter().map(|c| c["name"].as_str().unwrap().to_owned()).collect();
     for n in [
         "vault_read_found_contract_input",
+        "vault_read_recorded_open_position",
+        "vault_read_recorded_settled_not_open",
+        "vault_read_recorded_released_not_open",
+        "vault_read_depositor_mismatch",
         "vault_read_missing_account_live_recording",
         "vault_read_u64_max_widest_output",
         "calendar_dst_spring_monday_0000_edt",
@@ -62,7 +66,10 @@ fn required_job_vectors_present() {
 /// The vault_read stdout parses the way contracts/nectar-core/src/remote.rs::parse_vault_read reads it.
 #[test]
 fn vault_read_output_matches_remote_rs_shape() {
-    for case in cases().iter().filter(|c| c["name"].as_str().unwrap().starts_with("vault_read_found")) {
+    for case in cases().iter().filter(|c| {
+        let name = c["name"].as_str().unwrap();
+        name.starts_with("vault_read_found") || name == "vault_read_recorded_open_position"
+    }) {
         let v: Value = serde_json::from_str(&run_case(case).0).unwrap();
         let stdin: Value = serde_json::from_str(case["stdin"].as_str().unwrap()).unwrap();
         let id = match &stdin["position_id"] {
@@ -77,13 +84,15 @@ fn vault_read_output_matches_remote_rs_shape() {
         // valid_depositor (domain 1) = valid_base58_address: 32..=44 base58 chars
         let dep = v["depositor"].as_str().unwrap();
         assert!((32..=44).contains(&dep.len()) && b58_decode32(dep).is_some());
+        // on_deposit_verified requires depositor == committed: the job echoes exactly what it was asked about (SR-8).
+        assert_eq!(dep, stdin["depositor"].as_str().unwrap());
         assert!(v["slot_or_block"].is_u64());
         assert!(v.get("error").is_none());
     }
 }
 
-/// find_program_address agrees with @solana/kit on 102 positions under two vaults (tests/pda_kit.json); the bumps
-/// span 255..=245, so the on-curve rejection path is exercised many times.
+/// find_program_address agrees with @solana/kit on 204 v2 positions (two vaults, two depositors; tests/pda_kit.json);
+/// the bumps go well below 255, so the on-curve rejection path is exercised many times.
 #[test]
 fn pdas_match_solana_kit() {
     let kit = doc(include_str!("pda_kit.json"));
@@ -97,16 +106,20 @@ fn pdas_match_solana_kit() {
         assert_eq!(u64::from(bump), v["vault_bump"].as_u64().unwrap());
         for p in v["positions"].as_array().unwrap() {
             let id: u64 = p["id"].as_str().unwrap().parse().unwrap();
-            let (pda, bump) =
-                nectar_quoter::solana::find_program_address(&[b"pos", &vault, &id.to_le_bytes()], &program).unwrap();
+            let depositor = b58_decode32(p["depositor"].as_str().unwrap()).unwrap();
+            let (pda, bump) = nectar_quoter::solana::find_program_address(
+                &[b"pos", &vault, &id.to_le_bytes(), &depositor],
+                &program,
+            )
+            .unwrap();
             assert_eq!(b58_encode(&pda), p["pda"].as_str().unwrap(), "id {id}");
             assert_eq!(u64::from(bump), p["bump"].as_u64().unwrap(), "id {id}");
-            let req = VaultReadReq { program, mint, position_id: id, rpc_url: String::new() };
+            let req = VaultReadReq { program, mint, position_id: id, depositor, rpc_url: String::new() };
             assert_eq!(vault_read_pdas(&req).unwrap(), (vault, pda));
             checked += 1;
         }
     }
-    assert_eq!(checked, 102);
+    assert_eq!(checked, 204);
 }
 
 /// The embedded copies agree with packages/config (drift guard; the wasm must be rebuilt when they change).
@@ -130,7 +143,7 @@ fn quote_path_unchanged_and_run_has_no_http() {
     let b = run_with(quote.as_bytes(), |_| None, &mut |_: &str, _: &[u8]| panic!("quote job made an HTTP call"));
     assert_eq!(a, b);
     assert!(a.starts_with(r#"{"v":1,"symbol":"NVDAx""#));
-    let vr = r#"{"job":"vault_read","chain":"solana-devnet","program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW","position_id":"1"}"#;
+    let vr = r#"{"job":"vault_read","chain":"solana-devnet","program":"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW","position_id":"1","depositor":"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH"}"#;
     assert_eq!(run(vr.as_bytes(), |_| None), r#"{"v":1,"error":"http_unavailable"}"#);
     // an HTTP failure is a job error, never a guess
     let out = run_with(vr.as_bytes(), |_| None, &mut |_: &str, _: &[u8]| Err("http_status"));
