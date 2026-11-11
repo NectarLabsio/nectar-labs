@@ -18,6 +18,8 @@ import {
   VAULT_ABI,
   VAULT_STATUS_NONE,
   VAULT_STATUS_OPEN,
+  VAULT_STATUS_RELEASED,
+  VAULT_STATUS_SETTLED,
   ViemEvmPort,
   assertAccountName,
   assertBaseSepoliaChainId,
@@ -524,22 +526,111 @@ describe('base: relay with a mocked RPC', () => {
     assert.equal(lines.filter((l) => l.includes('base_deposit_confirm_unsupported')).length, 1);
     assert.equal(near.calls.length, 0);
   });
-  it('SR-11: an unchanged deposit is confirmed a bounded number of times; a changed amount re-arms it', async () => {
-    const { relay, near, evm, now } = setup({ outlayerVaultRead: true });
+  it('N4: an unchanged deposit is retried on a doubling, capped cooldown, never abandoned; a changed amount re-arms it', async () => {
+    const { relay, near, evm, db, now } = setup({ outlayerVaultRead: true });
     near.positions.push(basePosition('8', 'AwaitingDeposit'));
     openVault(evm, 8n, 1000n);
-    for (let i = 0; i < 3; i++) {
-      assert.deepEqual((await relay.tick()).deposits, ['8']);
-      now.ms += 3_600_000;
+    for (let i = 0; i < 12; i++) {
+      assert.deepEqual((await relay.tick()).deposits, ['8'], `attempt ${i}`);
+      const wait = (db.retry('base:deposit:8')?.next_attempt_at ?? 0) - now.ms;
+      assert.equal(wait, Math.min(21_600_000, 60_000 * 2 ** i), `attempt ${i}`);
+      assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'backoff' }]);
+      now.ms += wait;
     }
-    assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'confirm_rejected_unchanged' }]);
-    assert.equal(near.calls.length, 3);
+    assert.equal(near.calls.length, 12);
     openVault(evm, 8n, 1001n);
     assert.deepEqual((await relay.tick()).deposits, ['8']);
-    assert.equal(near.calls.length, 4);
+    assert.equal(db.retry('base:deposit:8')?.next_attempt_at, now.ms + 60_000);
   });
-  it('a check in flight, a proven deposit or an expired reservation is not confirmed', async () => {
-    for (const [extra, reason] of [[{ confirming: true }, 'confirm_in_flight'], [{ depositor: DEPOSITOR }, 'deposit_already_proven'], [{ expires_ns: String(BigInt(NOW) * 1_000_000n) }, 'reservation_expired']] as const) {
+  const EXPIRED = { expires_ns: String(BigInt(NOW) * 1_000_000n) };
+  it('N4: late and short deposits are confirmed once the reservation has expired', async () => {
+    for (const amount of [1000n, 400n]) {
+      const { relay, near, evm } = setup({ outlayerVaultRead: true });
+      near.positions.push(basePosition('8', 'AwaitingDeposit', EXPIRED));
+      openVault(evm, 8n, amount);
+      assert.deepEqual((await relay.tick()).deposits, ['8'], String(amount));
+      assert.deepEqual(near.calls, [{ method: 'confirm_remote_deposit', args: { position_id: '8' } }]);
+    }
+  });
+  it('N4: a position already marked Expired on NEAR is watched; with a proven deposit it is left alone', async () => {
+    const { relay, near, evm } = setup({ outlayerVaultRead: true });
+    near.positions.push({ ...basePosition('8', 'Expired'), status: 'Closed' });
+    near.positions.push({ ...basePosition('9', 'Expired', { depositor: DEPOSITOR }), status: 'Closed' });
+    openVault(evm, 8n, 400n);
+    openVault(evm, 9n, 400n);
+    const r = await relay.tick();
+    assert.deepEqual(r.deposits, ['8']);
+    assert.deepEqual(r.skipped, []);
+    assert.equal(near.calls.length, 1);
+    assert.equal(relay.status.awaitingDeposit, 0);
+  });
+  it('N4: an expired, still-empty slot costs no NEAR call and is polled slowly', async () => {
+    const { relay, near, db } = setup({ outlayerVaultRead: true });
+    near.positions.push(basePosition('8', 'AwaitingDeposit', EXPIRED));
+    await relay.tick();
+    assert.equal(near.calls.length, 0);
+    assert.equal(db.retry('base:deposit:8')?.next_attempt_at, NOW + 600_000);
+  });
+  it('N4, attest mode: a late full deposit is attested; a short one is not, because attestation books the reserved units', async () => {
+    const full = setup({ keeperAttest: true });
+    full.near.positions.push(basePosition('8', 'AwaitingDeposit', EXPIRED));
+    openVault(full.evm, 8n, 1000n);
+    assert.deepEqual((await full.relay.tick()).deposits, ['8']);
+    assert.equal(full.near.calls[0]?.method, 'keeper_attest_deposit');
+    const short = setup({ keeperAttest: true });
+    short.near.positions.push(basePosition('8', 'AwaitingDeposit', EXPIRED));
+    openVault(short.evm, 8n, 400n);
+    assert.deepEqual((await short.relay.tick()).skipped, [{ id: '8', reason: 'short_deposit_needs_attested_read' }]);
+    assert.equal(short.near.calls.length, 0);
+  });
+  it('N3: a settled slot under NEAR\'s authority with the current nonce unused relays the older leg, nothing signed', async () => {
+    const { relay, near, evm } = setup();
+    near.positions.push(basePosition('7', 'Settling'));
+    near.settlements.set('7', settleView(S7));
+    openVault(evm, 7n, 1000n, VAULT_STATUS_SETTLED);
+    const h = `0x${'88'.repeat(32)}` as Hex;
+    evm.events.set('PositionSettled:7:', h);
+    assert.deepEqual((await relay.tick()).settled, ['7']);
+    assert.equal(evm.signed.length, 0);
+    assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), [h]);
+    assert.deepEqual({ nonce: evm.queries[0]?.q.nonce, depositor: evm.queries[0]?.q.depositor }, { nonce: null, depositor: DEPOSITOR });
+  });
+  it('N3: a released slot relays the older release', async () => {
+    const { relay, near, evm } = setup();
+    const recipient = getAddress(R7.recipient as string);
+    near.positions.push(basePosition('7', 'Releasing', { committed_depositor: recipient }));
+    near.releases.set('7', releaseView(R7));
+    openVault(evm, 7n, 1000n, VAULT_STATUS_RELEASED, SIGNER, recipient);
+    const h = `0x${'99'.repeat(32)}` as Hex;
+    evm.events.set('PositionReleased:7:', h);
+    assert.deepEqual((await relay.tick()).released, ['7']);
+    assert.deepEqual(near.calls, [{ method: 'relay_release_result', args: { position_id: '7', solana_tx_sig: h } }]);
+  });
+  it('N3: no log yet → retried with backoff, not dropped', async () => {
+    const { relay, near, evm, now } = setup();
+    near.positions.push(basePosition('7', 'Settling'));
+    near.settlements.set('7', settleView(S7));
+    openVault(evm, 7n, 1000n, VAULT_STATUS_SETTLED);
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '7', reason: 'older_leg_tx_not_found' }]);
+    evm.events.set('PositionSettled:7:', `0x${'aa'.repeat(32)}`);
+    now.ms += 3_600_000;
+    assert.deepEqual((await relay.tick()).settled, ['7']);
+  });
+  it('N3: a slot closed under another key, or by the other op, is not relayed and not searched', async () => {
+    const cases: Array<[number, Address]> = [[VAULT_STATUS_SETTLED, '0x0000000000000000000000000000000000000001'], [VAULT_STATUS_RELEASED, SIGNER]];
+    for (const [status, authority] of cases) {
+      const { relay, near, evm } = setup();
+      near.positions.push(basePosition('7', 'Settling'));
+      near.settlements.set('7', settleView(S7));
+      openVault(evm, 7n, 1000n, status, authority);
+      evm.events.set('PositionSettled:7:', `0x${'bb'.repeat(32)}`);
+      assert.deepEqual((await relay.tick()).skipped, [{ id: '7', reason: 'vault_position_not_open' }]);
+      assert.equal(evm.queries.length, 0);
+      assert.equal(near.calls.length, 0);
+    }
+  });
+  it('a check in flight or a proven deposit is not confirmed', async () => {
+    for (const [extra, reason] of [[{ confirming: true }, 'confirm_in_flight'], [{ depositor: DEPOSITOR }, 'deposit_already_proven']] as const) {
       const { relay, near, evm } = setup({ outlayerVaultRead: true });
       near.positions.push(basePosition('8', 'AwaitingDeposit', extra));
       openVault(evm, 8n, 1000n);
@@ -679,6 +770,46 @@ describe('base: ViemEvmPort against a local JSON-RPC stub', () => {
       assert.equal(await port.findEventTx(VAULT, 'PositionSettled', { positionId: 7n, nonce: 1n, depositor: DEPOSITOR, fromBlock: 0n }), honest);
       assert.equal(await port.findEventTx(VAULT, 'PositionSettled', { positionId: 7n, nonce: 1n, depositor: SIGNER, fromBlock: 0n }), null);
     });
+  });
+  const indirectTx = (hash: Hex) => ({ ...txOf(hash, DEPOSITOR), to: OTHER, input: '0xdeadbeef' });
+  const nonceAnswer = (used: boolean): Hex => encodeAbiParameters([{ type: 'bool' }], [used]);
+  it('N2c: a leg landed through another contract is found from the vault log', async () => {
+    await withRpc((m) => {
+      if (m === 'eth_blockNumber') return '0x64';
+      if (m === 'eth_getLogs') return [settledLog(honest, 5)];
+      if (m === 'eth_getTransactionByHash') return indirectTx(honest);
+      throw new Error(`unexpected ${m}`);
+    }, async (port) => {
+      assert.equal(await port.findEventTx(VAULT, 'PositionSettled', { positionId: 7n, nonce: 1n, depositor: DEPOSITOR, fromBlock: 0n }), honest);
+    });
+  });
+  it('N2c: a direct call on this slot beats a newer tx whose slot cannot be read', async () => {
+    await withRpc((m, params) => {
+      if (m === 'eth_blockNumber') return '0x64';
+      if (m === 'eth_getLogs') return [settledLog(honest, 5), settledLog(squatter, 6)];
+      if (m === 'eth_getTransactionByHash') return params[0] === honest ? txOf(honest, DEPOSITOR) : indirectTx(squatter);
+      throw new Error(`unexpected ${m}`);
+    }, async (port) => {
+      assert.equal(await port.findEventTx(VAULT, 'PositionSettled', { positionId: 7n, nonce: 1n, depositor: DEPOSITOR, fromBlock: 0n }), honest);
+    });
+  });
+  it('N3: without a nonce filter, an event whose nonce this slot never consumed is passed over', async () => {
+    const asked: string[] = [];
+    const answers = [false, true];
+    await withRpc((m, params) => {
+      if (m === 'eth_blockNumber') return '0x64';
+      if (m === 'eth_getLogs') return [settledLog(honest, 5), settledLog(squatter, 6)];
+      if (m === 'eth_call') {
+        asked.push((params[0] as { data: Hex }).data);
+        return nonceAnswer(answers.shift() ?? false);
+      }
+      if (m === 'eth_getTransactionByHash') return txOf(params[0] as Hex, DEPOSITOR);
+      throw new Error(`unexpected ${m}`);
+    }, async (port) => {
+      assert.equal(await port.findEventTx(VAULT, 'PositionSettled', { positionId: 7n, nonce: null, depositor: DEPOSITOR, fromBlock: 0n }), honest);
+    });
+    assert.equal(asked.length, 2);
+    assert.ok(asked[0]?.includes(slotKeyOf(7n, DEPOSITOR).slice(2)));
   });
   it('findEventTx: scans from the given block through every chunk, beyond the lookback window', async () => {
     const ranges: Array<[string, string]> = [];

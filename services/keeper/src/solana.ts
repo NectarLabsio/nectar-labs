@@ -53,7 +53,7 @@ import {
   type SettleFields,
   type SettleKind,
 } from '../../../solana/client/preimage.ts';
-import { DEFAULT_BACKOFF, backoffDelayMs, type BackoffOptions } from './backoff.ts';
+import { DEFAULT_BACKOFF, backoffDelayMs, cappedCooldownMs, type BackoffOptions } from './backoff.ts';
 import type { CoreReader, KeeperWriter, TxResult } from './chain.ts';
 import type { KeeperDb } from './db.ts';
 import { KeyFileError } from './keyfile.ts';
@@ -191,9 +191,9 @@ export const vaultTokensPda = (program: Address, vault: Address): Promise<Addres
 /** §E (SR-8): the depositor is in the seeds, so a squatter's slot for the same id is a different account. */
 export const positionPda = (program: Address, vault: Address, id: bigint, depositor: Address): Promise<Address> =>
   pda(program, [utf8('pos'), ab(vault), u64le(id), ab(depositor)]);
-/** §E (SR-1, amended): scoped to the depositor-bound slot, so a nonce burned on another slot does not touch this one. */
-export const noncePda = (program: Address, position: Address, nonce: bigint): Promise<Address> =>
-  pda(program, [utf8('nonce'), ab(position), u64le(nonce)]);
+/** §E (SR-1, N1): scoped to the depositor-bound slot and its authority, so neither another slot nor a reopen under another key burns this nonce. */
+export const noncePda = (program: Address, position: Address, authority: Uint8Array, nonce: bigint): Promise<Address> =>
+  pda(program, [utf8('nonce'), ab(position), authority, u64le(nonce)]);
 export const claimPda = (program: Address, vault: Address, recipient: Address): Promise<Address> =>
   pda(program, [utf8('claim'), ab(vault), ab(recipient)]);
 export const associatedTokenAddress = (owner: Address, tokenProgram: Address, mint: Address): Promise<Address> =>
@@ -328,7 +328,7 @@ const metas = (order: AccountOrder, a: Partial<LegAccounts>): AccountMeta[] =>
     return { address: value, role };
   });
 
-export async function settleAccounts(v: VaultContext, payer: Address, position: Address, f: SettleFields): Promise<AccountMeta[]> {
+export async function settleAccounts(v: VaultContext, payer: Address, position: Address, authority: Uint8Array, f: SettleFields): Promise<AccountMeta[]> {
   const recipient = address(f.recipient);
   return metas(SETTLE_ACCOUNT_ORDER, {
     payer,
@@ -339,7 +339,7 @@ export async function settleAccounts(v: VaultContext, payer: Address, position: 
     recipient,
     recipientTokens: await associatedTokenAddress(recipient, v.tokenProgram, v.mint),
     claim: await claimPda(v.program, v.vault, recipient),
-    nonceRecord: await noncePda(v.program, position, f.nonce),
+    nonceRecord: await noncePda(v.program, position, authority, f.nonce),
     instructions: INSTRUCTIONS_SYSVAR_ADDRESS,
     tokenProgram: v.tokenProgram,
     associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ADDRESS,
@@ -347,12 +347,12 @@ export async function settleAccounts(v: VaultContext, payer: Address, position: 
   });
 }
 
-export async function releaseAccounts(v: VaultContext, payer: Address, position: Address, nonce: bigint): Promise<AccountMeta[]> {
+export async function releaseAccounts(v: VaultContext, payer: Address, position: Address, authority: Uint8Array, nonce: bigint): Promise<AccountMeta[]> {
   return metas(RELEASE_ACCOUNT_ORDER, {
     payer,
     vault: v.vault,
     position,
-    nonceRecord: await noncePda(v.program, position, nonce),
+    nonceRecord: await noncePda(v.program, position, authority, nonce),
     instructions: INSTRUCTIONS_SYSVAR_ADDRESS,
     systemProgram: SYSTEM_PROGRAM_ADDRESS,
   });
@@ -371,7 +371,7 @@ export async function buildSettleInstructions(
   if (f.program !== v.program) throw new Error('preimage program != vault program');
   return [
     ed25519VerifyInstruction(authority, signature, utf8(preimage)),
-    { programAddress: v.program, accounts: await settleAccounts(v, payer, position, f), data: settleIxData(f) },
+    { programAddress: v.program, accounts: await settleAccounts(v, payer, position, authority, f), data: settleIxData(f) },
   ];
 }
 
@@ -389,7 +389,7 @@ export async function buildReleaseInstructions(
   if (f.recipient !== depositor) throw new Error('release recipient != position depositor');
   return [
     ed25519VerifyInstruction(authority, signature, utf8(message)),
-    { programAddress: v.program, accounts: await releaseAccounts(v, payer, position, f.nonce), data: releaseIxData(f.positionId, f.nonce, f.expires) },
+    { programAddress: v.program, accounts: await releaseAccounts(v, payer, position, authority, f.nonce), data: releaseIxData(f.positionId, f.nonce, f.expires) },
   ];
 }
 
@@ -408,14 +408,19 @@ export interface SolTx {
   instructions: Array<{ program: Address; accounts: Address[]; data: Uint8Array }>;
 }
 
+export interface SigEntry {
+  signature: string;
+  ok: boolean;
+}
+
 export interface SolanaPort {
   getAccount(a: Address): Promise<SolAccount | null>;
   latestBlockhash(): Promise<{ blockhash: Blockhash; lastValidBlockHeight: bigint }>;
   blockHeight(): Promise<bigint>;
   sendBase64(wire: string): Promise<string>;
   status(sig: string): Promise<SigState>;
-  /** Signatures of successful txs touching `a`, newest first, at most `max`. Anyone can add to this list. */
-  successfulSignaturesFor(a: Address, max: number): Promise<string[]>;
+  /** One page of the txs touching `a`, newest first, strictly older than `before`. Anyone can add to this list. */
+  signaturesPage(a: Address, before: string | null, limit: number): Promise<SigEntry[]>;
   transaction(sig: string): Promise<SolTx | null>;
 }
 
@@ -449,19 +454,9 @@ export class KitSolanaPort implements SolanaPort {
     if (s.err !== null) return { kind: 'failed', err: JSON.stringify(s.err, (_k, x: unknown) => (typeof x === 'bigint' ? x.toString() : x)) };
     return s.confirmationStatus === 'confirmed' || s.confirmationStatus === 'finalized' ? { kind: 'confirmed' } : { kind: 'pending' };
   }
-  async successfulSignaturesFor(a: Address, max: number): Promise<string[]> {
-    const out: string[] = [];
-    let before: Signature | undefined;
-    for (let seen = 0; seen < max; ) {
-      const limit = Math.min(1000, max - seen);
-      const list = await this.rpc.getSignaturesForAddress(a, { limit, commitment: 'confirmed', ...(before === undefined ? {} : { before }) }).send();
-      for (const x of list) if (x.err === null) out.push(x.signature);
-      seen += list.length;
-      const last = list[list.length - 1];
-      if (list.length < limit || last === undefined) break;
-      before = last.signature;
-    }
-    return out;
+  async signaturesPage(a: Address, before: string | null, limit: number): Promise<SigEntry[]> {
+    const list = await this.rpc.getSignaturesForAddress(a, { limit, commitment: 'confirmed', ...(before === null ? {} : { before: before as Signature }) }).send();
+    return list.map((x) => ({ signature: x.signature, ok: x.err === null }));
   }
   async transaction(sig: string): Promise<SolTx | null> {
     const res = await this.rpc.getTransaction(sig as Signature, { encoding: 'json', commitment: 'confirmed', maxSupportedTransactionVersion: 0 }).send();
@@ -614,10 +609,15 @@ export interface RelayOptions {
   mint: Address;
   /** SR-31: the pinned program; a position naming any other program is refused */
   expectedProgram: Address;
-  /** SR-11: confirm_remote_deposit calls per unchanged vault observation */
-  maxConfirmsPerObservation?: number;
-  /** SR-2: signatures examined when looking for the tx that landed a leg (anyone can pad this list) */
-  maxLandedScan?: number;
+  /** N4: ceiling of the confirm_remote_deposit cooldown, which doubles per unchanged vault observation */
+  maxConfirmCooldownMs?: number;
+  /** N4: how often an expired reservation's slot is re-read (it may stay empty forever) */
+  expiredRescanMs?: number;
+  /** N2b: signatures listed per address when looking for the tx that landed a leg (anyone can pad this list) */
+  maxLandedSignatures?: number;
+  /** N2b: RPC budget of that search per tick; it resumes where it stopped, so a padded address only delays its own leg */
+  landedPagesPerTick?: number;
+  landedTxsPerTick?: number;
   nowMs?: () => number;
   rand?: () => number;
   sleep?: (ms: number) => Promise<void>;
@@ -654,6 +654,7 @@ export class SolanaRelay {
   private readonly inFlight = new Set<string>();
   private readonly vaults = new Map<string, VaultContext>();
   private readonly remoteChains = new Map<string, RemoteChainView | null>();
+  private readonly scans = new Map<string, HistoryScan>();
   private readonly opts: Required<RelayOptions>;
 
   private readonly near: CoreReader;
@@ -675,8 +676,11 @@ export class SolanaRelay {
       backoff: DEFAULT_BACKOFF,
       confirmPollMs: 2_000,
       depositCooldownMs: 60_000,
-      maxConfirmsPerObservation: 3,
-      maxLandedScan: 2_000,
+      maxConfirmCooldownMs: 21_600_000,
+      expiredRescanMs: 600_000,
+      maxLandedSignatures: 100_000,
+      landedPagesPerTick: 10,
+      landedTxsPerTick: 200,
       nowMs: Date.now,
       rand: Math.random,
       sleep: (ms) => new Promise((res) => setTimeout(res, ms)),
@@ -778,12 +782,14 @@ export class SolanaRelay {
       const settling = positions.filter((p) => p.status === 'Settling');
       const releasing = v2 ? positions.filter((p) => p.remote?.status === 'Releasing') : [];
       const awaiting = v2 ? positions.filter((p) => p.remote?.status === 'AwaitingDeposit') : [];
+      // N4: an expired reservation with no proven deposit can still hold a late one, which must be proven to be released.
+      const late = v2 ? positions.filter((p) => p.remote?.status === 'Expired' && !str(p.remote.depositor)) : [];
       this.status.awaitingDeposit = awaiting.length;
       let pendingS = 0;
       let pendingR = 0;
       for (const p of settling) if (await this.item('settle', p, report)) pendingS++;
       for (const p of releasing) if (await this.item('release', p, report)) pendingR++;
-      for (const p of awaiting) await this.item('deposit', p, report);
+      for (const p of [...awaiting, ...late]) await this.item('deposit', p, report);
       this.status.pendingSettlements = pendingS;
       this.status.pendingReleases = pendingR;
       this.status.lastTickOk = true;
@@ -850,7 +856,8 @@ export class SolanaRelay {
   private setBackoff(key: string, prevAttempts: number): number {
     const attempts = prevAttempts + 1;
     const delay = backoffDelayMs(attempts - 1, this.opts.backoff, this.opts.rand);
-    this.db.setRetry(key, attempts, this.opts.nowMs() + delay);
+    // Never shortens a cooldown already set: a failed confirm has spent allowance and keeps its own.
+    this.db.setRetry(key, attempts, Math.max(this.opts.nowMs() + delay, this.db.retry(key)?.next_attempt_at ?? 0));
     return delay;
   }
 
@@ -893,7 +900,7 @@ export class SolanaRelay {
     }
     if (f.program !== program) throw new Error('preimage program != remote_chain.vault_program');
     const vault = await this.vaultFor(p.collateral as string, program);
-    return await this.relayLeg({ op: 'settle', opCode: OP_SETTLE, kind: f.kind, id, vault, nonce: f.nonce, expires: f.expires, ixData: settleIxData(f), order: SETTLE_ACCOUNT_ORDER, landedStatus: POSITION_STATUS_SETTLED, p }, async (pos, authority) =>
+    return await this.relayLeg({ op: 'settle', opCode: OP_SETTLE, kind: f.kind, id, vault, nonce: f.nonce, expires: f.expires, discriminator: SETTLE_DISCRIMINATOR, order: SETTLE_ACCOUNT_ORDER, landedStatus: POSITION_STATUS_SETTLED, p }, async (pos, authority) =>
       buildSettleInstructions(vault, this.payer.address, pos.addr, authority, d.preimage, hexToBytes(d.signature_hex as string)),
     );
   }
@@ -912,15 +919,16 @@ export class SolanaRelay {
     if (String(f.positionId) !== id || String(f.nonce) !== d.nonce || String(f.expires) !== d.expires) throw new Error('release message fields != pending release');
     if (f.program !== program) throw new Error('release vault != remote_chain.vault_program');
     const vault = await this.vaultFor(p.collateral as string, program);
-    return await this.relayLeg({ op: 'release', opCode: OP_RELEASE, kind: 0, id, vault, nonce: f.nonce, expires: f.expires, ixData: releaseIxData(f.positionId, f.nonce, f.expires), order: RELEASE_ACCOUNT_ORDER, landedStatus: POSITION_STATUS_RELEASED, p, recipient: f.recipient }, async (pos, authority) =>
+    return await this.relayLeg({ op: 'release', opCode: OP_RELEASE, kind: 0, id, vault, nonce: f.nonce, expires: f.expires, discriminator: RELEASE_DISCRIMINATOR, order: RELEASE_ACCOUNT_ORDER, landedStatus: POSITION_STATUS_RELEASED, p, recipient: f.recipient }, async (pos, authority) =>
       buildReleaseInstructions(vault, this.payer.address, pos.addr, pos.acct.depositor, authority, d.message, hexToBytes(d.signature_hex)),
     );
   }
 
   /**
-   * Idempotent core. Only the vault can own its nonce PDA, so a program-owned record that passes every §E field check means
-   * the leg landed, and the tx that landed it is relayed. Anything else at that address (SR-2: a plain transfer) proves
-   * nothing and falls through to the send path, because Anchor `init` accepts a pre-funded account.
+   * Idempotent core. Only the vault can own its nonce PDA, and the seeds bind the slot and NEAR's authority (§E, N1), so a
+   * program-owned record that passes every field check proves the leg landed, whatever the slot's status is now: the depositor
+   * may have withdrawn and reopened it. Anything else at that address (SR-2: a plain transfer) proves nothing and falls through
+   * to the send path, because Anchor `init` accepts a pre-funded account.
    */
   private async relayLeg(leg: Leg, build: (pos: { addr: Address; acct: PositionAccount }, authority: Uint8Array) => Promise<Instruction[]>): Promise<Outcome> {
     const { op, id, vault, nonce, expires, p } = leg;
@@ -930,20 +938,19 @@ export class SolanaRelay {
     if (depositor === null) return { kind: 'skip', reason: 'depositor_unknown' };
     if (leg.recipient !== undefined && leg.recipient !== depositor) throw new Error('release recipient != committed depositor');
     const positionAddr = await positionPda(vault.program, vault.vault, BigInt(id), depositor);
-    const nonceAddr = await noncePda(vault.program, positionAddr, nonce);
-    const pos = await this.readPosition(vault, BigInt(id), depositor);
+    const nonceAddr = await noncePda(vault.program, positionAddr, authority, nonce);
     const record = await this.sol.getAccount(nonceAddr);
     if (record !== null && record.owner === vault.program) {
       this.assertNonceRecord(record.data, leg, authority);
-      // A landed leg leaves its own status; a missing account means the depositor has since withdrawn.
-      if (pos !== null && pos.acct.status !== leg.landedStatus) throw new Error(`nonce record exists but position status is ${pos.acct.status}, expected ${leg.landedStatus}`);
-      const sig = await this.findLandedTx(leg, nonceAddr, positionAddr);
-      if (sig === null) return { kind: 'skip', reason: 'nonce_used_tx_not_found' };
-      this.log.info('solana_leg_already_landed', { op, position_id: id, solana_tx_sig: sig });
-      await this.relayToNear(op, id, sig);
-      return { kind: 'done', sig };
+      return await this.relayFound(leg, await this.findLandedTx(leg, nonceAddr, positionAddr), 'nonce_used_tx_not_found');
     }
     if (record !== null) this.log.warn('solana_nonce_pda_not_a_record', { op, position_id: id, owner: record.owner });
+    const pos = await this.readPosition(vault, BigInt(id), depositor);
+    // N3: the slot left Open (or was withdrawn) without this nonce, so an older nonce of this leg may have landed before a re-sign.
+    if (pos === null || pos.acct.status === leg.landedStatus) {
+      const older = await this.findOlderLeg(leg, positionAddr, authority);
+      if (older.kind !== 'none') return await this.relayFound(leg, older, 'older_leg_tx_not_found');
+    }
     if (pos === null) return { kind: 'skip', reason: 'position_pda_missing' };
     if (pos.acct.status !== POSITION_STATUS_OPEN) return { kind: 'skip', reason: 'position_pda_not_open' };
     if (!eqBytes(authority, pos.acct.authority)) return { kind: 'skip', reason: 'authority_mismatch' };
@@ -960,6 +967,14 @@ export class SolanaRelay {
     return { kind: 'done', sig: signature };
   }
 
+  private async relayFound(leg: Leg, found: ScanResult<string>, notFound: string): Promise<Outcome> {
+    if (found.kind === 'more') return { kind: 'skip', reason: 'landed_scan_in_progress' };
+    if (found.kind === 'none') return { kind: 'skip', reason: notFound };
+    this.log.info('solana_leg_already_landed', { op: leg.op, position_id: leg.id, solana_tx_sig: found.value });
+    await this.relayToNear(leg.op, leg.id, found.value);
+    return { kind: 'done', sig: found.value };
+  }
+
   /** SR-2: every §E field must match this leg. A mismatch is refused; it is never read as "landed". */
   private assertNonceRecord(data: Uint8Array, leg: Leg, authority: Uint8Array): void {
     const r = parseNonceRecord(data);
@@ -973,22 +988,90 @@ export class SolanaRelay {
   }
 
   /**
-   * SR-2: the signature relayed to NEAR must be a successful tx that ran this exact vault instruction with the committed slot
-   * and its nonce record in their own account positions. Mere presence is not enough: the instruction data does not name the
-   * depositor, so a tx on another slot could list these accounts as trailing extras.
+   * N2b: walks one address's history oldest first, because the tx that created a record sits near the start while anyone can
+   * append transfers after it. Bounded per tick; an RPC error or a spent budget leaves the walk where it stopped and the next
+   * attempt resumes it, so rate limiting delays the search without restarting it.
    */
-  private async findLandedTx(leg: Leg, nonceAddr: Address, positionAddr: Address): Promise<string | null> {
+  private async walkHistory<T>(scope: string, a: Address, match: (tx: SolTx, sig: string) => Promise<T | null>): Promise<ScanResult<T>> {
+    const key = `${scope}:${a}`;
+    const scan = this.scans.get(key) ?? { sigs: [], before: null, listed: 0, complete: false, examined: 0 };
+    this.scans.set(key, scan);
+    for (let page = 0; !scan.complete; page++) {
+      if (page >= this.opts.landedPagesPerTick) return { kind: 'more' };
+      const limit = Math.min(SIGNATURE_PAGE, this.opts.maxLandedSignatures - scan.listed);
+      const list = await this.sol.signaturesPage(a, scan.before, limit);
+      for (const x of list) if (x.ok) scan.sigs.push(x.signature);
+      scan.listed += list.length;
+      scan.before = list[list.length - 1]?.signature ?? scan.before;
+      scan.complete = list.length < limit || scan.listed >= this.opts.maxLandedSignatures;
+    }
+    for (let n = 0; scan.examined < scan.sigs.length; n++) {
+      if (n >= this.opts.landedTxsPerTick) return { kind: 'more' };
+      const sig = scan.sigs[scan.sigs.length - 1 - scan.examined] as string;
+      const tx = await this.sol.transaction(sig);
+      const value = tx !== null && tx.succeeded ? await match(tx, sig) : null;
+      if (value !== null) return { kind: 'hit', value };
+      scan.examined++;
+    }
+    return { kind: 'none' };
+  }
+
+  /** A finished search forgets its walks, so the next attempt reads fresh history. An unfinished one keeps them, finished walks included. */
+  private endSearch<T>(found: ScanResult<T>, scope: string, addresses: Address[]): ScanResult<T> {
+    if (found.kind !== 'more') for (const a of addresses) this.scans.delete(`${scope}:${a}`);
+    return found;
+  }
+
+  /**
+   * The nonce account of each instruction in `tx` that ran this op on this slot. The data is compared by discriminator only:
+   * Anchor ignores trailing bytes, so the landing tx need not match what this keeper would have sent. Account positions
+   * matter: a tx on another slot can list these accounts as trailing extras.
+   */
+  private legNonceAccounts(tx: SolTx, leg: Leg, positionAddr: Address): Address[] {
     const atPosition = slotIndex(leg.order, 'position');
     const atNonce = slotIndex(leg.order, 'nonceRecord');
-    for (const sig of await this.sol.successfulSignaturesFor(nonceAddr, this.opts.maxLandedScan)) {
-      const tx = await this.sol.transaction(sig);
-      if (tx === null || !tx.succeeded) continue;
-      const hit = tx.instructions.some(
-        (ix) => ix.program === leg.vault.program && eqBytes(ix.data, leg.ixData) && ix.accounts[atPosition] === positionAddr && ix.accounts[atNonce] === nonceAddr,
-      );
-      if (hit) return sig;
+    const out: Address[] = [];
+    for (const ix of tx.instructions) {
+      const nonceAccount = ix.accounts[atNonce];
+      if (ix.program === leg.vault.program && eqBytes(ix.data.subarray(0, 8), leg.discriminator) && ix.accounts[atPosition] === positionAddr && nonceAccount !== undefined) out.push(nonceAccount);
     }
-    return null;
+    return out;
+  }
+
+  /** N2: `init` lets exactly one successful instruction name this record on this slot, so that tx created it. The slot's history is the fallback. */
+  private async findLandedTx(leg: Leg, nonceAddr: Address, positionAddr: Address): Promise<ScanResult<string>> {
+    const created = async (tx: SolTx, sig: string): Promise<string | null> => (this.legNonceAccounts(tx, leg, positionAddr).includes(nonceAddr) ? sig : null);
+    const scope = `landed:${leg.op}`;
+    const viaNonce = await this.walkHistory(scope, nonceAddr, created);
+    const found = viaNonce.kind === 'none' ? await this.walkHistory(scope, positionAddr, created) : viaNonce;
+    return this.endSearch(found, scope, [nonceAddr, positionAddr]);
+  }
+
+  /** N3: a tx on this slot whose nonce record, under any nonce, is a valid record of this leg signed by NEAR's authority. */
+  private async findOlderLeg(leg: Leg, positionAddr: Address, authority: Uint8Array): Promise<ScanResult<string>> {
+    const scope = `older:${leg.op}`;
+    const found = await this.walkHistory(scope, positionAddr, async (tx, sig) => {
+      for (const candidate of this.legNonceAccounts(tx, leg, positionAddr)) {
+        if (await this.isRecordOfLeg(candidate, leg, positionAddr, authority)) return sig;
+      }
+      return null;
+    });
+    return this.endSearch(found, scope, [positionAddr]);
+  }
+
+  /** The nonce is read from the record and the address re-derived from it: a record under another key is a different PDA. */
+  private async isRecordOfLeg(a: Address, leg: Leg, positionAddr: Address, authority: Uint8Array): Promise<boolean> {
+    const raw = await this.sol.getAccount(a);
+    if (raw === null || raw.owner !== leg.vault.program) return false;
+    let r: NonceRecord;
+    try {
+      r = parseNonceRecord(raw.data);
+    } catch {
+      return false;
+    }
+    if (r.version !== NONCE_RECORD_VERSION || r.vault !== leg.vault.vault || !eqBytes(r.authority, authority)) return false;
+    if (String(r.positionId) !== leg.id || r.op !== leg.opCode || r.kind !== leg.kind) return false;
+    return (await noncePda(leg.vault.program, positionAddr, authority, r.nonce)) === a;
   }
 
   private async confirm(sig: string, lastValidBlockHeight: bigint): Promise<void> {
@@ -1030,30 +1113,31 @@ export class SolanaRelay {
     if (!str(r?.reserved_units)) return skip('reserved_units_unknown');
     if (r.confirming === true) return skip('confirm_in_flight');
     if (str(r.depositor)) return skip('deposit_already_proven'); // a refused loan: confirming again cannot change it
-    if (str(r.expires_ns) && BigInt(this.opts.nowMs()) * 1_000_000n >= BigInt(r.expires_ns)) return skip('reservation_expired');
+    const now = this.opts.nowMs();
+    const expired = r.status === 'Expired' || (str(r.expires_ns) && BigInt(now) * 1_000_000n >= BigInt(r.expires_ns));
+    if (expired) this.db.setRetry(key, 0, now + this.opts.expiredRescanMs); // the slot may stay empty forever: poll it slowly
     const depositor = await this.depositorOf(id, p);
     if (depositor === null) return skip('depositor_unknown');
     const vault = await this.vaultFor(p.collateral as string, program);
     const pos = await this.readPosition(vault, BigInt(id), depositor);
     if (pos === null) return; // not deposited yet
     if (pos.acct.status !== POSITION_STATUS_OPEN) return skip('position_pda_not_open'); // settled or released: the account outlives the deposit
-    if (pos.acct.amount < BigInt(r.reserved_units)) return skip('deposit_below_reserved');
+    // N4: once expired no loan can follow, so a late or short deposit is proven for what it is and can then be released.
+    if (pos.acct.amount === 0n || (!expired && pos.acct.amount < BigInt(r.reserved_units))) return skip('deposit_below_reserved');
     const nearAuth = ed25519AuthorityBytes(r.authority);
     if (nearAuth === null || !eqBytes(nearAuth, pos.acct.authority)) return skip('authority_mismatch');
-    // SR-11: each call costs gas reserve and key allowance, so an unchanged vault gets a bounded number of tries.
+    // SR-11, N4: each call costs gas reserve and key allowance, so an unchanged vault waits a doubling, capped cooldown. It is never given up on.
     const fingerprint = `${pos.acct.amount}:${pos.acct.status}`;
     const seen = this.db.confirmState(key);
     const attempts = seen !== null && seen.fingerprint === fingerprint ? seen.attempts + 1 : 1;
-    if (attempts > this.opts.maxConfirmsPerObservation) return skip('confirm_rejected_unchanged');
-    // Recorded before the call: a failed or interrupted call has already spent allowance.
-    this.db.setConfirmState(key, fingerprint, attempts, this.opts.nowMs());
+    // Recorded before the call: a failed or interrupted call has already spent allowance, and OutLayer answers asynchronously.
+    this.db.setConfirmState(key, fingerprint, attempts, now);
+    this.db.setRetry(key, 0, now + cappedCooldownMs(this.opts.depositCooldownMs, attempts, this.opts.maxConfirmCooldownMs));
     const res = await this.writer.call('confirm_remote_deposit', { position_id: id });
     if (!res.ok) throw new Error(`confirm_remote_deposit failed: ${(res.failure ?? '').slice(0, 200)}`);
-    // OutLayer answers asynchronously: do not call again until the cooldown passes; it doubles per unchanged attempt.
-    this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.depositCooldownMs * 2 ** (attempts - 1));
     this.status.depositsConfirmed++;
     report.deposits.push(id);
-    this.log.info('remote_deposit_confirm_requested', { position_id: id, tx_hash: res.txHash });
+    this.log.info('remote_deposit_confirm_requested', { position_id: id, tx_hash: res.txHash, late: expired });
   }
 
   async run(signal: AbortSignal, pollMs: number): Promise<void> {
@@ -1071,6 +1155,22 @@ export class SolanaRelay {
 }
 
 type Outcome = { kind: 'none' } | { kind: 'skip'; reason: string } | { kind: 'done'; sig: string };
+type ScanResult<T> = { kind: 'hit'; value: T } | { kind: 'none' } | { kind: 'more' };
+
+/** getSignaturesForAddress returns at most 1000 per call. */
+const SIGNATURE_PAGE = 1_000;
+
+/** A resumable walk of one address's history. */
+interface HistoryScan {
+  /** successful signatures, newest first */
+  sigs: string[];
+  before: string | null;
+  /** entries listed, failed ones included */
+  listed: number;
+  complete: boolean;
+  /** how many of `sigs`, counted from the oldest, have been examined */
+  examined: number;
+}
 
 /** One signed leg, as transcribed from NEAR's message. */
 interface Leg {
@@ -1081,8 +1181,8 @@ interface Leg {
   vault: VaultContext;
   nonce: bigint;
   expires: bigint;
-  /** the exact instruction data this leg sends; also what a landed tx must contain */
-  ixData: Uint8Array;
+  /** the vault instruction this leg runs; a landed tx must have run it */
+  discriminator: Uint8Array;
   order: AccountOrder;
   /** the status byte this leg leaves on the position */
   landedStatus: number;

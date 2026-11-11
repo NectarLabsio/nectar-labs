@@ -42,7 +42,7 @@ import {
 } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { baseSepolia } from 'viem/chains';
-import { DEFAULT_BACKOFF, backoffDelayMs, type BackoffOptions } from './backoff.ts';
+import { DEFAULT_BACKOFF, backoffDelayMs, cappedCooldownMs, type BackoffOptions } from './backoff.ts';
 import type { CoreReader, KeeperWriter } from './chain.ts';
 import type { KeeperDb } from './db.ts';
 import { KeyFileError } from './keyfile.ts';
@@ -58,6 +58,8 @@ export const KIND_SELF = 2;
 /** `enum Status { None, Open, Settled, Released }` */
 export const VAULT_STATUS_NONE = 0;
 export const VAULT_STATUS_OPEN = 1;
+export const VAULT_STATUS_SETTLED = 2;
+export const VAULT_STATUS_RELEASED = 3;
 
 export const VAULT_ABI = parseAbi([
   'struct Settle { uint64 positionId; uint64 quoteId; uint256 repayE6; uint256 seizeRaw; address recipient; uint64 nonce; uint64 expires; uint8 kind; }',
@@ -467,15 +469,16 @@ export class ViemEvmPort implements EvmPort {
     return await this.pub.readContract({ address: vault, abi: VAULT_ABI, functionName: 'nonceUsed', args: [slotKey, nonce] });
   }
 
-  /** True iff the tx called this vault's settle / release on `depositor`'s slot. */
-  private async txActedOnSlot(hash: Hex, vault: Address, depositor: Address): Promise<boolean> {
+  /** Which slot a leg event's tx acted on: a direct vault call names it in the calldata; a call through another contract cannot be read. */
+  private async slotOfTx(hash: Hex, vault: Address, depositor: Address): Promise<'this' | 'other' | 'indirect'> {
     const tx = await this.pub.getTransaction({ hash });
-    if (tx.to === null || getAddress(tx.to) !== vault) return false;
+    if (tx.to === null || getAddress(tx.to) !== vault) return 'indirect';
     try {
       const call = decodeFunctionData({ abi: VAULT_ABI, data: tx.input });
-      return (call.functionName === 'settle' || call.functionName === 'release') && getAddress(call.args[1]) === depositor;
+      if (call.functionName !== 'settle' && call.functionName !== 'release') return 'indirect';
+      return getAddress(call.args[1]) === depositor ? 'this' : 'other';
     } catch {
-      return false; // not a direct vault call: the slot cannot be shown
+      return 'indirect';
     }
   }
 
@@ -512,9 +515,14 @@ export class ViemEvmPort implements EvmPort {
     }
   }
 
+  /**
+   * N2c: the tx comes from the vault's logs, so a leg landed through another contract is found too. A direct call on another
+   * slot is passed over; a tx whose slot cannot be read is the answer only if no direct call on this slot emitted the event.
+   */
   async findEventTx(vault: Address, event: VaultEvent, q: EventQuery): Promise<Hex | null> {
     const latest = await this.pub.getBlockNumber();
     const floor = q.fromBlock ?? (latest > this.lookback ? latest - this.lookback : 0n);
+    let indirect: Hex | null = null;
     for (let to = latest; to >= floor; ) {
       const from = to - this.chunk + 1n > floor ? to - this.chunk + 1n : floor;
       const logs = await this.pub.getContractEvents({ address: vault, abi: VAULT_ABI, eventName: event, args: { positionId: q.positionId }, fromBlock: from, toBlock: to });
@@ -523,16 +531,24 @@ export class ViemEvmPort implements EvmPort {
         if (l === undefined) continue;
         const a = l.args as { nonce?: bigint; depositor?: Address };
         if (q.nonce !== null && a.nonce !== q.nonce) continue;
-        if (q.depositor !== null) {
-          const onSlot = a.depositor !== undefined ? getAddress(a.depositor) === q.depositor : await this.txActedOnSlot(l.transactionHash, vault, q.depositor);
-          if (!onSlot) continue;
+        if (q.depositor !== null && a.depositor !== undefined) {
+          if (getAddress(a.depositor) !== q.depositor) continue;
+        } else if (q.depositor !== null) {
+          // N3: without a nonce to look for, only a nonce this slot consumed can be its leg.
+          if (q.nonce === null && (a.nonce === undefined || !(await this.nonceUsed(vault, slotKeyOf(q.positionId, q.depositor), a.nonce)))) continue;
+          const slot = await this.slotOfTx(l.transactionHash, vault, q.depositor);
+          if (slot === 'other') continue;
+          if (slot === 'indirect') {
+            indirect ??= l.transactionHash;
+            continue;
+          }
         }
         return l.transactionHash;
       }
       if (from === floor) break;
       to = from - 1n;
     }
-    return null;
+    return indirect;
   }
 }
 
@@ -569,8 +585,10 @@ export interface BaseRelayOptions {
   keeperAttest?: boolean;
   /** SR-28: BASE_OUTLAYER_VAULT_READ=1 once the quoter answers vault_read for base-sepolia. Off, deposits are logged as unsupported. */
   outlayerVaultRead?: boolean;
-  /** SR-11: confirm_remote_deposit calls per unchanged vault observation */
-  maxConfirmsPerObservation?: number;
+  /** N4: ceiling of the deposit-confirm cooldown, which doubles per unchanged vault observation */
+  maxConfirmCooldownMs?: number;
+  /** N4: how often an expired reservation's slot is re-read (it may stay empty forever) */
+  expiredRescanMs?: number;
   /** SR-28: how long an unsupported deposit waits before it is logged again */
   unsupportedCooldownMs?: number;
   /** ERC-8021 suffix bytes (H19); null = none. */
@@ -648,7 +666,8 @@ export class BaseRelay {
       maxPages: 200,
       keeperAttest: false,
       outlayerVaultRead: false,
-      maxConfirmsPerObservation: 3,
+      maxConfirmCooldownMs: 21_600_000,
+      expiredRescanMs: 600_000,
       unsupportedCooldownMs: 3_600_000,
       builderSuffixState: opts.builderSuffix != null ? 'appended' : 'none',
       backoff: DEFAULT_BACKOFF,
@@ -709,12 +728,14 @@ export class BaseRelay {
       const settling = base.filter((p) => p.status === 'Settling' || p.remote?.status === 'Settling');
       const releasing = base.filter((p) => p.remote?.status === 'Releasing');
       const awaiting = base.filter((p) => p.remote?.status === 'AwaitingDeposit');
+      // N4: an expired reservation with no proven deposit can still hold a late one, which must be proven to be released.
+      const late = base.filter((p) => p.remote?.status === 'Expired' && !str(p.remote.depositor));
       this.status.awaitingDeposit = awaiting.length;
       let pendingS = 0;
       let pendingR = 0;
       for (const p of settling) if (await this.item('settle', p, report)) pendingS++;
       for (const p of releasing) if (await this.item('release', p, report)) pendingR++;
-      for (const p of awaiting) await this.item('deposit', p, report);
+      for (const p of [...awaiting, ...late]) await this.item('deposit', p, report);
       this.status.pendingSettlements = pendingS;
       this.status.pendingReleases = pendingR;
       this.status.lastTickOk = true;
@@ -785,7 +806,8 @@ export class BaseRelay {
   private setBackoff(key: string, prevAttempts: number): number {
     const attempts = prevAttempts + 1;
     const delay = backoffDelayMs(attempts - 1, this.opts.backoff, this.opts.rand);
-    this.db.setRetry(key, attempts, this.opts.nowMs() + delay);
+    // Never shortens a cooldown already set: a failed confirm has spent allowance and keeps its own.
+    this.db.setRetry(key, attempts, Math.max(this.opts.nowMs() + delay, this.db.retry(key)?.next_attempt_at ?? 0));
     return delay;
   }
 
@@ -847,8 +869,9 @@ export class BaseRelay {
 
   /**
    * Idempotent core. Order: (1) a tx we signed before (stored hash) → by receipt; (2) the vault nonce is used → the leg
-   * landed (maybe before a crash, maybe by another relayer) → relay the tx that emitted the event; (3) the vault position
-   * is not open → skip. Otherwise verify the signer and expiry, sign, record the hash, broadcast, wait, relay.
+   * landed (maybe before a crash, maybe by another relayer) → relay the tx that emitted the event; (3) the slot shows this
+   * leg's end status under NEAR's authority → an older nonce landed before a re-sign → relay that tx; (4) the slot is not open
+   * → skip. Otherwise verify the signer and expiry, sign, record the hash, broadcast, wait, relay.
    */
   private async relayLeg(op: 'settle' | 'release', id: string, p: PositionLike, vault: Address, nonce: bigint, expires: bigint, digest: Hex, sig: Signature, calldata: (depositor: Address) => Hex): Promise<Outcome> {
     const txKey = `base:${op}:${id}:${nonce}`;
@@ -870,8 +893,8 @@ export class BaseRelay {
     const authority = getAddress(nearAuth);
     const depositor = await this.depositorOf(id, p);
     if (depositor === null) return { kind: 'skip', reason: 'depositor_unknown' };
+    const event = op === 'settle' ? 'PositionSettled' : 'PositionReleased';
     if (await this.evm.nonceUsed(vault, slotKeyOf(BigInt(id), depositor), nonce)) {
-      const event = op === 'settle' ? 'PositionSettled' : 'PositionReleased';
       // The depositor filter matters: another slot with the same id can emit the same (id, nonce).
       const hash = await this.evm.findEventTx(vault, event, { positionId: BigInt(id), nonce, depositor, fromBlock: await this.scanFloor(id, p) });
       if (hash === null) return { kind: 'skip', reason: 'nonce_used_tx_not_found' }; // retried with backoff, never final
@@ -880,6 +903,14 @@ export class BaseRelay {
       return { kind: 'done', txHash: hash };
     }
     const pos = await this.evm.position(vault, BigInt(id), depositor);
+    // N3: a slot cannot reopen and only its authority can close it, so this status under NEAR's key means NEAR's older nonce landed.
+    if (pos.status === (op === 'settle' ? VAULT_STATUS_SETTLED : VAULT_STATUS_RELEASED) && getAddress(pos.authority) === authority) {
+      const older = await this.evm.findEventTx(vault, event, { positionId: BigInt(id), nonce: null, depositor, fromBlock: await this.scanFloor(id, p) });
+      if (older === null) return { kind: 'skip', reason: 'older_leg_tx_not_found' }; // retried with backoff, never final
+      this.log.info('base_leg_already_landed', { op, position_id: id, evm_tx_hash: older });
+      await this.relayToNear(op, id, older);
+      return { kind: 'done', txHash: older };
+    }
     if (pos.status !== VAULT_STATUS_OPEN) return { kind: 'skip', reason: 'vault_position_not_open' };
     const signer = await recoverSigner(digest, sig);
     if (signer !== getAddress(pos.authority)) return { kind: 'skip', reason: 'signer_not_vault_authority' };
@@ -927,25 +958,32 @@ export class BaseRelay {
     if (!str(reserved) || !str(nearAuth)) return; // authority still pending on NEAR
     if (r?.confirming === true) return skip('confirm_in_flight');
     if (str(r?.depositor)) return skip('deposit_already_proven'); // a refused loan: confirming again cannot change it
-    if (str(r?.expires_ns) && BigInt(this.opts.nowMs()) * 1_000_000n >= BigInt(r.expires_ns)) return skip('reservation_expired');
+    const now = this.opts.nowMs();
+    const expired = r?.status === 'Expired' || (str(r?.expires_ns) && BigInt(now) * 1_000_000n >= BigInt(r.expires_ns));
+    if (expired) this.db.setRetry(key, 0, now + this.opts.expiredRescanMs); // the slot may stay empty forever: poll it slowly
     const depositor = await this.depositorOf(id, p);
     if (depositor === null) return skip('depositor_unknown');
     const pos = await this.evm.position(vault, BigInt(id), depositor);
     if (pos.status === VAULT_STATUS_NONE) return; // not deposited yet
-    if (pos.status !== VAULT_STATUS_OPEN || pos.amount < BigInt(reserved)) return skip('deposit_below_reserved');
+    // N4: once expired no loan can follow, so a late or short deposit is proven for what it is and can then be released.
+    const short = pos.amount < BigInt(reserved);
+    if (pos.status !== VAULT_STATUS_OPEN || pos.amount === 0n || (short && !expired)) return skip('deposit_below_reserved');
     if (!isAddress(nearAuth, { strict: false }) || getAddress(nearAuth) !== getAddress(pos.authority)) return skip('authority_mismatch');
+    // keeper_attest_deposit books the reserved units as deposited, which a short deposit is not; only an attested read can prove it.
+    if (short && this.opts.keeperAttest) return skip('short_deposit_needs_attested_read');
     if (this.status.depositConfirm === 'unsupported') {
       // SR-28: confirm_remote_deposit would be rejected every time, spending gas reserve and key allowance on each try.
       this.log.warn('base_deposit_confirm_unsupported', { position_id: id, reason: BASE_CONFIRM_UNSUPPORTED });
       this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.unsupportedCooldownMs);
       return skip('deposit_confirm_unsupported');
     }
-    // SR-11: each call costs gas reserve and key allowance, so an unchanged vault gets a bounded number of tries.
+    // SR-11, N4: each call costs gas reserve and key allowance, so an unchanged vault waits a doubling, capped cooldown. It is never given up on.
     const fingerprint = `${pos.amount}:${pos.status}`;
     const seen = this.db.confirmState(key);
     const attempts = seen !== null && seen.fingerprint === fingerprint ? seen.attempts + 1 : 1;
-    if (attempts > this.opts.maxConfirmsPerObservation) return skip('confirm_rejected_unchanged');
-    this.db.setConfirmState(key, fingerprint, attempts, this.opts.nowMs()); // before the call: a failed call has already spent allowance
+    // Recorded before the call: a failed or interrupted call has already spent allowance, and OutLayer answers asynchronously.
+    this.db.setConfirmState(key, fingerprint, attempts, now);
+    this.db.setRetry(key, 0, now + cappedCooldownMs(this.opts.depositCooldownMs, attempts, this.opts.maxConfirmCooldownMs));
     if (this.opts.keeperAttest) {
       // Local fork (D-026): OutLayer's vault_read cannot reach localhost, so the keeper attests what it read. Labelled.
       let opened: Hex | null = null;
@@ -963,8 +1001,6 @@ export class BaseRelay {
       if (!res.ok) throw new Error(`confirm_remote_deposit failed: ${(res.failure ?? '').slice(0, 200)}`);
       this.log.info('remote_deposit_confirm_requested', { position_id: id, tx_hash: res.txHash, chain: BASE_CHAIN_ID });
     }
-    // OutLayer answers asynchronously, and an attestation lands at once: either way, wait out a cooldown that doubles per unchanged attempt.
-    this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.depositCooldownMs * 2 ** (attempts - 1));
     this.status.depositsConfirmed++;
     report.deposits.push(id);
   }

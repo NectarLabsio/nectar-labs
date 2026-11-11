@@ -9,6 +9,11 @@ export interface BackoffOptions {
 
 export const DEFAULT_BACKOFF: BackoffOptions = { baseMs: 1_000, maxMs: 300_000, jitter: 0.5 };
 
+/** `baseMs` on the first attempt, doubling per further attempt, never above `capMs`. No jitter: the contract enforces its own cooldown. */
+export function cappedCooldownMs(baseMs: number, attempts: number, capMs: number): number {
+  return Math.min(capMs, baseMs * 2 ** Math.min(Math.max(attempts - 1, 0), 30));
+}
+
 export function backoffDelayMs(attempt: number, opts: BackoffOptions = DEFAULT_BACKOFF, rand: () => number = Math.random): number {
   if (!Number.isInteger(attempt) || attempt < 0) throw new RangeError('attempt must be a non-negative integer');
   const exp = Math.min(opts.maxMs, opts.baseMs * 2 ** Math.min(attempt, 30));

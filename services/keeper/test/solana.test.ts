@@ -23,9 +23,10 @@ import {
 } from '@solana/kit';
 import { ED25519_PROGRAM_ADDRESS, INSTRUCTIONS_SYSVAR_ADDRESS, ed25519InstructionData, hexToBytes } from '../../../solana/client/ed25519.ts';
 import { KIND_LEGACY, KIND_PRELIQ, KIND_SELF, releasePreimage, settlePreimage, utf8 } from '../../../solana/client/preimage.ts';
-import { nonceAddress, positionAddress } from '../../../solana/client/pda.ts';
+import { findProgramAddress, keyBytes, positionAddress, u64le as clientU64le } from '../../../solana/client/pda.ts';
 import { ACCOUNT_DISCRIMINATOR, NONCE_RECORD_V2, POSITION_V2, releaseInstruction, settleInstruction, vaultIds } from '../../../solana/client/vault.ts';
 import type { KeeperMethod } from '../src/abi.ts';
+import { cappedCooldownMs } from '../src/backoff.ts';
 import type { Allowance, CoreReader, KeeperCallArgs, KeeperWriter, TxResult, ViewResult } from '../src/chain.ts';
 import { assertSolanaPinned, loadConfig } from '../src/config.ts';
 import { KeeperDb } from '../src/db.ts';
@@ -42,6 +43,9 @@ import {
   POSITION_LAYOUT,
   POSITION_STATUS_RELEASED,
   POSITION_STATUS_SETTLED,
+  RELEASE_ACCOUNT_ORDER,
+  RELEASE_DISCRIMINATOR,
+  SETTLE_ACCOUNT_ORDER,
   SYSTEM_PROGRAM_ADDRESS,
   SolanaRelay,
   VAULT_DISCRIMINATOR,
@@ -64,6 +68,8 @@ import {
   settleIxData,
   vaultPda,
   vaultTokensPda,
+  type RelayOptions,
+  type SigEntry,
   type SigState,
   type SolAccount,
   type SolTx,
@@ -245,7 +251,7 @@ describe('solana: instruction bytes and account order (solana/deploy.md)', () =>
       { address: recipient, role: R },
       { address: await associatedTokenAddress(recipient, TOKEN_PROGRAM, MINT), role: W },
       { address: await claimPda(PROGRAM, v.vault, recipient), role: W },
-      { address: await noncePda(PROGRAM, pos, 0n), role: W },
+      { address: await noncePda(PROGRAM, pos, AUTH, 0n), role: W },
       { address: INSTRUCTIONS_SYSVAR_ADDRESS, role: R },
       { address: TOKEN_PROGRAM, role: R },
       { address: ASSOCIATED_TOKEN_PROGRAM_ADDRESS, role: R },
@@ -260,15 +266,22 @@ describe('solana: instruction bytes and account order (solana/deploy.md)', () =>
     const m = releasePreimage({ program: V.vault_program, positionId: 7n, recipient: DEPOSITOR, nonce: 9n, expires: 1700003600n });
     const [, rel] = await buildReleaseInstructions(v, payer, pos, DEPOSITOR, AUTH, m, hexToBytes(signMsg(m)));
     assert.ok(rel !== undefined);
-    assert.deepEqual(rel.accounts?.map((a) => a.address), [payer, v.vault, pos, await noncePda(PROGRAM, pos, 9n), INSTRUCTIONS_SYSVAR_ADDRESS, SYSTEM_PROGRAM_ADDRESS]);
+    assert.deepEqual(rel.accounts?.map((a) => a.address), [payer, v.vault, pos, await noncePda(PROGRAM, pos, AUTH, 9n), INSTRUCTIONS_SYSVAR_ADDRESS, SYSTEM_PROGRAM_ADDRESS]);
     await assert.rejects(buildReleaseInstructions(v, payer, pos, address(V.recipient), AUTH, m, SIG), /depositor/);
   });
-  it('§E seeds: the position PDA depends on the depositor, the nonce PDA on the slot', async () => {
+  it('§E seeds: the position PDA depends on the depositor, the nonce PDA on the slot and the authority', async () => {
     const v = await vaultCtx();
     const a = await positionPda(PROGRAM, v.vault, 1n, DEPOSITOR);
     const b = await positionPda(PROGRAM, v.vault, 1n, address(V.recipient));
     assert.notEqual(a, b);
-    assert.notEqual(await noncePda(PROGRAM, a, 1n), await noncePda(PROGRAM, b, 1n));
+    assert.notEqual(await noncePda(PROGRAM, a, AUTH, 1n), await noncePda(PROGRAM, b, AUTH, 1n));
+    assert.notEqual(await noncePda(PROGRAM, a, AUTH, 1n), await noncePda(PROGRAM, a, new Uint8Array(32).fill(7), 1n));
+  });
+  it('§E seeds: the nonce PDA is exactly [b"nonce", position, authority, nonce_le]', async () => {
+    const v = await vaultCtx();
+    const pos = await positionPda(PROGRAM, v.vault, 7n, DEPOSITOR);
+    const literal = findProgramAddress([utf8('nonce'), keyBytes(pos), AUTH, clientU64le(9n)], PROGRAM_ID).address;
+    assert.equal(await noncePda(PROGRAM, pos, AUTH, 9n), literal);
   });
   it('matches the vault client (solana/client, checked against the program): PDAs, layouts, settle and release', async () => {
     const v = await vaultCtx();
@@ -278,13 +291,14 @@ describe('solana: instruction bytes and account order (solana/deploy.md)', () =>
     const payer = address('11111111111111111111111111111112');
     const pos = await positionPda(PROGRAM, v.vault, 7n, DEPOSITOR);
     assert.equal(pos, positionAddress(PROGRAM_ID, v.vault, 7n, DEPOSITOR));
-    assert.equal(await noncePda(PROGRAM, pos, 9n), nonceAddress(PROGRAM_ID, pos, 9n));
+    // The nonce account is pinned to §E's literal seeds above; WO-35s moves the client to the same seeds in parallel.
+    const exceptNonce = <T>(accounts: readonly T[], order: typeof SETTLE_ACCOUNT_ORDER): T[] => accounts.filter((_a, i) => order[i]?.[0] !== 'nonceRecord');
     const f = parseSettlePreimage(V.preimage.replace('|pos=0|', '|pos=7|'));
     const settle = settleInstruction(ids, payer, DEPOSITOR, f);
-    assert.deepEqual(await settleAccounts(v, payer, pos, f), settle.accounts);
+    assert.deepEqual(exceptNonce(await settleAccounts(v, payer, pos, AUTH, f), SETTLE_ACCOUNT_ORDER), exceptNonce(settle.accounts, SETTLE_ACCOUNT_ORDER));
     assert.deepEqual(settleIxData(f), settle.data);
     const release = releaseInstruction(ids, payer, DEPOSITOR, { positionId: 7n, nonce: 9n, expires: 1700003600n });
-    assert.deepEqual(await releaseAccounts(v, payer, pos, 9n), release.accounts);
+    assert.deepEqual(exceptNonce(await releaseAccounts(v, payer, pos, AUTH, 9n), RELEASE_ACCOUNT_ORDER), exceptNonce(release.accounts, RELEASE_ACCOUNT_ORDER));
     assert.deepEqual(releaseIxData(7n, 9n, 1700003600n), release.data);
     assert.deepEqual([...NONCE_RECORD_DISCRIMINATOR], ACCOUNT_DISCRIMINATOR.NonceRecord);
     assert.equal(NONCE_RECORD_LEN, NONCE_RECORD_V2.len);
@@ -345,10 +359,22 @@ class FakeSol implements SolanaPort {
   async status(): Promise<SigState> {
     return { kind: 'confirmed' };
   }
-  async successfulSignaturesFor(a: Address, max: number): Promise<string[]> {
-    return (this.sigsFor.get(a) ?? []).slice(0, max);
+  pages: Array<{ a: Address; before: string | null }> = [];
+  txFetches: string[] = [];
+  /** throws once the page count reaches this, as a rate-limited RPC does */
+  failPageAt: number | null = null;
+  async signaturesPage(a: Address, before: string | null, limit: number): Promise<SigEntry[]> {
+    if (this.failPageAt !== null && this.pages.length === this.failPageAt) {
+      this.failPageAt = null;
+      throw new Error('429 Too Many Requests');
+    }
+    this.pages.push({ a, before });
+    const all = this.sigsFor.get(a) ?? [];
+    const start = before === null ? 0 : all.indexOf(before) + 1;
+    return all.slice(start, start + limit).map((signature) => ({ signature, ok: true }));
   }
   async transaction(sig: string): Promise<SolTx | null> {
+    this.txFetches.push(sig);
     return this.txs.get(sig) ?? null;
   }
 }
@@ -408,7 +434,7 @@ const solanaRemote = (status: string, extra: Record<string, unknown> = {}): Reco
 });
 const slot = (v: VaultContext, id: bigint): Promise<Address> => positionPda(PROGRAM, v.vault, id, DEPOSITOR);
 
-async function setup(): Promise<{ sol: FakeSol; near: FakeNear; relay: SolanaRelay; v: VaultContext; payer: KeyPairSigner; db: KeeperDb; now: { ms: number } }> {
+async function setup(extra: Partial<RelayOptions> = {}): Promise<{ sol: FakeSol; near: FakeNear; relay: SolanaRelay; v: VaultContext; payer: KeyPairSigner; db: KeeperDb; now: { ms: number } }> {
   const now = { ms: NOW };
   const sol = new FakeSol();
   const near = new FakeNear();
@@ -417,7 +443,7 @@ async function setup(): Promise<{ sol: FakeSol; near: FakeNear; relay: SolanaRel
   sol.accounts.set(v.vault, { owner: PROGRAM, data: vaultData('NVDAx', MINT) });
   const payer = await generateKeyPairSigner();
   const db = new KeeperDb(':memory:');
-  const relay = new SolanaRelay(near, near, sol, payer, db, quiet, { ...PINNED, nowMs: () => now.ms, rand: () => 0.5, sleep: async () => {} });
+  const relay = new SolanaRelay(near, near, sol, payer, db, quiet, { ...PINNED, nowMs: () => now.ms, rand: () => 0.5, sleep: async () => {}, ...extra });
   return { sol, near, relay, v, payer, db, now };
 }
 
@@ -566,7 +592,7 @@ const ATTACKER = address('Vote111111111111111111111111111111111111111');
 /** A settle that really landed: a valid record, a non-open position and the tx that ran the instruction. */
 async function landSettle(sol: FakeSol, v: VaultContext, sig: string): Promise<Address> {
   const f = parseSettlePreimage(V.preimage);
-  const nonceAddr = await noncePda(PROGRAM, await slot(v, f.positionId), f.nonce);
+  const nonceAddr = await noncePda(PROGRAM, await slot(v, f.positionId), AUTH, f.nonce);
   sol.accounts.set(nonceAddr, { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: f.nonce, positionId: f.positionId, op: OP_SETTLE, kind: f.kind }) });
   sol.sigsFor.set(nonceAddr, [sig]);
   sol.txs.set(sig, { succeeded: true, instructions: [{ program: PROGRAM, accounts: await settleTxAccounts(v, await slot(v, f.positionId)), data: settleIxData(f) }] });
@@ -574,7 +600,7 @@ async function landSettle(sol: FakeSol, v: VaultContext, sig: string): Promise<A
 }
 
 const settleTxAccounts = async (v: VaultContext, position: Address): Promise<Address[]> =>
-  (await settleAccounts(v, ATTACKER, position, parseSettlePreimage(V.preimage))).map((a) => a.address);
+  (await settleAccounts(v, ATTACKER, position, AUTH, parseSettlePreimage(V.preimage))).map((a) => a.address);
 
 function awaiting(near: FakeNear, id: string, reserved: string, extra: Record<string, unknown> = {}): void {
   // SR-11: an AwaitingDeposit position has top-level units 0 on the real contract (remote.rs).
@@ -586,7 +612,7 @@ describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
     const { sol, near, relay, v } = await setup();
     settlingPosition(near, V.preimage, V.signature_hex);
     sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n) });
-    const nonceAddr = await noncePda(PROGRAM, await slot(v, 0n), 0n);
+    const nonceAddr = await noncePda(PROGRAM, await slot(v, 0n), AUTH, 0n);
     sol.accounts.set(nonceAddr, { owner: SYSTEM_PROGRAM_ADDRESS, data: new Uint8Array(0) }); // a plain 890,880-lamport transfer
     sol.sigsFor.set(nonceAddr, ['AttackerTransferSig']);
     sol.txs.set('AttackerTransferSig', { succeeded: true, instructions: [{ program: SYSTEM_PROGRAM_ADDRESS, accounts: [ATTACKER, nonceAddr], data: new Uint8Array(12) }] });
@@ -599,7 +625,7 @@ describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
   it('a system-owned nonce PDA with no position to settle relays nothing', async () => {
     const { sol, near, relay, v } = await setup();
     settlingPosition(near, V.preimage, V.signature_hex);
-    const nonceAddr = await noncePda(PROGRAM, await slot(v, 0n), 0n);
+    const nonceAddr = await noncePda(PROGRAM, await slot(v, 0n), AUTH, 0n);
     sol.accounts.set(nonceAddr, { owner: SYSTEM_PROGRAM_ADDRESS, data: new Uint8Array(0) });
     sol.sigsFor.set(nonceAddr, ['AttackerTransferSig']);
     assert.deepEqual((await relay.tick()).skipped, [{ id: '0', reason: 'position_pda_missing' }]);
@@ -629,15 +655,89 @@ describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
       assert.equal(near.calls.length, 0);
     });
   }
-  it('a valid record whose position is still open, or left by the other op, is refused', async () => {
-    for (const status of [1, POSITION_STATUS_RELEASED]) {
+  it('N2a: a valid record is proof whatever the slot shows now: reopened, withdrawn, or any status', async () => {
+    for (const status of [1, POSITION_STATUS_SETTLED, POSITION_STATUS_RELEASED, null]) {
       const { sol, near, relay, v } = await setup();
       settlingPosition(near, V.preimage, V.signature_hex);
       await landSettle(sol, v, 'Sig');
-      sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n, status) });
-      assert.match((await relay.tick()).failed[0]?.error ?? '', /position status/);
-      assert.equal(near.calls.length, 0);
+      if (status !== null) sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n, status) });
+      assert.deepEqual((await relay.tick()).settled, ['0'], String(status));
+      assert.equal(sol.sent.length, 0);
+      assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), ['Sig']);
     }
+  });
+  it('N2d: a landing tx with trailing instruction bytes (Anchor ignores them) is the landing tx', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    await landSettle(sol, v, 'Trailing');
+    const data = Uint8Array.from([...settleIxData(parseSettlePreimage(V.preimage)), 0xde, 0xad]);
+    sol.txs.set('Trailing', { succeeded: true, instructions: [{ program: PROGRAM, accounts: await settleTxAccounts(v, await slot(v, 0n)), data }] });
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), ['Trailing']);
+  });
+  it('N2b: padding appended after the landing does not hide it: pages to the oldest and reads that first', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    const nonceAddr = await landSettle(sol, v, 'RealSig');
+    sol.sigsFor.set(nonceAddr, [...Array.from({ length: 2_500 }, (_x, i) => `Pad${i}`), 'RealSig']);
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), ['RealSig']);
+    assert.equal(sol.pages.length, 3);
+    assert.deepEqual(sol.txFetches, ['RealSig']);
+  });
+  it('N2b: a rate-limited listing resumes from its cursor on the next attempt', async () => {
+    const { sol, near, relay, v, now } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    const nonceAddr = await landSettle(sol, v, 'RealSig');
+    sol.sigsFor.set(nonceAddr, [...Array.from({ length: 1_500 }, (_x, i) => `Pad${i}`), 'RealSig']);
+    sol.failPageAt = 1;
+    assert.match((await relay.tick()).failed[0]?.error ?? '', /429/);
+    assert.equal(near.calls.length, 0);
+    now.ms += 3_600_000;
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.deepEqual(sol.pages.map((x) => x.before), [null, 'Pad999']);
+  });
+  it('N2b: the per-tick budget stops the search and the next tick continues it, nothing relayed meanwhile', async () => {
+    const { sol, near, relay, v, now } = await setup({ landedTxsPerTick: 2 });
+    settlingPosition(near, V.preimage, V.signature_hex);
+    const nonceAddr = await landSettle(sol, v, 'RealSig');
+    sol.sigsFor.set(nonceAddr, ['RealSig', 'Pre3', 'Pre2', 'Pre1']); // pre-funding transfers, older than the landing
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '0', reason: 'landed_scan_in_progress' }]);
+    assert.equal(near.calls.length, 0);
+    now.ms += 3_600_000;
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.deepEqual(sol.txFetches, ['Pre1', 'Pre2', 'Pre3', 'RealSig']);
+  });
+  it('N2b: a finished nonce walk is not repeated while the slot fallback is still running', async () => {
+    const { sol, near, relay, v, now } = await setup({ landedTxsPerTick: 1 });
+    settlingPosition(near, V.preimage, V.signature_hex);
+    const nonceAddr = await landSettle(sol, v, 'RealSig');
+    sol.sigsFor.set(nonceAddr, ['Pad']);
+    sol.sigsFor.set(await slot(v, 0n), ['RealSig', 'OpenSig']);
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '0', reason: 'landed_scan_in_progress' }]);
+    now.ms += 3_600_000;
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.deepEqual(sol.txFetches, ['Pad', 'OpenSig', 'RealSig']);
+    assert.equal(sol.pages.length, 2);
+  });
+  it('N2b: a search that finds nothing starts over next time, so a landing indexed later is seen', async () => {
+    const { sol, near, relay, v, now } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    const nonceAddr = await landSettle(sol, v, 'RealSig');
+    sol.sigsFor.set(nonceAddr, []);
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '0', reason: 'nonce_used_tx_not_found' }]);
+    sol.sigsFor.set(nonceAddr, ['RealSig']);
+    now.ms += 3_600_000;
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+  });
+  it('N2b: when the nonce history does not show the landing, the slot history does', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    const nonceAddr = await landSettle(sol, v, 'RealSig');
+    sol.sigsFor.set(nonceAddr, ['Pad']);
+    sol.sigsFor.set(await slot(v, 0n), ['RealSig']);
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), ['RealSig']);
   });
   it('a valid record on a Settled position (not yet withdrawn) relays the landed tx', async () => {
     const { sol, near, relay, v } = await setup();
@@ -654,11 +754,11 @@ describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
     near.positions.push({ position_id: '7', status: 'Open', collateral: 'NVDAx', units: '1', remote: solanaRemote('Releasing') });
     near.releases.set('7', { message: m, signature_hex: signMsg(m), nonce: '9', expires: '1700003600' });
     const pos = await slot(v, 7n);
-    const nonceAddr = await noncePda(PROGRAM, pos, 9n);
+    const nonceAddr = await noncePda(PROGRAM, pos, AUTH, 9n);
     sol.accounts.set(pos, { owner: PROGRAM, data: positionData(v.vault, 7n, 5n, POSITION_STATUS_RELEASED) });
     sol.accounts.set(nonceAddr, { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: 9n, positionId: 7n, op: OP_RELEASE, kind: 0 }) });
     sol.sigsFor.set(nonceAddr, ['RelSig']);
-    sol.txs.set('RelSig', { succeeded: true, instructions: [{ program: PROGRAM, accounts: (await releaseAccounts(v, ATTACKER, pos, 9n)).map((a) => a.address), data: releaseIxData(7n, 9n, 1700003600n) }] });
+    sol.txs.set('RelSig', { succeeded: true, instructions: [{ program: PROGRAM, accounts: (await releaseAccounts(v, ATTACKER, pos, AUTH, 9n)).map((a) => a.address), data: releaseIxData(7n, 9n, 1700003600n) }] });
     assert.deepEqual((await relay.tick()).released, ['7']);
     assert.equal(sol.sent.length, 0);
     assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), ['RelSig']);
@@ -689,21 +789,20 @@ describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
     const f = parseSettlePreimage(V.preimage);
     const squat = await positionPda(PROGRAM, v.vault, 0n, ATTACKER);
     sol.accounts.set(squat, { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n, POSITION_STATUS_SETTLED, AUTH, ATTACKER) });
-    sol.accounts.set(await noncePda(PROGRAM, squat, f.nonce), { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: f.nonce, positionId: f.positionId, op: OP_SETTLE, kind: f.kind }) });
+    sol.accounts.set(await noncePda(PROGRAM, squat, AUTH, f.nonce), { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: f.nonce, positionId: f.positionId, op: OP_SETTLE, kind: f.kind }) });
     sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n) });
     assert.deepEqual((await relay.tick()).settled, ['0']);
     assert.equal(sol.sent.length, 1);
   });
-  it('only the tx that ran this exact instruction is relayed, wherever it sits among padding transfers', async () => {
+  it('only a tx that ran this vault instruction on this slot is relayed, wherever it sits among padding transfers', async () => {
     const { sol, near, relay, v } = await setup();
     settlingPosition(near, V.preimage, V.signature_hex);
     const nonceAddr = await landSettle(sol, v, 'RealSig');
     const f = parseSettlePreimage(V.preimage);
-    const wrong = settleIxData({ ...f, seizeUnits: f.seizeUnits + 1n });
-    sol.sigsFor.set(nonceAddr, ['Transfer', 'WrongData', 'WrongProgram', 'Failed', 'Unknown', 'RealSig', 'OldTransfer']);
+    sol.sigsFor.set(nonceAddr, ['Transfer', 'RealSig', 'OtherIx', 'WrongProgram', 'Failed', 'Unknown', 'OldTransfer']);
     const accounts = await settleTxAccounts(v, await slot(v, 0n));
     sol.txs.set('Transfer', { succeeded: true, instructions: [{ program: SYSTEM_PROGRAM_ADDRESS, accounts: [ATTACKER, nonceAddr], data: new Uint8Array(12) }] });
-    sol.txs.set('WrongData', { succeeded: true, instructions: [{ program: PROGRAM, accounts, data: wrong }] });
+    sol.txs.set('OtherIx', { succeeded: true, instructions: [{ program: PROGRAM, accounts, data: RELEASE_DISCRIMINATOR }] });
     sol.txs.set('WrongProgram', { succeeded: true, instructions: [{ program: ATTACKER, accounts, data: settleIxData(f) }] });
     sol.txs.set('Failed', { succeeded: false, instructions: [{ program: PROGRAM, accounts, data: settleIxData(f) }] });
     assert.deepEqual((await relay.tick()).settled, ['0']);
@@ -723,7 +822,17 @@ describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
     const { sol, near, relay, v } = await setup();
     settlingPosition(near, V.preimage, V.signature_hex);
     sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n) });
-    sol.accounts.set(await noncePda(PROGRAM, await positionPda(PROGRAM, v.vault, 0n, ATTACKER), 0n), { owner: PROGRAM, data: new Uint8Array(91) });
+    sol.accounts.set(await noncePda(PROGRAM, await positionPda(PROGRAM, v.vault, 0n, ATTACKER), AUTH, 0n), { owner: PROGRAM, data: new Uint8Array(91) });
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.equal(sol.sent.length, 1);
+  });
+  it('N1: a nonce burned on this slot under another key is a different PDA: the leg is sent under NEAR\'s authority', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    const pos = await slot(v, 0n);
+    const att = new Uint8Array(32).fill(7);
+    sol.accounts.set(pos, { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n) });
+    sol.accounts.set(await noncePda(PROGRAM, pos, att, 0n), { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: att, nonce: 0n, positionId: 0n, op: OP_RELEASE, kind: 0 }) });
     assert.deepEqual((await relay.tick()).settled, ['0']);
     assert.equal(sol.sent.length, 1);
   });
@@ -751,6 +860,94 @@ describe('SR-2: a nonce PDA is proof only when the vault wrote it', () => {
     now.ms += 60_000;
     p.remote.authority = NEAR_AUTH;
     assert.deepEqual((await relay.tick()).settled, ['0']);
+  });
+});
+
+describe('N3: an older nonce of this leg landed before a re-sign', () => {
+  const OLD = 77n;
+  /** A settle that landed under an older nonce on the committed slot, signed by `authority`. */
+  async function landOlder(sol: FakeSol, v: VaultContext, sig: string, authority = AUTH): Promise<Address> {
+    const f = parseSettlePreimage(V.preimage);
+    const pos = await slot(v, 0n);
+    const old = await noncePda(PROGRAM, pos, authority, OLD);
+    sol.accounts.set(old, { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority, nonce: OLD, positionId: 0n, op: OP_SETTLE, kind: f.kind }) });
+    const accounts = (await settleAccounts(v, ATTACKER, pos, authority, { ...f, nonce: OLD })).map((a) => a.address);
+    sol.txs.set(sig, { succeeded: true, instructions: [{ program: PROGRAM, accounts, data: settleIxData({ ...f, nonce: OLD }) }] });
+    sol.sigsFor.set(pos, [sig, 'OpenSig']);
+    return old;
+  }
+  it('settled slot, no record for the current nonce: relays the older tx, sends nothing', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    await landOlder(sol, v, 'OlderSig');
+    sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n, POSITION_STATUS_SETTLED) });
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.equal(sol.sent.length, 0);
+    assert.deepEqual(near.calls, [{ method: 'relay_settlement_result', args: { position_id: '0', solana_tx_sig: 'OlderSig' } }]);
+  });
+  it('withdrawn slot (account gone): the older tx is still found through the slot history', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    await landOlder(sol, v, 'OlderSig');
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), ['OlderSig']);
+  });
+  it('a release that landed under an older nonce is relayed as the release', async () => {
+    const { sol, near, relay, v } = await setup();
+    near.version = '2.2.0-v7';
+    const m = releasePreimage({ program: V.vault_program, positionId: 7n, recipient: DEPOSITOR, nonce: 9n, expires: 1700003600n });
+    near.positions.push({ position_id: '7', status: 'Open', collateral: 'NVDAx', units: '1', remote: solanaRemote('Releasing') });
+    near.releases.set('7', { message: m, signature_hex: signMsg(m), nonce: '9', expires: '1700003600' });
+    const pos = await slot(v, 7n);
+    sol.accounts.set(pos, { owner: PROGRAM, data: positionData(v.vault, 7n, 5n, POSITION_STATUS_RELEASED) });
+    sol.accounts.set(await noncePda(PROGRAM, pos, AUTH, 4n), { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: 4n, positionId: 7n, op: OP_RELEASE, kind: 0 }) });
+    sol.sigsFor.set(pos, ['OldRel']);
+    sol.txs.set('OldRel', { succeeded: true, instructions: [{ program: PROGRAM, accounts: (await releaseAccounts(v, ATTACKER, pos, AUTH, 4n)).map((a) => a.address), data: releaseIxData(7n, 4n, 1700000600n) }] });
+    assert.deepEqual((await relay.tick()).released, ['7']);
+    assert.deepEqual(near.calls.map((c) => c.args.solana_tx_sig), ['OldRel']);
+  });
+  it('a leg the depositor ran under its own key is never relayed as NEAR\'s', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    await landOlder(sol, v, 'AttackerSig', new Uint8Array(32).fill(7));
+    sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n, POSITION_STATUS_SETTLED, new Uint8Array(32).fill(7)) });
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '0', reason: 'position_pda_not_open' }]);
+    assert.equal(near.calls.length, 0);
+  });
+  const forgeries: Array<[string, (old: Address, sol: FakeSol, v: VaultContext) => void]> = [
+    ['system-owned', (old, sol) => void sol.accounts.set(old, { owner: SYSTEM_PROGRAM_ADDRESS, data: new Uint8Array(0) })],
+    ['absent', (old, sol) => void sol.accounts.delete(old)],
+    ['the wrong op', (old, sol, v) => void sol.accounts.set(old, { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: OLD, positionId: 0n, op: OP_RELEASE, kind: 0 }) })],
+    ['another position', (old, sol, v) => void sol.accounts.set(old, { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: OLD, positionId: 1n, op: OP_SETTLE, kind: 0 }) })],
+    ['a nonce that does not derive this address', (old, sol, v) => void sol.accounts.set(old, { owner: PROGRAM, data: nonceRecordData({ version: 2, vault: v.vault, authority: AUTH, nonce: OLD + 1n, positionId: 0n, op: OP_SETTLE, kind: 0 }) })],
+  ];
+  for (const [name, forge] of forgeries) {
+    it(`an older candidate record that is ${name} proves nothing`, async () => {
+      const { sol, near, relay, v } = await setup();
+      settlingPosition(near, V.preimage, V.signature_hex);
+      const old = await landOlder(sol, v, 'Sig');
+      forge(old, sol, v);
+      sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n, POSITION_STATUS_SETTLED) });
+      assert.deepEqual((await relay.tick()).skipped, [{ id: '0', reason: 'position_pda_not_open' }]);
+      assert.equal(near.calls.length, 0);
+    });
+  }
+  it('a slot left by the other op is not searched', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    await landOlder(sol, v, 'Sig');
+    sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n, POSITION_STATUS_RELEASED) });
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '0', reason: 'position_pda_not_open' }]);
+    assert.equal(sol.pages.length, 0);
+    assert.equal(near.calls.length, 0);
+  });
+  it('an open slot is sent to, not searched', async () => {
+    const { sol, near, relay, v } = await setup();
+    settlingPosition(near, V.preimage, V.signature_hex);
+    sol.accounts.set(await slot(v, 0n), { owner: PROGRAM, data: positionData(v.vault, 0n, 100_000_000n) });
+    assert.deepEqual((await relay.tick()).settled, ['0']);
+    assert.equal(sol.pages.length, 0);
+    assert.equal(sol.sent.length, 1);
   });
 });
 
@@ -811,23 +1008,22 @@ describe('SR-11: deposits below the reserved units do not trigger confirm', () =
     assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'reserved_units_unknown' }]);
     assert.equal(near.calls.length, 0);
   });
-  it('a rejected confirm is not repeated forever: bounded per observation, re-armed when the amount changes', async () => {
-    const { sol, near, relay, v, now } = await setup();
+  it('N4: a rejected confirm is spaced out, never abandoned; a changed amount re-arms it', async () => {
+    const { sol, near, relay, v, db, now } = await setup();
     near.version = '2.2.0-v7';
     awaiting(near, '8', '1000');
     sol.accounts.set(await slot(v, 8n), { owner: PROGRAM, data: positionData(v.vault, 8n, 1000n) });
-    for (let i = 0; i < 3; i++) {
-      assert.deepEqual((await relay.tick()).deposits, ['8']);
-      now.ms += 3_600_000;
+    for (let i = 0; i < 12; i++) {
+      assert.deepEqual((await relay.tick()).deposits, ['8'], `attempt ${i}`);
+      const wait = (db.retry('sol:deposit:8')?.next_attempt_at ?? 0) - now.ms;
+      assert.equal(wait, Math.min(21_600_000, 60_000 * 2 ** i), `attempt ${i}`);
+      assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'backoff' }]);
+      now.ms += wait;
     }
-    for (let i = 0; i < 3; i++) {
-      assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'confirm_rejected_unchanged' }]);
-      now.ms += 3_600_000;
-    }
-    assert.equal(near.calls.length, 3);
+    assert.equal(near.calls.length, 12);
     sol.accounts.set(await slot(v, 8n), { owner: PROGRAM, data: positionData(v.vault, 8n, 1001n) });
     assert.deepEqual((await relay.tick()).deposits, ['8']);
-    assert.equal(near.calls.length, 4);
+    assert.equal(db.retry('sol:deposit:8')?.next_attempt_at, now.ms + 60_000);
   });
   it('the cooldown doubles per unchanged attempt, and the count survives a restart', async () => {
     const { sol, near, relay, v, db, payer, now } = await setup();
@@ -842,27 +1038,83 @@ describe('SR-11: deposits below the reserved units do not trigger confirm', () =
     now.ms = NOW + 180_000;
     const restarted = new SolanaRelay(near, near, sol, payer, db, quiet, { ...PINNED, nowMs: () => now.ms, rand: () => 0.5, sleep: async () => {} });
     await restarted.tick();
-    now.ms += 3_600_000;
-    assert.deepEqual((await restarted.tick()).skipped, [{ id: '8', reason: 'confirm_rejected_unchanged' }]);
+    assert.equal(db.retry('sol:deposit:8')?.next_attempt_at, NOW + 180_000 + 240_000);
     assert.equal(near.calls.length, 3);
   });
-  it('a failing confirm call also counts against the bound', async () => {
-    const { sol, near, relay, v, now } = await setup();
+  it('a failing confirm keeps the same doubling cooldown: the error backoff never shortens it', async () => {
+    const { sol, near, relay, v, db, now } = await setup();
     near.version = '2.2.0-v7';
     near.failCalls = true;
     awaiting(near, '8', '1000');
     sol.accounts.set(await slot(v, 8n), { owner: PROGRAM, data: positionData(v.vault, 8n, 1000n) });
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       assert.equal((await relay.tick()).failed.length, 1);
-      now.ms += 3_600_000;
+      assert.equal((db.retry('sol:deposit:8')?.next_attempt_at ?? 0) - now.ms, 60_000 * 2 ** i);
+      assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'backoff' }]);
+      now.ms += 60_000 * 2 ** i;
     }
-    assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'confirm_rejected_unchanged' }]);
-    assert.equal(near.calls.length, 3);
+    assert.equal(near.calls.length, 4);
+  });
+  it('cappedCooldownMs: doubles from the base, stops at the cap, survives huge attempt counts', () => {
+    assert.deepEqual([1, 2, 3, 4, 5].map((n) => cappedCooldownMs(10, n, 50)), [10, 20, 40, 50, 50]);
+    assert.equal(cappedCooldownMs(10, 100_000, 50), 50);
+    assert.equal(cappedCooldownMs(10, 0, 50), 10);
+  });
+  const EXPIRED = { expires_ns: String(BigInt(NOW) * 1_000_000n) };
+  it('N4: a full deposit that arrives after expiry is confirmed, so it can be released', async () => {
+    const { sol, near, relay, v } = await setup();
+    near.version = '2.2.0-v7';
+    awaiting(near, '8', '1000', EXPIRED);
+    sol.accounts.set(await slot(v, 8n), { owner: PROGRAM, data: positionData(v.vault, 8n, 1000n) });
+    assert.deepEqual((await relay.tick()).deposits, ['8']);
+    assert.deepEqual(near.calls, [{ method: 'confirm_remote_deposit', args: { position_id: '8' } }]);
+  });
+  it('N4: a short deposit is confirmed once the reservation has expired, and not before', async () => {
+    const { sol, near, relay, v, now } = await setup();
+    near.version = '2.2.0-v7';
+    awaiting(near, '8', '1000', { expires_ns: String(BigInt(NOW + 60_000) * 1_000_000n) });
+    sol.accounts.set(await slot(v, 8n), { owner: PROGRAM, data: positionData(v.vault, 8n, 1n) });
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'deposit_below_reserved' }]);
+    assert.equal(near.calls.length, 0);
+    now.ms = NOW + 60_000;
+    assert.deepEqual((await relay.tick()).deposits, ['8']);
+    assert.equal(near.calls.length, 1);
+  });
+  it('N4: a position already marked Expired on NEAR is watched too (status Closed at the top level)', async () => {
+    const { sol, near, relay, v } = await setup();
+    near.version = '2.2.0-v7';
+    near.positions.push({ position_id: '8', status: 'Closed', collateral: 'NVDAx', units: '0', remote: solanaRemote('Expired', { reserved_units: '1000', ...EXPIRED }) });
+    sol.accounts.set(await slot(v, 8n), { owner: PROGRAM, data: positionData(v.vault, 8n, 400n) });
+    assert.deepEqual((await relay.tick()).deposits, ['8']);
+    assert.equal(relay.status.awaitingDeposit, 0);
+  });
+  it('N4: an Expired position with a proven deposit is left alone', async () => {
+    const { near, relay } = await setup();
+    near.version = '2.2.0-v7';
+    near.positions.push({ position_id: '8', status: 'Closed', collateral: 'NVDAx', units: '0', remote: solanaRemote('Expired', { reserved_units: '1000', depositor: DEPOSITOR }) });
+    assert.deepEqual(await relay.tick(), { settled: [], released: [], deposits: [], skipped: [], failed: [] });
+    assert.equal(near.calls.length, 0);
+  });
+  it('N4: an expired, still-empty slot costs no NEAR call and is polled slowly', async () => {
+    const { near, relay, db } = await setup();
+    near.version = '2.2.0-v7';
+    awaiting(near, '8', '1000', EXPIRED);
+    await relay.tick();
+    assert.equal(near.calls.length, 0);
+    assert.equal(db.retry('sol:deposit:8')?.next_attempt_at, NOW + 600_000);
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'backoff' }]);
+  });
+  it('N4: an expired slot under another authority is still not confirmed', async () => {
+    const { sol, near, relay, v } = await setup();
+    near.version = '2.2.0-v7';
+    awaiting(near, '8', '1000', EXPIRED);
+    sol.accounts.set(await slot(v, 8n), { owner: PROGRAM, data: positionData(v.vault, 8n, 1000n, 1, new Uint8Array(32).fill(7)) });
+    assert.deepEqual((await relay.tick()).skipped, [{ id: '8', reason: 'authority_mismatch' }]);
+    assert.equal(near.calls.length, 0);
   });
   for (const [extra, reason] of [
     [{ confirming: true }, 'confirm_in_flight'],
     [{ depositor: DEPOSITOR }, 'deposit_already_proven'],
-    [{ expires_ns: String(BigInt(NOW) * 1_000_000n) }, 'reservation_expired'],
   ] as const) {
     it(`${reason}: no confirm`, async () => {
       const { sol, near, relay, v } = await setup();
@@ -992,21 +1244,21 @@ describe('KitSolanaPort against a local JSON-RPC stub', () => {
       transaction: { signatures: [SIG58], message: { accountKeys: [ATTACKER], header: { numRequiredSignatures: 1, numReadonlySignedAccounts: 0, numReadonlyUnsignedAccounts: 0 }, recentBlockhash: '4vJ9JU1bJJE96FWSJKvHsmmFADCg4gpZQff4P3bkLKi', instructions: [] } },
     }), async (port) => assert.equal((await port.transaction(SIG58))?.succeeded, false));
   });
-  it('getSignaturesForAddress: pages past 1000, drops failed txs, stops at max', async () => {
+  it('getSignaturesForAddress: one page per call, the cursor is passed, failed txs are marked', async () => {
     const calls: Array<{ before?: string; limit?: number }> = [];
     const sigAt = (i: number): string => b58(new Uint8Array(64).fill(1 + (i % 200)).map((x, k) => (k < 2 ? (i >> (8 * k)) & 255 : x)));
     await withRpc((_m, params) => {
       const cfg = params[1] as { before?: string; limit: number };
       calls.push(cfg);
-      const start = calls.length === 1 ? 0 : 1000;
-      return Array.from({ length: cfg.limit }, (_x, i) => ({ signature: sigAt(start + i), slot: 1, err: i === 0 ? { x: 1 } : null, memo: null, blockTime: 1, confirmationStatus: 'confirmed' }));
+      return Array.from({ length: cfg.limit }, (_x, i) => ({ signature: sigAt(i), slot: 1, err: i === 0 ? { x: 1 } : null, memo: null, blockTime: 1, confirmationStatus: 'confirmed' }));
     }, async (port) => {
-      const out = await port.successfulSignaturesFor(MINT, 1500);
-      assert.equal(calls.length, 2);
-      assert.equal(calls[0]?.limit, 1000);
-      assert.equal(calls[1]?.limit, 500);
-      assert.equal(calls[1]?.before, sigAt(999));
-      assert.equal(out.length, 1498);
+      const first = await port.signaturesPage(MINT, null, 3);
+      assert.deepEqual(first, [{ signature: sigAt(0), ok: false }, { signature: sigAt(1), ok: true }, { signature: sigAt(2), ok: true }]);
+      await port.signaturesPage(MINT, sigAt(2), 2);
+      assert.equal(calls[0]?.before, undefined);
+      assert.equal(calls[0]?.limit, 3);
+      assert.equal(calls[1]?.before, sigAt(2));
+      assert.equal(calls[1]?.limit, 2);
     });
   });
 });
