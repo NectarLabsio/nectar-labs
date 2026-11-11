@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [desktop] › e2e/hosts.spec.ts:29:3 › host routing (hosted mode) › www.<site> → SITE with 301, path and query kept (10ms)
+  ✓  2 [desktop] › e2e/hosts.spec.ts:35:3 › host routing (hosted mode) › APP / → /feed (2ms)
+  ✓  3 [desktop] › e2e/hosts.spec.ts:41:3 › host routing (hosted mode) › app routes on SITE → APP with 308 (10ms)
+  ✓  4 [desktop] › e2e/hosts.spec.ts:49:3 › host routing (hosted mode) › landing-only routes on APP → SITE with 308 (10ms)
+  ✓  5 [desktop] › e2e/hosts.spec.ts:57:3 › host routing (hosted mode) › each host serves its own routes; /api serves on both (559ms)
+  ✓  6 [desktop] › e2e/hosts.spec.ts:64:3 › host routing (hosted mode) › per-host robots, sitemap and canonical (25ms)
+
+  6 passed (848ms)
