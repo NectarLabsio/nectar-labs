@@ -5,7 +5,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { Ed25519Program, Keypair, PublicKey } from "@solana/web3.js";
 import { ed25519InstructionData, ed25519VerifyInstruction, ED25519_PROGRAM_ADDRESS, hexToBytes } from "../client/ed25519.ts";
-import { base58Decode, base58Encode, claimSeeds, findProgramAddress, isOnCurve, keyBytes, nonceSeeds, positionSeeds, u64le } from "../client/pda.ts";
+import { base58Decode, base58Encode, claimSeeds, findProgramAddress, isOnCurve, keyBytes, nonceAddress, nonceSeeds, positionSeeds, u64le } from "../client/pda.ts";
 import { KIND_LEGACY, KIND_PRELIQ, KIND_SELF, releasePreimage, settlePreimage, utf8 } from "../client/preimage.ts";
 import {
   ACCOUNT_DISCRIMINATOR,
@@ -48,12 +48,15 @@ test("client: base58 round-trips, including leading zeros", () => {
   assert.throws(() => base58Decode("0OIl"));
 });
 
-test("client: v2 seeds put the depositor in the position and the position in the nonce", () => {
+test("client: v2 seeds put the depositor in the position and the position and authority in the nonce", () => {
   const [vault, a, b, position] = [Keypair.generate(), Keypair.generate(), Keypair.generate(), Keypair.generate()].map((k) => k.publicKey.toBase58()) as [string, string, string, string];
   assert.deepEqual(positionSeeds(vault, 7n, a), [utf8("pos"), keyBytes(vault), u64le(7n), keyBytes(a)]);
-  assert.deepEqual(nonceSeeds(position, 7n), [utf8("nonce"), keyBytes(position), u64le(7n)]);
+  const [authority, other] = [new Uint8Array(32).fill(1), new Uint8Array(32).fill(2)];
+  assert.deepEqual(nonceSeeds(position, authority, 7n), [utf8("nonce"), keyBytes(position), authority, u64le(7n)]);
+  assert.notEqual(nonceAddress(vault, position, authority, 7n), nonceAddress(vault, position, other, 7n));
   assert.deepEqual(claimSeeds(vault, b), [utf8("claim"), keyBytes(vault), keyBytes(b)]);
-  assert.throws(() => nonceSeeds("111", 7n));
+  assert.throws(() => nonceSeeds("111", authority, 7n));
+  assert.throws(() => nonceSeeds(position, authority.subarray(1), 7n));
 });
 
 test("client: discriminators follow sha256('account:<Name>') and sha256('global:<name>')", () => {

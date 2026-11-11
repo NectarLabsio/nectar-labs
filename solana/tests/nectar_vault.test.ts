@@ -33,7 +33,7 @@ import {
 import idl from "../target/idl/nectar_vault.json" with { type: "json" };
 import type { NectarVault } from "../target/types/nectar_vault.ts";
 import { ED25519_PROGRAM_ADDRESS, ed25519InstructionData, hexToBytes } from "../client/ed25519.ts";
-import { claimAddress, nonceAddress, positionAddress } from "../client/pda.ts";
+import { claimAddress, findProgramAddress, keyBytes, nonceAddress, positionAddress, u64le } from "../client/pda.ts";
 import { KIND_LEGACY, KIND_PRELIQ, KIND_SELF, releasePreimage, settlePreimage, utf8 } from "../client/preimage.ts";
 import type { SettleKind } from "../client/preimage.ts";
 import {
@@ -128,7 +128,8 @@ const rawAccount = async (a: string): Promise<Uint8Array | null> => {
   return info === null ? null : new Uint8Array(info.data);
 };
 const positionOf = (id: bigint, who: string = DEPOSITOR, v: VaultIds = ids): string => positionAddress(PROGRAM, v.vault, id, who);
-const nonceOf = (n: bigint, id: bigint, who: string = DEPOSITOR): string => nonceAddress(PROGRAM, positionOf(id, who), n);
+const nonceOf = (n: bigint, id: bigint, who: string = DEPOSITOR, authority: Uint8Array = AUTH.pub): string =>
+  nonceAddress(PROGRAM, positionOf(id, who), authority, n);
 const claimOf = (recipient: string, v: VaultIds = ids): string => claimAddress(PROGRAM, v.vault, recipient);
 
 async function readPosition(id: bigint, who: string = DEPOSITOR, v: VaultIds = ids) {
@@ -164,19 +165,20 @@ async function open(id: bigint, amount: bigint, who?: Holder, authority: Uint8Ar
 }
 
 const settleMessage = (a: SettleArgs): Uint8Array => utf8(settlePreimage({ ...a, program: PROGRAM, kind: a.kind as SettleKind }));
-const settleIx = (a: SettleArgs, who: string = DEPOSITOR, v: VaultIds = ids): VaultInstruction => settleInstruction(v, PAYER, who, a);
+const settleIx = (a: SettleArgs, who: string = DEPOSITOR, v: VaultIds = ids, authority: Uint8Array = AUTH.pub): VaultInstruction =>
+  settleInstruction(v, PAYER, who, authority, a);
 const signedSettle = (a: SettleArgs, who: string = DEPOSITOR, key: EdKey = AUTH, v: VaultIds = ids): TransactionInstruction[] => [
   verifyIx(key, settleMessage(a)),
-  toIx(settleIx(a, who, v)),
+  toIx(settleIx(a, who, v, key.pub)),
 ];
 
 const releaseMessage = (positionId: bigint, nonce: bigint, expires: bigint, who: string = DEPOSITOR): Uint8Array =>
   utf8(releasePreimage({ program: PROGRAM, positionId, recipient: who, nonce, expires }));
-const releaseIx = (positionId: bigint, nonce: bigint, expires: bigint, who: string = DEPOSITOR): VaultInstruction =>
-  releaseInstruction(ids, PAYER, who, { positionId, nonce, expires });
+const releaseIx = (positionId: bigint, nonce: bigint, expires: bigint, who: string = DEPOSITOR, authority: Uint8Array = AUTH.pub): VaultInstruction =>
+  releaseInstruction(ids, PAYER, who, authority, { positionId, nonce, expires });
 const signedRelease = (positionId: bigint, nonce: bigint, who: string = DEPOSITOR, key: EdKey = AUTH): TransactionInstruction[] => {
   const expires = future();
-  return [verifyIx(key, releaseMessage(positionId, nonce, expires, who)), toIx(releaseIx(positionId, nonce, expires, who))];
+  return [verifyIx(key, releaseMessage(positionId, nonce, expires, who)), toIx(releaseIx(positionId, nonce, expires, who, key.pub))];
 };
 
 const withdraw = (id: bigint, kp: Keypair, destination: PublicKey, v: VaultIds = ids): Promise<string> =>
@@ -333,8 +335,8 @@ describe("SR-1 slot-scoped nonces", () => {
     await send(signedSettle(burn, attacker.key, K_ATTACKER));
     await open(711n, 1n, attacker, K_ATTACKER.pub);
     await send(signedRelease(711n, M, attacker.key, K_ATTACKER));
-    assert.ok(await rawAccount(nonceOf(N, 710n, attacker.key)), "burnt on the attacker's slot");
-    assert.ok(await rawAccount(nonceOf(M, 711n, attacker.key)), "burnt on the attacker's slot");
+    assert.ok(await rawAccount(nonceOf(N, 710n, attacker.key, K_ATTACKER.pub)), "burnt on the attacker's slot");
+    assert.ok(await rawAccount(nonceOf(M, 711n, attacker.key, K_ATTACKER.pub)), "burnt on the attacker's slot");
     assert.equal(await rawAccount(nonceOf(N, 710n)), null, "still unused on the honest slot");
     assert.equal(await rawAccount(nonceOf(M, 711n)), null, "still unused on the honest slot");
 
@@ -351,6 +353,80 @@ describe("SR-1 slot-scoped nonces", () => {
     const ix = settleIx(args);
     ix.accounts[8] = { ...ix.accounts[8]!, address: nonceOf(1020n, 901n) as (typeof ix.accounts)[number]["address"] };
     await expectFail(send([verifyIx(AUTH, settleMessage(args)), toIx(ix)]), "Error Code: ConstraintSeeds");
+  });
+});
+
+describe("N1 authority-scoped nonces", () => {
+  const swapNonce = (ix: VaultInstruction, index: number, a: string): VaultInstruction => {
+    ix.accounts[index] = { ...ix.accounts[index]!, address: a as (typeof ix.accounts)[number]["address"] };
+    return ix;
+  };
+
+  /** The attack: open under a key the depositor controls, consume nonce n, withdraw, repeat at the same address. */
+  async function preburn(id: bigint, d: Holder, nonces: bigint[], op: "release" | "settle"): Promise<void> {
+    for (const n of nonces) {
+      await open(id, 1n, d, K_ATTACKER.pub);
+      if (op === "release") await send(signedRelease(id, n, d.key, K_ATTACKER));
+      else await send(signedSettle({ positionId: id, quoteId: 1n, repayE6: 1n, seizeUnits: 1n, recipient: d.key, nonce: n, expires: future(), kind: KIND_PRELIQ }, d.key, K_ATTACKER));
+      await withdraw(id, d.kp, d.ata);
+      assert.ok(await rawAccount(nonceOf(n, id, d.key, K_ATTACKER.pub)), `nonce ${n} burnt under the depositor's own key`);
+      assert.equal(await rawAccount(nonceOf(n, id, d.key)), null, `nonce ${n} unused under the real authority`);
+    }
+  }
+
+  for (const [op, id, base] of [["release", 750n, 5600n], ["settle", 751n, 5610n]] as const) {
+    test(`pre-burning nonces by ${op} under the depositor's own key does not block the authority's signatures on the reopened slot`, async () => {
+      const full = 6_000_000n;
+      const d = await holder(full);
+      const [n0, n1, n2] = [base, base + 1n, base + 2n];
+      await preburn(id, d, [n0, n1, n2], op);
+
+      const r = Keypair.generate().publicKey.toBase58();
+      const leg = (nonce: bigint): SettleArgs => ({ positionId: id, quoteId: 20n, repayE6: 5n, seizeUnits: 1_000_000n, recipient: r, nonce, expires: future(), kind: KIND_PRELIQ });
+      await open(id, full, d);
+      await send(signedSettle(leg(n0), d.key));
+      assert.equal(await balance(getAssociatedTokenAddressSync(mint, pk(r), true)), 1_000_000n);
+      const s = await readPosition(id, d.key);
+      assert.equal(s.status, STATUS_SETTLED);
+      assert.equal(s.withdrawable, full - 1_000_000n);
+      const settled = await rawAccount(nonceOf(n0, id, d.key));
+      assert.ok(settled);
+      assert.equal(parseNonceRecord(settled).op, OP_SETTLE);
+      assert.deepEqual(parseNonceRecord(settled).authority, AUTH.pub);
+      await withdraw(id, d.kp, d.ata);
+
+      await open(id, full - 1_000_000n, d);
+      await send(signedRelease(id, n1, d.key));
+      const p = await readPosition(id, d.key);
+      assert.equal(p.status, STATUS_RELEASED);
+      assert.equal(p.withdrawable, full - 1_000_000n);
+      const released = await rawAccount(nonceOf(n1, id, d.key));
+      assert.ok(released);
+      assert.equal(parseNonceRecord(released).op, OP_RELEASE);
+      assert.deepEqual(parseNonceRecord(released).authority, AUTH.pub);
+      await withdraw(id, d.kp, d.ata);
+
+      // Under the real authority the replay set still holds across a reopen.
+      await open(id, 1_000n, d);
+      await expectFail(send(signedSettle(leg(n0), d.key)), "already in use");
+      await expectFail(send(signedRelease(id, n1, d.key)), "already in use");
+      await send(signedRelease(id, n2, d.key));
+      assert.equal((await readPosition(id, d.key)).status, STATUS_RELEASED);
+    });
+  }
+
+  test("a nonce record derived under another authority, or at the pre-N1 seeds, is refused", async () => {
+    const args = victimSettle({ nonce: 1022n });
+    const verify = verifyIx(AUTH, settleMessage(args));
+    await expectFail(send([verify, toIx(settleIx(args, DEPOSITOR, ids, OTHER.pub))]), "Error Code: ConstraintSeeds");
+    const old = findProgramAddress([utf8("nonce"), keyBytes(positionOf(VICTIM)), u64le(1022n)], PROGRAM).address;
+    await expectFail(send([verify, toIx(swapNonce(settleIx(args), 8, old))]), "Error Code: ConstraintSeeds");
+
+    const expires = future();
+    const verifyRelease = verifyIx(AUTH, releaseMessage(VICTIM, 1023n, expires));
+    await expectFail(send([verifyRelease, toIx(releaseIx(VICTIM, 1023n, expires, DEPOSITOR, OTHER.pub))]), "Error Code: ConstraintSeeds");
+    const oldRelease = findProgramAddress([utf8("nonce"), keyBytes(positionOf(VICTIM)), u64le(1023n)], PROGRAM).address;
+    await expectFail(send([verifyRelease, toIx(swapNonce(releaseIx(VICTIM, 1023n, expires), 3, oldRelease))]), "Error Code: ConstraintSeeds");
   });
 });
 
@@ -707,7 +783,7 @@ describe("nectar_vault negative paths", () => {
     assert.equal(p.amount, VICTIM_UNITS);
     assert.equal(p.status, STATUS_OPEN);
     assert.equal(p.withdrawable, 0n);
-    for (const n of [1000n, 1001n, 1002n, 1003n, 1004n, 1005n, 1006n, 1007n, 1008n, 1009n, 1010n, 1011n, 1020n, 1021n]) {
+    for (const n of [1000n, 1001n, 1002n, 1003n, 1004n, 1005n, 1006n, 1007n, 1008n, 1009n, 1010n, 1011n, 1020n, 1021n, 1022n, 1023n]) {
       assert.equal(await rawAccount(nonceOf(n, VICTIM)), null, `nonce ${n} unused`);
     }
   });

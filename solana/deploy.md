@@ -18,6 +18,7 @@ pnpm run test:anchor                  # local wallet + anchor test (build, solan
 pnpm run typecheck
 ```
 `anchor test` loads the program at the `[programs.localnet]` address, so a fresh clone with no program keypair still passes.
+On an exFAT volume the validator stops at slot 100 (the snapshot packager cannot hard link in `.anchor/test-ledger`) and later transactions time out. Run from an APFS checkout, or start `solana-test-validator --ledger <apfs path> --mint <wallet pubkey> --bpf-program <program id> target/deploy/nectar_vault.so` and run `pnpm run test:ts` with `ANCHOR_PROVIDER_URL` and `ANCHOR_WALLET` set.
 
 ## Devnet deploy (orchestrator, after merge)
 ```bash
@@ -42,9 +43,9 @@ the key NEAR derives for `solana-devnet/pos/<id>` (`TODO-G7` until G7 confirms i
 
 ## v2 in-place upgrade (orchestrator; devnet only)
 The live program is `ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW` (`config.yaml` `solana.vault_program`, upgrade authority `3pF3vKew...`). Its ProgramData holds
-397,240 bytes (read 2026-11-11) and the v2 `.so` is 426,456, so extend first or the upgrade fails. Recompute the difference if the `.so` changes.
+397,240 bytes (read 2026-11-11) and the v2 `.so` is 426,792, so extend first or the upgrade fails. Recompute the difference if the `.so` changes.
 ```bash
-solana program extend ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW 29216 --url devnet --keypair ~/.nectar/solana/deployer.json   # rent about 0.15 SOL
+solana program extend ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW 29552 --url devnet --keypair ~/.nectar/solana/deployer.json   # rent about 0.15 SOL
 anchor upgrade target/deploy/nectar_vault.so --program-id ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW --provider.cluster devnet --provider.wallet ~/.nectar/solana/deployer.json
 ```
 The deployer also needs about 2.17 SOL for the upgrade buffer (refunded). `getProgramAccounts` with `dataSize: 123` returned no v1 `Position` accounts on 2026-11-11; repeat it
@@ -56,9 +57,9 @@ TypeScript reference: `client/pda.ts` (seeds, PDAs; Node) and `client/vault.ts` 
 - Preimages are unchanged and are rebuilt with the **program id** in both `program=` (settle) and `vault=` (release), because that is the only vault id NEAR has
   (`remote_chain.vault_program`). The Ed25519 verification is unchanged.
 - PDAs: vault `["vault", mint]`, vault tokens `["tokens", vault]` (authority = vault), position `["pos", vault, u64le(position_id), depositor]`,
-  nonce `["nonce", position_pda, u64le(nonce)]`, claim `["claim", vault, recipient]`.
+  nonce `["nonce", position_pda, authority (32 raw bytes), u64le(nonce)]`, claim `["claim", vault, recipient]`. `nonceAddress`, `settleInstruction` and `releaseInstruction` in `client/` take the authority as a `Uint8Array`.
 - The transaction is `[Ed25519 verify ix (client/ed25519.ts), settle|release ix]`. Nothing may sit between them. `withdraw` and `claim` need no verify instruction. Measured on the
-  local validator (varies a little with PDA bumps): settle kind 0 with recipient ATA creation 67.2k CU, settle on the claim path 32.5k CU, release 27.0k CU. With every integer at its maximum and `|kind=PRELIQ`, the settle
+  local validator (varies a little with PDA bumps): settle kind 0 with recipient ATA creation 67-81k CU, settle on the claim path 34-36k CU, release 20k CU. With every integer at its maximum and `|kind=PRELIQ`, the settle
   transaction is 1129 of 1232 bytes.
 
 | Instruction | Discriminator | Data after the discriminator | Accounts, in order |
@@ -89,8 +90,8 @@ Lifecycle and what readers must do:
 - Events (Anchor `Program data:` logs, full layouts in the IDL): `PositionSettled` adds `position`, `depositor` and `claimed`; `PositionReleased` adds `position`; new `PositionWithdrawn`, `ClaimCredited`, `ClaimPaid`.
 - Errors are 6000 + index. v1 codes keep their numbers; appended: `PositionStillOpen` 6012, `RecipientTokensMismatch` 6013, `InvalidClaimAccount` 6014, `DestinationIsVault` 6015, `Overflow` 6016.
 
-**Nonces are per slot.** The settle preimage does not bind the depositor, so anyone can open a slot with the same id and NEAR's public authority under their own wallet and relay NEAR's settle signature there. That only
-spends that slot's own units to the signed recipient and consumes the nonce on that slot alone; the honest slot still settles with the same signature (tested). So readers must derive the nonce PDA from the committed slot,
-`["nonce", ["pos", vault, id, committed_depositor], nonce]`: a record there proves the leg landed on that slot, and a record under any other slot proves nothing. Release signatures bind the depositor and cannot cross slots.
-Nonce records are never closed, so a withdrawn slot reopened at the same address still refuses its used nonces (tested).
+**Nonces are per slot and authority.** The settle preimage does not bind the depositor, so anyone can open a slot with the same id and NEAR's public authority under their own wallet and relay NEAR's settle signature there. That only
+spends that slot's own units to the signed recipient and consumes the nonce on that slot alone; the honest slot still settles with the same signature (tested). The authority is in the seeds because a depositor can close its own slot and reopen it under a key it controls: nonces burnt that way sit under that key and never block NEAR's signatures once the slot is reopened under the real authority (N1, tested).
+So readers must derive the nonce PDA from the committed slot and the authority NEAR set for the position (`remote_authority_set`), `["nonce", ["pos", vault, id, committed_depositor], authority, u64le(nonce)]`, and never take the authority from the current slot, which may be closed or reopened under another key. A record there proves the leg landed on that slot under that authority; a record under any other slot or authority proves nothing. Release signatures bind the depositor and cannot cross slots.
+Nonce records are never closed, so a withdrawn slot reopened at the same address under the same authority still refuses its used nonces (tested).
 

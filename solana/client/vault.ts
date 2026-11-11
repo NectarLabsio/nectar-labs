@@ -240,9 +240,9 @@ export function openPositionInstruction(
 /**
  * Accounts: payer (signer, w), vault, mint, vault_tokens (w), position (w), recipient_account, recipient_tokens (w),
  * claim (w), nonce_record (w), instructions sysvar, token_program, associated_token_program, system_program.
- * Goes immediately after the Ed25519 verify instruction.
+ * Goes immediately after the Ed25519 verify instruction. `authority` is the slot's stored authority (nonce PDA seed).
  */
-export function settleInstruction(ids: VaultIds, payer: string, depositor: string, a: SettleArgs): VaultInstruction {
+export function settleInstruction(ids: VaultIds, payer: string, depositor: string, authority: Uint8Array, a: SettleArgs): VaultInstruction {
   const position = positionAddress(ids.program, ids.vault, a.positionId, depositor);
   return ix(
     ids,
@@ -255,7 +255,7 @@ export function settleInstruction(ids: VaultIds, payer: string, depositor: strin
       meta(a.recipient, READONLY),
       meta(associatedTokenAddress(a.recipient, ids.mint, ids.tokenProgram), WRITABLE),
       meta(claimAddress(ids.program, ids.vault, a.recipient), WRITABLE),
-      meta(nonceAddress(ids.program, position, a.nonce), WRITABLE),
+      meta(nonceAddress(ids.program, position, authority, a.nonce), WRITABLE),
       meta(INSTRUCTIONS_SYSVAR_ADDRESS, READONLY),
       meta(ids.tokenProgram, READONLY),
       meta(ASSOCIATED_TOKEN_PROGRAM, READONLY),
@@ -268,11 +268,13 @@ export function settleInstruction(ids: VaultIds, payer: string, depositor: strin
 /**
  * Accounts: payer (signer, w), vault, position (w), nonce_record (w), instructions sysvar, system_program.
  * Goes immediately after the Ed25519 verify instruction. Moves no tokens; the depositor then calls `withdraw`.
+ * `authority` is the slot's stored authority (nonce PDA seed).
  */
 export function releaseInstruction(
   ids: VaultIds,
   payer: string,
   depositor: string,
+  authority: Uint8Array,
   f: { positionId: bigint; nonce: bigint; expires: bigint },
 ): VaultInstruction {
   const position = positionAddress(ids.program, ids.vault, f.positionId, depositor);
@@ -282,7 +284,7 @@ export function releaseInstruction(
       meta(payer, WRITABLE_SIGNER),
       meta(ids.vault, READONLY),
       meta(position, WRITABLE),
-      meta(nonceAddress(ids.program, position, f.nonce), WRITABLE),
+      meta(nonceAddress(ids.program, position, authority, f.nonce), WRITABLE),
       meta(INSTRUCTIONS_SYSVAR_ADDRESS, READONLY),
       meta(SYSTEM_PROGRAM, READONLY),
     ],

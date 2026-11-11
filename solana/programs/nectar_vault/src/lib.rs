@@ -5,9 +5,11 @@
 //! preimage this program rebuilds from its own arguments. There is no admin key and no `cancel_position`.
 //!
 //! v2 (D-027, docs/work/security-review-v7.md):
-//! - SR-1: the replay set is scoped to the depositor-bound slot: nonce PDA `[b"nonce", position.key(), nonce]`. A nonce
-//!   burnt on one slot never blocks another, even one with the same id and authority. Records are never closed, so a
-//!   slot that is withdrawn and reopened at the same address still refuses its used nonces.
+//! - SR-1 + N1: the replay set is scoped to the depositor-bound slot and its authority: nonce PDA
+//!   `[b"nonce", position.key(), position.authority, nonce]`. A nonce burnt on one slot never blocks another, even one
+//!   with the same id and authority, and a depositor that reopens its own slot under a key it controls cannot pre-burn
+//!   the nonces of the real authority. Records are never closed, so a slot that is withdrawn and reopened at the same
+//!   address under the same authority still refuses its used nonces.
 //! - SR-8: a slot is bound to its depositor: position PDA `[b"pos", vault, position_id, depositor]`. Opening the same id
 //!   with another depositor creates another slot and never blocks the honest one.
 //! - SR-4: no payout depends on an account a third party controls. `settle` pays `seize_units` to the recipient's
@@ -422,8 +424,8 @@ pub struct Position {
     pub withdrawable: u64,
 }
 
-/// NonceRecord v2 (91 bytes), PDA `[b"nonce", position.key(), nonce.to_le_bytes()]`; its existence marks the nonce used
-/// on that slot (init fails on reuse).
+/// NonceRecord v2 (91 bytes), PDA `[b"nonce", position.key(), position.authority, nonce.to_le_bytes()]`; its existence
+/// marks the nonce used on that slot under that authority (init fails on reuse).
 #[account]
 #[derive(InitSpace)]
 pub struct NonceRecord {
@@ -535,7 +537,7 @@ pub struct Settle<'info> {
         init,
         payer = payer,
         space = 8 + NonceRecord::INIT_SPACE,
-        seeds = [NONCE_SEED, position.key().as_ref(), &nonce.to_le_bytes()],
+        seeds = [NONCE_SEED, position.key().as_ref(), position.authority.as_ref(), &nonce.to_le_bytes()],
         bump
     )]
     pub nonce_record: Box<Account<'info, NonceRecord>>,
@@ -564,7 +566,7 @@ pub struct Release<'info> {
         init,
         payer = payer,
         space = 8 + NonceRecord::INIT_SPACE,
-        seeds = [NONCE_SEED, position.key().as_ref(), &nonce.to_le_bytes()],
+        seeds = [NONCE_SEED, position.key().as_ref(), position.authority.as_ref(), &nonce.to_le_bytes()],
         bump
     )]
     pub nonce_record: Box<Account<'info, NonceRecord>>,
