@@ -9,8 +9,9 @@
 // (Web3 Secret Storage v3: scrypt + aes-128-ctr + keccak256 MAC; format observed on a `cast wallet new` 1.9.0 keystore,
 // F-343). No raw private key is read from the environment, ever; startup refuses when a *PRIVATE_KEY* variable is set.
 //
-// Vault ABI: evm/src/NectarVaultBase.sol, checked with `forge inspect NectarVaultBase abi` and `cast sig` (selectors
-// settle 0x29b82ac2, release 0xf8ac3116, positions 0x60f3ce04, nonceUsed 0x3c02a81e; test/fixtures/base_calldata.json).
+// Vault ABI: interface-v7 §E (D-027), built in parallel by WO-34e. §E fixes `positionOf(id, depositor)`, `nonceUsed[slotKey][nonce]`
+// and "an extra depositor argument", but not where that argument sits or whether the events change. VAULT_ABI is the one constant
+// to reconcile with `forge inspect NectarVaultBase abi` at merge.
 //
 // ERC-8021 builder-code suffix (H19): the suffix bytes are injected by the caller and appended only when non-null. The
 // format is unverified (F-351, G10 open: every spec URL 404), so main.ts injects null even when BASE_BUILDER_CODE is set
@@ -24,6 +25,8 @@ import {
   concat,
   createPublicClient,
   createWalletClient,
+  decodeFunctionData,
+  encodeAbiParameters,
   encodeFunctionData,
   getAddress,
   hashTypedData,
@@ -59,10 +62,10 @@ export const VAULT_STATUS_OPEN = 1;
 export const VAULT_ABI = parseAbi([
   'struct Settle { uint64 positionId; uint64 quoteId; uint256 repayE6; uint256 seizeRaw; address recipient; uint64 nonce; uint64 expires; uint8 kind; }',
   'struct Release { uint64 positionId; address recipient; uint64 nonce; uint64 expires; }',
-  'function settle(Settle m, uint8 v, bytes32 r, bytes32 s)',
-  'function release(Release m, uint8 v, bytes32 r, bytes32 s)',
-  'function positions(uint64) view returns (address authority, address depositor, uint256 amount, uint8 status)',
-  'function nonceUsed(uint64) view returns (bool)',
+  'function settle(Settle m, address depositor, uint8 v, bytes32 r, bytes32 s)',
+  'function release(Release m, address depositor, uint8 v, bytes32 r, bytes32 s)',
+  'function positionOf(uint64 id, address depositor) view returns (address authority, address slotDepositor, uint256 amount, uint8 status)',
+  'function nonceUsed(bytes32 slotKey, uint64 nonce) view returns (bool)',
   'event PositionOpened(uint64 indexed positionId, address indexed authority, address indexed depositor, uint256 amount)',
   'event PositionSettled(uint64 indexed positionId, uint64 indexed quoteId, address indexed recipient, uint256 repayE6, uint256 seizeRaw, uint256 remainder, uint64 nonce, uint8 kind)',
   'event PositionReleased(uint64 indexed positionId, address indexed recipient, uint256 amount, uint64 nonce)',
@@ -87,6 +90,12 @@ export const EIP712_TYPES = {
     { name: 'expires', type: 'uint64' },
   ],
 } as const;
+
+/** SR-28: why a Base deposit cannot be confirmed through OutLayer. */
+export const BASE_CONFIRM_UNSUPPORTED =
+  'confirm_remote_deposit is unsupported on Base: the quoter does not answer vault_read for base-sepolia. Set BASE_KEEPER_ATTEST=1 (the owner must allow keeper attestation), or BASE_OUTLAYER_VAULT_READ=1 once the quoter supports it';
+/** SR-29: a leg cannot land before its reservation; this margin absorbs NEAR / Base clock skew. */
+const SCAN_FLOOR_MARGIN_S = 300n;
 
 const U64_MAX = (1n << 64n) - 1n;
 const U256_MAX = (1n << 256n) - 1n;
@@ -355,14 +364,19 @@ export function releaseDigest(vault: Address, m: ReleaseStruct): Hex {
   return hashTypedData({ domain: domainOf(vault), types: EIP712_TYPES, primaryType: 'Release', message: m });
 }
 
-/** `settle(Settle, uint8 v, bytes32 r, bytes32 s)` calldata. */
-export function settleCalldata(m: SettleStruct, sig: Signature): Hex {
-  return encodeFunctionData({ abi: VAULT_ABI, functionName: 'settle', args: [m, sig.v, sig.r, sig.s] });
+/** `settle(Settle, address depositor, uint8 v, bytes32 r, bytes32 s)` calldata. */
+export function settleCalldata(m: SettleStruct, depositor: Address, sig: Signature): Hex {
+  return encodeFunctionData({ abi: VAULT_ABI, functionName: 'settle', args: [m, depositor, sig.v, sig.r, sig.s] });
 }
 
-/** `release(Release, uint8 v, bytes32 r, bytes32 s)` calldata. */
-export function releaseCalldata(m: ReleaseStruct, sig: Signature): Hex {
-  return encodeFunctionData({ abi: VAULT_ABI, functionName: 'release', args: [m, sig.v, sig.r, sig.s] });
+/** `release(Release, address depositor, uint8 v, bytes32 r, bytes32 s)` calldata. */
+export function releaseCalldata(m: ReleaseStruct, depositor: Address, sig: Signature): Hex {
+  return encodeFunctionData({ abi: VAULT_ABI, functionName: 'release', args: [m, depositor, sig.v, sig.r, sig.s] });
+}
+
+/** §E: `keccak256(abi.encode(id, depositor))`, the slot's key and the scope of its nonces. */
+export function slotKeyOf(id: bigint, depositor: Address): Hex {
+  return keccak256(encodeAbiParameters([{ type: 'uint64' }, { type: 'address' }], [id, depositor]));
 }
 
 /** ERC-8021 builder-code suffix (H19): appended verbatim when injected, else calldata unchanged. */
@@ -390,18 +404,29 @@ export interface EvmReceipt {
 
 export type VaultEvent = 'PositionOpened' | 'PositionSettled' | 'PositionReleased';
 
+export interface EventQuery {
+  positionId: bigint;
+  nonce: bigint | null;
+  /** the slot the tx must have acted on: from the event when it carries a depositor, else from the tx's calldata */
+  depositor: Address | null;
+  fromBlock: bigint | null;
+}
+
 export interface EvmPort {
   readonly signer: Address;
   chainId(): Promise<number>;
   blockNumber(): Promise<bigint>;
-  position(vault: Address, id: bigint): Promise<VaultPosition>;
-  nonceUsed(vault: Address, nonce: bigint): Promise<boolean>;
+  /** The slot `keccak256(abi.encode(id, depositor))` (§E). */
+  position(vault: Address, id: bigint, depositor: Address): Promise<VaultPosition>;
+  nonceUsed(vault: Address, slotKey: Hex, nonce: bigint): Promise<boolean>;
+  /** The highest block whose timestamp is ≤ `unixSeconds`. */
+  blockAtOrBefore(unixSeconds: bigint): Promise<bigint>;
   /** Prepares and signs a tx to `to`; nothing is broadcast. */
   sign(to: Address, data: Hex): Promise<{ hash: Hex; raw: Hex }>;
   broadcast(raw: Hex): Promise<Hex>;
   receipt(hash: Hex): Promise<EvmReceipt | null>;
-  /** Most recent tx that emitted `event` for `positionId` (and `nonce`, when given) within the lookback window. */
-  findEventTx(vault: Address, event: VaultEvent, positionId: bigint, nonce: bigint | null): Promise<Hex | null>;
+  /** Most recent tx that emitted `event` for `q.positionId` (and `q.nonce` / `q.depositor`, when given), from `q.fromBlock`, or over the lookback window when that is null. */
+  findEventTx(vault: Address, event: VaultEvent, q: EventQuery): Promise<Hex | null>;
 }
 
 export class ViemEvmPort implements EvmPort {
@@ -419,7 +444,8 @@ export class ViemEvmPort implements EvmPort {
     this.pub = createPublicClient({ chain: baseSepolia, transport: http(rpcUrl) });
     this.wallet = createWalletClient({ account, chain: baseSepolia, transport: http(rpcUrl) });
     // sepolia.base.org (also behind an anvil fork) answers eth_getLogs only for ranges of ≤ 200 blocks (observed
-    // 2026-11-10: "eth_getLogs is limited to a 200 range"), so scan in 200-block chunks over a bounded window.
+    // 2026-11-10: "eth_getLogs is limited to a 200 range"), so scan in 200-block chunks. Callers pass the reservation block
+    // (SR-29); the lookback window applies only when they have none.
     this.lookback = BigInt(opts.lookbackBlocks ?? 10_000);
     this.chunk = BigInt(opts.logChunkBlocks ?? 200);
   }
@@ -432,13 +458,38 @@ export class ViemEvmPort implements EvmPort {
     return await this.pub.getBlockNumber();
   }
 
-  async position(vault: Address, id: bigint): Promise<VaultPosition> {
-    const [authority, depositor, amount, status] = await this.pub.readContract({ address: vault, abi: VAULT_ABI, functionName: 'positions', args: [id] });
-    return { authority, depositor, amount, status };
+  async position(vault: Address, id: bigint, depositor: Address): Promise<VaultPosition> {
+    const [authority, slotDepositor, amount, status] = await this.pub.readContract({ address: vault, abi: VAULT_ABI, functionName: 'positionOf', args: [id, depositor] });
+    return { authority, depositor: slotDepositor, amount, status };
   }
 
-  async nonceUsed(vault: Address, nonce: bigint): Promise<boolean> {
-    return await this.pub.readContract({ address: vault, abi: VAULT_ABI, functionName: 'nonceUsed', args: [nonce] });
+  async nonceUsed(vault: Address, slotKey: Hex, nonce: bigint): Promise<boolean> {
+    return await this.pub.readContract({ address: vault, abi: VAULT_ABI, functionName: 'nonceUsed', args: [slotKey, nonce] });
+  }
+
+  /** True iff the tx called this vault's settle / release on `depositor`'s slot. */
+  private async txActedOnSlot(hash: Hex, vault: Address, depositor: Address): Promise<boolean> {
+    const tx = await this.pub.getTransaction({ hash });
+    if (tx.to === null || getAddress(tx.to) !== vault) return false;
+    try {
+      const call = decodeFunctionData({ abi: VAULT_ABI, data: tx.input });
+      return (call.functionName === 'settle' || call.functionName === 'release') && getAddress(call.args[1]) === depositor;
+    } catch {
+      return false; // not a direct vault call: the slot cannot be shown
+    }
+  }
+
+  async blockAtOrBefore(unixSeconds: bigint): Promise<bigint> {
+    const at = async (n: bigint): Promise<bigint> => (await this.pub.getBlock({ blockNumber: n })).timestamp;
+    let lo = 0n;
+    let hi = await this.pub.getBlockNumber();
+    if ((await at(hi)) <= unixSeconds) return hi;
+    while (lo < hi) {
+      const mid = (lo + hi + 1n) / 2n;
+      if ((await at(mid)) <= unixSeconds) lo = mid;
+      else hi = mid - 1n;
+    }
+    return lo;
   }
 
   async sign(to: Address, data: Hex): Promise<{ hash: Hex; raw: Hex }> {
@@ -461,17 +512,22 @@ export class ViemEvmPort implements EvmPort {
     }
   }
 
-  async findEventTx(vault: Address, event: VaultEvent, positionId: bigint, nonce: bigint | null): Promise<Hex | null> {
+  async findEventTx(vault: Address, event: VaultEvent, q: EventQuery): Promise<Hex | null> {
     const latest = await this.pub.getBlockNumber();
-    const floor = latest > this.lookback ? latest - this.lookback : 0n;
+    const floor = q.fromBlock ?? (latest > this.lookback ? latest - this.lookback : 0n);
     for (let to = latest; to >= floor; ) {
       const from = to - this.chunk + 1n > floor ? to - this.chunk + 1n : floor;
-      const logs = await this.pub.getContractEvents({ address: vault, abi: VAULT_ABI, eventName: event, args: { positionId }, fromBlock: from, toBlock: to });
+      const logs = await this.pub.getContractEvents({ address: vault, abi: VAULT_ABI, eventName: event, args: { positionId: q.positionId }, fromBlock: from, toBlock: to });
       for (let i = logs.length - 1; i >= 0; i--) {
         const l = logs[i];
         if (l === undefined) continue;
-        const a = l.args as { nonce?: bigint };
-        if (nonce === null || a.nonce === nonce) return l.transactionHash;
+        const a = l.args as { nonce?: bigint; depositor?: Address };
+        if (q.nonce !== null && a.nonce !== q.nonce) continue;
+        if (q.depositor !== null) {
+          const onSlot = a.depositor !== undefined ? getAddress(a.depositor) === q.depositor : await this.txActedOnSlot(l.transactionHash, vault, q.depositor);
+          if (!onSlot) continue;
+        }
+        return l.transactionHash;
       }
       if (from === floor) break;
       to = from - 1n;
@@ -488,6 +544,13 @@ interface RemoteView {
   status?: string;
   authority?: string | null;
   reserved_units?: string;
+  /** §E (SR-8): the address the borrower committed to at reserve time. */
+  committed_depositor?: string | null;
+  /** set once a deposit is proven */
+  depositor?: string | null;
+  reserved_ns?: string;
+  expires_ns?: string;
+  confirming?: boolean;
 }
 interface PositionLike {
   position_id?: string;
@@ -500,10 +563,16 @@ interface PositionLike {
 export interface BaseRelayOptions {
   pageSize: number;
   maxPages?: number;
-  /** BASE_VAULT_ADDRESS: when set, every position's pinned vault and the signed verifyingContract must equal it. */
-  expectedVault?: Address | null;
+  /** SR-31: every position's vault and the signed verifyingContract must equal this. */
+  expectedVault: Address;
   /** BASE_KEEPER_ATTEST=1 (local fork): `keeper_attest_deposit` instead of `confirm_remote_deposit`. */
   keeperAttest?: boolean;
+  /** SR-28: BASE_OUTLAYER_VAULT_READ=1 once the quoter answers vault_read for base-sepolia. Off, deposits are logged as unsupported. */
+  outlayerVaultRead?: boolean;
+  /** SR-11: confirm_remote_deposit calls per unchanged vault observation */
+  maxConfirmsPerObservation?: number;
+  /** SR-28: how long an unsupported deposit waits before it is logged again */
+  unsupportedCooldownMs?: number;
   /** ERC-8021 suffix bytes (H19); null = none. */
   builderSuffix?: Hex | null;
   builderSuffixState?: BuilderSuffixState;
@@ -519,12 +588,14 @@ export interface BaseRelayOptions {
 }
 
 export type BuilderSuffixState = 'none' | 'appended' | 'unverified_not_appended';
+export type DepositConfirmMode = 'keeper_attest' | 'outlayer' | 'unsupported';
 
 export interface BaseRelayStatus {
   enabled: boolean;
   chainId: number | null;
   signer: string;
   attestMode: boolean;
+  depositConfirm: DepositConfirmMode;
   builderSuffix: BuilderSuffixState;
   lastBlockSeen: string | null;
   lastTickAt: number | null;
@@ -557,8 +628,9 @@ export function isBasePosition(p: { remote?: { chain_id?: unknown } | null }): b
 export class BaseRelay {
   readonly status: BaseRelayStatus;
   private readonly inFlight = new Set<string>();
-  private readonly opts: Required<Omit<BaseRelayOptions, 'expectedVault' | 'builderSuffix'>> & Pick<BaseRelayOptions, 'expectedVault' | 'builderSuffix'>;
+  private readonly opts: Required<Omit<BaseRelayOptions, 'builderSuffix'>> & Pick<BaseRelayOptions, 'builderSuffix'>;
   private chainChecked = false;
+  private readonly scanFloors = new Map<string, bigint>();
 
   private readonly near: CoreReader;
   private readonly writer: KeeperWriter;
@@ -575,6 +647,9 @@ export class BaseRelay {
     this.opts = {
       maxPages: 200,
       keeperAttest: false,
+      outlayerVaultRead: false,
+      maxConfirmsPerObservation: 3,
+      unsupportedCooldownMs: 3_600_000,
       builderSuffixState: opts.builderSuffix != null ? 'appended' : 'none',
       backoff: DEFAULT_BACKOFF,
       receiptPollMs: 2_000,
@@ -591,6 +666,7 @@ export class BaseRelay {
       chainId: null,
       signer: evm.signer,
       attestMode: this.opts.keeperAttest,
+      depositConfirm: this.opts.keeperAttest ? 'keeper_attest' : this.opts.outlayerVaultRead ? 'outlayer' : 'unsupported',
       builderSuffix: this.opts.builderSuffixState,
       lastBlockSeen: null,
       lastTickAt: null,
@@ -656,7 +732,7 @@ export class BaseRelay {
     const v = p.remote?.vault_program;
     if (!str(v) || !isAddress(v, { strict: false })) throw new Error('position remote.vault_program is not a 0x address');
     const a = getAddress(v);
-    if (this.opts.expectedVault != null && this.opts.expectedVault !== a) throw new Error('remote.vault_program != BASE_VAULT_ADDRESS');
+    if (this.opts.expectedVault !== a) throw new Error('remote.vault_program != pinned Base vault');
     return a;
   }
 
@@ -728,7 +804,7 @@ export class BaseRelay {
     const m = settleStructOf(d);
     const sig = sigOf(d);
     if (settleDigest(vault, m).toLowerCase() !== d.digest.toLowerCase()) throw new Error('rebuilt Settle digest != signed digest');
-    return await this.relayLeg('settle', id, p, vault, m.nonce, m.expires, d.digest, sig, settleCalldata(m, sig));
+    return await this.relayLeg('settle', id, p, vault, m.nonce, m.expires, d.digest, sig, (depositor) => settleCalldata(m, depositor, sig));
   }
 
   private async release(id: string, p: PositionLike, vault: Address): Promise<Outcome> {
@@ -739,7 +815,34 @@ export class BaseRelay {
     const m = releaseStructOf(d);
     const sig = sigOf(d);
     if (releaseDigest(vault, m).toLowerCase() !== d.digest.toLowerCase()) throw new Error('rebuilt Release digest != signed digest');
-    return await this.relayLeg('release', id, p, vault, m.nonce, m.expires, d.digest, sig, releaseCalldata(m, sig));
+    if (m.recipient !== (await this.depositorOf(id, p))) throw new Error('release recipient != committed depositor');
+    return await this.relayLeg('release', id, p, vault, m.nonce, m.expires, d.digest, sig, (depositor) => releaseCalldata(m, depositor, sig));
+  }
+
+  /** §E: the committed depositor. A proven `remote.depositor` stands in for it and must agree when both are present. */
+  private async depositorOf(id: string, p: PositionLike): Promise<Address | null> {
+    let committed = p.remote?.committed_depositor;
+    if (!str(committed)) {
+      const { value } = await this.near.view('get_position', { position_id: id });
+      const remote = isObj(value) ? value.remote : null;
+      committed = isObj(remote) && str(remote.committed_depositor) ? remote.committed_depositor : null;
+    }
+    const proven = p.remote?.depositor;
+    if (str(committed) && str(proven) && getAddress(committed) !== getAddress(proven)) throw new Error('remote.depositor != committed_depositor');
+    const chosen = str(committed) ? committed : proven;
+    return str(chosen) ? addr('depositor', chosen) : null;
+  }
+
+  /** SR-29: the block to scan logs from, derived from the reservation time; null falls back to the port's lookback window. */
+  private async scanFloor(id: string, p: PositionLike): Promise<bigint | null> {
+    const hit = this.scanFloors.get(id);
+    if (hit !== undefined) return hit;
+    const ns = p.remote?.reserved_ns;
+    if (!str(ns) || !/^[1-9][0-9]*$/.test(ns)) return null;
+    const seconds = BigInt(ns) / 1_000_000_000n;
+    const floor = await this.evm.blockAtOrBefore(seconds > SCAN_FLOOR_MARGIN_S ? seconds - SCAN_FLOOR_MARGIN_S : 0n);
+    this.scanFloors.set(id, floor);
+    return floor;
   }
 
   /**
@@ -747,7 +850,7 @@ export class BaseRelay {
    * landed (maybe before a crash, maybe by another relayer) → relay the tx that emitted the event; (3) the vault position
    * is not open → skip. Otherwise verify the signer and expiry, sign, record the hash, broadcast, wait, relay.
    */
-  private async relayLeg(op: 'settle' | 'release', id: string, p: PositionLike, vault: Address, nonce: bigint, expires: bigint, digest: Hex, sig: Signature, calldata: Hex): Promise<Outcome> {
+  private async relayLeg(op: 'settle' | 'release', id: string, p: PositionLike, vault: Address, nonce: bigint, expires: bigint, digest: Hex, sig: Signature, calldata: (depositor: Address) => Hex): Promise<Outcome> {
     const txKey = `base:${op}:${id}:${nonce}`;
     const stored = this.db.evmTx(txKey);
     if (stored !== null) {
@@ -762,22 +865,28 @@ export class BaseRelay {
       if (rc === null && this.opts.nowMs() - stored.sent_at < this.opts.pendingTxTimeoutMs) return { kind: 'skip', reason: 'tx_pending' };
       this.db.clearEvmTx(txKey); // reverted or dropped: re-evaluate from chain state
     }
-    if (await this.evm.nonceUsed(vault, nonce)) {
-      const hash = await this.evm.findEventTx(vault, op === 'settle' ? 'PositionSettled' : 'PositionReleased', BigInt(id), nonce);
-      if (hash === null) return { kind: 'skip', reason: 'nonce_used_tx_not_found' };
+    const nearAuth = p.remote?.authority;
+    if (!str(nearAuth) || !isAddress(nearAuth, { strict: false })) return { kind: 'skip', reason: 'authority_unknown' };
+    const authority = getAddress(nearAuth);
+    const depositor = await this.depositorOf(id, p);
+    if (depositor === null) return { kind: 'skip', reason: 'depositor_unknown' };
+    if (await this.evm.nonceUsed(vault, slotKeyOf(BigInt(id), depositor), nonce)) {
+      const event = op === 'settle' ? 'PositionSettled' : 'PositionReleased';
+      // The depositor filter matters: another slot with the same id can emit the same (id, nonce).
+      const hash = await this.evm.findEventTx(vault, event, { positionId: BigInt(id), nonce, depositor, fromBlock: await this.scanFloor(id, p) });
+      if (hash === null) return { kind: 'skip', reason: 'nonce_used_tx_not_found' }; // retried with backoff, never final
       this.log.info('base_leg_already_landed', { op, position_id: id, evm_tx_hash: hash });
       await this.relayToNear(op, id, hash);
       return { kind: 'done', txHash: hash };
     }
-    const pos = await this.evm.position(vault, BigInt(id));
+    const pos = await this.evm.position(vault, BigInt(id), depositor);
     if (pos.status !== VAULT_STATUS_OPEN) return { kind: 'skip', reason: 'vault_position_not_open' };
     const signer = await recoverSigner(digest, sig);
     if (signer !== getAddress(pos.authority)) return { kind: 'skip', reason: 'signer_not_vault_authority' };
-    const nearAuth = p.remote?.authority;
-    if (str(nearAuth) && (!isAddress(nearAuth, { strict: false }) || getAddress(nearAuth) !== signer)) return { kind: 'skip', reason: 'authority_mismatch' };
+    if (authority !== signer) return { kind: 'skip', reason: 'authority_mismatch' };
     if (BigInt(Math.floor(this.opts.nowMs() / 1000)) >= expires) return { kind: 'skip', reason: 'signature_expired' };
 
-    const { hash, raw } = await this.evm.sign(vault, withBuilderSuffix(calldata, this.opts.builderSuffix ?? null));
+    const { hash, raw } = await this.evm.sign(vault, withBuilderSuffix(calldata(depositor), this.opts.builderSuffix ?? null));
     this.db.setEvmTx(txKey, hash, this.opts.nowMs());
     this.log.info('base_tx_sending', { op, position_id: id, evm_tx_hash: hash });
     await this.evm.broadcast(raw);
@@ -811,29 +920,42 @@ export class BaseRelay {
   }
 
   private async deposit(id: string, p: PositionLike, vault: Address, report: BaseRelayReport, key: string): Promise<void> {
-    const reserved = p.remote?.reserved_units ?? p.units;
-    const nearAuth = p.remote?.authority;
+    const r = p.remote;
+    const skip = (reason: string): void => void report.skipped.push({ id, reason });
+    const reserved = r?.reserved_units;
+    const nearAuth = r?.authority;
     if (!str(reserved) || !str(nearAuth)) return; // authority still pending on NEAR
-    const pos = await this.evm.position(vault, BigInt(id));
+    if (r?.confirming === true) return skip('confirm_in_flight');
+    if (str(r?.depositor)) return skip('deposit_already_proven'); // a refused loan: confirming again cannot change it
+    if (str(r?.expires_ns) && BigInt(this.opts.nowMs()) * 1_000_000n >= BigInt(r.expires_ns)) return skip('reservation_expired');
+    const depositor = await this.depositorOf(id, p);
+    if (depositor === null) return skip('depositor_unknown');
+    const pos = await this.evm.position(vault, BigInt(id), depositor);
     if (pos.status === VAULT_STATUS_NONE) return; // not deposited yet
-    if (pos.status !== VAULT_STATUS_OPEN || pos.amount < BigInt(reserved)) {
-      report.skipped.push({ id, reason: 'deposit_below_reserved' });
-      return;
+    if (pos.status !== VAULT_STATUS_OPEN || pos.amount < BigInt(reserved)) return skip('deposit_below_reserved');
+    if (!isAddress(nearAuth, { strict: false }) || getAddress(nearAuth) !== getAddress(pos.authority)) return skip('authority_mismatch');
+    if (this.status.depositConfirm === 'unsupported') {
+      // SR-28: confirm_remote_deposit would be rejected every time, spending gas reserve and key allowance on each try.
+      this.log.warn('base_deposit_confirm_unsupported', { position_id: id, reason: BASE_CONFIRM_UNSUPPORTED });
+      this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.unsupportedCooldownMs);
+      return skip('deposit_confirm_unsupported');
     }
-    if (!isAddress(nearAuth, { strict: false }) || getAddress(nearAuth) !== getAddress(pos.authority)) {
-      report.skipped.push({ id, reason: 'authority_mismatch' });
-      return;
-    }
+    // SR-11: each call costs gas reserve and key allowance, so an unchanged vault gets a bounded number of tries.
+    const fingerprint = `${pos.amount}:${pos.status}`;
+    const seen = this.db.confirmState(key);
+    const attempts = seen !== null && seen.fingerprint === fingerprint ? seen.attempts + 1 : 1;
+    if (attempts > this.opts.maxConfirmsPerObservation) return skip('confirm_rejected_unchanged');
+    this.db.setConfirmState(key, fingerprint, attempts, this.opts.nowMs()); // before the call: a failed call has already spent allowance
     if (this.opts.keeperAttest) {
       // Local fork (D-026): OutLayer's vault_read cannot reach localhost, so the keeper attests what it read. Labelled.
       let opened: Hex | null = null;
       try {
-        opened = await this.evm.findEventTx(vault, 'PositionOpened', BigInt(id), null);
+        opened = await this.evm.findEventTx(vault, 'PositionOpened', { positionId: BigInt(id), nonce: null, depositor, fromBlock: await this.scanFloor(id, p) });
       } catch (e) {
         this.log.warn('base_open_tx_lookup_failed', { position_id: id, error: errMsg(e).slice(0, 200) }); // tx_ref falls back to the slot
       }
-      const txRef = opened ?? `${vault}:positions:${id}`;
-      const res = await this.writer.call('keeper_attest_deposit', { position_id: id, tx_ref: txRef, depositor: getAddress(pos.depositor) });
+      const txRef = opened ?? `${vault}:positionOf:${id}:${depositor}`;
+      const res = await this.writer.call('keeper_attest_deposit', { position_id: id, tx_ref: txRef, depositor });
       if (!res.ok) throw new Error(`keeper_attest_deposit failed: ${(res.failure ?? '').slice(0, 200)}`);
       this.log.info('remote_deposit_keeper_attested', { position_id: id, tx_hash: res.txHash, evm_tx_hash: opened, source: 'keeper-attest (local fork)' });
     } else {
@@ -841,8 +963,8 @@ export class BaseRelay {
       if (!res.ok) throw new Error(`confirm_remote_deposit failed: ${(res.failure ?? '').slice(0, 200)}`);
       this.log.info('remote_deposit_confirm_requested', { position_id: id, tx_hash: res.txHash, chain: BASE_CHAIN_ID });
     }
-    // OutLayer answers asynchronously, and an attestation lands at once: either way, do not call again until the cooldown passes.
-    this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.depositCooldownMs);
+    // OutLayer answers asynchronously, and an attestation lands at once: either way, wait out a cooldown that doubles per unchanged attempt.
+    this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.depositCooldownMs * 2 ** (attempts - 1));
     this.status.depositsConfirmed++;
     report.deposits.push(id);
   }

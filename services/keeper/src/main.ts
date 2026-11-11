@@ -2,7 +2,7 @@
 // refuses to start (exit 2) while ids are unset (env and config.yaml), the key file is missing / too open, or the key is
 // a FullAccess key on chain (startup.ts; D-012 deletion stays the primary control).
 
-import { BaseRelay, ChainRefusedError, ViemEvmPort, assertBaseSepoliaRpc, loadFoundryKeystore, rawKeyEnvVars } from './base.ts';
+import { BASE_CONFIRM_UNSUPPORTED, BaseRelay, ChainRefusedError, ViemEvmPort, assertBaseSepoliaRpc, loadFoundryKeystore, rawKeyEnvVars } from './base.ts';
 import { NearCoreReader, NearKeeperWriter } from './chain.ts';
 import { ConfigError, loadConfig } from './config.ts';
 import { KeeperDb } from './db.ts';
@@ -55,10 +55,10 @@ async function main(): Promise<void> {
       const payer = await loadSolanaFeePayer(cfg.solanaKeypairPath);
       relay = new SolanaRelay(reader, writer, new KitSolanaPort(cfg.solanaRpcUrl), payer, db, log, {
         pageSize: cfg.pageSize,
-        expectedProgram: cfg.vaultProgramId === null ? null : address(cfg.vaultProgramId),
-        mintOverride: cfg.vaultMint === null ? null : address(cfg.vaultMint),
+        expectedProgram: address(cfg.vaultProgramId as string), // loadConfig refuses a relay without a pinned program and mint
+        mint: address(cfg.vaultMint as string),
       });
-      log.info('solana_relay_enabled', { fee_payer: payer.address });
+      log.info('solana_relay_enabled', { fee_payer: payer.address, vault_program: cfg.vaultProgramId, mint: cfg.vaultMint });
     } catch (e) {
       log.error('startup_refused', { error: errMsg(e) });
       process.exitCode = 2;
@@ -75,14 +75,15 @@ async function main(): Promise<void> {
       const raw = rawKeyEnvVars(process.env);
       if (raw.length > 0) throw new Error(`raw key environment variable(s) set (${raw.join(', ')}); the keeper signs from a Foundry keystore only`);
       assertBaseSepoliaRpc(cfg.base.rpcUrl);
-      if (cfg.base.vaultAddress !== null && !isAddress(cfg.base.vaultAddress, { strict: false })) throw new Error('BASE_VAULT_ADDRESS is not a 0x address');
+      if (!isAddress(cfg.base.vaultAddress, { strict: false })) throw new Error('BASE_VAULT_ADDRESS is not a 0x address');
       const account = loadFoundryKeystore(cfg.base.keystoreDir, cfg.base.account, cfg.base.passwordFile);
       // TODO-H19: ERC-8021 suffix bytes are unverified (F-351), so none are injected even when BASE_BUILDER_CODE is set.
       if (cfg.base.builderCode !== null) log.warn('base_builder_code_not_appended', { reason: 'ERC-8021 suffix format unverified (F-351)' });
-      baseRelay = new BaseRelay(reader, writer, new ViemEvmPort(cfg.base.rpcUrl, account), db, log, {
+      baseRelay = new BaseRelay(reader, writer, new ViemEvmPort(cfg.base.rpcUrl, account, { lookbackBlocks: cfg.base.logLookbackBlocks }), db, log, {
         pageSize: cfg.pageSize,
-        expectedVault: cfg.base.vaultAddress === null ? null : getAddress(cfg.base.vaultAddress),
+        expectedVault: getAddress(cfg.base.vaultAddress),
         keeperAttest: cfg.base.keeperAttest,
+        outlayerVaultRead: cfg.base.outlayerVaultRead,
         builderSuffix: null,
         builderSuffixState: cfg.base.builderCode === null ? 'none' : 'unverified_not_appended',
       });
@@ -92,7 +93,8 @@ async function main(): Promise<void> {
         if (e instanceof ChainRefusedError) throw e;
         log.warn('base_chain_check_deferred', { error: errMsg(e).slice(0, 200) }); // RPC down: every tick re-checks before acting
       }
-      log.info('base_relay_enabled', { signer: account.address, chain_id: baseRelay.status.chainId, attest_mode: cfg.base.keeperAttest });
+      log.info('base_relay_enabled', { signer: account.address, chain_id: baseRelay.status.chainId, attest_mode: cfg.base.keeperAttest, deposit_confirm: baseRelay.status.depositConfirm });
+      if (baseRelay.status.depositConfirm === 'unsupported') log.warn('base_deposit_confirm_unsupported', { reason: BASE_CONFIRM_UNSUPPORTED });
     } catch (e) {
       log.error('startup_refused', { error: errMsg(e) });
       process.exitCode = 2;

@@ -11,6 +11,9 @@
 //   Vault account discriminator = sha256("account:Vault")[..8] (Anchor rule; the same rule reproduces the
 //     Position / settle / release discriminators listed in solana/deploy.md)
 // The token program is not hard-coded: it is the owner of the mint account.
+//
+// Vault v2: interface-v7 §E (D-027, as amended 2026-11-11) and solana/deploy.md "Interface v2"; test/solana.test.ts checks the
+// PDAs, layouts and account orders against solana/client/vault.ts.
 
 import {
   AccountRole,
@@ -21,7 +24,6 @@ import {
   createTransactionMessage,
   getAddressDecoder,
   getAddressEncoder,
-  getBase58Decoder,
   getBase58Encoder,
   getBase64EncodedWireTransaction,
   getProgramDerivedAddress,
@@ -32,7 +34,6 @@ import {
   signTransactionMessageWithSigners,
   type AccountMeta,
   type Address,
-  type Base58EncodedBytes,
   type Blockhash,
   type Instruction,
   type KeyPairSigner,
@@ -64,8 +65,18 @@ export const SETTLE_DISCRIMINATOR = Uint8Array.from([175, 42, 185, 87, 144, 131,
 export const RELEASE_DISCRIMINATOR = Uint8Array.from([253, 249, 15, 206, 28, 127, 193, 241]);
 export const POSITION_DISCRIMINATOR = Uint8Array.from([170, 188, 143, 228, 122, 64, 247, 208]);
 export const VAULT_DISCRIMINATOR = Uint8Array.from([211, 8, 232, 43, 2, 152, 117, 119]);
-export const POSITION_ACCOUNT_LEN = 123;
+export const NONCE_RECORD_DISCRIMINATOR = Uint8Array.from([108, 73, 223, 163, 215, 18, 237, 161]);
+/** §E: disc · version u8 · vault · authority · nonce u64 · position_id u64 · op u8 · kind u8. */
+export const NONCE_RECORD_VERSION = 2;
+export const NONCE_RECORD_LEN = 8 + 1 + 32 + 32 + 8 + 8 + 1 + 1;
+export const OP_SETTLE = 0;
+export const OP_RELEASE = 1;
+/** `Position` v2 (deploy.md); `withdrawable u64` @123 is not read here. */
+export const POSITION_LAYOUT = { len: 131, layoutVersion: 2, version: 8, authority: 9, depositor: 41, amount: 73, status: 81, vault: 82, positionId: 114, bump: 122 } as const;
+/** A position stays after settle or release, until the depositor withdraws: existence says nothing, the status byte does. */
 export const POSITION_STATUS_OPEN = 1;
+export const POSITION_STATUS_SETTLED = 2;
+export const POSITION_STATUS_RELEASED = 3;
 export const ASSOCIATED_TOKEN_PROGRAM_ADDRESS = address('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL');
 export const SYSTEM_PROGRAM_ADDRESS = address('11111111111111111111111111111111');
 
@@ -177,10 +188,14 @@ async function pda(program: Address, seeds: Uint8Array[]): Promise<Address> {
 
 export const vaultPda = (program: Address, mint: Address): Promise<Address> => pda(program, [utf8('vault'), ab(mint)]);
 export const vaultTokensPda = (program: Address, vault: Address): Promise<Address> => pda(program, [utf8('tokens'), ab(vault)]);
-export const positionPda = (program: Address, vault: Address, id: bigint): Promise<Address> =>
-  pda(program, [utf8('pos'), ab(vault), u64le(id)]);
-export const noncePda = (program: Address, vault: Address, nonce: bigint): Promise<Address> =>
-  pda(program, [utf8('nonce'), ab(vault), u64le(nonce)]);
+/** §E (SR-8): the depositor is in the seeds, so a squatter's slot for the same id is a different account. */
+export const positionPda = (program: Address, vault: Address, id: bigint, depositor: Address): Promise<Address> =>
+  pda(program, [utf8('pos'), ab(vault), u64le(id), ab(depositor)]);
+/** §E (SR-1, amended): scoped to the depositor-bound slot, so a nonce burned on another slot does not touch this one. */
+export const noncePda = (program: Address, position: Address, nonce: bigint): Promise<Address> =>
+  pda(program, [utf8('nonce'), ab(position), u64le(nonce)]);
+export const claimPda = (program: Address, vault: Address, recipient: Address): Promise<Address> =>
+  pda(program, [utf8('claim'), ab(vault), ab(recipient)]);
 export const associatedTokenAddress = (owner: Address, tokenProgram: Address, mint: Address): Promise<Address> =>
   pda(ASSOCIATED_TOKEN_PROGRAM_ADDRESS, [ab(owner), ab(tokenProgram), ab(mint)]);
 
@@ -195,20 +210,48 @@ export interface PositionAccount {
   bump: number;
 }
 
-/** `Position` (123 B): disc @0, version @8, authority @9, depositor @41, amount @73, status @81, vault @82, position_id @114, bump @122. */
+/** `Position` v2: exact length, discriminator and layout version. */
 export function parsePositionAccount(data: Uint8Array): PositionAccount {
-  if (data.length !== POSITION_ACCOUNT_LEN) throw new Error(`position account is ${data.length} bytes, expected ${POSITION_ACCOUNT_LEN}`);
+  const L = POSITION_LAYOUT;
+  if (data.length !== L.len) throw new Error(`position account is ${data.length} bytes, expected ${L.len}`);
   if (!POSITION_DISCRIMINATOR.every((b, i) => data[i] === b)) throw new Error('not a nectar_vault Position account');
+  if (data[L.version] !== L.layoutVersion) throw new Error(`position layout version ${data[L.version]} != ${L.layoutVersion}`);
+  const v = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  return {
+    version: data[L.version] as number,
+    authority: data.slice(L.authority, L.authority + 32),
+    depositor: dec.decode(data.subarray(L.depositor, L.depositor + 32)),
+    amount: v.getBigUint64(L.amount, true),
+    status: data[L.status] as number,
+    vault: dec.decode(data.subarray(L.vault, L.vault + 32)),
+    positionId: v.getBigUint64(L.positionId, true),
+    bump: data[L.bump] as number,
+  };
+}
+
+export interface NonceRecord {
+  version: number;
+  vault: Address;
+  authority: Uint8Array;
+  nonce: bigint;
+  positionId: bigint;
+  op: number;
+  kind: number;
+}
+
+/** Decodes a §E NonceRecord; throws unless the length and discriminator are exact. */
+export function parseNonceRecord(data: Uint8Array): NonceRecord {
+  if (data.length !== NONCE_RECORD_LEN) throw new Error(`nonce record is ${data.length} bytes, expected ${NONCE_RECORD_LEN}`);
+  if (!NONCE_RECORD_DISCRIMINATOR.every((b, i) => data[i] === b)) throw new Error('not a nectar_vault NonceRecord account');
   const v = new DataView(data.buffer, data.byteOffset, data.byteLength);
   return {
     version: data[8] as number,
-    authority: data.slice(9, 41),
-    depositor: dec.decode(data.subarray(41, 73)),
-    amount: v.getBigUint64(73, true),
-    status: data[81] as number,
-    vault: dec.decode(data.subarray(82, 114)),
-    positionId: v.getBigUint64(114, true),
-    bump: data[122] as number,
+    vault: dec.decode(data.subarray(9, 41)),
+    authority: data.slice(41, 73),
+    nonce: v.getBigUint64(73, true),
+    positionId: v.getBigUint64(81, true),
+    op: data[89] as number,
+    kind: data[90] as number,
   };
 }
 
@@ -231,43 +274,88 @@ export interface VaultContext {
 const w = (a: Address): AccountMeta => ({ address: a, role: AccountRole.WRITABLE });
 const r = (a: Address): AccountMeta => ({ address: a, role: AccountRole.READONLY });
 
-/** settle accounts in deploy.md order. */
-export async function settleAccounts(v: VaultContext, payer: Address, position: Address, depositor: Address, f: SettleFields): Promise<AccountMeta[]> {
+/** Every account a v2 settle or release can name. */
+export interface LegAccounts {
+  payer: Address;
+  vault: Address;
+  mint: Address;
+  vaultTokens: Address;
+  position: Address;
+  recipient: Address;
+  recipientTokens: Address;
+  claim: Address;
+  nonceRecord: Address;
+  instructions: Address;
+  tokenProgram: Address;
+  associatedTokenProgram: Address;
+  systemProgram: Address;
+}
+type AccountOrder = ReadonlyArray<readonly [keyof LegAccounts, AccountRole]>;
+
+/** settle accounts, in deploy.md order. */
+export const SETTLE_ACCOUNT_ORDER: AccountOrder = [
+  ['payer', AccountRole.WRITABLE_SIGNER],
+  ['vault', AccountRole.READONLY],
+  ['mint', AccountRole.READONLY],
+  ['vaultTokens', AccountRole.WRITABLE],
+  ['position', AccountRole.WRITABLE],
+  ['recipient', AccountRole.READONLY],
+  ['recipientTokens', AccountRole.WRITABLE],
+  ['claim', AccountRole.WRITABLE],
+  ['nonceRecord', AccountRole.WRITABLE],
+  ['instructions', AccountRole.READONLY],
+  ['tokenProgram', AccountRole.READONLY],
+  ['associatedTokenProgram', AccountRole.READONLY],
+  ['systemProgram', AccountRole.READONLY],
+];
+
+/** release accounts, in deploy.md order; release only records `withdrawable`, so it moves no tokens. */
+export const RELEASE_ACCOUNT_ORDER: AccountOrder = [
+  ['payer', AccountRole.WRITABLE_SIGNER],
+  ['vault', AccountRole.READONLY],
+  ['position', AccountRole.WRITABLE],
+  ['nonceRecord', AccountRole.WRITABLE],
+  ['instructions', AccountRole.READONLY],
+  ['systemProgram', AccountRole.READONLY],
+];
+
+const slotIndex = (order: AccountOrder, name: keyof LegAccounts): number => order.findIndex(([n]) => n === name);
+
+const metas = (order: AccountOrder, a: Partial<LegAccounts>): AccountMeta[] =>
+  order.map(([name, role]) => {
+    const value = a[name];
+    if (value === undefined) throw new Error(`account ${name} not provided`);
+    return { address: value, role };
+  });
+
+export async function settleAccounts(v: VaultContext, payer: Address, position: Address, f: SettleFields): Promise<AccountMeta[]> {
   const recipient = address(f.recipient);
-  return [
-    { address: payer, role: AccountRole.WRITABLE_SIGNER },
-    r(v.vault),
-    r(v.mint),
-    w(v.vaultTokens),
-    w(position),
-    w(depositor),
-    w(await associatedTokenAddress(depositor, v.tokenProgram, v.mint)),
-    r(recipient),
-    w(await associatedTokenAddress(recipient, v.tokenProgram, v.mint)),
-    w(await noncePda(v.program, v.vault, f.nonce)),
-    r(INSTRUCTIONS_SYSVAR_ADDRESS),
-    r(v.tokenProgram),
-    r(ASSOCIATED_TOKEN_PROGRAM_ADDRESS),
-    r(SYSTEM_PROGRAM_ADDRESS),
-  ];
+  return metas(SETTLE_ACCOUNT_ORDER, {
+    payer,
+    vault: v.vault,
+    mint: v.mint,
+    vaultTokens: v.vaultTokens,
+    position,
+    recipient,
+    recipientTokens: await associatedTokenAddress(recipient, v.tokenProgram, v.mint),
+    claim: await claimPda(v.program, v.vault, recipient),
+    nonceRecord: await noncePda(v.program, position, f.nonce),
+    instructions: INSTRUCTIONS_SYSVAR_ADDRESS,
+    tokenProgram: v.tokenProgram,
+    associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ADDRESS,
+    systemProgram: SYSTEM_PROGRAM_ADDRESS,
+  });
 }
 
-/** release accounts: settle's list without recipient_account and recipient_tokens. */
-export async function releaseAccounts(v: VaultContext, payer: Address, position: Address, depositor: Address, nonce: bigint): Promise<AccountMeta[]> {
-  return [
-    { address: payer, role: AccountRole.WRITABLE_SIGNER },
-    r(v.vault),
-    r(v.mint),
-    w(v.vaultTokens),
-    w(position),
-    w(depositor),
-    w(await associatedTokenAddress(depositor, v.tokenProgram, v.mint)),
-    w(await noncePda(v.program, v.vault, nonce)),
-    r(INSTRUCTIONS_SYSVAR_ADDRESS),
-    r(v.tokenProgram),
-    r(ASSOCIATED_TOKEN_PROGRAM_ADDRESS),
-    r(SYSTEM_PROGRAM_ADDRESS),
-  ];
+export async function releaseAccounts(v: VaultContext, payer: Address, position: Address, nonce: bigint): Promise<AccountMeta[]> {
+  return metas(RELEASE_ACCOUNT_ORDER, {
+    payer,
+    vault: v.vault,
+    position,
+    nonceRecord: await noncePda(v.program, position, nonce),
+    instructions: INSTRUCTIONS_SYSVAR_ADDRESS,
+    systemProgram: SYSTEM_PROGRAM_ADDRESS,
+  });
 }
 
 /** `[Ed25519 verify ix, settle ix]`; nothing may sit between them (the vault reads the previous instruction). */
@@ -275,7 +363,6 @@ export async function buildSettleInstructions(
   v: VaultContext,
   payer: Address,
   position: Address,
-  depositor: Address,
   authority: Uint8Array,
   preimage: string,
   signature: Uint8Array,
@@ -284,7 +371,7 @@ export async function buildSettleInstructions(
   if (f.program !== v.program) throw new Error('preimage program != vault program');
   return [
     ed25519VerifyInstruction(authority, signature, utf8(preimage)),
-    { programAddress: v.program, accounts: await settleAccounts(v, payer, position, depositor, f), data: settleIxData(f) },
+    { programAddress: v.program, accounts: await settleAccounts(v, payer, position, f), data: settleIxData(f) },
   ];
 }
 
@@ -302,7 +389,7 @@ export async function buildReleaseInstructions(
   if (f.recipient !== depositor) throw new Error('release recipient != position depositor');
   return [
     ed25519VerifyInstruction(authority, signature, utf8(message)),
-    { programAddress: v.program, accounts: await releaseAccounts(v, payer, position, depositor, f.nonce), data: releaseIxData(f.positionId, f.nonce, f.expires) },
+    { programAddress: v.program, accounts: await releaseAccounts(v, payer, position, f.nonce), data: releaseIxData(f.positionId, f.nonce, f.expires) },
   ];
 }
 
@@ -315,16 +402,21 @@ export interface SolAccount {
 
 export type SigState = { kind: 'pending' } | { kind: 'confirmed' } | { kind: 'failed'; err: string };
 
+/** A landed transaction, with account indexes resolved and inner (CPI) instructions flattened in. */
+export interface SolTx {
+  succeeded: boolean;
+  instructions: Array<{ program: Address; accounts: Address[]; data: Uint8Array }>;
+}
+
 export interface SolanaPort {
   getAccount(a: Address): Promise<SolAccount | null>;
-  /** Accounts of `program` whose data starts with `discriminator`. */
-  programAccounts(program: Address, discriminator: Uint8Array): Promise<Array<{ address: Address; data: Uint8Array }>>;
   latestBlockhash(): Promise<{ blockhash: Blockhash; lastValidBlockHeight: bigint }>;
   blockHeight(): Promise<bigint>;
   sendBase64(wire: string): Promise<string>;
   status(sig: string): Promise<SigState>;
-  /** The oldest signature touching `a` (the tx that created a nonce record), or null. */
-  oldestSignatureFor(a: Address): Promise<string | null>;
+  /** Signatures of successful txs touching `a`, newest first, at most `max`. Anyone can add to this list. */
+  successfulSignaturesFor(a: Address, max: number): Promise<string[]>;
+  transaction(sig: string): Promise<SolTx | null>;
 }
 
 const b64 = (s: string): Uint8Array => new Uint8Array(Buffer.from(s, 'base64'));
@@ -337,13 +429,6 @@ export class KitSolanaPort implements SolanaPort {
   async getAccount(a: Address): Promise<SolAccount | null> {
     const { value } = await this.rpc.getAccountInfo(a, { encoding: 'base64', commitment: 'confirmed' }).send();
     return value === null ? null : { owner: value.owner, data: b64(value.data[0]) };
-  }
-  async programAccounts(program: Address, discriminator: Uint8Array): Promise<Array<{ address: Address; data: Uint8Array }>> {
-    const bytes = getBase58Decoder().decode(discriminator) as Base58EncodedBytes;
-    const res = await this.rpc
-      .getProgramAccounts(program, { encoding: 'base64', commitment: 'confirmed', filters: [{ memcmp: { offset: 0n, bytes, encoding: 'base58' } }] })
-      .send();
-    return res.map((x) => ({ address: x.pubkey, data: b64(x.account.data[0]) }));
   }
   async latestBlockhash(): Promise<{ blockhash: Blockhash; lastValidBlockHeight: bigint }> {
     const { value } = await this.rpc.getLatestBlockhash({ commitment: 'confirmed' }).send();
@@ -364,10 +449,34 @@ export class KitSolanaPort implements SolanaPort {
     if (s.err !== null) return { kind: 'failed', err: JSON.stringify(s.err, (_k, x: unknown) => (typeof x === 'bigint' ? x.toString() : x)) };
     return s.confirmationStatus === 'confirmed' || s.confirmationStatus === 'finalized' ? { kind: 'confirmed' } : { kind: 'pending' };
   }
-  async oldestSignatureFor(a: Address): Promise<string | null> {
-    const list = await this.rpc.getSignaturesForAddress(a, { limit: 1000, commitment: 'confirmed' }).send();
-    const ok = list.filter((x) => x.err === null);
-    return ok.length === 0 ? null : (ok[ok.length - 1]?.signature ?? null);
+  async successfulSignaturesFor(a: Address, max: number): Promise<string[]> {
+    const out: string[] = [];
+    let before: Signature | undefined;
+    for (let seen = 0; seen < max; ) {
+      const limit = Math.min(1000, max - seen);
+      const list = await this.rpc.getSignaturesForAddress(a, { limit, commitment: 'confirmed', ...(before === undefined ? {} : { before }) }).send();
+      for (const x of list) if (x.err === null) out.push(x.signature);
+      seen += list.length;
+      const last = list[list.length - 1];
+      if (list.length < limit || last === undefined) break;
+      before = last.signature;
+    }
+    return out;
+  }
+  async transaction(sig: string): Promise<SolTx | null> {
+    const res = await this.rpc.getTransaction(sig as Signature, { encoding: 'json', commitment: 'confirmed', maxSupportedTransactionVersion: 0 }).send();
+    if (res === null) return null;
+    const meta = res.meta;
+    if (meta === null) return { succeeded: false, instructions: [] };
+    // Index space per the RPC: static keys, then loaded writable, then loaded readonly.
+    const keys: Address[] = [...res.transaction.message.accountKeys, ...meta.loadedAddresses.writable, ...meta.loadedAddresses.readonly];
+    const all = [...res.transaction.message.instructions, ...(meta.innerInstructions ?? []).flatMap((x) => x.instructions)];
+    const instructions = all.map((ix) => ({
+      program: keys[ix.programIdIndex] as Address,
+      accounts: ix.accounts.map((i) => keys[i] as Address),
+      data: Uint8Array.from(getBase58Encoder().encode(ix.data) as unknown as ArrayLike<number>),
+    }));
+    return { succeeded: meta.err === null, instructions };
   }
 }
 
@@ -419,6 +528,13 @@ interface RemoteView {
   vault_program?: string;
   status?: string;
   authority?: string;
+  /** §E (SR-8): the address the borrower committed to at reserve time. */
+  committed_depositor?: string | null;
+  /** set once a deposit is proven */
+  depositor?: string | null;
+  reserved_units?: string;
+  expires_ns?: string;
+  confirming?: boolean;
 }
 interface PositionLike {
   position_id?: string;
@@ -494,10 +610,14 @@ export interface RelayOptions {
   confirmPollMs?: number;
   /** cooldown after a confirm_remote_deposit call (OutLayer answers asynchronously) */
   depositCooldownMs?: number;
-  /** NECTAR_VAULT_MINT override: skips vault discovery */
-  mintOverride?: Address | null;
-  /** NECTAR_VAULT_PROGRAM_ID: when set, NEAR's remote_chain.vault_program must equal it */
-  expectedProgram?: Address | null;
+  /** SR-12: the pinned mint; the vault is PDA("vault", mint), never discovered by symbol */
+  mint: Address;
+  /** SR-31: the pinned program; a position naming any other program is refused */
+  expectedProgram: Address;
+  /** SR-11: confirm_remote_deposit calls per unchanged vault observation */
+  maxConfirmsPerObservation?: number;
+  /** SR-2: signatures examined when looking for the tx that landed a leg (anyone can pad this list) */
+  maxLandedScan?: number;
   nowMs?: () => number;
   rand?: () => number;
   sleep?: (ms: number) => Promise<void>;
@@ -534,7 +654,7 @@ export class SolanaRelay {
   private readonly inFlight = new Set<string>();
   private readonly vaults = new Map<string, VaultContext>();
   private readonly remoteChains = new Map<string, RemoteChainView | null>();
-  private readonly opts: Required<Omit<RelayOptions, 'mintOverride' | 'expectedProgram'>> & Pick<RelayOptions, 'mintOverride' | 'expectedProgram'>;
+  private readonly opts: Required<RelayOptions>;
 
   private readonly near: CoreReader;
   private readonly writer: KeeperWriter;
@@ -555,6 +675,8 @@ export class SolanaRelay {
       backoff: DEFAULT_BACKOFF,
       confirmPollMs: 2_000,
       depositCooldownMs: 60_000,
+      maxConfirmsPerObservation: 3,
+      maxLandedScan: 2_000,
       nowMs: Date.now,
       rand: Math.random,
       sleep: (ms) => new Promise((res) => setTimeout(res, ms)),
@@ -608,28 +730,21 @@ export class SolanaRelay {
     return rc;
   }
 
-  /** The vault for `symbol`: from NECTAR_VAULT_MINT, else the program's Vault account whose symbol matches. */
+  /** SR-12: the vault is PDA("vault", pinned mint). `init_vault` is permissionless, so other Vault accounts are never listed. */
   private async vaultFor(symbol: string, program: Address): Promise<VaultContext> {
     const key = `${program}:${symbol}`;
     const hit = this.vaults.get(key);
     if (hit !== undefined) return hit;
-    let mint: Address | null = this.opts.mintOverride ?? null;
-    if (mint === null) {
-      const found = (await this.sol.programAccounts(program, VAULT_DISCRIMINATOR))
-        .map((a) => {
-          try {
-            return parseVaultAccount(a.data);
-          } catch {
-            return null;
-          }
-        })
-        .filter((x): x is { symbol: string; mint: Address } => x !== null && x.symbol === symbol);
-      if (found.length !== 1) throw new Error(`expected one vault for ${symbol}, found ${found.length}`);
-      mint = (found[0] as { mint: Address }).mint;
-    }
+    const mint = this.opts.mint;
+    const vault = await vaultPda(program, mint);
+    const raw = await this.sol.getAccount(vault);
+    if (raw === null) throw new Error('vault account not found for the pinned mint');
+    if (raw.owner !== program) throw new Error('vault PDA not owned by the vault program');
+    const parsed = parseVaultAccount(raw.data);
+    if (parsed.mint !== mint) throw new Error('vault mint != pinned mint');
+    if (parsed.symbol !== symbol) throw new Error(`vault symbol ${parsed.symbol} != collateral ${symbol}`);
     const mintAcct = await this.sol.getAccount(mint);
     if (mintAcct === null) throw new Error('vault mint account not found');
-    const vault = await vaultPda(program, mint);
     const ctx: VaultContext = { program, vault, mint, vaultTokens: await vaultTokensPda(program, vault), tokenProgram: mintAcct.owner };
     this.vaults.set(key, ctx);
     return ctx;
@@ -651,7 +766,7 @@ export class SolanaRelay {
       vaultProgram = rc.vault_program;
     }
     const prog = address(vaultProgram);
-    if (this.opts.expectedProgram != null && this.opts.expectedProgram !== prog) throw new Error('remote_chain.vault_program != NECTAR_VAULT_PROGRAM_ID');
+    if (this.opts.expectedProgram !== prog) throw new Error('vault_program from NEAR != pinned vault program');
     return prog;
   }
 
@@ -739,14 +854,32 @@ export class SolanaRelay {
     return delay;
   }
 
-  private async readOpenPosition(program: Address, vault: VaultContext, id: bigint): Promise<{ addr: Address; acct: PositionAccount } | null> {
-    const addr = await positionPda(program, vault.vault, id);
+  /**
+   * The depositor's slot, or null when nothing is deposited there. Anyone can pre-fund the PDA with a plain transfer, and
+   * a system-owned account there is not a position.
+   */
+  private async readPosition(vault: VaultContext, id: bigint, depositor: Address): Promise<{ addr: Address; acct: PositionAccount } | null> {
+    const addr = await positionPda(vault.program, vault.vault, id, depositor);
     const raw = await this.sol.getAccount(addr);
-    if (raw === null) return null;
-    if (raw.owner !== program) throw new Error('position PDA not owned by the vault program');
+    if (raw === null || raw.owner === SYSTEM_PROGRAM_ADDRESS) return null;
+    if (raw.owner !== vault.program) throw new Error('position PDA not owned by the vault program');
     const acct = parsePositionAccount(raw.data);
-    if (acct.vault !== vault.vault || acct.positionId !== id) throw new Error('position PDA fields do not match');
+    if (acct.vault !== vault.vault || acct.positionId !== id || acct.depositor !== depositor) throw new Error('position PDA fields do not match');
     return { addr, acct };
+  }
+
+  /** §E: the committed depositor. A proven `remote.depositor` stands in for it and must agree when both are present. */
+  private async depositorOf(id: string, p: PositionLike): Promise<Address | null> {
+    let committed = p.remote?.committed_depositor;
+    if (!str(committed)) {
+      const { value } = await this.near.view('get_position', { position_id: id });
+      const remote = isObj(value) ? value.remote : null;
+      committed = isObj(remote) && str(remote.committed_depositor) ? remote.committed_depositor : null;
+    }
+    const proven = p.remote?.depositor;
+    if (str(committed) && str(proven) && committed !== proven) throw new Error('remote.depositor != committed_depositor');
+    const chosen = str(committed) ? committed : proven;
+    return str(chosen) ? address(chosen) : null;
   }
 
   private async settle(id: string, p: PositionLike, program: Address): Promise<Outcome> {
@@ -760,8 +893,8 @@ export class SolanaRelay {
     }
     if (f.program !== program) throw new Error('preimage program != remote_chain.vault_program');
     const vault = await this.vaultFor(p.collateral as string, program);
-    return await this.relayLeg('settle', id, vault, f.nonce, f.expires, p, async (pos) =>
-      buildSettleInstructions(vault, this.payer.address, pos.addr, pos.acct.depositor, pos.acct.authority, d.preimage, hexToBytes(d.signature_hex as string)),
+    return await this.relayLeg({ op: 'settle', opCode: OP_SETTLE, kind: f.kind, id, vault, nonce: f.nonce, expires: f.expires, ixData: settleIxData(f), order: SETTLE_ACCOUNT_ORDER, landedStatus: POSITION_STATUS_SETTLED, p }, async (pos, authority) =>
+      buildSettleInstructions(vault, this.payer.address, pos.addr, authority, d.preimage, hexToBytes(d.signature_hex as string)),
     );
   }
 
@@ -779,40 +912,44 @@ export class SolanaRelay {
     if (String(f.positionId) !== id || String(f.nonce) !== d.nonce || String(f.expires) !== d.expires) throw new Error('release message fields != pending release');
     if (f.program !== program) throw new Error('release vault != remote_chain.vault_program');
     const vault = await this.vaultFor(p.collateral as string, program);
-    return await this.relayLeg('release', id, vault, f.nonce, f.expires, p, async (pos) =>
-      buildReleaseInstructions(vault, this.payer.address, pos.addr, pos.acct.depositor, pos.acct.authority, d.message, hexToBytes(d.signature_hex)),
+    return await this.relayLeg({ op: 'release', opCode: OP_RELEASE, kind: 0, id, vault, nonce: f.nonce, expires: f.expires, ixData: releaseIxData(f.positionId, f.nonce, f.expires), order: RELEASE_ACCOUNT_ORDER, landedStatus: POSITION_STATUS_RELEASED, p, recipient: f.recipient }, async (pos, authority) =>
+      buildReleaseInstructions(vault, this.payer.address, pos.addr, pos.acct.depositor, authority, d.message, hexToBytes(d.signature_hex)),
     );
   }
 
   /**
-   * Idempotent core: a used nonce PDA means the leg already landed (maybe before a crash) → relay the tx that created it;
-   * a missing position PDA without the nonce means something else closed it → skip. Otherwise send and confirm, then relay.
+   * Idempotent core. Only the vault can own its nonce PDA, so a program-owned record that passes every §E field check means
+   * the leg landed, and the tx that landed it is relayed. Anything else at that address (SR-2: a plain transfer) proves
+   * nothing and falls through to the send path, because Anchor `init` accepts a pre-funded account.
    */
-  private async relayLeg(
-    op: 'settle' | 'release',
-    id: string,
-    vault: VaultContext,
-    nonce: bigint,
-    expires: bigint,
-    p: PositionLike,
-    build: (pos: { addr: Address; acct: PositionAccount }) => Promise<Instruction[]>,
-  ): Promise<Outcome> {
-    const nonceAddr = await noncePda(vault.program, vault.vault, nonce);
-    if ((await this.sol.getAccount(nonceAddr)) !== null) {
-      const sig = await this.sol.oldestSignatureFor(nonceAddr);
-      if (sig === null) return { kind: 'skip', reason: 'nonce_used_signature_not_found' };
+  private async relayLeg(leg: Leg, build: (pos: { addr: Address; acct: PositionAccount }, authority: Uint8Array) => Promise<Instruction[]>): Promise<Outcome> {
+    const { op, id, vault, nonce, expires, p } = leg;
+    const authority = ed25519AuthorityBytes(p.remote?.authority);
+    if (authority === null) return { kind: 'skip', reason: 'authority_unknown' };
+    const depositor = await this.depositorOf(id, p);
+    if (depositor === null) return { kind: 'skip', reason: 'depositor_unknown' };
+    if (leg.recipient !== undefined && leg.recipient !== depositor) throw new Error('release recipient != committed depositor');
+    const positionAddr = await positionPda(vault.program, vault.vault, BigInt(id), depositor);
+    const nonceAddr = await noncePda(vault.program, positionAddr, nonce);
+    const pos = await this.readPosition(vault, BigInt(id), depositor);
+    const record = await this.sol.getAccount(nonceAddr);
+    if (record !== null && record.owner === vault.program) {
+      this.assertNonceRecord(record.data, leg, authority);
+      // A landed leg leaves its own status; a missing account means the depositor has since withdrawn.
+      if (pos !== null && pos.acct.status !== leg.landedStatus) throw new Error(`nonce record exists but position status is ${pos.acct.status}, expected ${leg.landedStatus}`);
+      const sig = await this.findLandedTx(leg, nonceAddr, positionAddr);
+      if (sig === null) return { kind: 'skip', reason: 'nonce_used_tx_not_found' };
       this.log.info('solana_leg_already_landed', { op, position_id: id, solana_tx_sig: sig });
       await this.relayToNear(op, id, sig);
       return { kind: 'done', sig };
     }
-    const pos = await this.readOpenPosition(vault.program, vault, BigInt(id));
+    if (record !== null) this.log.warn('solana_nonce_pda_not_a_record', { op, position_id: id, owner: record.owner });
     if (pos === null) return { kind: 'skip', reason: 'position_pda_missing' };
     if (pos.acct.status !== POSITION_STATUS_OPEN) return { kind: 'skip', reason: 'position_pda_not_open' };
-    const nearAuth = ed25519AuthorityBytes(p.remote?.authority);
-    if (nearAuth !== null && !eqBytes(nearAuth, pos.acct.authority)) return { kind: 'skip', reason: 'authority_mismatch' };
+    if (!eqBytes(authority, pos.acct.authority)) return { kind: 'skip', reason: 'authority_mismatch' };
     if (BigInt(Math.floor(this.opts.nowMs() / 1000)) >= expires) return { kind: 'skip', reason: 'signature_expired' };
 
-    const ixs = await build(pos);
+    const ixs = await build(pos, authority);
     const bh = await this.sol.latestBlockhash();
     const { wire, signature } = await signToWire(ixs, this.payer, bh);
     this.log.info('solana_tx_sending', { op, position_id: id, solana_tx_sig: signature });
@@ -821,6 +958,37 @@ export class SolanaRelay {
     this.log.info('solana_tx_confirmed', { op, position_id: id, solana_tx_sig: signature });
     await this.relayToNear(op, id, signature);
     return { kind: 'done', sig: signature };
+  }
+
+  /** SR-2: every §E field must match this leg. A mismatch is refused; it is never read as "landed". */
+  private assertNonceRecord(data: Uint8Array, leg: Leg, authority: Uint8Array): void {
+    const r = parseNonceRecord(data);
+    if (r.version !== NONCE_RECORD_VERSION) throw new Error(`nonce record version ${r.version} != ${NONCE_RECORD_VERSION}`);
+    if (r.vault !== leg.vault.vault) throw new Error('nonce record vault mismatch');
+    if (!eqBytes(r.authority, authority)) throw new Error('nonce record authority mismatch');
+    if (r.nonce !== leg.nonce) throw new Error('nonce record nonce mismatch');
+    if (String(r.positionId) !== leg.id) throw new Error('nonce record position mismatch');
+    if (r.op !== leg.opCode) throw new Error('nonce record op mismatch');
+    if (r.kind !== leg.kind) throw new Error('nonce record kind mismatch');
+  }
+
+  /**
+   * SR-2: the signature relayed to NEAR must be a successful tx that ran this exact vault instruction with the committed slot
+   * and its nonce record in their own account positions. Mere presence is not enough: the instruction data does not name the
+   * depositor, so a tx on another slot could list these accounts as trailing extras.
+   */
+  private async findLandedTx(leg: Leg, nonceAddr: Address, positionAddr: Address): Promise<string | null> {
+    const atPosition = slotIndex(leg.order, 'position');
+    const atNonce = slotIndex(leg.order, 'nonceRecord');
+    for (const sig of await this.sol.successfulSignaturesFor(nonceAddr, this.opts.maxLandedScan)) {
+      const tx = await this.sol.transaction(sig);
+      if (tx === null || !tx.succeeded) continue;
+      const hit = tx.instructions.some(
+        (ix) => ix.program === leg.vault.program && eqBytes(ix.data, leg.ixData) && ix.accounts[atPosition] === positionAddr && ix.accounts[atNonce] === nonceAddr,
+      );
+      if (hit) return sig;
+    }
+    return null;
   }
 
   private async confirm(sig: string, lastValidBlockHeight: bigint): Promise<void> {
@@ -856,23 +1024,33 @@ export class SolanaRelay {
   }
 
   private async deposit(id: string, p: PositionLike, program: Address, report: RelayReport, key: string): Promise<void> {
-    if (!str(p.units)) return;
+    const r = p.remote;
+    const skip = (reason: string): void => void report.skipped.push({ id, reason });
+    // SR-11: an AwaitingDeposit position has top-level units = 0; the reserved amount is remote.reserved_units.
+    if (!str(r?.reserved_units)) return skip('reserved_units_unknown');
+    if (r.confirming === true) return skip('confirm_in_flight');
+    if (str(r.depositor)) return skip('deposit_already_proven'); // a refused loan: confirming again cannot change it
+    if (str(r.expires_ns) && BigInt(this.opts.nowMs()) * 1_000_000n >= BigInt(r.expires_ns)) return skip('reservation_expired');
+    const depositor = await this.depositorOf(id, p);
+    if (depositor === null) return skip('depositor_unknown');
     const vault = await this.vaultFor(p.collateral as string, program);
-    const pos = await this.readOpenPosition(program, vault, BigInt(id));
+    const pos = await this.readPosition(vault, BigInt(id), depositor);
     if (pos === null) return; // not deposited yet
-    if (pos.acct.status !== POSITION_STATUS_OPEN || pos.acct.amount < BigInt(p.units)) {
-      report.skipped.push({ id, reason: 'deposit_below_reserved' });
-      return;
-    }
-    const nearAuth = ed25519AuthorityBytes(p.remote?.authority);
-    if (nearAuth === null || !eqBytes(nearAuth, pos.acct.authority)) {
-      report.skipped.push({ id, reason: 'authority_mismatch' });
-      return;
-    }
+    if (pos.acct.status !== POSITION_STATUS_OPEN) return skip('position_pda_not_open'); // settled or released: the account outlives the deposit
+    if (pos.acct.amount < BigInt(r.reserved_units)) return skip('deposit_below_reserved');
+    const nearAuth = ed25519AuthorityBytes(r.authority);
+    if (nearAuth === null || !eqBytes(nearAuth, pos.acct.authority)) return skip('authority_mismatch');
+    // SR-11: each call costs gas reserve and key allowance, so an unchanged vault gets a bounded number of tries.
+    const fingerprint = `${pos.acct.amount}:${pos.acct.status}`;
+    const seen = this.db.confirmState(key);
+    const attempts = seen !== null && seen.fingerprint === fingerprint ? seen.attempts + 1 : 1;
+    if (attempts > this.opts.maxConfirmsPerObservation) return skip('confirm_rejected_unchanged');
+    // Recorded before the call: a failed or interrupted call has already spent allowance.
+    this.db.setConfirmState(key, fingerprint, attempts, this.opts.nowMs());
     const res = await this.writer.call('confirm_remote_deposit', { position_id: id });
     if (!res.ok) throw new Error(`confirm_remote_deposit failed: ${(res.failure ?? '').slice(0, 200)}`);
-    // OutLayer answers asynchronously: do not call again until the cooldown passes.
-    this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.depositCooldownMs);
+    // OutLayer answers asynchronously: do not call again until the cooldown passes; it doubles per unchanged attempt.
+    this.db.setRetry(key, 0, this.opts.nowMs() + this.opts.depositCooldownMs * 2 ** (attempts - 1));
     this.status.depositsConfirmed++;
     report.deposits.push(id);
     this.log.info('remote_deposit_confirm_requested', { position_id: id, tx_hash: res.txHash });
@@ -893,6 +1071,25 @@ export class SolanaRelay {
 }
 
 type Outcome = { kind: 'none' } | { kind: 'skip'; reason: string } | { kind: 'done'; sig: string };
+
+/** One signed leg, as transcribed from NEAR's message. */
+interface Leg {
+  op: 'settle' | 'release';
+  opCode: number;
+  kind: number;
+  id: string;
+  vault: VaultContext;
+  nonce: bigint;
+  expires: bigint;
+  /** the exact instruction data this leg sends; also what a landed tx must contain */
+  ixData: Uint8Array;
+  order: AccountOrder;
+  /** the status byte this leg leaves on the position */
+  landedStatus: number;
+  p: PositionLike;
+  /** release only: the message's recipient, which must be the committed depositor */
+  recipient?: string;
+}
 
 /** Devnet only (CLAUDE.md §1): refuse a mainnet RPC. */
 export function assertDevnetRpc(url: string): void {
