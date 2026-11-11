@@ -1,0 +1,20 @@
+# Root build-context allowlist (union of services/feed and services/x402 Dockerfile.dockerignore; those take precedence on BuildKit).
+# Nothing else reaches a build context: no .env*, evidence/, keys, ~/.nectar copies, node_modules, .git, .claude.
+*
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!packages/config/config.yaml
+!services/feed/package.json
+!services/feed/openapi.yaml
+!services/feed/src/**
+!services/x402/package.json
+!services/x402/src/**
+!services/keeper/package.json
+!services/keeper/src/health.ts
+!services/keeper/src/keyfile.ts
+**/.env*
+**/*.key
+**/*key*.json
+**/*.pem
+**/node_modules
