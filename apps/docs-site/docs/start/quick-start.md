@@ -13,7 +13,7 @@ git clone <repo-url> nectar-labs && cd nectar-labs   # repo URL: TODO-H2 (privat
 pnpm i
 pnpm demo:testnet            # read-only views against the testnet contract
 pnpm --filter web dev        # web app on http://localhost:3100
-pnpm --filter docs-site start  # this site on http://localhost:3000
+pnpm --filter docs-site start  # this site on http://localhost:3000/docs/
 ```
 
 ## Prerequisites
@@ -32,7 +32,7 @@ pnpm --filter docs-site start  # this site on http://localhost:3000
 | 2 | `pnpm i` | works; installs from `pnpm-lock.yaml` (13 s in G9 run 3; a cold pnpm store is slower) |
 | 3 | `pnpm demo:testnet` | works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml` and prints contract version, exit capacity, pool, quotes, positions and explorer links (see [Live on testnet](/start/live-on-testnet)); 5 s in G9 run 3. |
 | 4 | `pnpm --filter web dev` | starts `apps/web` on http://localhost:3100 (`next dev -p 3100`; G3 PASS). |
-| 5 | `pnpm --filter docs-site start` | works: this site on http://localhost:3000 |
+| 5 | `pnpm --filter docs-site start` | works: this site on http://localhost:3000/docs/ |
 
 `demo:testnet` reads public state only. It never signs, needs no key and costs nothing.
 

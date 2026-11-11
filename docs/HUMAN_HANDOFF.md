@@ -6,7 +6,7 @@ in Claude Code with the id (for example `H7 done`). The orchestrator then does e
 entry's "What Claude Code does then" line says.
 
 Status values: OPEN · WAITING (agent did its part, needs Kunal) · DONE · DEFAULTED (deadline passed,
-default applied, disclosed in README).
+default applied, disclosed in README) · SUPERSEDED (replaced by the entries it names; history kept).
 
 ---
 
@@ -60,11 +60,67 @@ What Kunal does (3 min): create the property/site, then reply `H4 ga4 G-XXXXXXX`
 What Claude Code does then: sets `NEXT_PUBLIC_ANALYTICS` and `docusaurus.config.ts` accordingly, updates the Cookie page's storage list, redeploys previews, records in EVIDENCE.
 Default if silent: analytics off; banner shipped; both code paths present and tested with a dummy id.
 
-## H5 — domains and hosting                          status: OPEN   needed by: G3 (previews fine without)
+## H5 — domains and hosting                          status: SUPERSEDED 2026-11-12 by H-HOST + H-DOMAIN (+ H-DNS), D-030; history below   needed by: G3 (previews fine without)
 Why a human: domain DNS and Vercel account ownership.
 What Kunal does (5 min): in Vercel create projects `nectar-labs-web` and `nectar-labs-docs` (or run `vercel link` in `apps/web` and `apps/docs-site`); add domains; optionally `vercel env add VERCEL_TOKEN` is NOT needed — instead run `vercel --prod` yourself, or paste a scoped token into `~/.nectar/vercel.token` (0600) and reply `H5 token`.
 What Claude Code does then: with a token, deploys previews after each green gate via `vercel deploy --prebuilt`; without, prints the exact `vercel` commands in EVIDENCE.
 Default if silent: no hosted preview; README links to `pnpm --filter web dev` and screenshots in evidence/.
+
+## H-DOMAIN — a domain for the hosted demo             status: OPEN   needed by: 2026-11-13 06:00 UTC (WO-34 deploy, round 3)
+Why a human: registering a domain spends real money and binds a registrar account. Agents never buy a domain.
+Facts: nectarlabs.io is **not registered** (F-395: whois.nic.io "Domain not found", NXDOMAIN at a0.nic.io, 2026-11-11T19:43Z). The orchestrator's
+  pre-check (docs/work/wo-34-deploy.md) saw the Vercel registry offer it at $14.99 for the first year, $46 renewal. That contradicts the brief, which said it
+  already answered HTTP (FACTS C-022).
+What Kunal does (5 min), one of:
+  (a) Vercel dashboard → Domains → Buy → `nectarlabs.io` (check the price shown), then reply `H-DOMAIN nectarlabs.io`.
+  (b) Name a domain you already own (the team already holds nectar.monster, nectarnetwork.fun, nectarn.wtf on Vercel DNS): reply `H-DOMAIN <domain>`.
+  (c) Reply `H-DOMAIN none` to keep the platform URLs.
+What Claude Code does then: adds the domain to the new Vercel web project (SITE = apex, APP = `ac.<domain>`, `www` → apex 301), sets SITE_URL, APP_URL,
+  DOCS_URL and DOCS_ORIGIN_URL (see RUNBOOK "Docs site under /docs"), redeploys the same commit, then writes the records Vercel returns into H-DNS.
+Default if silent by 2026-11-13 06:00 UTC: `*.vercel.app` aliases for SITE and APP (docs under APP `/docs`) and `*.up.railway.app` for the Feed. A domain
+  added later is an env + alias change, no code change.
+
+## H-DNS — DNS records for the chosen domain           status: OPEN (blocked on H-DOMAIN; records are filled in at deploy time)   needed by: production on a custom domain
+Why a human: only the domain's owner can edit its DNS zone (unless the domain uses Vercel DNS, where Vercel sets the records itself).
+What Kunal does (5 min): after H-DOMAIN, add exactly the records listed below at the domain's DNS provider, then reply `H-DNS done`.
+  Records: TODO-H-DNS (the orchestrator pastes the A/CNAME/TXT values Vercel returns when the domain is added to the project; none yet).
+What Claude Code does then: waits for Vercel to show the domain as verified and the certificate as issued, then the verifier re-runs the production checks
+  (wo-34v) on the custom domain and records them in EVIDENCE.
+Default if silent: the platform URLs from H-DOMAIN's default stay the public URLs.
+
+## H-LEGAL — operator, country, contact, X handle     status: OPEN   needed by: 2026-11-13 12:00 UTC (production promotion)
+Why a human: the legal pages name who operates the site and where; only Kunal can state his legal identity and choose a public contact. Overlaps H9
+  (entity name, TODO-H9); one answer covers both.
+Where it goes: `packages/config/config.yaml` → `site:` (`operator`, `country`, `contact`, `x_handle`; all null today, marked TODO-H-LEGAL). The pages read
+  them from there. A production build with operator, country or contact null fails on purpose, so no page ships a blank operator.
+What Kunal does (2 min): reply `H-LEGAL operator="<person or company name>" country="<country>" contact="<email>" x="<@handle or none>"`.
+What Claude Code does then: the orchestrator fills `site:`; the legal pages (privacy, cookies, terms, disclaimers; WO-34e) and the site footer show the
+  values; the production guard passes; the deploy is promoted to production.
+Default if silent by 2026-11-13 12:00 UTC: no production promotion (previews only, noindex). The submission continues without hosting.
+
+## H-KEYS — testnet signing keys as Railway secrets   status: OPEN (treated as not confirmed)   needed by: hosted keeper / x402 relayer only
+Why a human: storing a signing key with a third party changes where keys live (CLAUDE.md: OS keychain or `0600` files under `~/.nectar/`). Kunal's
+  paste kept the line "New testnet-only function-call keys… may be stored as Railway secrets", but the template fields around it were left unfilled, so it
+  is not read as a confirmation.
+What Kunal does (1 min): reply `H-KEYS yes` (new testnet-only function-call keys, one for the keeper and one for the x402 relayer, created for this
+  purpose with a small allowance, stored only as Railway service variables) or `H-KEYS no`.
+What Claude Code does then, on yes: creates the two new function-call keys on testnet (method-restricted, never full access, never the keys in
+  `~/.nectar/`), sets them as Railway variables on the new project, deploys the keeper and x402 services, records the public keys and allowance in
+  EVIDENCE. On no: nothing leaves `~/.nectar/`.
+Default if silent: keeper and x402 stay local (they run when the operator runs them). The hosted app says when settlement runs.
+
+## H-HOST — Vercel and Railway CLI login, Railway plan   status: OPEN   needed by: 2026-11-13 06:00 UTC (WO-34 deploy, round 3)
+Why a human: a CLI login binds Kunal's accounts (Vercel team "kunal's projects", Hobby plan; Railway workspace "kunal drall's Projects"). The Railway
+  plan is not readable through the API. Agents never log in for him and never upgrade a plan.
+What Kunal does (5 min), in his own shell:
+  1. `npx -y vercel@65.14.0 login`
+  2. `npx -y @railway/cli@5.71.0 login`
+     (versions: F-394, npm latest on 2026-11-11; the subcommand grammar is still VERIFY there, so the orchestrator checks `--help` before scripting.)
+  3. Railway: Dashboard → Workspace settings → Plan. Reply `H-HOST done, railway plan <name>`. Do not upgrade.
+What Claude Code does then: creates new projects only (the pre-repo Vercel projects nectar-landing, nectar-frontend, docs-site-nectar and the five
+  pre-repo Railway projects stay untouched), sets env per RUNBOOK, deploys the code-final commit after the G3b re-run (scripts/deploy/*), and the
+  verifier records deployment ids, URLs and headers in EVIDENCE (wo-34v).
+Default if silent by 2026-11-13 06:00 UTC: no hosting. README keeps the local quick start; the submission continues.
 
 ## H7 — NEAR AI Cloud API key                         status: OPEN   needed by: P2 / G8 (live test only)
 Why a human: paid credential tied to Kunal's account ($10 credit).
