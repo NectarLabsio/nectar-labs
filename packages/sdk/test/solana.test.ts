@@ -84,7 +84,7 @@ interface ClientMeta { address: string; role: number }
 interface ClientIx { programAddress: string; accounts: ClientMeta[]; data: Uint8Array }
 const pdaClient = (await import(/* @vite-ignore */ new URL("../../../solana/client/pda.ts", import.meta.url).href)) as {
   positionAddress: (program: string, vault: string, id: bigint, depositor: string) => string;
-  nonceAddress: (program: string, position: string, nonce: bigint) => string;
+  nonceAddress: (program: string, position: string, authority: Uint8Array, nonce: bigint) => string;
   claimAddress: (program: string, vault: string, recipient: string) => string;
   vaultAddress: (program: string, mint: string) => string;
   vaultTokensAddress: (program: string, vault: string) => string;
@@ -106,7 +106,7 @@ const vaultClient = (await import(/* @vite-ignore */ new URL("../../../solana/cl
   parsePosition: (d: Uint8Array) => { depositor: string; amount: bigint; status: number; vault: string; positionId: bigint; bump: number; withdrawable: bigint };
   parseClaim: (d: Uint8Array) => { vault: string; recipient: string; amount: bigint; bump: number };
   openPositionInstruction: (ids: ClientIds, depositor: string, depositorTokens: string, f: { positionId: bigint; authority: Uint8Array; amount: bigint }) => ClientIx;
-  releaseInstruction: (ids: ClientIds, payer: string, depositor: string, f: { positionId: bigint; nonce: bigint; expires: bigint }) => ClientIx;
+  releaseInstruction: (ids: ClientIds, payer: string, depositor: string, authority: Uint8Array, f: { positionId: bigint; nonce: bigint; expires: bigint }) => ClientIx;
   withdrawInstruction: (ids: ClientIds, depositor: string, positionId: bigint, destination: string) => ClientIx;
   claimInstruction: (ids: ClientIds, recipient: string, destination: string) => ClientIx;
 };
@@ -222,7 +222,10 @@ describe("PDAs (deploy.md seeds) match an independent derivation", () => {
     expect(await vaultTokensPda(PROGRAM, vault)).toBe(nobleFindPda([s("tokens"), base58ToBytes(vault)], PROGRAM));
     const pos = await positionPda(PROGRAM, vault, 7n, DEPOSITOR);
     expect(pos).toBe(nobleFindPda([s("pos"), base58ToBytes(vault), u64(7n), base58ToBytes(DEPOSITOR)], PROGRAM));
-    expect(await noncePda(PROGRAM, pos, 3n)).toBe(nobleFindPda([s("nonce"), base58ToBytes(pos), u64(3n)], PROGRAM));
+    const auth = parseEd25519Authority(AUTH);
+    expect(await noncePda(PROGRAM, pos, auth, 3n)).toBe(nobleFindPda([s("nonce"), base58ToBytes(pos), auth, u64(3n)], PROGRAM));
+    expect(await noncePda(PROGRAM, pos, new Uint8Array(32).fill(7), 3n)).not.toBe(await noncePda(PROGRAM, pos, auth, 3n));
+    await expect(noncePda(PROGRAM, pos, auth.slice(1), 3n)).rejects.toThrow(/32 bytes/);
     expect(await claimPda(PROGRAM, vault, DEPOSITOR)).toBe(nobleFindPda([s("claim"), base58ToBytes(vault), base58ToBytes(DEPOSITOR)], PROGRAM));
     expect(await associatedTokenAddress(DEPOSITOR, MINT)).toBe(
       nobleFindPda([base58ToBytes(DEPOSITOR), base58ToBytes(TOKEN_PROGRAM_ADDRESS), base58ToBytes(MINT)], ASSOCIATED_TOKEN_PROGRAM_ADDRESS),
@@ -258,7 +261,7 @@ describe("byte-exact against solana/client (pda.ts, vault.ts)", () => {
     for (const [id, dep] of [[0n, DEPOSITOR], [7n, OTHER], [(1n << 64n) - 1n, DEPOSITOR]] as const) {
       const pos = await positionPda(PROGRAM, vault, id, dep);
       expect(pos).toBe(pdaClient.positionAddress(PROGRAM, vault, id, dep));
-      expect(await noncePda(PROGRAM, pos, 9n)).toBe(pdaClient.nonceAddress(PROGRAM, pos, 9n));
+      for (const auth of [parseEd25519Authority(AUTH), new Uint8Array(32).fill(7)]) expect(await noncePda(PROGRAM, pos, auth, 9n)).toBe(pdaClient.nonceAddress(PROGRAM, pos, auth, 9n));
       expect(await claimPda(PROGRAM, vault, dep)).toBe(pdaClient.claimAddress(PROGRAM, vault, dep));
       expect(await associatedTokenAddress(dep, MINT)).toBe(pdaClient.associatedTokenAddress(dep, MINT));
     }
@@ -270,8 +273,8 @@ describe("byte-exact against solana/client (pda.ts, vault.ts)", () => {
     same(mine, vaultClient.openPositionInstruction(clientIds, DEPOSITOR, pdaClient.associatedTokenAddress(DEPOSITOR, MINT), { positionId: 7n, authority: parseEd25519Authority(AUTH), amount: 1_000_000n }));
   });
   it("release", async () => {
-    const mine = await releaseInstruction(ids, { payer: OTHER, depositor: DEPOSITOR, positionId: 7n, nonce: 9n, expires: 1_800_000_000n });
-    same(mine, vaultClient.releaseInstruction(clientIds, OTHER, DEPOSITOR, { positionId: 7n, nonce: 9n, expires: 1_800_000_000n }));
+    const mine = await releaseInstruction(ids, { payer: OTHER, depositor: DEPOSITOR, authority: AUTH, positionId: 7n, nonce: 9n, expires: 1_800_000_000n });
+    same(mine, vaultClient.releaseInstruction(clientIds, OTHER, DEPOSITOR, parseEd25519Authority(AUTH), { positionId: 7n, nonce: 9n, expires: 1_800_000_000n }));
   });
   it("withdraw", async () => {
     same(await withdrawInstruction(ids, { depositor: DEPOSITOR, positionId: 7n, destination: DESTINATION }), vaultClient.withdrawInstruction(clientIds, DEPOSITOR, 7n, DESTINATION));
@@ -356,6 +359,8 @@ describe("instructions and transaction", () => {
       "payer", "vault", "position", "nonce_record", "instructions", "system_program",
     ]);
     expect(ixs[1]!.accounts[4]!.address).toBe(INSTRUCTIONS_SYSVAR_ADDRESS);
+    // The nonce record is derived from the authority passed in (NEAR's `remote.authority`), the same key the verify ix checks.
+    expect(ixs[1]!.accounts[3]!.address).toBe(await noncePda(PROGRAM, ixs[1]!.accounts[2]!.address, parseEd25519Authority(AUTH), 9n));
     const wire = compileWireTransaction(ixs.map((i) => i.instruction), DEPOSITOR, { blockhash: "11111111111111111111111111111111", lastValidBlockHeight: 100n });
     expect(wire[0]).toBe(1); // one signature slot (fee payer), empty until the wallet signs
     expect(wire.slice(1, 65).every((b) => b === 0)).toBe(true);

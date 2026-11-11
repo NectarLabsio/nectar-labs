@@ -178,9 +178,14 @@ export async function positionPda(program: string, vault: string, positionId: bi
   const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("pos"), addrBytes(vault), u64le(positionId, "position_id"), addrBytes(depositor)] });
   return pda;
 }
-/** `["nonce", position_pda, u64le(nonce)]`: scoped to the depositor-bound slot (SR-1). */
-export async function noncePda(program: string, position: string, nonce: bigint): Promise<Address> {
-  const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("nonce"), addrBytes(position), u64le(nonce, "nonce")] });
+/**
+ * `["nonce", position_pda, authority, u64le(nonce)]`: scoped to the depositor-bound slot (SR-1) and its authority (N1).
+ * `authority` is the 32 raw bytes of the key NEAR set for the position (`remote.authority`), never the current slot's: a slot can be
+ * closed or reopened under another key.
+ */
+export async function noncePda(program: string, position: string, authority: Uint8Array, nonce: bigint): Promise<Address> {
+  if (authority.length !== 32) throw new Error(`authority must be 32 bytes, got ${authority.length}`);
+  const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("nonce"), addrBytes(position), authority, u64le(nonce, "nonce")] });
   return pda;
 }
 /** `["claim", vault, recipient]`. */
@@ -280,18 +285,20 @@ export async function openPositionInstruction(
 /**
  * `release(position_id, nonce, expires)`. Accounts (deploy.md): payer (signer, w), vault, position (w), nonce_record (w), instructions
  * sysvar, system_program. Moves no tokens: it records the whole amount as `withdrawable`, and the depositor then signs `withdraw`.
+ * `authority` is `remote.authority` from nectar-core (the nonce PDA seed), not a value read from the slot.
  */
 export async function releaseInstruction(
   ids: VaultIds,
-  p: { payer: string; depositor: string; positionId: bigint; nonce: bigint; expires: bigint },
+  p: { payer: string; depositor: string; authority: string; positionId: bigint; nonce: bigint; expires: bigint },
 ): Promise<DescribedInstruction> {
+  const auth = parseEd25519Authority(p.authority);
   const vault = await vaultPda(ids.program, ids.mint);
   const position = await positionPda(ids.program, vault, p.positionId, p.depositor);
   const accounts: NamedAccount[] = [
     { name: "payer", address: address(p.payer), role: AccountRole.WRITABLE_SIGNER },
     { name: "vault", address: vault, role: AccountRole.READONLY },
     { name: "position", address: position, role: AccountRole.WRITABLE },
-    { name: "nonce_record", address: await noncePda(ids.program, position, p.nonce), role: AccountRole.WRITABLE },
+    { name: "nonce_record", address: await noncePda(ids.program, position, auth, p.nonce), role: AccountRole.WRITABLE },
     { name: "instructions", address: INSTRUCTIONS_SYSVAR_ADDRESS, role: AccountRole.READONLY },
     { name: "system_program", address: SYSTEM_PROGRAM_ADDRESS, role: AccountRole.READONLY },
   ];
@@ -437,7 +444,7 @@ export function planRelease(pr: PendingRelease, expect: { program: string; posit
 /** `[Ed25519 verify ix, release ix]` for one pending release (deploy.md: nothing may sit between them). */
 export async function releaseTransactionInstructions(ids: VaultIds, plan: ReleasePlan, p: { payer: string; authority: string }): Promise<DescribedInstruction[]> {
   const verify = ed25519VerifyInstruction(parseEd25519Authority(p.authority), plan.signature, plan.message);
-  const release = await releaseInstruction(ids, { payer: p.payer, depositor: plan.recipient, positionId: plan.positionId, nonce: plan.nonce, expires: plan.expires });
+  const release = await releaseInstruction(ids, { payer: p.payer, depositor: plan.recipient, authority: p.authority, positionId: plan.positionId, nonce: plan.nonce, expires: plan.expires });
   return [verify, release];
 }
 
