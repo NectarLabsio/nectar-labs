@@ -2,7 +2,7 @@
 
 Shows only what docs/EVIDENCE.md records (gate table as of commit 5083d30): G1–G4, G6 PASS · G5 FALLBACK (owner oracle, disclosed) ·
 G8 PASS on a fixture (no live NEAR AI answer) · re-runs after the D-027 security rollout, 2026-11-11T08:02Z–08:25Z, on `2.2.1-v7`:
-G11 PASS (every SR-1…SR-33 has a named test), G2b PASS, G3b PASS (design port; remote screen spec skipped), G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
+G11 PASS (every SR-1…SR-33 has a named test), G2b PASS, G3b PASS (design port; mocked remote and Notes E2E passed), G7 PASS (Solana devnet, vault v2), G13 PASS **on a local fork of
 Base Sepolia, not Base Sepolia** (D-026), G14 PASS for the chain claims (the HTTP 402 → 200 leg was not re-run by the verifier) · G9 pending.
 The contract on camera is **`nectar-core-v2.nectar.testnet`** at `2.2.1-v7` (ids in `packages/config/config.yaml`; review findings and what
 remains open in SECURITY.md). v1 (`nectar-core.nectar.testnet`) is the earlier deployment, kept as evidence; it is not shown.
@@ -127,8 +127,9 @@ No hackathon name, badge or banner in any segment. Captions say "testnet", "mock
 Not in the video (not verified by a gate, or not on testnet): Feed MCP with an agent client, a live NEAR AI answer, a live Pyth price, the
 corporate-action multiplier, `pay_to`, referrers, real Base Sepolia (H15), the Base web screens (`features.base: false`). On testnet but left out
 for time: the x402 payment (G14 re-run PASS for the chain claims), the Shield / Profit-Lock / Reserve runs (chain-checked by the verifier, EVIDENCE
-§v7 module runs; the Profit-Lock event is not chain-confirmed), and the web withdraw / claim / Re-sign screens (the remote screen spec was skipped in the G3b re-run).
+§v7 module runs; the Profit-Lock event is not chain-confirmed), and the web withdraw / claim / Re-sign screens (mocked E2E passed in the G3b re-run; the real-chain flow is in the G7/G13 re-runs).
 
 Capture: `pnpm demo:capture` (Playwright `e2e/screens.spec.ts`) gives silent screens; the full take above is screen-recorded by Kunal (H11).
-Note: the G3b re-run (2026-11-11T08:24Z) covers the design port on 2.2.1-v7, but its remote and Notes screen specs were skipped (`REMOTE_SCREENS`,
-`NOTES_SCREENS` unset), so those screens have no E2E record. Rehearse every screen before recording.
+Note: the mocked E2E for the remote screens (withdraw, claim, Re-sign, owed collateral) and the Notes screens passed in the G3b re-run
+(2026-11-11T08:24Z, 5083d30; desktop and phone). Screenshot capture was not run (`REMOTE_SCREENS`, `NOTES_SCREENS` unset), and the real-chain
+flow is only in the G7/G13 re-runs, so rehearse every screen before recording.

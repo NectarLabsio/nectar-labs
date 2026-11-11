@@ -50,7 +50,7 @@ Claim → evidence (docs/EVIDENCE.md gate table as of 5083d30, quoted exactly; "
 | copilot | G8 PASS (fixture) (2026-11-09T23:56Z) |
 | pre-submission review, SECURITY.md | not a gate: D-027, SECURITY.md, docs/work/security-review-v7.md. Fix tests recorded in 5083d30 (G11 re-run after D-027): every SR-1…SR-33 has a named test, 124 contract sr* tests, Solana 10 cargo + 55 TS, forge 105 pass / 3 skip |
 | runs repeated on the fixed contract | G7, G13 (local fork) and G14 re-run after D-027 rows above |
-| web | G3b web E2E (re-run after D-027 + design port) PASS (2026-11-11T08:24Z, recorded in 5083d30; remote screen spec skipped); not claimed in `idea` |
+| web | G3b web E2E (re-run after D-027 + design port) PASS (2026-11-11T08:24Z, recorded in 5083d30; mocked remote and Notes E2E passed, screenshot capture not run); not claimed in `idea` |
 
 ## Tracks — proposal for H16 (Kunal decides)
 Proposed: `defi`, `security`, `privacy`, `agents`, `nfts`. Not proposed: `realworld`. Each proposed track is backed by a gate.
