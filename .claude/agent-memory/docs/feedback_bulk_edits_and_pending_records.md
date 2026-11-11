@@ -16,6 +16,9 @@ A skipped env-gated block is not a skipped spec: `REMOTE_SCREENS` / `NOTES_SCREE
 **Why:** a claim of missing coverage is as false as a claim of coverage that isn't there.
 **How to apply:** grep the e2e.log per test line (`✓` vs `-`, both `[desktop]` and `[phone]`) before saying a spec was skipped.
 
+When EVIDENCE gains a newer FAIL for a gate that README/docs still call PASS (e.g. G3b on 3107a1a after the 3ab3026 PASS, WO-43d 2026-11-11), qualify every PASS mention (banner, live table row, Evidence section, docs-site status lines + Evidence table, SUBMISSION claim row): "PASS on <old commit>; re-run on <new> FAIL (recorded in <c>); fix <WO> merged, no verifier re-run recorded yet". A work order scoped to one file does not make the others truthful.
+**Why:** an unqualified PASS after a recorded FAIL overclaims the current code.
+
 Docs-site copy rule is wider than the word "hackathon": G9 failed (2026-11-11) on one Evidence-page sentence; WO-38 also removed "agents track", "pre-submission", "reviewers and their agents". `node scripts/check-no-branding-all.mjs` only greps /hackathon/i, so grep track|judg|submission|deadline by hand.
 Before naming web routes, run `npx next dev -p <spare>` in apps/web and curl each (e.g. /quote is a 307 to /quote/new; /markets, /earn 404).
 
