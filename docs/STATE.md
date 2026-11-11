@@ -18,10 +18,17 @@
   - WO-34k: Feed single-port, /health, head start, CORS, Dockerfiles. Docker is not installed locally, so the images were never built.
 - **x402 is not hosted:** @fastnear/x402 needs a full-access relayer key (F-328), and the key line forbids full-access keys → C-023 / D-031. Railway =
   Feed only, plus the keeper if H-KEYS = yes; Base stays local.
-- Running round 2 (worktrees): WO-34b web (about/status/changelog/brand/talk/security pages, content guard), WO-34c web (data inventory, exact-host CSP,
-  crawl.mjs), WO-34r3 researcher (Railway facts, C-023), WO-34e1 docs (terms/disclaimers, D-031).
+- Round 2 MERGED (verify:quick 0 after each):
+  - WO-34r3 FACTS F-404–F-412 (Railway Free $1 credit and 1 volume per project, Hobby $5; `railway up` honours .railwayignore, not .dockerignore;
+    RAILWAY_DOCKERFILE_PATH; logs kept 3/7/30 days). C-023.
+  - .railwayignore + root .dockerignore allowlists.
+  - WO-34e1: terms/disclaimers (TODO-H-LEGAL markers), D-031.
+  - WO-34b: about/status/changelog/brand/talk/security pages, LH 100, content guard. CONTACT_EMAIL constant removed; contact comes from site.contact.
+  - WO-34c: data inventory, exact-host CSP (Meteor only), crawl.mjs (96 URLs 200, redirects pass); SITE /docs/* → APP 308; local /docs/* explainer.
+- Running round 3 (worktrees):
+  - WO-34f web: every selector wallet under the CSP, no cross-host prefetch (6 CORS errors), RPC coalescing + polite crawl (~450 fastnear refusals).
+  - WO-34e2 docs: privacy + cookies from the inventory; outlayer/localhost doc links; H-KEYS keeper-only. Re-sync after WO-34f merges.
 - Then:
-  - WO-34e2 docs: privacy + cookies from the inventory.
   - G3b re-run 3 on the code-final commit.
   - Deploy that commit (after H-HOST).
   - WO-34v production acceptance.
@@ -163,7 +170,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T19:50:49Z · commit da52c9c
+Last activity: 2026-11-11T20:17:46Z · commit 48b3fa8
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

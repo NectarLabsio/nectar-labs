@@ -31,14 +31,14 @@ pnpm --filter docs-site start  # this site on http://localhost:3000/docs/
 | 1 | `git clone` | works once the repo is public (H2) |
 | 2 | `pnpm i` | works; installs from `pnpm-lock.yaml` (13 s in G9 run 3; a cold pnpm store is slower) |
 | 3 | `pnpm demo:testnet` | works now: `scripts/50-verify.sh` runs `scripts/demo-testnet.mjs`, which reads the ids from `config.yaml` and prints contract version, exit capacity, pool, quotes, positions and explorer links (see [Live on testnet](/start/live-on-testnet)); 5 s in G9 run 3. |
-| 4 | `pnpm --filter web dev` | starts `apps/web` on http://localhost:3100 (`next dev -p 3100`; G3 PASS). |
-| 5 | `pnpm --filter docs-site start` | works: this site on http://localhost:3000/docs/ |
+| 4 | `pnpm --filter web dev` | starts `apps/web` on `http://localhost:3100` (`next dev -p 3100`; G3 PASS). |
+| 5 | `pnpm --filter docs-site start` | works: this site on `http://localhost:3000/docs/` |
 
 `demo:testnet` reads public state only. It never signs, needs no key and costs nothing.
 
 ## Pages to open
 
-On http://localhost:3100: `/` (landing), `/borrow`, `/feed`, `/feed/NVDAx`, `/quote/new`, `/console`, `/notes`, `/reserve`, `/shield`, `/agents`, `/keepers`, `/security`, `/talk`, `/docs`, `/legal/privacy` (also `cookies`, `terms`, `disclaimers`). Per-object pages: `/position/<id>`, `/quote/<id>`, `/note/<token id>` (for example `/note/q-0`). Source: the `page.tsx` files under `apps/web/app`.
+On `http://localhost:3100`: `/` (landing), `/borrow`, `/feed`, `/feed/NVDAx`, `/quote/new`, `/console`, `/notes`, `/reserve`, `/shield`, `/agents`, `/keepers`, `/security`, `/talk`, `/docs`, `/legal/privacy` (also `cookies`, `terms`, `disclaimers`). Per-object pages: `/position/<id>`, `/quote/<id>`, `/note/<token id>` (for example `/note/q-0`). Source: the `page.tsx` files under `apps/web/app`.
 
 The Feed (`pnpm --filter feed start`) needs no env; ports, store path and MCP registration are on [Feed MCP](/integrate/feed-mcp).
 
