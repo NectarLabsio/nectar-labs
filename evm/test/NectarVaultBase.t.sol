@@ -9,7 +9,7 @@ contract NectarVaultBaseTest is VaultFixture {
     // ================================================================ open
 
     function test_open_recordsPositionAndPullsTokens() public view {
-        (address a, address d, uint256 amt, NectarVaultBase.Status st) = vault.positions(POS);
+        (address a, address d, uint256 amt, NectarVaultBase.Status st) = vault.positionOf(POS, alice);
         assertEq(a, authority);
         assertEq(d, alice);
         assertEq(amt, AMOUNT);
@@ -83,7 +83,7 @@ contract NectarVaultBaseTest is VaultFixture {
         assertEq(token.balanceOf(alice), 9 * AMOUNT + 60_000_000);
         assertEq(token.balanceOf(address(vault)), 0);
         assertEq(uint8(_status(POS)), uint8(NectarVaultBase.Status.Settled));
-        assertTrue(vault.nonceUsed(1));
+        assertTrue(vault.nonceUsed(_key(POS, alice), 1));
     }
 
     function test_settle_selfKind_fullSeize() public {
@@ -99,8 +99,8 @@ contract NectarVaultBaseTest is VaultFixture {
         assertEq(token.balanceOf(alice), 10 * AMOUNT);
     }
 
-    function test_settle_atExactExpiry_ok() public {
-        _doSettle(_settle(POS, 1, buyer, 4, T0, 1));
+    function test_settle_lastValidSecond_ok() public {
+        _doSettle(_settle(POS, 1, buyer, 4, T0 + 1, 1)); // SR-30: valid while now < expires
         assertEq(uint8(_status(POS)), uint8(NectarVaultBase.Status.Settled));
     }
 
@@ -108,7 +108,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.prank(makeAddr("keeper"));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
         assertEq(token.balanceOf(buyer), 40_000_000);
     }
 
@@ -120,7 +120,7 @@ contract NectarVaultBaseTest is VaultFixture {
         assertEq(token.balanceOf(alice), 10 * AMOUNT);
         assertEq(token.balanceOf(address(vault)), 0);
         assertEq(uint8(_status(POS)), uint8(NectarVaultBase.Status.Released));
-        assertTrue(vault.nonceUsed(9));
+        assertTrue(vault.nonceUsed(_key(POS, alice), 9));
     }
 
     function test_hashes_matchIndependentEip712() public view {
@@ -137,14 +137,14 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(OTHER_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.WrongSigner.selector, vm.addr(OTHER_PK), authority));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_release_wrongSigner_reverts() public {
         NectarVaultBase.Release memory m = _release(POS, alice, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(OTHER_PK, _releaseDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.WrongSigner.selector, vm.addr(OTHER_PK), authority));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_settle_tamperedField_reverts() public {
@@ -152,7 +152,7 @@ contract NectarVaultBaseTest is VaultFixture {
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         m.seizeRaw += 1; // relayer tries to seize one more unit
         vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_release_redirectedRecipient_reverts() public {
@@ -160,7 +160,7 @@ contract NectarVaultBaseTest is VaultFixture {
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         m.recipient = buyer;
         vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_settle_releaseSignatureAsSettle_reverts() public {
@@ -168,7 +168,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Release memory rl = _release(POS, buyer, 1, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(rl, 84532));
         vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-        vault.settle(_settle(POS, AMOUNT, buyer, 1, T0 + 600, 1), v, r, s);
+        vault.settle(_settle(POS, AMOUNT, buyer, 1, T0 + 600, 1), alice, v, r, s);
     }
 
     function test_settle_signatureForOtherVault_reverts() public {
@@ -177,7 +177,7 @@ contract NectarVaultBaseTest is VaultFixture {
         bytes32 d = _digest(_domain(84532, address(other)), _settleStruct(m));
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, d);
         vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function testFuzz_settle_onlyAuthorityKeyAccepted(uint256 pk) public {
@@ -186,7 +186,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(pk, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.WrongSigner.selector, vm.addr(pk), authority));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     // ================================================================= nonce
@@ -194,27 +194,27 @@ contract NectarVaultBaseTest is VaultFixture {
     function test_settle_replayedSignature_reverts() public {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NonceUsed.selector, 1));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
-    function test_nonceReusedOnAnotherPosition_reverts() public {
+    function test_nonceReusedOnAnotherPosition_ok() public {
         vm.prank(alice);
         vault.openPosition(8, authority, AMOUNT);
         _doSettle(_defaultSettle()); // consumes nonce 1 on position 7
-        NectarVaultBase.Release memory m = _release(8, alice, 1, T0 + 600);
-        (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
-        vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NonceUsed.selector, 1));
-        vault.release(m, v, r, s);
+        assertFalse(vault.nonceUsed(_key(8, alice), 1)); // SR-1: nonces are per slot
+        _doRelease(_release(8, alice, 1, T0 + 600));
+        assertTrue(vault.nonceUsed(_key(8, alice), 1));
+        assertEq(uint8(_status(8)), uint8(NectarVaultBase.Status.Released));
     }
 
     function test_failedSettle_doesNotBurnNonce() public {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(OTHER_PK, _settleDigest(m, 84532));
         vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-        vault.settle(m, v, r, s);
-        assertFalse(vault.nonceUsed(1));
+        vault.settle(m, alice, v, r, s);
+        assertFalse(vault.nonceUsed(_key(POS, alice), 1));
         _doSettle(m);
     }
 
@@ -224,7 +224,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _settle(POS, 1, buyer, 1, T0 - 1, 1);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.Expired.selector, T0 - 1, T0));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_release_expiredAfterWarp_reverts() public {
@@ -232,7 +232,7 @@ contract NectarVaultBaseTest is VaultFixture {
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         vm.warp(T0 + 601);
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.Expired.selector, T0 + 600, T0 + 601));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     // ============================================================ chain id
@@ -241,14 +241,14 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 8453));
         vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_release_digestForChain8453_reverts() public {
         NectarVaultBase.Release memory m = _release(POS, alice, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 8453));
         vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_settle_executedOnChain8453_reverts() public {
@@ -256,7 +256,7 @@ contract NectarVaultBaseTest is VaultFixture {
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.chainId(8453); // same bytecode/state on a different chain (fork replay)
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.WrongChain.selector, 8453));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     // ==================================================== Solana message refused
@@ -278,7 +278,7 @@ contract NectarVaultBaseTest is VaultFixture {
         for (uint256 i; i < hashes.length; ++i) {
             (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, hashes[i]);
             vm.expectPartialRevert(NectarVaultBase.WrongSigner.selector);
-            vault.settle(m, v, r, s);
+            vault.settle(m, alice, v, r, s);
         }
     }
 
@@ -288,7 +288,8 @@ contract NectarVaultBaseTest is VaultFixture {
         bytes32 edS = bytes32(uint256(sha256("ed25519 S")) >> 4); // ed25519 S < 2^253
         NectarVaultBase.Settle memory m = _defaultSettle();
         for (uint8 v = 27; v <= 28; ++v) {
-            (bool ok, bytes memory ret) = address(vault).call(abi.encodeCall(NectarVaultBase.settle, (m, v, edR, edS)));
+            (bool ok, bytes memory ret) =
+                address(vault).call(abi.encodeCall(NectarVaultBase.settle, (m, alice, v, edR, edS)));
             assertFalse(ok);
             bytes4 sel = bytes4(ret);
             assertTrue(sel == NectarVaultBase.WrongSigner.selector || sel == NectarVaultBase.InvalidSignature.selector);
@@ -302,8 +303,8 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _settle(POS, 1, mallory, 1, T0 + 600, 1);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotAuthorized.selector, ALLOW_ID, mallory));
-        vault.settle(m, v, r, s);
-        assertFalse(vault.nonceUsed(1));
+        vault.settle(m, alice, v, r, s);
+        assertFalse(vault.nonceUsed(_key(POS, alice), 1));
     }
 
     function test_settle_recipientDeniedAfterQuote_reverts() public {
@@ -311,7 +312,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotAuthorized.selector, ALLOW_ID, buyer));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_settle_unauthorizedDepositorForRemainder_reverts() public {
@@ -319,7 +320,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotAuthorized.selector, ALLOW_ID, alice));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_settle_fullSeize_depositorNotChecked() public {
@@ -332,7 +333,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Release memory m = _release(POS, mallory, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotAuthorized.selector, ALLOW_ID, mallory));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_issuerSwitchesToAlwaysBlock_failsVisibly() public {
@@ -341,7 +342,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Release memory m = _release(POS, alice, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotAuthorized.selector, blockAll, alice));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_defaultAlwaysAllowPolicy_settles() public {
@@ -360,7 +361,7 @@ contract NectarVaultBaseTest is VaultFixture {
         vm.expectRevert(
             abi.encodeWithSelector(MockB20.PolicyForbids.selector, token.TRANSFER_SENDER_POLICY(), address(vault))
         );
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
         assertEq(uint8(_status(POS)), uint8(NectarVaultBase.Status.Open)); // whole tx reverted
     }
 
@@ -371,24 +372,24 @@ contract NectarVaultBaseTest is VaultFixture {
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         assertLe(uint256(s), N / 2, "vm.sign returns low s");
         (uint8 hv, bytes32 hs) = _highS(v, s);
-        vault.settle(m, hv, r, hs);
+        vault.settle(m, alice, hv, r, hs);
         assertEq(token.balanceOf(buyer), 40_000_000);
     }
 
     function test_highS_malleatedReplay_reverts() public {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
         (uint8 hv, bytes32 hs) = _highS(v, s);
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NonceUsed.selector, 1));
-        vault.settle(m, hv, r, hs);
+        vault.settle(m, alice, hv, r, hs);
     }
 
     function test_release_highS_isNormalisedAndAccepted() public {
         NectarVaultBase.Release memory m = _release(POS, alice, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         (uint8 hv, bytes32 hs) = _highS(v, s);
-        vault.release(m, hv, r, hs);
+        vault.release(m, alice, hv, r, hs);
         assertEq(token.balanceOf(alice), 10 * AMOUNT);
     }
 
@@ -396,7 +397,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         bytes32 hs = bytes32(N - uint256(s)); // v left as-is → recovers a different key
-        (bool ok, bytes memory ret) = address(vault).call(abi.encodeCall(NectarVaultBase.settle, (m, v, r, hs)));
+        (bool ok, bytes memory ret) = address(vault).call(abi.encodeCall(NectarVaultBase.settle, (m, alice, v, r, hs)));
         assertFalse(ok);
         bytes4 sel = bytes4(ret);
         assertTrue(sel == NectarVaultBase.WrongSigner.selector || sel == NectarVaultBase.InvalidSignature.selector);
@@ -408,7 +409,7 @@ contract NectarVaultBaseTest is VaultFixture {
         uint8[3] memory bad = [v - 27, 29, 0];
         for (uint256 i; i < bad.length; ++i) {
             vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.InvalidV.selector, bad[i]));
-            vault.settle(m, bad[i], r, s);
+            vault.settle(m, alice, bad[i], r, s);
         }
     }
 
@@ -416,25 +417,25 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r,) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(NectarVaultBase.InvalidSignature.selector);
-        vault.settle(m, v, r, bytes32(0));
+        vault.settle(m, alice, v, r, bytes32(0));
         vm.expectRevert(NectarVaultBase.InvalidSignature.selector);
-        vault.settle(m, v, r, bytes32(N));
+        vault.settle(m, alice, v, r, bytes32(N));
     }
 
     function test_rOutOfRange_reverts() public {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v,, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(NectarVaultBase.InvalidSignature.selector);
-        vault.settle(m, v, bytes32(0), s);
+        vault.settle(m, alice, v, bytes32(0), s);
         vm.expectRevert(NectarVaultBase.InvalidSignature.selector);
-        vault.settle(m, v, bytes32(type(uint256).max), s);
+        vault.settle(m, alice, v, bytes32(type(uint256).max), s);
     }
 
     function test_unrecoverableSignature_reverts() public {
         // r = 5 is not the x-coordinate of a curve point (x^3 + 7 = 132 is a non-residue mod p) → ecrecover returns 0
         NectarVaultBase.Settle memory m = _defaultSettle();
         vm.expectRevert(NectarVaultBase.InvalidSignature.selector);
-        vault.settle(m, 27, bytes32(uint256(5)), bytes32(uint256(1)));
+        vault.settle(m, alice, 27, bytes32(uint256(5)), bytes32(uint256(1)));
     }
 
     // ===================================================== lifecycle closure
@@ -442,9 +443,9 @@ contract NectarVaultBaseTest is VaultFixture {
     function test_doubleRelease_sameSignature_reverts() public {
         NectarVaultBase.Release memory m = _release(POS, alice, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NonceUsed.selector, 9));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_doubleRelease_freshNonce_reverts() public {
@@ -452,7 +453,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Release memory m = _release(POS, alice, 10, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotOpen.selector, POS, NectarVaultBase.Status.Released));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_settleAfterRelease_reverts() public {
@@ -460,7 +461,7 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _defaultSettle();
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotOpen.selector, POS, NectarVaultBase.Status.Released));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_releaseAfterSettle_reverts() public {
@@ -468,14 +469,14 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Release memory m = _release(POS, alice, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotOpen.selector, POS, NectarVaultBase.Status.Settled));
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function test_settle_unknownPosition_reverts() public {
         NectarVaultBase.Settle memory m = _settle(99, 1, buyer, 1, T0 + 600, 1);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotOpen.selector, 99, NectarVaultBase.Status.None));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     // ===================================================== typed-field sanity
@@ -486,7 +487,7 @@ contract NectarVaultBaseTest is VaultFixture {
             NectarVaultBase.Settle memory m = _settle(POS, 1, buyer, 1, T0 + 600, kinds[i]);
             (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
             vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.BadKind.selector, kinds[i]));
-            vault.settle(m, v, r, s);
+            vault.settle(m, alice, v, r, s);
         }
     }
 
@@ -494,21 +495,21 @@ contract NectarVaultBaseTest is VaultFixture {
         NectarVaultBase.Settle memory m = _settle(POS, AMOUNT + 1, buyer, 1, T0 + 600, 1);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.SeizeExceedsAmount.selector, AMOUNT + 1, AMOUNT));
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_settle_zeroRecipient_reverts() public {
         NectarVaultBase.Settle memory m = _settle(POS, 1, address(0), 1, T0 + 600, 1);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _settleDigest(m, 84532));
         vm.expectRevert(NectarVaultBase.ZeroAddress.selector);
-        vault.settle(m, v, r, s);
+        vault.settle(m, alice, v, r, s);
     }
 
     function test_release_zeroRecipient_reverts() public {
         NectarVaultBase.Release memory m = _release(POS, address(0), 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
         vm.expectRevert(NectarVaultBase.ZeroAddress.selector);
-        vault.release(m, v, r, s);
+        vault.release(m, alice, v, r, s);
     }
 
     function testFuzz_settle_splitConservesUnits(uint256 seize) public {

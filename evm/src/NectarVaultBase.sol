@@ -9,9 +9,13 @@ import {IB20Minimal, IPolicyRegistry} from "./interfaces/IB20Minimal.sol";
 ///         from `v1.signer` (domain 0, path `base-sepolia/pos/<id>`). The collateral leaves only with an
 ///         EIP-712 message signed by that authority: `Settle` (seized units to the buyer, remainder to the
 ///         depositor) or `Release` (everything to the recipient).
-/// @dev Checks on settle/release, in order: chain id 84532, expiry, global nonce unused, position open,
-///      ecrecover(digest) == authority, typed-field sanity, then `PolicyRegistry.isAuthorized` for every
-///      receiving account, and only then the transfers. State is closed before any external transfer.
+/// @dev Slots are keyed `keccak256(abi.encode(id, depositor))` with depositor = msg.sender at `openPosition`, so a
+///      third party cannot squat a borrower's id (SR-8). Nonces are scoped to the slot, so a nonce spent in one slot
+///      cannot block another (SR-1, interface-v7 §E). The typed data and NEAR's digests do not name the depositor.
+///      Checks on settle/release, in order: chain id 84532, expiry (valid while now < expires, SR-30), slot nonce
+///      unused, slot open, ecrecover(digest) == slot authority, typed-field sanity, then
+///      `PolicyRegistry.isAuthorized` for every receiving account, and only then the transfers. State is closed
+///      before any external transfer.
 ///      Signatures with s > n/2 are normalised (s' = n - s, v flipped) instead of rejected: the MPC
 ///      network's low-s behaviour is unverified (F-332), and replay protection comes from the signed
 ///      nonce, not from signature uniqueness, so a malleated copy is refused as `NonceUsed`.
@@ -71,17 +75,21 @@ contract NectarVaultBase {
     uint256 internal constant SECP256K1_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
     uint256 internal constant SECP256K1_HALF_N = 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0;
 
+    /// @dev Leading 10 bytes of a B20 token address (F-347 layout; value observed in F-348). Those tokens are
+    ///      precompile-backed accounts with no code, so they are the only no-code tokens the constructor accepts.
+    bytes10 internal constant B20_ADDRESS_PREFIX = 0xb2000000000000000000;
+
     // --------------------------------------------------------------- state
 
     IB20Minimal public immutable token;
     IPolicyRegistry public immutable policyRegistry;
     bytes32 private immutable _DOMAIN_SEPARATOR;
 
-    /// @notice `positions(id) → (authority, depositor, amount, status)`; read by the OutLayer vault_read job.
-    mapping(uint64 => Position) public positions;
+    /// @dev Keyed by `slotKeyOf(id, depositor)`; read through `positionOf`.
+    mapping(bytes32 => Position) private _positions;
 
-    /// @notice Vault-global used-nonce set shared by settle and release (same scope as the Solana vault).
-    mapping(uint64 => bool) public nonceUsed;
+    /// @notice Used-nonce set per slot (`slotKeyOf`), shared by settle and release (same scope as the Solana vault).
+    mapping(bytes32 => mapping(uint64 => bool)) public nonceUsed;
 
     // -------------------------------------------------------------- events
 
@@ -104,6 +112,7 @@ contract NectarVaultBase {
 
     error WrongChain(uint256 chainId);
     error ZeroAddress();
+    error TokenHasNoCode(address token);
     error ZeroAmount();
     error PositionExists(uint64 positionId);
     error NotOpen(uint64 positionId, Status status);
@@ -124,6 +133,7 @@ contract NectarVaultBase {
     constructor(address token_, address policyRegistry_) {
         if (block.chainid != CHAIN_ID) revert WrongChain(block.chainid);
         if (token_ == address(0) || policyRegistry_ == address(0)) revert ZeroAddress();
+        if (token_.code.length == 0 && bytes10(bytes20(token_)) != B20_ADDRESS_PREFIX) revert TokenHasNoCode(token_);
         token = IB20Minimal(token_);
         policyRegistry = IPolicyRegistry(policyRegistry_);
         _DOMAIN_SEPARATOR = keccak256(abi.encode(DOMAIN_TYPEHASH, NAME_HASH, VERSION_HASH, CHAIN_ID, address(this)));
@@ -131,11 +141,11 @@ contract NectarVaultBase {
 
     // ------------------------------------------------------------ external
 
-    /// @notice Deposit `amount` raw units for position `id` under `authority`. Depositor = msg.sender.
+    /// @notice Deposit `amount` raw units into the slot (`id`, msg.sender) under `authority`.
     function openPosition(uint64 id, address authority, uint256 amount) external {
         if (amount == 0) revert ZeroAmount();
         if (authority == address(0)) revert ZeroAddress();
-        Position storage p = positions[id];
+        Position storage p = _positions[slotKeyOf(id, msg.sender)];
         if (p.status != Status.None) revert PositionExists(id);
         p.authority = authority;
         p.depositor = msg.sender;
@@ -145,15 +155,16 @@ contract NectarVaultBase {
         _safeTransferFrom(msg.sender, address(this), amount);
     }
 
-    /// @notice Settle an open position with an authority-signed EIP-712 `Settle`.
-    function settle(Settle calldata m, uint8 v, bytes32 r, bytes32 s) external {
-        Position storage p = _consume(m.positionId, m.nonce, m.expires, hashSettle(m), v, r, s);
+    /// @notice Settle the open slot (`m.positionId`, `depositor`) with an authority-signed EIP-712 `Settle`.
+    function settle(Settle calldata m, address depositor, uint8 v, bytes32 r, bytes32 s) external {
+        Position storage p = _consume(m.positionId, depositor, m.nonce, m.expires, hashSettle(m), v, r, s);
         _executeSettle(p, m);
     }
 
-    /// @notice Release an open position's full amount with an authority-signed EIP-712 `Release`.
-    function release(Release calldata m, uint8 v, bytes32 r, bytes32 s) external {
-        Position storage p = _consume(m.positionId, m.nonce, m.expires, hashRelease(m), v, r, s);
+    /// @notice Release the full amount of the open slot (`m.positionId`, `depositor`) with an authority-signed
+    ///         EIP-712 `Release`.
+    function release(Release calldata m, address depositor, uint8 v, bytes32 r, bytes32 s) external {
+        Position storage p = _consume(m.positionId, depositor, m.nonce, m.expires, hashRelease(m), v, r, s);
         if (m.recipient == address(0)) revert ZeroAddress();
         _requireAuthorized(token.policyId(token.TRANSFER_RECEIVER_POLICY()), m.recipient);
         uint256 amount = p.amount;
@@ -163,6 +174,21 @@ contract NectarVaultBase {
     }
 
     // --------------------------------------------------------------- views
+
+    /// @notice The key of slot (`id`, `depositor`): the scope of its position and its nonces.
+    function slotKeyOf(uint64 id, address depositor) public pure returns (bytes32) {
+        return keccak256(abi.encode(id, depositor));
+    }
+
+    /// @notice Slot (`id`, `depositor`) as `(authority, depositor, amount, status)`; all zero if never opened.
+    function positionOf(uint64 id, address depositor)
+        external
+        view
+        returns (address authority, address slotDepositor, uint256 amount, Status status)
+    {
+        Position storage p = _positions[slotKeyOf(id, depositor)];
+        return (p.authority, p.depositor, p.amount, p.status);
+    }
 
     function domainSeparator() public view returns (bytes32) {
         return _DOMAIN_SEPARATOR;
@@ -206,20 +232,27 @@ contract NectarVaultBase {
         emit PositionSettled(m.positionId, m.quoteId, m.recipient, m.repayE6, m.seizeRaw, remainder, m.nonce, m.kind);
     }
 
-    /// @dev Common gate for settle/release. Marks the nonce used and returns the open position.
-    function _consume(uint64 id, uint64 nonce, uint64 expires, bytes32 digest, uint8 v, bytes32 r, bytes32 s)
-        internal
-        returns (Position storage p)
-    {
+    /// @dev Common gate for settle/release. Marks the slot's nonce used and returns the open slot.
+    function _consume(
+        uint64 id,
+        address depositor,
+        uint64 nonce,
+        uint64 expires,
+        bytes32 digest,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) internal returns (Position storage p) {
         if (block.chainid != CHAIN_ID) revert WrongChain(block.chainid);
         // forge-lint: disable-next-line(block-timestamp)
-        if (block.timestamp > expires) revert Expired(expires, block.timestamp);
-        if (nonceUsed[nonce]) revert NonceUsed(nonce);
-        p = positions[id];
+        if (block.timestamp >= expires) revert Expired(expires, block.timestamp);
+        bytes32 key = slotKeyOf(id, depositor);
+        if (nonceUsed[key][nonce]) revert NonceUsed(nonce);
+        p = _positions[key];
         if (p.status != Status.Open) revert NotOpen(id, p.status);
         address recovered = _recover(digest, v, r, s);
         if (recovered != p.authority) revert WrongSigner(recovered, p.authority);
-        nonceUsed[nonce] = true;
+        nonceUsed[key][nonce] = true;
     }
 
     function _recover(bytes32 digest, uint8 v, bytes32 r, bytes32 s) internal pure returns (address signer) {
@@ -257,7 +290,8 @@ contract NectarVaultBase {
                 revert(add(ret, 0x20), mload(ret))
             }
         }
-        // No extcodesize check: B20 tokens may be native (precompile-style) accounts with empty code (F-347).
-        if (ret.length != 0 && !abi.decode(ret, (bool))) revert TransferFailed();
+        // An account with no code "succeeds" with empty return data and moves nothing (phantom deposit), so one
+        // word of `true` is required. No extcodesize check: B20 tokens have empty code (F-347) and return `true`.
+        if (ret.length != 32 || !abi.decode(ret, (bool))) revert TransferFailed();
     }
 }
