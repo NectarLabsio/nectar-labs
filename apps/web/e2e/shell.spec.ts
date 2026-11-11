@@ -29,6 +29,11 @@ for (const theme of ["dark", "light"] as const) {
 test("consent banner is shown by default and analytics stay off", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByTestId("consent")).toBeVisible();
+  // R2-01: the claim is scoped to our own logs, names the RPC providers, and mentions the wallet connector's storage.
+  await expect(page.getByTestId("consent")).toContainText("We never join wallet addresses to IP addresses in logs we control.");
+  await expect(page.getByTestId("consent")).toContainText("NEAR and Solana RPC providers, which see your IP and the accounts you query");
+  await expect(page.getByTestId("consent")).toContainText("the wallet connector keeps its own session storage");
+  await expect(page.getByTestId("consent")).not.toContainText("never joined to IPs");
   await page.getByTestId("consent-decline").click();
   await expect(page.getByTestId("consent")).toHaveCount(0);
   expect(await page.evaluate(() => Boolean(document.getElementById("ga-src")))).toBe(false);

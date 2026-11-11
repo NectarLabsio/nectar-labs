@@ -13,17 +13,21 @@ import {
   SHIELD_MIN_BORROW_USD_E6,
   borrowReasonText,
   bpsToPct,
+  describeTransferAmount,
   feeStack,
   flagPriceUsdE6,
   formatNewYork,
   formatUnits,
+  formatUnitsTrim,
   formatUsdE6,
   formatWindowCountdown,
   health,
+  intentHash,
   isAccountId,
   parseUnits,
   shieldOpensLeft,
   shieldReasonText,
+  tokenTable,
   tx,
   valueUsdE6WithMultiplier,
   type BorrowPreview,
@@ -49,6 +53,15 @@ const tryParse = (s: string, d: number): bigint | null => {
     return s.trim() ? parseUnits(s, d) : null;
   } catch {
     return null;
+  }
+};
+/** The parser's own reason ("1,5" → use a dot for decimals), so the field says why, not just "invalid" (R2-06). */
+const parseErr = (s: string, d: number): string => {
+  try {
+    parseUnits(s, d);
+    return "Enter a positive number";
+  } catch (e) {
+    return e instanceof Error ? e.message : "Enter a positive number";
   }
 };
 const big = (v: string | number | bigint | null | undefined) => BigInt(v ?? 0);
@@ -90,6 +103,9 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
   const [raw, setRaw] = useState(false);
   const [failure, setFailure] = useState<string | null>(null);
   const [newId, setNewId] = useState<string | null>(null);
+  // R2-07: fingerprint of the call captured when the review opened; any change closes the review and asks for a new one.
+  const [reviewed, setReviewed] = useState<string | null>(null);
+  const [staleReview, setStaleReview] = useState(false);
   const nowS = useNowS(1000);
 
   // `?c=<symbol>` picks the collateral (Markets links); `?ref=` becomes the referrer (v2 + features.referrals); `?chain=solana`.
@@ -179,9 +195,9 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
   const receiveNote = net !== null ? `Deducted from proceeds: ${receiver ? `${receiver} receives` : "you receive"} ${formatUsdE6(net)}${payTo?.memo && receiver ? ` (memo "${payTo.memo}")` : ""}.` : null;
   const reason = real && !real.ok ? (shield ? shieldReasonText(real.reason) ?? borrowReasonText(real.reason) : borrowReasonText(real.reason)) ?? "Borrow exceeds the limit or the pool." : null;
 
-  const unitsErr = unitsIn && !units ? "Enter a positive number" : units && bal.data !== undefined && units > bal.data ? "More than your balance" : null;
+  const unitsErr = unitsIn && !units ? (col ? parseErr(unitsIn, col.decimals) : "Enter a positive number") : units && bal.data !== undefined && units > bal.data ? "More than your balance" : null;
   const shieldMinErr = shield && borrow !== null && borrow < SHIELD_MIN_BORROW_USD_E6 ? "Shields start at $5 on testnet" : null;
-  const borrowErr = borrowIn && !borrow ? "Enter a positive number" : over && limit !== null ? `Above your limit by ${formatUsdE6(borrow! - limit)}. Shared exit capacity is the cap.` : shieldMinErr;
+  const borrowErr = borrowIn && !borrow ? parseErr(borrowIn, 6) : over && limit !== null ? `Above your limit by ${formatUsdE6(borrow! - limit)}. Shared exit capacity is the cap.` : shieldMinErr;
   const opensLeft = opens.data === undefined ? null : shieldOpensLeft(opens.data);
   const preLiqErr = col && (preLiq < col.pre_liq_min_bps || preLiq > col.pre_liq_max_bps) ? `Between ${bpsToPct(col.pre_liq_min_bps)} and ${bpsToPct(col.pre_liq_max_bps)}` : null;
   const ready = Boolean(col?.token && config.core && units && borrow && real?.ok && !unitsErr && !borrowErr && !preLiqErr && !payToErr && !memoErr && bal.data !== undefined && (!shield || (shieldInput && v2 && opensLeft !== 0)));
@@ -199,9 +215,27 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
           ...(shieldInput ? { shield: shieldInput } : {}),
         })
       : null;
+  const intentKey = intentHash(intent);
+  const reviewFresh = reviewed !== null && intentKey === reviewed;
+
+  useEffect(() => {
+    if (stage === "review" && reviewed !== null && intentKey !== reviewed) {
+      setStage(null);
+      setReviewed(null);
+      setStaleReview(true);
+    }
+  }, [stage, reviewed, intentKey]);
+
+  const openReview = () => {
+    setRaw(false);
+    setFailure(null);
+    setStaleReview(false);
+    setReviewed(intentKey);
+    setStage("review");
+  };
 
   const confirm = async () => {
-    if (!intent) return;
+    if (!intent || !ready || !reviewFresh) return;
     setFailure(null);
     setStage("signing");
     const before = views && accountId ? await views.listPositions(0, 200).catch(() => null) : null;
@@ -374,7 +408,12 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
                 <Kvr k="Protection" v={protLabel} />
               </div>
               {lines && total !== null ? <FeeStackList lines={lines} total={formatUsdE6(total)} note={receiveNote} testId="preview-fees" /> : null}
-              <button type="button" className="nx-btn lg" disabled={accountId ? !canReview : false} onClick={() => (accountId ? (setRaw(false), setStage("review")) : connect())} data-testid="review-borrow">
+              {staleReview ? (
+                <Notice tone="warn" title="Review again" testId="review-stale" live>
+                  The loan changed while the review was open (an amount, the protection or its window). Nothing was signed. Review it again before you sign.
+                </Notice>
+              ) : null}
+              <button type="button" className="nx-btn lg" disabled={accountId ? !canReview : false} onClick={() => (accountId ? openReview() : connect())} data-testid="review-borrow">
                 {!accountId ? "Connect a wallet to borrow" : over ? "Lower the amount to continue" : "Review borrow"}
               </button>
             </Panel>
@@ -392,7 +431,10 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
               <button type="button" className="nx-btn line" onClick={() => { setStage(null); setBorrowIn(""); }}>Borrow more</button>
             </>
           ) : (
-            <button type="button" className="nx-btn lg" onClick={confirm} data-testid="confirm-in-wallet" disabled={!intent}>Confirm in wallet</button>
+            <>
+              <button type="button" className="nx-btn lg" onClick={confirm} data-testid="confirm-in-wallet" disabled={!intent || !ready || !reviewFresh}>Confirm in wallet</button>
+              {!ready ? <span className="nx-k" data-testid="confirm-blocked">The contract preview no longer allows this loan. Close and review again.</span> : null}
+            </>
           )
         }
       >
@@ -403,7 +445,7 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
           <span className="nx-stack"><span className="nx-k">You borrow</span><span className="nx-big">{formatUsdE6(borrow ?? 0n)}</span></span>
         </div>
         <div>
-          <Kvr k="Collateral locked" v={`${unitsIn || 0} ${col?.symbol ?? ""}`} />
+          <Kvr k="Collateral locked" v={<span className="num" data-testid="review-units">{units !== null && col ? `${formatUnitsTrim(units, col.decimals)} ${col.symbol}` : "—"}</span>} />
           <Kvr k="Protection" v={shieldInput ? `${protLabel} to ${formatNewYork(shieldInput.window_end_ns)}` : protLabel} />
           <Kvr k="Fees" v={total !== null ? formatUsdE6(total) : "—"} />
           <Kvr k={receiver ? `${receiver} receives` : "You receive"} v={<span className="nx-pos">{net !== null ? formatUsdE6(net) : "—"}</span>} />
@@ -415,7 +457,7 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
             <button type="button" className="nx-link" style={{ alignSelf: "flex-start" }} aria-expanded={raw} onClick={() => setRaw(!raw)} data-testid="show-wallet-payload">{raw ? "Hide what your wallet signs" : "Show what your wallet signs"}</button>
             {raw ? (
               <div className="nx-stack" style={{ gap: 10 }} data-testid="wallet-payload">
-                <SignTxRows preview={intent} signer={accountId} network="NEAR testnet" testIdPrefix="review" />
+                <SignTxRows preview={intent} signer={accountId} network="NEAR testnet" amount={describeTransferAmount(intent, tokenTable(config))} testIdPrefix="review" />
                 <SignJson preview={intent} testIdPrefix="review" />
               </div>
             ) : null}

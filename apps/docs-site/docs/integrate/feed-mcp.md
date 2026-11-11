@@ -14,7 +14,7 @@ A read-only MCP server over stdio and Streamable HTTP, built on `@modelcontextpr
 | --- | --- | --- |
 | `get_exit_capacity` | `symbol` | the view result with USD formatting and `as_of` |
 | `preview_borrow` | `symbol`, `units`, `borrow_usd` | `limit_usd`, `premium_usd`, `ok`, `reason` |
-| `list_quotes` | `symbol`, optional `limit` | live quotes without buyer identity (ids and sizes only) |
+| `list_quotes` | `symbol`, optional `limit` | live quotes, ids and sizes only. The output leaves out the buyer, but buyers are public on chain (`list_quotes` / `get_quote` views, Quote Note owners), so this is not a privacy property |
 | `explain_limit` | `symbol` | the [Cramér formula](/concepts/cramer-limits) (PRD §4.2, D-009) with live numbers substituted |
 
 The server also lists the four agent skill tools (8 in total): `open_protected_stock_loan`, `quote_capacity`, `get_note` and `build_self_settle`. The last two still return `not_available`. See [Agent skill and x402 export](/integrate/agent-skill-x402).

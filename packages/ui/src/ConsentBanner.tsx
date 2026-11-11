@@ -50,8 +50,9 @@ export function ConsentBanner() {
     <div className="consent" role="dialog" aria-label="Cookie preferences" data-testid="consent">
       <strong className="heading-text">Cookies and storage</strong>
       <span>
-        This site stores your theme, this choice and your wallet session in your browser. Analytics load only if you accept, and only on the production site. Wallet
-        addresses are never joined to IPs.
+        This site stores your theme and this choice in your browser; the wallet connector keeps its own session storage there too. Analytics load only if you
+        accept, and only on the production site. We never join wallet addresses to IP addresses in logs we control. Your browser talks directly to the NEAR and
+        Solana RPC providers, which see your IP and the accounts you query.
       </span>
       <div className="acts">
         <Button variant="primary" size="sm" onClick={() => choose(true)}>

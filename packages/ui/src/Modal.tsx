@@ -129,10 +129,12 @@ export interface SignModalProps {
   summary?: ReactNode;
   /** Fee stack and its total, rendered before the JSON. */
   fees?: { lines: FeeLine[]; total: ReactNode; note?: ReactNode };
+  /** Decoded `amount` of an ft_transfer_call in token units ("15 NVDAx (15000000 base units)"). */
+  amount?: ReactNode;
 }
 
 /** The sign preview every write passes through: exact msg JSON, gas and deposit before the wallet opens. */
-export function SignModal({ preview, signer, network, busy, error, onConfirm, onCancel, summary, fees }: SignModalProps) {
+export function SignModal({ preview, signer, network, busy, error, onConfirm, onCancel, summary, fees, amount }: SignModalProps) {
   if (!preview) return null;
   return (
     <Modal
@@ -152,7 +154,7 @@ export function SignModal({ preview, signer, network, busy, error, onConfirm, on
       }
     >
       <p className="small">Nothing is sent until you approve it in your wallet. This is exactly what the wallet will be asked to sign.</p>
-      <SignTxRows preview={preview} signer={signer} network={network} testIdPrefix="sign" />
+      <SignTxRows preview={preview} signer={signer} network={network} amount={amount} testIdPrefix="sign" />
       {fees ? <FeeStackList lines={fees.lines} total={fees.total} note={fees.note} testId="sign-fees" /> : null}
       {summary}
       <SignJson preview={preview} testIdPrefix="sign" />
@@ -161,14 +163,22 @@ export function SignModal({ preview, signer, network, busy, error, onConfirm, on
   );
 }
 
-/** Network, signer, receiver, method, gas and deposit of a NEAR write (sign modal and the v2 review drawer). */
-export function SignTxRows({ preview, signer, network, testIdPrefix = "sign" }: { preview: SignPreview; signer: string | null; network: string; testIdPrefix?: string }) {
+/**
+ * Network, signer, receiver, method, gas and deposit of a NEAR write (sign modal and the v2 review drawer). An ft_transfer_call
+ * always gets an Amount line (R2-06): the decoded token amount when the caller knows the token, else the raw base units, said so.
+ */
+export function SignTxRows({ preview, signer, network, amount, testIdPrefix = "sign" }: { preview: SignPreview; signer: string | null; network: string; amount?: ReactNode; testIdPrefix?: string }) {
+  const isFt = preview.methodName === "ft_transfer_call" || preview.methodName === "ft_transfer";
+  const raw = typeof preview.args.amount === "string" ? preview.args.amount : null;
   return (
     <div className="kvs">
       <div className="kv"><span>Network</span><b>{network}</b></div>
       <div className="kv"><span>Signer</span><b>{signer ?? "not connected"}</b></div>
       <div className="kv"><span>Receiver</span><b>{preview.receiverId}</b></div>
       <div className="kv"><span>Method</span><b>{preview.methodName}</b></div>
+      {isFt && (amount || raw) ? (
+        <div className="kv"><span>Amount</span><b className="num" data-testid={`${testIdPrefix}-amount`}>{amount ?? `${raw} base units (token decimals unknown)`}</b></div>
+      ) : null}
       <div className="kv"><span>Gas (max, unused is refunded)</span><b data-testid={`${testIdPrefix}-gas`}>{fmtGas(preview.gas)}</b></div>
       <div className="kv"><span>Deposit</span><b data-testid={`${testIdPrefix}-deposit`}>{fmtYocto(preview.deposit)}</b></div>
     </div>

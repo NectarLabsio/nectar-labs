@@ -5,8 +5,8 @@ description: Hash-pinned OutLayer program computing the clearing discount.
 ---
 # Quoter (TEE) and fallback
 
-<p className="verified">Verified against: F-040 (2026-11-09), F-041 (2026-11-09), F-043 (2026-11-09), F-045 (2026-11-09), F-167 (2026-11-09), F-168 (2026-11-09), F-169 (2026-11-09), F-172 (2026-11-09), F-177 (2026-11-09), F-178 (2026-11-09), F-179 (2026-11-09), F-180 (2026-11-09) · D-004, D-014, D-015 (2026-11-10) · docs/EVIDENCE.md G4 PASS 2026-11-09T22:10Z (d87eef6) and addendum PASS 2026-11-09T22:51Z (fea52b7) · evidence/G4/run-C-20261109T2240Z.log, run-D-20261109T2245Z.log</p>
-<p className="status">Status on 2026-11-10: live on OutLayer testnet (G4 PASS). The market-maker inputs are demo values. The fallback is a permanent code path.</p>
+<p className="verified">Verified against: F-040 (2026-11-09), F-041 (2026-11-09), F-043 (2026-11-09), F-045 (2026-11-09), F-167 (2026-11-09), F-168 (2026-11-09), F-169 (2026-11-09), F-172 (2026-11-09), F-177 (2026-11-09), F-178 (2026-11-09), F-179 (2026-11-09), F-180 (2026-11-09) · D-004, D-014, D-015 (2026-11-10) · docs/EVIDENCE.md G4 PASS 2026-11-09T22:10Z (d87eef6) and addendum PASS 2026-11-09T22:51Z (fea52b7) · evidence/G4/run-C-20261109T2240Z.log, run-D-20261109T2245Z.log · output-inference and operator-set limits: docs/work/review-2-findings.md R2-02 (2026-11-11), source quoter/src/lib.rs, contracts/nectar-core/src/p1.rs (`get_vol_bps`, `quoter_result`), scripts/35-quoter-secrets.mjs</p>
+<p className="status">Status on 2026-11-11: live on OutLayer testnet (G4 PASS). The market-maker inputs are operator-set demo values, published on this page, and each settlement's discount reveals their product (see Honest limits). The fallback is a permanent code path.</p>
 
 ## What is deployed
 
@@ -25,7 +25,7 @@ description: Hash-pinned OutLayer program computing the clearing discount.
 disc_bps = min( max_discount_bps ,  vol_bps + floor(q_bps · gamma_bps · vol_bps / 10^8) )
 ```
 
-`q_bps` (inventory use) and `gamma_bps` (risk aversion) are the buyer's secrets inside OutLayer. `vol_bps` comes from contract config (`set_vol_bps`). D-014 corrects the PRD §4.5 divisor: three bps factors need `10^8`, not `10^6`. Integer maths only. Without secrets, a fill is priced at `max_discount_bps`.
+In the design, `q_bps` (inventory use) and `gamma_bps` (risk aversion) are the buyer's secrets inside OutLayer. In this build they are demo values set by the protocol owner (see Honest limits). `vol_bps` comes from contract config (`set_vol_bps`). D-014 corrects the PRD §4.5 divisor: three bps factors need `10^8`, not `10^6`. Integer maths only. Without secrets, a fill is priced at `max_discount_bps`.
 
 Worked example from request 15148: `min(400, 150 + floor(3000 · 2000 · 150 / 10^8)) = min(400, 159) = 159` bps.
 
@@ -58,8 +58,11 @@ Any input error gives `{"v":1,"error":"<short>"}` with exit code 0, and the cont
 
 ## Honest limits
 
-- **Demo inputs.** `MM_1_Q_BPS=3000` and `MM_1_GAMMA_BPS=2000` are demo values, not a real market maker's book.
+- **What holds.** The inputs are encrypted for OutLayer's keystore, and the access condition lets only the pinned program read them (`WasmHash`, F-177, F-178).
+- **Demo inputs, set by the operator and published.** `MM_1_Q_BPS=3000` and `MM_1_GAMMA_BPS=2000` are demo values, not a real market maker's book. The protocol owner stores them (`scripts/35-quoter-secrets.mjs` signs `store_secrets` as `accounts.owner`), they are printed on this page and in docs/EVIDENCE.md, and the web app gives a market maker no way to submit its own.
+- **The output reveals q·γ.** `vol_bps` is public (`get_vol_bps` view, `vol_set` event), and every fill's `disc_bps` is emitted in `quoter_result` and appears in the public attestation JSON. `q_bps` and `gamma_bps` enter the formula only as their product, so one settlement below the cap reveals q·γ to within floor rounding. Request 15148 (vol 150, disc 159) puts it in [6.0e6, 6.67e6); the demo product is 3000 · 2000 = 6.0e6.
 - **Plaintext seen by the coordinator.** `scripts/35-quoter-secrets.mjs` sends the plaintext JSON to OutLayer's `/secrets/pubkey` endpoint before encrypting it on the client (F-167), so the OutLayer coordinator has seen these values. A real market maker would need a flow that never leaves plaintext with the coordinator.
+- **PROD path (not built).** Each market maker stores its own secrets profile, encrypts on its own machine with no plaintext step, and the protocol publishes coarser or batched outputs so that one fill does not reveal q·γ.
 - **No on-chain TDX check.** The contract cannot verify the TDX quote. It trusts `outlayer.testnet` to run the pinned hash. The attestation can be checked off-chain, but the verifier did not verify the TDX quote cryptographically.
 - The owner can turn TEE pricing off with `set_quoter_pin`, which sends every settlement to the fallback.
 - Outbound HTTP is off in the quoter (D-014). It uses the contract-supplied price (`src: "oracle"`).

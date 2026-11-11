@@ -1,6 +1,10 @@
 // Public runtime settings. Defaults are testnet-only.
+import { assertNotMainnetRpc } from "@nectar/sdk";
+
+// R2-10: a URL that names mainnet is refused when this module loads (build, server start, first client render), as
+// services/x402/src/config.ts does. NEXT_PUBLIC_* values are inlined at build time, so `next build` fails on them.
 // RPC default from F-096 (near-connect providers example). Override with NEXT_PUBLIC_NEAR_RPC.
-export const RPC_URL = process.env.NEXT_PUBLIC_NEAR_RPC || "https://test.rpc.fastnear.com";
+export const RPC_URL = assertNotMainnetRpc(process.env.NEXT_PUBLIC_NEAR_RPC || "https://test.rpc.fastnear.com", "NEXT_PUBLIC_NEAR_RPC");
 // Feed API (services/feed). Reached only through the same-origin /api/indexer proxy. Empty: pages show "indexer not connected".
 export const FEED_URL = process.env.NEXT_PUBLIC_FEED_URL ?? "";
 // Explorer base for tx links: TODO-G2 confirm the testnet explorer URL in docs/FACTS.md; empty disables links.
@@ -17,7 +21,8 @@ export const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 // E2E only: lets Playwright sign with the demo borrower key injected at test time. Never set in production.
 export const E2E_KEY_ADAPTER = process.env.NEXT_PUBLIC_E2E_KEY_ADAPTER === "1";
 // Solana devnet RPC for the remote (Solana) collateral flow (@solana/wallet-standard-chains 1.1.2 names this endpoint for solana:devnet).
-export const SOLANA_RPC_URL = process.env.NEXT_PUBLIC_SOLANA_RPC || "https://api.devnet.solana.com";
+// No genesis-hash check: the Solana devnet genesis hash is not in docs/FACTS.md yet (WO-42b), so only the URL is checked.
+export const SOLANA_RPC_URL = assertNotMainnetRpc(process.env.NEXT_PUBLIC_SOLANA_RPC || "https://api.devnet.solana.com", "NEXT_PUBLIC_SOLANA_RPC");
 export const SOLANA_FAUCET_URL = "https://faucet.solana.com";
 export const SOLANA_EXPLORER_TX = (sig: string): string => `https://explorer.solana.com/tx/${sig}?cluster=devnet`;
 export const SOLANA_EXPLORER_ADDR = (a: string): string => `https://explorer.solana.com/address/${a}?cluster=devnet`;

@@ -7,9 +7,6 @@ import type { TxOutcome, WalletAdapter } from "./types";
 export class E2EMockAdapter implements WalletAdapter {
   readonly id = "e2e-mock";
   readonly label = "Mock wallet (E2E, localhost)";
-  network() {
-    return "testnet";
-  }
   async restore() {
     return readLocalE2EMock()?.near?.accountId ?? null;
   }

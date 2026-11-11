@@ -85,6 +85,14 @@ export interface PublicConfig {
   solana: { cluster: "devnet"; vaultProgram: string | null; mint: string | null; decimals: number };
 }
 
+/** Token account → symbol/decimals (collaterals + USDC), for decoding `ft_transfer_call` amounts in the sign modal (R2-06). */
+export function tokenTable(c: { usdc: string | null; usdcDecimals: number; collaterals: ReadonlyArray<{ symbol: string; token: string | null; decimals: number }> }): Record<string, { symbol: string; decimals: number; usd?: boolean }> {
+  const out: Record<string, { symbol: string; decimals: number; usd?: boolean }> = {};
+  for (const col of c.collaterals) if (col.token) out[col.token] = { symbol: col.symbol, decimals: col.decimals };
+  if (c.usdc) out[c.usdc] = { symbol: "USDC", decimals: c.usdcDecimals, usd: true };
+  return out;
+}
+
 export function parseConfig(text: string): NectarConfigYaml {
   const c = parse(text) as NectarConfigYaml;
   if (!c || typeof c !== "object" || !c.accounts || !c.collateral) throw new Error("config.yaml: missing accounts/collateral");

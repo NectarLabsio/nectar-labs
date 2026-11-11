@@ -48,10 +48,13 @@ export function ConnectPrompt({ action }: { action: string }) {
   );
 }
 
-export function WrongNetwork() {
+export function WrongNetwork({ accountId }: { accountId?: string | null }) {
   return (
     <Banner tone="danger" title="Wrong network">
-      Your wallet is not on NEAR testnet. Switch it to testnet; nothing here runs on mainnet.
+      <span data-testid="wrong-network">
+        {accountId ? <><span className="mono">{accountId}</span> is not a NEAR testnet account. </> : "Your wallet is not on NEAR testnet. "}
+        Switch your wallet to testnet (an account ending in .testnet); nothing here signs on mainnet.
+      </span>
     </Banner>
   );
 }
@@ -98,7 +101,7 @@ export function Gate({ children, wallet, action = "continue", blockOnPause }: { 
     <div className="stack">
       {chain.paused ? <PausedBanner /> : null}
       {wallet && !w.accountId ? <ConnectPrompt action={action} /> : null}
-      {wallet && w.accountId && w.network !== "testnet" ? <WrongNetwork /> : null}
+      {w.accountId && w.network !== "testnet" ? <WrongNetwork accountId={w.accountId} /> : null}
       {blockOnPause && chain.paused ? null : children}
     </div>
   );

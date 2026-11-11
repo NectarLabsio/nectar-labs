@@ -3,8 +3,15 @@
 ## In flight (2026-11-11 ~09:55Z) — Kunal's 6-item request (no push / post / send)
 - WO-39 verifier (worktree): G14 402→200 re-run from a fresh clone (own x402 on :8891) + G1 gas rows on 2.2.1; step 0 marks G14 402→200 SELF-ATTESTED.
   agent1 re-funded 2 mock NVDAx via scripts/60-x402-accounts.sh (evidence/G14/rerun/accounts-topup-*.log).
-- WO-40 security review 2 (read-only; web/SDK, copilot prompt injection, privacy claims) → report in session scratchpad review2.md → fix WOs (web, docs).
-- WO-41 web (worktree): `.nx-delta.up` light-theme contrast.
+- WO-40 security review 2 DONE → docs/work/review-2-findings.md: 0 high, 5 med (R2-01…05), 7 low; privacy claims C2/C8/C10 do not hold, C1/C3/C4/C5/C13/C14
+  partial. Fixes: WO-42a web (copilot binding, /api hardening, headers) + WO-43 docs (privacy claims) running; WO-42b web (amounts, intent, note transfer,
+  network guards, privacy copy) after WO-41 merges; WO-44 keeper (demo agent verifies MCP call, zod) when a slot frees; WO-43b docs (SECURITY.md review 2
+  section + copilot binding wording) after all merge. Out of scope, disclose: on-chain fee bound (contract), MM-owned quoter secrets (PROD).
+- WO-41 MERGED (b2a9641): `--accent-text` token; `/` light a11y 97 → 100, 28/28 route×theme = 100. WO-43 MERGED (fb3f05c): privacy claims corrected.
+- WO-39 MERGED (94cc421): **G14 402→200 PASS, verifier-run** (fresh clone 45ed1f3, own x402 :8891; borrow 7UFpexpd… #14, relay EskZKj9s…, 200 + 110 CSV
+  rows). **G1 2.2.1 gas rows FAIL**: remove_extra_remote_chain has no GAS row (66/67 measured, max 78.72 Tgas) → docs/GATE_FAIL_G1_221.md, WO-45 contract
+  (test-only) running → verifier re-check. Docs still say "HTTP leg not re-run" (agent-skill-x402.md:49 etc.) → fix in WO-43b.
+- Running: WO-42a (web copilot/api), WO-42b (web wallet/sdk/copy, resumed after turn limit), WO-44 keeper, WO-45 contract.
 - Then: G9 re-run from a fresh clone → move `submission-rc` → STATE. Findings so far: WO-33a/b/c merged (e18ba08, 6727643, e17f17e); apps/web NOT
   deployed anywhere (no deploy config in repo; Vercel team has nectar-landing / nectar-frontend / docs-site-nectar, all created before this repo
   (2026-10-31 and earlier), 0 deployments since 2026-11-09; Railway nectar-network* also pre-date it). H5 (Vercel) still OPEN. Five stale WO-33c
@@ -89,7 +96,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T09:06:41Z · commit 20c6a37
+Last activity: 2026-11-11T14:19:18Z · commit fb3f05c
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

@@ -53,6 +53,11 @@ test.describe("landing v7", () => {
     await expect(page.locator("footer")).toBeVisible();
     await expect(page.locator("[data-feature]")).toHaveCount(0);
     copyRules((await page.locator("body").innerText()).toLowerCase());
+    // Review 2: privacy claims scoped to what holds in this build (R2-01, R2-02).
+    const body = await page.locator("body").innerText();
+    expect(body).toContain("We never join wallet addresses to IP addresses in logs we control.");
+    expect(body).toContain("operator-set demo parameters (published in the docs)");
+    expect(body).not.toMatch(/private parameters are read inside a TEE|reads private market-maker parameters|never joined to IPs/);
   });
 
   test("flags on: every module section renders with its data-feature tag; copy rules still hold", async ({ page }) => {

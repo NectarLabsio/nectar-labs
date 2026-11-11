@@ -135,6 +135,20 @@ describe("events + format + config", () => {
     expect(parseUnits("1,234.5", 6)).toBe(1_234_500000n);
     expect(() => parseUnits("1.1234567", 6)).toThrow();
     expect(bpsToPct(6250)).toBe("62.5 %");
+  });
+  it("R2-06: commas are thousands separators only (a decimal comma is refused)", () => {
+    expect(() => parseUnits("1,5", 6)).toThrow(/commas only group thousands/);
+    expect(() => parseUnits("12,34", 6)).toThrow();
+    expect(() => parseUnits("1,2345", 6)).toThrow();
+    expect(() => parseUnits(",500", 6)).toThrow();
+    expect(() => parseUnits("1234,567", 6)).toThrow();
+    expect(() => parseUnits("1,234,", 6)).toThrow();
+    expect(parseUnits("1,234", 6)).toBe(1_234_000000n);
+    expect(parseUnits("12,345,678.9", 6)).toBe(12_345_678_900000n);
+    expect(parseUnits("1,500.", 6)).toBe(1_500_000000n);
+    expect(parseUnits("1.5", 6)).toBe(1_500000n);
+    expect(parseUnits(" 15 ", 6)).toBe(15_000000n);
+    expect(parseUnits(".5", 6)).toBe(500000n);
     expect(bpsToPct(4000)).toBe("40 %");
   });
   it("loads config.yaml and reports TODO ids as pending", () => {
