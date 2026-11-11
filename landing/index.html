@@ -566,7 +566,7 @@ footer{position:relative;border-top:1px solid var(--border);padding-block:56px 0
     <div class="copy">
       <span class="tag"><b></b>For market makers</span>
       <h2>Get paid to stand behind a price.</h2>
-      <p>Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers' limit premiums fund your commitment fees, and your private parameters are read inside a TEE instead of being published.</p>
+      <p>Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers' limit premiums fund your commitment fees. In this testnet build the OutLayer TEE prices with operator-set demo parameters (published in the docs), and each settlement's discount reveals their product.</p>
       <dl class="spec">
         <div><dt>Escrow</dt><dd>USDC, held by nectar-core</dd></div>
         <div><dt>Exit</dt><dd>After the notice period</dd></div>
@@ -688,7 +688,7 @@ footer{position:relative;border-top:1px solid var(--border);padding-block:56px 0
 
   <div class="seq" id="settle" data-sp>
     <div><span class="k">01 Flag</span><h3>Health falls below 1</h3><p>Any keeper calls <code>trigger_preliquidation(position_id)</code> with a function-call key. No deposit, no price, no hash.</p><span class="who">nectar-core on NEAR testnet</span></div>
-    <div><span class="k">02 Price</span><h3>A TEE computes the discount</h3><p>A pinned OutLayer program reads private market-maker parameters and returns <code>disc_bps</code>, clamped to the quote's ceiling.</p><span class="who">OutLayer, attested</span></div>
+    <div><span class="k">02 Price</span><h3>A TEE computes the discount</h3><p>A pinned OutLayer program returns <code>disc_bps</code>, clamped to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.</p><span class="who">OutLayer, attested</span></div>
     <div><span class="k">03 Sign</span><h3>Chain Signatures signs</h3><p>The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base). The keeper never holds a key.</p><span class="who">v1.signer-prod.testnet</span></div>
     <div><span class="k">04 Settle</span><h3>The vault verifies, then pays</h3><p>Solana checks the Ed25519 instruction before <code>settle</code>. Base checks EIP-712 with <code>ecrecover</code>. Then the buyer is paid and the result is relayed home.</p><span class="who">nectar_vault, NectarVaultBase</span></div>
   </div>

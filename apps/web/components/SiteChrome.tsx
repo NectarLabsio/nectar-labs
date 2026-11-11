@@ -135,7 +135,7 @@ function Analytics() {
       w.dataLayer.push(a);
     };
     w.gtag("js", new Date());
-    w.gtag("config", GA_ID, { anonymize_ip: true });
+    w.gtag("config", GA_ID);
   }, [on]);
   return null;
 }
