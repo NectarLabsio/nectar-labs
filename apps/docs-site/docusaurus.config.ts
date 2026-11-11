@@ -98,7 +98,7 @@ const config: Config = {
         { title: 'Protocols', items: [
           { label: 'NEAR', href: 'https://near.org' }, { label: 'Solana', href: 'https://solana.com' },
           { label: 'Chain Signatures', href: 'https://docs.near.org/chain-abstraction/chain-signatures' },
-          { label: 'OutLayer', href: 'https://docs.outlayer.ai/' }, { label: 'NEAR Intents', href: 'https://docs.near-intents.org/' } ] },
+          { label: 'OutLayer', href: 'https://outlayer.fastnear.com/docs/getting-started' }, { label: 'NEAR Intents', href: 'https://docs.near-intents.org/' } ] },
         { title: 'Build', items: [
           { label: 'Docs', to: '/' }, { label: 'SDK', to: '/integrate/sdk' }, { label: 'Feed MCP', to: '/integrate/feed-mcp' },
           ...github({ label: 'GitHub', href: REPO }), { label: 'Status', to: '/start/live-on-testnet' } ] },
