@@ -1,0 +1,26 @@
+# `railway up` upload allowlist (F-409: honours .railwayignore + .gitignore, not .dockerignore). gitignore syntax.
+# Only what the Feed / x402 Dockerfiles need. Never .env*, evidence/, keys, ~/.nectar copies, node_modules, .git, .claude.
+*
+!*/
+!/package.json
+!/pnpm-lock.yaml
+!/pnpm-workspace.yaml
+!/.dockerignore
+!/packages/config/config.yaml
+!/services/feed/package.json
+!/services/feed/openapi.yaml
+!/services/feed/Dockerfile
+!/services/feed/Dockerfile.dockerignore
+!/services/feed/src/**
+!/services/x402/package.json
+!/services/x402/Dockerfile
+!/services/x402/Dockerfile.dockerignore
+!/services/x402/src/**
+!/services/keeper/package.json
+!/services/keeper/src/health.ts
+!/services/keeper/src/keyfile.ts
+**/node_modules/
+**/.env*
+**/*.key
+**/*key*.json
+**/*.pem
