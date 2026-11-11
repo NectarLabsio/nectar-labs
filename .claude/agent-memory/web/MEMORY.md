@@ -1,2 +1,3 @@
 - [Worktree bash guard](feedback_worktree_bash.md) — split git/heredoc commands; WIP-commit early under turn budgets
 - [Web E2E patterns](project_web_e2e.md) — v2 views mocked via page.route on fastnear + localhost E2E mock wallet
+- [RPC providers](project_rpc_providers.md) — FastNEAR x2 + dRPC + Intear fallback in the SDK; adding a host touches CSP, inventory, privacy page

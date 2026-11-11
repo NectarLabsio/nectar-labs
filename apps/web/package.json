@@ -10,7 +10,7 @@
     "start": "next start -p 3100",
     "typecheck": "next typegen && tsc --noEmit -p tsconfig.json",
     "lint": "node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs",
-    "test": "node --test --test-reporter=spec --import ./scripts/node-test-shims.mjs lib/api/api.test.ts lib/copilot/verify.test.ts",
+    "test": "node --test --test-reporter=spec --import ./scripts/node-test-shims.mjs lib/api/api.test.ts lib/api/health.test.ts lib/copilot/verify.test.ts",
     "e2e": "playwright test",
     "e2e:screens": "playwright test e2e/screens.spec.ts",
     "demo:capture": "playwright test e2e/screens.spec.ts",

@@ -1,5 +1,6 @@
 import { NectarViews, RpcError, resilientRpcTransport, rpcEndpoints } from "@nectar/sdk";
 import { getPublicConfig } from "@/lib/config.server";
+import { healthChecker, type HealthSnapshot } from "@/lib/api/health";
 import { RPC_URL } from "@/lib/env";
 
 export const dynamic = "force-dynamic";
@@ -19,14 +20,6 @@ const urls = rpcEndpoints(RPC_URL);
 /** One transport per server instance, so a provider's cooldown after a 429 carries over to the next read. */
 const transport = resilientRpcTransport({ urls, timeoutMs: ATTEMPT_MS });
 
-interface Snapshot { core: string; at: number; status: number; body: Record<string, unknown> }
-/** `checked` = when this answer was computed (drives FRESH_MS reuse); `stale` = served from the last good snapshot. */
-interface Answer extends Snapshot { checked: number; stale: boolean }
-
-let last: Answer | null = null;
-let lastGood: Snapshot | null = null;
-let inflight: Promise<Answer> | null = null;
-
 /** A public reason (no internals): the server log keeps the detail. */
 function reasonOf(e: unknown): string {
   if (e instanceof RpcError && e.throttled) return "every RPC provider refused the read (rate limited)";
@@ -34,19 +27,19 @@ function reasonOf(e: unknown): string {
   return "RPC read failed";
 }
 
-function failed(core: string, reason: string, detail: string): Snapshot {
+function failed(core: string, reason: string, detail: string): HealthSnapshot {
   console.error(`health: RPC read failed: ${detail}`);
   return { core, at: Date.now(), status: 502, body: { ok: false, deployed: true, core, error: reason } };
 }
 
-async function read(core: string, network: string): Promise<Snapshot> {
+async function read(core: string, network: string): Promise<HealthSnapshot> {
   const v = new NectarViews(core, transport);
   let timer: ReturnType<typeof setTimeout> | undefined;
-  const deadline = new Promise<Snapshot>((resolve) => {
+  const deadline = new Promise<HealthSnapshot>((resolve) => {
     timer = setTimeout(() => resolve(failed(core, `no RPC answer within ${DEADLINE_MS / 1000} s`, `deadline ${DEADLINE_MS} ms`)), DEADLINE_MS);
   });
   const answer = Promise.all([v.contractVersion(), v.getPool()]).then(
-    ([version, pool]): Snapshot => ({ core, at: Date.now(), status: 200, body: { ok: true, deployed: true, core, version, pool, network, rpc: urls } }),
+    ([version, pool]): HealthSnapshot => ({ core, at: Date.now(), status: 200, body: { ok: true, deployed: true, core, version, pool, network, rpc: urls } }),
     (e: unknown) => failed(core, reasonOf(e), e instanceof Error ? e.message : String(e)),
   );
   try {
@@ -56,19 +49,8 @@ async function read(core: string, network: string): Promise<Snapshot> {
   }
 }
 
-/** A fresh read; on failure the last good snapshot of the same core if it is ≤ STALE_OK_MS old. Never an invented value. */
-async function check(core: string, network: string): Promise<Answer> {
-  const r = await read(core, network);
-  const checked = Date.now();
-  if (r.status === 200) {
-    lastGood = r;
-    return { ...r, checked, stale: false };
-  }
-  if (lastGood && lastGood.core === core && checked - lastGood.at <= STALE_OK_MS) {
-    return { ...lastGood, body: { ...lastGood.body, rpc_error: r.body.error }, checked, stale: true };
-  }
-  return { ...r, checked, stale: false };
-}
+/** Reuse within FRESH_MS; when every provider refuses, the last good snapshot while ≤ STALE_OK_MS old (lib/api/health.ts). */
+const health = healthChecker({ read, freshMs: FRESH_MS, staleOkMs: STALE_OK_MS });
 
 /**
  * Next's router prefetches in-app links with `RSC: 1` (+ `Next-Router-Prefetch`). It drops any answer that is not a Flight
@@ -84,16 +66,6 @@ export async function GET(req: Request) {
   if (isRouterRequest(req)) return new Response(null, { status: 204, headers });
   const c = getPublicConfig();
   if (!c.core) return Response.json({ ok: false, deployed: false, pending: c.pending, network: c.network }, { headers });
-  const now = Date.now();
-  // Reuse a recent answer; a stale one only while its snapshot is still within STALE_OK_MS.
-  let hit = last && last.core === c.core && now - last.checked <= FRESH_MS && (!last.stale || now - last.at <= STALE_OK_MS) ? last : null;
-  if (!hit) {
-    inflight ??= check(c.core, c.network).finally(() => {
-      inflight = null;
-    });
-    hit = await inflight;
-    last = hit;
-  }
-  const age_s = Math.max(0, Math.floor((Date.now() - hit.at) / 1000));
-  return Response.json({ ...hit.body, as_of: new Date(hit.at).toISOString(), age_s, ...(hit.stale ? { stale_s: age_s } : {}) }, { status: hit.status, headers });
+  const r = await health(c.core, c.network);
+  return Response.json(r.body, { status: r.status, headers });
 }
