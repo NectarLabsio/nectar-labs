@@ -1,5 +1,5 @@
 //! Minimal Solana primitives for the `vault_read` job (WO-24), without the Solana SDK (wasm size):
-//! base58 / base64, the Ed25519 "is on curve" test, `find_program_address`, and the 123-byte `Position` layout
+//! base58 / base64, the Ed25519 "is on curve" test, `find_program_address`, and the 131-byte `Position` v2 layout
 //! from solana/deploy.md. Integer-only, no allocation beyond small vectors.
 
 use sha2::{Digest, Sha256};
@@ -241,19 +241,22 @@ pub fn find_program_address(seeds: &[&[u8]], program: &[u8; 32]) -> Option<([u8;
     None
 }
 
-/// nectar_vault PDAs (solana/deploy.md): vault `["vault", mint]`, position `["pos", vault, u64le(id)]`.
+/// nectar_vault PDAs (solana/deploy.md): vault `["vault", mint]`, position `["pos", vault, u64le(id), depositor]`.
 pub fn vault_pda(mint: &[u8; 32], program: &[u8; 32]) -> Option<[u8; 32]> {
     find_program_address(&[b"vault", mint], program).map(|(a, _)| a)
 }
 
-pub fn position_pda(vault: &[u8; 32], position_id: u64, program: &[u8; 32]) -> Option<[u8; 32]> {
-    find_program_address(&[b"pos", vault, &position_id.to_le_bytes()], program).map(|(a, _)| a)
+pub fn position_pda(vault: &[u8; 32], position_id: u64, depositor: &[u8; 32], program: &[u8; 32]) -> Option<[u8; 32]> {
+    find_program_address(&[b"pos", vault, &position_id.to_le_bytes(), depositor], program).map(|(a, _)| a)
 }
 
-// ------------------------------------------------------------------ Position account (123 bytes)
+// ------------------------------------------------------------------ Position v2 account (131 bytes)
 
-pub const POSITION_LEN: usize = 123;
+pub const POSITION_LEN: usize = 131;
 pub const POSITION_DISCRIMINATOR: [u8; 8] = [170, 188, 143, 228, 122, 64, 247, 208];
+pub const POSITION_VERSION: u8 = 2;
+/// 1 Open, 2 Settled, 3 Released. A v2 position stays on chain after settle/release until `withdraw`, with `amount`
+/// unchanged, so only this status proves an open deposit; the account existing does not.
 pub const STATUS_OPEN: u8 = 1;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -266,6 +269,7 @@ pub struct Position {
     pub vault: [u8; 32],
     pub position_id: u64,
     pub bump: u8,
+    pub withdrawable: u64,
 }
 
 fn arr32(d: &[u8], at: usize) -> [u8; 32] {
@@ -281,13 +285,16 @@ fn u64le(d: &[u8], at: usize) -> u64 {
 }
 
 /// Offsets per solana/deploy.md: discriminator @0, version @8, authority @9, depositor @41, amount @73,
-/// status @81, vault @82, position_id @114, bump @122.
+/// status @81, vault @82, position_id @114, bump @122, withdrawable @123.
 pub fn decode_position(d: &[u8]) -> Result<Position, &'static str> {
     if d.len() != POSITION_LEN {
         return Err("bad_account_len");
     }
     if d[..8] != POSITION_DISCRIMINATOR {
         return Err("bad_discriminator");
+    }
+    if d[8] != POSITION_VERSION {
+        return Err("bad_version");
     }
     Ok(Position {
         version: d[8],
@@ -298,6 +305,7 @@ pub fn decode_position(d: &[u8]) -> Result<Position, &'static str> {
         vault: arr32(d, 82),
         position_id: u64le(d, 114),
         bump: d[122],
+        withdrawable: u64le(d, 123),
     })
 }
 

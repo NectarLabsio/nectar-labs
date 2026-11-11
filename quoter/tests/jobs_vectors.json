@@ -4,120 +4,186 @@
  "cases": [
   {
    "name": "vault_read_found_contract_input",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":520755300},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIEBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":520755300},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
-   "expected_stdout": "{\"position_id\":\"7\",\"units\":\"5000000\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw\",\"slot_or_block\":520755300}",
-   "stdout_bytes": 188
+   "expected_stdout": "{\"position_id\":\"7\",\"units\":\"5000000\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"slot_or_block\":520755300}",
+   "stdout_bytes": 189
   },
   {
    "name": "vault_read_found_numeric_id",
-   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":0}",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":0,\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"8sQx5Q69am9Xmw6bhGfTPJ6YW1S888ETjVUgEL7SJ3Kh\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":1},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIAEAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgAAAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Yr2qqW1LV68wHUpdru8bhTw5bb3pVvfJyehe7QAft35\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":1},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgEAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgAAAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
-   "expected_stdout": "{\"position_id\":\"0\",\"units\":\"1\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw\",\"slot_or_block\":1}",
-   "stdout_bytes": 174
+   "expected_stdout": "{\"position_id\":\"0\",\"units\":\"1\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"slot_or_block\":1}",
+   "stdout_bytes": 175
   },
   {
    "name": "vault_read_u64_max_widest_output",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"18446744073709551615\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"18446744073709551615\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"4o6RC44TgRbggM4D5XqFpcoChRN4LaJHWQajGnP1gE74\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":18446744073709551615},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIP//////////AfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDg////////////\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"2eU1kCezBf9siymwXYK1jzeqdaZjAWenAXbA54PUqy7z\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":18446744073709551615},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZv//////////AfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDg////////////AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
-   "expected_stdout": "{\"position_id\":\"18446744073709551615\",\"units\":\"18446744073709551615\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw\",\"slot_or_block\":18446744073709551615}",
-   "stdout_bytes": 231
+   "expected_stdout": "{\"position_id\":\"18446744073709551615\",\"units\":\"18446744073709551615\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"slot_or_block\":18446744073709551615}",
+   "stdout_bytes": 232
   },
   {
    "name": "vault_read_missing_account_live_recording",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"0\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"0\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"8sQx5Q69am9Xmw6bhGfTPJ6YW1S888ETjVUgEL7SJ3Kh\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":520755252},\"value\":null},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Yr2qqW1LV68wHUpdru8bhTw5bb3pVvfJyehe7QAft35\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":520982765},\"value\":null},\"id\":1}"
    },
    "expected_stdout": "{\"position_id\":\"0\",\"found\":false}",
    "stdout_bytes": 33
   },
   {
    "name": "vault_read_wrong_owner",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIEBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"11111111111111111111111111111111\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"11111111111111111111111111111111\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"wrong_owner\"}",
    "stdout_bytes": 29
   },
   {
    "name": "vault_read_bad_discriminator",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"AAAAAAAAAAABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIAUAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"AAAAAAAAAAACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgUAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"bad_discriminator\"}",
    "stdout_bytes": 35
   },
   {
    "name": "vault_read_short_account",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIEBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":122}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAA==\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":130}},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"bad_account_len\"}",
    "stdout_bytes": 33
   },
   {
-   "name": "vault_read_status_not_open",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "name": "vault_read_long_account",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIAUAAAAAAAAAAPGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAAAA\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":132}},\"id\":1}"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"bad_account_len\"}",
+   "stdout_bytes": 33
+  },
+  {
+   "name": "vault_read_v1_layout_rejected",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkBLTAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"bad_account_len\"}",
+   "stdout_bytes": 33
+  },
+  {
+   "name": "vault_read_bad_version",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgUAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"bad_version\"}",
+   "stdout_bytes": 29
+  },
+  {
+   "name": "vault_read_status_not_open",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgUAAAAAAAAAAPGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"position_not_open\"}",
    "stdout_bytes": 35
   },
   {
-   "name": "vault_read_vault_mismatch",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "name": "vault_read_status_settled",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIAUAAAAAAAAAATiU48Sh7FkdNwOOgwFeAcnB5rblyM8EUg2HvVkd8+s6BwAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkBLTAAAAAAAAvGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/QEIPAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"position_not_open\"}",
+   "stdout_bytes": 35
+  },
+  {
+   "name": "vault_read_status_released",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZkBLTAAAAAAAA/GvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/QEtMAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"position_not_open\"}",
+   "stdout_bytes": 35
+  },
+  {
+   "name": "vault_read_depositor_mismatch",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIAUAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgBwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"depositor_mismatch\"}",
+   "stdout_bytes": 36
+  },
+  {
+   "name": "vault_read_vault_mismatch",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgUAAAAAAAAAATiU48Sh7FkdNwOOgwFeAcnB5rblyM8EUg2HvVkd8+s6BwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"vault_mismatch\"}",
    "stdout_bytes": 32
   },
   {
    "name": "vault_read_position_id_mismatch",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fIAUAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgCAAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":5},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZgUAAAAAAAAAAfGvP+jBmfpBkWnqVFjZZCStsgpPx2esR0HI+WU2KFDgCAAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"position_mismatch\"}",
    "stdout_bytes": 35
   },
   {
    "name": "vault_read_rpc_error",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
     "response": "{\"jsonrpc\":\"2.0\",\"error\":{\"code\":-32005,\"message\":\"Node is behind\"},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"rpc_error\"}",
@@ -125,10 +191,10 @@
   },
   {
    "name": "vault_read_bad_base64",
-   "stdin": "{\"chain\":\"solana-devnet\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"job\":\"vault_read\",\"position_id\":\"7\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
    "http": {
     "url": "https://api.devnet.solana.com",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"CN8cEjLF1gttTEnyNgWgkUaVLXfijuzd9xMDguovkXTF\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"Fg5QXeUuNZ5AeCqJsKoXTes8eLwdAcX6awbkEaJpM6nw\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
     "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"slot\":1},\"value\":{\"data\":[\"!!!!\",\"base64\"],\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}},\"id\":1}"
    },
    "expected_stdout": "{\"v\":1,\"error\":\"bad_base64\"}",
@@ -136,42 +202,89 @@
   },
   {
    "name": "vault_read_custom_rpc_and_mint",
-   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"3\",\"mint\":\"So11111111111111111111111111111111111111112\",\"rpc_url\":\"https://devnet.helius-rpc.com/?api-key=x\"}",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"3\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"mint\":\"So11111111111111111111111111111111111111112\",\"rpc_url\":\"https://devnet.helius-rpc.com/?api-key=x\"}",
    "http": {
     "url": "https://devnet.helius-rpc.com/?api-key=x",
-    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"BzoHBYRRyD1koeUYUyyCqnVod6MQzH3P44Bh3EK53vSL\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
-    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":9},\"value\":{\"data\":[\"qryP5HpA99ABUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFIBAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fICoAAAAAAAAAATiU48Sh7FkdNwOOgwFeAcnB5rblyM8EUg2HvVkd8+s6AwAAAAAAAAD/\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":123}},\"id\":1}"
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"FPqr7siwJR2AnPaMocikhwdeJd9GsSp22M9qJEFprFYt\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"4.4.0\",\"slot\":9},\"value\":{\"data\":[\"qryP5HpA99ACUEf6DatUFKxezndmXfrlne3vG+N9PJoIU9DGpsagcFJYZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZioAAAAAAAAAATiU48Sh7FkdNwOOgwFeAcnB5rblyM8EUg2HvVkd8+s6AwAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1747200,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}"
    },
-   "expected_stdout": "{\"position_id\":\"3\",\"units\":\"42\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"4wBqpZM9xaSheZzJSMawUKKwhdpChKbZ5eu5ky4Vigw\",\"slot_or_block\":9}",
-   "stdout_bytes": 175
+   "expected_stdout": "{\"position_id\":\"3\",\"units\":\"42\",\"authority\":\"ed25519:6QPGoVj8ZPndsvDsK3n1Sed4mwyZqD2YnPDSS8y9S1tV\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"slot_or_block\":9}",
+   "stdout_bytes": 176
   },
   {
    "name": "vault_read_http_rpc_rejected",
-   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"3\",\"rpc_url\":\"http://x\"}",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"3\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\",\"rpc_url\":\"http://x\"}",
    "http": null,
    "expected_stdout": "{\"v\":1,\"error\":\"bad_rpc_url\"}",
    "stdout_bytes": 29
   },
   {
    "name": "vault_read_unsupported_chain",
-   "stdin": "{\"job\":\"vault_read\",\"chain\":\"base-sepolia\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"3\"}",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"base-sepolia\",\"program\":\"0xabababababababababababababababababababab\",\"position_id\":\"3\",\"depositor\":\"0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd\"}",
    "http": null,
    "expected_stdout": "{\"v\":1,\"error\":\"unsupported_chain\"}",
    "stdout_bytes": 35
   },
   {
    "name": "vault_read_bad_program",
-   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"0xdead\",\"position_id\":\"3\"}",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"0xdead\",\"position_id\":\"3\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\"}",
    "http": null,
    "expected_stdout": "{\"v\":1,\"error\":\"bad_program\"}",
    "stdout_bytes": 29
   },
   {
    "name": "vault_read_bad_position_id",
-   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"007\"}",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"007\",\"depositor\":\"6x5SYnLroiN7WYq8NQYU9KHcH4YjpBbwpUfVu3EB7ieH\"}",
    "http": null,
    "expected_stdout": "{\"v\":1,\"error\":\"bad_position_id\"}",
    "stdout_bytes": 33
+  },
+  {
+   "name": "vault_read_missing_depositor",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"3\"}",
+   "http": null,
+   "expected_stdout": "{\"v\":1,\"error\":\"bad_depositor\"}",
+   "stdout_bytes": 31
+  },
+  {
+   "name": "vault_read_evm_depositor_on_solana",
+   "stdin": "{\"job\":\"vault_read\",\"chain\":\"solana-devnet\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"position_id\":\"3\",\"depositor\":\"0xcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd\"}",
+   "http": null,
+   "expected_stdout": "{\"v\":1,\"error\":\"bad_depositor\"}",
+   "stdout_bytes": 31
+  },
+  {
+   "name": "vault_read_recorded_open_position",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"5HrPGuxueye7cULX7bZnByh5RPGnfWiGrDfXczGcXe7A\",\"job\":\"vault_read\",\"mint\":\"F18PW9dWeEUZJtnfR12wKi6YJakURRYQN9zj4uxzJ5EL\",\"position_id\":\"20\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"r8bW1dx9PgNhJM7WoS6jusUzCawjPNxkuyYh29KiZup\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"2.3.0\",\"slot\":8},\"value\":{\"data\":[\"qryP5HpA99AC6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw/v+Ed9+2bcc+KLpDnmcVmUWrrTqTyKdIm4rZ3qJv7mYDw+gIAAAAAAQhDmOV/qE/iS/49hm+4PKZvselNW4z9PmfcfDyzDLiQFAAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1802640,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}\n"
+   },
+   "expected_stdout": "{\"position_id\":\"20\",\"units\":\"50000000\",\"authority\":\"ed25519:GmaDrppBC7P5ARKV8g3djiwP89vz1jLK23V2GBjuAEGB\",\"depositor\":\"5HrPGuxueye7cULX7bZnByh5RPGnfWiGrDfXczGcXe7A\",\"slot_or_block\":8}",
+   "stdout_bytes": 183
+  },
+  {
+   "name": "vault_read_recorded_settled_not_open",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"5HrPGuxueye7cULX7bZnByh5RPGnfWiGrDfXczGcXe7A\",\"job\":\"vault_read\",\"mint\":\"F18PW9dWeEUZJtnfR12wKi6YJakURRYQN9zj4uxzJ5EL\",\"position_id\":\"0\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"A5PoewQS2AWBn7ZeQTG6Nv9w7yMzgYnnd55Td6LxodCS\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"2.3.0\",\"slot\":42},\"value\":{\"data\":[\"qryP5HpA99AC6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw/v+Ed9+2bcc+KLpDnmcVmUWrrTqTyKdIm4rZ3qJv7mQDh9QUAAAAAAghDmOV/qE/iS/49hm+4PKZvselNW4z9PmfcfDyzDLiQAAAAAAAAAAD+RdKHAgAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1802640,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}\n"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"position_not_open\"}",
+   "stdout_bytes": 35
+  },
+  {
+   "name": "vault_read_recorded_released_not_open",
+   "stdin": "{\"chain\":\"solana-devnet\",\"depositor\":\"5HrPGuxueye7cULX7bZnByh5RPGnfWiGrDfXczGcXe7A\",\"job\":\"vault_read\",\"mint\":\"F18PW9dWeEUZJtnfR12wKi6YJakURRYQN9zj4uxzJ5EL\",\"position_id\":\"2\",\"program\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\"}",
+   "http": {
+    "url": "https://api.devnet.solana.com",
+    "body": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getAccountInfo\",\"params\":[\"JB5SZyY4QR5deyUPdprsg5oGj5JCjtavJyyRC8mKsk5Z\",{\"encoding\":\"base64\",\"commitment\":\"finalized\"}]}",
+    "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"2.3.0\",\"slot\":83},\"value\":{\"data\":[\"qryP5HpA99AC6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw/v+Ed9+2bcc+KLpDnmcVmUWrrTqTyKdIm4rZ3qJv7mU5hvAAAAAAAAwhDmOV/qE/iS/49hm+4PKZvselNW4z9PmfcfDyzDLiQAgAAAAAAAAD/TmG8AAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1802640,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}\n"
+   },
+   "expected_stdout": "{\"v\":1,\"error\":\"position_not_open\"}",
+   "stdout_bytes": 35
   },
   {
    "name": "calendar_weekday_open",

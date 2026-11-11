@@ -1,0 +1,30 @@
+{
+ "source": "solana-test-validator 2.3.0 running the nectar_vault v2 program built from solana/ at 604146c (anchor build, 426456 bytes, sha256 c2412d6e782e15060a0dc519ccdb0be137640e6f80796e93d38774940a8fd152), driven by solana/tests/nectar_vault.test.ts. Local validator, not devnet: no v2 Position existed on devnet when this was recorded (getProgramAccounts dataSize 131 returned [] on 2026-11-11).",
+ "recorded": "2026-11-11",
+ "request": "getAccountInfo, encoding base64, commitment finalized; each pda is the address the program itself created",
+ "program": "ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW",
+ "mint": "F18PW9dWeEUZJtnfR12wKi6YJakURRYQN9zj4uxzJ5EL",
+ "vault": "ZG3cAE4zev5U6jzXe7AbmycaTupKq2LXhsjgBNL9x2B",
+ "depositor": "5HrPGuxueye7cULX7bZnByh5RPGnfWiGrDfXczGcXe7A",
+ "authority_hex": "ea4a6c63e29c520abef5507b132ec5f9954776aebebe7b92421eea691446d22c",
+ "accounts": [
+  {
+   "name": "open",
+   "position_id": "20",
+   "pda": "r8bW1dx9PgNhJM7WoS6jusUzCawjPNxkuyYh29KiZup",
+   "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"2.3.0\",\"slot\":8},\"value\":{\"data\":[\"qryP5HpA99AC6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw/v+Ed9+2bcc+KLpDnmcVmUWrrTqTyKdIm4rZ3qJv7mYDw+gIAAAAAAQhDmOV/qE/iS/49hm+4PKZvselNW4z9PmfcfDyzDLiQFAAAAAAAAAD/AAAAAAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1802640,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}\n"
+  },
+  {
+   "name": "settled",
+   "position_id": "0",
+   "pda": "A5PoewQS2AWBn7ZeQTG6Nv9w7yMzgYnnd55Td6LxodCS",
+   "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"2.3.0\",\"slot\":42},\"value\":{\"data\":[\"qryP5HpA99AC6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw/v+Ed9+2bcc+KLpDnmcVmUWrrTqTyKdIm4rZ3qJv7mQDh9QUAAAAAAghDmOV/qE/iS/49hm+4PKZvselNW4z9PmfcfDyzDLiQAAAAAAAAAAD+RdKHAgAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1802640,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}\n"
+  },
+  {
+   "name": "released",
+   "position_id": "2",
+   "pda": "JB5SZyY4QR5deyUPdprsg5oGj5JCjtavJyyRC8mKsk5Z",
+   "response": "{\"jsonrpc\":\"2.0\",\"result\":{\"context\":{\"apiVersion\":\"2.3.0\",\"slot\":83},\"value\":{\"data\":[\"qryP5HpA99AC6kpsY+KcUgq+9VB7Ey7F+ZVHdq6+vnuSQh7qaRRG0iw/v+Ed9+2bcc+KLpDnmcVmUWrrTqTyKdIm4rZ3qJv7mU5hvAAAAAAAAwhDmOV/qE/iS/49hm+4PKZvselNW4z9PmfcfDyzDLiQAgAAAAAAAAD/TmG8AAAAAAA=\",\"base64\"],\"executable\":false,\"lamports\":1802640,\"owner\":\"ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW\",\"rentEpoch\":18446744073709551615,\"space\":131}},\"id\":1}\n"
+  }
+ ]
+}
