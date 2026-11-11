@@ -1,5 +1,5 @@
 # GATE FAIL — G3b re-run 3 (d4218d4) — 2026-11-11
-Status: OPEN. Evidence: docs/EVIDENCE.md §G3b re-run 3, evidence/G3/verifier-20261111T2144Z/.
+Status: RESOLVED — G3b re-run 4 PASS on fd06e11 (EVIDENCE §G3b re-run 4). Evidence: docs/EVIDENCE.md §G3b re-run 3, evidence/G3/verifier-20261111T2144Z/.
 
 ## What failed
 The full e2e did not reach 0 failed. Each of two runs had one desktop failure, and both were FastNEAR rate limits (-429):
