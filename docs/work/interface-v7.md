@@ -119,7 +119,7 @@ on-curve key, or EVM 0x address ≠ zero). Stored in a NEW raw-key map (code-onl
 input gains `"depositor"`.
 **Solana vault v2 layout (program upgrade in place; no open positions).**
 - Position PDA `[b"pos", vault, position_id.to_le_bytes(), depositor]` (SR-8).
-- Nonce PDA `[b"nonce", position.key(), nonce.to_le_bytes()]` (SR-1; amended 2026-11-11: scoped to the depositor-bound slot, not the authority — with authority scope an attacker could open the same id with NEAR's public authority under its own wallet and relay NEAR's signature there, burning the honest slot's nonce). `NonceRecord` v2 = disc · `version u8 (=2)` · `vault Pubkey` ·
+- Nonce PDA `[b"nonce", position.key(), position.authority, nonce.to_le_bytes()]` (SR-1 + re-verification N1: slot AND authority, so a depositor cannot pre-burn nonces by closing and reopening its own slot under another key; earlier amendment 2026-11-11: scoped to the depositor-bound slot, not the authority — with authority scope an attacker could open the same id with NEAR's public authority under its own wallet and relay NEAR's signature there, burning the honest slot's nonce). `NonceRecord` v2 = disc · `version u8 (=2)` · `vault Pubkey` ·
   `authority [u8;32]` · `nonce u64` · `position_id u64` · `op u8` (0 settle, 1 release) · `kind u8`. The keeper validates owner = program, length,
   discriminator and every field (SR-2).
 - Payouts never depend on an account a third party controls (SR-4): settle pays `seize_units` to the recipient's ATA when that account is valid
