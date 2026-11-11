@@ -1,6 +1,23 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## In flight (2026-11-11 ~09:55Z) — Kunal's 6-item request (no push / post / send)
+## Now (2026-11-11 ~17:50Z) — read this block first
+- **SUBMISSION-READY on the agent side; `submission-rc` moved to the commit that records this block** (local tag; no remote; nothing pushed/posted/sent).
+- **Gates, verifier-run today (fresh clones):** G14 402→200 PASS (2e16f9b) and again on HEAD with the guarded demo agent (a677689: E2suM2LC… #15, relay
+  4vW2tPF5…); G1 2.2.1 gas rows PASS 67/67, max 78.60 Tgas, wasm = deployed (a677689; GATE_FAIL_G1_221 RESOLVED); G9 run 3 PASS (837cd12, clone 3107a1a);
+  G3b re-run 2 PASS (5770fa7, clone fd6592d: e2e 404/0, screens 76/76, LH 28/28 = 100, verify green; GATE_FAIL_G3B_R2 RESOLVED). All other gates as before.
+- **Security review 2** (docs/work/review-2-findings.md; SECURITY.md "Review 2"): 0 H / 5 M / 7 L, fixed in WO-42a/42b/42c/43/43b/44/49; disclosed residuals:
+  on-chain fee bound (contract), full script-src CSP + near-connect manifest pin, real-wallet signing under new headers (selector verified, signing not),
+  Solana genesis-hash check (not in FACTS), MM-owned quoter secrets (PROD), zod advisory via @x402/core, docs-site build-time criticals, elliptic (low).
+  Privacy claims that did not hold (landing TEE line, "never joined to IPs", privacy.md third-party table) are corrected. FACTS C-020 OPEN (implicit-account
+  definitions differ; SDK takes the safe side) — surface to Kunal.
+- apps/web is NOT deployed anywhere (H5 OPEN). WO-33a/b/c merged earlier.
+- **Before recording:** agent1 holds 2 mock NVDAx (topped up ~15:26Z; each x402 demo run uses 1); connect a real testnet wallet once; dismiss the cookie
+  banner first (it covers the bottom of the wallet list); Feed :8788 may still be catching up (neardata 429s) — DEMO_SCRIPT "Before recording".
+- **Kunal:** `kill 14369` (verifier's leftover `next start` on :3217 — its kill was refused, so the orchestrator did not run it). OPEN: H-GUARD-V7, H15, H16
+  tracks, H17–H20, H11 video, H10/H14 team + payout, H2/H3 publish, H1 send, H5 Vercel.
+- Background: keeper-v2 daemon, Feed :8788/:8789, x402 :8791, anvil :8545 (Base local fork).
+
+## Log of Kunal's 6-item request (2026-11-11 ~09:55Z → ~17:50Z, done)
 - WO-39 verifier (worktree): G14 402→200 re-run from a fresh clone (own x402 on :8891) + G1 gas rows on 2.2.1; step 0 marks G14 402→200 SELF-ATTESTED.
   agent1 re-funded 2 mock NVDAx via scripts/60-x402-accounts.sh (evidence/G14/rerun/accounts-topup-*.log).
 - WO-40 security review 2 DONE → docs/work/review-2-findings.md: 0 high, 5 med (R2-01…05), 7 low; privacy claims C2/C8/C10 do not hold, C1/C3/C4/C5/C13/C14
@@ -27,7 +44,7 @@
   (2026-10-31 and earlier), 0 deployments since 2026-11-09; Railway nectar-network* also pre-date it). H5 (Vercel) still OPEN. Five stale WO-33c
   `next start` servers (:3174–3178) stopped.
 
-## Now (2026-11-11 ~09:10Z) — read this block; everything below "History" is superseded
+## Earlier (2026-11-11 ~09:10Z) — superseded by the top block
 - **SUBMISSION-READY on the agent side.** G9 PASS on the re-run (EVIDENCE 89f83ee, fresh clone of 0af5cdd: quick start < 2 min, verify 15 s, gitleaks 272
   commits clean, Feed MCP from README → `agents` claimable). First run FAIL (docs-site hackathon sentence) → GATE_FAIL_G9 RESOLVED; repo-wide branding check
   now first in `verify:quick`. Tag **`submission-rc`** (local only). Only Kunal's items remain (below). Submission payload: `node scripts/build-submission.mjs`
@@ -106,7 +123,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T16:35:20Z · commit 1a46931
+Last activity: 2026-11-11T17:45:14Z · commit 0616ecd
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
