@@ -48,6 +48,9 @@ check)
 deposit)
   ID=${2:?id}; P=$(view "$CORE" get_position "{\"position_id\":\"$ID\"}"); A=$(echo "$P" | jq -r '.remote.authority'); U=$(echo "$P" | jq -r '.remote.reserved_units // .units')
   node "$ROOT/scripts/59-vault-open.mjs" "$PROG" "$MINT" "$K/borrower1-sol.json" "$ID" "$A" "$U" ;;
+resign)
+  # SR-3: an expired, unrelayed signed leg gets a fresh-nonce signature (anyone may call)
+  ID=${2:?id}; call "$CORE" resign_remote_settlement "{\"position_id\":\"$ID\"}" "$BR" '100 Tgas' 2>&1 | grep -oE 'EVENT_JSON:\{.*' | cut -c1-260 ;;
 withdraw)
   # vault v2 (D-027): after settle/release the depositor pulls its tokens
   ID=${2:?id}; node "$ROOT/scripts/59-vault-open.mjs" withdraw "$PROG" "$MINT" "$K/borrower1-sol.json" "$ID" ;;
