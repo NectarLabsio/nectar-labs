@@ -208,7 +208,7 @@ test.describe("/note/[id] (mocked v2)", () => {
     await expect(page.getByTestId("note-remote-recipient")).toHaveCount(0);
   });
 
-  test("quote note owned by the viewer: set_quote_remote_recipient with no deposit", async ({ page }) => {
+  test("quote note owned by the viewer: set_quote_remote_recipient with 1 yocto", async ({ page }) => {
     await setup(page);
     await page.goto("/note/q-3");
     const card = page.getByTestId("note-remote-recipient");
@@ -219,7 +219,7 @@ test.describe("/note/[id] (mocked v2)", () => {
     await page.getByTestId("note-remote-set").click();
     const modal = page.getByRole("dialog");
     await expect(modal.getByTestId("sign-args")).toContainText('"recipient": "So11111111111111111111111111111111111111112"');
-    await expect(modal.getByTestId("sign-deposit")).toHaveText("0 NEAR");
+    await expect(modal.getByTestId("sign-deposit")).toHaveText("1 yoctoNEAR");
     await modal.getByRole("button", { name: "Open wallet to sign" }).click();
     const c = await calls(page);
     expect(c[0]).toMatchObject({ methodName: "set_quote_remote_recipient", args: { quote_id: "3", recipient: "So11111111111111111111111111111111111111112" } });

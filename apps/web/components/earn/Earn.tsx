@@ -148,7 +148,7 @@ function QuoteComposer({ symbol, decimals }: { symbol: string; decimals: number 
           token={<><Coin />USDC</>}
           input={{ value: amountIn, onChange: (e) => setAmountIn(e.target.value), placeholder: "0" }}
           error={amountErr}
-          helper={`Escrowed in nectar-core. Minimum ${formatUsdE6(min, 0)}.`}
+          helper={`Escrowed in nectar-core. Minimum ${formatUsdE6(min, 0)}. A fill that leaves less than that ends the quote and makes the rest claimable.`}
           quick={[{ label: "$10k", onClick: () => setAmountIn("10000") }, { label: "$25k", onClick: () => setAmountIn("25000") }, { label: "$50k", onClick: () => setAmountIn("50000") }]}
           testId="amt-quote"
         />

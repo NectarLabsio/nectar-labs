@@ -56,6 +56,7 @@ const PAIRS: Array<{ ts: string; rust: string; tsOnly?: string[] }> = [
   { ts: "QuoterConfigView", rust: "QuoterConfigView" },
   { ts: "RemoteConfigView", rust: "RemoteConfigView" },
   { ts: "PendingRelease", rust: "PendingRelease" },
+  { ts: "PendingSettlement", rust: "PendingSettlement" },
   { ts: "ShieldParams", rust: "ShieldParams" },
   { ts: "ShieldInput", rust: "ShieldInput" },
   { ts: "ShieldView", rust: "ShieldView" },
@@ -72,12 +73,13 @@ const PAIRS: Array<{ ts: string; rust: string; tsOnly?: string[] }> = [
 ];
 
 /** JSON structs in types.rs with no SDK view yet: internal, or served only to the keeper. A new struct must be added to one list or the other. */
-const NOT_EXPOSED = ["ReserveFeeDay", "VaultReadConfig", "SecretsRef", "PythPrice", "SignerConfig", "PendingSettlement", "ExtraRemoteChain", "EvmSigned", "RemoteChainView", "PendingSettlementEvm", "PendingReleaseEvm", "VaultAuthorityHint", "JobConfigView", "JobState", "MultiplierSource"];
+const NOT_EXPOSED = ["ReserveFeeDay", "VaultReadConfig", "SecretsRef", "PythPrice", "SignerConfig", "ExtraRemoteChain", "EvmSigned", "RemoteChainView", "PendingSettlementEvm", "PendingReleaseEvm", "VaultAuthorityHint", "JobConfigView", "JobState", "MultiplierSource"];
 
 const ENUMS: Array<[ts: string, rust: string]> = [
   ["PositionStatus", "PositionStatus"],
   ["RemoteStatus", "RemoteStatus"],
   ["ReleaseStatus", "ReleaseStatus"],
+  ["PendingStatus", "PendingStatus"],
   ["ShieldKind", "ShieldKind"],
   ["PriceKind", "PriceKind"],
 ];

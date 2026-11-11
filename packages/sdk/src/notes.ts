@@ -1,7 +1,7 @@
 // Position Notes (interface-v7 §C, WO-22) and the Nectar Reserve (WO-23b, PRD §4.8). Integers only; the contract stays authoritative.
 //   token ids: `q-<quote_id>` (Quote Note), `p-<position_id>` (Loan Note), `r-<collateral>-<n>` (Reserve Note)
 //   nft_transfer: Note owner, exactly 1 yocto; refused while `nft_transfer_locked` (a pending settlement references the Note)
-//   set_quote_remote_recipient(quote_id, recipient?): Quote Note owner, no deposit (not #[payable]); refused while locked
+//   set_quote_remote_recipient(quote_id, recipient?): Quote Note owner, 1 yocto (SR-21: it redirects fill payouts); refused while locked
 //   JoinNectarReserve{collateral}: ft_transfer_call of USDC, ≥ 10_000_000 e6 (WO-23b, merged 67a5426)
 //   set_reserve_params(symbol, discount_bps, notice_ns?): owner (txV2.setReserveParams); replaces v1 `set_reserve`
 import type { AccountId, Bps, FtOnTransferMsg, U128, U64 } from "./types";
@@ -254,12 +254,12 @@ export const txNotes = {
     }
     return coreCall(core, "nft_transfer", args, { gasTgas: NOTE_GAS_TGAS.nftTransfer, deposit: ONE_YOCTO, label: "Transfer Note" });
   },
-  /** Quote Note owner; `recipient` null clears it. No deposit (the method is not payable). */
+  /** Quote Note owner; `recipient` null clears it. 1 yocto (SR-21: it redirects fill payouts, so a full-access key must sign). */
   setQuoteRemoteRecipient: (core: string, quote_id: U64, recipient: string | null): TxIntent => {
     if (recipient !== null && !isSolanaAddress(recipient)) throw new Error("recipient must be a Solana address (base58)");
     return coreCall(core, "set_quote_remote_recipient", { quote_id: assertU64(quote_id, "quote_id"), recipient }, {
       gasTgas: NOTE_GAS_TGAS.setQuoteRemoteRecipient,
-      deposit: "0",
+      deposit: ONE_YOCTO,
       label: recipient ? "Set Solana recipient" : "Clear Solana recipient",
     });
   },

@@ -182,6 +182,8 @@
     "reservation_expiry_s": 1800,
     "reserve_deposit_yocto": "50000000000000000000000"
   },
+  "get_owed_collateral": "0",
+  "get_pending_settlement": null,
   "is_referrer": true,
   "get_claimable": "150000",
   "get_reserve": {

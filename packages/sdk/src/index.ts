@@ -11,6 +11,7 @@ export * from "./feed";
 export * from "./v7";
 export * from "./remote";
 export * from "./solana";
+export * from "./evm";
 export * from "./shields";
 export * from "./notes";
 export * from "./earn";
