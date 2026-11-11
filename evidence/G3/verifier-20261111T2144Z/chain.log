@@ -1,0 +1,61 @@
+=== selector probe (21:58:51Z)
+desktop mock: undefined banner: false wallets: 6 allFullyVisible: false Meteor Wallet(NOT VISIBLE), Intear Wallet(NOT VISIBLE), Ledger(NOT VISIBLE), Nightly Wallet(NOT VISIBLE), Ethereum Wallets(NOT VISIBLE), NEAR CLI(NOT VISIBLE)
+phone mock: undefined banner: false wallets: 6 allFullyVisible: false Meteor Wallet(NOT VISIBLE), Intear Wallet(NOT VISIBLE), Ledger(NOT VISIBLE), Nightly Wallet(NOT VISIBLE), Ethereum Wallets(NOT VISIBLE), NEAR CLI(NOT VISIBLE)
+probe exit 0
+=== e2e full run 2 (21:58:58Z)
+  1 failed
+  3 flaky
+  106 skipped
+  472 passed (9.1m)
+e2e exit 1
+3297 stopped
+=== pnpm verify (22:08:06Z)
+verify exit 0
+branding exit 0
+no hackathon branding in landing, web app or docs site
+branding exit 0
+=== (b) hosted build for hosts.spec (nectar.test) (22:08:24Z)
+build exit 0
+hosts.spec exit 0
+
+Running 6 tests using 1 worker
+
+  ✓  1 [desktop] › e2e/hosts.spec.ts:29:3 › host routing (hosted mode) › www.<site> → SITE with 301, path and query kept (10ms)
+  ✓  2 [desktop] › e2e/hosts.spec.ts:35:3 › host routing (hosted mode) › APP / → /feed (2ms)
+  ✓  3 [desktop] › e2e/hosts.spec.ts:41:3 › host routing (hosted mode) › app routes on SITE → APP with 308 (10ms)
+  ✓  4 [desktop] › e2e/hosts.spec.ts:49:3 › host routing (hosted mode) › landing-only routes on APP → SITE with 308 (9ms)
+  ✓  5 [desktop] › e2e/hosts.spec.ts:57:3 › host routing (hosted mode) › each host serves its own routes; /api serves on both (591ms)
+  ✓  6 [desktop] › e2e/hosts.spec.ts:64:3 › host routing (hosted mode) › per-host robots, sitemap and canonical (24ms)
+
+  6 passed (875ms)
+3771 stopped
+=== docs-site build (22:08:34Z)
+docs build exit 0
+=== (c)(d) hosted build for inventory + crawl (site.localhost:3761) (22:08:43Z)
+build exit 0
+docs via app: 200
+inventory exit 0
+
+Running 6 tests using 1 worker
+
+  ✓  1 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent accept (49.2s)
+  ✓  2 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent decline (49.1s)
+  ✓  3 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent accept (51.0s)
+  ✓  4 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent decline (49.1s)
+  ✓  5 [inventory] › e2e/inventory.spec.ts:275:3 › data inventory (opt-in, network) › every wallet the selector lists, one by one (fresh profile each, no signing) (1.0m)
+  ✓  6 [inventory] › e2e/inventory.spec.ts:359:3 › data inventory (opt-in, network) › zero CSP violations across the inventory runs (1ms)
+
+  6 passed (4.4m)
+inventory diff lines:     2443
+=== (d) crawl --polite (22:13:11Z)
+crawl exit 0
+crawl: 89 internal, 44 external, 0 failures, 0 our console errors, 17 page loads with third-party network failures → /tmp/verify-g3b-20261111T2144Z/ev/crawl
+/private/tmp/claude-501/-Volumes-T7-nectar-labs/287a71ca-7606-413d-ba02-4ab86f1493b2/scratchpad/hosted.sh: line 37: 88591 Terminated: 15          nohup node apps/web/scripts/serve-docs.mjs --port 3762 > "$E/server-docs.log" 2>&1
+3761 stopped
+3762 stopped
+=== (f) production guard build (expected to FAIL) (22:28:08Z)
+prod build exit 1 (non-zero expected)
+Production build refused (WO-34a guard): ${gaps.join(
+Production build refused (WO-34a guard): config.yaml site.operator is null (TODO-H-LEGAL); config.yaml site.country is null (TODO-H-LEGAL); config.yaml site.contact is null (TODO-H-LEGAL)
+HOSTED-DONE
+CHAIN-DONE

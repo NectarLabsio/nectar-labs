@@ -1,0 +1,2945 @@
+{
+  "generated": "2026-11-11T22:13:11.439Z",
+  "how": "apps/web/e2e/inventory.spec.ts (real Chrome, fresh profile per combo, hosted mode, docs via the /docs rewrite)",
+  "site": "http://site.localhost:3761",
+  "app": "http://app.localhost:3761",
+  "combos": [
+    "dark/accept",
+    "light/decline",
+    "light/accept",
+    "dark/decline"
+  ],
+  "walletOpened": "NEAR CLI",
+  "cspBypassed": false,
+  "selectorHosts": [
+    "app.localhost:3761",
+    "evm-on-near.dev",
+    "raw.githubusercontent.com",
+    "storage.herewallet.app",
+    "test.rpc.fastnear.com"
+  ],
+  "wallets": [
+    {
+      "name": "Meteor Wallet",
+      "reached": "sandboxed frame loaded (1)",
+      "hosts": {
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage meteor-wallet:<random id>",
+        "localStorage meteor-wallet:met_bridge_partner::<per-session ids>",
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Intear Wallet",
+      "reached": "sandboxed frame loaded (1); shows: \"CONNECT INTEAR WALLET Choose your preferred wallet connection method 🌐 Web 📱💻 App 🧪 Web (Beta) 🔧 Self-Hosted Close\"",
+      "hosts": {
+        "wallet.intear.tech": [
+          "document@iframe",
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Ledger",
+      "reached": "sandboxed frame loaded (1); shows: \"Connect Ledger Before continuing, please ensure the NEAR app is installed on your Ledger device. You may install it via Ledger Live. USB Wir\"",
+      "hosts": {},
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Nightly Wallet",
+      "reached": "sandboxed frame loaded (1); shows: \"Nightly Wallet Download Nightly Download\"",
+      "hosts": {
+        "storage.herewallet.app": [
+          "image@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Ethereum Wallets",
+      "reached": "sandboxed frame loaded (1); opened 1 window(s); shows: \":root { --background-color: rgb(40, 40, 40); --text-color: rgb(255, 255, 255); --border-color: rgb(209, 209, 209); } * { font-family: system\"",
+      "hosts": {
+        "evm-on-near.dev": [
+          "document",
+          "fetch"
+        ]
+      },
+      "windows": [
+        {
+          "url": "https://evm-on-near.dev/",
+          "hosts": [
+            "evm-on-near.dev"
+          ]
+        }
+      ],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "NEAR CLI",
+      "reached": "sandboxed frame loaded (1); shows: \"STEP 1 OF 2 Connect with NEAR CLI Enter your NEAR account ID Next\"",
+      "hosts": {
+        "rsms.me": [
+          "font@iframe",
+          "stylesheet@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    }
+  ],
+  "hosts": [
+    {
+      "host": "app.localhost:3761",
+      "types": [
+        "document",
+        "fetch",
+        "font",
+        "image",
+        "other",
+        "script",
+        "stylesheet"
+      ],
+      "pages": [
+        "app.localhost:3761/feed",
+        "app.localhost:3761/feed/NVDAx",
+        "app.localhost:3761/borrow",
+        "app.localhost:3761/shield",
+        "app.localhost:3761/quote/new",
+        "app.localhost:3761/quote/0",
+        "app.localhost:3761/reserve",
+        "app.localhost:3761/notes",
+        "app.localhost:3761/note/0",
+        "app.localhost:3761/position/0",
+        "app.localhost:3761/console",
+        "app.localhost:3761/agents",
+        "app.localhost:3761/keepers",
+        "app.localhost:3761/docs/",
+        "app.localhost:3761/docs/start/quick-start",
+        "app.localhost:3761/docs/security/audits",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)"
+      ],
+      "who": "our code",
+      "purpose": "This site: pages, scripts, styles, fonts, same-origin API routes, docs via the /docs rewrite",
+      "when": "Every page",
+      "directives": [
+        "connect-src",
+        "font-src",
+        "frame-src",
+        "img-src",
+        "script-src",
+        "style-src"
+      ]
+    },
+    {
+      "host": "evm-on-near.dev",
+      "types": [
+        "image",
+        "document",
+        "fetch"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+        "app.localhost:3761/borrow (wallet selector + Ethereum Wallets)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet icons named in the wallet list",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "connect-src",
+        "frame-src",
+        "img-src"
+      ]
+    },
+    {
+      "host": "fonts.cdnfonts.com",
+      "types": [
+        "stylesheet@iframe"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's web fonts (stylesheet + font files)",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "style-src"
+      ]
+    },
+    {
+      "host": "mc.meteorwallet.app",
+      "types": [
+        "fetch@iframe"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's own API",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "meteorwallet.app",
+      "types": [
+        "image@iframe"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet images",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "img-src"
+      ]
+    },
+    {
+      "host": "raw.githubusercontent.com",
+      "types": [
+        "fetch",
+        "image"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet list (manifest.json)",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "connect-src",
+        "img-src"
+      ]
+    },
+    {
+      "host": "rpc.testnet.fastnear.com",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "app.localhost:3761/quote/0",
+        "app.localhost:3761/note/0",
+        "app.localhost:3761/console",
+        "app.localhost:3761/keepers",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+        "site.localhost:3761/status",
+        "site.localhost:3761/brand",
+        "site.localhost:3761/legal/privacy",
+        "site.localhost:3761/legal/cookies",
+        "site.localhost:3761/legal/terms",
+        "app.localhost:3761/feed",
+        "app.localhost:3761/feed/NVDAx",
+        "app.localhost:3761/borrow",
+        "app.localhost:3761/quote/new",
+        "app.localhost:3761/reserve",
+        "app.localhost:3761/position/0",
+        "site.localhost:3761/changelog",
+        "site.localhost:3761/talk",
+        "site.localhost:3761/legal/disclaimers",
+        "app.localhost:3761/agents",
+        "app.localhost:3761/shield",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet)",
+        "app.localhost:3761/borrow (wallet selector + Intear Wallet)"
+      ],
+      "who": "our code",
+      "purpose": "NEAR testnet RPC fallback (@nectar/sdk TESTNET_RPC_FALLBACKS)",
+      "when": "App pages that read the contracts",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "rsms.me",
+      "types": [
+        "stylesheet@iframe",
+        "font@iframe"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet)",
+        "app.localhost:3761/borrow (wallet selector + NEAR CLI)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's web fonts (stylesheet + font files)",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "font-src",
+        "style-src"
+      ]
+    },
+    {
+      "host": "site.localhost:3761",
+      "types": [
+        "document",
+        "fetch",
+        "font",
+        "image",
+        "other",
+        "script",
+        "stylesheet"
+      ],
+      "pages": [
+        "site.localhost:3761/",
+        "site.localhost:3761/about",
+        "site.localhost:3761/security",
+        "site.localhost:3761/status",
+        "site.localhost:3761/changelog",
+        "site.localhost:3761/brand",
+        "site.localhost:3761/talk",
+        "site.localhost:3761/legal/privacy",
+        "site.localhost:3761/legal/cookies",
+        "site.localhost:3761/legal/terms",
+        "site.localhost:3761/legal/disclaimers"
+      ],
+      "who": "our code",
+      "purpose": "This site: pages, scripts, styles, fonts, same-origin API routes, docs via the /docs rewrite",
+      "when": "Every page",
+      "directives": [
+        "connect-src",
+        "font-src",
+        "frame-src",
+        "img-src",
+        "script-src",
+        "style-src"
+      ]
+    },
+    {
+      "host": "storage.herewallet.app",
+      "types": [
+        "image",
+        "image@iframe"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+        "app.localhost:3761/borrow (wallet selector + Nightly Wallet)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet icons named in the wallet list",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "img-src"
+      ]
+    },
+    {
+      "host": "test.rpc.fastnear.com",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "site.localhost:3761/",
+        "site.localhost:3761/about",
+        "site.localhost:3761/security",
+        "site.localhost:3761/status",
+        "site.localhost:3761/changelog",
+        "site.localhost:3761/brand",
+        "site.localhost:3761/talk",
+        "site.localhost:3761/legal/privacy",
+        "site.localhost:3761/legal/cookies",
+        "site.localhost:3761/legal/terms",
+        "site.localhost:3761/legal/disclaimers",
+        "app.localhost:3761/feed",
+        "app.localhost:3761/feed/NVDAx",
+        "app.localhost:3761/borrow",
+        "app.localhost:3761/shield",
+        "app.localhost:3761/quote/new",
+        "app.localhost:3761/quote/0",
+        "app.localhost:3761/reserve",
+        "app.localhost:3761/notes",
+        "app.localhost:3761/note/0",
+        "app.localhost:3761/position/0",
+        "app.localhost:3761/console",
+        "app.localhost:3761/agents",
+        "app.localhost:3761/keepers",
+        "app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)"
+      ],
+      "who": "our code",
+      "purpose": "NEAR testnet RPC: contract views, transaction status",
+      "when": "App pages that read the contracts; wallet selector",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "wallet.intear.tech",
+      "types": [
+        "document@iframe",
+        "fetch"
+      ],
+      "pages": [
+        "app.localhost:3761/borrow (wallet selector + Intear Wallet)"
+      ],
+      "who": "Intear Wallet (sandboxed frame, through near-connect)",
+      "purpose": "Code, styles, fonts, images or API of Intear Wallet",
+      "when": "Only after you open Intear Wallet in the selector",
+      "directives": [
+        "connect-src",
+        "frame-src"
+      ]
+    }
+  ],
+  "cookies": [],
+  "storage": [
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ethereum-wallets:0.1.4",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/intear-wallet:1.0.0",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ledger:1.0.0",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/meteor-wallet:1.1.1",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/near-cli:1.0.0",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/nightly-wallet:1.0.0",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:<random id>",
+      "origin": "http://app.localhost:3761",
+      "who": "the wallet you opened (through near-connect)",
+      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
+      "lifetime": "Until disconnect or you clear site data",
+      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:met_bridge_partner::<per-session ids>",
+      "origin": "http://app.localhost:3761",
+      "who": "the wallet you opened (through near-connect)",
+      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
+      "lifetime": "Until disconnect or you clear site data",
+      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-consent",
+      "origin": "http://app.localhost:3761",
+      "who": "our code",
+      "purpose": "Your cookie/analytics choice ({v, analytics, at})",
+      "lifetime": "Until you clear site data",
+      "source": "packages/ui/src/ConsentBanner.tsx"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-theme",
+      "origin": "http://app.localhost:3761",
+      "who": "our code",
+      "purpose": "Remembers dark or light theme",
+      "lifetime": "Until you clear site data",
+      "source": "packages/ui/src/theme.tsx"
+    },
+    {
+      "kind": "localStorage",
+      "name": "selected-wallet",
+      "origin": "http://app.localhost:3761",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Id of the wallet you picked",
+      "lifetime": "Set on connect, removed on disconnect",
+      "source": "@hot-labs/near-connect build/NearConnector.js"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-consent",
+      "origin": "http://site.localhost:3761",
+      "who": "our code",
+      "purpose": "Your cookie/analytics choice ({v, analytics, at})",
+      "lifetime": "Until you clear site data",
+      "source": "packages/ui/src/ConsentBanner.tsx"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-theme",
+      "origin": "http://site.localhost:3761",
+      "who": "our code",
+      "purpose": "Remembers dark or light theme",
+      "lifetime": "Until you clear site data",
+      "source": "packages/ui/src/theme.tsx"
+    }
+  ],
+  "cspViolations": [],
+  "pages": [
+    {
+      "url": "http://site.localhost:3761/",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/about",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/security",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/status",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/changelog",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/brand",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/talk",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/privacy",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/cookies",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/terms",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/disclaimers",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed/NVDAx",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/shield",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/new",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/0",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/reserve",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/notes",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/note/0",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/position/0",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/console",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/agents",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/keepers",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/start/quick-start",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/security/audits",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/about",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/security",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/status",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/changelog",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/brand",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/talk",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/privacy",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/cookies",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/terms",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/disclaimers",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed/NVDAx",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/shield",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/new",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/0",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/reserve",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/notes",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/note/0",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/position/0",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/console",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/agents",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/keepers",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/start/quick-start",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/security/audits",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/about",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/security",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/status",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/changelog",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/brand",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/talk",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/privacy",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/cookies",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/terms",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/disclaimers",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed/NVDAx",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/shield",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/new",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/0",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/reserve",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/notes",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/note/0",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/position/0",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/console",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/agents",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/keepers",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/start/quick-start",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/security/audits",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/about",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/security",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/status",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/changelog",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/brand",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/talk",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/privacy",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/cookies",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/terms",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://site.localhost:3761/legal/disclaimers",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "site.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/feed/NVDAx",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/shield",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/new",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/quote/0",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/reserve",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/notes",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/note/0",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/position/0",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/console",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/agents",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/keepers",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/start/quick-start",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/docs/security/audits",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "app.localhost:3761": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Meteor Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Intear Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "wallet.intear.tech": [
+          "document@iframe",
+          "fetch"
+        ],
+        "rpc.testnet.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Ledger)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {}
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Nightly Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "storage.herewallet.app": [
+          "image@iframe"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + Ethereum Wallets)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "evm-on-near.dev": [
+          "document",
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "http://app.localhost:3761/borrow (wallet selector + NEAR CLI)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "rsms.me": [
+          "font@iframe",
+          "stylesheet@iframe"
+        ]
+      }
+    }
+  ]
+}
