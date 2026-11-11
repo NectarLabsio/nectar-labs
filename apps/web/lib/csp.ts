@@ -12,12 +12,12 @@
 export const MEASURED = {
   // NEAR testnet RPC (our code: lib/env.ts default + @nectar/sdk TESTNET_RPC_FALLBACKS), the near-connect wallet manifest,
   // Meteor Wallet's API from its frame.
-  connect: ["https://test.rpc.fastnear.com", "https://rpc.testnet.fastnear.com", "https://raw.githubusercontent.com", "https://mc.meteorwallet.app"],
+  connect: ["https://test.rpc.fastnear.com", "https://rpc.testnet.fastnear.com", "https://raw.githubusercontent.com", "https://mc.meteorwallet.app", "wss://mc.meteorwallet.app"],
   // Wallet icons in the selector (manifest), Meteor's frame images.
   img: ["https://raw.githubusercontent.com", "https://storage.herewallet.app", "https://evm-on-near.dev", "https://meteorwallet.app"],
-  // Meteor's frame stylesheets (and the font files they reference).
+  // Meteor's frame stylesheets and their fonts (the cdnfonts sheet inlines woff2 as data: URLs).
   style: ["https://fonts.cdnfonts.com", "https://rsms.me"],
-  font: ["https://fonts.cdnfonts.com", "https://rsms.me"],
+  font: ["data:", "https://fonts.cdnfonts.com", "https://rsms.me"],
   frame: [] as string[],
   script: [] as string[],
 } as const;
@@ -35,13 +35,16 @@ function originOf(u: string | undefined): string | null {
 const uniq = (xs: (string | null)[]): string[] => [...new Set(xs.filter((x): x is string => !!x))];
 
 /**
- * The full policy. Env-configured browser origins are added to connect-src: NEXT_PUBLIC_NEAR_RPC (a non-default RPC) and
+ * The full policy. Env-configured browser origins are added to connect-src: SITE_URL and APP_URL, NEXT_PUBLIC_NEAR_RPC (a non-default RPC) and
  * NEXT_PUBLIC_SOLANA_RPC / its devnet default (reached only in the Solana remote-collateral flow, which needs a Solana wallet
  * extension and so cannot be measured in a fresh profile: listed from code, components/remote/solana-tx.tsx).
  */
 export function buildCsp(env: Record<string, string | undefined> = process.env): string {
   const connect = uniq([
     "'self'",
+    // The other host of the pair: next/link prefetches a cross-host link (measured: SITE / fetches APP /feed and /borrow).
+    originOf(env.SITE_URL),
+    originOf(env.APP_URL),
     ...MEASURED.connect,
     originOf(env.NEXT_PUBLIC_NEAR_RPC),
     originOf(env.NEXT_PUBLIC_SOLANA_RPC) ?? "https://api.devnet.solana.com",

@@ -157,15 +157,25 @@ while (queue.length && routes.length < MAX) {
 }
 await browser.close();
 
+// External links. 403/429 are bot walls or rate limits (nearblocks, explorer.solana.com answer browsers fine): warnings for a
+// manual check, not failures. Links to localhost / 127.0.0.1 are local-run instructions in the docs: listed, not fetched.
 const externals = [];
+const warnings = [];
 for (const [href, from] of external) {
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:|\/)/.test(href)) {
+    externals.push({ href, from, status: null, ok: true, note: "local-run link, not fetched" });
+    warnings.push({ kind: "local-link", where: href, detail: `linked from ${from}` });
+    continue;
+  }
   const r = await chain(href);
+  const soft = r.final === 403 || r.final === 429;
   const ok = r.final > 0 && r.final < 400;
-  externals.push({ href, from, status: r.final, ok });
-  if (!ok) fail("external", href, `status ${r.final} (linked from ${from})`);
+  externals.push({ href, from, status: r.final, ok, ...(soft ? { note: "bot wall / rate limit: check by hand" } : {}) });
+  if (soft) warnings.push({ kind: "external-soft", where: href, detail: `status ${r.final} (linked from ${from})` });
+  else if (!ok) fail("external", href, `status ${r.final} (linked from ${from})`);
 }
 
-const report = { generated: new Date().toISOString(), site: SITE, app: APP, docs: DOCS, variants: VARIANTS.map((v) => `${v.theme}@${v.width}`), redirects, routes, externals, failures, truncated: queue.length > 0 };
+const report = { generated: new Date().toISOString(), site: SITE, app: APP, docs: DOCS, variants: VARIANTS.map((v) => `${v.theme}@${v.width}`), redirects, routes, externals, failures, warnings, truncated: queue.length > 0 };
 mkdirSync(OUT, { recursive: true });
 writeFileSync(resolve(OUT, "crawl.json"), `${JSON.stringify(report, null, 2)}\n`);
 const md = [
@@ -176,6 +186,10 @@ const md = [
   `## Failures: ${failures.length}`,
   "",
   ...failures.map((f) => `- **${f.kind}** ${f.where}: ${f.detail.replace(/\|/g, "\\|")}`),
+  "",
+  `## Warnings: ${warnings.length}`,
+  "",
+  ...warnings.map((w) => `- ${w.kind} ${w.where}: ${w.detail}`),
   "",
   "## Redirects (WO-34a)",
   "",

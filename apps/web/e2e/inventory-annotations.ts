@@ -19,7 +19,7 @@ const STORAGE: { re: RegExp; who: string; purpose: string; lifetime: string; sou
 ];
 
 /** Collapse per-visit random ids (wallet-generated) so one key pattern is one row. */
-export const normalizeKey = (name: string): string => name.replace(/[A-Za-z0-9_-]{24,}/g, "<random id>");
+export const normalizeKey = (name: string): string => name.replace(/::.*$/, "::<per-session ids>").replace(/[A-Za-z0-9_-]{24,}/g, "<random id>");
 
 export function annotateStorage(e: Pick<StorageEntry, "kind" | "name" | "origin">): StorageEntry {
   const hit = STORAGE.find((s) => s.re.test(e.name));
