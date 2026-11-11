@@ -628,6 +628,18 @@ fn remote_self_settle_signs_kind_self_and_credits_on_signature() {
 }
 
 #[test]
+fn sr5_self_settle_reduces_remote_debt_and_sign_failure_restores_it() {
+    let mut c = remote_open();
+    assert_eq!(Nectar::remote_debt("NVDAx", 1), 10_000_000_000);
+    settle_self(&mut c, alice(), T0 + 3 * SEC);
+    assert_eq!(Nectar::remote_debt("NVDAx", 1), 0);
+    let d = c.get_pending_settlement(U64(0)).unwrap();
+    cb_ctx(T0 + 4 * SEC, PromiseResult::Failed);
+    c.on_signature(U64(0), U64(2), d.nonce);
+    assert_eq!(Nectar::remote_debt("NVDAx", 1), 10_000_000_000);
+}
+
+#[test]
 fn remote_self_settle_sign_failure_rolls_back_fill() {
     let mut c = remote_open();
     settle_self(&mut c, alice(), T0 + 3 * SEC);

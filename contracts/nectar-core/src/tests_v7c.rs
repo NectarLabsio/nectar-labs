@@ -262,7 +262,8 @@ fn sr5_sizing_excludes_reserve_and_depth() {
     cc.reserve.discount_bps = 3_000;
     cc.verified_dex_depth_usd_e6 = U128(40_000_000_000);
     assert!(c.check_borrow(&cc, UNITS, BORROW, None, false, None, None).is_ok(), "a NEAR loan counts R_c");
-    assert_eq!(c.check_borrow(&cc, UNITS, BORROW, None, false, None, Some((0, 0))).err(), Some(ERR_AGGREGATE_LIMIT));
+    let none = RemoteSizing { q_usd_e6: 0, largest_usd_e6: 0, debt_usd_e6: 0 };
+    assert_eq!(c.check_borrow(&cc, UNITS, BORROW, None, false, None, Some(none)).err(), Some(ERR_AGGREGATE_LIMIT));
 }
 
 #[test]
@@ -275,6 +276,246 @@ fn sr5_unfit_quotes_cannot_crowd_out_a_fitting_one() {
     assert!(!c.select_quotes("NVDAx").iter().any(|(_, id)| *id == 0), "the old cut drops the only quote that can settle");
     trigger(&mut c);
     assert_eq!(c.get_pending_settlement(U64(0)).unwrap().quote_id, U64(0));
+}
+
+// ------------------------------------------------------------------ SR-5 regression (WO-36c): remote debt vs fitting capacity
+
+const SOLANA: u32 = 1;
+const EVM: u32 = 0;
+const USD: u128 = 1_000_000;
+
+/// Q_c $22k, of which only $2k fits a Solana recipient: full capacity $16.5k, remote capacity $1.5k.
+fn thin_remote() -> Nectar {
+    let mut c = base(true);
+    fund(&mut c, "b1.test", 20_000 * USD, 250, false);
+    fund(&mut c, "b2.test", 2_000 * USD, 300, true);
+    c
+}
+fn near_loan(c: &mut Nectar, who: &str, borrow: u128) {
+    let m = format!(r#"{{"LockCollateralAndBorrow":{{"collateral":"NVDAx","borrow_usd_e6":"{borrow}","pre_liq_ltv_bps":7500}}}}"#);
+    assert_eq!(ft(c, nvdax(), who, UNITS, &m), 0);
+}
+fn remote_loan(c: &mut Nectar, borrow: u128) -> u64 {
+    let id = reserve_amt(c, borrow);
+    prove(c, id);
+    id
+}
+fn debt_of(c: &Nectar, id: u64) -> u128 {
+    c.get_position(U64(id)).unwrap().debt_usd_e6.0
+}
+fn solana_debt() -> u128 {
+    Nectar::remote_debt("NVDAx", SOLANA)
+}
+fn repay(c: &mut Nectar, id: u64, amount: u128) {
+    assert_eq!(ft(c, usdc(), "borrower.test", amount, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)), 0);
+}
+fn sizing(q_usd_e6: u128, debt_usd_e6: u128) -> Option<RemoteSizing> {
+    Some(RemoteSizing { q_usd_e6, largest_usd_e6: q_usd_e6, debt_usd_e6 })
+}
+
+#[test]
+fn sr5_near_held_debt_does_not_consume_remote_capacity() {
+    // the live failure: $9k of NEAR-held debt beside a loan well inside the remote capacity
+    let mut c = thin_remote();
+    near_loan(&mut c, "alice.test", 9_000 * USD);
+    let id = remote_loan(&mut c, 1_000 * USD);
+    assert_eq!(debt_of(&c, id), 1_000 * USD);
+    assert_eq!(solana_debt(), 1_000 * USD);
+    assert_eq!(c.coll_or_panic("NVDAx").total_debt_usd_e6, U128(10_000 * USD));
+}
+
+#[test]
+fn sr5_two_remote_loans_cannot_exceed_remote_capacity() {
+    let mut c = thin_remote();
+    remote_loan(&mut c, 1_000 * USD);
+    let over = remote_loan(&mut c, 500 * USD + 1);
+    assert!(event_with("remote_loan_refused", ERR_AGGREGATE_LIMIT));
+    assert_eq!((debt_of(&c, over), solana_debt()), (0, 1_000 * USD));
+    let exact = remote_loan(&mut c, 500 * USD);
+    assert_eq!((debt_of(&c, exact), solana_debt()), (500 * USD, 1_500 * USD));
+}
+
+#[test]
+fn sr5_remote_loan_still_bounded_by_the_aggregate() {
+    // only the $2k quote exists, so both capacities are $1.5k: $1.4k of NEAR-held debt leaves $100 of aggregate headroom
+    let mut c = base(true);
+    fund(&mut c, "b2.test", 2_000 * USD, 300, true);
+    near_loan(&mut c, "alice.test", 1_400 * USD);
+    let id = remote_loan(&mut c, 200 * USD);
+    assert!(event_with("remote_loan_refused", ERR_AGGREGATE_LIMIT));
+    assert_eq!((debt_of(&c, id), solana_debt()), (0, 0));
+}
+
+#[test]
+fn sr5_repay_frees_remote_headroom() {
+    let mut c = thin_remote();
+    let first = remote_loan(&mut c, 1_500 * USD);
+    let refused = remote_loan(&mut c, 500 * USD);
+    assert!(event_with("remote_loan_refused", ERR_AGGREGATE_LIMIT));
+    assert_eq!(debt_of(&c, refused), 0);
+    repay(&mut c, first, 500 * USD);
+    assert_eq!(solana_debt(), 1_000 * USD);
+    let second = remote_loan(&mut c, 500 * USD);
+    assert_eq!((debt_of(&c, second), solana_debt()), (500 * USD, 1_500 * USD));
+    repay(&mut c, first, 1_000 * USD);
+    repay(&mut c, second, 500 * USD);
+    assert_eq!(solana_debt(), 0);
+    assert!(!env::storage_has_key(&[REMOTE_DEBT_PREFIX, &SOLANA.to_le_bytes(), b"NVDAx"].concat()), "no key left at zero");
+}
+
+#[test]
+fn sr5_overpaying_repay_counts_only_the_applied_amount() {
+    let mut c = thin_remote();
+    let a = remote_loan(&mut c, 400 * USD);
+    remote_loan(&mut c, 600 * USD);
+    assert_eq!(ft(&mut c, usdc(), "borrower.test", 900 * USD, &format!(r#"{{"Repay":{{"position_id":"{a}"}}}}"#)), 500 * USD);
+    assert_eq!(solana_debt(), 600 * USD);
+}
+
+#[test]
+fn sr5_settlement_reduces_remote_debt() {
+    let mut c = open_remote(true, false);
+    assert_eq!(solana_debt(), BORROW);
+    trigger(&mut c);
+    let repaid = c.get_pending_settlement(U64(0)).unwrap().repay_usd_e6.0;
+    assert_eq!(solana_debt(), BORROW - repaid);
+    callback(&mut c, T0 + 6 * SEC, 0, PromiseResult::Successful(sig_json(2, 64)));
+    set_ctx(keeper(), 0, T0 + 7 * SEC);
+    c.relay_settlement_result(U64(0), TX.into());
+    assert_eq!(solana_debt(), BORROW - repaid, "counted once, at the leg");
+}
+
+#[test]
+fn sr5_sign_failure_gives_the_debt_back() {
+    let mut c = open_remote(true, false);
+    trigger(&mut c);
+    assert!(solana_debt() < BORROW);
+    callback(&mut c, T0 + 6 * SEC, 0, PromiseResult::Failed);
+    assert_eq!((debt_of(&c, 0), solana_debt()), (BORROW, BORROW));
+}
+
+#[test]
+fn sr5_cancelled_leg_gives_the_debt_back() {
+    let mut c = open_remote(true, false);
+    trigger(&mut c);
+    let at = expiry_ns(&c);
+    set_ctx(owner(), 0, at);
+    c.cancel_settlement(U64(0));
+    assert_eq!((debt_of(&c, 0), solana_debt()), (BORROW, BORROW));
+}
+
+#[test]
+fn sr5_write_off_clears_remote_debt() {
+    // the price collapses: the leg takes every unit, the rest of the debt stays until the owner writes it off
+    let mut c = open_remote(true, false);
+    set_ctx(owner(), 0, T0 + 4 * SEC);
+    c.set_oracle_params(U64(120 * SEC), U64(86_400 * SEC), 9000);
+    set_ctx(owner(), 0, T0 + 5 * SEC);
+    assert!(c.update_owner_price("NVDAx".into(), U128(100_000_000)));
+    trigger(&mut c);
+    callback(&mut c, T0 + 6 * SEC, 0, PromiseResult::Successful(sig_json(3, 64)));
+    set_ctx(keeper(), 0, T0 + 9 * SEC);
+    c.relay_settlement_result(U64(0), TX.into());
+    let left = debt_of(&c, 0);
+    assert!(left > 0);
+    assert_eq!(solana_debt(), left);
+    set_ctx(owner(), 0, T0 + 10 * SEC);
+    c.write_off_bad_debt(U64(0));
+    assert_eq!(solana_debt(), 0);
+}
+
+#[test]
+fn sr5_failed_proceeds_transfer_reduces_remote_debt() {
+    let mut c = open_remote(true, false);
+    cb_ctx(T0 + 6 * SEC, PromiseResult::Failed);
+    assert!(!c.on_payout(Payout::BorrowProceeds { position_id: U64(0) }, borrower(), U128(BORROW - 1_000 * USD)));
+    assert_eq!((debt_of(&c, 0), solana_debt()), (1_000 * USD, 1_000 * USD));
+}
+
+#[test]
+fn sr5_near_loans_are_not_limited_by_remote_debt() {
+    let mut c = thin_remote();
+    remote_loan(&mut c, 1_500 * USD);
+    near_loan(&mut c, "alice.test", 9_000 * USD);
+    let id = 1;
+    assert_eq!((debt_of(&c, id), solana_debt()), (9_000 * USD, 1_500 * USD));
+    repay(&mut c, id, 9_000 * USD);
+    assert_eq!(solana_debt(), 1_500 * USD, "a NEAR-held repayment is not remote debt");
+}
+
+#[test]
+fn sr5_repaying_a_loan_from_before_the_counter_does_not_trap() {
+    let mut c = thin_remote();
+    let id = remote_loan(&mut c, 1_000 * USD);
+    Nectar::set_remote_debt("NVDAx", SOLANA, 0); // as on 2.2.0: the loan was never counted
+    repay(&mut c, id, 1_000 * USD);
+    assert_eq!((debt_of(&c, id), solana_debt()), (0, 0));
+}
+
+#[test]
+fn sr5_remote_debt_is_per_symbol_and_domain() {
+    let _c = base(true);
+    Nectar::set_remote_debt("NVDAx", SOLANA, 7);
+    Nectar::set_remote_debt("NVDAx", EVM, 9);
+    Nectar::set_remote_debt("AAPLx", SOLANA, 11);
+    assert_eq!((Nectar::remote_debt("NVDAx", SOLANA), Nectar::remote_debt("NVDAx", EVM), Nectar::remote_debt("AAPLx", SOLANA)), (7, 9, 11));
+    assert_eq!(Nectar::remote_debt("AAPLx", EVM), 0);
+}
+
+#[test]
+fn sr5_chains_of_one_domain_share_their_quotes() {
+    // a recipient fits a domain, so a second Solana chain draws on the same $2k: its debt must count too
+    let mut c = thin_remote();
+    set_ctx(owner(), 0, T0);
+    c.set_extra_remote_chain(
+        "NVDAx".into(),
+        RemoteChain { chain_id: "solana-other".into(), vault_program: VAULT.into(), mpc_domain_id: SOLANA },
+        "https://rpc.example".into(),
+    );
+    remote_loan(&mut c, 1_000 * USD);
+    set_ctx(borrower(), RESERVE_DEPOSIT_YOCTO, T0 + SEC);
+    let id = c
+        .reserve_remote_position("NVDAx".into(), U128(UNITS), U128(600 * USD), 7500, None, None, None, Some("solana-other".into()), DEPOSITOR.into())
+        .0;
+    prove(&mut c, id);
+    assert!(event_with("remote_loan_refused", ERR_AGGREGATE_LIMIT));
+    assert_eq!((debt_of(&c, id), solana_debt()), (0, 1_000 * USD));
+}
+
+#[test]
+fn sr5_remote_limit_boundary() {
+    let c = thin_remote();
+    let cc = c.coll_or_panic("NVDAx");
+    // $2k x 0.75 = $1.5k, of which $1k is drawn
+    assert!(c.check_borrow(&cc, UNITS, 500 * USD, None, false, None, sizing(2_000 * USD, 1_000 * USD)).is_ok());
+    assert_eq!(c.check_borrow(&cc, UNITS, 500 * USD + 1, None, false, None, sizing(2_000 * USD, 1_000 * USD)).err(), Some(ERR_AGGREGATE_LIMIT));
+    // the largest quote still caps a loan the sum would allow
+    let split = Some(RemoteSizing { q_usd_e6: 2_000 * USD, largest_usd_e6: 1_000 * USD, debt_usd_e6: 0 });
+    assert!(c.check_borrow(&cc, UNITS, 1_000 * USD, None, false, None, split).is_ok());
+    assert_eq!(c.check_borrow(&cc, UNITS, 1_000 * USD + 1, None, false, None, split).err(), Some(ERR_REMOTE_SETTLE_CAP));
+}
+
+#[test]
+fn sr5_remote_limit_uses_the_position_value_for_ltv() {
+    // Q is ample: the cap is 70% of the position's $1.8k
+    let c = thin_remote();
+    let cc = c.coll_or_panic("NVDAx");
+    assert!(c.check_borrow(&cc, UNITS / 10, 1_260 * USD, None, false, None, sizing(2_000 * USD, 0)).is_ok());
+    assert_eq!(c.check_borrow(&cc, UNITS / 10, 1_260 * USD + 1, None, false, None, sizing(2_000 * USD, 0)).err(), Some("borrow above B_c"));
+}
+
+#[test]
+fn sr5_remote_haircut_follows_the_session_and_the_shield() {
+    let mut c = thin_remote();
+    set_ctx(owner(), 0, T0);
+    c.set_session_calendar(vec![[U64(T0 - 3_600 * SEC), U64(T0 + 6 * 3_600 * SEC)]]);
+    let cc = c.coll_or_panic("NVDAx");
+    assert!(c.session_open(&cc), "open session: 10% haircut");
+    assert!(c.check_borrow(&cc, UNITS, 1_800 * USD, None, false, None, sizing(2_000 * USD, 0)).is_ok());
+    assert_eq!(c.check_borrow(&cc, UNITS, 1_800 * USD + 1, None, false, None, sizing(2_000 * USD, 0)).err(), Some(ERR_AGGREGATE_LIMIT));
+    // a Shield is sized at the weekend haircut even in an open session
+    assert_eq!(c.check_borrow(&cc, UNITS, 1_800 * USD, None, false, Some(100), sizing(2_000 * USD, 0)).err(), Some(ERR_AGGREGATE_LIMIT));
+    assert!(c.check_borrow(&cc, UNITS, 1_500 * USD, None, false, Some(100), sizing(2_000 * USD, 0)).is_ok());
 }
 
 // ------------------------------------------------------------------ SR-7
