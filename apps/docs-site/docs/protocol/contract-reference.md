@@ -80,6 +80,20 @@ Logged as `EVENT_JSON:` with `standard: "nectar"`, `version: "1.0.0"`. `data` is
 
 P1 and P2 add `quoter_result`, `quoter_fallback`, `settlement_signed` and `settlement_relayed` (PRD §6.8).
 
+## v2 remote and recovery methods (`nectar-core-v2`, 2.2.1-v7)
+
+Live on `nectar-core-v2.nectar.testnet` since 2026-11-11 (D-027; code-only upgrades, upgrade txs in evidence/rollout/; verifier record pending). Full lifecycle: [Remote collateral on Solana](/integrate/remote-collateral-solana).
+
+| Method | Caller | Deposit | Notes |
+| --- | --- | --- | --- |
+| `reserve_remote_position(collateral, units, borrow_usd_e6, pre_liq_ltv_bps, pay_to?, referrer?, shield?, chain?, depositor)` | borrower | reservation deposit (refunded) | `depositor` is required (SR-8) |
+| `confirm_remote_deposit(position_id)` | borrower, keeper or owner | 0 | SR-6 |
+| `resign_remote_settlement(position_id)` | anyone | 0 (not payable) | SR-3: after an unrelayed signed leg expired; same leg, fresh nonce |
+| `claim_owed_collateral(symbol)` | account owed | 1 yocto | SR-17; view `get_owed_collateral(account_id, symbol)` |
+| `set_quote_remote_recipient(quote_id, recipient?)` | buyer | 1 yocto | SR-7 format check, SR-21 |
+| `write_off_bad_debt(position_id)` | owner | 0 | SR-9 |
+| `withdraw_treasury`, `withdraw_lender_fees`, `withdraw_liquidity` | owner | 1 yocto | spec gap from the review: owner-gated withdrawals of pool USDC |
+
 ## Errors
 
 Panic messages are fixed by WO-2 and listed here from the built contract after G1.

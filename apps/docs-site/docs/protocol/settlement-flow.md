@@ -50,4 +50,11 @@ keeper        nectar-core              v1.signer-prod.testnet      nectar_vault 
   |------------->| position Closed (keeper claim advisory)                 |
 ```
 
-The keeper never chooses the recipient, the amount or the nonce (D-003). It can relay or refuse. A refusal is visible because the position stays in `Settling`, and any other keeper can relay the same signed message. Details: [Preimage format](/protocol/preimage-format), [Solana vault](/protocol/solana-vault), [Chain Signatures leg](/protocol/chain-signatures).
+The keeper never chooses the recipient, the amount or the nonce (D-003). It can relay or refuse. A refusal is visible because the position stays in `Settling`, and any other keeper can relay the same signed message. Since the 2026-11-11 security fix wave (contract 2.2.1-v7, vault v2, D-027; verifier record pending):
+
+- The relay report is advisory. nectar-core checks only the format of the tx reference ([Trust model](/security/trust-model)).
+- If a signed leg expires unrelayed, anyone can call `resign_remote_settlement(position_id)`. It signs the identical leg with a fresh nonce; nothing is rolled back (test `sr3_expired_signed_leg_resigns_identically_with_a_fresh_nonce`).
+- The vault no longer pushes the remainder. After settle the depositor signs `withdraw`, and a buyer whose token account cannot receive signs `claim`. The EVM vault on the local fork still pays both in the same transaction.
+- Remote settlement is single-leg: one quote whose recipient fits the chain must clear the debt. Candidates are filtered by recipient before the 8-quote cut (SR-5, test `sr5_unfit_quotes_cannot_crowd_out_a_fitting_one`).
+
+Details: [Preimage format](/protocol/preimage-format), [Solana vault](/protocol/solana-vault), [Chain Signatures leg](/protocol/chain-signatures).
