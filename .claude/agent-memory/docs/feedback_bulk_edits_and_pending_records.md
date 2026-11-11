@@ -11,3 +11,9 @@ Bulk doc edits: write a Python script to the scratchpad with Write, then run `py
 Agent re-runs under `evidence/*/rerun/` that are not in docs/EVIDENCE.md are labelled "verifier record pending". Once the verifier records them, replace each note with "EVIDENCE §<gate> re-run … (recorded in <EVIDENCE commit>)"; EVIDENCE rows list the tested commit, so name the recording commit explicitly to avoid confusion. Keep "pending" only for what the EVIDENCE block says was NOT RUN, and quote the verifier's caveats (scope skipped, specs skipped, not chain-confirmed).
 **Why:** only the verifier writes EVIDENCE; README must not claim a verified state it lacks, nor hide one it has.
 **How to apply:** read the EVIDENCE block itself (Verdict + Notes lines) before writing PASS; check skipped specs (e.g. REMOTE_SCREENS) and "not re-run" scopes.
+
+A skipped env-gated block is not a skipped spec: `REMOTE_SCREENS` / `NOTES_SCREENS` only gate the screenshot-capture describe; the mocked functional tests in the same file still run. WO-37a wrote "no verifier E2E record" for the vault v2 screens and WO-37c had to correct it.
+**Why:** a claim of missing coverage is as false as a claim of coverage that isn't there.
+**How to apply:** grep the e2e.log per test line (`✓` vs `-`, both `[desktop]` and `[phone]`) before saying a spec was skipped.
+
+Fresh worktrees have no node_modules: run `pnpm install --frozen-lockfile --offline` (about 1 min) before `pnpm --filter docs-site build`.

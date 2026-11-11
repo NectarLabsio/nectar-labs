@@ -1,1 +1,1 @@
-- [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python edits; plain git only; cite EVIDENCE "recorded in <commit>", pending only for NOT RUN scope
+- [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python edits; plain git only; cite EVIDENCE "recorded in <commit>"; grep e2e.log per test before saying "skipped"
