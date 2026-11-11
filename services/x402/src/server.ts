@@ -10,6 +10,7 @@ import { createServer, type IncomingMessage, type Server } from 'node:http';
 import { createNearFacilitator, type FacilitatorNearSigner, type FacilitatorNearSignerConfig } from '@fastnear/x402/facilitator';
 import { createNearResourceServer, type FacilitatorEndpointConfig, type NearFacilitatorClient } from '@fastnear/x402/server';
 import { x402HTTPResourceServer, type HTTPAdapter, type HTTPRequestContext, type RoutesConfig } from '@x402/core/server';
+import { corsHeaders, handlePreflight, type CorsPolicy } from '../../feed/src/cors.ts';
 import { MAX_TIMEOUT_SECONDS, NETWORK, ROUTE, SCHEME, type X402Config } from './config.ts';
 
 export type Log = (msg: string, fields?: Record<string, string | number | boolean | null>) => void;
@@ -73,16 +74,28 @@ export interface PaidServerDeps {
   facilitator: NearFacilitatorClient | FacilitatorEndpointConfig;
   upstream: Upstream;
   log?: Log;
+  /** GET /health (hosted.ts healthReply); absent = 404 as before. */
+  health?: () => Promise<{ status: number; body: Record<string, unknown> }>;
+  /** X402_CORS_ORIGINS allowlist; absent = no CORS headers (as before). */
+  cors?: CorsPolicy;
 }
 
 export async function createPaidServer(d: PaidServerDeps): Promise<Server> {
   const log = d.log ?? jsonLog;
   const http = new x402HTTPResourceServer(createNearResourceServer({ facilitators: d.facilitator }), routes(d.cfg));
   await http.initialize();
+  const cors: CorsPolicy = d.cors ?? { origins: null, legacyWildcard: false, methods: 'GET, OPTIONS' };
   return createServer((req, res) => {
+    if (handlePreflight(cors, req, res)) return;
+    for (const [k, v] of Object.entries(corsHeaders(cors, req))) res.setHeader(k, v);
     void (async () => {
       const adapter = new NodeAdapter(req);
       const ctx: HTTPRequestContext = { adapter, path: adapter.getPath(), method: adapter.getMethod() };
+      if (d.health !== undefined && ctx.path === '/health' && (ctx.method === 'GET' || ctx.method === 'HEAD')) {
+        const h = await d.health();
+        res.writeHead(h.status, { 'content-type': 'application/json', 'cache-control': 'no-store' }).end(ctx.method === 'HEAD' ? undefined : JSON.stringify(h.body));
+        return;
+      }
       if (!http.requiresPayment(ctx)) {
         res.writeHead(404, { 'content-type': 'application/json' }).end('{"error":"not found"}');
         return;

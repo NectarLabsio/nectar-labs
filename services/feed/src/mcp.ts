@@ -5,11 +5,12 @@
 // contract's `preview_borrow`. No account ids leave this module (list_quotes whitelists fields).
 // Transports: stdio (src/mcp-stdio.ts) and stateless Streamable HTTP (createMcpHttpServer).
 
-import { createServer, type Server } from 'node:http';
+import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
+import { corsHeaders, handlePreflight, type CorsPolicy } from './cors.ts';
 import type { ExitCapacity, FeedDb, OneClickReport } from './db.ts';
 import { errMsg } from './log.ts';
 import { SKILL_TOOL_NAMES, SkillError, notAvailable, openProtectedStockLoan, quoteCapacity } from './skill.ts';
@@ -207,13 +208,23 @@ export function createMcpServer(deps: McpDeps): McpServer {
 }
 
 /** Stateless Streamable HTTP on `POST /mcp` (one server+transport per request). No request logging. */
-export function createMcpHttpServer(deps: McpDeps): Server {
+export function createMcpHttpServer(deps: McpDeps, cors?: CorsPolicy): Server {
+  const handle = mcpHandler(deps, cors);
   return createServer((req, res) => {
     const path = (req.url ?? '/').split('?')[0];
     if (path !== '/mcp') {
       res.writeHead(404, { 'content-type': 'application/json' }).end('{"error":"not found"}');
       return;
     }
+    handle(req, res);
+  });
+}
+
+/** `/mcp` handler: CORS (allowlist only; the dedicated MCP port had no CORS headers before WO-34k), POST only. */
+export function mcpHandler(deps: McpDeps, cors: CorsPolicy = { origins: null, legacyWildcard: false, methods: 'POST, OPTIONS' }): (req: IncomingMessage, res: ServerResponse) => void {
+  return (req, res) => {
+    if (handlePreflight(cors, req, res)) return;
+    for (const [k, v] of Object.entries(corsHeaders(cors, req))) res.setHeader(k, v);
     if (req.method !== 'POST') {
       res.writeHead(405, { 'content-type': 'application/json', allow: 'POST' }).end('{"error":"method not allowed (stateless server)"}');
       return;
@@ -230,5 +241,5 @@ export function createMcpHttpServer(deps: McpDeps): Server {
       .catch((e: unknown) => {
         if (!res.headersSent) res.writeHead(500, { 'content-type': 'application/json' }).end(JSON.stringify({ error: errMsg(e) }));
       });
-  });
+  };
 }

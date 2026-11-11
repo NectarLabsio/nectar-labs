@@ -1,0 +1,19 @@
+# Allowlist: only what services/x402/Dockerfile copies. .env*, evidence/, keys and ~/.nectar copies never reach
+# the build context.
+*
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!packages/config/config.yaml
+!services/x402/package.json
+!services/x402/src/**
+!services/feed/package.json
+!services/feed/src/repo-config.ts
+!services/keeper/package.json
+!services/feed/src/cors.ts
+!services/keeper/src/keyfile.ts
+**/.env*
+**/*.key
+**/*key*.json
+**/*.pem
+**/node_modules
