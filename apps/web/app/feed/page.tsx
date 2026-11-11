@@ -15,7 +15,9 @@ import {
   type FeedSettlement,
   type FeedSettlements,
   type QuoterConfigView,
+  type PositionView,
 } from "@nectar/sdk";
+import { AccountDock, MarketsHero, MarketsTable, Promos } from "@/components/markets/MarketsTop";
 import { useChain, useView } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { EquationCard } from "@/components/EquationCard";
@@ -25,8 +27,8 @@ import { FeedApiNotice, useFeedApi } from "@/components/useFeedApi";
 import { OneClickPanel, RouteStatusBadge } from "@/components/OneClickPanel";
 import { txUrl } from "@/lib/env";
 
-interface Row { c: CollateralView; cap: ExitCapacity; atStake: bigint; gap: bigint; upliftBps: number; upliftUsd: bigint }
-interface Data { rows: Row[]; quoter: QuoterConfigView | null }
+interface Row { c: CollateralView; cap: ExitCapacity; atStake: bigint; gap: bigint; upliftBps: number; upliftUsd: bigint; borrowed: bigint }
+interface Data { rows: Row[]; quoter: QuoterConfigView | null; positions: PositionView[] }
 
 export default function FeedPage() {
   const { config } = useChain();
@@ -38,10 +40,12 @@ export default function FeedPage() {
         const units = ps.filter((p) => p.collateral === c.symbol && p.status !== "Closed").reduce((a, p) => a + BigInt(p.units), 0n);
         const atStake = valueUsdE6WithMultiplier(units, BigInt(cap.oracle_price_usd_e6), c.decimals, cap.multiplier_e18 ? BigInt(cap.multiplier_e18) : E18, cap.price_kind);
         const upliftBps = Math.max(0, cap.limit_bps_effective - c.base_ltv_bps);
-        return { c, cap, atStake, gap: exitGapUsdE6(atStake, cap), upliftBps, upliftUsd: (atStake * BigInt(upliftBps)) / 10_000n };
+        const debt = ps.filter((p) => p.collateral === c.symbol && p.status !== "Closed").reduce((a, p) => a + BigInt(p.debt_usd_e6), 0n);
+        const borrowed = cap.total_debt_usd_e6 != null ? BigInt(cap.total_debt_usd_e6) : debt;
+        return { c, cap, atStake, gap: exitGapUsdE6(atStake, cap), upliftBps, upliftUsd: (atStake * BigInt(upliftBps)) / 10_000n, borrowed };
       }),
     );
-    return { rows, quoter };
+    return { rows, quoter, positions: ps };
   }, []);
   const settlements = useFeedApi<FeedSettlements>("api/settlements?limit=20");
   const oneclick = useFeedApi<FeedOneClick>("api/oneclick");
@@ -49,12 +53,32 @@ export default function FeedPage() {
   const firstCfg = config.collaterals.find((c) => c.symbol === first?.c.symbol) ?? config.collaterals[0];
   const pricing = pricingLabel(data.data?.quoter);
   return (
-    <div className="page wrap">
-      <div className="page-head">
-        <span className="label">Nectar Feed</span>
-        <h1>Exit capacity by market</h1>
-        <p className="lead">Committed quotes, the Nectar Reserve and verified DEX depth per collateral, and the limit they support. Read from nectar-core on NEAR testnet.</p>
+    <div className="nx-page">
+      <div className="nx-head-row">
+        <div className="nx-stack" style={{ gap: 10 }}>
+          <h1 className="nx-title">Markets</h1>
+          <p className="nx-lede">Borrow against tokenized stocks. Every limit is backed by buyers who have already escrowed USDC. NEAR testnet, mock collateral.</p>
+        </div>
+        <div className="nx-row" style={{ flexWrap: "wrap" }}>
+          <Link className="nx-btn line" href="/quote/new">Commit a quote</Link>
+          <Link className="nx-btn" href="/borrow">Borrow</Link>
+        </div>
       </div>
+      <Gate>
+        {data.error ? null : data.loading && !data.data ? (
+          <LoadingBlock lines={3} />
+        ) : data.data && data.data.rows.length > 0 ? (
+          <>
+            <MarketsHero row={data.data.rows[0]!} />
+            <div className="nx-rail">
+              <MarketsTable rows={data.data.rows} />
+              <AccountDock rows={data.data.rows} positions={data.data.positions} />
+            </div>
+            <Promos />
+          </>
+        ) : null}
+      </Gate>
+      <h2 className="nx-h2" id="details-h">Market details</h2>
       <div className="stack-lg">
         <EquationCard symbol={first?.c.symbol} cap={first?.cap} col={firstCfg} />
         <Gate>

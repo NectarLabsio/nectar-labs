@@ -65,6 +65,8 @@ export interface SignOptions {
   fees?: { lines: FeeLine[]; total: ReactNode; note?: ReactNode };
   /** Toast title on success, e.g. "Quote funded". */
   success: string;
+  /** Next step shown in the success toast (e.g. a link to the new loan). */
+  next?: ReactNode;
 }
 type SignFn = (intent: TxIntent, opts: SignOptions) => Promise<TxOutcome | null>;
 const SignCtx = createContext<SignFn>(async () => null);
@@ -107,7 +109,13 @@ function SignHost({ adapter, accountId, children }: { adapter: WalletAdapter; ac
       if (out.ok) {
         toast.push({
           title: pending.opts.success,
-          body: out.hash ? (link ? <a className="link" href={link} target="_blank" rel="noreferrer noopener">View transaction {out.hash.slice(0, 10)}…</a> : <span className="mono">tx {out.hash}</span>) : undefined,
+          body:
+            out.hash || pending.opts.next ? (
+              <span className="stack-sm">
+                {out.hash ? (link ? <a className="link" href={link} target="_blank" rel="noreferrer noopener">View transaction {out.hash.slice(0, 10)}…</a> : <span className="mono">tx {out.hash}</span>) : null}
+                {pending.opts.next}
+              </span>
+            ) : undefined,
         });
       } else {
         toast.push({ tone: "error", title: `${pending.intent.label} failed`, body: <span className="mono small">{out.failure}</span>, timeout: 0 });

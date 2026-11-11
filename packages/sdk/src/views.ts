@@ -1,6 +1,6 @@
 // Typed read-only client for nectar-core views (interface-p0.md "Views") and NEP-141 balance views (F-013).
-// Uses near-api-js 7.4.0 JsonRpcProvider.callFunction (F-012).
-import { JsonRpcProvider } from "near-api-js";
+// Request shape = near-api-js 7.4.0 JsonRpcProvider.callFunction (F-012), sent through the resilient transport in ./rpc.
+import { RpcError, resilientRpcTransport, rpcEndpoints, type ViewTransport } from "./rpc";
 import type {
   BorrowPreview,
   CollateralView,
@@ -30,34 +30,19 @@ export function contractGeneration(version: string | null | undefined): Contract
   return typeof version === "string" && version.startsWith("2.") ? "v2" : "v1";
 }
 
-export class RpcError extends Error {
-  constructor(
-    message: string,
-    readonly method: string,
-    override readonly cause?: unknown,
-  ) {
-    super(message);
-    this.name = "RpcError";
-  }
+export { RpcError };
+export type { ViewTransport };
+
+/** Retry (429 / 5xx, jittered backoff, 3 attempts) then fall back: `url` first, then the FastNEAR testnet hosts (F-369). */
+export function rpcTransport(url: string | readonly string[]): ViewTransport {
+  return resilientRpcTransport({ urls: rpcEndpoints(url) });
 }
 
-export interface ViewTransport {
-  call<T>(contractId: string, method: string, args: Record<string, unknown>): Promise<T>;
-}
+type RawPosition = Omit<PositionView, "id"> & { id?: U64; position_id?: U64 };
 
-export function rpcTransport(url: string): ViewTransport {
-  const provider = new JsonRpcProvider({ url });
-  return {
-    async call<T>(contractId: string, method: string, args: Record<string, unknown>): Promise<T> {
-      try {
-        const r = await provider.callFunction<object | string | number | boolean>({ contractId, method, args, blockQuery: { finality: "final" } });
-        return r as T;
-      } catch (e) {
-        const m = e instanceof Error ? e.message : String(e);
-        throw new RpcError(`${method}: ${m}`, method, e);
-      }
-    },
-  };
+/** The contract names the key `position_id` (interface-p0 Views); `PositionView.id` is the SDK's name for it. */
+function withPositionId(p: RawPosition): PositionView {
+  return { ...p, id: (p.id ?? p.position_id) as U64 };
 }
 
 export class NectarViews {
@@ -66,7 +51,8 @@ export class NectarViews {
     readonly t: ViewTransport,
   ) {}
 
-  static fromRpc(core: string, rpcUrl: string): NectarViews {
+  /** `rpcUrl` is the configured endpoint (or an ordered list); the FastNEAR testnet fallbacks are appended. */
+  static fromRpc(core: string, rpcUrl: string | readonly string[]): NectarViews {
     return new NectarViews(core, rpcTransport(rpcUrl));
   }
 
@@ -81,8 +67,11 @@ export class NectarViews {
   getExitCapacity = (symbol: string) => this.v<ExitCapacity>("get_exit_capacity", { symbol });
   getQuote = (quote_id: U64) => this.v<QuoteView | null>("get_quote", { quote_id });
   listQuotes = (symbol: string, from_index = 0, limit = 64) => this.v<QuoteView[]>("list_quotes", { symbol, from_index, limit });
-  getPosition = (position_id: U64) => this.v<PositionView | null>("get_position", { position_id });
-  listPositions = (from_index = 0, limit = 50) => this.v<PositionView[]>("list_positions", { from_index, limit });
+  getPosition = async (position_id: U64): Promise<PositionView | null> => {
+    const p = await this.v<RawPosition | null>("get_position", { position_id });
+    return p ? withPositionId(p) : null;
+  };
+  listPositions = async (from_index = 0, limit = 50): Promise<PositionView[]> => (await this.v<RawPosition[]>("list_positions", { from_index, limit })).map(withPositionId);
   getHealth = (position_id: U64) => this.v<HealthView>("get_health", { position_id });
   getPool = () => this.v<PoolView>("get_pool");
   /** `referrer` is a v2 argument; it is sent only when given, so v1 calls stay unchanged. */

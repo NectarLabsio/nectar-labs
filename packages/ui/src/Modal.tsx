@@ -134,7 +134,6 @@ export interface SignModalProps {
 /** The sign preview every write passes through: exact msg JSON, gas and deposit before the wallet opens. */
 export function SignModal({ preview, signer, network, busy, error, onConfirm, onCancel, summary, fees }: SignModalProps) {
   if (!preview) return null;
-  const msgJson = preview.msg === undefined ? null : JSON.stringify(preview.msg, null, 2);
   return (
     <Modal
       open
@@ -153,28 +152,45 @@ export function SignModal({ preview, signer, network, busy, error, onConfirm, on
       }
     >
       <p className="small">Nothing is sent until you approve it in your wallet. This is exactly what the wallet will be asked to sign.</p>
-      <div className="kvs">
-        <div className="kv"><span>Network</span><b>{network}</b></div>
-        <div className="kv"><span>Signer</span><b>{signer ?? "not connected"}</b></div>
-        <div className="kv"><span>Receiver</span><b>{preview.receiverId}</b></div>
-        <div className="kv"><span>Method</span><b>{preview.methodName}</b></div>
-        <div className="kv"><span>Gas (max, unused is refunded)</span><b data-testid="sign-gas">{fmtGas(preview.gas)}</b></div>
-        <div className="kv"><span>Deposit</span><b data-testid="sign-deposit">{fmtYocto(preview.deposit)}</b></div>
-      </div>
+      <SignTxRows preview={preview} signer={signer} network={network} testIdPrefix="sign" />
       {fees ? <FeeStackList lines={fees.lines} total={fees.total} note={fees.note} testId="sign-fees" /> : null}
       {summary}
+      <SignJson preview={preview} testIdPrefix="sign" />
+      {error ? <p className="error danger-text" role="alert">{error}</p> : null}
+    </Modal>
+  );
+}
+
+/** Network, signer, receiver, method, gas and deposit of a NEAR write (sign modal and the v2 review drawer). */
+export function SignTxRows({ preview, signer, network, testIdPrefix = "sign" }: { preview: SignPreview; signer: string | null; network: string; testIdPrefix?: string }) {
+  return (
+    <div className="kvs">
+      <div className="kv"><span>Network</span><b>{network}</b></div>
+      <div className="kv"><span>Signer</span><b>{signer ?? "not connected"}</b></div>
+      <div className="kv"><span>Receiver</span><b>{preview.receiverId}</b></div>
+      <div className="kv"><span>Method</span><b>{preview.methodName}</b></div>
+      <div className="kv"><span>Gas (max, unused is refunded)</span><b data-testid={`${testIdPrefix}-gas`}>{fmtGas(preview.gas)}</b></div>
+      <div className="kv"><span>Deposit</span><b data-testid={`${testIdPrefix}-deposit`}>{fmtYocto(preview.deposit)}</b></div>
+    </div>
+  );
+}
+
+/** The decoded ft_on_transfer `msg` (if any) and the raw call args, exactly as the wallet receives them. */
+export function SignJson({ preview, testIdPrefix = "sign" }: { preview: SignPreview; testIdPrefix?: string }) {
+  const msgJson = preview.msg === undefined ? null : JSON.stringify(preview.msg, null, 2);
+  return (
+    <>
       {msgJson ? (
         <div className="stack-sm">
           <span className="label">msg (ft_on_transfer)</span>
-          <pre className="codeblock" data-testid="sign-msg">{msgJson}</pre>
+          <pre className="codeblock" data-testid={`${testIdPrefix}-msg`}>{msgJson}</pre>
         </div>
       ) : null}
       <div className="stack-sm">
         <span className="label">args</span>
-        <pre className="codeblock" data-testid="sign-args">{JSON.stringify(preview.args, null, 2)}</pre>
+        <pre className="codeblock" data-testid={`${testIdPrefix}-args`}>{JSON.stringify(preview.args, null, 2)}</pre>
       </div>
-      {error ? <p className="error danger-text" role="alert">{error}</p> : null}
-    </Modal>
+    </>
   );
 }
 

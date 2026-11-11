@@ -20,6 +20,7 @@ import { useBalance } from "@/components/useBalance";
 import { useFeedApi } from "@/components/useFeedApi";
 import { SessionBadge } from "@/components/Session";
 import { ShieldCard, ZapCard, shieldWindowFor, useNowS } from "@/components/Shields";
+import { BorrowComposer } from "@/components/borrow/BorrowComposer";
 
 const tryParse = (s: string, d: number): bigint | null => {
   try {
@@ -62,13 +63,16 @@ export default function ShieldPage() {
   const d = data.data;
   const unitsErr = unitsIn && !units ? "Enter a positive number" : units && bal.data !== undefined && units > bal.data ? "More than your balance" : null;
 
+  const title = SHIELD_TAGLINE.charAt(0).toUpperCase() + SHIELD_TAGLINE.slice(1);
   return (
-    <div className="page wrap">
-      <div className="page-head">
-        <span className="label">Shields</span>
-        <h1>{SHIELD_TAGLINE.charAt(0).toUpperCase() + SHIELD_TAGLINE.slice(1)}</h1>
-        <p className="lead">A Shield is a normal loan opened at the weekend limit for a fixed window, so the limit cannot be cut halfway through. It charges a flat Shield fee instead of the limit premium; inside the window only committed buyers can settle it. Testnet, mock collateral.</p>
-      </div>
+    <>
+      {on ? (
+        <BorrowComposer initialProtection="weekend" crumb="Shield" title={title} lede="A Shield is a normal loan opened at the weekend limit for a fixed window, so the limit cannot be cut halfway through. It charges a flat Shield fee instead of the limit premium; inside the window only committed buyers can settle it. Testnet, mock collateral." />
+      ) : null}
+    <div className="nx-page" style={on ? { paddingTop: 0 } : undefined}>
+      {on ? <h2 className="nx-h2">Shield presets in detail</h2> : (
+        <div className="nx-head-row"><div className="nx-stack" style={{ gap: 10 }}><h1 className="nx-title">{title}</h1><p className="nx-lede">Testnet, mock collateral.</p></div></div>
+      )}
       <Gate>
         {!on ? (
           <Banner tone="info" title="Shields are not enabled on this deployment" role="status">
@@ -126,5 +130,6 @@ export default function ShieldPage() {
         )}
       </Gate>
     </div>
+    </>
   );
 }

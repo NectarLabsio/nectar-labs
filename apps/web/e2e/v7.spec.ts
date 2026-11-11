@@ -113,8 +113,8 @@ test.describe("v1 path (mocked v1 contract, every flag on)", () => {
 
   test("borrow: fee stack with total, no v7 controls even with ?ref=", async ({ page }) => {
     await page.goto(`/borrow?ref=agent1.nectar.testnet`);
-    await page.getByLabel(/Collateral units/).fill("1");
-    await page.getByLabel(/^Borrow/).fill("10");
+    await page.getByLabel("You lock").fill("1");
+    await page.getByLabel("You borrow").fill("10");
     const fees = page.getByTestId("preview-fees");
     await expect(fees).toBeVisible({ timeout: 20_000 });
     await expect(fees).toContainText("Limit premium");
@@ -148,8 +148,8 @@ test.describe("v2 path (mocked view fixture), flags off", () => {
 
   test("borrow uses the contract fee stack; pay_to and referrer stay hidden while their flags are off", async ({ page }) => {
     await page.goto("/borrow?ref=agent1.nectar.testnet");
-    await page.getByLabel(/Collateral units/).fill("1");
-    await page.getByLabel(/^Borrow/).fill("10");
+    await page.getByLabel("You lock").fill("1");
+    await page.getByLabel("You borrow").fill("10");
     const fees = page.getByTestId("preview-fees");
     await expect(fees).toContainText("Origination (30 bps of the borrow)", { timeout: 20_000 });
     await expect(page.getByTestId("preview-fees-total")).toHaveText("$0.03");

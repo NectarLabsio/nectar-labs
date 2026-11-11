@@ -99,3 +99,35 @@ export function shockPrice(price_usd_e6: bigint, shock_bps: number): bigint {
 export function oracleFresh(age_s: number, session_open: boolean, max_age_s_session: number, max_age_s_closed: number): boolean {
   return age_s <= (session_open ? max_age_s_session : max_age_s_closed);
 }
+
+// ---- UI helpers for the v2 app (WO-33b). Inputs are view values; nothing here replaces a contract check.
+
+/** Exit capacity (1 − h)(Q + R + D), USD e6. Pass D = 0 for weekend parameters. */
+export function capacityUsdE6(q: bigint, r: bigint, d: bigint, haircut_bps: number): bigint {
+  return ((BPS - BigInt(haircut_bps)) * (q + r + d)) / BPS;
+}
+
+/** Health factor pre_liq_ltv / ltv as a float for display (Infinity with no debt). */
+export function healthFactor(ltv_bps: number, pre_liq_ltv_bps: number): number {
+  if (ltv_bps <= 0) return Number.POSITIVE_INFINITY;
+  return pre_liq_ltv_bps / ltv_bps;
+}
+
+/** Price at which the position reaches its flag line (health 1), scaled from the current price: p · ltv / pre_liq. */
+export function flagPriceUsdE6(price_usd_e6: bigint, ltv_bps: number, pre_liq_ltv_bps: number): bigint {
+  if (pre_liq_ltv_bps <= 0) return 0n;
+  return (price_usd_e6 * BigInt(ltv_bps)) / BigInt(pre_liq_ltv_bps);
+}
+
+/** Debt repayment that brings health to `target_e4` (1e4 = health 1.00) at value V; 0 when already there. Rounded up to the cent. */
+export function repayToHealthUsdE6(debt_usd_e6: bigint, value_usd_e6: bigint, pre_liq_ltv_bps: number, target_e4 = 10_000): bigint {
+  const maxDebt = (value_usd_e6 * BigInt(pre_liq_ltv_bps)) / BigInt(target_e4);
+  if (debt_usd_e6 <= maxDebt) return 0n;
+  return ceilDiv(debt_usd_e6 - maxDebt, 10_000n) * 10_000n;
+}
+
+/** Health (e4, 1e4 = 1.00) after the debt and/or value change. */
+export function healthAfterE4(debt_usd_e6: bigint, value_usd_e6: bigint, pre_liq_ltv_bps: number): number {
+  if (debt_usd_e6 <= 0n) return Number.MAX_SAFE_INTEGER;
+  return Number((value_usd_e6 * BigInt(pre_liq_ltv_bps)) / debt_usd_e6);
+}

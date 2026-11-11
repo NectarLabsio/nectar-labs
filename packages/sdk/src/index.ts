@@ -5,6 +5,7 @@ export * from "./preimage";
 export * from "./events";
 export * from "./format";
 export * from "./views";
+export { TESTNET_RPC_FALLBACKS, backoffMs, resilientRpcTransport, rpcEndpoints, type FetchLike, type ResilientRpcOptions } from "./rpc";
 export * from "./config";
 export * from "./feed";
 export * from "./v7";

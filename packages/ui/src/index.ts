@@ -8,3 +8,4 @@ export * from "./ConsentBanner";
 export * from "./Nav";
 export * from "./app";
 export * from "./charts";
+export * from "./form";
