@@ -330,10 +330,23 @@ contract NectarVaultBaseTest is VaultFixture {
     }
 
     function test_release_unauthorizedRecipient_reverts() public {
-        NectarVaultBase.Release memory m = _release(POS, mallory, 9, T0 + 600);
+        registry.deny(ALLOW_ID, alice); // the depositor, the only valid recipient, is off the allowlist
+        NectarVaultBase.Release memory m = _release(POS, alice, 9, T0 + 600);
         (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
-        vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotAuthorized.selector, ALLOW_ID, mallory));
+        vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.NotAuthorized.selector, ALLOW_ID, alice));
         vault.release(m, alice, v, r, s);
+    }
+
+    /// @dev A valid authority signature naming an allowlisted third party still cannot move the collateral.
+    function test_release_recipientNotDepositor_reverts() public {
+        NectarVaultBase.Release memory m = _release(POS, buyer, 9, T0 + 600);
+        (uint8 v, bytes32 r, bytes32 s) = _sign(AUTH_PK, _releaseDigest(m, 84532));
+        vm.expectRevert(abi.encodeWithSelector(NectarVaultBase.RecipientNotDepositor.selector, buyer, alice));
+        vault.release(m, alice, v, r, s);
+        assertEq(uint8(_status(POS)), uint8(NectarVaultBase.Status.Open));
+        assertFalse(vault.nonceUsed(_key(POS, alice), 9));
+        assertEq(token.balanceOf(buyer), 0);
+        assertEq(token.balanceOf(address(vault)), AMOUNT);
     }
 
     function test_issuerSwitchesToAlwaysBlock_failsVisibly() public {
