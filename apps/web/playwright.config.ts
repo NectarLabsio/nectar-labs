@@ -20,8 +20,10 @@ export default defineConfig({
     ...(channel ? { channel } : {}),
   },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 }, ...(channel ? { channel } : {}) } },
-    { name: "phone", use: { ...devices["Pixel 7"], viewport: { width: 400, height: 860 }, ...(channel ? { channel } : {}) } },
+    { name: "desktop", testIgnore: ["**/._*", "**/inventory.spec.ts"], use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 900 }, ...(channel ? { channel } : {}) } },
+    { name: "phone", testIgnore: ["**/._*", "**/inventory.spec.ts"], use: { ...devices["Pixel 7"], viewport: { width: 400, height: 860 }, ...(channel ? { channel } : {}) } },
+    // WO-34c opt-in data inventory (network, hosted mode, real Chrome): `--project=inventory` only. See e2e/inventory.spec.ts.
+    { name: "inventory", testMatch: "**/inventory.spec.ts", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 }, ...(channel ? { channel } : {}) } },
   ],
   webServer: process.env.E2E_BASE_URL
     ? undefined
