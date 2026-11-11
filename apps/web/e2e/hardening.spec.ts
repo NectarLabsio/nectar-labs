@@ -1,0 +1,39 @@
+import { expect, test } from "@playwright/test";
+
+// WO-42a (review 2): security headers and /api request guards against the production build. API-only, so desktop project only.
+test.describe("hardening", () => {
+  test.beforeEach(({}, info) => test.skip(info.project.name !== "desktop", "HTTP-level checks, viewport-independent"));
+
+  test("pages carry X-Frame-Options, HSTS and a CSP with frame-ancestors/object-src/base-uri/form-action", async ({ request }) => {
+    const r = await request.get("/");
+    const h = r.headers();
+    expect(h["x-frame-options"]).toBe("DENY");
+    expect(h["strict-transport-security"]).toMatch(/max-age=\d+/);
+    const csp = h["content-security-policy"] ?? "";
+    for (const d of ["frame-ancestors 'none'", "object-src 'none'", "base-uri 'self'", "form-action 'self'"]) expect(csp).toContain(d);
+  });
+
+  test("/api/copilot refuses cross-origin, non-JSON and oversized bodies before doing any work", async ({ request, baseURL }) => {
+    const origin = new URL(baseURL!).origin;
+    const cross = await request.post("/api/copilot", { headers: { "content-type": "application/json", origin: "https://evil.example", "sec-fetch-site": "cross-site" }, data: '{"fixture":true}' });
+    expect(cross.status()).toBe(403);
+    const noHeaders = await request.post("/api/copilot", { headers: { "content-type": "application/json" }, data: '{"fixture":true}' });
+    expect(noHeaders.status()).toBe(403);
+    const plain = await request.post("/api/copilot", { headers: { "content-type": "text/plain", origin }, data: '{"fixture":true}' });
+    expect(plain.status()).toBe(415);
+    const big = await request.post("/api/copilot", { headers: { "content-type": "application/json", origin }, data: JSON.stringify({ nonce: "ab".repeat(32), notes: "x".repeat(9000) }) });
+    expect(big.status()).toBe(413);
+  });
+
+  test("/api/indexer refuses '.' and '..' id segments", async ({ request }) => {
+    for (const p of ["/api/indexer/api/note/%2E%2E", "/api/indexer/api/note/%2E", "/api/indexer/api/asset/%2E%2E"]) expect((await request.get(p)).status(), p).toBe(404);
+  });
+
+  test("/api/health answers with an age and reuses a fresh read", async ({ request }) => {
+    const a = (await (await request.get("/api/health")).json()) as { deployed: boolean; as_of?: string; error?: string };
+    test.skip(!a.deployed, "no core deployed in config");
+    const b = (await (await request.get("/api/health")).json()) as { as_of?: string };
+    expect(b.as_of).toBe(a.as_of);
+    if (a.error) expect(a.error).toBe("RPC read failed");
+  });
+});

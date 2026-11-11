@@ -26,9 +26,14 @@ declare global {
   }
 }
 
-export function readLocalE2EMock(): E2EMock | null {
-  if (typeof window === "undefined") return null;
+/** true only in a browser on localhost / 127.0.0.1 (Playwright's `next start`). Every E2E-only adapter checks this. */
+export function isLocalE2EHost(): boolean {
+  if (typeof window === "undefined") return false;
   const h = window.location.hostname;
-  if (h !== "localhost" && h !== "127.0.0.1") return null;
+  return h === "localhost" || h === "127.0.0.1";
+}
+
+export function readLocalE2EMock(): E2EMock | null {
+  if (!isLocalE2EHost()) return null;
   return window.__NECTAR_E2E_MOCK__ ?? null;
 }

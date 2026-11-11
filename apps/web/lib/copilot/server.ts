@@ -1,6 +1,8 @@
 // Server-only: NEAR AI Cloud client (F-070, F-074, F-076), Intel DCAP quote verification with @phala/dcap-qvl 0.7.1 (F-073)
 // and NVIDIA GPU attestation via NRAS (F-077). Outbound origins, live mode only: cloud-api.near.ai, Phala PCCS, nras.attestation.nvidia.com.
-// Never imported by client components. The API key is read from NEAR_AI_API_KEY (TODO-H7); absent → "key missing".
+// Never imported by client components (`server-only` fails the build if one does, R2-13). The API key is read from NEAR_AI_API_KEY
+// (TODO-H7); absent → "key missing". Node tests resolve `server-only` to an empty module (scripts/node-test-shims.mjs).
+import "server-only";
 import { createHash } from "node:crypto";
 import dcap from "@phala/dcap-qvl";
 import { recoverPersonalSign, type CopilotBundle, type GpuVerdict, type QuoteVerdict } from "./verify.ts";
