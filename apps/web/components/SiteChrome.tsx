@@ -1,24 +1,25 @@
 "use client";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CONSENT_CHANGED_EVENT, CONSENT_YIELD_TO, ChainMark, Chip, ConsentBanner, Footer, Nav, SessionChip, analyticsAllowed, type LinkLike, type NavLink } from "@nectar/ui";
 import { sessionHeadline, sessionReasonText, sessionStatus, type ExitCapacity } from "@nectar/sdk";
 import { LandingNav } from "./landing/LandingNav";
-import { GA_ID, docsHref, hostHref, repoHref } from "@/lib/env";
+import { GA_ID, docsHref, repoHref } from "@/lib/env";
+import { HostLink } from "./HostLink";
 import { NEAR_CONNECT_POPUP } from "@/lib/wallet/near-connect";
 import { useChain, useFeature, useView, useWallet } from "./AppProvider";
 
-/** API routes (footer "Status" → /api/health) are plain anchors: the client router must never RSC-prefetch a JSON route (GATE_FAIL_G3B_R2). */
+/** API routes (footer "Status" → /api/health) are plain anchors: the client router must never RSC-prefetch a JSON route (GATE_FAIL_G3B_R2).
+ *  Cross-host links (SITE ↔ APP, docs) are plain anchors too (HostLink, WO-34f); same-host links keep next/link prefetch. */
 const NextLink: LinkLike = ({ href, children, ...rest }) =>
   href.startsWith("/api/") ? (
     <a href={href} {...rest}>
       {children}
     </a>
   ) : (
-    <Link href={hostHref(href)} {...rest}>
+    <HostLink href={href} {...rest}>
       {children}
-    </Link>
+    </HostLink>
   );
 
 function WalletButton() {

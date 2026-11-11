@@ -3,14 +3,14 @@
 // when config.yaml `features.<name>` is on (Module / On, data-feature tags). Hero and chamber numbers are the PRD §4 example
 // position and say so; real figures come from nectar-core views in the "Read it from the contract" section.
 // Copy rules: never "insurance", never "without liquidations"; testnet and mock collateral disclosed.
-import Link from "next/link";
+import { HostLink as Link } from "../HostLink";
 import { useEffect, useRef, useState } from "react";
 import hero from "@nectar/ui/3d/hero.webp";
 import tokA from "@nectar/ui/3d/tokA.webp";
 import tokB from "@nectar/ui/3d/tokB.webp";
 import tokC from "@nectar/ui/3d/tokC.webp";
 import tokD from "@nectar/ui/3d/tokD.webp";
-import { docsHref } from "@/lib/env";
+import { docsHref, hostHref } from "@/lib/env";
 import { CopyContact } from "../CopyContact";
 import { useFeature } from "../AppProvider";
 import { Module, On } from "../FeatureGate";
@@ -26,7 +26,7 @@ const Arrow = () => (
   </svg>
 );
 const Pill = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a className={s.pillbtn} href={href}>
+  <a className={s.pillbtn} href={hostHref(href)}>
     {children}
     <i>
       <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">

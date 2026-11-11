@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { HostLink as Link } from "../HostLink";
 import { useEffect, useState } from "react";
 import { currentTheme, setTheme } from "@nectar/ui";
 import { docsHref } from "@/lib/env";

@@ -5,7 +5,7 @@ export * from "./preimage";
 export * from "./events";
 export * from "./format";
 export * from "./views";
-export { TESTNET_RPC_FALLBACKS, backoffMs, isUnknownAccount, resilientRpcTransport, rpcEndpoints, type AccountView, type FetchLike, type ResilientRpcOptions } from "./rpc";
+export { TESTNET_RPC_FALLBACKS, backoffMs, cachedTransport, isUnknownAccount, resilientRpcTransport, rpcEndpoints, type AccountView, type CacheOptions, type FetchLike, type ResilientRpcOptions } from "./rpc";
 export * from "./network";
 export * from "./config";
 export * from "./feed";

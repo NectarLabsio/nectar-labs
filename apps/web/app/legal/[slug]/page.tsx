@@ -21,7 +21,13 @@ function load(slug: Slug): { title: string; html: string } | null {
   const src = readFileSync(p, "utf8").replace(/^---\n[\s\S]*?\n---\n/, "");
   guardContent(`/legal/${slug}`, src);
   const title = /^#\s+(.+)$/m.exec(src)?.[1] ?? slug;
-  return { title, html: marked.parse(src, { async: false }) };
+  // Wide tables (the privacy page's data inventory) scroll in a focusable region, as on /security (axe scrollable-region-focusable).
+  const html = marked
+    .parse(src, { async: false })
+    .replace(/<pre>/g, "<pre tabindex=\"0\">")
+    .replace(/<table>/g, "<div class=\"table-wrap\" tabindex=\"0\" role=\"region\" aria-label=\"Table\"><table class=\"t\">")
+    .replace(/<\/table>/g, "</table></div>");
+  return { title, html };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

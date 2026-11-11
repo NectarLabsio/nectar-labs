@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { HostLink as Link } from "@/components/HostLink";
 
 export const metadata = { title: "Docs" };
 

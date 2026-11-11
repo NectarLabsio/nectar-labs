@@ -49,6 +49,8 @@ const config: NextConfig = {
     return [
       { source: "/quote", destination: "/quote/new", permanent: false },
       { source: "/positions/:id", destination: "/position/:id", permanent: false },
+      // Browsers ask for /favicon.ico on documents without icon metadata (the SVG/JSON files): answer with the mark (WO-34f crawl 404).
+      { source: "/favicon.ico", destination: "/brand/mark.svg", permanent: true },
     ];
   },
   async rewrites() {

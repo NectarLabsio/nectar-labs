@@ -51,7 +51,8 @@ export function directives(types: string[]): string[] {
   return [...d].sort();
 }
 
-export function annotateHost(host: string, site: string, app: string): HostUse {
+/** `wallets`: names of the wallets whose frame contacted `host` in the per-wallet pass (WO-34f); they name the owner of unknown hosts. */
+export function annotateHost(host: string, site: string, app: string, wallets: string[] = []): HostUse {
   const self = [new URL(site).host, new URL(app).host];
   const fill = (who: string, purpose: string, when: string): HostUse => ({ host, types: [], pages: [], who, purpose, when, directives: [] });
   let u: HostUse;
@@ -59,7 +60,12 @@ export function annotateHost(host: string, site: string, app: string): HostUse {
   else if (host.endsWith(":")) u = fill("browser", `${host} URL (inline data, no network)`, "Rendering");
   else {
     const hit = HOSTS.find((h) => h.re.test(host));
-    u = hit ? fill(hit.who, hit.purpose, hit.when) : fill("the wallet you opened (through near-connect)", "Wallet code, icons or the wallet's own API", "Only after you open a wallet in the selector");
+    const named = wallets.length ? wallets.join(", ") : "";
+    u = hit
+      ? fill(hit.who, hit.purpose, hit.when)
+      : named
+        ? fill(`${named} (sandboxed frame, through near-connect)`, `Code, styles, fonts, images or API of ${named}`, `Only after you open ${named} in the selector`)
+        : fill("the wallet you opened (through near-connect)", "Wallet code, icons or the wallet's own API", "Only after you open a wallet in the selector");
   }
   return u;
 }

@@ -1,6 +1,6 @@
 // Typed read-only client for nectar-core views (interface-p0.md "Views") and NEP-141 balance views (F-013).
 // Request shape = near-api-js 7.4.0 JsonRpcProvider.callFunction (F-012), sent through the resilient transport in ./rpc.
-import { RpcError, resilientRpcTransport, rpcEndpoints, type ViewTransport } from "./rpc";
+import { RpcError, cachedTransport, resilientRpcTransport, rpcEndpoints, type ViewTransport } from "./rpc";
 import type {
   BorrowPreview,
   CollateralView,
@@ -34,9 +34,12 @@ export function contractGeneration(version: string | null | undefined): Contract
 export { RpcError };
 export type { ViewTransport };
 
-/** Retry (429 / 5xx, jittered backoff, 3 attempts) then fall back: `url` first, then the FastNEAR testnet hosts (F-369). */
+/**
+ * Retry (429 / 5xx, jittered backoff, 3 attempts, shared cooldown, 4 in flight) then fall back: `url` first, then the FastNEAR
+ * testnet hosts (F-369). Answers are de-duplicated in flight and reused for 8 s (cachedTransport, WO-34f); `NectarViews.invalidate()` clears them.
+ */
 export function rpcTransport(url: string | readonly string[]): ViewTransport {
-  return resilientRpcTransport({ urls: rpcEndpoints(url) });
+  return cachedTransport(resilientRpcTransport({ urls: rpcEndpoints(url) }));
 }
 
 type RawPosition = Omit<PositionView, "id">;
@@ -60,6 +63,9 @@ export class NectarViews {
   static fromRpc(core: string, rpcUrl: string | readonly string[]): NectarViews {
     return new NectarViews(core, rpcTransport(rpcUrl));
   }
+
+  /** Forget cached view answers (explicit reload, e.g. after a transaction). */
+  invalidate = (): void => this.t.clear?.();
 
   private v<T>(method: string, args: Record<string, unknown> = {}): Promise<T> {
     return this.t.call<T>(this.core, method, args);
