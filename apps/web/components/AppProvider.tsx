@@ -8,7 +8,7 @@ import type { TxOutcome, WalletAdapter } from "@/lib/wallet/types";
 import { NearConnectAdapter } from "@/lib/wallet/near-connect";
 import { E2EKeyAdapter } from "@/lib/wallet/e2e-key";
 import { E2EMockAdapter } from "@/lib/wallet/e2e-mock";
-import { readLocalE2EMock, type E2EMock } from "@/lib/e2e-mock";
+import { isLocalE2EHost, readLocalE2EMock, type E2EMock } from "@/lib/e2e-mock";
 
 // ------------------------------------------------------------------ chain
 
@@ -192,7 +192,7 @@ export function AppProvider({ config: baseConfig, children }: { config: PublicCo
   }, [views, tick]);
 
   const adapterRef = useRef<WalletAdapter | null>(null);
-  if (!adapterRef.current) adapterRef.current = E2E_KEY_ADAPTER ? new E2EKeyAdapter() : readLocalE2EMock()?.near ? new E2EMockAdapter() : new NearConnectAdapter();
+  if (!adapterRef.current) adapterRef.current = E2E_KEY_ADAPTER && isLocalE2EHost() ? new E2EKeyAdapter() : readLocalE2EMock()?.near ? new E2EMockAdapter() : new NearConnectAdapter();
   const adapter = adapterRef.current;
   const [accountId, setAccountId] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);

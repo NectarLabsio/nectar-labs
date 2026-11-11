@@ -1,8 +1,10 @@
 // E2E-only adapter: signs with the demo borrower key that Playwright injects at test time
 // (window.__NECTAR_E2E__ = { accountId, privateKey }, from env NECTAR_E2E_BORROWER_ID / NECTAR_E2E_BORROWER_KEY).
 // Compiled in only when NEXT_PUBLIC_E2E_KEY_ADAPTER=1. The key never lives in the repo or the bundle.
+// Localhost only, like E2EMockAdapter (R2-13): on any other host the injected key is ignored and AppProvider uses near-connect.
 import type { TxIntent } from "@nectar/sdk";
 import { RPC_URL } from "../env";
+import { isLocalE2EHost } from "../e2e-mock";
 import { parseOutcome, type TxOutcome, type WalletAdapter } from "./types";
 
 interface E2EKey { accountId: string; privateKey: string }
@@ -17,7 +19,7 @@ export class E2EKeyAdapter implements WalletAdapter {
     return "testnet";
   }
   private key(): E2EKey | null {
-    return typeof window !== "undefined" ? (window.__NECTAR_E2E__ ?? null) : null;
+    return isLocalE2EHost() ? (window.__NECTAR_E2E__ ?? null) : null;
   }
   async restore() {
     return this.key()?.accountId ?? null;

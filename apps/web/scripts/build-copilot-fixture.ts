@@ -9,7 +9,7 @@ import { join, resolve } from "node:path";
 import { randomBytes } from "node:crypto";
 import { secp256k1 } from "@noble/curves/secp256k1.js";
 import { bytesToHex } from "@noble/hashes/utils.js";
-import { buildRequestBody, expectedReportData, personalHash, pubkeyToAddress, sha256Hex } from "../lib/copilot/verify.ts";
+import { FIXTURE_INPUT, buildRequestBody, expectedReportData, personalHash, pubkeyToAddress, sha256Hex } from "../lib/copilot/verify.ts";
 
 const sample = process.argv[2];
 if (!sample) throw new Error("usage: build-copilot-fixture.ts <dcap-qvl>/sample");
@@ -20,11 +20,11 @@ const quote = readFileSync(join(sample, "tdx_quote"));
 writeFileSync(join(out, "phala-tdx-quote.hex"), quote.toString("hex") + "\n");
 writeFileSync(join(out, "phala-tdx-collateral.json"), readFileSync(join(sample, "tdx_quote_collateral.json")));
 
-const model = "deepseek-ai/DeepSeek-V3.1";
+// R2-03: the panel binds the fixture to FIXTURE_INPUT (no max_tokens), so the input lives next to the verifier.
+const { model, notes } = FIXTURE_INPUT;
 const sk = secp256k1.utils.randomSecretKey();
 const address = pubkeyToAddress(secp256k1.getPublicKey(sk));
 const nonce = randomBytes(32).toString("hex");
-const notes = "Issuer announced a stock split effective next month. Trading was halted briefly last week pending news. Liquidity on the tokenised wrapper is thin outside US hours.";
 const requestBody = buildRequestBody(model, notes);
 const answer = "- A stock split is announced; position units and oracle feeds must track the ratio change.\n- A recent trading halt shows event risk: exits can pause without notice.\n- Thin out-of-hours liquidity on the wrapper raises exit risk for pre-liquidation.";
 const responseText = JSON.stringify({ id: "chatcmpl-fixture-wo17", object: "chat.completion", model, choices: [{ index: 0, finish_reason: "stop", message: { role: "assistant", content: answer } }] });

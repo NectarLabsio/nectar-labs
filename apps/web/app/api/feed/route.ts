@@ -38,7 +38,9 @@ export async function GET() {
     last = { core: c.core, assets, at: Date.now() };
     return Response.json(body(last, Date.now()), { headers });
   } catch (e) {
-    const error = e instanceof Error ? e.message : String(e);
+    // R2-11: details in the server log, a generic string in the response.
+    console.error(`feed: RPC read failed: ${e instanceof Error ? e.message : String(e)}`);
+    const error = "RPC read failed";
     if (last && last.core === c.core) return Response.json(body(last, Date.now(), { error }), { status: 200, headers });
     return Response.json({ deployed: true, error }, { status: 502, headers });
   }

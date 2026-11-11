@@ -100,7 +100,10 @@ export function extractAnswer(responseText: string): string | null {
   }
 }
 
-export function verifyBundle(b: CopilotBundle, nonceHex: string): Verification {
+/** What the browser asked for: the request body it rebuilt from the notes it sent, and the model the panel announced (R2-03). */
+export interface ExpectedRequest { requestBody: string; modelId: string }
+
+export function verifyBundle(b: CopilotBundle, nonceHex: string, expected: ExpectedRequest): Verification {
   const checks: Check[] = [];
   const add = (id: string, label: string, status: CheckStatus, detail: string, required = true) => checks.push({ id, label, status, detail, required });
   const pass = (ok: boolean): CheckStatus => (ok ? "passed" : "failed");
@@ -110,7 +113,10 @@ export function verifyBundle(b: CopilotBundle, nonceHex: string): Verification {
   const kind = parts.length === 3 ? "provider_tee" : parts.length === 2 ? "gateway" : "unknown";
   add("signature_kind", "Signature is from the model TEE (provider_tee)", pass(kind === "provider_tee" && (b.signature.signature_kind ?? "provider_tee") === "provider_tee"), `signed text has ${parts.length} parts (${kind})`);
   const [mid, rq, rs] = kind === "provider_tee" ? parts : [null, parts[0], parts[1]];
-  add("model_id", "Signed model id equals requested model", mid === null ? "failed" : pass(mid === b.modelId), `signed ${mid ?? "none"}, requested ${b.modelId}`);
+  add("model_id", "Signed model id equals the announced model", mid === null ? "failed" : pass(mid === b.modelId && b.modelId === expected.modelId), `signed ${mid ?? "none"}, bundle ${b.modelId}, announced ${expected.modelId}`);
+  // R2-03: the signed exchange must be the one built from this user's notes, not any TEE-signed exchange the server kept.
+  const sameRequest = b.requestBody === expected.requestBody;
+  add("request_matches_input", "Signed request is the one built from your notes", pass(sameRequest), sameRequest ? `request ${sha256Hex(expected.requestBody).slice(0, 16)}… rebuilt in your browser` : "the server returned an exchange for a different request");
   const reqHash = sha256Hex(b.requestBody);
   const resHash = sha256Hex(b.responseText);
   add("request_hash", "sha256(request) matches signed text", pass(rq === reqHash), `local ${reqHash.slice(0, 16)}…`);
@@ -173,6 +179,26 @@ export const SYSTEM_PROMPT = [
   "If the notes contain no relevant context, say so. Do not use outside knowledge. Answer in at most 6 short bullet points.",
 ].join(" ");
 
-export function buildRequestBody(modelId: string, notes: string): string {
-  return JSON.stringify({ model: modelId, stream: false, messages: [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: notes }] });
+/** Output cap for live answers (R2-04). The recorded fixture predates it and was built without `max_tokens`. */
+export const COPILOT_MAX_TOKENS = 400;
+
+/**
+ * Exact request bytes. Same function on the server (what it sends) and in the browser (what it expects to see signed).
+ * No `tools`, `tool_choice` or `functions`: the copilot has no action path (R2-12). `maxTokens` omitted: no `max_tokens` field.
+ */
+export function buildRequestBody(modelId: string, notes: string, maxTokens?: number): string {
+  const messages = [{ role: "system", content: SYSTEM_PROMPT }, { role: "user", content: notes }];
+  return JSON.stringify(maxTokens === undefined ? { model: modelId, stream: false, messages } : { model: modelId, stream: false, max_tokens: maxTokens, messages });
 }
+
+/** Live request for the notes the user typed (trimmed, as the server trims them), capped at COPILOT_MAX_TOKENS. */
+export const liveRequestBody = (modelId: string, notes: string): string => buildRequestBody(modelId, notes.trim(), COPILOT_MAX_TOKENS);
+
+/** The input the recorded fixture was built from (scripts/build-copilot-fixture.ts). The panel binds the fixture to this, never to server-sent text. */
+export const FIXTURE_INPUT = {
+  model: "deepseek-ai/DeepSeek-V3.1",
+  notes: "Issuer announced a stock split effective next month. Trading was halted briefly last week pending news. Liquidity on the tokenised wrapper is thin outside US hours.",
+} as const;
+
+/** Expected request for the recorded fixture: the body it was built from (no `max_tokens`; it predates R2-04). */
+export const fixtureExpected = (): ExpectedRequest => ({ requestBody: buildRequestBody(FIXTURE_INPUT.model, FIXTURE_INPUT.notes), modelId: FIXTURE_INPUT.model });
