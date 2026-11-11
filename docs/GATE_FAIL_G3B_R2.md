@@ -6,4 +6,4 @@ review 2; `/api/health` changed in WO-42a (5 s cache, generic errors) — regres
 Everything else green: 362 passed (all functional, a11y, phone-scroll specs), Lighthouse 28/28 route×theme = 100, headers present (XFO DENY, HSTS, CSP
 frame-ancestors 'none').
 **Fix (WO-49, web):** find why the prefetch never settles (route handler + cache vs RSC prefetch), fix it at the root, and make the footer link not prefetch
-an API route. **Then:** verifier re-runs G3b from a fresh clone. Status: OPEN.
+an API route. **Then:** verifier re-runs G3b from a fresh clone. Status: **RESOLVED** — G3b re-run 2 PASS (EVIDENCE 5770fa7, fresh clone fd6592d: e2e 404 passed / 0 failed incl. screens.spec 76/76, Lighthouse 28/28 = 100, pnpm verify green).
