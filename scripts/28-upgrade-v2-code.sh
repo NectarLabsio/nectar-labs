@@ -13,7 +13,7 @@ snap() { for v in 'get_config|{}' 'get_pool|{}' 'list_quotes|{"symbol":"NVDAx","
   'get_reserve|{"symbol":"NVDAx"}' 'nft_total_supply|{}' 'get_session_calendar|{"from_index":0,"limit":5}' 'get_remote_config|{}' 'get_quoter_config|{}'; do
   echo "${v%%|*} $(view "${v%%|*}" "${v#*|}" | jq -c 'if type=="object" then del(.contract_version) else . end')"; done; }
 VER0=$(view contract_version '{}'); echo "live version $VER0"
-case "$VER0" in *'2.0.'*|*'2.1.'*) ;; *) echo "unexpected live version $VER0 — stop" >&2; exit 3;; esac
+case "$VER0" in *'2.0.'*|*'2.1.'*|*'2.2.'*) ;; *) echo "unexpected live version $VER0 — stop" >&2; exit 3;; esac
 snap > /tmp/nectar-v2-before.$$
 NEW=$(wc -c <"$WASM" | tr -d ' '); A=$(acct); USED=$(echo "$A" | jq -r .result.storage_usage); AMT=$(echo "$A" | jq -r .result.amount)
 OLD=$(q "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"query\",\"params\":{\"request_type\":\"view_code\",\"finality\":\"final\",\"account_id\":\"$CORE\"}}" | jq -r '.result.code_base64 | length * 3 / 4 | floor')
