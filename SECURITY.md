@@ -37,21 +37,23 @@ Decision D-027 (docs/DECISIONS.md) fixed every high and medium finding plus the 
 
 | Component | State on 2026-11-11 | Source |
 | --- | --- | --- |
-| `nectar-core-v2.nectar.testnet` | `2.2.1-v7`. Two code-only upgrades: 2.1.0 → 2.2.0 (tx `7J1DsrKP19HTd1c2AWuoRbW2AyCUR75nd8hLGwNuKPAr`) and 2.2.0 → 2.2.1 (tx `EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay`), deployed code hash `3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk`. Built with `cargo near build non-reproducible-wasm`, so no byte-for-byte rebuild is claimed | evidence/rollout/security-upgrade-20261111T070338Z.log, evidence/rollout/upgrade-221-20261111T075031Z.log |
+| `nectar-core-v2.nectar.testnet` | `2.2.1-v7`. Two code-only upgrades: 2.1.0 → 2.2.0 (tx `7J1DsrKP19HTd1c2AWuoRbW2AyCUR75nd8hLGwNuKPAr`) and 2.2.0 → 2.2.1 (tx `EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay`), deployed code hash `3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk`. Built with `cargo near build non-reproducible-wasm`. The 2.2.1-v7 wasm rebuilt from a fresh clone with `cargo near build non-reproducible-wasm` matched the deployed code hash (3mv4LRm6…) on the verifier's machine; it is not the Docker reproducible build | evidence/rollout/security-upgrade-20261111T070338Z.log, evidence/rollout/upgrade-221-20261111T075031Z.log; docs/EVIDENCE.md §G2b re-run after D-027 (recorded in b8784c1) |
 | `usdc-mock`, `nvdax-mock` | `mock-ft` code-only upgrade (SR-27) | same rollout log, step 3 |
 | Solana `nectar_vault` `ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW` (devnet) | in-place upgrade to the v2 account layout. No v1 positions were open. Last deployed in slot 521021977 | same rollout log, step 4; solana/deploy.md |
 | OutLayer quoter | version `5f9bb28796c6c355522444252be380f09e0a1067a453a6d48e06724f581bc062` pinned (`vault_read` reads the v2 layout) | same rollout log, step 5 |
 | EVM vault | redeployed **on a local fork of Base Sepolia (anvil, chain id 84532), not on Base Sepolia** (D-026): vault `0xC64b733424C8d25fB574F275007ED8756e261226`, MockB20 `0x634F88DAEf0a1f77645c523C3FA351Fe37aaf81d` | same rollout log, step 6 |
 
-Re-runs on this stack (agent runs, **verifier record pending**; docs/EVIDENCE.md still records the earlier runs on 2.0.0/2.1.0-v7):
-- G7 on Solana devnet, evidence/G7/rerun/summary.md. Position 8: refused loan, then release and withdraw. Position 9: funded loan, repay, release, withdraw. Position 10: settle to the buyer, then the depositor withdraws the remainder.
-- G13 on the local fork, evidence/G13/rerun/summary.md. Position 11 released, position 12 settled, and a replayed settle reverts with `NonceUsed(14)`.
-- G14 on testnet, evidence/G14/rerun/summary.md: borrow, then 402, then a paid call, then 200.
-- G11 and G2b (contract tests and testnet views) have not been re-run by the verifier on 2.2.1-v7.
+Re-runs on this stack, recorded by the verifier in docs/EVIDENCE.md on 2026-11-11 (fresh clones of commit 3ab3026):
+- G2b, §G2b re-run after D-027 (recorded in b8784c1): `contract_version` 2.2.1-v7, the rebuilt code hash matches (row above), the keeper-v2 key and the views hold. `pnpm verify` was not part of this re-run.
+- G7 on Solana devnet, §G7 re-run (recorded in b8784c1), checking evidence/G7/rerun/summary.md from both chains. Position 8: refused loan (aggregate limit), then release and withdraw. Position 9: funded loan, release, withdraw. Position 10: settle to the buyer, then the depositor withdraws the remainder.
+- G13 on the local fork, §G13 re-run (recorded in b8784c1). Position 11 released, position 12 settled, and replayed calldata reverts with `NonceUsed(10)` and `NonceUsed(14)`.
+- G14 on testnet, §G14 re-run (recorded in b8784c1): the borrow (position #13) and the delegated mock-USDC payment are verified on chain. The HTTP 402 → 200 step was not re-run by the verifier; it rests on the orchestrator log in evidence/G14/rerun/ (verifier record pending).
+- G11, §G11 re-run (recorded in 5083d30): 608 unit + 50 sandbox tests, mock-ft 23, model.csv 132 rows, max receipt 67.69 Tgas; forge 105 pass / 3 skip; Solana 10 cargo + 55 TS; keeper 293, x402 17, feed 63, sdk 178. The G1 check that every contract method has a gas row was not run on 2.2.1 (verifier record pending).
+- G3b, §G3b re-run (recorded in 5083d30): e2e 392 pass / 82 skip, accessibility ≥ 90 on all 22 route/theme pairs.
 
 ### Status per finding
 
-"Fixed" means the code change is merged and a reproducing test is in the repository. The test names below come from `contracts/nectar-core/src/tests_v7c.rs` / `tests_v7d.rs` (`srN_*`), `solana/tests/nectar_vault.test.ts`, `evm/test/SecurityV7.t.sol` and `services/*/test`. A verifier run of those suites on the deployed versions is pending.
+"Fixed" means the code change is merged and a reproducing test is in the repository. The test names below come from `contracts/nectar-core/src/tests_v7c.rs` / `tests_v7d.rs` (`srN_*`), `solana/tests/nectar_vault.test.ts`, `evm/test/SecurityV7.t.sol` and `services/*/test`. The verifier ran those suites on the deployed versions (docs/EVIDENCE.md §G11 re-run after D-027, recorded in 5083d30): every finding SR-1…SR-33 has at least one test named after it, and 124 `sr*`-named contract tests pass. The tests were run on the fixed code only, not on the pre-fix code to show that they fail there.
 
 | Id | Sev | Finding (short) | Status | Evidence |
 | --- | --- | --- | --- | --- |

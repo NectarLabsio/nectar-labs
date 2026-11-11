@@ -5,7 +5,7 @@ description: nectar-core P0 methods, messages, views and events.
 ---
 # Contract reference (`nectar-core`, P0)
 
-<p className="verified">Verified against: F-010 (2026-11-10), F-013 (2026-11-09), F-018 (2026-11-10), F-021 (2026-11-09), F-028 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · D-009, D-010 (2026-11-10)</p>
+<p className="verified">Verified against: F-010 (2026-11-10), F-013 (2026-11-09), F-018 (2026-11-10), F-021 (2026-11-09), F-028 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · D-009, D-010 (2026-11-10) · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
 <p className="status">Status: interface specification that WO-2 implements. Deployed on testnet as `nectar-core.nectar.testnet` on 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). If the built ABI differs, the ABI wins and this page is corrected.</p>
 
 Built with `near-sdk` 5.30.1 (F-010) and `cargo near build` (F-011). The contract account is [`nectar-core.nectar.testnet`](https://testnet.nearblocks.io/address/nectar-core.nectar.testnet).
@@ -82,7 +82,7 @@ P1 and P2 add `quoter_result`, `quoter_fallback`, `settlement_signed` and `settl
 
 ## v2 remote and recovery methods (`nectar-core-v2`, 2.2.1-v7)
 
-Live on `nectar-core-v2.nectar.testnet` since 2026-11-11 (D-027; code-only upgrades, upgrade txs in evidence/rollout/; verifier record pending). Full lifecycle: [Remote collateral on Solana](/integrate/remote-collateral-solana).
+Live on `nectar-core-v2.nectar.testnet` since 2026-11-11 (D-027; code-only upgrades, upgrade txs in evidence/rollout/; version and code hash checked in docs/EVIDENCE.md §G2b re-run after D-027, recorded in b8784c1). Full lifecycle: [Remote collateral on Solana](/integrate/remote-collateral-solana).
 
 | Method | Caller | Deposit | Notes |
 | --- | --- | --- | --- |

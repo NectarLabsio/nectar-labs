@@ -5,7 +5,7 @@ description: How the contract changes, now and in production.
 ---
 # Upgrades
 
-<p className="verified">Verified against: F-011 (2026-11-10), F-014 / F-176 (2026-11-09), F-017 (2026-11-10), F-027 (2026-11-10) · spec docs/PRD.md §16.5 · docs/EVIDENCE.md G4 addendum (2026-11-09T22:51Z, fea52b7) · evidence/G4/upgrade-20261109T2157Z.log, evidence/upgrades/run-20261109T2238Z.log</p>
+<p className="verified">Verified against: F-011 (2026-11-10), F-014 / F-176 (2026-11-09), F-017 (2026-11-10), F-027 (2026-11-10) · spec docs/PRD.md §16.5 · docs/EVIDENCE.md G4 addendum (2026-11-09T22:51Z, fea52b7) · evidence/G4/upgrade-20261109T2157Z.log, evidence/upgrades/run-20261109T2238Z.log · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
 <p className="status">Status on 2026-11-10: nectar-core upgraded twice in place on testnet. Current code_hash `HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX`. PROD governance is design only.</p>
 
 ## Upgrade history (testnet)
@@ -31,7 +31,7 @@ Both upgrade paths are tested in the sandbox first (`contracts/nectar-core/tests
 
 ## This build (testnet)
 
-- Build only with `cargo near build` (F-011). Plain `cargo build` for wasm lacks the `--cfg near` flag that cargo-near adds (F-027). The submitted artifact uses `reproducible-wasm`.
+- Build only with `cargo near build` (F-011). Plain `cargo build` for wasm lacks the `--cfg near` flag that cargo-near adds (F-027). nectar-core-v2 `2.2.1-v7` was built with `non-reproducible-wasm`: the 2.2.1-v7 wasm rebuilt from a fresh clone with `cargo near build non-reproducible-wasm` matched the deployed code hash (3mv4LRm6…) on the verifier's machine; it is not the Docker reproducible build (EVIDENCE §G2b re-run after D-027).
 - Redeploy to the same account with `near contract deploy … use-file <wasm> without-init-call …` (F-017).
 - Every deploy tags the git commit, bumps `contract_version()`, and is recorded on the [Evidence](/project/evidence) page.
 - `Quote` and `Position` borsh layouts are versioned. A layout change ships with a sandbox migration test.

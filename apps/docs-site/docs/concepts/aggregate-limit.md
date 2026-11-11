@@ -5,8 +5,8 @@ description: The v7 two-sided check. A loan must fit its own LTV ceiling and the
 ---
 # Aggregate borrowing limit
 
-<p className="verified">Verified against: spec docs/PRD.md §4.2 (aggregate rule, v7) · docs/work/interface-v7.md §A1, §A6 · D-018 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:52Z, 91db9ea), evidence/v7-modules/summary.md (2026-11-10)</p>
-<p className="status">Status: live on testnet (EVIDENCE §G2b, 2026-11-10T16:52Z). It runs in `nectar-core-v2.nectar.testnet`: `get_exit_capacity` returns total debt, the shared capacity and the headroom. On 2026-11-10 a Shield open was refused by this check before a buyer added capacity (evidence/v7-modules/summary.md; verifier record pending). The earlier v1 contract does not have this check.</p>
+<p className="verified">Verified against: spec docs/PRD.md §4.2 (aggregate rule, v7) · docs/work/interface-v7.md §A1, §A6 · D-018 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:52Z, 91db9ea; re-run on 2.2.1-v7 2026-11-11, recorded in b8784c1), §G7 re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
+<p className="status">Status: live on testnet (EVIDENCE §G2b, re-run on 2.2.1-v7 on 2026-11-11). It runs in `nectar-core-v2.nectar.testnet`: `get_exit_capacity` returns total debt, the shared capacity and the headroom. On 2026-11-11 the check refused the remote loan of position 8 (`remote_loan_refused` with reason `aggregate_limit`, reservation deposit refunded), as recorded in EVIDENCE §G7 re-run after D-027. The earlier v1 contract does not have this check.</p>
 
 ## Why it changed
 

@@ -5,7 +5,7 @@ description: Audit status, stated plainly.
 ---
 # Audits
 
-<p className="verified">Verified against: spec docs/PRD.md §15, §18 · docs/work/security-review-v7.md (2026-11-11) · D-026 (2026-11-10), D-027 (2026-11-11) · F-346 (2026-11-10) · tests named below · rollout logs evidence/rollout/ (2026-11-11; verifier record pending)</p>
+<p className="verified">Verified against: spec docs/PRD.md §15, §18 · docs/work/security-review-v7.md (2026-11-11) · D-026 (2026-11-10), D-027 (2026-11-11) · F-346 (2026-11-10) · tests named below · rollout logs evidence/rollout/ (2026-11-11) · docs/EVIDENCE.md re-runs after D-027: §G2b, §G7, §G13, §G14 (recorded in b8784c1), §G11, §G3b (recorded in 5083d30)</p>
 
 **No audit has been performed.** The contracts, the Solana program and the quoter are unaudited testnet code. Do not use them with real assets.
 
@@ -20,7 +20,7 @@ Mainnet also requires a 30-day testnet soak and a legal review of the disclaimer
 
 ## Pre-submission review (2026-11-11, not an audit)
 
-An automated, read-only multi-agent review (report: `docs/work/security-review-v7.md`) kept **33 findings: 5 high, 8 medium, 20 low**. Most concerned remote settlement: a signed remote leg could get stuck with the buyer's escrow spent and the collateral locked. Decision D-027 fixed every high and medium finding plus the cheap lows. It was deployed on 2026-11-11 as nectar-core-v2 `2.2.1-v7` (code-only upgrades), Solana vault v2 (in-place upgrade) and a redeployed EVM vault on the local fork. The full per-finding table is in `SECURITY.md` at the repository root. The re-runs on the upgraded stack have a **verifier record pending**.
+An automated, read-only multi-agent review (report: `docs/work/security-review-v7.md`) kept **33 findings: 5 high, 8 medium, 20 low**. Most concerned remote settlement: a signed remote leg could get stuck with the buyer's escrow spent and the collateral locked. Decision D-027 fixed every high and medium finding plus the cheap lows. It was deployed on 2026-11-11 as nectar-core-v2 `2.2.1-v7` (code-only upgrades), Solana vault v2 (in-place upgrade) and a redeployed EVM vault on the local fork. The full per-finding table is in `SECURITY.md` at the repository root. The verifier re-ran the gates on the upgraded stack on 2026-11-11 and recorded PASS for G11, G2b, G7, G13 (local fork), G14 (chain claims) and G3b ([Evidence](/project/evidence)). Every finding SR-1…SR-33 has at least one test named after it, and 124 `sr*` contract tests pass (EVIDENCE §G11, recorded in 5083d30). The tests ran on the fixed code only.
 
 Examples of reproducing tests: `sr3_expired_signed_leg_resigns_identically_with_a_fresh_nonce`, `sr5_two_remote_loans_cannot_exceed_remote_capacity`, `sr7_funding_refuses_a_recipient_no_vault_can_pay`, `sr8_squatted_slot_never_confirms_the_reservation`, `sr17_owed_collateral_claim_round_trip` (contracts/nectar-core); "nonces burnt on the attacker's own slots, same ids, do not block an honest settle or release" and "recipient ATA reassigned: settle credits a claim, recipient and depositor both pull" (solana/tests/nectar_vault.test.ts); `test_SR1_v2_nonceBurnedElsewhereDoesNotBlockSlot`, `test_SR30_v2_settleAtExactExpiry_reverts` (evm/test/SecurityV7.t.sol).
 
