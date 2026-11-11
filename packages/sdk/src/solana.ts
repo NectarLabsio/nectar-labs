@@ -1,9 +1,11 @@
-// nectar_vault client for the web app (WO-31, D-020): @solana/kit 8.6.0 instruction builders, PDAs, the Ed25519
-// verify instruction (F-082, byte-identical to solana/client/ed25519.ts) and a minimal devnet JSON-RPC reader.
-// Layouts: solana/deploy.md "Interface" (discriminators, account order, PDAs, Position offsets) and
-// solana/programs/nectar_vault/src/lib.rs (open_position accounts). Integers only; amounts are u64 base units.
+// nectar_vault v2 client for the web app (WO-31, WO-34w, D-020, interface-v7 §E): @solana/kit 8.6.0 instruction builders, PDAs, the
+// Ed25519 verify instruction (F-082, byte-identical to solana/client/ed25519.ts) and a minimal devnet JSON-RPC reader.
+// Layouts: solana/deploy.md "Interface v2" and solana/client/{pda,vault}.ts; packages/sdk/test/solana.test.ts compares every builder
+// with those helpers byte for byte. Integers only; amounts are u64 base units.
 //   open_position data = disc(8) ‖ position_id u64 LE ‖ authority [u8;32] ‖ amount u64 LE          (56 B)
 //   release data       = disc(8) ‖ position_id u64 LE ‖ nonce u64 LE ‖ expires i64 LE              (32 B)
+//   withdraw data      = disc(8) ‖ position_id u64 LE                                              (16 B)
+//   claim data         = disc(8)                                                                   ( 8 B)
 //   tx (release)       = [Ed25519 verify ix, release ix]; nothing may sit between them (deploy.md)
 import {
   AccountRole,
@@ -17,6 +19,7 @@ import {
   getBase58Encoder,
   getProgramDerivedAddress,
   getTransactionEncoder,
+  isOffCurveAddress,
   pipe,
   setTransactionMessageFeePayer,
   setTransactionMessageLifetimeUsingBlockhash,
@@ -44,13 +47,17 @@ export const DISCRIMINATOR = {
   open_position: [135, 128, 47, 77, 15, 152, 240, 49],
   settle: [175, 42, 185, 87, 144, 131, 102, 212],
   release: [253, 249, 15, 206, 28, 127, 193, 241],
+  withdraw: [183, 18, 70, 156, 148, 109, 161, 34],
+  claim: [62, 198, 214, 193, 213, 159, 108, 210],
   /** `Position` account discriminator. */
   position_account: [170, 188, 143, 228, 122, 64, 247, 208],
+  /** `Claim` account discriminator. */
+  claim_account: [155, 70, 22, 176, 123, 215, 246, 102],
 } as const;
 
-/** `Position` account (deploy.md): 123 bytes. */
+/** `Position` v2 account (deploy.md): 131 bytes. */
 export const POSITION_ACCOUNT = {
-  size: 123,
+  size: 131,
   version: 8,
   authority: 9,
   depositor: 41,
@@ -59,8 +66,19 @@ export const POSITION_ACCOUNT = {
   vault: 82,
   position_id: 114,
   bump: 122,
+  withdrawable: 123,
 } as const;
+export const POSITION_LAYOUT_VERSION = 2;
 export const POSITION_STATUS_OPEN = 1;
+export const POSITION_STATUS_SETTLED = 2;
+export const POSITION_STATUS_RELEASED = 3;
+
+/** `NonceRecord` v2 account (deploy.md): 91 bytes. Only its size matters here, for the rent shown in the sign preview. */
+export const NONCE_RECORD_ACCOUNT = { size: 91 } as const;
+
+/** `Claim` v1 account (deploy.md): 82 bytes. */
+export const CLAIM_ACCOUNT = { size: 82, version: 8, vault: 9, recipient: 41, amount: 73, bump: 81 } as const;
+export const CLAIM_LAYOUT_VERSION = 1;
 
 const U64_MAX = (1n << 64n) - 1n;
 const I64_MIN = -(1n << 63n);
@@ -137,6 +155,11 @@ export function isSolanaAddress(s: string): boolean {
   }
 }
 
+/** A wallet key: base58, 32 bytes and on the curve. nectar-core refuses anything else as a depositor or a buyer recipient (SR-7, SR-8). */
+export function isSolanaWalletKey(s: string): boolean {
+  return isSolanaAddress(s) && !isOffCurveAddress(address(s));
+}
+
 // ---------------------------------------------------------------- PDAs (deploy.md)
 
 const enc = new TextEncoder();
@@ -150,13 +173,19 @@ export async function vaultTokensPda(program: string, vault: string): Promise<Ad
   const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("tokens"), addrBytes(vault)] });
   return pda;
 }
-/** `["pos", vault, u64le(position_id)]`. */
-export async function positionPda(program: string, vault: string, positionId: bigint): Promise<Address> {
-  const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("pos"), addrBytes(vault), u64le(positionId, "position_id")] });
+/** `["pos", vault, u64le(position_id), depositor]`: one slot per depositor (SR-8). */
+export async function positionPda(program: string, vault: string, positionId: bigint, depositor: string): Promise<Address> {
+  const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("pos"), addrBytes(vault), u64le(positionId, "position_id"), addrBytes(depositor)] });
   return pda;
 }
-export async function noncePda(program: string, vault: string, nonce: bigint): Promise<Address> {
-  const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("nonce"), addrBytes(vault), u64le(nonce, "nonce")] });
+/** `["nonce", position_pda, u64le(nonce)]`: scoped to the depositor-bound slot (SR-1). */
+export async function noncePda(program: string, position: string, nonce: bigint): Promise<Address> {
+  const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("nonce"), addrBytes(position), u64le(nonce, "nonce")] });
+  return pda;
+}
+/** `["claim", vault, recipient]`. */
+export async function claimPda(program: string, vault: string, recipient: string): Promise<Address> {
+  const [pda] = await getProgramDerivedAddress({ programAddress: address(program), seeds: [enc.encode("claim"), addrBytes(vault), addrBytes(recipient)] });
   return pda;
 }
 /** Associated token account: seeds `[owner, token_program, mint]` under the ATA program. */
@@ -179,6 +208,12 @@ export function openPositionData(positionId: bigint, authority: Uint8Array, amou
 export function releaseData(positionId: bigint, nonce: bigint, expires: bigint): Uint8Array {
   return concat(DISCRIMINATOR.release, u64le(positionId, "position_id"), u64le(nonce, "nonce"), i64le(expires, "expires"));
 }
+
+export function withdrawData(positionId: bigint): Uint8Array {
+  return concat(DISCRIMINATOR.withdraw, u64le(positionId, "position_id"));
+}
+
+export const claimData = (): Uint8Array => Uint8Array.from(DISCRIMINATOR.claim);
 
 /** A named account, for the sign preview. */
 export interface NamedAccount {
@@ -207,7 +242,11 @@ export interface VaultIds {
   program: string;
   /** Mock NVDAx SPL mint (config `solana.mint`). */
   mint: string;
+  /** The owner of the mint account; the program enforces it. Default: classic SPL Token. */
+  tokenProgram?: string;
 }
+
+const tokenProgramOf = (ids: VaultIds): Address => address(ids.tokenProgram ?? TOKEN_PROGRAM_ADDRESS);
 
 /**
  * `open_position(position_id, authority, amount)`. Accounts (lib.rs OpenPosition): depositor (signer, w), vault, mint,
@@ -224,9 +263,9 @@ export async function openPositionInstruction(
     { name: "vault", address: vault, role: AccountRole.READONLY },
     { name: "mint", address: address(ids.mint), role: AccountRole.READONLY },
     { name: "vault_tokens", address: await vaultTokensPda(ids.program, vault), role: AccountRole.WRITABLE },
-    { name: "depositor_tokens", address: await associatedTokenAddress(p.depositor, ids.mint), role: AccountRole.WRITABLE },
-    { name: "position", address: await positionPda(ids.program, vault, p.positionId), role: AccountRole.WRITABLE },
-    { name: "token_program", address: TOKEN_PROGRAM_ADDRESS, role: AccountRole.READONLY },
+    { name: "depositor_tokens", address: await associatedTokenAddress(p.depositor, ids.mint, tokenProgramOf(ids)), role: AccountRole.WRITABLE },
+    { name: "position", address: await positionPda(ids.program, vault, p.positionId, p.depositor), role: AccountRole.WRITABLE },
+    { name: "token_program", address: tokenProgramOf(ids), role: AccountRole.READONLY },
     { name: "system_program", address: SYSTEM_PROGRAM_ADDRESS, role: AccountRole.READONLY },
   ];
   return {
@@ -239,27 +278,21 @@ export async function openPositionInstruction(
 }
 
 /**
- * `release(position_id, nonce, expires)`. Accounts (deploy.md, settle minus recipient_account/recipient_tokens): payer (signer, w), vault,
- * mint, vault_tokens (w), position (w), depositor (w), depositor_tokens (w, ATA, created if missing), nonce_record (w), instructions
- * sysvar, token_program, associated_token_program, system_program.
+ * `release(position_id, nonce, expires)`. Accounts (deploy.md): payer (signer, w), vault, position (w), nonce_record (w), instructions
+ * sysvar, system_program. Moves no tokens: it records the whole amount as `withdrawable`, and the depositor then signs `withdraw`.
  */
 export async function releaseInstruction(
   ids: VaultIds,
   p: { payer: string; depositor: string; positionId: bigint; nonce: bigint; expires: bigint },
 ): Promise<DescribedInstruction> {
   const vault = await vaultPda(ids.program, ids.mint);
+  const position = await positionPda(ids.program, vault, p.positionId, p.depositor);
   const accounts: NamedAccount[] = [
     { name: "payer", address: address(p.payer), role: AccountRole.WRITABLE_SIGNER },
     { name: "vault", address: vault, role: AccountRole.READONLY },
-    { name: "mint", address: address(ids.mint), role: AccountRole.READONLY },
-    { name: "vault_tokens", address: await vaultTokensPda(ids.program, vault), role: AccountRole.WRITABLE },
-    { name: "position", address: await positionPda(ids.program, vault, p.positionId), role: AccountRole.WRITABLE },
-    { name: "depositor", address: address(p.depositor), role: AccountRole.WRITABLE },
-    { name: "depositor_tokens", address: await associatedTokenAddress(p.depositor, ids.mint), role: AccountRole.WRITABLE },
-    { name: "nonce_record", address: await noncePda(ids.program, vault, p.nonce), role: AccountRole.WRITABLE },
+    { name: "position", address: position, role: AccountRole.WRITABLE },
+    { name: "nonce_record", address: await noncePda(ids.program, position, p.nonce), role: AccountRole.WRITABLE },
     { name: "instructions", address: INSTRUCTIONS_SYSVAR_ADDRESS, role: AccountRole.READONLY },
-    { name: "token_program", address: TOKEN_PROGRAM_ADDRESS, role: AccountRole.READONLY },
-    { name: "associated_token_program", address: ASSOCIATED_TOKEN_PROGRAM_ADDRESS, role: AccountRole.READONLY },
     { name: "system_program", address: SYSTEM_PROGRAM_ADDRESS, role: AccountRole.READONLY },
   ];
   return {
@@ -269,6 +302,48 @@ export async function releaseInstruction(
     accounts,
     args: { position_id: p.positionId.toString(), nonce: p.nonce.toString(), expires: p.expires.toString() },
   };
+}
+
+/**
+ * `withdraw(position_id)`, signed by the depositor after settle or release. Accounts (deploy.md): depositor (signer, w), vault, mint,
+ * vault_tokens (w), position (w), destination (w; any token account of the mint except the vault's own), token_program.
+ */
+export async function withdrawInstruction(ids: VaultIds, p: { depositor: string; positionId: bigint; destination: string }): Promise<DescribedInstruction> {
+  const vault = await vaultPda(ids.program, ids.mint);
+  const accounts: NamedAccount[] = [
+    { name: "depositor", address: address(p.depositor), role: AccountRole.WRITABLE_SIGNER },
+    { name: "vault", address: vault, role: AccountRole.READONLY },
+    { name: "mint", address: address(ids.mint), role: AccountRole.READONLY },
+    { name: "vault_tokens", address: await vaultTokensPda(ids.program, vault), role: AccountRole.WRITABLE },
+    { name: "position", address: await positionPda(ids.program, vault, p.positionId, p.depositor), role: AccountRole.WRITABLE },
+    { name: "destination", address: address(p.destination), role: AccountRole.WRITABLE },
+    { name: "token_program", address: tokenProgramOf(ids), role: AccountRole.READONLY },
+  ];
+  return {
+    instruction: ix(address(ids.program), accounts, withdrawData(p.positionId)),
+    program: ids.program,
+    label: "nectar_vault.withdraw",
+    accounts,
+    args: { position_id: p.positionId.toString() },
+  };
+}
+
+/**
+ * `claim()`, signed by the recipient: pays the whole `Claim` and closes it. Accounts (deploy.md): recipient (signer, w), vault, mint,
+ * vault_tokens (w), claim (w), destination (w; any token account of the mint except the vault's own), token_program.
+ */
+export async function claimInstruction(ids: VaultIds, p: { recipient: string; destination: string }): Promise<DescribedInstruction> {
+  const vault = await vaultPda(ids.program, ids.mint);
+  const accounts: NamedAccount[] = [
+    { name: "recipient", address: address(p.recipient), role: AccountRole.WRITABLE_SIGNER },
+    { name: "vault", address: vault, role: AccountRole.READONLY },
+    { name: "mint", address: address(ids.mint), role: AccountRole.READONLY },
+    { name: "vault_tokens", address: await vaultTokensPda(ids.program, vault), role: AccountRole.WRITABLE },
+    { name: "claim", address: await claimPda(ids.program, vault, p.recipient), role: AccountRole.WRITABLE },
+    { name: "destination", address: address(p.destination), role: AccountRole.WRITABLE },
+    { name: "token_program", address: tokenProgramOf(ids), role: AccountRole.READONLY },
+  ];
+  return { instruction: ix(address(ids.program), accounts, claimData()), program: ids.program, label: "nectar_vault.claim", accounts, args: {} };
 }
 
 // ---------------------------------------------------------------- Ed25519 verify instruction (F-082)
@@ -389,7 +464,7 @@ export function formatLamports(l: bigint): string {
   return `${whole}${frac ? "." + frac : ""} SOL`;
 }
 
-// ---------------------------------------------------------------- Position account decode
+// ---------------------------------------------------------------- account decode
 
 export interface VaultPosition {
   version: number;
@@ -400,23 +475,75 @@ export interface VaultPosition {
   vault: string;
   positionId: bigint;
   bump: number;
+  /** Units the depositor can `withdraw`: 0 while Open; set by settle (the remainder) or release (everything). */
+  withdrawable: bigint;
 }
 
+function checkLayout(data: Uint8Array, name: string, size: number, disc: readonly number[], version: number): DataView {
+  if (data.length !== size) throw new Error(`${name} account is ${data.length} bytes, expected ${size}`);
+  if (!disc.every((b, i) => data[i] === b)) throw new Error(`Not a nectar_vault ${name} account`);
+  if (data[8] !== version) throw new Error(`${name} layout version is ${data[8]}, expected ${version}`);
+  return new DataView(data.buffer, data.byteOffset, data.byteLength);
+}
+
+/** Decodes a `Position` v2 account. The caller checks that the account owner is the vault program (`SolanaReader.vaultPosition` does). */
 export function decodeVaultPosition(data: Uint8Array): VaultPosition {
-  if (data.length < POSITION_ACCOUNT.size) throw new Error(`Position account is ${data.length} bytes, expected ${POSITION_ACCOUNT.size}`);
-  if (!DISCRIMINATOR.position_account.every((b, i) => data[i] === b)) throw new Error("Not a nectar_vault Position account");
-  const v = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  const L = POSITION_ACCOUNT;
+  const v = checkLayout(data, "Position", L.size, DISCRIMINATOR.position_account, POSITION_LAYOUT_VERSION);
   const dec = getAddressDecoder();
   return {
-    version: data[POSITION_ACCOUNT.version]!,
-    authority: bytesToBase58(data.slice(POSITION_ACCOUNT.authority, POSITION_ACCOUNT.authority + 32)),
-    depositor: dec.decode(data.slice(POSITION_ACCOUNT.depositor, POSITION_ACCOUNT.depositor + 32)),
-    amount: v.getBigUint64(POSITION_ACCOUNT.amount, true),
-    status: data[POSITION_ACCOUNT.status]!,
-    vault: dec.decode(data.slice(POSITION_ACCOUNT.vault, POSITION_ACCOUNT.vault + 32)),
-    positionId: v.getBigUint64(POSITION_ACCOUNT.position_id, true),
-    bump: data[POSITION_ACCOUNT.bump]!,
+    version: data[L.version]!,
+    authority: bytesToBase58(data.slice(L.authority, L.authority + 32)),
+    depositor: dec.decode(data.slice(L.depositor, L.depositor + 32)),
+    amount: v.getBigUint64(L.amount, true),
+    status: data[L.status]!,
+    vault: dec.decode(data.slice(L.vault, L.vault + 32)),
+    positionId: v.getBigUint64(L.position_id, true),
+    bump: data[L.bump]!,
+    withdrawable: v.getBigUint64(L.withdrawable, true),
   };
+}
+
+export interface VaultClaim {
+  version: number;
+  vault: string;
+  recipient: string;
+  amount: bigint;
+  bump: number;
+}
+
+/** Decodes a `Claim` v1 account. The caller checks that the account owner is the vault program (`SolanaReader.vaultClaim` does). */
+export function decodeVaultClaim(data: Uint8Array): VaultClaim {
+  const L = CLAIM_ACCOUNT;
+  const v = checkLayout(data, "Claim", L.size, DISCRIMINATOR.claim_account, CLAIM_LAYOUT_VERSION);
+  const dec = getAddressDecoder();
+  return {
+    version: data[L.version]!,
+    vault: dec.decode(data.slice(L.vault, L.vault + 32)),
+    recipient: dec.decode(data.slice(L.recipient, L.recipient + 32)),
+    amount: v.getBigUint64(L.amount, true),
+    bump: data[L.bump]!,
+  };
+}
+
+/** The base of an SPL token account (mint, owner, amount, state), the fields the program's own `payout::accepts` reads. */
+export const TOKEN_ACCOUNT = { minSize: 165, mint: 0, owner: 32, amount: 64, state: 108 } as const;
+export const TOKEN_STATE_INITIALIZED = 1;
+
+export interface TokenAccountInfo {
+  mint: string;
+  owner: string;
+  amount: bigint;
+  /** 0 uninitialized, 1 initialized, 2 frozen. */
+  state: number;
+}
+
+export function decodeTokenAccount(data: Uint8Array): TokenAccountInfo {
+  const L = TOKEN_ACCOUNT;
+  if (data.length < L.minSize) throw new Error(`Token account is ${data.length} bytes, expected at least ${L.minSize}`);
+  const v = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  const dec = getAddressDecoder();
+  return { mint: dec.decode(data.slice(L.mint, L.mint + 32)), owner: dec.decode(data.slice(L.owner, L.owner + 32)), amount: v.getBigUint64(L.amount, true), state: data[L.state]! };
 }
 
 // ---------------------------------------------------------------- devnet JSON-RPC (read-only + status)
@@ -466,8 +593,8 @@ export class SolanaReader {
   }
 
   /** SPL balance of an owner's ATA in base units; 0 when the ATA does not exist. */
-  async tokenBalance(owner: string, mint: string): Promise<bigint> {
-    const ata = await associatedTokenAddress(owner, mint);
+  async tokenBalance(owner: string, mint: string, tokenProgram: string = TOKEN_PROGRAM_ADDRESS): Promise<bigint> {
+    const ata = await associatedTokenAddress(owner, mint, tokenProgram);
     try {
       const r = await this.call<{ value: { amount: string } }>("getTokenAccountBalance", [ata, { commitment: "confirmed" }]);
       return BigInt(r.value.amount);
@@ -477,16 +604,45 @@ export class SolanaReader {
     }
   }
 
-  async accountData(addr: string): Promise<Uint8Array | null> {
-    const r = await this.call<{ value: null | { data: [string, string] } }>("getAccountInfo", [addr, { encoding: "base64", commitment: "confirmed" }]);
-    return r.value ? b64ToBytes(r.value.data[0]) : null;
+  /** Raw account: its owner program and data, or null when the account does not exist. */
+  async accountInfo(addr: string): Promise<{ owner: string; data: Uint8Array } | null> {
+    const r = await this.call<{ value: null | { owner: string; data: [string, string] } }>("getAccountInfo", [addr, { encoding: "base64", commitment: "confirmed" }]);
+    return r.value ? { owner: r.value.owner, data: b64ToBytes(r.value.data[0]) } : null;
   }
 
-  /** The vault's Position account for a NEAR position id, or null (not deposited yet, or closed after settle/release). */
-  async vaultPosition(ids: VaultIds, positionId: bigint): Promise<VaultPosition | null> {
+  async accountData(addr: string): Promise<Uint8Array | null> {
+    return (await this.accountInfo(addr))?.data ?? null;
+  }
+
+  /**
+   * The vault's slot for (NEAR position id, depositor), or null when it was never opened or is already withdrawn. `status` says what it
+   * holds: an account in status Settled or Released is not an open deposit (deploy.md). Throws on a slot that is not the program's own.
+   */
+  async vaultPosition(ids: VaultIds, positionId: bigint, depositor: string): Promise<VaultPosition | null> {
     const vault = await vaultPda(ids.program, ids.mint);
-    const data = await this.accountData(await positionPda(ids.program, vault, positionId));
-    return data ? decodeVaultPosition(data) : null;
+    const info = await this.accountInfo(await positionPda(ids.program, vault, positionId, depositor));
+    if (!info) return null;
+    if (info.owner !== ids.program) throw new Error("The Position account is not owned by the vault program.");
+    const p = decodeVaultPosition(info.data);
+    if (p.vault !== vault || p.positionId !== positionId || p.depositor !== depositor) throw new Error("The Position account does not match this vault, position and depositor.");
+    return p;
+  }
+
+  /** The recipient's pending `Claim`, or null when nothing is owed. Throws on an account that is not the program's own. */
+  async vaultClaim(ids: VaultIds, recipient: string): Promise<VaultClaim | null> {
+    const vault = await vaultPda(ids.program, ids.mint);
+    const info = await this.accountInfo(await claimPda(ids.program, vault, recipient));
+    if (!info) return null;
+    if (info.owner !== ids.program) throw new Error("The Claim account is not owned by the vault program.");
+    const c = decodeVaultClaim(info.data);
+    if (c.vault !== vault || c.recipient !== recipient) throw new Error("The Claim account does not match this vault and recipient.");
+    return c;
+  }
+
+  /** An SPL token account, or null when it does not exist or is not owned by the given token program. */
+  async tokenAccount(addr: string, tokenProgram: string = TOKEN_PROGRAM_ADDRESS): Promise<TokenAccountInfo | null> {
+    const info = await this.accountInfo(addr);
+    return info && info.owner === tokenProgram ? decodeTokenAccount(info.data) : null;
   }
 
   async rentExemptLamports(bytes: number): Promise<bigint> {

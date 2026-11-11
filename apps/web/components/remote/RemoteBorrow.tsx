@@ -2,10 +2,11 @@
 // /borrow, Solana path: reserve on NEAR → deposit with Phantom → attested confirmation → Open (WO-31).
 import { useEffect, useState } from "react";
 import { Banner, Button, Card, FeeStackList, Field, Kv } from "@nectar/ui";
-import { bpsToPct, borrowReasonText, feeStack, formatUsdE6, parseUnits, remotePath, txRemote, type BorrowPreview, type PositionView } from "@nectar/sdk";
+import { MIN_REMOTE_BORROW_USD_E6, SOLANA_DOMAIN_ID, bpsToPct, borrowReasonText, feeStack, formatUsdE6, largestFittingQuoteUsdE6, parseUnits, remotePath, remoteRefusalText, txRemote, type BorrowPreview, type PositionView, type QuoteView } from "@nectar/sdk";
 import { useChain, useSign, useView, useWallet } from "@/components/AppProvider";
 import { LoadingBlock, RpcErrorBanner } from "@/components/states";
-import { RemoteDeposit, RemoteOpenCard, RemoteSteps, ReservationCard, isRemote, stepOf, useInterval } from "./RemoteFlow";
+import { RemoteDeposit, RemoteOpenCard, RemoteSteps, ReservationCard, SolanaWalletBlock, isRemote, stepOf, useInterval } from "./RemoteFlow";
+import { useSolanaWallet } from "./useSolanaWallet";
 
 const tryParse = (s: string, d: number): bigint | null => {
   try {
@@ -67,6 +68,7 @@ export function RemoteBorrow() {
   const { config, generation } = useChain();
   const { accountId } = useWallet();
   const sign = useSign();
+  const sol = useSolanaWallet();
   const col = config.collaterals[0];
   const [unitsIn, setUnitsIn] = useState("");
   const [borrowIn, setBorrowIn] = useState("");
@@ -84,19 +86,26 @@ export function RemoteBorrow() {
   const preview = useView<BorrowPreview>(col && units && borrow ? (v) => v.previewBorrow(col.symbol, units.toString(), borrow.toString()) : null, [col?.symbol, units?.toString(), borrow?.toString()]);
   const fees = borrow && preview.data ? feeStack(borrow, preview.data, { generation, originationFeeBps: config.v7.origination_fee_bps }) : null;
   const preLiqErr = col && (preLiq < col.pre_liq_min_bps || preLiq > col.pre_liq_max_bps) ? `Between ${bpsToPct(col.pre_liq_min_bps)} and ${bpsToPct(col.pre_liq_max_bps)}` : null;
-  const canReserve = Boolean(accountId && config.core && col && units && borrow && preview.data?.ok && !preLiqErr);
+  // SR-5: a remote loan settles in one leg, so one quote with a recipient on this chain must cover it. nectar-core re-checks this.
+  const quotes = useView<QuoteView[]>(col ? (v) => v.listQuotes(col.symbol) : null, [col?.symbol]);
+  const largest = quotes.data ? largestFittingQuoteUsdE6(quotes.data, SOLANA_DOMAIN_ID) : null;
+  const overCap = borrow !== null && largest !== null && borrow > largest;
+  const belowMin = borrow !== null && borrow < MIN_REMOTE_BORROW_USD_E6;
+  const depositor = sol.devnet ? sol.address : null;
+  const canReserve = Boolean(accountId && config.core && col && units && borrow && preview.data?.ok && !preLiqErr && depositor && !overCap && !belowMin);
 
   const reserve = async () => {
-    if (!config.core || !col || !units || !borrow) return;
+    if (!config.core || !col || !units || !borrow || !depositor) return;
     setErr(null);
-    const out = await sign(txRemote.reserve(config.core, { collateral: col.symbol, units: units.toString(), borrow_usd_e6: borrow.toString(), pre_liq_ltv_bps: preLiq }), {
+    const out = await sign(txRemote.reserve(config.core, { collateral: col.symbol, units: units.toString(), borrow_usd_e6: borrow.toString(), pre_liq_ltv_bps: preLiq, depositor }), {
       success: "Reserved. Deposit on Solana next",
       summary: (
         <div className="stack-sm">
           <p className="small">
-            No collateral moves on NEAR. nectar-core derives a Solana key for this position (path <span className="mono">{remotePath("<id>", config.v7.remote_path_prefix)}</span>) and holds the reservation for 30 minutes. The 0.05 NEAR deposit is refunded when the reservation confirms, is refused or expires. USDC is paid only after the deposit is
+            No collateral moves on NEAR. nectar-core derives a Solana key for this position (path <span className="mono">{remotePath("<id>", config.v7.remote_path_prefix)}</span>) and holds the reservation for 30 minutes. About 0.0057 NEAR of the 0.05 NEAR deposit pays for the record's storage; the rest is refunded when the reservation confirms, is refused or expires. USDC is paid only after the deposit is
             confirmed by an attested read of the vault.
           </p>
+          <p className="small">Only a deposit from <span className="addr">{depositor}</span> can confirm this reservation.</p>
           {fees ? <div className="kvs"><Kv k="You receive at confirmation (estimate)" v={formatUsdE6(fees.net_usd_e6)} /></div> : null}
         </div>
       ),
@@ -105,7 +114,7 @@ export function RemoteBorrow() {
     if (!out) return;
     const newId = out.ok ? decodeU64Return(out.successValue) : null;
     if (!newId) {
-      setErr(out.ok ? "The contract did not return a position id." : (out.failure ?? "Reservation failed."));
+      setErr(out.ok ? "The contract did not return a position id." : (remoteRefusalText(out.failure) ?? out.failure ?? "Reservation failed."));
       return;
     }
     setId(newId);
@@ -124,9 +133,13 @@ export function RemoteBorrow() {
           <div className="stack">
             <p className="small">Your collateral stays on Solana devnet in the nectar_vault program, locked to a key nectar-core derives for this position. Reserve here, then deposit with Phantom within 30 minutes.</p>
             <Field label={`Collateral units on Solana (${col?.symbol ?? ""})`} inputMode="decimal" value={unitsIn} onChange={(e) => setUnitsIn(e.target.value)} unit={col?.symbol} error={unitsIn && !units ? "Enter a positive number" : undefined} hint="Mock tokens on Solana devnet." />
-            <Field label="Borrow" inputMode="decimal" value={borrowIn} onChange={(e) => setBorrowIn(e.target.value)} unit="USDC" error={borrowIn && !borrow ? "Enter a positive number" : undefined} />
+            <Field label="Borrow" inputMode="decimal" value={borrowIn} onChange={(e) => setBorrowIn(e.target.value)} unit="USDC" error={borrowIn && !borrow ? "Enter a positive number" : belowMin ? `The minimum loan is ${formatUsdE6(MIN_REMOTE_BORROW_USD_E6, 0)}` : undefined} />
             <Field label="Pre-liquidation LTV" type="number" value={preLiq} onChange={(e) => setPreLiq(Number(e.target.value))} unit="bps" error={preLiqErr ?? undefined} />
-            {err ? <Banner tone="danger" title="Reservation failed">{err}</Banner> : null}
+            <SolanaWalletBlock sol={sol} need="commit it as the depositor">
+              <div className="kvs"><Kv k="Depositor wallet" v={<span className="addr" data-testid="depositor-wallet">{sol.address}</span>} /></div>
+              <p className="caption">nectar-core records this wallet with the reservation. Only a deposit from it can confirm the loan, so deposit from this wallet.</p>
+            </SolanaWalletBlock>
+            {err ? <Banner tone="danger" title="Reservation failed"><span data-testid="reserve-error">{err}</span></Banner> : null}
             <Button variant="primary" disabled={!canReserve} onClick={reserve}>Reserve on NEAR</Button>
           </div>
         </Card>
@@ -134,9 +147,11 @@ export function RemoteBorrow() {
           {!units || !borrow ? <p className="dim">Enter units and an amount to see the limit and fees.</p> : null}
           {preview.error ? <RpcErrorBanner error={preview.error} onRetry={preview.reload} /> : preview.loading ? <LoadingBlock /> : null}
           {preview.data && !preview.data.ok ? <Banner tone="danger" title="Over the limit">{borrowReasonText(preview.data.reason) ?? "Borrow exceeds B_c or the pool."}</Banner> : null}
+          {overCap ? <Banner tone="danger" title="Above the largest single quote"><span data-testid="remote-cap-refused">{remoteRefusalText("remote_settle_capacity")}</span></Banner> : null}
           {preview.data ? (
             <div className="kvs" aria-live="polite">
               <Kv k="Limit B_c (contract)" v={formatUsdE6(preview.data.b_c_usd_e6)} />
+              {largest !== null ? <Kv k="Largest single quote on Solana" v={<span data-testid="remote-cap">{formatUsdE6(largest)}</span>} /> : null}
               <Kv k="Limits re-checked" v="at confirmation, with a fresh price" />
             </div>
           ) : null}

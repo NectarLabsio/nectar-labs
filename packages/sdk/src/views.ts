@@ -23,6 +23,7 @@ import type {
   U64,
 } from "./types";
 import type { PendingRelease } from "./solana";
+import type { PendingSettlement } from "./remote";
 import { NOTE_PAGE, type NoteToken, type ReserveNoteView, type ReserveView } from "./notes";
 
 /** interface-v7 §A6: v2 answers `contract_version()` with a "2." prefix ("2.0.0-v7"). Anything else (v1: "nectar-core 0.1.0 p2") is v1. */
@@ -106,6 +107,10 @@ export class NectarViews {
   getClaimable = (account_id: string) => this.v<U128>("get_claimable", { account_id });
   /** interface-v7 §B: the signed NECTAR_RELEASE_V1 for a Releasing remote position, or null. */
   getPendingRelease = (position_id: U64) => this.v<PendingRelease | null>("get_pending_release", { position_id });
+  /** The signed remote leg of a position, or null when it has none. */
+  getPendingSettlement = (position_id: U64) => this.v<PendingSettlement | null>("get_pending_settlement", { position_id });
+  /** SR-17: units of `symbol` nectar-core owes this account after a failed transfer; `claim_owed_collateral` pays them. */
+  getOwedCollateral = (account_id: string, symbol: string) => this.v<U128>("get_owed_collateral", { account_id, symbol });
   isReferrer = (account_id: string) => this.v<boolean>("is_referrer", { account_id });
   getSessionCalendar = (from_index = 0, limit = 100) => this.v<SessionWindow[]>("get_session_calendar", { from_index, limit });
   /** Every calendar window (pages of 100, the contract's MAX_PAGE; at most 600 windows). */

@@ -12,6 +12,8 @@ writes use the localhost-only `window.__NECTAR_E2E_MOCK__.near` wallet that reco
 Args-dependent views (preview_borrow with `shield`, etc.): decode `params.args_base64` in a per-spec route (see e2e/shields.spec.ts).
 Running E2E: run `npx next start -p <port>` in background and set `E2E_BASE_URL`; full suite ≈ 5 min, 1 worker. `formatUsdE6` shows 2 dp truncated.
 Landing v2 (WO-33a): `/` uses CSS module `components/landing/landing.module.css` (local names avoid components.css collisions); module ids are #borrow (shields), #reserve, #spend, #notes, #chains; agent_skill is a div inside #code.
+Browsers: the shared Playwright cache can lag the pinned version (1248 vs 1254 on 2026-11-11); use `PW_CHANNEL=chrome` rather than installing. design*.spec and screens.spec write to evidence/, so skip them when the work order limits writes.
+Remote spec answers `getAccountInfo` by address, deriving the PDAs with `@nectar/sdk` in the spec: a wrong seed in the app makes the card vanish, so the flow tests also cover seeds.
 Nav strict-mode traps: no `session-badge` testid and no role=dialog in the shell (specs use unscoped getByRole("dialog")).
 
 **Why:** gates pass at different times; the UI must be tested and must not claim "live".

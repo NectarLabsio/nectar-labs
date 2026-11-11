@@ -80,7 +80,7 @@ export default function NotePage() {
     if (!config.core || ref?.kind !== "QUOTE") return;
     await sign(txNotes.setQuoteRemoteRecipient(config.core, ref.quote_id, value), {
       success: value ? "Solana recipient set" : "Solana recipient cleared",
-      summary: <p className="small">Remote (Solana devnet) fills of quote #{ref.quote_id} {value ? <>pay <span className="mono">{value}</span></> : "fall back to NEAR"}. No deposit.</p>,
+      summary: <p className="small">Remote (Solana devnet) fills of quote #{ref.quote_id} {value ? <>pay <span className="mono">{value}</span></> : "fall back to NEAR"}. The 1 yoctoNEAR deposit makes your wallet confirm the change.</p>,
     });
     setRecipient("");
     quote.reload();

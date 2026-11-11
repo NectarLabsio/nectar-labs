@@ -167,7 +167,7 @@ export interface RemoteConfigView {
   vault_read_deposit_yocto: U128 | null;
   vault_read_gas_tgas: number | null;
   reservation_expiry_s: number;
-  /** Deposit `reserve_remote_position` requires (refunded). Optional only for fixtures that predate WO-23a. */
+  /** Deposit `reserve_remote_position` requires (refunded less the record's storage). Optional only for fixtures that predate WO-23a. */
   reserve_deposit_yocto?: U128;
 }
 /** `set_vault_read_config` arguments (owner; contract: 1..=128-char strings, deposit > 0, gas 10..=100 Tgas). */
@@ -408,6 +408,8 @@ export interface NectarEventMap {
   session_forced_closed: { symbol: string; closed?: boolean };
   shield_opened: { position_id: U64; borrower: AccountId; collateral: string; kind: ShieldKind; window_end_ns: U64; fee_bps: Bps; fee_usd_e6: U128; remote: boolean };
   self_settled: { position_id: U64; [k: string]: unknown };
+  remote_loan_refused: { position_id: U64; reason: string };
+  remote_deposit_rejected: { position_id: U64; reason: string };
 }
 export type NectarEventName = keyof NectarEventMap;
 export type NectarEvent = {

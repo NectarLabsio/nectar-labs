@@ -89,9 +89,9 @@ describe("note calls", () => {
     expect(() => txNotes.nftTransfer(CORE, "z-1", "bob.testnet")).toThrow();
     expect(() => txNotes.nftTransfer(CORE, "p-1", "Bad Account")).toThrow();
   });
-  it("set_quote_remote_recipient: no deposit, base58 checked, null clears", () => {
+  it("set_quote_remote_recipient: 1 yocto, base58 checked, null clears", () => {
     const rcpt = "So11111111111111111111111111111111111111112";
-    expect(txNotes.setQuoteRemoteRecipient(CORE, "2", rcpt)).toMatchObject({ methodName: "set_quote_remote_recipient", deposit: "0", args: { quote_id: "2", recipient: rcpt } });
+    expect(txNotes.setQuoteRemoteRecipient(CORE, "2", rcpt)).toMatchObject({ methodName: "set_quote_remote_recipient", deposit: "1", args: { quote_id: "2", recipient: rcpt } });
     expect(txNotes.setQuoteRemoteRecipient(CORE, "2", null).args).toEqual({ quote_id: "2", recipient: null });
     expect(() => txNotes.setQuoteRemoteRecipient(CORE, "2", "not-base58-0OIl")).toThrow();
   });

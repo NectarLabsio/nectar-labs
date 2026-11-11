@@ -240,6 +240,8 @@ export function borrowReasonText(reason: string | null | undefined): string | nu
       return "The asset's total debt would exceed (1 − h)(Q + R + D): no headroom left for this amount.";
     case "ca_pending":
       return "A corporate action is pending; new borrows are refused until it is applied. Repay still works.";
+    case "borrow below minimum":
+      return "The minimum loan is $5.";
     case "referrer_is_borrower":
       return "The referrer cannot be the borrower.";
     default:

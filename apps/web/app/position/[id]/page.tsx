@@ -27,7 +27,7 @@ import {
   type ShieldView,
 } from "@nectar/sdk";
 import { useChain, useFeature, useSign, useView, useWallet } from "@/components/AppProvider";
-import { DepositSourceBadge, RemoteDeposit, RemoteOpenCard, RemoteRelease, RemoteStatusBadge, ReservationCard, isRemote } from "@/components/remote/RemoteFlow";
+import { DepositSourceBadge, OwedCollateralCard, RemoteAfterOpen, RemoteDeposit, RemoteOpenCard, RemoteRelease, RemoteStatusBadge, ReservationCard, isRemote } from "@/components/remote/RemoteFlow";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { ProfitLockPanel, ShieldStatusCard } from "@/components/Shields";
 import { NoteLink } from "@/components/Notes";
@@ -69,7 +69,8 @@ export default function PositionPage() {
   } catch {
     amount = null;
   }
-  const remote = solanaOn && isRemote(pos) ? pos : null;
+  // The Solana flow only: a Base position (P2b, driven by scripts on a local fork) has no wallet flow here.
+  const remote = solanaOn && isRemote(pos) && pos.remote.chain_id !== "base-sepolia" ? pos : null;
   const canRepay = Boolean(pos && pos.status === "Open" && accountId === pos.borrower && (!remote || (remote.remote.status === "Open" && big(remote.debt_usd_e6) > 0n)));
   const repay = async () => {
     if (!config.usdc || !config.core || !pos || !amount) return;
@@ -131,7 +132,7 @@ export default function PositionPage() {
                       <NxBadge tone={statusTone} data-testid="position-status" data-status={status}>{status}</NxBadge>
                       {remote ? <><RemoteStatusBadge status={remote.remote.status} /><DepositSourceBadge source={remote.remote.source} /></> : null}
                     </div>
-                    <span className="nx-k">{formatUnits(pos.units, dec)} {pos.collateral} (mock) on {remote ? "Solana devnet, settled by NEAR testnet" : "NEAR testnet"}. {sh.data ? `${sh.data.kind} Shield` : "Standard loan"}, flag line {bpsToPct(preLiq)} LTV.</span>
+                    <span className="nx-k">{formatUnits(pos.units, dec)} {pos.collateral} (mock) on {remote ? "Solana devnet, settled by NEAR testnet" : pos.remote?.chain_id === "base-sepolia" ? "Base (local fork), settled by NEAR testnet" : "NEAR testnet"}. {sh.data ? `${sh.data.kind} Shield` : "Standard loan"}, flag line {bpsToPct(preLiq)} LTV.</span>
                   </div>
                 </div>
               </div>
@@ -150,9 +151,17 @@ export default function PositionPage() {
             ) : null}
 
             {pos.status === "Closed" ? (
-              <Panel title="Closed" titleLevel={2} data-testid="position-closed">
-                <p className="nx-k">This loan has no debt left: it was repaid or settled. Per-buyer settlement rows appear in the <Link className="nx-link" href="/feed#settlements-h">settlement history</Link> once the Feed indexer records the <code>settled_near</code> event.</p>
-              </Panel>
+              <div className="nx-stack" style={{ gap: 20 }}>
+                <Panel title="Closed" titleLevel={2} data-testid="position-closed">
+                  {remote?.remote.status === "Expired" ? (
+                    <p className="nx-k">This reservation expired before a deposit was recorded, so no loan was paid.</p>
+                  ) : (
+                    <p className="nx-k">This loan has no debt left: it was repaid or settled. Per-buyer settlement rows appear in the <Link className="nx-link" href="/feed#settlements-h">settlement history</Link> once the Feed indexer records the <code>settled_near</code> event.</p>
+                  )}
+                </Panel>
+                {remote?.remote.status === "Expired" ? <RemoteDeposit pos={remote} onChanged={p.reload} loadedAt={loadedAt} /> : remote ? <RemoteAfterOpen pos={remote} onChanged={p.reload} /> : null}
+                <OwedCollateralCard symbol={pos.collateral} decimals={dec} />
+              </div>
             ) : (
               <div className="nx-split">
                 <Panel as="section" aria-label="Health" style={{ gap: 22 }}>
@@ -186,7 +195,7 @@ export default function PositionPage() {
                       <RemoteDeposit pos={remote} onChanged={p.reload} loadedAt={loadedAt} />
                     </>
                   ) : remote && remote.remote.status !== "Open" ? (
-                    <RemoteRelease pos={remote} onChanged={p.reload} />
+                    <RemoteAfterOpen pos={remote} onChanged={p.reload} />
                   ) : remote && !canRepay ? (
                     <>
                       <RemoteOpenCard pos={remote} />
@@ -226,6 +235,7 @@ export default function PositionPage() {
                     </Panel>
                   )}
                   {sh.data ? <ShieldStatusCard shield={sh.data} /> : null}
+                  <OwedCollateralCard symbol={pos.collateral} decimals={dec} />
                 </div>
               </div>
             )}
