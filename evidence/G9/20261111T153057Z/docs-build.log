@@ -1,0 +1,11 @@
+
+> docs-site@0.1.0 build /private/tmp/verify-G9-20261111T153057Z/apps/docs-site
+> docusaurus build
+
+[INFO] [en] Creating an optimized production build...
+[webpackbar] ℹ Compiling Client
+[webpackbar] ℹ Compiling Server
+[webpackbar] ✔ Server: Compiled successfully in 8.33s
+[webpackbar] ✔ Client: Compiled successfully in 17.07s
+[SUCCESS] Generated static files in "build".
+[INFO] Use `npm run serve` command to test your build locally.

@@ -32,6 +32,7 @@
 | G14 x402 (re-run on HEAD; demo agent verifies the MCP borrow call before signing) | PASS — own x402 server from the clone on :8891: unpaid GET → 402 (near:testnet, usdc-mock, 10000, payTo nectar.testnet); demo exit 0: borrow_verified → borrow E2suM2LC… → core-v2 position_opened #15 $10, fee $0.03, 10 receipts 0 failed; relay 4vW2tPF5… x402-relayer → Delegate agent1 → usdc-mock ft_transfer {nectar.testnet, 10000}, 4 receipts 0 failed; 200 + 123 CSV rows (= free upstream); treasury 30000 → 40000; x402 test 34/0 | 2026-11-11T15:02Z–15:25Z (demo 15:02:29Z–15:02:48Z) | 48b5c5a | evidence/G14/verifier-20261111T145956Z/ (see §G14; agent1 now holds 0 mock NVDAx) |
 | G14 x402 (re-run after D-027) | PASS — chain claims (08:02Z) + 402 → 200 verifier-run 2026-11-11T13:54Z–13:55Z: own x402 server from the clone on :8891, unpaid GET → 402 (near:testnet, usdc-mock, 10000, payTo nectar.testnet), paid → 200 CSV 110 rows | 2026-11-11T08:02Z–08:25Z; 13:52Z–14:18Z | 3ab3026; 45ed1f3 (402 → 200) | evidence/G14/verifier-20261111T080154Z/ (borrow HvFX6… #13, relay BemztvL…); evidence/G14/verifier-20261111T135216Z/ (borrow 7UFpexpd… agent1 → nvdax-mock ft_transfer_call → core-v2 position_opened #14 $10, fee $0.03, 10 receipts 0 failed; relay EskZKj9s… signer x402-relayer → Delegate agent1 (pk 3zyEty…) → usdc-mock ft_transfer {nectar.testnet, 10000}, 4 receipts 0 failed; treasury usdc 20000 → 30000; see §G14) |
 | G1 (2.2.1 gas rows) | PASS (re-check after WO-45; prior FAIL 13:53Z at 45ed1f3 kept in §G1) — 67 of 67 non-private change methods have a GAS row, 0 rows ≥ 100 Tgas (max tx-total 78.60, max receipt 67.61); remove_extra_remote_chain 2.64, update_owner_price(oracle_rejected) 2.61; 608 unit + 51 sandbox, 0 failed; no contracts/*/src change since 2.2.1 (4a67bd6); tested wasm = deployed code_hash 3mv4LRm6… | 2026-11-11T15:01Z–15:25Z | 48b5c5a | evidence/G1/verifier-221b-20261111T145956Z/ (method-gas-diff.tsv, gas-summary.txt, wasm-vs-deployed.txt, src-unchanged.txt; see §G1) |
+| G9 run 3 (after review 2) | PASS — quick start about 2.3 min (pnpm i 13 s, demo:testnet 5 s, verify 36 s, docs build 25 s; all exit 0; ui 7, feed 63, keeper 293, x402 34, 0 failed); gitleaks 305 commits, no leaks; R2-03/04/05/06/09/11 present in code; no "never joined to IPs" / "instead of being published"; GA "not configured"; `next start` sends X-Frame-Options DENY, HSTS, CSP frame-ancestors 'none'; Chrome wallet selector opens with 6 entries, 0 CSP console messages; Feed MCP stdio + HTTP live (own ports); ids answer on RPC; payload builds with `website` absent; handoffs 5 DONE / 13 DEFAULT / 8 KUNAL-ONLY / 0 OTHER-OPEN | 2026-11-11T15:30Z–15:38Z | 3107a1a | evidence/G9/20261111T153057Z/ (see §G9 run 3) |
 | G9 fresh-clone rehearsal (re-run after WO-38) | PASS — quick start under 2 min; demo:testnet, verify (ui 7, feed 63, keeper 293, x402 17, sdk 178; 0 failed), verify:quick (repo-wide branding check first), docs build and gitleaks (272 commits, no leaks) all exit 0; no "hackathon" in the product sources, the built docs site or search-index.json; 21 README routes 200; Feed MCP stdio + HTTP live; no unbacked claim; payload builds with `website` absent | 2026-11-11T08:57Z–09:00Z | 0af5cdd | evidence/G9/20261111T085721Z/ (see §G9 re-run) |
 | G9 (first run) | FAIL — superseded by the re-run above; one copy-rule breach: docs-site page Project › Evidence (`apps/docs-site/docs/project/evidence.md:11`, built to /project/evidence) says "built for the NEAR Hackathon". Everything else passed: quick start in about 3 min, demo:testnet / verify / docs build / gitleaks (268 commits) exit 0, Feed MCP stdio + HTTP live with no env, ids answer on RPC | 2026-11-11T08:43Z–08:50Z | c5f6349 | evidence/G9/20261111T084317Z/ (see §G9) |
 
@@ -588,6 +589,49 @@ Explorer: none opened (G10 is facts + read-only RPC).
 Result: PASS with open items F-351 (ERC-8021 format, G12/G13 scope), F-352 (xStocks multiplier, G11), F-353 (Rhea ids). None used in code.
 
 ## G9
+
+### G9 run 3 — fresh-clone rehearsal after review 2 — PASS — 2026-11-11T15:30Z–15:38Z — commit 3107a1a
+Work order docs/work/g9-final-2.md (steps 1–7 of g9-final.md plus 8–10). Fresh clone `/tmp/verify-G9-20261111T153057Z` of local main (HEAD 3107a1a). No secrets.
+Own ports only: Feed REST :8988, MCP HTTP :8989, web `next start` :3291; host keeper :8790 and Feed :8788 left running. FEED_DB_PATH in the verifier's scratch dir.
+```
+$ pnpm i                         exit 0  13 s
+$ pnpm demo:testnet              exit 0   5 s   nectar-core-v2 2.2.1-v7; Q_c $16,119.22 R_c $10.00; pool $40,771 / $9,229; quotes #0–#4; positions #0–#15 (#1 #4 #5 #13 #14 #15 Open)
+$ pnpm verify                    exit 0  36 s   ui 7/0, feed 63/0, keeper 293/0, x402 34/0 (+ lint, typecheck, sdk, testnet views)
+$ pnpm --filter docs-site build  exit 0  25 s   [SUCCESS] Generated static files in "build".
+$ gitleaks detect --source <clone> --log-opts=--all   exit 0   305 commits scanned, no leaks found
+$ node scripts/build-submission.mjs                   exit 0   keys requestId,projectName,leadName,email,size,tracks,nearAddress,projectUrl,demoUrl,idea,consent; website absent
+  open fields: leadName/email/size TODO-H10 · nearAddress/consent TODO-H14 · projectUrl TODO-H2 · demoUrl TODO-H3
+Feed MCP stdio (scripted JSON-RPC client): initialize nectar-feed 0.3.0 · tools/list 8 tools · get_exit_capacity{symbol:NVDAx} q_usd_e6 16119220000, r_usd_e6 10000000 (= demo)
+Feed MCP HTTP :8989/mcp: initialize (SSE) ok · tools/list 8 tools · get_exit_capacity same values · REST /healthz 200; feed_started core nectar-core-v2.nectar.testnet
+RPC (test.rpc.fastnear.com view_account): nectar-core-v2 code_hash 3mv4LRm6…FvK (= README) · nvdax-mock, usdc-mock HnZj9e… · x402-relayer, agent1 exist
+Solana devnet getAccountInfo ENZaNFHo…pubW: executable true, owner BPFLoaderUpgradeab1e… (= config.yaml program_id, in README)
+$ curl -sI http://127.0.0.1:3291/   (next build && next start)
+HTTP/1.1 200 OK · X-Frame-Options: DENY · Strict-Transport-Security: max-age=63072000; includeSubDomains
+Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+Chrome (Playwright channel chrome) /borrow → 200 → click "Connect wallet": manifest raw.githubusercontent.com/hot-dao/near-selector … 200; "Select wallet" dialog lists
+  Meteor Wallet, Intear Wallet, Ledger, Nightly Wallet, Ethereum Wallets, NEAR CLI; CSP console messages 0; console errors 0. Nothing signed.
+```
+Logs: evidence/G9/20261111T153057Z/ (times.txt, pnpm-i, demo-testnet, verify, docs-build, gitleaks, build-submission, feed-mcp-stdio, feed-start, next-build, headers.txt, connect-wallet.log, connect-wallet.png).
+Explorer: no explorer page opened (nearblocks answers WebFetch with 403); ids proven over RPC only, as handoff H-EXPLORER's default says.
+
+Step 8, review 2: R2-03 `request_matches_input` (apps/web/lib/copilot/verify.ts:119) · R2-04 403/415/413/429 (apps/web/lib/api/guard.ts:82–153; tests api.test.ts:50–96)
+· R2-05 services/x402/src/borrow-guard.ts present · R2-06 "1,5" refused (packages/sdk/src/format.ts:28, BorrowComposer.tsx:58) · R2-09 `accountExists` via view_account
+(packages/sdk/src/views.ts:69, note/[id]/page.tsx:78) · R2-11 "." and ".." refused (apps/web/lib/api/feed-paths.ts:19; test api.test.ts:140). Privacy (review 2 §C): no
+"never joined to IPs" and no "instead of being published" in README, docs/SUBMISSION.md, docs-site docs/src, apps/web or landing/; landing (Landing.tsx:652) and the cookie banner
+now say "in logs we control" and that the RPC providers see the IP; privacy.md:38 says analytics are "not configured in this build"; README:109 and SUBMISSION:59 disclose the
+operator-set parameters, the coordinator plaintext (F-167) and the q·γ leak. Step 10: README and SECURITY cite G14 (re-run on HEAD, 15:02Z, 48b5c5a) and G1 2.2.1 gas rows
+(67/67, max 78.60 Tgas) exactly as the EVIDENCE rows above say; no stronger claim found.
+Copy rules: no "insurance" / "without liquidations" in README, apps/web, landing/, docs-site, packages/ui; "hackathon" in none of the product sources nor the built docs site;
+"mock collateral" in SiteChrome, LandingLive, Shields, OneClickPanel; landing/index.html says testnet (17×).
+Handoffs (27 entries): DONE 5 (H-TOOLCHAIN, H-TOOLCHAIN-SOLANA, H-NEAR-FAUCET ×2, H-SOL-AIRDROP) · DEFAULT-AT-DEADLINE 13 (H-EXPLORER, H4, H5, H7, H8, H9, H12, H13, H15,
+H17, H18, H19, H20) · KUNAL-ONLY 8 (H1, H2, H3, H10, H11, H14, H16, H-GUARD-V7) · not in scope 1 (H6) · OTHER-OPEN 0. No README claim rests on an open item.
+Guesses / deviations (a stranger would hit the first two): (1) the repo URL is TODO-H2; cloned the local path per gates.md. (2) README does not name the MCP tool argument;
+`get_exit_capacity` with `asset` failed input validation, `symbol` (from tools/list's schema) worked. (3) Feed default ports 8788/8789 are taken on this host by the host Feed;
+used the documented FEED_PORT / FEED_MCP_PORT. (4) `pnpm --filter web dev` (:3100) was not run because the parallel G3b run uses that port; the app was checked with
+`next build && next start` on :3291 instead (step 9).
+Notes, not failures: README "On 2026-11-11 it showed … positions #0–#13 with #1, #4, #5 and #13 Open" is a dated snapshot; live now shows #14 and #15 Open too and pool
+$40,771 / $9,229. The cookie banner sits over the bottom of the wallet selector (NEAR CLI row partly covered) until the user answers it.
+Verdict: PASS. No reason for FAIL found.
 
 ### G9 — final fresh-clone rehearsal — RE-RUN after WO-38 — PASS — 2026-11-11T08:57Z–09:00Z — commit 0af5cdd
 Fresh clone `/tmp/verify-G9r-1794387441` of the local repo (main HEAD 0af5cdd: WO-38 b143b72 merged as d0e8465, plus 0af5cdd, which adds `scripts/check-no-branding-all.mjs` to `verify:quick`). No remote, nothing pushed, no keys.

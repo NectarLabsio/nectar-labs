@@ -1,0 +1,6 @@
+15:31:52Z
+pnpm-i exit 0 13s
+demo-testnet exit 0 5s
+verify exit 0 36s
+docs-build exit 0 25s
+15:33:11Z
