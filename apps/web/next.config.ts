@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { buildCsp } from "./lib/csp";
 import { docsOrigin, docsUrl, readHosts } from "./lib/hosts";
 
 // Hosted env (WO-34a, apps/web/.env.example). All unset = local single-host mode: no redirects, no rewrites, same headers as before.
@@ -12,10 +13,8 @@ if (production && (!env.SITE_URL || !env.APP_URL)) {
 
 // Runtime origins the browser may reach (rules: RPC, Feed API, 1Click dry, NEAR AI via server route).
 // Wallet origins are reached only after the user presses "Connect wallet" (near-connect loads its manifest and wallet sandboxes then).
-// R2-08: no framing (clickjacking), no plugins, no <base> or form retargeting. script-src / connect-src / frame-src / img-src are
-// not set: WO-34a allows them only after a measurement in real Chrome with the real near-connect selector and a wallet iframe,
-// which has not run yet (disclosed residual; Next inline RSC scripts would also need nonces, i.e. dynamic rendering everywhere).
-const csp = ["frame-ancestors 'none'", "object-src 'none'", "base-uri 'self'", "form-action 'self'"].join("; ");
+// R2-08 + WO-34c: frame-ancestors/object-src/base-uri/form-action locked; fetch directives are the measured hosts (lib/csp.ts).
+const csp = buildCsp(env);
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -55,8 +54,11 @@ const config: NextConfig = {
   async rewrites() {
     // APP /docs → the docs deployment (F-393: the Docusaurus build is served at its root, prefix stripped; its pages reference
     // /docs/assets/…, which this same rule serves). beforeFiles beats app/docs/page.tsx, which stays for local mode only.
-    if (!hosts || !DOCS_ORIGIN) return [];
-    const has = [{ type: "host" as const, value: hosts.appHost.replace(/\./g, "\\.") }];
+    // No docs deployment (local single-host mode): every /docs/<slug> link (legal pages, landing) gets the in-app docs explainer
+    // instead of a 404.
+    if (!hosts || !DOCS_ORIGIN) return [{ source: "/docs/:path+", destination: "/docs" }];
+    // `has: host` is matched against the hostname with the port stripped (next/dist/shared/lib/router/utils/prepare-destination.js).
+    const has = [{ type: "host" as const, value: new URL(hosts.app).hostname.replace(/\./g, "\\.") }];
     return {
       beforeFiles: [
         { source: "/docs", destination: `${DOCS_ORIGIN}/`, has },

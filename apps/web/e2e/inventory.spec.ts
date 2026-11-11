@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
-import { annotateHost, annotateStorage, directives, type HostUse, type StorageEntry } from "./inventory-annotations";
+import { annotateHost, annotateStorage, directives, normalizeKey, type HostUse, type StorageEntry } from "./inventory-annotations";
 
 // WO-34c data inventory. Opt-in project `inventory` (needs network; not in the default run). Real Chrome, fresh profile per test:
 //   SITE_URL=http://site.localhost:3741 APP_URL=http://app.localhost:3741 DOCS_ORIGIN=http://localhost:3742 npx next build
@@ -14,7 +14,7 @@ const APP = (process.env.INV_APP ?? "http://app.localhost:3741").replace(/\/$/, 
 const OUT = resolve(import.meta.dirname, "../content");
 
 const LANDING = ["/", "/about", "/security", "/status", "/changelog", "/brand", "/talk", "/legal/privacy", "/legal/cookies", "/legal/terms", "/legal/disclaimers"];
-const APP_ROUTES = ["/feed", "/feed/NVDAx", "/borrow", "/shield", "/quote/new", "/quote/0", "/reserve", "/notes", "/note/0", "/position/0", "/console", "/agents", "/keepers", "/docs/", "/docs/start/quickstart", "/docs/legal/privacy"];
+const APP_ROUTES = ["/feed", "/feed/NVDAx", "/borrow", "/shield", "/quote/new", "/quote/0", "/reserve", "/notes", "/note/0", "/position/0", "/console", "/agents", "/keepers", "/docs/", "/docs/start/quick-start", "/docs/security/audits"];
 const COMBOS = [
   { theme: "dark", consent: "accept" },
   { theme: "light", consent: "decline" },
@@ -103,7 +103,8 @@ async function dumpStorage(page: Page): Promise<void> {
     }
     return { origin: location.origin, local: Object.keys(localStorage), session: Object.keys(sessionStorage), idb };
   });
-  const add = (kind: StorageEntry["kind"], name: string) => {
+  const add = (kind: StorageEntry["kind"], rawName: string) => {
+    const name = normalizeKey(rawName);
     const k = `${kind}|${dump.origin}|${name}`;
     if (!storage.has(k)) storage.set(k, annotateStorage({ kind, name, origin: dump.origin }));
   };

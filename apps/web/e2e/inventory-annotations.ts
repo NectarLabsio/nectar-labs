@@ -18,6 +18,9 @@ const STORAGE: { re: RegExp; who: string; purpose: string; lifetime: string; sou
   { re: /^[a-z0-9-]+(\.[a-z0-9-]+)*:/, who: "the wallet you opened (through near-connect)", purpose: "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id", lifetime: "Until disconnect or you clear site data", source: "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)" },
 ];
 
+/** Collapse per-visit random ids (wallet-generated) so one key pattern is one row. */
+export const normalizeKey = (name: string): string => name.replace(/[A-Za-z0-9_-]{24,}/g, "<random id>");
+
 export function annotateStorage(e: Pick<StorageEntry, "kind" | "name" | "origin">): StorageEntry {
   const hit = STORAGE.find((s) => s.re.test(e.name));
   return hit ? { ...e, who: hit.who, purpose: hit.purpose, lifetime: hit.lifetime, source: hit.source } : { ...e, who: "UNCLASSIFIED", purpose: "UNCLASSIFIED: review", lifetime: "?", source: "?" };
@@ -25,7 +28,11 @@ export function annotateStorage(e: Pick<StorageEntry, "kind" | "name" | "origin"
 
 const HOSTS: { re: RegExp; who: string; purpose: string; when: string }[] = [
   { re: /^test\.rpc\.fastnear\.com$/, who: "our code", purpose: "NEAR testnet RPC: contract views, transaction status", when: "App pages that read the contracts; wallet selector" },
-  { re: /^rpc\.testnet\.(near|fastnear)\.(org|com)$/, who: "the wallet / near-connect", purpose: "NEAR testnet RPC", when: "Wallet selector or wallet frame" },
+  { re: /^rpc\.testnet\.fastnear\.com$/, who: "our code", purpose: "NEAR testnet RPC fallback (@nectar/sdk TESTNET_RPC_FALLBACKS)", when: "App pages that read the contracts" },
+  { re: /^storage\.herewallet\.app$|^evm-on-near\.dev$/, who: NC, purpose: "Wallet icons named in the wallet list", when: "After you press Connect wallet" },
+  { re: /^mc\.meteorwallet\.app$/, who: "Meteor Wallet (sandboxed frame)", purpose: "Meteor Wallet's own API", when: "Only after you open Meteor Wallet in the selector" },
+  { re: /^meteorwallet\.app$/, who: "Meteor Wallet (sandboxed frame)", purpose: "Meteor Wallet images", when: "Only after you open Meteor Wallet in the selector" },
+  { re: /^fonts\.cdnfonts\.com$|^rsms\.me$/, who: "Meteor Wallet (sandboxed frame)", purpose: "Meteor Wallet's web fonts (stylesheet + font files)", when: "Only after you open Meteor Wallet in the selector" },
   { re: /^raw\.githubusercontent\.com$|^cdn\.jsdelivr\.net$/, who: NC, purpose: "Wallet list (manifest.json)", when: "After you press Connect wallet" },
 ];
 
