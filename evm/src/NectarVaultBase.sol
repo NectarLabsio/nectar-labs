@@ -8,7 +8,7 @@ import {IB20Minimal, IPolicyRegistry} from "./interfaces/IB20Minimal.sol";
 ///         A borrower deposits B20 (or MockB20) units under an authority address that nectar-core derives
 ///         from `v1.signer` (domain 0, path `base-sepolia/pos/<id>`). The collateral leaves only with an
 ///         EIP-712 message signed by that authority: `Settle` (seized units to the buyer, remainder to the
-///         depositor) or `Release` (everything to the recipient).
+///         depositor) or `Release` (everything back to the depositor, who must be its named recipient).
 /// @dev Slots are keyed `keccak256(abi.encode(id, depositor))` with depositor = msg.sender at `openPosition`, so a
 ///      third party cannot squat a borrower's id (SR-8). Nonces are scoped to the slot, so a nonce spent in one slot
 ///      cannot block another (SR-1, interface-v7 §E). The typed data and NEAR's digests do not name the depositor.
@@ -124,6 +124,7 @@ contract NectarVaultBase {
     error BadKind(uint8 kind);
     error SeizeExceedsAmount(uint256 seizeRaw, uint256 amount);
     error NotAuthorized(uint64 policyId, address account);
+    error RecipientNotDepositor(address recipient, address depositor);
     error TransferFailed();
 
     // --------------------------------------------------------- constructor
@@ -161,11 +162,12 @@ contract NectarVaultBase {
         _executeSettle(p, m);
     }
 
-    /// @notice Release the full amount of the open slot (`m.positionId`, `depositor`) with an authority-signed
-    ///         EIP-712 `Release`.
+    /// @notice Release the full amount of the open slot (`m.positionId`, `depositor`) to its depositor with an
+    ///         authority-signed EIP-712 `Release`. `m.recipient` must be that depositor (parity with the Solana vault).
     function release(Release calldata m, address depositor, uint8 v, bytes32 r, bytes32 s) external {
         Position storage p = _consume(m.positionId, depositor, m.nonce, m.expires, hashRelease(m), v, r, s);
         if (m.recipient == address(0)) revert ZeroAddress();
+        if (m.recipient != p.depositor) revert RecipientNotDepositor(m.recipient, p.depositor);
         _requireAuthorized(token.policyId(token.TRANSFER_RECEIVER_POLICY()), m.recipient);
         uint256 amount = p.amount;
         p.status = Status.Released;
