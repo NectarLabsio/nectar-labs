@@ -299,12 +299,13 @@ fn trigger_without_vol_falls_back_to_static() {
 }
 
 #[test]
-#[should_panic(expected = "gas reserve empty")]
-fn trigger_quoter_needs_deposit_in_reserve() {
+fn sr6_trigger_short_reserve_settles_at_static_pricing() {
     let mut c = demo_p1(true);
     set_ctx(owner(), 0, T0);
     c.set_quoter_config(U128(999), 100, U64(1), 1, 1);
     trigger(&mut c);
+    assert!(event_with("quoter_fallback", "gas_reserve_short"));
+    assert!(has_event("settled_near"));
 }
 
 #[test]
@@ -762,13 +763,14 @@ fn pyth_callback_ignores_cancelled() {
 }
 
 #[test]
-fn pyth_callback_quoter_reserve_empty_aborts() {
+fn sr6_pyth_callback_short_reserve_settles_at_static_pricing() {
     let mut c = pyth_triggered(true);
     set_ctx(owner(), 0, T0 + 4 * SEC);
     c.set_quoter_config(U128(10_000), 100, U64(100_000_000), 128, 30);
     pyth_callback(&mut c, PromiseResult::Successful(px_json(&good_px())));
-    assert!(event_with("settlement_aborted", "gas reserve empty"));
-    assert_eq!(c.get_position(U64(0)).unwrap().status, PositionStatus::Open);
+    assert!(event_with("quoter_fallback", "gas_reserve_short"));
+    assert!(has_event("settled_near"), "the rescue is not blocked");
+    assert!(!has_event("settlement_aborted"));
 }
 
 // ------------------------------------------------------------------ WO-10b: cancel_settlement

@@ -590,7 +590,7 @@ fn base_settle_ignores_base58_quotes() {
     set_ctx(keeper(), 0, T0 + 2 * SEC);
     c.keeper_attest_deposit(U64(0), ETX.into(), EDEP.into());
     // SR-5 needs a 0x quote at confirmation; the buyer then switches it to a base58 recipient
-    set_ctx(a("buyer1.test"), 0, T0 + 2 * SEC);
+    set_ctx(a("buyer1.test"), 1, T0 + 2 * SEC);
     c.set_quote_remote_recipient(U64(0), Some(RCPT.into()));
     drop_price(&mut c);
     trigger(&mut c);
@@ -607,7 +607,7 @@ fn solana_settle_ignores_0x_quotes() {
     confirm(&mut c, 0, T0 + 2 * SEC);
     verified(&mut c, 0, T0 + 2 * SEC, vault_json(0, UNITS, AUTH_B58, DEPOSITOR));
     // SR-5 needs a base58 quote at confirmation; the buyer then switches it to a 0x recipient
-    set_ctx(a("buyer1.test"), 0, T0 + 2 * SEC);
+    set_ctx(a("buyer1.test"), 1, T0 + 2 * SEC);
     c.set_quote_remote_recipient(U64(0), Some(ERCPT.into()));
     drop_price(&mut c);
     trigger(&mut c);
@@ -780,7 +780,7 @@ fn eip712_matches_wo27_vault_vectors() {
 fn quote_recipient_accepts_0x_and_base58() {
     let mut c = base(true);
     fund(&mut c, "buyer1.test", 1_000_000_000, 250, false);
-    set_ctx(a("buyer1.test"), 0, T0 + SEC);
+    set_ctx(a("buyer1.test"), 1, T0 + SEC);
     c.set_quote_remote_recipient(U64(0), Some(ERCPT.into()));
     assert_eq!(c.get_quote(U64(0)).unwrap().buyer_remote_recipient.as_deref(), Some(ERCPT));
     c.set_quote_remote_recipient(U64(0), Some(RCPT.into()));
@@ -792,6 +792,6 @@ fn quote_recipient_accepts_0x_and_base58() {
 fn quote_recipient_refuses_bad_0x() {
     let mut c = base(true);
     fund(&mut c, "buyer1.test", 1_000_000_000, 250, false);
-    set_ctx(a("buyer1.test"), 0, T0 + SEC);
+    set_ctx(a("buyer1.test"), 1, T0 + SEC);
     c.set_quote_remote_recipient(U64(0), Some("0x70997970C51812dc3A010C7d01b50e0d17dc79".into()));
 }

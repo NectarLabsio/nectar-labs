@@ -154,6 +154,7 @@ impl Nectar {
     #[payable]
     pub fn withdraw_claimable(&mut self) -> Promise {
         assert_one_yocto();
+        self.assert_not_paused();
         let account = env::predecessor_account_id();
         let amount = self.claimable(&account);
         require!(amount > 0, "nothing to withdraw");
@@ -177,9 +178,63 @@ impl Nectar {
         let token = self.coll_or_panic(&symbol).token;
         // effects
         self.owed_collateral.remove(&key);
+        Self::set_owed_total(&symbol, Self::owed_total(&symbol).saturating_sub(amount));
         emit("owed_collateral_claimed", json!({ "account_id": account, "symbol": symbol, "units": U128(amount) }));
         // interaction
         Self::transfer(&token, &account, amount, Payout::OwedCollateral { symbol })
+    }
+
+    // ------------------------------------------------------------ pool withdrawals (owner, 1 yocto)
+    /// Spec gap of security-review-v7: pays `amount` of the treasury's USDC to `receiver_id`; restored if the transfer fails.
+    #[payable]
+    pub fn withdraw_treasury(&mut self, receiver_id: AccountId, amount_usd_e6: U128) -> Promise {
+        assert_one_yocto();
+        self.assert_owner();
+        self.assert_not_paused();
+        require!(amount_usd_e6.0 > 0, "amount is zero");
+        // effects
+        self.treasury_usd_e6 = math::sub(self.treasury_usd_e6, amount_usd_e6.0).unwrap_or_else(|_| env::panic_str("exceeds treasury"));
+        emit("treasury_withdrawn", json!({ "receiver_id": receiver_id, "amount_usd_e6": amount_usd_e6 }));
+        // interaction
+        Self::transfer(&self.usdc_token, &receiver_id, amount_usd_e6.0, Payout::Treasury)
+    }
+
+    /// Spec gap: the lenders' fee pool has no per-lender index, so the owner distributes it to `receiver_id`.
+    #[payable]
+    pub fn withdraw_lender_fees(&mut self, receiver_id: AccountId, amount_usd_e6: U128) -> Promise {
+        assert_one_yocto();
+        self.assert_owner();
+        self.assert_not_paused();
+        require!(amount_usd_e6.0 > 0, "amount is zero");
+        // effects
+        self.lenders_fees_usd_e6 = math::sub(self.lenders_fees_usd_e6, amount_usd_e6.0).unwrap_or_else(|_| env::panic_str("exceeds lender fees"));
+        emit("lender_fees_withdrawn", json!({ "receiver_id": receiver_id, "amount_usd_e6": amount_usd_e6 }));
+        // interaction
+        Self::transfer(&self.usdc_token, &receiver_id, amount_usd_e6.0, Payout::LenderFees)
+    }
+
+    /// Spec gap: returns supplied liquidity to the `lender` who supplied it (never another account), up to what the pool
+    /// has free: lent USDC stays lent.
+    #[payable]
+    pub fn withdraw_liquidity(&mut self, lender: AccountId, amount_usd_e6: U128) -> Promise {
+        assert_one_yocto();
+        self.assert_owner();
+        self.assert_not_paused();
+        let amount = amount_usd_e6.0;
+        require!(amount > 0, "amount is zero");
+        let supplied = self.lender_supplied.get(&lender).copied().unwrap_or(0);
+        let left = math::sub(supplied, amount).unwrap_or_else(|_| env::panic_str("exceeds supplied"));
+        let available = math::sub(self.available_usd_e6, amount).unwrap_or_else(|_| env::panic_str("insufficient pool liquidity"));
+        // effects
+        self.available_usd_e6 = available;
+        if left == 0 {
+            self.lender_supplied.remove(&lender);
+        } else {
+            self.lender_supplied.insert(lender.clone(), left);
+        }
+        emit("liquidity_withdrawn", json!({ "lender": lender, "amount_usd_e6": amount_usd_e6 }));
+        // interaction
+        Self::transfer(&self.usdc_token, &lender, amount, Payout::Liquidity)
     }
 
     pub fn get_claimable(&self, account_id: AccountId) -> U128 {

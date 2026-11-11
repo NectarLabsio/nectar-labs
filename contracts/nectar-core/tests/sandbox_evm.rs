@@ -505,9 +505,17 @@ async fn upgrade_flow(old: &[u8], old_version: &str) -> anyhow::Result<()> {
     assert_eq!(view(&core, "get_remote_chains", json!({ "symbol": "NVDAx" })).await?.as_array().unwrap().len(), 1);
     assert!(view(&core, "get_pending_settlement_evm", json!({ "position_id": "1" })).await?.is_null());
     assert!(position(&core, legacy).await?["remote"].get("committed_depositor").is_none(), "no commitment before 2.2");
+    // WO-34b on the old state: every new raw key reads as absent, a stranger cannot confirm
+    assert_eq!(view(&core, "get_outlayer_closed_until", json!({ "symbol": "NVDAx" })).await?, json!("0"));
+    assert_eq!(view(&core, "get_quoter_cooldown", json!({ "position_id": "1" })).await?, json!("0"));
+    let stranger = e.worker.dev_create_account().await?;
+    let r = stranger.call(core.id(), "confirm_remote_deposit").args_json(json!({ "position_id": legacy.to_string() }))
+        .gas(Gas::from_tgas(150)).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("borrower, keeper or owner only"), "{:?}", r.failures());
     let r = confirm(&e, &core, &s, legacy, &vault_body(legacy, &legacy_auth, RCPT)).await?;
     gas("confirm_remote_deposit(legacy reservation, after upgrade)", &r);
     assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(events(&r, "reservation_deposit_refunded")[0]["amount_yocto"], RESERVE_DEPOSIT.to_string(), "a legacy deposit comes back whole");
     assert_eq!(position(&core, legacy).await?["remote"]["depositor"], RCPT, "any valid depositor: nothing was committed");
 
     // NEAR flow: repay #0 in full, then a fresh NEAR borrow
@@ -552,12 +560,20 @@ async fn upgrade_flow(old: &[u8], old_version: &str) -> anyhow::Result<()> {
     let p = position(&core, bid).await?;
     assert_eq!(p["remote"]["authority"].as_str().unwrap(), stub_evm_address(&s, &core, &format!("base-sepolia/pos/{bid}")).await?);
     assert_eq!(p["remote"]["committed_depositor"], EDEP);
+    let held: u128 = p["remote"]["deposit_yocto"].as_str().unwrap().parse()?;
+    assert!(held > 0 && held < RESERVE_DEPOSIT, "SR-14 on the upgraded state: {held}");
     owner_call(&e, &core, "set_allow_keeper_deposit_attestation", json!({ "allow": true })).await?;
     let r = e.keeper.call(core.id(), "keeper_attest_deposit")
         .args_json(json!({ "position_id": bid.to_string(), "tx_ref": ETX, "depositor": EDEP }))
         .gas(Gas::from_tgas(100)).transact().await?;
     assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
     assert_eq!(events(&r, "remote_deposit_confirmed")[0]["funded"], true);
+    // the treasury the old code accrued can be withdrawn by the new code
+    let ops = e.worker.dev_create_account().await?;
+    let r = yocto(&e.owner, &core, "withdraw_treasury", json!({ "receiver_id": ops.id(), "amount_usd_e6": "1000" })).await?;
+    gas("withdraw_treasury(after upgrade)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(bal(&e.usdc, ops.id()).await?, 1000);
     price(&e, &core, 155_000_000).await?;
     price(&e, &core, 140_000_000).await?;
     let r = trigger(&e, &core, bid).await?;
@@ -568,6 +584,10 @@ async fn upgrade_flow(old: &[u8], old_version: &str) -> anyhow::Result<()> {
     assert!(r.is_success(), "{:?}", r.failures());
     assert_eq!(position(&core, bid).await?["remote"]["status"], "Closed");
     Ok(())
+}
+
+async fn yocto(who: &Account, core: &Contract, method: &str, args: Value) -> anyhow::Result<ExecutionFinalResult> {
+    Ok(who.call(core.id(), method).args_json(args).deposit(NearToken::from_yoctonear(1)).gas(Gas::from_tgas(100)).transact().await?)
 }
 
 // ------------------------------------------------------------------ WO-34a (2.2.0-v7)
@@ -708,7 +728,8 @@ async fn sr5_remote_loan_refused_without_fitting_capacity() -> anyhow::Result<()
     let borrower = user(&e, 0, 0).await?;
     let (id, _) = reserve(&core, &borrower, None).await?;
     let auth = position(&core, id).await?["remote"]["authority"].as_str().unwrap().to_string();
-    let r = b.call(core.id(), "set_quote_remote_recipient").args_json(json!({ "quote_id": "0", "recipient": null })).transact().await?;
+    let r = b.call(core.id(), "set_quote_remote_recipient").args_json(json!({ "quote_id": "0", "recipient": null }))
+        .deposit(NearToken::from_yoctonear(1)).transact().await?;
     assert!(r.is_success(), "{:?}", r.failures());
     let r = confirm(&e, &core, &s, id, &vault_body(id, &auth, DEPOSITOR)).await?;
     assert_eq!(events(&r, "remote_loan_refused")[0]["reason"], "aggregate_limit");
@@ -765,9 +786,14 @@ async fn sr7_bad_recipient_refunded_and_refused() -> anyhow::Result<()> {
     assert!(view(&core, "list_quotes", json!({ "symbol": "NVDAx" })).await?.as_array().unwrap().is_empty());
     ft_call(&e.usdc, &b, core.id(), 1_000_000_000, &fund_msg(250, None)).await?;
     let r = b.call(core.id(), "set_quote_remote_recipient")
-        .args_json(json!({ "quote_id": "0", "recipient": "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T" })).transact().await?;
-    assert!(r.is_failure(), "off-curve recipient refused");
+        .args_json(json!({ "quote_id": "0", "recipient": "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T" }))
+        .deposit(NearToken::from_yoctonear(1)).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("bad recipient"), "off-curve recipient refused: {:?}", r.failures());
+    // SR-21: a function-call key (no deposit) cannot redirect fills
     let r = b.call(core.id(), "set_quote_remote_recipient").args_json(json!({ "quote_id": "0", "recipient": RCPT })).transact().await?;
+    assert!(format!("{:?}", r.failures()).contains("exactly 1 yoctoNEAR"), "{:?}", r.failures());
+    let r = b.call(core.id(), "set_quote_remote_recipient").args_json(json!({ "quote_id": "0", "recipient": RCPT }))
+        .deposit(NearToken::from_yoctonear(1)).transact().await?;
     assert!(r.is_success(), "{:?}", r.failures());
     Ok(())
 }
@@ -808,5 +834,281 @@ async fn sr17_owed_collateral_claim_round_trip() -> anyhow::Result<()> {
     assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
     assert_eq!(bal(&e.nvdax, buyer.id()).await?, owed);
     assert_eq!(view(&core, "get_owed_collateral", args).await?, json!("0"));
+    Ok(())
+}
+
+// ------------------------------------------------------------------ WO-34b (2.2.0-v7)
+
+/// `request_remote_release` by any account, then wait for the detached sign chain.
+async fn release_as(who: &Account, core: &Contract, id: u64) -> anyhow::Result<ExecutionFinalResult> {
+    let st = who
+        .call(core.id(), "request_remote_release")
+        .args_json(json!({ "position_id": id.to_string() }))
+        .gas(Gas::from_tgas(100))
+        .transact_async()
+        .await?;
+    for _ in 0..120 {
+        let d = view(core, "get_pending_release", json!({ "position_id": id.to_string() })).await?;
+        if !d.is_null() && d["status"] != "AwaitingSignature" {
+            break;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(500));
+    }
+    Ok(st.await?)
+}
+
+fn fails_with(r: &ExecutionFinalResult, msg: &str) {
+    assert!(format!("{:?}", r.failures()).contains(msg), "expected {msg}: {:?}", r.failures());
+}
+
+/// SR-6 (who confirms, who pays), SR-14 (storage kept from the deposit), SR-15 (one vault, one collateral) and SR-26 (the
+/// retry window belongs to the borrower).
+#[tokio::test]
+async fn sr6_sr14_sr15_sr26_remote_confirm_and_release_callers() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    seed(&e, &core).await?;
+    let s = stub(&e).await?;
+    chain(&e, &core, &s).await?;
+    let tslax = deploy_ft(&e.worker, &e.owner, "TSLAx").await?;
+    owner_call(&e, &core, "upsert_collateral", json!({ "symbol": "TSLAx", "config": {
+        "symbol": "TSLAx", "token": tslax.id(), "decimals": 6, "price_feed_id": "TODO-G5",
+        "base_ltv_bps": 4000, "max_nectar_ltv_bps": 7000, "base_haircut_bps": 1000,
+        "weekend_haircut_bps": 2500, "limit_premium_bps": 300, "pre_liq_min_bps": 6500,
+        "pre_liq_max_bps": 8000, "market_session_open": false,
+        "verified_dex_depth_usd_e6": "0", "nectar_reserve_usd_e6": "0", "remote_chain": null } })).await?;
+    let r = e.owner.call(core.id(), "set_remote_chain").args_json(json!({ "symbol": "TSLAx",
+        "remote_chain": { "chain_id": "solana-devnet", "vault_program": VAULT, "mpc_domain_id": 1 } })).transact().await?;
+    fails_with(&r, "vault already serves another collateral");
+
+    let borrower = user(&e, 0, 0).await?;
+    let (id, r) = reserve(&core, &borrower, None).await?;
+    gas("reserve_remote_position+derived_public_key", &r);
+    let p = position(&core, id).await?;
+    let held: u128 = p["remote"]["deposit_yocto"].as_str().unwrap().parse()?;
+    let storage: u128 = events(&r, "remote_reserved")[0]["storage_yocto"].as_str().unwrap().parse()?;
+    assert!(storage > 0 && held == RESERVE_DEPOSIT - storage, "{storage} {held}");
+    let auth = p["remote"]["authority"].as_str().unwrap().to_string();
+
+    let stranger = e.worker.dev_create_account().await?;
+    let r = stranger.call(core.id(), "confirm_remote_deposit").args_json(json!({ "position_id": id.to_string() }))
+        .gas(Gas::from_tgas(150)).transact().await?;
+    fails_with(&r, "borrower, keeper or owner only");
+
+    // the borrower's own read comes from the held deposit, not the gas reserve; a failed read costs the borrower
+    let reserve0 = view(&core, "get_gas_reserve", json!({})).await?;
+    s.call("set_mode").args_json(json!({ "mode": "raw", "body": "null" })).transact().await?.into_result()?;
+    let r = borrower.call(core.id(), "confirm_remote_deposit").args_json(json!({ "position_id": id.to_string() }))
+        .gas(Gas::from_tgas(150)).transact().await?;
+    gas("confirm_remote_deposit(borrower)", &r);
+    assert_eq!(events(&r, "remote_deposit_rejected")[0]["reason"], "no_result");
+    assert_eq!(view(&core, "get_gas_reserve", json!({})).await?, reserve0);
+    let held2: u128 = position(&core, id).await?["remote"]["deposit_yocto"].as_str().unwrap().parse()?;
+    assert_eq!(held2, held - DEPOSIT);
+
+    // a refused loan: the retry window belongs to the borrower
+    owner_call(&e, &core, "set_oracle_params", json!({ "max_age_ns_session": "1", "max_age_ns_closed": "1", "band_bps": 1500 })).await?;
+    advance(&e, 31).await?;
+    let r = confirm(&e, &core, &s, id, &vault_body(id, &auth, DEPOSITOR)).await?;
+    assert_eq!(events(&r, "remote_loan_refused")[0]["reason"], "oracle stale");
+    assert_eq!(events(&r, "reservation_deposit_refunded")[0]["amount_yocto"], held2.to_string());
+    let r = stranger.call(core.id(), "request_remote_release").args_json(json!({ "position_id": id.to_string() }))
+        .gas(Gas::from_tgas(100)).transact().await?;
+    fails_with(&r, "borrower only during the retry window");
+    let r = release_as(&borrower, &core, id).await?;
+    gas("request_remote_release(borrower, retry window)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(position(&core, id).await?["remote"]["status"], "Releasing");
+    Ok(())
+}
+
+/// SR-9 with the real mock-ft: an underwater settlement takes every unit and leaves debt. The position parks for the
+/// owner, cannot re-trigger, and `write_off_bad_debt` closes it.
+#[tokio::test]
+async fn sr9_bad_debt_parks_then_writes_off() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    let lender = user(&e, 100_000_000_000, 0).await?;
+    ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    let buyer = user(&e, 20_000_000_000, 0).await?;
+    ft_call(&e.usdc, &buyer, core.id(), 20_000_000_000, &fund_msg(0, None)).await?;
+    // 100.5 units: with the 50 bps keeper share the cap at $100 and 0 bps consumes every unit exactly
+    let units = 100_500_000;
+    let alice = user(&e, 0, units).await?;
+    let lock = format!(r#"{{"LockCollateralAndBorrow":{{"collateral":"NVDAx","borrow_usd_e6":"{BORROW}","pre_liq_ltv_bps":7500}}}}"#);
+    ft_call(&e.nvdax, &alice, core.id(), units, &lock).await?;
+    for p in [155_000_000, 135_000_000, 115_000_000, 100_000_000] {
+        price(&e, &core, p).await?;
+    }
+    let args = json!({ "position_id": "0" });
+    let go = || e.keeper.call(core.id(), "trigger_preliquidation").args_json(args.clone()).gas(Gas::from_tgas(300)).transact();
+    let r = go().await?;
+    gas("trigger_preliquidation(underwater)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    let p = position(&core, 0).await?;
+    assert_eq!((p["status"].clone(), p["units"].clone(), p["debt_usd_e6"].clone()), (json!("Settling"), json!("0"), json!("1250000000")));
+    assert_eq!(view(&core, "get_health", args.clone()).await?["triggerable"], false);
+    fails_with(&go().await?, "position not open");
+    owner_call(&e, &core, "cancel_settlement", args.clone()).await?;
+    fails_with(&go().await?, "no collateral left");
+
+    let stranger = e.worker.dev_create_account().await?;
+    fails_with(&stranger.call(core.id(), "write_off_bad_debt").args_json(args.clone()).transact().await?, "owner only");
+    let available = view(&core, "get_pool", json!({})).await?["available_usd_e6"].clone();
+    owner_call(&e, &core, "write_off_bad_debt", args.clone()).await?;
+    let p = position(&core, 0).await?;
+    assert_eq!((p["status"].clone(), p["debt_usd_e6"].clone()), (json!("Closed"), json!("0")));
+    let pool = view(&core, "get_pool", json!({})).await?;
+    assert_eq!((pool["utilised_usd_e6"].clone(), pool["available_usd_e6"].clone()), (json!("0"), available));
+    assert_eq!(view(&core, "get_collateral", json!({ "symbol": "NVDAx" })).await?["total_debt_usd_e6"], "0");
+    Ok(())
+}
+
+/// SR-16, SR-19 and SR-20 with the real mock-ft: the token cannot move under an open book; a fill leaves a dust remainder
+/// claimable and off the book; a top-up cannot relist above a lowered Reserve discount.
+#[tokio::test]
+async fn sr16_sr19_sr20_dust_relist_and_token_guard() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    let lender = user(&e, 100_000_000_000, 0).await?;
+    ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    let buyer = user(&e, 15_200_000_000, 0).await?;
+    ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+    let alice = user(&e, 0, UNITS).await?;
+    let lock = format!(r#"{{"LockCollateralAndBorrow":{{"collateral":"NVDAx","borrow_usd_e6":"{BORROW}","pre_liq_ltv_bps":7500}}}}"#);
+    ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+
+    let other = deploy_ft(&e.worker, &e.owner, "OTHER").await?;
+    let r = e.owner.call(core.id(), "upsert_collateral").args_json(json!({ "symbol": "NVDAx", "config": {
+        "symbol": "NVDAx", "token": other.id(), "decimals": 6, "price_feed_id": "TODO-G5",
+        "base_ltv_bps": 4000, "max_nectar_ltv_bps": 7000, "base_haircut_bps": 1000,
+        "weekend_haircut_bps": 2500, "limit_premium_bps": 300, "pre_liq_min_bps": 6500,
+        "pre_liq_max_bps": 8000, "market_session_open": false,
+        "verified_dex_depth_usd_e6": "0", "nectar_reserve_usd_e6": "0", "remote_chain": null } })).transact().await?;
+    fails_with(&r, "token or decimals change with an open book");
+
+    owner_call(&e, &core, "set_quote_params", json!({ "min_notice_period_ns": "1000000000", "min_quote_usd_e6": "4000000000" })).await?;
+    price(&e, &core, 155_000_000).await?;
+    price(&e, &core, 140_000_000).await?;
+    let r = e.keeper.call(core.id(), "trigger_preliquidation").args_json(json!({ "position_id": "0" })).gas(Gas::from_tgas(300)).transact().await?;
+    gas("trigger_preliquidation(dust remainder)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(events(&r, "settled_near")[0]["dust_usd_e6"], "3750000000");
+    assert!(view(&core, "list_quotes", json!({ "symbol": "NVDAx" })).await?.as_array().unwrap().is_empty());
+    let before = bal(&e.usdc, buyer.id()).await?;
+    let r = yocto(&buyer, &core, "claim_fees", json!({ "quote_id": "0" })).await?;
+    gas("claim_fees(dust)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert!(bal(&e.usdc, buyer.id()).await? - before >= 3_750_000_000, "the dust is paid");
+
+    owner_call(&e, &core, "set_reserve_params", json!({ "symbol": "NVDAx", "discount_bps": 100 })).await?;
+    owner_call(&e, &core, "set_quote_params", json!({ "min_notice_period_ns": "1000000000", "min_quote_usd_e6": "100000000" })).await?;
+    let before = bal(&e.usdc, buyer.id()).await?;
+    let r = ft_call(&e.usdc, &buyer, core.id(), 200_000_000, r#"{"TopUpQuote":{"quote_id":"0"}}"#).await?;
+    gas("ft_transfer_call:TopUpQuote(refused)", &r);
+    assert_eq!(bal(&e.usdc, buyer.id()).await?, before, "refunded: 250 bps cannot relist under a 100 bps Reserve");
+    Ok(())
+}
+
+/// SR-20 on a remote leg: the signature callback delists a dust remainder inside its gas budget.
+#[tokio::test]
+async fn sr20_signed_leg_sweeps_dust() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    seed(&e, &core).await?;
+    let s = stub(&e).await?;
+    chain(&e, &core, &s).await?;
+    let borrower = user(&e, 0, 0).await?;
+    let (id, _) = reserve(&core, &borrower, None).await?;
+    let auth = position(&core, id).await?["remote"]["authority"].as_str().unwrap().to_string();
+    let r = confirm(&e, &core, &s, id, &vault_body(id, &auth, DEPOSITOR)).await?;
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    owner_call(&e, &core, "set_quote_params", json!({ "min_notice_period_ns": "1000000000", "min_quote_usd_e6": "4000000000" })).await?;
+    price(&e, &core, 155_000_000).await?;
+    price(&e, &core, 140_000_000).await?;
+    let r = trigger(&e, &core, id).await?;
+    gas("trigger+sign(dust sweep)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(view(&core, "get_pending_settlement", json!({ "position_id": id.to_string() })).await?["status"], "Signed");
+    let q = view(&core, "get_quote", json!({ "quote_id": "0" })).await?;
+    assert_eq!(q["remaining_usd_e6"], "0", "{q}");
+    Ok(())
+}
+
+/// Spec gap + SR-25 with the real mock-ft: the owner can take the treasury, the lenders' fees and a lender's free
+/// liquidity out; a failed transfer restores the balance; the pause stops withdrawals.
+#[tokio::test]
+async fn gap_pool_withdrawals_and_sr25_pause() -> anyhow::Result<()> {
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    let lender = user(&e, 100_000_000_000, 0).await?;
+    ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    let buyer = user(&e, 15_000_000_000, 0).await?;
+    ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+    let alice = user(&e, 0, UNITS).await?;
+    let lock = format!(r#"{{"LockCollateralAndBorrow":{{"collateral":"NVDAx","borrow_usd_e6":"{BORROW}","pre_liq_ltv_bps":7500}}}}"#);
+    ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+    let pool = view(&core, "get_pool", json!({})).await?;
+    let parse = |k: &str, v: &Value| -> u128 { v[k].as_str().unwrap().parse().unwrap() };
+    let (t0, f0, a0) = (parse("treasury_usd_e6", &pool), parse("lenders_fees_usd_e6", &pool), parse("available_usd_e6", &pool));
+    assert!(t0 > 0 && f0 > 0);
+
+    let ops = e.worker.dev_create_account().await?;
+    let stranger = e.worker.dev_create_account().await?;
+    fails_with(&yocto(&stranger, &core, "withdraw_treasury", json!({ "receiver_id": stranger.id(), "amount_usd_e6": "1" })).await?, "owner only");
+    // a failed transfer puts it back: an unregistered receiver cannot be paid
+    let required = |on: bool| e.owner.call(e.usdc.id(), "set_registration_required").args_json(json!({ "required": on })).transact();
+    required(true).await?.into_result()?;
+    let r = yocto(&e.owner, &core, "withdraw_treasury", json!({ "receiver_id": stranger.id(), "amount_usd_e6": t0.to_string() })).await?;
+    gas("withdraw_treasury(transfer failed)", &r);
+    assert_eq!(events(&r, "payout_failed").len(), 1);
+    assert_eq!(parse("treasury_usd_e6", &view(&core, "get_pool", json!({})).await?), t0, "restored by on_payout");
+    required(false).await?.into_result()?;
+    for (method, args) in [
+        ("withdraw_treasury", json!({ "receiver_id": ops.id(), "amount_usd_e6": t0.to_string() })),
+        ("withdraw_lender_fees", json!({ "receiver_id": ops.id(), "amount_usd_e6": f0.to_string() })),
+        ("withdraw_liquidity", json!({ "lender": lender.id(), "amount_usd_e6": "1000000" })),
+    ] {
+        let r = yocto(&e.owner, &core, method, args).await?;
+        gas(method, &r);
+        assert!(r.is_success() && r.failures().is_empty(), "{method}: {:?}", r.failures());
+    }
+    assert_eq!(bal(&e.usdc, ops.id()).await?, t0 + f0);
+    assert_eq!(bal(&e.usdc, lender.id()).await?, 1_000_000);
+    let pool = view(&core, "get_pool", json!({})).await?;
+    assert_eq!((parse("treasury_usd_e6", &pool), parse("lenders_fees_usd_e6", &pool), parse("available_usd_e6", &pool)), (0, 0, a0 - 1_000_000));
+
+    fails_with(&yocto(&e.owner, &core, "withdraw_liquidity", json!({ "lender": ops.id(), "amount_usd_e6": "1" })).await?, "exceeds supplied");
+
+    owner_call(&e, &core, "pause", json!({})).await?;
+    fails_with(&yocto(&stranger, &core, "withdraw_claimable", json!({})).await?, "paused");
+    fails_with(&yocto(&e.owner, &core, "withdraw_treasury", json!({ "receiver_id": ops.id(), "amount_usd_e6": "1" })).await?, "paused");
+    Ok(())
+}
+
+/// SR-27 on the real mock-ft: registration is charged, the excess refunded; the owner is exempt.
+#[tokio::test]
+async fn sr27_mock_ft_charges_registration() -> anyhow::Result<()> {
+    let e = env().await?;
+    let stranger = e.worker.dev_create_account().await?;
+    let victim = e.worker.dev_create_account().await?;
+    let args = json!({ "account_id": victim.id() });
+    let r = stranger.call(e.usdc.id(), "storage_deposit").args_json(args.clone()).transact().await?;
+    fails_with(&r, "attach the storage cost");
+    assert!(view(&e.usdc, "storage_balance_of", args.clone()).await?.is_null());
+
+    let before = stranger.view_account().await?.balance.as_yoctonear();
+    let r = stranger.call(e.usdc.id(), "storage_deposit").args_json(args.clone()).deposit(NearToken::from_millinear(100)).transact().await?;
+    gas("mock-ft:storage_deposit(paid)", &r);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert!(!view(&e.usdc, "storage_balance_of", args.clone()).await?.is_null());
+    // saturating: the failed call's gas refund can land in the same window
+    let spent = before.saturating_sub(stranger.view_account().await?.balance.as_yoctonear());
+    assert!(spent < NearToken::from_millinear(10).as_yoctonear(), "the excess came back: spent {spent}");
+
+    let free = e.worker.dev_create_account().await?;
+    let r = e.owner.call(e.usdc.id(), "storage_deposit").args_json(json!({ "account_id": free.id() })).transact().await?;
+    assert!(r.is_success(), "{:?}", r.failures());
+    assert_eq!(view(&e.usdc, "free_registrations", json!({})).await?, json!(0));
     Ok(())
 }

@@ -231,7 +231,7 @@ fn sr5_borrow_capped_at_the_largest_fitting_quote() {
     fund(&mut c, "b1.test", 8_000_000_000, 250, true);
     fund(&mut c, "b2.test", 8_000_000_000, 400, true);
     let id = reserve_amt(&mut c, BORROW);
-    set_ctx(a("b0.test"), 0, T0 + SEC);
+    set_ctx(a("b0.test"), 1, T0 + SEC);
     c.set_quote_remote_recipient(U64(0), None);
     prove(&mut c, id);
     assert!(event_with("remote_loan_refused", ERR_REMOTE_SETTLE_CAP));
@@ -344,10 +344,10 @@ fn sr7_set_recipient_refuses_and_accepts() {
     let mut c = base(true);
     fund(&mut c, "b1.test", 1_000_000_000, 250, false);
     for r in BAD_RECIPIENTS {
-        set_ctx(a("b1.test"), 0, T0 + 2 * SEC);
+        set_ctx(a("b1.test"), 1, T0 + 2 * SEC);
         assert!(catch_unwind(AssertUnwindSafe(|| c.set_quote_remote_recipient(U64(0), Some(r.into())))).is_err(), "{r}");
     }
-    set_ctx(a("b1.test"), 0, T0 + 2 * SEC);
+    set_ctx(a("b1.test"), 1, T0 + 2 * SEC);
     c.set_quote_remote_recipient(U64(0), Some(RCPT.into()));
     assert_eq!(c.get_quote(U64(0)).unwrap().buyer_remote_recipient.as_deref(), Some(RCPT));
 }

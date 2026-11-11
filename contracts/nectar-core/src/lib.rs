@@ -51,6 +51,8 @@ mod tests_notes;
 mod tests_reserve;
 #[cfg(all(test, feature = "p2"))]
 mod tests_v7c;
+#[cfg(all(test, feature = "p2"))]
+mod tests_v7d;
 
 use near_sdk::json_types::{U64, U128};
 use near_sdk::serde_json::{self, json};
@@ -98,6 +100,14 @@ pub const MAX_QUOTES_PER_ASSET: usize = 64;
 pub const MAX_QUOTES_PER_SETTLEMENT: usize = 8;
 pub const MAX_PAGE: u32 = 100;
 pub const MAX_STRING_LEN: usize = 128;
+/// SR-14: smallest loan, NEAR-held or remote (testnet $5, PROD $50).
+pub const MIN_BORROW_USD_E6: u128 = 5_000_000;
+/// SR-13: per symbol, until when (ns) an OutLayer calendar answer keeps the session closed (raw key).
+pub const OUTLAYER_CLOSED_PREFIX: &[u8] = b"__v7c_closed:";
+/// SR-13: one answer closes for an hour; only the owner's `forced_closed` is open-ended.
+pub const OUTLAYER_CLOSED_TTL_NS: u64 = 3_600 * 1_000_000_000;
+/// SR-19: per symbol, total owed collateral units (raw key).
+pub const OWED_TOTAL_PREFIX: &[u8] = b"__v7c_owed:";
 
 pub const GAS_FT_TRANSFER: Gas = Gas::from_tgas(5); // mock-ft ft_transfer burns ~1.6 Tgas (WO-10a sandbox GAS lines)
 pub const GAS_ON_PAYOUT: Gas = Gas::from_tgas(5); // on_payout burns ~1.6 Tgas (success branch)
@@ -124,6 +134,8 @@ pub(crate) const ERR_AGGREGATE_LIMIT: &str = "aggregate_limit";
 /// SR-5: a remote loan above the largest single quote that could settle it.
 pub(crate) const ERR_REMOTE_SETTLE_CAP: &str = "remote_settle_capacity";
 pub(crate) const ERR_CA_PENDING: &str = "ca_pending";
+pub(crate) const ERR_MIN_BORROW: &str = "borrow below minimum";
+pub(crate) const ERR_BELOW_RESERVE: &str = "max_discount_bps must be below the reserve discount";
 pub(crate) const ERR_REFERRER_IS_BORROWER: &str = "referrer_is_borrower";
 
 /// Fee stack of one borrow (A5): net = borrow - premium - origination.
@@ -186,6 +198,13 @@ pub(crate) fn default_quoter() -> QuoterConfig {
         max_memory_mb: DEFAULT_MAX_MEMORY_MB,
         max_execution_seconds: DEFAULT_MAX_EXECUTION_SECONDS,
     }
+}
+
+/// Raw storage key `prefix ++ suffix`.
+pub(crate) fn prefixed(prefix: &[u8], suffix: &[u8]) -> Vec<u8> {
+    let mut k = prefix.to_vec();
+    k.extend_from_slice(suffix);
+    k
 }
 
 fn ok<T>(r: MathResult<T>) -> T {
@@ -309,10 +328,19 @@ impl Nectar {
         if c.oracle_updated_ns.0 == 0 || now.saturating_sub(c.oracle_updated_ns.0) > SESSION_MAX_PRICE_AGE_NS {
             return (false, "stale_price");
         }
-        if c.forced_closed {
+        if c.forced_closed || self.outlayer_closed(&c.symbol) {
             return (false, "forced_closed");
         }
         (true, "open")
+    }
+    /// SR-13: end (ns) of the closure from the last OutLayer calendar answer; 0 = none.
+    pub(crate) fn outlayer_closed_until(&self, symbol: &str) -> u64 {
+        env::storage_read(&prefixed(OUTLAYER_CLOSED_PREFIX, symbol.as_bytes()))
+            .and_then(|b| <[u8; 8]>::try_from(b.as_slice()).ok())
+            .map_or(0, u64::from_le_bytes)
+    }
+    pub(crate) fn outlayer_closed(&self, symbol: &str) -> bool {
+        env::block_timestamp() < self.outlayer_closed_until(symbol)
     }
     pub(crate) fn session_open(&self, c: &CollateralConfig) -> bool {
         self.session_state(c).0
@@ -443,7 +471,7 @@ impl Nectar {
         }
         // WO-23b: the Reserve fills after every quote, so its discount stays above every quote ceiling.
         if c.reserve.discount_bps > 0 && max_discount_bps >= c.reserve.discount_bps {
-            return Err("max_discount_bps must be below the reserve discount");
+            return Err(ERR_BELOW_RESERVE);
         }
         if notice_period_ns < self.min_notice_period_ns {
             return Err("notice period below minimum");
@@ -511,6 +539,14 @@ impl Nectar {
         let relist = !ids.contains(&quote_id);
         if relist && ids.len() >= MAX_QUOTES_PER_ASSET {
             return Err("quote cap reached for asset");
+        }
+        // SR-16: a relisted quote still fills before the Reserve, so its ceiling must stay below the Reserve's discount.
+        if relist && !Self::below_reserve(&q, &c) {
+            return Err(ERR_BELOW_RESERVE);
+        }
+        // SR-20: and it must come back at quote size, not as dust.
+        if relist && math::add(q.remaining_usd_e6.0, amount)? < self.min_quote_usd_e6 {
+            return Err("quote below minimum");
         }
         let acc = c.acc_fee_per_dollar_e18.0;
         Self::checkpoint_fees(&mut q, acc)?;
@@ -712,6 +748,9 @@ impl Nectar {
         shield_fee_bps: Option<u16>,
         remote: Option<(u128, u128)>,
     ) -> Result<BorrowTerms, &'static str> {
+        if borrow < MIN_BORROW_USD_E6 {
+            return Err(ERR_MIN_BORROW);
+        }
         // WO-23a §4.9: a Shield is sized at weekend parameters and pays a flat fee instead of the premium.
         let mut lp = self.limit_params_for(c, shield_fee_bps.is_some());
         // SR-5 (WO-34a): a remote loan settles in ONE signed leg from ONE quote whose recipient fits its chain. Size it
@@ -745,11 +784,13 @@ impl Nectar {
             None => math::premium_usd_e6(borrow, l.static_limit_usd_e6, c.limit_premium_bps)?,
         };
         // WO-23b: the buyers' share is split Q_c : R_c between the quotes' and the Reserve's fee indices.
+        // SR-20: a Q_c below one minimum quote counts as 0, so dust cannot collect the share or inflate the index.
+        let q_fee_weight = if c.active_committed_q_usd_e6.0 < self.min_quote_usd_e6 { 0 } else { c.active_committed_q_usd_e6.0 };
         let split = math::split_premium_qr(
             premium,
             self.fee_split.buyers_bps,
             self.fee_split.lenders_bps,
-            c.active_committed_q_usd_e6.0,
+            q_fee_weight,
             Self::reserve_rc(c),
             c.reserve.shares.0,
         )?;
@@ -833,6 +874,24 @@ impl Nectar {
         p
     }
 
+    /// SR-20: a non-exiting quote left below the minimum leaves the book and its remainder becomes claimable, so it
+    /// cannot hold a dust weight in the fee index. Returns the amount moved (subtract it from Q_c). Runs between the fee
+    /// checkpoint and `reset_fee_debt`.
+    pub(crate) fn sweep_dust(&self, q: &mut Quote) -> MathResult<u128> {
+        let rem = q.remaining_usd_e6.0;
+        if q.exiting() || rem == 0 || rem >= self.min_quote_usd_e6 {
+            return Ok(0);
+        }
+        q.claimable_fees_usd_e6 = U128(math::add(q.claimable_fees_usd_e6.0, rem)?);
+        q.remaining_usd_e6 = U128(0);
+        Ok(rem)
+    }
+
+    /// SR-16: the Reserve fills after every quote, so a listed quote's ceiling stays below its discount.
+    pub(crate) fn below_reserve(q: &Quote, c: &CollateralConfig) -> bool {
+        c.reserve.discount_bps == 0 || q.max_discount_bps < c.reserve.discount_bps
+    }
+
     /// <= 8 live quotes with capacity: ascending max_discount_bps, then oldest (lowest id). <= 64 reads.
     pub(crate) fn select_quotes(&self, symbol: &str) -> Vec<(u16, u64)> {
         let ids = self.live_ids(symbol);
@@ -873,7 +932,7 @@ impl Nectar {
         let mut total_repay: u128 = 0;
         let mut keeper_units: u128 = 0;
         let mut buyer_transfers: Vec<(AccountId, u128, u64)> = Vec::new();
-        let mut legs: Vec<(Quote, u16, u128, u128)> = Vec::new();
+        let mut legs: Vec<(Quote, u16, u128, u128, u128)> = Vec::new();
         for &(disc, qid) in cands.iter().take(MAX_QUOTES_PER_SETTLEMENT) {
             if debt == 0 || units == 0 {
                 break;
@@ -892,6 +951,8 @@ impl Nectar {
                 q_c = math::sub(q_c, leg.repay_usd_e6)?;
             }
             q.remaining_usd_e6 = U128(math::sub(q.remaining_usd_e6.0, leg.repay_usd_e6)?);
+            let dust = self.sweep_dust(&mut q)?;
+            q_c = math::sub(q_c, dust)?;
             Self::reset_fee_debt(&mut q, acc)?;
             debt = math::sub(debt, leg.repay_usd_e6)?;
             units = math::sub(units, math::add(leg.buyer_units, leg.keeper_units)?)?;
@@ -902,7 +963,7 @@ impl Nectar {
                 Some(entry) => entry.1 = math::add(entry.1, leg.buyer_units)?,
                 None => buyer_transfers.push((q.buyer.clone(), leg.buyer_units, qid)),
             }
-            legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units));
+            legs.push((q, disc, leg.repay_usd_e6, leg.buyer_units, dust));
         }
         // WO-23b (§4.8): then the Reserve at its discount, only once no live quote outside this call has capacity.
         // Seized units stay here (`reserve.units`) and accrue per active share; no transfer.
@@ -948,8 +1009,9 @@ impl Nectar {
         p.units = U128(units);
         let release = if debt == 0 {
             self.close_position(&mut p)
-        } else if reserve_stage {
-            // WO-23b: quotes and Reserve exhausted; the shortfall stays Settling for the owner (`cancel_settlement`).
+        } else if reserve_stage || units == 0 {
+            // WO-23b: quotes and Reserve exhausted; SR-9: or no collateral left. The shortfall stays Settling for the
+            // owner (`cancel_settlement`, `write_off_bad_debt`) and never re-triggers.
             p.status = PositionStatus::Settling;
             0
         } else {
@@ -960,11 +1022,12 @@ impl Nectar {
         let reserve = math::sub(self.gas_reserve_yocto, u128::from(n_local)).map_err(|_| "gas reserve empty")?;
 
         // effects
-        for (q, disc, repay, seize) in legs {
+        for (q, disc, repay, seize, dust) in legs {
             emit(
                 "settled_near",
                 json!({ "position_id": position_id, "quote_id": q.quote_id, "disc_bps": disc,
-                        "repay_usd_e6": U128(repay), "seize_units": U128(seize), "buyer": q.buyer }),
+                        "repay_usd_e6": U128(repay), "seize_units": U128(seize), "buyer": q.buyer,
+                        "dust_usd_e6": U128(dust) }),
             );
             if q.remaining_usd_e6.0 == 0 {
                 self.remove_live(&p.collateral, q.quote_id.0);
@@ -980,6 +1043,9 @@ impl Nectar {
         }
         if reserve_stage && p.status == PositionStatus::Settling {
             self.reserve_ref_add(&p.collateral, position_id.0);
+        }
+        if p.status != PositionStatus::Settling {
+            self.note_refs_clear(&p);
         }
         self.utilised_usd_e6 = utilised;
         self.available_usd_e6 = available;
@@ -1023,6 +1089,30 @@ impl Nectar {
         let key = Self::owed_key(account, symbol);
         let v = ok(math::add(self.owed_collateral.get(&key).copied().unwrap_or(0), units));
         self.owed_collateral.insert(key, v);
+        Self::set_owed_total(symbol, ok(math::add(Self::owed_total(symbol), units)));
+    }
+    /// SR-19: owed units of `symbol` across accounts (entries from before 2.2 are not counted).
+    pub(crate) fn owed_total(symbol: &str) -> u128 {
+        env::storage_read(&prefixed(OWED_TOTAL_PREFIX, symbol.as_bytes()))
+            .and_then(|b| <[u8; 16]>::try_from(b.as_slice()).ok())
+            .map_or(0, u128::from_le_bytes)
+    }
+    pub(crate) fn set_owed_total(symbol: &str, units: u128) {
+        let key = prefixed(OWED_TOTAL_PREFIX, symbol.as_bytes());
+        if units == 0 {
+            env::storage_remove(&key);
+        } else {
+            env::storage_write(&key, &units.to_le_bytes());
+        }
+    }
+    /// SR-19: nothing is owed or escrowed in this asset's token, and nothing is valued with its decimals.
+    fn book_empty(c: &CollateralConfig) -> bool {
+        c.total_debt_usd_e6.0 == 0
+            && c.active_committed_q_usd_e6.0 == 0
+            && c.reserve.units.0 == 0
+            && c.reserve.usdc_e6.0 == 0
+            && c.reserve.shares.0 == 0
+            && Self::owed_total(&c.symbol) == 0
     }
 }
 
@@ -1181,8 +1271,16 @@ impl Nectar {
         if let Some(sym) = self.token_to_symbol.get(&i.token) {
             require!(sym == &symbol, "token already mapped to another symbol");
         }
+        #[cfg(feature = "p2")]
+        if let Some(rc) = &i.remote_chain {
+            self.assert_vault_unbound(&symbol, rc);
+        }
         let c = match self.coll(&symbol) {
             Some(old) => {
+                // SR-19: payouts, valuation and the token map follow these two; only an empty book may change them.
+                if old.token != i.token || old.decimals != i.decimals {
+                    require!(Self::book_empty(&old), "token or decimals change with an open book");
+                }
                 if old.token != i.token {
                     self.token_to_symbol.remove(&old.token);
                 }
@@ -1436,6 +1534,8 @@ impl Nectar {
         if let Some(r) = &p.remote {
             require!(r.status == RemoteStatus::Open, "remote position not open");
         }
+        // SR-9: no leg can seize from nothing; the keeper gets a failed tx and backs off.
+        require!(p.units.0 > 0, "no collateral left: write_off_bad_debt");
         let c = self.coll_or_panic(&p.collateral);
         // WO-10b: Pyth source -> freshness, conf, band and health are checked in `on_pyth_price`.
         #[cfg(feature = "p1")]
@@ -1459,6 +1559,32 @@ impl Nectar {
         if let Err(e) = self.settle(position_id, p, c, &cands, &keeper) {
             env::panic_str(e);
         }
+    }
+
+    /// SR-9: owner closes a position with debt and no collateral left (the terminal bad-debt state). The loss comes out
+    /// of the pool: `utilised` and the aggregate debt fall, `available` does not. Remote: only once its leg was relayed.
+    pub fn write_off_bad_debt(&mut self, position_id: U64) {
+        self.assert_owner();
+        let mut p = self.position_or_panic(position_id.0);
+        require!(p.units.0 == 0, "position still holds collateral");
+        let debt = p.debt_usd_e6.0;
+        require!(debt > 0, "no debt to write off");
+        require!(p.status != PositionStatus::Closed, "position closed");
+        if let Some(r) = &p.remote {
+            require!(r.status == RemoteStatus::Closed, "remote position not closed");
+        }
+        let mut c = self.coll_or_panic(&p.collateral);
+        let utilised = ok(math::sub(self.utilised_usd_e6, debt));
+        let total_debt = ok(math::sub(c.total_debt_usd_e6.0, debt));
+        // effects
+        self.utilised_usd_e6 = utilised;
+        c.total_debt_usd_e6 = U128(total_debt);
+        self.put_coll(c);
+        self.note_refs_clear(&p);
+        p.debt_usd_e6 = U128(0);
+        p.status = PositionStatus::Closed;
+        emit("bad_debt_written_off", json!({ "position_id": position_id, "collateral": p.collateral, "debt_usd_e6": U128(debt) }));
+        self.put_position(p);
     }
 
     // ------------------------------------------------------------ callbacks
@@ -1506,7 +1632,9 @@ impl Nectar {
                 q.remaining_usd_e6 = U128(ok(math::add(q.remaining_usd_e6.0, principal_usd_e6.0)));
                 q.claimable_fees_usd_e6 = U128(ok(math::add(q.claimable_fees_usd_e6.0, fees_usd_e6.0)));
                 let mut ids = self.live_ids(&q.collateral);
-                if principal_usd_e6.0 > 0 && !ids.contains(&quote_id.0) && ids.len() < MAX_QUOTES_PER_ASSET {
+                // SR-16: the escrow is restored and withdrawable either way; it is listed only below the Reserve's discount.
+                let fits = self.coll(&q.collateral).is_none_or(|c| Self::below_reserve(&q, &c));
+                if principal_usd_e6.0 > 0 && fits && !ids.contains(&quote_id.0) && ids.len() < MAX_QUOTES_PER_ASSET {
                     ids.push(quote_id.0);
                     self.quotes_by_collateral.insert(q.collateral.clone(), ids);
                 }
@@ -1532,6 +1660,13 @@ impl Nectar {
                 self.claimable_usdc.insert(account_id.clone(), v);
             }
             Payout::ReserveExit { .. } | Payout::ReserveUnits { .. } => self.restore_reserve_payout(&payout, amt),
+            Payout::Treasury => self.treasury_usd_e6 = ok(math::add(self.treasury_usd_e6, amt)),
+            Payout::LenderFees => self.lenders_fees_usd_e6 = ok(math::add(self.lenders_fees_usd_e6, amt)),
+            Payout::Liquidity => {
+                self.available_usd_e6 = ok(math::add(self.available_usd_e6, amt));
+                let v = ok(math::add(self.lender_supplied.get(&account_id).copied().unwrap_or(0), amt));
+                self.lender_supplied.insert(account_id.clone(), v);
+            }
         }
         emit("payout_failed", json!({ "payout": payout, "account": account_id, "amount": amount }));
         false
@@ -1614,7 +1749,7 @@ impl Nectar {
             price_kind: c.price_kind,
             ca_pending: c.ca_pending,
             ca_effective_ns: c.ca_effective_ns,
-            forced_closed: c.forced_closed,
+            forced_closed: c.forced_closed || self.outlayer_closed(&symbol),
         }
     }
 
@@ -1658,7 +1793,7 @@ impl Nectar {
             ltv_bps: math::ltv_bps(p.debt_usd_e6.0, value),
             pre_liq_ltv_bps: p.pre_liq_ltv_bps,
             oracle_fresh: fresh,
-            triggerable: fresh && trig && p.status == PositionStatus::Open && !self.paused,
+            triggerable: fresh && trig && p.units.0 > 0 && p.status == PositionStatus::Open && !self.paused,
         }
     }
 

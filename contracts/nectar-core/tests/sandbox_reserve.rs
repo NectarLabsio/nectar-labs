@@ -326,5 +326,17 @@ async fn reserve_shortfall_stays_settling_and_locks_transfers() -> anyhow::Resul
     assert_eq!(status(&e, 0).await?, "Open");
     let t = yocto(&bob, &e, "nft_transfer", json!({ "receiver_id": carol.id(), "token_id": "r-NVDAx-1" })).await?;
     assert!(t.is_success(), "{:?}", t.failures());
+
+    // SR-22: the depleted Reserve reopens at 1:1; the old Note keeps its claim and has no share of the new pool
+    let old = rnote(&e, "r-NVDAx-1").await?;
+    assert!(u(&old["claimable_units"]) > 0);
+    let dave = user(&e, 20_000_000, 0).await?;
+    ft_call(&e.usdc, &dave, e.core.id(), 20_000_000, JOIN).await?.into_result()?;
+    assert_eq!(bal(&e.usdc, dave.id()).await?, 0, "not refunded");
+    let rv = reserve(&e).await?;
+    assert_eq!((u(&rv["shares"]), u(&rv["r_usd_e6"])), (20_000_000, 20_000_000));
+    let after = rnote(&e, "r-NVDAx-1").await?;
+    assert_eq!((u(&after["value_usd_e6"]), after["claimable_units"].clone()), (0, old["claimable_units"].clone()));
+    assert_eq!(u(&rnote(&e, "r-NVDAx-2").await?["value_usd_e6"]), 20_000_000);
     Ok(())
 }

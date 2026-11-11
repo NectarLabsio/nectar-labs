@@ -4,8 +4,9 @@
 //! 1. `reserve_remote_position` (borrower, no deposit): position with `remote.status = AwaitingDeposit`, path
 //!    `<chain>/pos/<id>`, cross-contract `derived_public_key({path, predecessor: <this>, domain_id})` (F-338)
 //!    `.then(on_authority)`. No pool funds are locked; the reservation expires after 30 min
-//!    (`expire_remote_reservation`, anyone).
-//! 2. `confirm_remote_deposit` (anyone): OutLayer `vault_read` (deposit from `gas_reserve_yocto`)
+//!    (`expire_remote_reservation`, anyone). SR-14: the record's storage cost is kept from the deposit.
+//! 2. `confirm_remote_deposit` (borrower, keeper or owner; SR-6): OutLayer `vault_read` (deposit from
+//!    `gas_reserve_yocto` for the keeper and owner, from the held reservation deposit for the borrower)
 //!    `.then(on_deposit_verified)`: authority and committed depositor must match (SR-8), depositor recorded; then both
 //!    limits (A1), sized against fitting quotes only (SR-5), are re-checked with the stored price (must be fresh) and
 //!    the loan is paid (A4 `pay_to`, A5 fees). OutLayer failure: stays AwaitingDeposit + `remote_deposit_rejected` (no
@@ -13,7 +14,7 @@
 //!    the depositor so the collateral can be released.
 //!    `keeper_attest_deposit` is the testnet fallback behind `allow_keeper_deposit_attestation` (`source: "keeper"`).
 //! 3. Settlement: `settle_remote` (one signed leg, `|kind=PRELIQ`, the position's own path; src/p2.rs).
-//! 4. `request_remote_release` (anyone, after debt = 0): signs `NECTAR_RELEASE_V1` with the position's path;
+//! 4. `request_remote_release` (anyone after debt = 0; borrower only during a refused loan's retry window, SR-26): signs `NECTAR_RELEASE_V1` with the position's path;
 //!    `relay_release_result` (keeper) closes it.
 //!
 //! All amounts in Solana preimages are u64 (the vault takes u64): units and repay that do not fit are refused.
@@ -36,6 +37,13 @@ use crate::{
 
 /// SR-8 (WO-34a): the depositor committed at reservation (raw key: code-only upgrade, no struct layout change).
 pub const COMMITTED_DEPOSITOR_PREFIX: &[u8] = b"__v7c_depositor:";
+
+/// SR-6: OutLayer reads of one position the gas reserve pays for at the keeper's request.
+pub const MAX_RESERVE_CONFIRMS: u8 = 4;
+pub const CONFIRM_COUNT_PREFIX: &[u8] = b"__v7c_confirms:";
+/// SR-14 (PRD §15): reservations one account may have open at a time.
+pub const MAX_OPEN_RESERVATIONS: u8 = 8;
+pub const OPEN_RESERVATIONS_PREFIX: &[u8] = b"__v7c_open_resv:";
 
 pub const ALLOW_KEEPER_ATTEST_KEY: &[u8] = b"__v7_allow_keeper_attest";
 pub const VAULT_READ_KEY: &[u8] = b"__v7_vault_read";
@@ -180,6 +188,30 @@ impl Nectar {
     pub(crate) fn committed_depositor(&self, position_id: u64) -> Option<String> {
         env::storage_read(&committed_key(position_id)).and_then(|b| String::from_utf8(b).ok())
     }
+    /// SR-6: OutLayer reads the keeper has had the gas reserve pay for on this position.
+    fn confirm_reads(position_id: u64) -> u8 {
+        env::storage_read(&crate::prefixed(CONFIRM_COUNT_PREFIX, &position_id.to_le_bytes()))
+            .and_then(|b| b.first().copied())
+            .unwrap_or(0)
+    }
+    /// SR-14: reservations this account has open (reservations from before 2.2 are not counted).
+    pub(crate) fn open_reservations(account: &AccountId) -> u8 {
+        env::storage_read(&crate::prefixed(OPEN_RESERVATIONS_PREFIX, account.as_bytes()))
+            .and_then(|b| b.first().copied())
+            .unwrap_or(0)
+    }
+    fn set_open_reservations(account: &AccountId, n: u8) {
+        let key = crate::prefixed(OPEN_RESERVATIONS_PREFIX, account.as_bytes());
+        if n == 0 {
+            env::storage_remove(&key);
+        } else {
+            env::storage_write(&key, &[n]);
+        }
+    }
+    /// SR-14: a reservation ended (proven, failed or expired).
+    fn close_reservation(account: &AccountId) {
+        Self::set_open_reservations(account, Self::open_reservations(account).saturating_sub(1));
+    }
     /// SR-5: (sum, largest) `remaining` of the live, non-exiting quotes whose recipient fits `domain_id`. <= 64 reads.
     pub(crate) fn remote_capacity(&self, symbol: &str, domain_id: u32) -> Result<(u128, u128), &'static str> {
         let (mut sum, mut largest) = (0u128, 0u128);
@@ -264,6 +296,9 @@ impl Nectar {
         let Some(mut r) = p.remote.take() else { return };
         let now = env::block_timestamp();
         let late = r.status == RemoteStatus::Expired || now >= r.expires_ns.0;
+        if r.depositor.is_none() && r.status == RemoteStatus::AwaitingDeposit {
+            Self::close_reservation(&p.borrower);
+        }
         r.depositor = Some(depositor.clone());
         r.source = Some(source.to_string());
         r.deposit_ref = Some(deposit_ref.clone());
@@ -562,6 +597,9 @@ impl Nectar {
         require!(units.0 <= U64_MAX, "units exceed u64");
         require!(borrow_usd_e6.0 > 0, "borrow is zero");
         require!(borrow_usd_e6.0 <= U64_MAX, "borrow exceeds u64");
+        require!(borrow_usd_e6.0 >= crate::MIN_BORROW_USD_E6, crate::ERR_MIN_BORROW);
+        let open = Self::open_reservations(&borrower);
+        require!(open < MAX_OPEN_RESERVATIONS, "too many open reservations");
         require!(valid_depositor(&depositor, rc.mpc_domain_id), "bad depositor");
         require!(
             (c.pre_liq_min_bps..=c.pre_liq_max_bps).contains(&pre_liq_ltv_bps),
@@ -594,11 +632,12 @@ impl Nectar {
             .checked_add(RESERVATION_EXPIRY_S * SEC)
             .unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
         // effects
+        let storage_before = env::storage_usage();
         self.next_position_id = next;
         if shield.is_some() {
             self.note_shield_open(&borrower);
         }
-        self.put_position(Position {
+        let mut position = Position {
             position_id: U64(id),
             borrower: borrower.clone(),
             collateral: collateral.clone(),
@@ -635,14 +674,28 @@ impl Nectar {
                 committed_depositor: None,
             }),
             shield,
-        });
+        };
+        self.put_position(position.clone());
         env::storage_write(&committed_key(id), depositor.as_bytes());
+        Self::set_open_reservations(&borrower, open + 1);
+        // SR-14: the record outlives the refund, so its storage is kept from the deposit. `flush` makes it measurable.
+        self.positions.flush();
+        let bytes = u128::from(env::storage_usage().saturating_sub(storage_before));
+        let storage_cost = bytes
+            .checked_mul(env::storage_byte_cost().as_yoctonear())
+            .unwrap_or_else(|| env::panic_str(math::ERR_OVERFLOW));
+        let held = math::sub(deposit, storage_cost).unwrap_or_else(|_| env::panic_str("deposit below storage cost"));
+        if let Some(r) = position.remote.as_mut() {
+            r.deposit_yocto = U128(held);
+        }
+        self.put_position(position);
         emit(
             "remote_reserved",
             json!({ "position_id": U64(id), "borrower": borrower, "collateral": collateral, "chain": rc.chain_id,
                     "vault_program": rc.vault_program, "path": path, "domain_id": rc.mpc_domain_id,
                     "units": units, "borrow_usd_e6": borrow_usd_e6, "expires_ns": U64(expires_ns),
-                    "deposit_yocto": U128(deposit), "shield": shield, "depositor": depositor }),
+                    "deposit_yocto": U128(deposit), "storage_yocto": U128(storage_cost), "shield": shield,
+                    "depositor": depositor }),
         );
         // interaction (F-338: always pass predecessor and domain_id)
         let args = json!({ "path": path, "predecessor": env::current_account_id(), "domain_id": rc.mpc_domain_id });
@@ -690,6 +743,7 @@ impl Nectar {
                 r.status = RemoteStatus::Expired;
                 p.status = PositionStatus::Closed;
                 refund = Self::take_reservation_deposit(&mut r);
+                Self::close_reservation(&p.borrower);
                 emit("remote_reservation_failed", json!({ "position_id": position_id, "reason": reason }));
             }
         }
@@ -710,6 +764,7 @@ impl Nectar {
         r.status = RemoteStatus::Expired;
         p.status = PositionStatus::Closed;
         let refund = Self::take_reservation_deposit(&mut r);
+        Self::close_reservation(&p.borrower);
         p.remote = Some(r);
         let borrower = p.borrower.clone();
         self.put_position(p);
@@ -719,11 +774,16 @@ impl Nectar {
     }
 
     // ------------------------------------------------------------ 2. confirm
-    /// Anyone (the keeper key included). OutLayer `vault_read` (WO-24) `.then(on_deposit_verified)`. Accepted on an
-    /// expired reservation too, so a late deposit can be proven and released (no loan then).
+    /// SR-6: the borrower, the keeper or the owner. OutLayer `vault_read` (WO-24) `.then(on_deposit_verified)`. The keeper
+    /// and owner draw on `gas_reserve_yocto` above its floor (keeper: `MAX_RESERVE_CONFIRMS` per position); the borrower's
+    /// read comes out of the held reservation deposit. Accepted on an expired reservation for the keeper and owner, so a
+    /// late deposit can still be proven and released (no loan then). Not payable: the keeper key cannot attach NEAR (F-015).
     pub fn confirm_remote_deposit(&mut self, position_id: U64) {
         self.assert_not_paused();
         let mut p = self.position_or_panic(position_id.0);
+        let caller = env::predecessor_account_id();
+        let (is_keeper, is_owner) = (caller == self.keeper, caller == self.owner);
+        require!(is_keeper || is_owner || caller == p.borrower, "borrower, keeper or owner only");
         let mut r = Self::remote_or_panic(&p);
         require!(
             matches!(r.status, RemoteStatus::AwaitingDeposit | RemoteStatus::Expired),
@@ -737,7 +797,14 @@ impl Nectar {
             "confirm cooldown"
         );
         let cfg = self.vault_read_config().unwrap_or_else(|| env::panic_str("vault_read not configured"));
-        require!(self.gas_reserve_yocto >= cfg.deposit_yocto, "gas reserve empty");
+        let from_reserve = is_keeper || is_owner;
+        let reads = Self::confirm_reads(position_id.0);
+        if from_reserve {
+            require!(self.reserve_spendable(cfg.deposit_yocto), "gas reserve empty");
+            require!(!is_keeper || is_owner || reads < MAX_RESERVE_CONFIRMS, "confirm budget spent");
+        } else {
+            require!(r.deposit_yocto.0 >= cfg.deposit_yocto, "reservation deposit spent");
+        }
         let exec_gas = Gas::from_tgas(cfg.gas_tgas);
         let cb_gas = GAS_ON_DEPOSIT_BASE.as_gas() + Self::per_transfer_gas();
         require!(
@@ -769,7 +836,14 @@ impl Nectar {
         .to_string();
         let outlayer = q.outlayer_account.clone();
         // effects
-        self.gas_reserve_yocto = math::sub(self.gas_reserve_yocto, cfg.deposit_yocto).unwrap_or_else(|e| env::panic_str(e));
+        if from_reserve {
+            self.gas_reserve_yocto = math::sub(self.gas_reserve_yocto, cfg.deposit_yocto).unwrap_or_else(|e| env::panic_str(e));
+            if is_keeper {
+                env::storage_write(&crate::prefixed(CONFIRM_COUNT_PREFIX, &position_id.0.to_le_bytes()), &[reads.saturating_add(1)]);
+            }
+        } else {
+            r.deposit_yocto = U128(math::sub(r.deposit_yocto.0, cfg.deposit_yocto).unwrap_or_else(|e| env::panic_str(e)));
+        }
         r.confirming = true;
         r.last_confirm_ns = U64(now);
         p.remote = Some(r);
@@ -888,6 +962,10 @@ impl Nectar {
         require!(!r.confirming, "deposit check in flight");
         require!(!self.settle_in_flight(position_id.0), "remote settlement in flight");
         let depositor = r.depositor.clone().unwrap_or_else(|| env::panic_str("no deposit recorded"));
+        // SR-26: a refused loan may be retried until expiry; only the borrower can give that up.
+        if r.status == RemoteStatus::AwaitingDeposit && env::block_timestamp() < r.expires_ns.0 {
+            require!(env::predecessor_account_id() == p.borrower, "borrower only during the retry window");
+        }
         let now_s = env::block_timestamp() / SEC;
         match r.status {
             RemoteStatus::Open | RemoteStatus::AwaitingDeposit | RemoteStatus::Expired => {}

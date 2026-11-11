@@ -163,7 +163,7 @@ pub(crate) fn vault_json(id: u64, units: u128, authority: &str, depositor: &str)
 }
 
 pub(crate) fn confirm(c: &mut Nectar, id: u64, ts: u64) {
-    set_ctx(a("anyone.test"), 0, ts);
+    set_ctx(keeper(), 0, ts);
     c.confirm_remote_deposit(U64(id));
 }
 
@@ -558,7 +558,7 @@ fn near_held_position_with_remote_quote_settles_on_near() {
 #[test]
 fn lock_and_borrow_refuses_remote_path() {
     let mut c = base(true);
-    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"1000000","pre_liq_ltv_bps":7500,"remote_path":"solana-devnet-v1"}}"#;
+    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"5000000","pre_liq_ltv_bps":7500,"remote_path":"solana-devnet-v1"}}"#;
     assert_eq!(ft(&mut c, nvdax(), "borrower.test", UNITS, bm), UNITS, "full refund");
     assert!(get_logs().iter().any(|l| l.contains("remote_path removed in v2")));
     assert_eq!(c.get_position(U64(0)), None);
@@ -741,7 +741,7 @@ fn expire_too_early() {
 fn expire_near_position() {
     let mut c = base(true);
     fund(&mut c, "buyer9.test", 5_000_000_000, 400, false); // aggregate capacity (A1)
-    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"1000000","pre_liq_ltv_bps":7500}}"#;
+    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"5000000","pre_liq_ltv_bps":7500}}"#;
     assert_eq!(ft(&mut c, nvdax(), "borrower.test", UNITS, bm), 0);
     c.expire_remote_reservation(U64(0));
 }
@@ -872,7 +872,8 @@ fn deposit_rejections_keep_awaiting() {
     for (res, reason) in cases {
         let mut c = reserved();
         let avail = c.get_pool().available_usd_e6;
-        confirm(&mut c, 0, T0 + 2 * SEC);
+        set_ctx(owner(), 0, T0 + 2 * SEC); // the mock's raw keys outlive the loop: the keeper's read budget would run out
+        c.confirm_remote_deposit(U64(0));
         verified(&mut c, 0, T0 + 3 * SEC, res);
         let p = c.get_position(U64(0)).unwrap();
         let r = p.remote.clone().unwrap();
@@ -895,8 +896,9 @@ fn deposit_proven_but_limits_fail_records_depositor() {
     assert_eq!((r.status, r.depositor.as_deref(), p.debt_usd_e6), (RemoteStatus::AwaitingDeposit, Some(DEPOSITOR), U128(0)));
     assert!(event_with("remote_loan_refused", "oracle stale"));
     assert!(event_with("remote_deposit_confirmed", "\"funded\":false"));
-    // the collateral is releasable
-    release(&mut c, T0 + 3 * SEC);
+    // the collateral is releasable (SR-26: by the borrower during the retry window)
+    set_ctx(borrower(), 0, T0 + 3 * SEC);
+    c.request_remote_release(U64(0));
     assert_eq!(remote(&c, 0).status, RemoteStatus::Releasing);
 }
 
@@ -929,7 +931,7 @@ fn confirm_paused() {
 fn confirm_near_position() {
     let mut c = base(true);
     fund(&mut c, "buyer9.test", 5_000_000_000, 400, false); // aggregate capacity (A1)
-    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"1000000","pre_liq_ltv_bps":7500}}"#;
+    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"5000000","pre_liq_ltv_bps":7500}}"#;
     assert_eq!(ft(&mut c, nvdax(), "borrower.test", UNITS, bm), 0);
     confirm(&mut c, 0, T0 + 2 * SEC);
 }
@@ -993,7 +995,7 @@ fn confirm_gas_reserve_empty() {
 #[should_panic(expected = "attach more gas")]
 fn confirm_needs_gas() {
     let mut c = reserved();
-    ctx_gas(a("anyone.test"), 0, T0 + 2 * SEC, 60);
+    ctx_gas(keeper(), 0, T0 + 2 * SEC, 60);
     c.confirm_remote_deposit(U64(0));
 }
 
@@ -1134,7 +1136,7 @@ fn trigger_signs_with_position_path_and_kind_preliq() {
 fn remote_position_needs_a_remote_quote() {
     // SR-5: a loan needs fitting capacity at confirmation; here the buyer drops the recipient afterwards
     let mut c = open_remote(true, false);
-    set_ctx(a("buyer1.test"), 0, T0 + 4 * SEC);
+    set_ctx(a("buyer1.test"), 1, T0 + 4 * SEC);
     c.set_quote_remote_recipient(U64(0), None);
     trigger(&mut c);
 }
@@ -1144,7 +1146,7 @@ fn remote_position_needs_a_remote_quote() {
 fn partial_remote_quote_is_skipped() {
     // the only remote quote left ($5k) cannot repay the $11,250 debt in one leg; the vault closes on settle
     let mut c = open_remote(true, true);
-    set_ctx(a("buyer1.test"), 0, T0 + 4 * SEC);
+    set_ctx(a("buyer1.test"), 1, T0 + 4 * SEC);
     c.set_quote_remote_recipient(U64(0), None);
     trigger(&mut c);
 }
@@ -1519,7 +1521,7 @@ fn release_without_deposit_refused() {
 fn release_near_position_refused() {
     let mut c = base(true);
     fund(&mut c, "buyer9.test", 5_000_000_000, 400, false); // aggregate capacity (A1)
-    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"1000000","pre_liq_ltv_bps":7500}}"#;
+    let bm = r#"{"LockCollateralAndBorrow":{"collateral":"NVDAx","borrow_usd_e6":"5000000","pre_liq_ltv_bps":7500}}"#;
     assert_eq!(ft(&mut c, nvdax(), "borrower.test", UNITS, bm), 0);
     release(&mut c, T0 + 10 * SEC);
 }

@@ -227,14 +227,61 @@ fn v7_reserve_join_unknown_collateral_and_wrong_token_refunded() {
 }
 
 #[test]
-fn v7_reserve_join_depleted_refunded() {
+fn sr22_join_on_a_depleted_reserve_mints_one_to_one() {
     let mut c = setup();
     enable(&mut c, 1_000);
     let mut col = c.coll("NVDAx").unwrap();
     col.reserve.shares = U128(5);
     c.put_coll(col);
-    assert_eq!(join(&mut c, alice(), 10_000_000), 10_000_000);
-    assert!(get_logs().iter().any(|l| l.contains("reserve_depleted")));
+    assert_eq!(join(&mut c, alice(), 10_000_000), 0);
+    assert!(get_logs().iter().any(|l| l.contains("reserve_epoch_closed")));
+    assert_eq!((rv(&c).shares, rv(&c).r_usd_e6), (U128(10_000_000), U128(10_000_000)));
+}
+
+#[test]
+fn sr22_old_notes_keep_their_claims_and_get_nothing_from_the_new_epoch() {
+    let mut c = shortfall();
+    let old = note(&c, "r-NVDAx-1");
+    let (units, fees) = (old.claimable_units, old.claimable_fees_usd_e6);
+    assert!(units.0 > 0);
+    assert_eq!(rv(&c).r_usd_e6, U128(0));
+    assert_eq!(join(&mut c, carol(), 20_000_000), 0, "no longer refused");
+    assert_eq!((rv(&c).shares, rv(&c).r_usd_e6), (U128(20_000_000), U128(20_000_000)));
+    let new = note(&c, "r-NVDAx-2");
+    assert_eq!((new.value_usd_e6, new.claimable_units, new.claimable_fees_usd_e6), (U128(20_000_000), U128(0), U128(0)));
+    // a later fill accrues to the new epoch only
+    let mut col = c.coll("NVDAx").unwrap();
+    col.reserve.units = U128(col.reserve.units.0 + 20_000);
+    col.reserve.acc_units_per_share_e18 = U128(col.reserve.acc_units_per_share_e18.0 + math::E18 / 1_000);
+    c.put_coll(col);
+    let old = note(&c, "r-NVDAx-1");
+    assert_eq!((old.value_usd_e6, old.claimable_units, old.claimable_fees_usd_e6), (U128(0), units, fees));
+    assert_eq!(note(&c, "r-NVDAx-2").claimable_units, U128(20_000));
+    // the old holder exits: no value, its units, and the new shares are untouched
+    set_ctx(owner(), 0, T0 + 5 * SEC);
+    c.cancel_settlement(U64(0));
+    set_ctx(bob(), 1, T0 + 6 * SEC);
+    c.initiate_reserve_exit("r-NVDAx-1".into());
+    assert_eq!((rv(&c).shares, rv(&c).r_usd_e6), (U128(20_000_000), U128(20_000_000)));
+    let old = note(&c, "r-NVDAx-1");
+    assert_eq!((old.value_usd_e6, old.claimable_units), (U128(0), units));
+    set_ctx(bob(), 1, T0 + 8 * DAY_NS);
+    let _ = c.complete_reserve_exit("r-NVDAx-1".into());
+    assert!(get_logs().iter().any(|l| l.contains("reserve_exited") && l.contains(&format!("\"units\":\"{}\"", units.0))));
+}
+
+#[test]
+fn sr22_a_second_depletion_closes_a_second_epoch() {
+    let mut c = shortfall();
+    assert_eq!(join(&mut c, carol(), 20_000_000), 0);
+    let mut col = c.coll("NVDAx").unwrap();
+    col.reserve.usdc_e6 = U128(col.reserve.notice_usdc_e6.0); // the new shares are filled down to nothing too
+    c.put_coll(col);
+    assert_eq!(join(&mut c, alice(), 30_000_000), 0);
+    assert_eq!(Nectar::reserve_epoch("NVDAx"), 2);
+    assert_eq!(rv(&c).shares, U128(30_000_000));
+    assert_eq!(note(&c, "r-NVDAx-2").value_usd_e6, U128(0));
+    assert_eq!(note(&c, "r-NVDAx-3").value_usd_e6, U128(30_000_000));
 }
 
 // ------------------------------------------------------------------ owner params

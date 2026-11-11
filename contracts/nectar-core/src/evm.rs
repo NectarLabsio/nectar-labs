@@ -392,6 +392,7 @@ impl Nectar {
         let c = self.coll_or_panic(&symbol);
         require!(valid_extra_chain(&remote_chain), "bad remote_chain");
         require!(valid_rpc_url(&rpc_url), "bad rpc_url");
+        self.assert_vault_unbound(&symbol, &remote_chain);
         require!(
             c.remote_chain.as_ref().is_none_or(|p| p.chain_id != remote_chain.chain_id),
             "chain is the primary remote chain"

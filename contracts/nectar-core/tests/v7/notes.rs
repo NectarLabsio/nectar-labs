@@ -74,6 +74,7 @@ async fn notes_authority_follows_transfer() -> anyhow::Result<()> {
     let r = bob
         .call(e.core.id(), "set_quote_remote_recipient")
         .args_json(json!({ "quote_id": "2", "recipient": RCPT }))
+        .deposit(NearToken::from_yoctonear(1))
         .transact()
         .await?;
     gas("set_quote_remote_recipient", &r);

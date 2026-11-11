@@ -26,6 +26,11 @@ use crate::events::emit;
 use crate::types::*;
 use crate::{MAX_QUOTES_PER_SETTLEMENT, MAX_STRING_LEN, Nectar, NectarExt, math};
 
+/// SR-9: after a quoter run aborts, this position gets no paid run for this long (P0 static pricing meanwhile).
+pub const QUOTER_ABORT_COOLDOWN_NS: u64 = 300 * 1_000_000_000;
+pub const QUOTER_ABORT_PREFIX: &[u8] = b"__v7c_qabort:";
+/// SR-6: non-liquidation spends must leave this many quoter runs in `gas_reserve_yocto`.
+pub const GAS_RESERVE_FLOOR_RUNS: u128 = 4;
 /// Callback own burn for parse + 8 legs (sandbox: ~13 Tgas with 10 transfers scheduled).
 pub const GAS_QUOTER_CB_BASE: Gas = Gas::from_tgas(20);
 /// Per transfer, on top of the attached ft_transfer + on_payout gas: exec fees of the two receipts the
@@ -269,11 +274,20 @@ impl Nectar {
             let keeper = self.keeper.clone();
             return self.settle(position_id, p, c.clone(), &cands, &keeper);
         }
+        // SR-9: dry run at the ceilings; a settlement that cannot succeed never spends the deposit.
+        if !self.settle_possible(&p, c, &cands) {
+            return Err("no quote capacity");
+        }
         let n_transfers = self.n_transfers(&cands);
         let deposit = self.quoter.deposit_yocto;
         let need = math::add(deposit, u128::from(n_transfers))?;
-        if self.gas_reserve_yocto < need {
-            return Err("gas reserve empty");
+        // SR-6, SR-9: a short reserve or a recent aborted run costs the quoter's price, never the rescue (PRD §6).
+        let cooling = env::block_timestamp() < self.quoter_cooling_until(position_id.0);
+        if cooling || self.gas_reserve_yocto < need {
+            let reason = if cooling { "abort_cooldown" } else { "gas_reserve_short" };
+            emit("quoter_fallback", json!({ "position_id": position_id, "reason": reason }));
+            let keeper = self.keeper.clone();
+            return self.settle(position_id, p, c.clone(), &cands, &keeper);
         }
         let cb_gas = Gas::from_gas(
             GAS_QUOTER_CB_BASE.as_gas() + n_transfers * Self::per_transfer_gas() + self.remote_extra_gas(&p),
@@ -357,7 +371,49 @@ impl Nectar {
             .detach();
     }
 
+    /// SR-6: may a non-liquidation caller spend `amount`? While the quoter is on, a floor stays for pre-liquidation.
+    pub(crate) fn reserve_spendable(&self, amount: u128) -> bool {
+        let floor = if self.quoter_enabled() { GAS_RESERVE_FLOOR_RUNS.saturating_mul(self.quoter.deposit_yocto) } else { 0 };
+        self.gas_reserve_yocto >= amount.saturating_add(floor)
+    }
+
+    /// SR-9: end (ns) of the position's no-paid-run window; 0 = none.
+    pub(crate) fn quoter_cooling_until(&self, position_id: u64) -> u64 {
+        env::storage_read(&crate::prefixed(QUOTER_ABORT_PREFIX, &position_id.to_le_bytes()))
+            .and_then(|b| <[u8; 8]>::try_from(b.as_slice()).ok())
+            .map_or(0, |t| u64::from_le_bytes(t).saturating_add(QUOTER_ABORT_COOLDOWN_NS))
+    }
+
+    /// SR-9: would `settle` find at least one leg at these discounts (quotes, then the Reserve)?
+    fn settle_possible(&self, p: &Position, c: &CollateralConfig, cands: &[(u16, u64)]) -> bool {
+        if p.units.0 == 0 || p.debt_usd_e6.0 == 0 {
+            return false;
+        }
+        if p.remote.is_some() {
+            return !cands.is_empty(); // `select_remote_quotes` kept only quotes that close it alone
+        }
+        let (m, price) = (Self::eff_multiplier(c), c.oracle_price_usd_e6.0);
+        let leg = |capacity: u128, disc: u16| {
+            matches!(
+                math::settle_leg_m(p.debt_usd_e6.0, capacity, p.units.0, m, price, c.decimals, disc, self.keeper_fee_bps),
+                Ok(Some(_))
+            )
+        };
+        cands.iter().any(|&(disc, id)| self.quote(id).is_some_and(|q| q.collateral == p.collateral && leg(q.remaining_usd_e6.0, disc)))
+            || (c.reserve.discount_bps > 0
+                && c.reserve.shares.0 > 0
+                && self.reserve_stage_open(&p.collateral, cands)
+                && leg(Self::reserve_rc(c), c.reserve.discount_bps))
+    }
+
+    /// SR-9: a quoter run that paid its deposit ended without a settlement.
+    fn abort_quoter_run(&mut self, p: Position, reason: &str) {
+        env::storage_write(&crate::prefixed(QUOTER_ABORT_PREFIX, &p.position_id.0.to_le_bytes()), &env::block_timestamp().to_le_bytes());
+        self.abort_settlement(p, reason);
+    }
+
     fn abort_settlement(&mut self, mut p: Position, reason: &str) {
+        self.note_refs_clear(&p);
         p.status = PositionStatus::Open;
         emit("settlement_aborted", json!({ "position_id": p.position_id, "reason": reason }));
         self.put_position(p);
@@ -417,11 +473,11 @@ impl Nectar {
             None
         };
         if let Some(r) = reason {
-            return self.abort_settlement(p, r);
+            return self.abort_quoter_run(p, r);
         }
         let keeper = self.keeper.clone();
         if let Err(e) = self.settle(position_id, p.clone(), c, &cands, &keeper) {
-            self.abort_settlement(p, e);
+            self.abort_quoter_run(p, e);
         }
     }
 
@@ -508,6 +564,7 @@ impl Nectar {
         require!(!self.signed_leg_open(position_id.0), "signed remote leg: resign_remote_settlement");
         #[cfg(feature = "p2")]
         self.cancel_remote_leg(&mut p);
+        self.note_refs_clear(&p);
         p.status = PositionStatus::Open;
         self.put_position(p);
         emit("settlement_cancelled", json!({ "position_id": position_id }));
@@ -625,6 +682,11 @@ impl Nectar {
     }
 
     /// Accounted gas reserve (yocto). OutLayer deposit refunds land in the account balance, not here.
+    /// SR-9: until when (ns) a trigger of this position runs at P0 static pricing after an aborted quoter run; 0 = none.
+    pub fn get_quoter_cooldown(&self, position_id: U64) -> U64 {
+        U64(self.quoter_cooling_until(position_id.0))
+    }
+
     pub fn get_gas_reserve(&self) -> U128 {
         U128(self.gas_reserve_yocto)
     }
