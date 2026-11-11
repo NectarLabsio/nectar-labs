@@ -33,7 +33,7 @@ setup)
 reserve)
   U=${2:?units}; call "$CORE" update_owner_price '{"symbol":"NVDAx","price_usd_e6":"150000000"}' "$OWNER" '30 Tgas' >/dev/null
   BC=$(view "$CORE" preview_borrow "{\"symbol\":\"NVDAx\",\"units\":\"$U\",\"borrow_usd_e6\":\"1\"}" | jq -r '.b_c_usd_e6'); B=$(( BC * 98 / 100 )); echo "b_c=$BC borrow=$B"
-  call "$CORE" reserve_remote_position "$(jq -cn --arg u "$U" --arg b "$B" '{collateral:"NVDAx", units:$u, borrow_usd_e6:$b, pre_liq_ltv_bps:7500, chain:"base-sepolia"}')" "$BR" '150 Tgas' '0.05 NEAR' | events ;;
+  call "$CORE" reserve_remote_position "$(jq -cn --arg u "$U" --arg b "$B" --arg d "$(evm borrower1)" '{collateral:"NVDAx", units:$u, borrow_usd_e6:$b, pre_liq_ltv_bps:7500, chain:"base-sepolia", depositor:$d}')" "$BR" '150 Tgas' '0.05 NEAR' | events ;;
 check)
   ID=${2:?id}; A=$(view "$CORE" get_position "{\"position_id\":\"$ID\"}" | jq -r '.remote.authority')
   K=$(view v1.signer-prod.testnet derived_public_key "$(jq -cn --arg p "base-sepolia/pos/$ID" --arg c "$CORE" '{path:$p, predecessor:$c, domain_id:0}')" | tr -d '"')
@@ -45,12 +45,12 @@ deposit)
   ID=${2:?id}; P=$(view "$CORE" get_position "{\"position_id\":\"$ID\"}"); A=$(echo "$P" | jq -r '.remote.authority'); U=$(echo "$P" | jq -r '.remote.reserved_units')
   csend borrower1 "$TOK" 'approve(address,uint256)' "$VAULT" "$U" | grep -E 'status|transactionHash'
   csend borrower1 "$VAULT" 'openPosition(uint64,address,uint256)' "$ID" "$A" "$U" | grep -E 'status|transactionHash'
-  echo "vault positions($ID): $(cast call "$VAULT" 'positions(uint64)(address,address,uint256,uint8)' "$ID" --rpc-url "$RPC" | tr '\n' ' ')" ;;
+  echo "vault positions($ID): $(cast call "$VAULT" 'positionOf(uint64,address)(address,address,uint256,uint8)' "$ID" "$(evm borrower1)" --rpc-url "$RPC" | tr '\n' ' ')" ;;
 show)
   ID=${2:?id}; view "$CORE" get_position "{\"position_id\":\"$ID\"}" | jq -c '{debt_usd_e6, units, remote: (.remote | {status, chain_id, authority, depositor, source, paid_usd_e6})}'
   view "$CORE" get_pending_settlement_evm "{\"position_id\":\"$ID\"}" | jq -c . 2>/dev/null | cut -c1-300
   view "$CORE" get_pending_release_evm "{\"position_id\":\"$ID\"}" | jq -c . 2>/dev/null | cut -c1-300
-  echo "vault positions($ID): $(cast call "$VAULT" 'positions(uint64)(address,address,uint256,uint8)' "$ID" --rpc-url "$RPC" | tr '\n' ' ')" ;;
+  echo "vault positions($ID): $(cast call "$VAULT" 'positionOf(uint64,address)(address,address,uint256,uint8)' "$ID" "$(evm borrower1)" --rpc-url "$RPC" | tr '\n' ' ')" ;;
 repay)
   ID=${2:?id}; DEBT=$(view "$CORE" get_position "{\"position_id\":\"$ID\"}" | jq -r '.debt_usd_e6')
   ftc "$USDC" "$BR" "$DEBT" "$(jq -cn --arg i "$ID" '{Repay:{position_id:$i}}')" | events ;;

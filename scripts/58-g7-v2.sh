@@ -6,6 +6,7 @@
 #   check <id>           stored authority vs live derived_public_key(solana-devnet/pos/<id>, predecessor core, domain 1)  [G7 criterion]
 #   deposit <id>         borrower1 open_position on the vault with the stored authority
 #   show <id>            position + remote + pending settlement/release
+#   withdraw <id>        borrower1 pulls its tokens from the vault after settle/release (vault v2)
 #   repay <id>           borrower1 repays the full debt (USDC ft_transfer_call Repay)
 #   release <id>         request_remote_release (the keeper relays the signed release to Solana)
 #   price <usd_e6>       owner price (band 1,500 bps per step; disclosed demo control)
@@ -38,7 +39,7 @@ reserve)
   U=${2:?units}; call "$CORE" update_owner_price '{"symbol":"NVDAx","price_usd_e6":"180000000"}' "$OWNER" '30 Tgas' >/dev/null
   BC=$(view "$CORE" preview_borrow "{\"symbol\":\"NVDAx\",\"units\":\"$U\",\"borrow_usd_e6\":\"1\"}" | jq -r '.b_c_usd_e6')
   B=$(( BC * 98 / 100 )); echo "b_c=$BC borrow=$B"
-  call "$CORE" reserve_remote_position "$(jq -cn --arg u "$U" --arg b "$B" '{collateral:"NVDAx", units:$u, borrow_usd_e6:$b, pre_liq_ltv_bps:7500}')" "$BR" '100 Tgas' '0.05 NEAR' \
+  call "$CORE" reserve_remote_position "$(jq -cn --arg u "$U" --arg b "$B" --arg d "$(kp borrower1-sol)" '{collateral:"NVDAx", units:$u, borrow_usd_e6:$b, pre_liq_ltv_bps:7500, depositor:$d}')" "$BR" '100 Tgas' '0.05 NEAR' \
     | grep -oE 'EVENT_JSON:\{.*"remote_reserved".*' | head -1 ;;
 check)
   ID=${2:?id}; A=$(view "$CORE" get_position "{\"position_id\":\"$ID\"}" | jq -r '.remote.authority')
@@ -47,6 +48,9 @@ check)
 deposit)
   ID=${2:?id}; P=$(view "$CORE" get_position "{\"position_id\":\"$ID\"}"); A=$(echo "$P" | jq -r '.remote.authority'); U=$(echo "$P" | jq -r '.remote.reserved_units // .units')
   node "$ROOT/scripts/59-vault-open.mjs" "$PROG" "$MINT" "$K/borrower1-sol.json" "$ID" "$A" "$U" ;;
+withdraw)
+  # vault v2 (D-027): after settle/release the depositor pulls its tokens
+  ID=${2:?id}; node "$ROOT/scripts/59-vault-open.mjs" withdraw "$PROG" "$MINT" "$K/borrower1-sol.json" "$ID" ;;
 show)
   ID=${2:?id}; view "$CORE" get_position "{\"position_id\":\"$ID\"}" | jq -c '{state, debt_usd_e6, units, remote: (.remote | {status, authority, depositor, source, paid_usd_e6})}'
   view "$CORE" get_pending_settlement "{\"position_id\":\"$ID\"}" | jq -c '.' 2>/dev/null | cut -c1-300
