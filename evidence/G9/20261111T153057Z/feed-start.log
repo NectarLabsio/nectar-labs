@@ -1,0 +1,10 @@
+
+> feed@0.1.0 start /private/tmp/verify-G9-20261111T153057Z/services/feed
+> node --disable-warning=ExperimentalWarning src/main.ts
+
+{"ts":"2026-11-11T15:33:47.806Z","level":"info","service":"feed","msg":"feed_started","port":8988,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"8989","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
+{"ts":"2026-11-11T15:33:50.028Z","level":"info","service":"feed","msg":"neardata_cursor_init","height":277234471}
+{"ts":"2026-11-11T15:33:50.323Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:34:40.746Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277234525 HTTP 429"}
+{"ts":"2026-11-11T15:35:09.637Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277234534 HTTP 429"}
+{"ts":"2026-11-11T15:36:02.214Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277234564 HTTP 429"}

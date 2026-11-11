@@ -1,0 +1,13 @@
+GET /borrow 200
+connect button visible: true
+ext response 200 https://raw.githubusercontent.com/hot-dao/near-selector/refs/heads/main/repository/manifest.json
+ext response 200 https://raw.githubusercontent.com/Meteor-Wallet/meteor_wallet_sdk/main/assets/meteor-logo-svg.svg
+ext response 200 https://storage.herewallet.app/upload/6947eb5c14c65a715fb49a08e5937dcecc994bf224b3869b9878bd7a7db068f9.webp
+ext response 200 https://evm-on-near.dev/ethereum.svg
+dialogs: 1
+frames: 1
+[frame http://127.0.0.1:3291/borrow] Skip to content Nectar Labs home Markets Borrow Earn Portfolio Agents Curator Weekend parameters N Testnet Connecting… Markets / Borrow Borrow USDC Lock mock collateral and borrow USDC up to the limit committed buyers support. Every fee is listed before your wallet opens. NEAR testnet. Weekend parameters stale price (> 15 min) i Connect a wallet Connect a NEAR testnet wallet to borrow. Meteor and other testnet wallets. The app never asks for a full-access key. Connect wallet NEAR Solana devnet live on testnet Base local fork, not live You lock mock NVDAx NVDAx Collateral value appears here You
+shadow roots: ["NEXT-ROUTE-ANNOUNCER: "]
+wallet names seen: Meteor
+CSP console messages: 0
+other console errors: 0
