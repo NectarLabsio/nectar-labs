@@ -220,6 +220,16 @@ impl Nectar {
         buyers.len() as u64 + 2
     }
 
+    /// WO-35c: `(ft_transfers, yocto from the gas reserve)` of a settlement. A remote position settles through one
+    /// signed leg: no transfer, one yocto for `sign`, and its gas is `remote_extra_gas`.
+    pub(crate) fn settlement_cost(&self, p: &Position, cands: &[(u16, u64)]) -> (u64, u128) {
+        if p.remote.is_some() {
+            return (0, 1);
+        }
+        let n = self.n_transfers(cands);
+        (n, u128::from(n))
+    }
+
     pub(crate) fn per_transfer_gas() -> u64 {
         crate::GAS_FT_TRANSFER.as_gas() + crate::GAS_ON_PAYOUT.as_gas() + GAS_RECEIPTS_PER_TRANSFER.as_gas()
     }
@@ -278,9 +288,9 @@ impl Nectar {
         if !self.settle_possible(&p, c, &cands) {
             return Err("no quote capacity");
         }
-        let n_transfers = self.n_transfers(&cands);
+        let (n_transfers, yocto) = self.settlement_cost(&p, &cands);
         let deposit = self.quoter.deposit_yocto;
-        let need = math::add(deposit, u128::from(n_transfers))?;
+        let need = math::add(deposit, yocto)?;
         // SR-6, SR-9: a short reserve or a recent aborted run costs the quoter's price, never the rescue (PRD §6).
         let cooling = env::block_timestamp() < self.quoter_cooling_until(position_id.0);
         if cooling || self.gas_reserve_yocto < need {
@@ -338,7 +348,7 @@ impl Nectar {
     /// `.then(on_pyth_price)` with all remaining gas. Our own age/conf/band checks still run in the callback.
     pub(crate) fn start_pyth_read(&mut self, position_id: U64, mut p: Position, account: AccountId, price_identifier: String) {
         let cands = self.select_quotes_for(&p, &self.coll_or_panic(&p.collateral));
-        let n = self.n_transfers(&cands);
+        let (n, _) = self.settlement_cost(&p, &cands);
         let downstream = if self.quoter_enabled() && self.vol_bps.get(&p.collateral).is_some() {
             self.quoter_leg_gas(n) + self.remote_extra_gas(&p)
         } else {

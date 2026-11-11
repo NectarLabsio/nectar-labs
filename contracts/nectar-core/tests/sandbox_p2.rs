@@ -177,10 +177,14 @@ async fn pending(core: &Contract, pos: u64) -> anyhow::Result<Value> {
 }
 
 async fn trigger(e: &Env, core: &Contract, pos: u64) -> anyhow::Result<ExecutionFinalResult> {
+    trigger_gas(e, core, pos, 300).await
+}
+
+async fn trigger_gas(e: &Env, core: &Contract, pos: u64, tgas: u64) -> anyhow::Result<ExecutionFinalResult> {
     let st = e.keeper
         .call(core.id(), "trigger_preliquidation")
         .args_json(json!({ "position_id": pos.to_string() }))
-        .gas(Gas::from_tgas(300))
+        .gas(Gas::from_tgas(tgas))
         // async + poll: the yield/resume chain outlives broadcast_tx_commit, whose timeout makes
         // near-workspaces re-send the trigger (the re-sent tx then fails "position not open")
         .transact_async()
@@ -558,4 +562,83 @@ async fn advance(e: &Env, secs: u64) -> anyhow::Result<()> {
         }
     }
     anyhow::bail!("sandbox clock did not advance {secs} s")
+}
+
+/// WO-35c (reviewer N1): Pyth + quoter on a remote position with 8 distinct-buyer candidates, at the deployed gas
+/// settings (quoter 80, signer 30). A remote leg makes no `ft_transfer`; budgeting 10 of them needed > 300 Tgas, so
+/// the trigger reverted. Checks the whole chain: Pyth read, quoter run over 8 quotes, signed leg, relay, Closed.
+async fn remote_pyth_quoter_eight_buyers(label: &str, attached_tgas: u64) -> anyhow::Result<()> {
+    const PYTH_ID: &str = "B1073854ED24CBC755DC527418F52B7D271F6CC967BBF8D8129112B18860A593";
+    let e = env().await?;
+    let core = init_core(&e, &wasm("nectar_core")).await?;
+    let lender = user(&e, 100_000_000_000, 0).await?;
+    ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    for i in 0..8u16 {
+        let b = user(&e, 15_000_000_000, 0).await?;
+        ft_call(&e.usdc, &b, core.id(), 15_000_000_000, &fund_msg(250 + i * 10, true)).await?;
+    }
+    let mut buyers = Vec::new();
+    for i in 0..8u64 {
+        buyers.push(view(&core, "get_quote", json!({ "quote_id": i.to_string() })).await?["buyer"].clone().to_string());
+    }
+    buyers.sort();
+    buyers.dedup();
+    assert_eq!(buyers.len(), 8, "8 distinct buyers");
+
+    let s = stub(&e).await?;
+    chain(&e, &core, &s).await?;
+    owner_call(&e, &core, "set_signer_config", json!({ "account": s.id(), "path": "solana-devnet-v1",
+        "gas_tgas": 30, "expiry_s": 3600 })).await?;
+    let borrower = user(&e, 0, 0).await?;
+    let (id, _) = reserve(&e, &core, &borrower).await?;
+    let auth = position(&core, id).await?["remote"]["authority"].as_str().unwrap().to_string();
+    let r = confirm(&e, &core, &s, id, &vault_body(id, UNITS, &auth)).await?;
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+
+    owner_call(&e, &core, "set_quoter_config", json!({ "deposit_yocto": DEPOSIT.to_string(), "gas_tgas": 80,
+        "max_instructions": "100000000", "max_memory_mb": 128, "max_execution_seconds": 30 })).await?;
+    owner_call(&e, &core, "set_quoter_pin", json!({ "project_id": "nectar.testnet/nectar-quoter", "version_key": "ab".repeat(32) })).await?;
+    owner_call(&e, &core, "set_vol_bps", json!({ "symbol": "NVDAx", "vol_bps": 420 })).await?;
+    s.call("set_mode").args_json(json!({ "mode": "echo", "disc_bps": 65 })).transact().await?.into_result()?;
+    let pyth = stub(&e).await?;
+    owner_call(&e, &core, "set_oracle_source", json!({ "symbol": "NVDAx",
+        "source": { "Pyth": { "account": pyth.id(), "price_identifier": PYTH_ID } } })).await?;
+    price(&e, &core, 155_000_000).await?;
+    let t = now_ns(&e).await? / SEC;
+    let body = format!(r#"{{"price":"14000000000","conf":"1000000","expo":-8,"publish_time":{t}}}"#);
+    pyth.call("set_pyth_body").args_json(json!({ "body": body })).transact().await?.into_result()?;
+    let runs: u64 = view(&s, "get_requests", json!({})).await?.as_u64().unwrap();
+
+    let r = trigger_gas(&e, &core, id, attached_tgas).await?;
+    gas(label, &r);
+    println!("GAS,{label},attached,{}", attached_tgas * TGAS);
+    assert!(r.is_success() && r.failures().is_empty(), "{:?}", r.failures());
+    assert_eq!(view(&s, "get_requests", json!({})).await?.as_u64().unwrap(), runs + 1, "one paid quoter run");
+    let last: Value = near_sdk::serde_json::from_str(view(&s, "get_last_request", json!({})).await?.as_str().unwrap())?;
+    let stdin: Value = near_sdk::serde_json::from_str(last["input_data"].as_str().unwrap())?;
+    assert_eq!(stdin["quotes"].as_array().unwrap().len(), 8, "all 8 candidates priced");
+    assert_eq!(stdin["oracle_price_usd_e6"], "140000000", "the Pyth price");
+
+    let d = pending(&core, id).await?;
+    assert_eq!(d["status"], "Signed", "{d}");
+    let pre = d["preimage"].as_str().unwrap();
+    assert!(pre.contains("|quote=0|") && pre.ends_with("|kind=PRELIQ"), "{pre}");
+    let pk = derived_key(&s, &core, "solana-devnet/pos/0").await?;
+    verify_with(&pk, pre, d["signature_hex"].as_str().unwrap());
+    let r = relay(&e, &core, id, TX).await?;
+    assert!(r.is_success(), "{:?}", r.failures());
+    let p = position(&core, id).await?;
+    assert_eq!((p["status"].clone(), p["remote"]["status"].clone()), (json!("Closed"), json!("Closed")));
+    Ok(())
+}
+
+#[tokio::test]
+async fn gas_trigger_remote_pyth_quoter_eight_buyers() -> anyhow::Result<()> {
+    remote_pyth_quoter_eight_buyers("trigger+pyth+quoter+sign(remote, 8 buyers)", 300).await
+}
+
+/// The budget is a floor the keeper may attach exactly: just above it the chain must still reach `Signed`.
+#[tokio::test]
+async fn gas_trigger_remote_pyth_quoter_near_minimum() -> anyhow::Result<()> {
+    remote_pyth_quoter_eight_buyers("trigger+pyth+quoter+sign(remote, near minimum)", 185).await
 }
