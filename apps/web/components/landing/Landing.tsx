@@ -10,7 +10,8 @@ import tokA from "@nectar/ui/3d/tokA.webp";
 import tokB from "@nectar/ui/3d/tokB.webp";
 import tokC from "@nectar/ui/3d/tokC.webp";
 import tokD from "@nectar/ui/3d/tokD.webp";
-import { CONTACT_EMAIL, docsHref } from "@/lib/env";
+import { docsHref } from "@/lib/env";
+import { CopyContact } from "../CopyContact";
 import { useFeature } from "../AppProvider";
 import { Module, On } from "../FeatureGate";
 import { LandingStats, LiveLimitCard } from "../LandingLive";
@@ -315,34 +316,8 @@ function HubLinks({ hub }: { hub: React.RefObject<HTMLDivElement | null> }) {
   );
 }
 
-function CopyMail() {
-  const [label, setLabel] = useState("Copy address");
-  const ref = useRef<HTMLSpanElement>(null);
-  const copy = () => {
-    const sel = () => {
-      const r = document.createRange();
-      if (ref.current) r.selectNodeContents(ref.current);
-      const g = getSelection();
-      g?.removeAllRanges();
-      g?.addRange(r);
-      setLabel("Selected");
-    };
-    try {
-      navigator.clipboard.writeText(CONTACT_EMAIL).then(() => setLabel("Copied"), sel);
-    } catch {
-      sel();
-    }
-    setTimeout(() => setLabel("Copy address"), 1800);
-  };
-  return (
-    <div className={s.addr}>
-      <span id="mail" ref={ref}>{CONTACT_EMAIL}</span>
-      <button type="button" id="copymail" onClick={copy}>{label}</button>
-    </div>
-  );
-}
-
-export function Landing() {
+/** `contact`: config.yaml site.contact. `solanaLive`: docs/EVIDENCE.md shows the G7 Solana gate PASS (read on the server at build). */
+export function Landing({ contact, solanaLive }: { contact: string | null; solanaLive: boolean }) {
   const shields = useFeature("shields");
   const reserve = useFeature("reserve");
   const profitLock = useFeature("profit_lock");
@@ -399,7 +374,7 @@ export function Landing() {
     ["OutLayer", "TEE pricing"],
     ["NEAR Intents", "1Click quotes, dry run"],
     ["Pyth", "price feed"],
-    ...(sol ? ([["Solana", "spoke, devnet"]] as Array<[string, string]>) : []),
+    ...(sol ? ([["Solana", solanaLive ? "spoke, devnet" : "spoke, not live yet"]] as Array<[string, string]>) : []),
     ...(base ? ([["Base", "spoke, local fork"]] as Array<[string, string]>) : []),
     ...(x402 ? ([["x402", "paid API calls"]] as Array<[string, string]>) : []),
     ["NEAR AI Cloud", "copilot"],
@@ -444,7 +419,7 @@ export function Landing() {
             <div className={s.counters}>
               <div className={s.counter}><span>Committed quotes</span><Roll value="$65,000" className={s.num} intro /></div>
               <div className={s.counter}><span>Weekend limit</span><Roll value="60.5%" className={s.num} intro /></div>
-              <small>Example position on testnet: 300 mock NVDAx</small>
+              <small><b>Example</b> position on testnet: 300 mock NVDAx</small>
             </div>
           </div>
         </div>
@@ -466,7 +441,7 @@ export function Landing() {
         <div className={s.wrap}>
           <div className={s["sec-head"]}>
             <h2>Lenders price the exit, not the asset.</h2>
-            <p>Follow one position through four states. The numbers are the example from the hero: 300 mock NVDAx at $185, with $28,000 already drawn against the asset.</p>
+            <p><strong>Example.</strong> Follow one position through four states. The numbers are the example from the hero: 300 mock NVDAx at $185, with $28,000 already drawn against the asset.</p>
           </div>
         </div>
         <Chamber />
@@ -605,7 +580,7 @@ export function Landing() {
             <On name="solana_remote">
               <div className={s.node} id="nsol">
                 <div className={s.art} dangerouslySetInnerHTML={{ __html: ART.sol }} />
-                <div className={s.body}><h3>Solana devnet</h3><span className={s.t}>xStocks-style mock collateral, Ed25519 · on testnet (devnet leg)</span>
+                <div className={s.body}><h3>Solana devnet</h3><span className={s.t}>xStocks-style mock collateral, Ed25519 · {solanaLive ? "devnet, round trip verified" : "Not live yet"}</span>
                   <ul><li>nectar_vault program</li><li>Verifies the signature through the Instructions sysvar</li></ul></div>
               </div>
             </On>
@@ -693,7 +668,7 @@ export function Landing() {
 
       <div className={c(s.wrap, s.talk)} id="talk">
         <h2>Market maker, curator or issuer? Talk to us.</h2>
-        <CopyMail />
+        <CopyContact contact={contact} className={s.addr} testId="landing-contact" />
       </div>
     </div>
   );

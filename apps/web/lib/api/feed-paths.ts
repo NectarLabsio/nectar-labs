@@ -7,6 +7,7 @@ const ALLOWED: readonly RegExp[] = [
   /^api\/settlements$/,
   /^api\/oneclick$/,
   /^healthz$/,
+  /^health$/,
   new RegExp(`^api/asset/${SEG(32)}$`),
   new RegExp(`^api/note/${SEG(64)}$`),
 ];

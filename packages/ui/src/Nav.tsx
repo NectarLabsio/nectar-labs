@@ -93,7 +93,8 @@ export interface FooterProps {
   columns: Array<{ title: string; links: FooterLink[] }>;
   Link?: LinkLike;
   brandBase?: string;
-  email: string;
+  /** Contact address for mailto links (config.yaml site.contact); null hides nothing but the copy behaviour. */
+  email?: string | null;
   /** Giant wordmark fading into the page under the bottom bar (landing). */
   giant?: boolean;
 }
@@ -113,7 +114,7 @@ export function Footer({ columns, Link = A, brandBase = "/brand", email, giant }
             <div className="fcol" key={c.title}>
               <h2>{c.title}</h2>
               {c.links.map((l) =>
-                l.href.startsWith("mailto:") ? (
+                l.href.startsWith("mailto:") && email ? (
                   <a
                     key={l.label}
                     href={l.href}

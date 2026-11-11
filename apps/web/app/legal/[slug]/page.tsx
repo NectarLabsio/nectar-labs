@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { findConfigPath } from "@nectar/sdk/config-node";
+import { guardContent } from "@/lib/config.server";
 
 const SLUGS = ["privacy", "cookies", "terms", "disclaimers"] as const;
 type Slug = (typeof SLUGS)[number];
@@ -18,6 +19,7 @@ function load(slug: Slug): { title: string; html: string } | null {
   const p = join(repo, "apps", "docs-site", "docs", "legal", `${slug}.md`);
   if (!existsSync(p)) return null;
   const src = readFileSync(p, "utf8").replace(/^---\n[\s\S]*?\n---\n/, "");
+  guardContent(`/legal/${slug}`, src);
   const title = /^#\s+(.+)$/m.exec(src)?.[1] ?? slug;
   return { title, html: marked.parse(src, { async: false }) };
 }
