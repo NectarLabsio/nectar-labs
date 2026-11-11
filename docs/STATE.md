@@ -29,9 +29,13 @@
   - WO-34f: 6/6 selector wallets under the enforced CSP (0 violations, never signed); HostLink (no cross-host prefetch); SDK view coalescing (8 s
     TTL, shared 429 backoff); polite crawl 89 URLs, 0 failures, 0 of our console errors; local e2e 142 pass.
   - WO-34e2: privacy + cookies from the inventory (10 third-party hosts, all listed; per-wallet table; unpinned-manifest caveat); H-KEYS keeper-only.
-- **Code-final commit: d4218d4.** Running: G3b re-run 3 (verifier, fresh clone of d4218d4; brief g9-g3b-final-4.md + WO-34 additions a–f).
+- **G3b re-run 3 on d4218d4: FAIL** (fdd2cee). Live e2e: 1 failure per run, both FastNEAR -429 (/api/health, list_quotes). Every WO-34 addition
+  passed: hosts 6/6, inventory 0 CSP violations 6/6 wallets, crawl 0/0, LH 20×2 = 100, guard refuses null fields. → docs/GATE_FAIL_G3B_R3.md.
+- Running: WO-34g web (cross-provider RPC fallback dRPC/Intear per F-369, health ≤ 60 s stale snapshot, live-spec retries). Then docs adds the
+  fallback hosts to privacy, then G3b re-run 4 on the new code-final commit.
+- Deploy scripts ready: scripts/deploy/deploy-{vercel,railway}.sh (598a4a3). They need H-HOST logins.
 - Then:
-  - Deploy d4218d4 once G3b passes, after H-HOST + H-LEGAL (+ H-DOMAIN or the vercel.app default).
+  - Deploy the G3b-passed commit, after H-HOST + H-LEGAL (+ H-DOMAIN or the vercel.app default).
   - WO-34v production acceptance.
   - README "Hosted demo".
   - G9 run 4.
@@ -171,7 +175,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T21:42:39Z · commit d60a507
+Last activity: 2026-11-11T22:13:35Z · commit 598a4a3
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
