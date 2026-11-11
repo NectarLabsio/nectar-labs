@@ -1,7 +1,13 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## Now (2026-11-11 ~08:30Z) — read this block; everything below "History" is superseded
-- **Gates:** every gate PASS except G9. After the D-027 security rollout the chain gates were re-verified from a fresh clone (EVIDENCE b8784c1):
+## Now (2026-11-11 ~09:10Z) — read this block; everything below "History" is superseded
+- **SUBMISSION-READY on the agent side.** G9 PASS on the re-run (EVIDENCE 89f83ee, fresh clone of 0af5cdd: quick start < 2 min, verify 15 s, gitleaks 272
+  commits clean, Feed MCP from README → `agents` claimable). First run FAIL (docs-site hackathon sentence) → GATE_FAIL_G9 RESOLVED; repo-wide branding check
+  now first in `verify:quick`. Tag **`submission-rc`** (local only). Only Kunal's items remain (below). Submission payload: `node scripts/build-submission.mjs`
+  (dry run); open fields H10 lead/email/size, H14 nearAddress/consent, H2 projectUrl, H3 demoUrl; tracks = defi/security/privacy until H16.
+- Demo Feed on :8788 is replaying ~1 day of neardata blocks (429s without an API key; health 503 until caught up). Before recording: if still behind,
+  restart it with a fresh FEED_DB_PATH (loses event history) — DEMO_SCRIPT "Before recording".
+- **Gates:** every gate PASS (G5 fallback, G8 fixture, Base on a local fork — disclosed). After the D-027 security rollout the chain gates were re-verified from a fresh clone (EVIDENCE b8784c1):
   G2b (2.2.1-v7 wasm byte-identical on this Mac's non-reproducible build), G7 (positions 8/9/10), G13 local fork (11/12, replays revert), G14
   (chain claims; HTTP 402→200 from the orchestrator log only). Test gates re-verified (EVIDENCE 5083d30): G11 PASS (608 unit + 50 sandbox, every
   SR-1…33 has a named test), Solana/EVM suites PASS (forge 105, Solana 10 + 55), G3b PASS on design v2 (e2e 392, a11y ≥ 90 on 22 pairs; home light 97
@@ -14,13 +20,12 @@
   copilot prompt injection, privacy claims.
 - **Design v2** (WO-33a/b/c) merged: landing + testnet app.
 - **Merged 2026-11-11:** WO-37a (EVIDENCE refs; 8 "pending" survive = G14 402→200 verifier re-run + G1 gas-row check on 2.2.1), WO-37b (DEMO_SCRIPT
-  re-seed list + SUBMISSION prose for 2.2.1), WO-37c (mocked remote/Notes E2E did pass in G3b). Scripts: price walk in 58/62, `42-mint-usdc.sh`.
-  **In flight:** verifier G9 final rehearsal (docs/work/g9-final.md). **Next:** G9 PASS → tag `submission-rc` locally.
-  Nothing is sent, pushed or posted without Kunal.
+  re-seed list + SUBMISSION prose for 2.2.1), WO-37c (mocked remote/Notes E2E did pass in G3b), WO-38 (G9 fix), WO-38b (G9 PASS in docs).
+  Scripts: price walk in 58/62, `42-mint-usdc.sh`, `check-no-branding-all.mjs`. Nothing in flight. Nothing is sent, pushed or posted without Kunal.
 - RPC default test.rpc.fastnear.com (D-025). Background: keeper-v2 daemon (Solana + Base relays), Feed :8788/:8789, x402 :8791, anvil :8545.
   Plain `cargo near build` on this Mac needs SDKROOT=…/MacOSX26.5.sdk.
 - Commits: no Co-Authored-By trailer (Kunal, 2026-11-10); kunal-drall sole author.
-- **Human (OPEN, docs/HUMAN_HANDOFF.md):** H-GUARD-V7 (Kunal runs `python3 scripts/v7-install-claude-config.py && bash scripts/test-guard-v7.sh`),
+- **Human (OPEN, docs/HUMAN_HANDOFF.md; H-NEAR-FAUCET now DONE):** H-GUARD-V7 (Kunal runs `python3 scripts/v7-install-claude-config.py && bash scripts/test-guard-v7.sh`),
   H15 (optional real Base Sepolia ETH), H16 tracks, H17, H18 thesis, H19 builder code, H20 market.near.ai, H11 video, H10/H14 team + payout, H1–H3 publish.
 
 ## History (pre-2026-11-11, superseded by the block above)
@@ -74,7 +79,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T08:42:57Z · commit 31a7bbe
+Last activity: 2026-11-11T09:06:25Z · tag submission-rc
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
