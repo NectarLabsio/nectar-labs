@@ -5,6 +5,17 @@ Budget ≤ 35 turns each — commit what you have and report before you run out.
 **G3b (verifier A):** exactly docs/work/wo-50-verifier-g3b-rerun.md (full e2e desktop + phone incl. screens.spec, Lighthouse, headers, `pnpm verify`,
 branding check). Plus: in real Chrome with the REAL near-connect selector (fresh profile, consent banner visible), /borrow → Connect wallet → every wallet
 row fully visible (not covered by the banner) on desktop and phone viewports; screenshot to evidence. Do not sign. Row "G3b re-run 3" + section.
+WO-34 additions (all on your own ports, from the fresh clone):
+- (a) Local-mode e2e now includes `site-pages.spec.ts` and the `/docs/*` explainer.
+- (b) Hosted-mode `e2e/hosts.spec.ts` (SITE_URL/APP_URL on *.localhost): redirect codes, per-host sitemap/robots, canonical.
+- (c) `E2E_INVENTORY=1 --project=inventory` with the CSP ENFORCED: 0 CSP violations, including each of the 6 selector wallets opened up to the connect
+  prompt (never sign). The measured hosts must equal apps/web/content/data-inventory.json, and every third-party host must appear in backticks in
+  apps/docs-site/docs/legal/privacy.md.
+- (d) `node apps/web/scripts/crawl.mjs --polite` in hosted mode (docs via scripts/serve-docs.mjs): 0 failures, 0 of our console errors.
+- (e) Lighthouse default route list (now including /about /status /changelog /brand /talk /security) ≥ 90, both themes.
+- (f) A production build with `NECTAR_PRODUCTION=1` and the site URLs set must FAIL while config.yaml `site:` operator fields are null or any page
+  contains `TODO-H`. That failure is expected; record it as PASS of the guard.
+**G9 (verifier B) runs only after the deploy step** (README "Hosted demo" lands first), or on Kunal's deadline if hosting is skipped.
 
 **G9 (verifier B):** docs/work/g9-final.md steps 1–7 + docs/work/g9-final-2.md steps 8–10, plus:
 11. `node scripts/build-submission.mjs` (dry run only, never --send): `tracks` = ["defi","security","agents"]; no privacy-track framing left in SUBMISSION,
