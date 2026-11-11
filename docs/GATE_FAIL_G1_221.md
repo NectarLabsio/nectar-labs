@@ -5,4 +5,4 @@ Everything else green: 608 unit + 50 sandbox, 0 failed; test wasm = deployed cod
 Note (not a FAIL reason): update_owner_price out-of-band reject branch is unit-tested only; the accepted path is measured (2.74 Tgas).
 **Fix (WO-45, contract, test-only):** sandbox test that calls remove_extra_remote_chain (and the update_owner_price reject branch) and prints GAS rows in the
 existing format. No contract source change → deployed code unchanged, no redeploy.
-**Then:** verifier re-runs the gas-row check from a fresh clone. Status: OPEN.
+**Then:** verifier re-runs the gas-row check from a fresh clone. Status: **RESOLVED** — verifier re-check PASS (EVIDENCE a677689, fresh clone 48b5c5a: 67/67 change methods with a GAS row, max 78.60 Tgas; wasm = deployed 3mv4LRm6…).
