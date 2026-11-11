@@ -1,0 +1,745 @@
+
+> web@0.1.0 e2e /private/tmp/verify-g3b-20261111T2144Z/apps/web
+> playwright test
+
+
+Running 582 tests using 1 worker
+
+  ✓    1 [desktop] › e2e/agents-console.spec.ts:50:3 › /agents › flags off: install snippets, labelled example, x402 not run yet, referral stats on v2 (669ms)
+  ✓    2 [desktop] › e2e/agents-console.spec.ts:79:3 › /agents › flags on: x402 marked testnet (no 'not run' notice), withdraw control on v2 (529ms)
+  ✓    3 [desktop] › e2e/agents-console.spec.ts:95:3 › /agents › v1 contract: referral stats explain that v2 is needed (171ms)
+  ✓    4 [desktop] › e2e/agents-console.spec.ts:103:3 › /console v7 controls (v2) › owner: multiplier, corporate action, session, referrers, remote — each write opens the sign modal (3.0s)
+  ✓    5 [desktop] › e2e/agents-console.spec.ts:194:3 › /console v7 controls (v2) › non-owner: read-only, apply works for anyone once effective (3.1s)
+  ✓    6 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (334ms)
+  ✓    7 [desktop] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (327ms)
+  ✓    8 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px dark: no h-scroll, axe clean, screenshot (717ms)
+  ✓    9 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px dark: no h-scroll, axe clean, screenshot (633ms)
+  ✓   10 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px dark: no h-scroll, axe clean, screenshot (670ms)
+  ✓   11 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px dark: no h-scroll, axe clean, screenshot (594ms)
+  ✓   12 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px dark: no h-scroll, axe clean, screenshot (595ms)
+  ✓   13 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px dark: no h-scroll, axe clean, screenshot (644ms)
+  ✓   14 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px dark: no h-scroll, axe clean, screenshot (596ms)
+  ✓   15 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px dark: no h-scroll, axe clean, screenshot (1.7s)
+  ✓   16 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px dark: no h-scroll, axe clean, screenshot (589ms)
+  ✓   17 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px dark: no h-scroll, axe clean, screenshot (607ms)
+  ✓   18 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px dark: no h-scroll, axe clean, screenshot (694ms)
+  ✓   19 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px dark: no h-scroll, axe clean, screenshot (627ms)
+  ✓   20 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px dark: no h-scroll, axe clean, screenshot (668ms)
+  ✓   21 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 400px dark: no h-scroll, axe clean, screenshot (574ms)
+  ✓   22 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px dark: no h-scroll, axe clean, screenshot (558ms)
+  ✓   23 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px dark: no h-scroll, axe clean, screenshot (604ms)
+  ✓   24 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px dark: no h-scroll, axe clean, screenshot (599ms)
+  ✓   25 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 400px dark: no h-scroll, axe clean, screenshot (1.6s)
+  ✓   26 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px dark: no h-scroll, axe clean, screenshot (584ms)
+  ✓   27 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 400px dark: no h-scroll, axe clean, screenshot (606ms)
+  ✓   28 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px light: no h-scroll, axe clean, screenshot (704ms)
+  ✓   29 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px light: no h-scroll, axe clean, screenshot (626ms)
+  ✓   30 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px light: no h-scroll, axe clean, screenshot (680ms)
+  ✓   31 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px light: no h-scroll, axe clean, screenshot (595ms)
+  ✓   32 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px light: no h-scroll, axe clean, screenshot (596ms)
+  ✓   33 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px light: no h-scroll, axe clean, screenshot (608ms)
+  ✓   34 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px light: no h-scroll, axe clean, screenshot (568ms)
+  ✓   35 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px light: no h-scroll, axe clean, screenshot (1.7s)
+  ✓   36 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px light: no h-scroll, axe clean, screenshot (597ms)
+  ✓   37 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px light: no h-scroll, axe clean, screenshot (610ms)
+  ✓   38 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px light: no h-scroll, axe clean, screenshot (687ms)
+  ✓   39 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px light: no h-scroll, axe clean, screenshot (618ms)
+  ✓   40 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px light: no h-scroll, axe clean, screenshot (663ms)
+  ✓   41 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 position 400px light: no h-scroll, axe clean, screenshot (559ms)
+  ✓   42 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px light: no h-scroll, axe clean, screenshot (576ms)
+  ✓   43 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px light: no h-scroll, axe clean, screenshot (598ms)
+  ✓   44 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px light: no h-scroll, axe clean, screenshot (572ms)
+  ✓   45 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 console 400px light: no h-scroll, axe clean, screenshot (1.6s)
+  ✓   46 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px light: no h-scroll, axe clean, screenshot (575ms)
+  ✓   47 [desktop] › e2e/design-app.spec.ts:140:7 › design v2 market 400px light: no h-scroll, axe clean, screenshot (605ms)
+  ✓   48 [desktop] › e2e/design-app.spec.ts:156:3 › design v2 flows (mocked) › markets: hero from views, schedule labelled as not history, chain filter, account dock (290ms)
+  ✓   49 [desktop] › e2e/design-app.spec.ts:170:3 › design v2 flows (mocked) › borrow with a Weekend Shield: review drawer → wallet payload → sign modal → recorded, confirmed state (1.4s)
+  ✓   50 [desktop] › e2e/design-app.spec.ts:196:3 › design v2 flows (mocked) › review 2 (R2-06, R2-07): decimal comma refused; review shows the parsed amount; a change under an open review closes it (421ms)
+  ✓   51 [desktop] › e2e/design-app.spec.ts:222:3 › design v2 flows (mocked) › review 2 (R2-10): a signer that is not a testnet account sees Wrong network and the sign modal refuses (361ms)
+  ✓   52 [desktop] › e2e/design-app.spec.ts:237:3 › design v2 flows (mocked) › position DI-1: Profit-Lock over the daily cap offers Repay $X first, which pre-fills Repay (277ms)
+  ✓   53 [desktop] › e2e/design-app.spec.ts:249:3 › design v2 flows (mocked) › position states come from real state: at risk pre-fills the repay that restores health 1 (293ms)
+  ✓   54 [desktop] › e2e/design-app.spec.ts:263:3 › design v2 flows (mocked) › position settling: notice, no repay form (197ms)
+  ✓   55 [desktop] › e2e/design-app.spec.ts:271:3 › design v2 flows (mocked) › position closed: closed panel, no actions (176ms)
+  ✓   56 [desktop] › e2e/design-app.spec.ts:279:3 › design v2 flows (mocked) › portfolio: net value, weekend outlook, tabs from views (325ms)
+  ✓   57 [desktop] › e2e/design-app.spec.ts:298:3 › design v2 flows (mocked) › portfolio at risk warns; no debt says nothing to do (193ms)
+  ✓   58 [desktop] › e2e/design-app.spec.ts:305:3 › design v2 flows (mocked) › portfolio empty account: empty states and the faucet link (288ms)
+  ✓   59 [desktop] › e2e/design-app.spec.ts:317:3 › design v2 flows (mocked) › earn: ladder in settlement order from views, share and last week's fees, sign modal (296ms)
+  ✓   60 [desktop] › e2e/design-app.spec.ts:345:3 › design v2 flows (mocked) › earn: mode tabs keep the address; Reserve waterfall (242ms)
+  ✓   61 [desktop] › e2e/design-app.spec.ts:357:3 › design v2 flows (mocked) › quote page: the contract's quote_id drives actions and the Note link (206ms)
+  ✓   62 [desktop] › e2e/design-app.spec.ts:367:3 › design v2 flows (mocked) › curator: what-if impact before signing, full upsert in the sign modal, keeps remote_chain (1.1s)
+  ✓   63 [desktop] › e2e/design-app.spec.ts:392:3 › design v2 flows (mocked) › curator read-only: sliders move, signing does not; a closed-capacity shortfall warns; evidence from EVIDENCE.md (1.0s)
+  ✓   64 [desktop] › e2e/design-app.spec.ts:407:3 › design v2 flows (mocked) › market: ladder and limit from views, session toggle, unknown symbol (277ms)
+  ✓   65 [desktop] › e2e/design-app.spec.ts:422:3 › design v2 flows (mocked) › market: unknown symbol is an empty state (164ms)
+  ✓   66 [desktop] › e2e/design-app.spec.ts:428:3 › design v2 flows (mocked) › agents: replay steps through four labelled calls (5.0s)
+  ✓   67 [desktop] › e2e/design.spec.ts:13:5 › landing v2 1440px dark: reduced motion leaves everything visible, no h-scroll, axe clean (2.7s)
+  ✓   68 [desktop] › e2e/design.spec.ts:13:5 › landing v2 400px dark: reduced motion leaves everything visible, no h-scroll, axe clean (2.3s)
+  ✓   69 [desktop] › e2e/design.spec.ts:13:5 › landing v2 1440px light: reduced motion leaves everything visible, no h-scroll, axe clean (2.5s)
+  ✓   70 [desktop] › e2e/design.spec.ts:13:5 › landing v2 400px light: reduced motion leaves everything visible, no h-scroll, axe clean (2.2s)
+  ✓   71 [desktop] › e2e/design.spec.ts:34:1 › landing v2 with motion: intro runs, 3D mark replaces the first frame when WebGL is available (2.9s)
+  ✓   72 [desktop] › e2e/hardening.spec.ts:7:3 › hardening › pages carry X-Frame-Options, HSTS and a CSP with frame-ancestors/object-src/base-uri/form-action (16ms)
+  ✓   73 [desktop] › e2e/hardening.spec.ts:16:3 › hardening › /api/copilot refuses cross-origin, non-JSON and oversized bodies before doing any work (11ms)
+  ✓   74 [desktop] › e2e/hardening.spec.ts:28:3 › hardening › /api/indexer refuses '.' and '..' id segments (11ms)
+  ✓   75 [desktop] › e2e/hardening.spec.ts:32:3 › hardening › /api/health answers with an age and reuses a fresh read (526ms)
+  ✓   76 [desktop] › e2e/hardening.spec.ts:41:3 › hardening › /api/health answers a router (RSC) prefetch with an empty 204 (9ms)
+  ✓   77 [desktop] › e2e/hardening.spec.ts:47:3 › hardening › the footer Status link opens the /status page, /api/health is never RSC-prefetched, and /borrow reaches networkidle (2.4s)
+  -   78 [desktop] › e2e/hosts.spec.ts:29:3 › host routing (hosted mode) › www.<site> → SITE with 301, path and query kept
+  -   79 [desktop] › e2e/hosts.spec.ts:35:3 › host routing (hosted mode) › APP / → /feed
+  -   80 [desktop] › e2e/hosts.spec.ts:41:3 › host routing (hosted mode) › app routes on SITE → APP with 308
+  -   81 [desktop] › e2e/hosts.spec.ts:49:3 › host routing (hosted mode) › landing-only routes on APP → SITE with 308
+  -   82 [desktop] › e2e/hosts.spec.ts:57:3 › host routing (hosted mode) › each host serves its own routes; /api serves on both
+  -   83 [desktop] › e2e/hosts.spec.ts:64:3 › host routing (hosted mode) › per-host robots, sitemap and canonical
+  ✘   84 [desktop] › e2e/live-views.spec.ts:29:3 › real views on testnet › a real /quote/[id] renders its figures and Note link (329ms)
+  ✘   85 [desktop] › e2e/live-views.spec.ts:29:3 › real views on testnet › a real /quote/[id] renders its figures and Note link (retry #1) (401ms)
+  ✓   86 [desktop] › e2e/live-views.spec.ts:42:3 › real views on testnet › a real open /position/[id] renders status and health (4.7s)
+  ✘   87 [desktop] › e2e/live-views.spec.ts:53:3 › real views on testnet › a real closed remote position shows the contract's remote status (313ms)
+  ✓   88 [desktop] › e2e/live-views.spec.ts:53:3 › real views on testnet › a real closed remote position shows the contract's remote status (retry #1) (2.2s)
+  ✓   89 [desktop] › e2e/notes.spec.ts:115:3 › /notes (mocked v2, notes on) › grid of live SVG thumbnails as <img> data URIs; type chips filter; nav link; a11y; no h-scroll (721ms)
+  ✓   90 [desktop] › e2e/notes.spec.ts:140:3 › /notes (mocked v2, notes on) › pages of 20 (289ms)
+  ✓   91 [desktop] › e2e/notes.spec.ts:151:3 › /notes (mocked v2, notes on) › empty account (197ms)
+  ✓   92 [desktop] › e2e/notes.spec.ts:157:3 › /notes (mocked v2, notes on) › flags off: Portfolio still works, its Notes tab says so; no Notes or Reserve links (404ms)
+  ✓   93 [desktop] › e2e/notes.spec.ts:173:3 › /note/[id] (mocked v2) › loan note: svg, owner, history fallback, share link; transfer → sign modal (nft_transfer, 1 yocto, 50 TGas) → recorded (1.4s)
+  ✓   94 [desktop] › e2e/notes.spec.ts:208:3 › /note/[id] (mocked v2) › review 2 (R2-09): a receiver that does not exist is refused; an implicit account needs no lookup; retype must match (1.4s)
+  ✓   95 [desktop] › e2e/notes.spec.ts:226:3 › /note/[id] (mocked v2) › locked note: transfer disabled with the reason (206ms)
+  ✓   96 [desktop] › e2e/notes.spec.ts:234:3 › /note/[id] (mocked v2) › not the owner: transfer disabled, no recipient card (192ms)
+  ✓   97 [desktop] › e2e/notes.spec.ts:241:3 › /note/[id] (mocked v2) › quote note owned by the viewer: set_quote_remote_recipient with 1 yocto (659ms)
+  ✓   98 [desktop] › e2e/notes.spec.ts:258:3 › /note/[id] (mocked v2) › an SVG that fails the allow-list is not rendered; a bad id is refused (273ms)
+  ✓   99 [desktop] › e2e/notes.spec.ts:267:3 › /note/[id] (mocked v2) › position and quote pages link their Notes (259ms)
+  ✓  100 [desktop] › e2e/notes.spec.ts:278:3 › /reserve (mocked v2 views, contract shapes) › R_c, realised fee APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice (729ms)
+  ✓  101 [desktop] › e2e/notes.spec.ts:317:3 › /reserve states (contract shapes) › disabled Reserve (discount_bps 0) refuses deposits before the wallet; empty pool shows no APR (209ms)
+  -  102 [desktop] › e2e/notes.spec.ts:334:5 › notes screenshots › capture dark
+  -  103 [desktop] › e2e/notes.spec.ts:334:5 › notes screenshots › capture light
+  ✓  104 [desktop] › e2e/oneclick.spec.ts:14:3 › 1Click reference depth on /feed › renders pair samples, signature status and NVDAx route status from the API (209ms)
+  ✓  105 [desktop] › e2e/oneclick.spec.ts:32:3 › 1Click reference depth on /feed › shows '1Click data unavailable' and no route badge when the API is unreachable (171ms)
+  ✓  106 [desktop] › e2e/oneclick.spec.ts:42:3 › 1Click reference depth on /feed › Feed indexer not configured: one notice with the docs link, no 5xx fetches (also with a mocked unset indexer) (196ms)
+  ✓  107 [desktop] › e2e/oneclick.spec.ts:64:3 › 1Click reference depth on /feed › the proxy itself answers 200 configured:false when the build has no Feed URL (86ms)
+  ✓  108 [desktop] › e2e/oneclick.spec.ts:71:3 › 1Click reference depth on /feed › empty pair list is stated, not faked (170ms)
+  ✓  109 [desktop] › e2e/p1.spec.ts:10:3 › P1 read-only surfaces › quote form offers 7 d / 30 d notice presets (1.5s)
+  ✘  110 [desktop] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (5.3s)
+  ✓  111 [desktop] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (retry #1) (1.6s)
+  ✘  112 [desktop] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview (20.4s)
+  ✓  113 [desktop] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview (retry #1) (1.6s)
+  ✓  114 [desktop] › e2e/p1.spec.ts:41:3 › P1 read-only surfaces › keepers page shows triggers section and run-a-keeper snippet (163ms)
+  ✓  115 [desktop] › e2e/p1.spec.ts:47:3 › P1 read-only surfaces › /api/feed is read per request and labelled with its age, never a build-time snapshot (1.3s)
+  ✓  116 [desktop] › e2e/p1.spec.ts:60:3 › P1 read-only surfaces › indexer proxy only passes documented paths (83ms)
+  ✓  117 [desktop] › e2e/remote.spec.ts:199:3 › Solana remote borrow (mocked) › reserve → Phantom deposit → waiting for attested deposit → OutLayer confirm failed (924ms)
+  ✓  118 [desktop] › e2e/remote.spec.ts:240:3 › Solana remote borrow (mocked) › no Phantom (193ms)
+  ✓  119 [desktop] › e2e/remote.spec.ts:246:3 › Solana remote borrow (mocked) › wrong cluster (243ms)
+  ✓  120 [desktop] › e2e/remote.spec.ts:253:3 › Solana remote borrow (mocked) › no SOL (260ms)
+  ✓  121 [desktop] › e2e/remote.spec.ts:260:3 › Solana remote borrow (mocked) › reservation expired (179ms)
+  ✓  122 [desktop] › e2e/remote.spec.ts:266:3 › Solana remote borrow (mocked) › open, keeper-attested, repaid → request release (598ms)
+  ✓  123 [desktop] › e2e/remote.spec.ts:281:3 › Solana remote borrow (mocked) › releasing → Send release on Solana sends [ed25519 verify, release] (354ms)
+  ✓  124 [desktop] › e2e/remote.spec.ts:308:3 › Solana remote borrow (mocked) › reserve needs one quote that covers the loan; the refusal reason is shown (371ms)
+  ✓  125 [desktop] › e2e/remote.spec.ts:328:3 › Solana remote borrow (mocked) › deposit from a wallet other than the committed one is stopped (242ms)
+  ✓  126 [desktop] › e2e/remote.spec.ts:336:3 › Solana remote borrow (mocked) › a slot that is no longer Open is not a deposit (244ms)
+  ✓  127 [desktop] › e2e/remote.spec.ts:344:3 › Solana remote borrow (mocked) › only the borrower can request the confirmation (217ms)
+  ✓  128 [desktop] › e2e/remote.spec.ts:352:3 › Solana remote borrow (mocked) › the borrower cannot request a read the held deposit no longer covers (203ms)
+  ✓  129 [desktop] › e2e/remote.spec.ts:358:3 › Solana remote borrow (mocked) › a refused loan inside the retry window: the borrower can give up and release (218ms)
+  ✓  130 [desktop] › e2e/remote.spec.ts:365:3 › Solana remote borrow (mocked) › expired and closed, but the deposit landed: it is shown for recovery (212ms)
+  ✓  131 [desktop] › e2e/remote.spec.ts:373:3 › Solana remote borrow (mocked) › short deposit: Loan refused — release your deposit (191ms)
+  ✓  132 [desktop] › e2e/remote.spec.ts:382:3 › Solana remote borrow (mocked) › released on Solana → the depositor withdraws (682ms)
+  ✓  133 [desktop] › e2e/remote.spec.ts:401:3 › Solana remote borrow (mocked) › settled and closed → withdraw the remainder; only the depositor can (252ms)
+  ✓  134 [desktop] › e2e/remote.spec.ts:411:3 › Solana remote borrow (mocked) › a claim exists → the buyer claims to its token account (366ms)
+  ✓  135 [desktop] › e2e/remote.spec.ts:424:3 › Solana remote borrow (mocked) › the buyer's token account is frozen → it must name another token account (307ms)
+  ✓  136 [desktop] › e2e/remote.spec.ts:437:3 › Solana remote borrow (mocked) › a claim for another wallet: only the recipient can claim (241ms)
+  ✓  137 [desktop] › e2e/remote.spec.ts:446:3 › Solana remote borrow (mocked) › no claim: no Claim card (182ms)
+  ✓  138 [desktop] › e2e/remote.spec.ts:453:3 › Solana remote borrow (mocked) › a signed leg expired unrelayed → Re-sign settlement (282ms)
+  ✓  139 [desktop] › e2e/remote.spec.ts:465:3 › Solana remote borrow (mocked) › a signed leg still valid, or already landed: no Re-sign (209ms)
+  ✓  140 [desktop] › e2e/remote.spec.ts:472:3 › Solana remote borrow (mocked) › owed collateral → Claim owed collateral, 1 yocto (254ms)
+  ✓  141 [desktop] › e2e/remote.spec.ts:483:3 › Solana remote borrow (mocked) › flag off (no E2E override): no chain selector (163ms)
+  -  142 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting dark
+  -  143 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing dark
+  -  144 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper dark
+  -  145 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw dark
+  -  146 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim dark
+  -  147 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign dark
+  -  148 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused dark
+  -  149 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting light
+  -  150 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing light
+  -  151 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper light
+  -  152 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw light
+  -  153 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim light
+  -  154 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign light
+  -  155 [desktop] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused light
+  ✓  156 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / dark (2.5s)
+  ✓  157 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (1.9s)
+  ✓  158 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark (6.2s)
+  ✓  159 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (4.5s)
+  ✓  160 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (4.3s)
+  ✓  161 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote dark (4.1s)
+  ✓  162 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (3.8s)
+  ✓  163 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (1.7s)
+  ✓  164 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve dark (2.6s)
+  ✓  165 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes dark (3.3s)
+  ✓  166 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (4.3s)
+  ✓  167 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console dark (4.2s)
+  ✓  168 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /agents dark (1.7s)
+  ✓  169 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (4.4s)
+  ✓  170 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (3.0s)
+  ✓  171 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security dark (3.3s)
+  ✓  172 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /about dark (1.7s)
+  ✓  173 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /status dark (3.0s)
+  ✓  174 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /changelog dark (4.4s)
+  ✓  175 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /brand dark (1.7s)
+  ✓  176 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (1.8s)
+  ✓  177 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (2.1s)
+  ✓  178 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (1.9s)
+  ✓  179 [desktop] › e2e/screens.spec.ts:12:5 › screenshot / light (2.6s)
+  ✓  180 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed light (3.7s)
+  ✓  181 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light (4.0s)
+  ✓  182 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (3.7s)
+  ✓  183 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /shield light (3.6s)
+  ✓  184 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote light (3.4s)
+  ✓  185 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (3.3s)
+  ✓  186 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (1.6s)
+  ✓  187 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /reserve light (3.4s)
+  ✓  188 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /notes light (1.5s)
+  ✓  189 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (2.5s)
+  ✓  190 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /console light (3.2s)
+  ✓  191 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /agents light (2.6s)
+  ✓  192 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (3.7s)
+  ✓  193 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /talk light (1.6s)
+  ✓  194 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /security light (2.1s)
+  ✓  195 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /about light (2.5s)
+  ✓  196 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /status light (2.0s)
+  ✓  197 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /changelog light (3.2s)
+  ✓  198 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /brand light (1.6s)
+  ✓  199 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (2.2s)
+  ✓  200 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (1.7s)
+  ✓  201 [desktop] › e2e/screens.spec.ts:12:5 › screenshot /docs light (3.9s)
+  ✓  202 [desktop] › e2e/shell.spec.ts:10:5 › / renders in dark, no horizontal scroll, axe clean (663ms)
+  ✓  203 [desktop] › e2e/shell.spec.ts:10:5 › /feed renders in dark, no horizontal scroll, axe clean (473ms)
+  ✓  204 [desktop] › e2e/shell.spec.ts:10:5 › /feed/NVDAx renders in dark, no horizontal scroll, axe clean (458ms)
+  ✓  205 [desktop] › e2e/shell.spec.ts:10:5 › /borrow renders in dark, no horizontal scroll, axe clean (468ms)
+  ✓  206 [desktop] › e2e/shell.spec.ts:10:5 › /shield renders in dark, no horizontal scroll, axe clean (451ms)
+  ✓  207 [desktop] › e2e/shell.spec.ts:10:5 › /quote renders in dark, no horizontal scroll, axe clean (455ms)
+  ✓  208 [desktop] › e2e/shell.spec.ts:10:5 › /quote/new renders in dark, no horizontal scroll, axe clean (461ms)
+  ✓  209 [desktop] › e2e/shell.spec.ts:10:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (450ms)
+  ✓  210 [desktop] › e2e/shell.spec.ts:10:5 › /reserve renders in dark, no horizontal scroll, axe clean (453ms)
+  ✓  211 [desktop] › e2e/shell.spec.ts:10:5 › /notes renders in dark, no horizontal scroll, axe clean (451ms)
+  ✓  212 [desktop] › e2e/shell.spec.ts:10:5 › /position/0 renders in dark, no horizontal scroll, axe clean (446ms)
+  ✓  213 [desktop] › e2e/shell.spec.ts:10:5 › /console renders in dark, no horizontal scroll, axe clean (465ms)
+  ✓  214 [desktop] › e2e/shell.spec.ts:10:5 › /agents renders in dark, no horizontal scroll, axe clean (504ms)
+  ✓  215 [desktop] › e2e/shell.spec.ts:10:5 › /keepers renders in dark, no horizontal scroll, axe clean (461ms)
+  ✓  216 [desktop] › e2e/shell.spec.ts:10:5 › /talk renders in dark, no horizontal scroll, axe clean (445ms)
+  ✓  217 [desktop] › e2e/shell.spec.ts:10:5 › /security renders in dark, no horizontal scroll, axe clean (686ms)
+  ✓  218 [desktop] › e2e/shell.spec.ts:10:5 › /about renders in dark, no horizontal scroll, axe clean (443ms)
+  ✓  219 [desktop] › e2e/shell.spec.ts:10:5 › /status renders in dark, no horizontal scroll, axe clean (530ms)
+  ✓  220 [desktop] › e2e/shell.spec.ts:10:5 › /changelog renders in dark, no horizontal scroll, axe clean (889ms)
+  ✓  221 [desktop] › e2e/shell.spec.ts:10:5 › /brand renders in dark, no horizontal scroll, axe clean (470ms)
+  ✓  222 [desktop] › e2e/shell.spec.ts:10:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (579ms)
+  ✓  223 [desktop] › e2e/shell.spec.ts:10:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (462ms)
+  ✓  224 [desktop] › e2e/shell.spec.ts:10:5 › /docs renders in dark, no horizontal scroll, axe clean (442ms)
+  ✓  225 [desktop] › e2e/shell.spec.ts:10:5 › / renders in light, no horizontal scroll, axe clean (650ms)
+  ✓  226 [desktop] › e2e/shell.spec.ts:10:5 › /feed renders in light, no horizontal scroll, axe clean (479ms)
+  ✓  227 [desktop] › e2e/shell.spec.ts:10:5 › /feed/NVDAx renders in light, no horizontal scroll, axe clean (449ms)
+  ✓  228 [desktop] › e2e/shell.spec.ts:10:5 › /borrow renders in light, no horizontal scroll, axe clean (478ms)
+  ✓  229 [desktop] › e2e/shell.spec.ts:10:5 › /shield renders in light, no horizontal scroll, axe clean (449ms)
+  ✓  230 [desktop] › e2e/shell.spec.ts:10:5 › /quote renders in light, no horizontal scroll, axe clean (460ms)
+  ✓  231 [desktop] › e2e/shell.spec.ts:10:5 › /quote/new renders in light, no horizontal scroll, axe clean (460ms)
+  ✓  232 [desktop] › e2e/shell.spec.ts:10:5 › /quote/0 renders in light, no horizontal scroll, axe clean (456ms)
+  ✓  233 [desktop] › e2e/shell.spec.ts:10:5 › /reserve renders in light, no horizontal scroll, axe clean (460ms)
+  ✓  234 [desktop] › e2e/shell.spec.ts:10:5 › /notes renders in light, no horizontal scroll, axe clean (471ms)
+  ✓  235 [desktop] › e2e/shell.spec.ts:10:5 › /position/0 renders in light, no horizontal scroll, axe clean (446ms)
+  ✓  236 [desktop] › e2e/shell.spec.ts:10:5 › /console renders in light, no horizontal scroll, axe clean (469ms)
+  ✓  237 [desktop] › e2e/shell.spec.ts:10:5 › /agents renders in light, no horizontal scroll, axe clean (496ms)
+  ✓  238 [desktop] › e2e/shell.spec.ts:10:5 › /keepers renders in light, no horizontal scroll, axe clean (463ms)
+  ✓  239 [desktop] › e2e/shell.spec.ts:10:5 › /talk renders in light, no horizontal scroll, axe clean (446ms)
+  ✓  240 [desktop] › e2e/shell.spec.ts:10:5 › /security renders in light, no horizontal scroll, axe clean (665ms)
+  ✓  241 [desktop] › e2e/shell.spec.ts:10:5 › /about renders in light, no horizontal scroll, axe clean (432ms)
+  ✓  242 [desktop] › e2e/shell.spec.ts:10:5 › /status renders in light, no horizontal scroll, axe clean (527ms)
+  ✓  243 [desktop] › e2e/shell.spec.ts:10:5 › /changelog renders in light, no horizontal scroll, axe clean (916ms)
+  ✓  244 [desktop] › e2e/shell.spec.ts:10:5 › /brand renders in light, no horizontal scroll, axe clean (452ms)
+  ✓  245 [desktop] › e2e/shell.spec.ts:10:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (565ms)
+  ✓  246 [desktop] › e2e/shell.spec.ts:10:5 › /legal/terms renders in light, no horizontal scroll, axe clean (456ms)
+  ✓  247 [desktop] › e2e/shell.spec.ts:10:5 › /docs renders in light, no horizontal scroll, axe clean (444ms)
+  ✓  248 [desktop] › e2e/shell.spec.ts:31:1 › consent banner is shown by default and analytics stay off (325ms)
+  ✓  249 [desktop] › e2e/shell.spec.ts:47:1 › consent banner steps aside while the wallet selector or a modal is open (249ms)
+  ✓  250 [desktop] › e2e/shell.spec.ts:85:1 › theme toggle switches data-theme (276ms)
+  ✓  251 [desktop] › e2e/shields.spec.ts:106:3 › /shield (mocked v2, shields on) › weekend and event cards: fee, countdown, weekend limit, backing, opens left, faucet beside the dry quote; copy rules (571ms)
+  ✓  252 [desktop] › e2e/shields.spec.ts:136:3 › /shield (mocked v2, shields on) › open a Weekend Shield: sign modal shows the shield msg, 250 TGas, 1 yocto, fee stack; then the mock wallet records it (1.3s)
+  ✓  253 [desktop] › e2e/shields.spec.ts:165:3 › /shield (mocked v2, shields on) › daily limit reached disables both cards with the reason (238ms)
+  ✓  254 [desktop] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (174ms)
+  ✓  255 [desktop] › e2e/shields.spec.ts:185:3 › Profit-Lock on /position/[id] (mocked v2) › preview → sign modal (self_settle, 1 yocto, 300 TGas) → recorded (661ms)
+  ✓  256 [desktop] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: health < 1 (223ms)
+  ✓  257 [desktop] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: corporate action pending (245ms)
+  ✓  258 [desktop] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: no opted-in capacity (237ms)
+  ✓  259 [desktop] › e2e/shields.spec.ts:228:3 › /quote/new voluntary fills (mocked v2) › switch adds accepts_voluntary_fills to the FundPappusQuote msg (596ms)
+  ✓  260 [desktop] › e2e/shields.spec.ts:244:3 › /quote/new voluntary fills (mocked v2) › flag off: no switch (171ms)
+  ✓  261 [desktop] › e2e/site-pages.spec.ts:10:5 › /about (dark): h1, axe clean, no horizontal scroll (430ms)
+  ✓  262 [desktop] › e2e/site-pages.spec.ts:10:5 › /status (dark): h1, axe clean, no horizontal scroll (508ms)
+  ✓  263 [desktop] › e2e/site-pages.spec.ts:10:5 › /changelog (dark): h1, axe clean, no horizontal scroll (867ms)
+  ✓  264 [desktop] › e2e/site-pages.spec.ts:10:5 › /brand (dark): h1, axe clean, no horizontal scroll (454ms)
+  ✓  265 [desktop] › e2e/site-pages.spec.ts:10:5 › /talk (dark): h1, axe clean, no horizontal scroll (440ms)
+  ✓  266 [desktop] › e2e/site-pages.spec.ts:10:5 › /security (dark): h1, axe clean, no horizontal scroll (673ms)
+  ✓  267 [desktop] › e2e/site-pages.spec.ts:10:5 › /about (light): h1, axe clean, no horizontal scroll (434ms)
+  ✓  268 [desktop] › e2e/site-pages.spec.ts:10:5 › /status (light): h1, axe clean, no horizontal scroll (531ms)
+  ✓  269 [desktop] › e2e/site-pages.spec.ts:10:5 › /changelog (light): h1, axe clean, no horizontal scroll (866ms)
+  ✓  270 [desktop] › e2e/site-pages.spec.ts:10:5 › /brand (light): h1, axe clean, no horizontal scroll (451ms)
+  ✓  271 [desktop] › e2e/site-pages.spec.ts:10:5 › /talk (light): h1, axe clean, no horizontal scroll (430ms)
+  ✓  272 [desktop] › e2e/site-pages.spec.ts:10:5 › /security (light): h1, axe clean, no horizontal scroll (674ms)
+  ✓  273 [desktop] › e2e/site-pages.spec.ts:25:3 › content › /about says what it is and that no operator is configured locally (160ms)
+  ✓  274 [desktop] › e2e/site-pages.spec.ts:31:3 › content › /talk has no form and shows the local contact text (145ms)
+  ✓  275 [desktop] › e2e/site-pages.spec.ts:37:3 › content › /status shows live checks, the hosted split, contract ids and the gate table with its source (1.5s)
+  ✓  276 [desktop] › e2e/site-pages.spec.ts:48:3 › content › /changelog lists tagged groups without branding (225ms)
+  ✓  277 [desktop] › e2e/site-pages.spec.ts:55:3 › content › /brand links real files (189ms)
+  ✓  278 [desktop] › e2e/site-pages.spec.ts:62:3 › content › /security renders SECURITY.md and the reporting contact (191ms)
+  ✓  279 [desktop] › e2e/site-pages.spec.ts:68:3 › content › footer links the new pages; no whitepaper link; landing worked example labelled (274ms)
+  ✓  280 [desktop] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (2.0s)
+  ✓  281 [desktop] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (6ms)
+  -  282 [desktop] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✓  283 [desktop] › e2e/v7.spec.ts:45:3 › landing v7 › flags off: hero, live card, how it works, FAQ, footer; no module sections; copy rules (299ms)
+  ✓  284 [desktop] › e2e/v7.spec.ts:63:3 › landing v7 › flags on: every module section renders with its data-feature tag; copy rules still hold (307ms)
+  ✓  285 [desktop] › e2e/v7.spec.ts:78:3 › landing v7 › one flag on: only that module renders (211ms)
+  ✓  286 [desktop] › e2e/v7.spec.ts:86:3 › landing v7 › live card shows in-session vs weekend parameters from testnet (1.6s)
+  ✓  287 [desktop] › e2e/v7.spec.ts:105:3 › v1 path (mocked v1 contract, every flag on) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (258ms)
+  ✓  288 [desktop] › e2e/v7.spec.ts:119:3 › v1 path (mocked v1 contract, every flag on) › borrow: fee stack with total, no v7 controls even with ?ref= (216ms)
+  ✓  289 [desktop] › e2e/v7.spec.ts:142:3 › v2 path (mocked view fixture), flags off › feed shows total debt, aggregate headroom and the contract's session reason (229ms)
+  ✓  290 [desktop] › e2e/v7.spec.ts:154:3 › v2 path (mocked view fixture), flags off › borrow uses the contract fee stack; pay_to and referrer stay hidden while their flags are off (210ms)
+  ✓  291 [desktop] › e2e/v7.spec.ts:176:3 › v2 path (mocked view fixture), flags on › feed shows the multiplier line (M = 1.02 on the fixture) (218ms)
+  ✓  292 [desktop] › e2e/v7.spec.ts:182:3 › v2 path (mocked view fixture), flags on › borrow shows pay_to and the referrer from ?ref= (179ms)
+  ✓  293 [phone] › e2e/agents-console.spec.ts:50:3 › /agents › flags off: install snippets, labelled example, x402 not run yet, referral stats on v2 (669ms)
+  ✓  294 [phone] › e2e/agents-console.spec.ts:79:3 › /agents › flags on: x402 marked testnet (no 'not run' notice), withdraw control on v2 (519ms)
+  ✓  295 [phone] › e2e/agents-console.spec.ts:95:3 › /agents › v1 contract: referral stats explain that v2 is needed (183ms)
+  ✓  296 [phone] › e2e/agents-console.spec.ts:103:3 › /console v7 controls (v2) › owner: multiplier, corporate action, session, referrers, remote — each write opens the sign modal (12.7s)
+  ✓  297 [phone] › e2e/agents-console.spec.ts:194:3 › /console v7 controls (v2) › non-owner: read-only, apply works for anyone once effective (1.6s)
+  ✓  298 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /console: key state, fixture checks listed, answer hidden (321ms)
+  ✓  299 [phone] › e2e/copilot.spec.ts:8:5 › copilot verifier › panel on /borrow: key state, fixture checks listed, answer hidden (323ms)
+  -  300 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px dark: no h-scroll, axe clean, screenshot
+  -  301 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px dark: no h-scroll, axe clean, screenshot
+  -  302 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px dark: no h-scroll, axe clean, screenshot
+  -  303 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px dark: no h-scroll, axe clean, screenshot
+  -  304 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px dark: no h-scroll, axe clean, screenshot
+  -  305 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px dark: no h-scroll, axe clean, screenshot
+  -  306 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px dark: no h-scroll, axe clean, screenshot
+  -  307 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px dark: no h-scroll, axe clean, screenshot
+  -  308 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px dark: no h-scroll, axe clean, screenshot
+  -  309 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px dark: no h-scroll, axe clean, screenshot
+  -  310 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px dark: no h-scroll, axe clean, screenshot
+  -  311 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px dark: no h-scroll, axe clean, screenshot
+  -  312 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px dark: no h-scroll, axe clean, screenshot
+  -  313 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 400px dark: no h-scroll, axe clean, screenshot
+  -  314 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px dark: no h-scroll, axe clean, screenshot
+  -  315 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px dark: no h-scroll, axe clean, screenshot
+  -  316 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px dark: no h-scroll, axe clean, screenshot
+  -  317 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 400px dark: no h-scroll, axe clean, screenshot
+  -  318 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px dark: no h-scroll, axe clean, screenshot
+  -  319 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 400px dark: no h-scroll, axe clean, screenshot
+  -  320 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 1440px light: no h-scroll, axe clean, screenshot
+  -  321 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 1440px light: no h-scroll, axe clean, screenshot
+  -  322 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 1440px light: no h-scroll, axe clean, screenshot
+  -  323 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 1440px light: no h-scroll, axe clean, screenshot
+  -  324 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 1440px light: no h-scroll, axe clean, screenshot
+  -  325 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 1440px light: no h-scroll, axe clean, screenshot
+  -  326 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 1440px light: no h-scroll, axe clean, screenshot
+  -  327 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 1440px light: no h-scroll, axe clean, screenshot
+  -  328 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 1440px light: no h-scroll, axe clean, screenshot
+  -  329 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 1440px light: no h-scroll, axe clean, screenshot
+  -  330 [phone] › e2e/design-app.spec.ts:140:7 › design v2 feed 400px light: no h-scroll, axe clean, screenshot
+  -  331 [phone] › e2e/design-app.spec.ts:140:7 › design v2 borrow 400px light: no h-scroll, axe clean, screenshot
+  -  332 [phone] › e2e/design-app.spec.ts:140:7 › design v2 shield 400px light: no h-scroll, axe clean, screenshot
+  -  333 [phone] › e2e/design-app.spec.ts:140:7 › design v2 position 400px light: no h-scroll, axe clean, screenshot
+  -  334 [phone] › e2e/design-app.spec.ts:140:7 › design v2 portfolio 400px light: no h-scroll, axe clean, screenshot
+  -  335 [phone] › e2e/design-app.spec.ts:140:7 › design v2 earn 400px light: no h-scroll, axe clean, screenshot
+  -  336 [phone] › e2e/design-app.spec.ts:140:7 › design v2 reserve 400px light: no h-scroll, axe clean, screenshot
+  -  337 [phone] › e2e/design-app.spec.ts:140:7 › design v2 console 400px light: no h-scroll, axe clean, screenshot
+  -  338 [phone] › e2e/design-app.spec.ts:140:7 › design v2 agents 400px light: no h-scroll, axe clean, screenshot
+  -  339 [phone] › e2e/design-app.spec.ts:140:7 › design v2 market 400px light: no h-scroll, axe clean, screenshot
+  ✓  340 [phone] › e2e/design-app.spec.ts:156:3 › design v2 flows (mocked) › markets: hero from views, schedule labelled as not history, chain filter, account dock (298ms)
+  ✓  341 [phone] › e2e/design-app.spec.ts:170:3 › design v2 flows (mocked) › borrow with a Weekend Shield: review drawer → wallet payload → sign modal → recorded, confirmed state (1.4s)
+  ✓  342 [phone] › e2e/design-app.spec.ts:196:3 › design v2 flows (mocked) › review 2 (R2-06, R2-07): decimal comma refused; review shows the parsed amount; a change under an open review closes it (1.3s)
+  ✓  343 [phone] › e2e/design-app.spec.ts:222:3 › design v2 flows (mocked) › review 2 (R2-10): a signer that is not a testnet account sees Wrong network and the sign modal refuses (369ms)
+  ✓  344 [phone] › e2e/design-app.spec.ts:237:3 › design v2 flows (mocked) › position DI-1: Profit-Lock over the daily cap offers Repay $X first, which pre-fills Repay (258ms)
+  ✓  345 [phone] › e2e/design-app.spec.ts:249:3 › design v2 flows (mocked) › position states come from real state: at risk pre-fills the repay that restores health 1 (283ms)
+  ✓  346 [phone] › e2e/design-app.spec.ts:263:3 › design v2 flows (mocked) › position settling: notice, no repay form (183ms)
+  ✓  347 [phone] › e2e/design-app.spec.ts:271:3 › design v2 flows (mocked) › position closed: closed panel, no actions (175ms)
+  ✓  348 [phone] › e2e/design-app.spec.ts:279:3 › design v2 flows (mocked) › portfolio: net value, weekend outlook, tabs from views (323ms)
+  ✓  349 [phone] › e2e/design-app.spec.ts:298:3 › design v2 flows (mocked) › portfolio at risk warns; no debt says nothing to do (207ms)
+  ✓  350 [phone] › e2e/design-app.spec.ts:305:3 › design v2 flows (mocked) › portfolio empty account: empty states and the faucet link (270ms)
+  ✓  351 [phone] › e2e/design-app.spec.ts:317:3 › design v2 flows (mocked) › earn: ladder in settlement order from views, share and last week's fees, sign modal (306ms)
+  ✓  352 [phone] › e2e/design-app.spec.ts:345:3 › design v2 flows (mocked) › earn: mode tabs keep the address; Reserve waterfall (243ms)
+  ✓  353 [phone] › e2e/design-app.spec.ts:357:3 › design v2 flows (mocked) › quote page: the contract's quote_id drives actions and the Note link (213ms)
+  ✓  354 [phone] › e2e/design-app.spec.ts:367:3 › design v2 flows (mocked) › curator: what-if impact before signing, full upsert in the sign modal, keeps remote_chain (1.6s)
+  ✓  355 [phone] › e2e/design-app.spec.ts:392:3 › design v2 flows (mocked) › curator read-only: sliders move, signing does not; a closed-capacity shortfall warns; evidence from EVIDENCE.md (1.5s)
+  ✓  356 [phone] › e2e/design-app.spec.ts:407:3 › design v2 flows (mocked) › market: ladder and limit from views, session toggle, unknown symbol (250ms)
+  ✓  357 [phone] › e2e/design-app.spec.ts:422:3 › design v2 flows (mocked) › market: unknown symbol is an empty state (170ms)
+  ✓  358 [phone] › e2e/design-app.spec.ts:428:3 › design v2 flows (mocked) › agents: replay steps through four labelled calls (5.0s)
+  -  359 [phone] › e2e/design.spec.ts:13:5 › landing v2 1440px dark: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  360 [phone] › e2e/design.spec.ts:13:5 › landing v2 400px dark: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  361 [phone] › e2e/design.spec.ts:13:5 › landing v2 1440px light: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  362 [phone] › e2e/design.spec.ts:13:5 › landing v2 400px light: reduced motion leaves everything visible, no h-scroll, axe clean
+  -  363 [phone] › e2e/design.spec.ts:34:1 › landing v2 with motion: intro runs, 3D mark replaces the first frame when WebGL is available
+  -  364 [phone] › e2e/hardening.spec.ts:7:3 › hardening › pages carry X-Frame-Options, HSTS and a CSP with frame-ancestors/object-src/base-uri/form-action
+  -  365 [phone] › e2e/hardening.spec.ts:16:3 › hardening › /api/copilot refuses cross-origin, non-JSON and oversized bodies before doing any work
+  -  366 [phone] › e2e/hardening.spec.ts:28:3 › hardening › /api/indexer refuses '.' and '..' id segments
+  -  367 [phone] › e2e/hardening.spec.ts:32:3 › hardening › /api/health answers with an age and reuses a fresh read
+  -  368 [phone] › e2e/hardening.spec.ts:41:3 › hardening › /api/health answers a router (RSC) prefetch with an empty 204
+  -  369 [phone] › e2e/hardening.spec.ts:47:3 › hardening › the footer Status link opens the /status page, /api/health is never RSC-prefetched, and /borrow reaches networkidle
+  -  370 [phone] › e2e/hosts.spec.ts:29:3 › host routing (hosted mode) › www.<site> → SITE with 301, path and query kept
+  -  371 [phone] › e2e/hosts.spec.ts:35:3 › host routing (hosted mode) › APP / → /feed
+  -  372 [phone] › e2e/hosts.spec.ts:41:3 › host routing (hosted mode) › app routes on SITE → APP with 308
+  -  373 [phone] › e2e/hosts.spec.ts:49:3 › host routing (hosted mode) › landing-only routes on APP → SITE with 308
+  -  374 [phone] › e2e/hosts.spec.ts:57:3 › host routing (hosted mode) › each host serves its own routes; /api serves on both
+  -  375 [phone] › e2e/hosts.spec.ts:64:3 › host routing (hosted mode) › per-host robots, sitemap and canonical
+  -  376 [phone] › e2e/live-views.spec.ts:29:3 › real views on testnet › a real /quote/[id] renders its figures and Note link
+  -  377 [phone] › e2e/live-views.spec.ts:42:3 › real views on testnet › a real open /position/[id] renders status and health
+  -  378 [phone] › e2e/live-views.spec.ts:53:3 › real views on testnet › a real closed remote position shows the contract's remote status
+  ✓  379 [phone] › e2e/notes.spec.ts:115:3 › /notes (mocked v2, notes on) › grid of live SVG thumbnails as <img> data URIs; type chips filter; nav link; a11y; no h-scroll (682ms)
+  ✓  380 [phone] › e2e/notes.spec.ts:140:3 › /notes (mocked v2, notes on) › pages of 20 (243ms)
+  ✓  381 [phone] › e2e/notes.spec.ts:151:3 › /notes (mocked v2, notes on) › empty account (198ms)
+  ✓  382 [phone] › e2e/notes.spec.ts:157:3 › /notes (mocked v2, notes on) › flags off: Portfolio still works, its Notes tab says so; no Notes or Reserve links (373ms)
+  ✓  383 [phone] › e2e/notes.spec.ts:173:3 › /note/[id] (mocked v2) › loan note: svg, owner, history fallback, share link; transfer → sign modal (nft_transfer, 1 yocto, 50 TGas) → recorded (1.7s)
+  ✓  384 [phone] › e2e/notes.spec.ts:208:3 › /note/[id] (mocked v2) › review 2 (R2-09): a receiver that does not exist is refused; an implicit account needs no lookup; retype must match (1.5s)
+  ✓  385 [phone] › e2e/notes.spec.ts:226:3 › /note/[id] (mocked v2) › locked note: transfer disabled with the reason (202ms)
+  ✓  386 [phone] › e2e/notes.spec.ts:234:3 › /note/[id] (mocked v2) › not the owner: transfer disabled, no recipient card (196ms)
+  ✓  387 [phone] › e2e/notes.spec.ts:241:3 › /note/[id] (mocked v2) › quote note owned by the viewer: set_quote_remote_recipient with 1 yocto (1.2s)
+  ✓  388 [phone] › e2e/notes.spec.ts:258:3 › /note/[id] (mocked v2) › an SVG that fails the allow-list is not rendered; a bad id is refused (255ms)
+  ✓  389 [phone] › e2e/notes.spec.ts:267:3 › /note/[id] (mocked v2) › position and quote pages link their Notes (254ms)
+  ✓  390 [phone] › e2e/notes.spec.ts:278:3 › /reserve (mocked v2 views, contract shapes) › R_c, realised fee APR, notes with countdown; $10 minimum; join → JoinNectarReserve msg; give notice (711ms)
+  ✓  391 [phone] › e2e/notes.spec.ts:317:3 › /reserve states (contract shapes) › disabled Reserve (discount_bps 0) refuses deposits before the wallet; empty pool shows no APR (212ms)
+  -  392 [phone] › e2e/notes.spec.ts:334:5 › notes screenshots › capture dark
+  -  393 [phone] › e2e/notes.spec.ts:334:5 › notes screenshots › capture light
+  ✓  394 [phone] › e2e/oneclick.spec.ts:14:3 › 1Click reference depth on /feed › renders pair samples, signature status and NVDAx route status from the API (213ms)
+  ✓  395 [phone] › e2e/oneclick.spec.ts:32:3 › 1Click reference depth on /feed › shows '1Click data unavailable' and no route badge when the API is unreachable (169ms)
+  ✓  396 [phone] › e2e/oneclick.spec.ts:42:3 › 1Click reference depth on /feed › Feed indexer not configured: one notice with the docs link, no 5xx fetches (also with a mocked unset indexer) (194ms)
+  ✓  397 [phone] › e2e/oneclick.spec.ts:64:3 › 1Click reference depth on /feed › the proxy itself answers 200 configured:false when the build has no Feed URL (85ms)
+  ✓  398 [phone] › e2e/oneclick.spec.ts:71:3 › 1Click reference depth on /feed › empty pair list is stated, not faked (171ms)
+  ✓  399 [phone] › e2e/p1.spec.ts:10:3 › P1 read-only surfaces › quote form offers 7 d / 30 d notice presets (2.0s)
+  ✓  400 [phone] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history (1.5s)
+  ✓  401 [phone] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview (1.6s)
+  ✓  402 [phone] › e2e/p1.spec.ts:41:3 › P1 read-only surfaces › keepers page shows triggers section and run-a-keeper snippet (177ms)
+  ✓  403 [phone] › e2e/p1.spec.ts:47:3 › P1 read-only surfaces › /api/feed is read per request and labelled with its age, never a build-time snapshot (1.5s)
+  ✓  404 [phone] › e2e/p1.spec.ts:60:3 › P1 read-only surfaces › indexer proxy only passes documented paths (95ms)
+  ✓  405 [phone] › e2e/remote.spec.ts:199:3 › Solana remote borrow (mocked) › reserve → Phantom deposit → waiting for attested deposit → OutLayer confirm failed (9.3s)
+  ✓  406 [phone] › e2e/remote.spec.ts:240:3 › Solana remote borrow (mocked) › no Phantom (189ms)
+  ✓  407 [phone] › e2e/remote.spec.ts:246:3 › Solana remote borrow (mocked) › wrong cluster (229ms)
+  ✓  408 [phone] › e2e/remote.spec.ts:253:3 › Solana remote borrow (mocked) › no SOL (260ms)
+  ✓  409 [phone] › e2e/remote.spec.ts:260:3 › Solana remote borrow (mocked) › reservation expired (200ms)
+  ✓  410 [phone] › e2e/remote.spec.ts:266:3 › Solana remote borrow (mocked) › open, keeper-attested, repaid → request release (568ms)
+  ✓  411 [phone] › e2e/remote.spec.ts:281:3 › Solana remote borrow (mocked) › releasing → Send release on Solana sends [ed25519 verify, release] (356ms)
+  ✓  412 [phone] › e2e/remote.spec.ts:308:3 › Solana remote borrow (mocked) › reserve needs one quote that covers the loan; the refusal reason is shown (374ms)
+  ✓  413 [phone] › e2e/remote.spec.ts:328:3 › Solana remote borrow (mocked) › deposit from a wallet other than the committed one is stopped (227ms)
+  ✓  414 [phone] › e2e/remote.spec.ts:336:3 › Solana remote borrow (mocked) › a slot that is no longer Open is not a deposit (244ms)
+  ✓  415 [phone] › e2e/remote.spec.ts:344:3 › Solana remote borrow (mocked) › only the borrower can request the confirmation (212ms)
+  ✓  416 [phone] › e2e/remote.spec.ts:352:3 › Solana remote borrow (mocked) › the borrower cannot request a read the held deposit no longer covers (211ms)
+  ✓  417 [phone] › e2e/remote.spec.ts:358:3 › Solana remote borrow (mocked) › a refused loan inside the retry window: the borrower can give up and release (220ms)
+  ✓  418 [phone] › e2e/remote.spec.ts:365:3 › Solana remote borrow (mocked) › expired and closed, but the deposit landed: it is shown for recovery (204ms)
+  ✓  419 [phone] › e2e/remote.spec.ts:373:3 › Solana remote borrow (mocked) › short deposit: Loan refused — release your deposit (200ms)
+  ✓  420 [phone] › e2e/remote.spec.ts:382:3 › Solana remote borrow (mocked) › released on Solana → the depositor withdraws (656ms)
+  ✓  421 [phone] › e2e/remote.spec.ts:401:3 › Solana remote borrow (mocked) › settled and closed → withdraw the remainder; only the depositor can (219ms)
+  ✓  422 [phone] › e2e/remote.spec.ts:411:3 › Solana remote borrow (mocked) › a claim exists → the buyer claims to its token account (402ms)
+  ✓  423 [phone] › e2e/remote.spec.ts:424:3 › Solana remote borrow (mocked) › the buyer's token account is frozen → it must name another token account (323ms)
+  ✓  424 [phone] › e2e/remote.spec.ts:437:3 › Solana remote borrow (mocked) › a claim for another wallet: only the recipient can claim (243ms)
+  ✓  425 [phone] › e2e/remote.spec.ts:446:3 › Solana remote borrow (mocked) › no claim: no Claim card (173ms)
+  ✓  426 [phone] › e2e/remote.spec.ts:453:3 › Solana remote borrow (mocked) › a signed leg expired unrelayed → Re-sign settlement (259ms)
+  ✓  427 [phone] › e2e/remote.spec.ts:465:3 › Solana remote borrow (mocked) › a signed leg still valid, or already landed: no Re-sign (210ms)
+  ✓  428 [phone] › e2e/remote.spec.ts:472:3 › Solana remote borrow (mocked) › owed collateral → Claim owed collateral, 1 yocto (244ms)
+  ✓  429 [phone] › e2e/remote.spec.ts:483:3 › Solana remote borrow (mocked) › flag off (no E2E override): no chain selector (162ms)
+  -  430 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting dark
+  -  431 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing dark
+  -  432 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper dark
+  -  433 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw dark
+  -  434 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim dark
+  -  435 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign dark
+  -  436 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused dark
+  -  437 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › borrow-remote-awaiting light
+  -  438 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-releasing light
+  -  439 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-open-keeper light
+  -  440 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-withdraw light
+  -  441 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-claim light
+  -  442 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-resign light
+  -  443 [phone] › e2e/remote.spec.ts:504:7 › remote screenshots › position-remote-refused light
+  ✓  444 [phone] › e2e/screens.spec.ts:12:5 › screenshot / dark (4.5s)
+  ✓  445 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed dark (2.1s)
+  ✓  446 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx dark (2.1s)
+  ✓  447 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow dark (3.4s)
+  ✓  448 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield dark (2.8s)
+  ✓  449 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote dark (2.0s)
+  ✓  450 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new dark (2.1s)
+  ✓  451 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 dark (1.6s)
+  ✓  452 [phone] › e2e/screens.spec.ts:12:5 › screenshot /reserve dark (4.8s)
+  ✓  453 [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes dark (1.7s)
+  ✓  454 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 dark (2.0s)
+  ✓  455 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console dark (4.1s)
+  ✓  456 [phone] › e2e/screens.spec.ts:12:5 › screenshot /agents dark (2.8s)
+  ✓  457 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers dark (4.7s)
+  ✓  458 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk dark (2.0s)
+  ✓  459 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security dark (3.3s)
+  ✓  460 [phone] › e2e/screens.spec.ts:12:5 › screenshot /about dark (1.6s)
+  ✓  461 [phone] › e2e/screens.spec.ts:12:5 › screenshot /status dark (3.2s)
+  ✓  462 [phone] › e2e/screens.spec.ts:12:5 › screenshot /changelog dark (2.7s)
+  ✓  463 [phone] › e2e/screens.spec.ts:12:5 › screenshot /brand dark (1.6s)
+  ✓  464 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy dark (2.1s)
+  ✓  465 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms dark (1.8s)
+  ✓  466 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs dark (1.6s)
+  ✓  467 [phone] › e2e/screens.spec.ts:12:5 › screenshot / light (6.3s)
+  ✓  468 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed light (2.2s)
+  ✓  469 [phone] › e2e/screens.spec.ts:12:5 › screenshot /feed/NVDAx light (4.8s)
+  ✓  470 [phone] › e2e/screens.spec.ts:12:5 › screenshot /borrow light (2.9s)
+  ✓  471 [phone] › e2e/screens.spec.ts:12:5 › screenshot /shield light (4.0s)
+  ✓  472 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote light (2.9s)
+  ✓  473 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/new light (3.7s)
+  ✓  474 [phone] › e2e/screens.spec.ts:12:5 › screenshot /quote/0 light (2.0s)
+  ✓  475 [phone] › e2e/screens.spec.ts:12:5 › screenshot /reserve light (3.6s)
+  ✓  476 [phone] › e2e/screens.spec.ts:12:5 › screenshot /notes light (1.7s)
+  ✓  477 [phone] › e2e/screens.spec.ts:12:5 › screenshot /position/0 light (4.7s)
+  ✓  478 [phone] › e2e/screens.spec.ts:12:5 › screenshot /console light (3.3s)
+  ✓  479 [phone] › e2e/screens.spec.ts:12:5 › screenshot /agents light (1.9s)
+  ✓  480 [phone] › e2e/screens.spec.ts:12:5 › screenshot /keepers light (5.9s)
+  ✓  481 [phone] › e2e/screens.spec.ts:12:5 › screenshot /talk light (1.8s)
+  ✓  482 [phone] › e2e/screens.spec.ts:12:5 › screenshot /security light (3.2s)
+  ✓  483 [phone] › e2e/screens.spec.ts:12:5 › screenshot /about light (1.6s)
+  ✓  484 [phone] › e2e/screens.spec.ts:12:5 › screenshot /status light (3.6s)
+  ✓  485 [phone] › e2e/screens.spec.ts:12:5 › screenshot /changelog light (2.7s)
+  ✓  486 [phone] › e2e/screens.spec.ts:12:5 › screenshot /brand light (3.0s)
+  ✓  487 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/privacy light (2.6s)
+  ✓  488 [phone] › e2e/screens.spec.ts:12:5 › screenshot /legal/terms light (1.8s)
+  ✓  489 [phone] › e2e/screens.spec.ts:12:5 › screenshot /docs light (1.8s)
+  ✓  490 [phone] › e2e/shell.spec.ts:10:5 › / renders in dark, no horizontal scroll, axe clean (645ms)
+  ✓  491 [phone] › e2e/shell.spec.ts:10:5 › /feed renders in dark, no horizontal scroll, axe clean (463ms)
+  ✓  492 [phone] › e2e/shell.spec.ts:10:5 › /feed/NVDAx renders in dark, no horizontal scroll, axe clean (446ms)
+  ✓  493 [phone] › e2e/shell.spec.ts:10:5 › /borrow renders in dark, no horizontal scroll, axe clean (445ms)
+  ✓  494 [phone] › e2e/shell.spec.ts:10:5 › /shield renders in dark, no horizontal scroll, axe clean (431ms)
+  ✓  495 [phone] › e2e/shell.spec.ts:10:5 › /quote renders in dark, no horizontal scroll, axe clean (444ms)
+  ✓  496 [phone] › e2e/shell.spec.ts:10:5 › /quote/new renders in dark, no horizontal scroll, axe clean (447ms)
+  ✓  497 [phone] › e2e/shell.spec.ts:10:5 › /quote/0 renders in dark, no horizontal scroll, axe clean (440ms)
+  ✓  498 [phone] › e2e/shell.spec.ts:10:5 › /reserve renders in dark, no horizontal scroll, axe clean (442ms)
+  ✓  499 [phone] › e2e/shell.spec.ts:10:5 › /notes renders in dark, no horizontal scroll, axe clean (447ms)
+  ✓  500 [phone] › e2e/shell.spec.ts:10:5 › /position/0 renders in dark, no horizontal scroll, axe clean (431ms)
+  ✓  501 [phone] › e2e/shell.spec.ts:10:5 › /console renders in dark, no horizontal scroll, axe clean (449ms)
+  ✓  502 [phone] › e2e/shell.spec.ts:10:5 › /agents renders in dark, no horizontal scroll, axe clean (485ms)
+  ✓  503 [phone] › e2e/shell.spec.ts:10:5 › /keepers renders in dark, no horizontal scroll, axe clean (450ms)
+  ✓  504 [phone] › e2e/shell.spec.ts:10:5 › /talk renders in dark, no horizontal scroll, axe clean (436ms)
+  ✓  505 [phone] › e2e/shell.spec.ts:10:5 › /security renders in dark, no horizontal scroll, axe clean (684ms)
+  ✓  506 [phone] › e2e/shell.spec.ts:10:5 › /about renders in dark, no horizontal scroll, axe clean (437ms)
+  ✓  507 [phone] › e2e/shell.spec.ts:10:5 › /status renders in dark, no horizontal scroll, axe clean (529ms)
+  ✓  508 [phone] › e2e/shell.spec.ts:10:5 › /changelog renders in dark, no horizontal scroll, axe clean (898ms)
+  ✓  509 [phone] › e2e/shell.spec.ts:10:5 › /brand renders in dark, no horizontal scroll, axe clean (443ms)
+  ✓  510 [phone] › e2e/shell.spec.ts:10:5 › /legal/privacy renders in dark, no horizontal scroll, axe clean (567ms)
+  ✓  511 [phone] › e2e/shell.spec.ts:10:5 › /legal/terms renders in dark, no horizontal scroll, axe clean (455ms)
+  ✓  512 [phone] › e2e/shell.spec.ts:10:5 › /docs renders in dark, no horizontal scroll, axe clean (436ms)
+  ✓  513 [phone] › e2e/shell.spec.ts:10:5 › / renders in light, no horizontal scroll, axe clean (644ms)
+  ✓  514 [phone] › e2e/shell.spec.ts:10:5 › /feed renders in light, no horizontal scroll, axe clean (471ms)
+  ✓  515 [phone] › e2e/shell.spec.ts:10:5 › /feed/NVDAx renders in light, no horizontal scroll, axe clean (437ms)
+  ✓  516 [phone] › e2e/shell.spec.ts:10:5 › /borrow renders in light, no horizontal scroll, axe clean (446ms)
+  ✓  517 [phone] › e2e/shell.spec.ts:10:5 › /shield renders in light, no horizontal scroll, axe clean (442ms)
+  ✓  518 [phone] › e2e/shell.spec.ts:10:5 › /quote renders in light, no horizontal scroll, axe clean (440ms)
+  ✓  519 [phone] › e2e/shell.spec.ts:10:5 › /quote/new renders in light, no horizontal scroll, axe clean (443ms)
+  ✓  520 [phone] › e2e/shell.spec.ts:10:5 › /quote/0 renders in light, no horizontal scroll, axe clean (433ms)
+  ✓  521 [phone] › e2e/shell.spec.ts:10:5 › /reserve renders in light, no horizontal scroll, axe clean (434ms)
+  ✓  522 [phone] › e2e/shell.spec.ts:10:5 › /notes renders in light, no horizontal scroll, axe clean (437ms)
+  ✓  523 [phone] › e2e/shell.spec.ts:10:5 › /position/0 renders in light, no horizontal scroll, axe clean (438ms)
+  ✓  524 [phone] › e2e/shell.spec.ts:10:5 › /console renders in light, no horizontal scroll, axe clean (455ms)
+  ✓  525 [phone] › e2e/shell.spec.ts:10:5 › /agents renders in light, no horizontal scroll, axe clean (487ms)
+  ✓  526 [phone] › e2e/shell.spec.ts:10:5 › /keepers renders in light, no horizontal scroll, axe clean (455ms)
+  ✓  527 [phone] › e2e/shell.spec.ts:10:5 › /talk renders in light, no horizontal scroll, axe clean (429ms)
+  ✓  528 [phone] › e2e/shell.spec.ts:10:5 › /security renders in light, no horizontal scroll, axe clean (686ms)
+  ✓  529 [phone] › e2e/shell.spec.ts:10:5 › /about renders in light, no horizontal scroll, axe clean (430ms)
+  ✓  530 [phone] › e2e/shell.spec.ts:10:5 › /status renders in light, no horizontal scroll, axe clean (535ms)
+  ✓  531 [phone] › e2e/shell.spec.ts:10:5 › /changelog renders in light, no horizontal scroll, axe clean (924ms)
+  ✓  532 [phone] › e2e/shell.spec.ts:10:5 › /brand renders in light, no horizontal scroll, axe clean (451ms)
+  ✓  533 [phone] › e2e/shell.spec.ts:10:5 › /legal/privacy renders in light, no horizontal scroll, axe clean (572ms)
+  ✓  534 [phone] › e2e/shell.spec.ts:10:5 › /legal/terms renders in light, no horizontal scroll, axe clean (460ms)
+  ✓  535 [phone] › e2e/shell.spec.ts:10:5 › /docs renders in light, no horizontal scroll, axe clean (444ms)
+  ✓  536 [phone] › e2e/shell.spec.ts:31:1 › consent banner is shown by default and analytics stay off (325ms)
+  ✓  537 [phone] › e2e/shell.spec.ts:47:1 › consent banner steps aside while the wallet selector or a modal is open (221ms)
+  ✓  538 [phone] › e2e/shell.spec.ts:85:1 › theme toggle switches data-theme (263ms)
+  ✓  539 [phone] › e2e/shields.spec.ts:106:3 › /shield (mocked v2, shields on) › weekend and event cards: fee, countdown, weekend limit, backing, opens left, faucet beside the dry quote; copy rules (569ms)
+  ✓  540 [phone] › e2e/shields.spec.ts:136:3 › /shield (mocked v2, shields on) › open a Weekend Shield: sign modal shows the shield msg, 250 TGas, 1 yocto, fee stack; then the mock wallet records it (1.2s)
+  ✓  541 [phone] › e2e/shields.spec.ts:165:3 › /shield (mocked v2, shields on) › daily limit reached disables both cards with the reason (229ms)
+  ✓  542 [phone] › e2e/shields.spec.ts:175:3 › /shield (mocked v2, shields on) › flags off: honest disabled state, no Shields nav link (171ms)
+  ✓  543 [phone] › e2e/shields.spec.ts:185:3 › Profit-Lock on /position/[id] (mocked v2) › preview → sign modal (self_settle, 1 yocto, 300 TGas) → recorded (645ms)
+  ✓  544 [phone] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: health < 1 (213ms)
+  ✓  545 [phone] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: corporate action pending (222ms)
+  ✓  546 [phone] › e2e/shields.spec.ts:216:5 › Profit-Lock on /position/[id] (mocked v2) › disabled with a reason: no opted-in capacity (226ms)
+  ✓  547 [phone] › e2e/shields.spec.ts:228:3 › /quote/new voluntary fills (mocked v2) › switch adds accepts_voluntary_fills to the FundPappusQuote msg (611ms)
+  ✓  548 [phone] › e2e/shields.spec.ts:244:3 › /quote/new voluntary fills (mocked v2) › flag off: no switch (174ms)
+  ✓  549 [phone] › e2e/site-pages.spec.ts:10:5 › /about (dark): h1, axe clean, no horizontal scroll (419ms)
+  ✓  550 [phone] › e2e/site-pages.spec.ts:10:5 › /status (dark): h1, axe clean, no horizontal scroll (525ms)
+  ✓  551 [phone] › e2e/site-pages.spec.ts:10:5 › /changelog (dark): h1, axe clean, no horizontal scroll (873ms)
+  ✓  552 [phone] › e2e/site-pages.spec.ts:10:5 › /brand (dark): h1, axe clean, no horizontal scroll (432ms)
+  ✓  553 [phone] › e2e/site-pages.spec.ts:10:5 › /talk (dark): h1, axe clean, no horizontal scroll (417ms)
+  ✓  554 [phone] › e2e/site-pages.spec.ts:10:5 › /security (dark): h1, axe clean, no horizontal scroll (679ms)
+  ✓  555 [phone] › e2e/site-pages.spec.ts:10:5 › /about (light): h1, axe clean, no horizontal scroll (428ms)
+  ✓  556 [phone] › e2e/site-pages.spec.ts:10:5 › /status (light): h1, axe clean, no horizontal scroll (529ms)
+  ✓  557 [phone] › e2e/site-pages.spec.ts:10:5 › /changelog (light): h1, axe clean, no horizontal scroll (891ms)
+  ✓  558 [phone] › e2e/site-pages.spec.ts:10:5 › /brand (light): h1, axe clean, no horizontal scroll (436ms)
+  ✓  559 [phone] › e2e/site-pages.spec.ts:10:5 › /talk (light): h1, axe clean, no horizontal scroll (425ms)
+  ✓  560 [phone] › e2e/site-pages.spec.ts:10:5 › /security (light): h1, axe clean, no horizontal scroll (674ms)
+  ✓  561 [phone] › e2e/site-pages.spec.ts:25:3 › content › /about says what it is and that no operator is configured locally (158ms)
+  ✓  562 [phone] › e2e/site-pages.spec.ts:31:3 › content › /talk has no form and shows the local contact text (158ms)
+  ✓  563 [phone] › e2e/site-pages.spec.ts:37:3 › content › /status shows live checks, the hosted split, contract ids and the gate table with its source (1.5s)
+  ✓  564 [phone] › e2e/site-pages.spec.ts:48:3 › content › /changelog lists tagged groups without branding (205ms)
+  ✓  565 [phone] › e2e/site-pages.spec.ts:55:3 › content › /brand links real files (180ms)
+  ✓  566 [phone] › e2e/site-pages.spec.ts:62:3 › content › /security renders SECURITY.md and the reporting contact (180ms)
+  ✓  567 [phone] › e2e/site-pages.spec.ts:68:3 › content › footer links the new pages; no whitepaper link; landing worked example labelled (291ms)
+  ✓  568 [phone] › e2e/testnet.spec.ts:8:3 › testnet read-only › feed lists NVDAx with live capacity (2.0s)
+  ✓  569 [phone] › e2e/testnet.spec.ts:15:3 › testnet read-only › api health answers from the contract (5ms)
+  -  570 [phone] › e2e/testnet.spec.ts:29:3 › testnet write: borrow with demo key › sign modal shows msg, gas, deposit; borrow lands
+  ✓  571 [phone] › e2e/v7.spec.ts:45:3 › landing v7 › flags off: hero, live card, how it works, FAQ, footer; no module sections; copy rules (275ms)
+  ✓  572 [phone] › e2e/v7.spec.ts:63:3 › landing v7 › flags on: every module section renders with its data-feature tag; copy rules still hold (308ms)
+  ✓  573 [phone] › e2e/v7.spec.ts:78:3 › landing v7 › one flag on: only that module renders (219ms)
+  ✓  574 [phone] › e2e/v7.spec.ts:86:3 › landing v7 › live card shows in-session vs weekend parameters from testnet (1.1s)
+  ✓  575 [phone] › e2e/v7.spec.ts:105:3 › v1 path (mocked v1 contract, every flag on) › feed equation card: live terms, canonical labels, session badge; no v2 aggregate rows (245ms)
+  ✓  576 [phone] › e2e/v7.spec.ts:119:3 › v1 path (mocked v1 contract, every flag on) › borrow: fee stack with total, no v7 controls even with ?ref= (218ms)
+  ✓  577 [phone] › e2e/v7.spec.ts:142:3 › v2 path (mocked view fixture), flags off › feed shows total debt, aggregate headroom and the contract's session reason (231ms)
+  ✓  578 [phone] › e2e/v7.spec.ts:154:3 › v2 path (mocked view fixture), flags off › borrow uses the contract fee stack; pay_to and referrer stay hidden while their flags are off (218ms)
+  ✓  579 [phone] › e2e/v7.spec.ts:176:3 › v2 path (mocked view fixture), flags on › feed shows the multiplier line (M = 1.02 on the fixture) (208ms)
+  ✓  580 [phone] › e2e/v7.spec.ts:182:3 › v2 path (mocked view fixture), flags on › borrow shows pay_to and the referrer from ?ref= (190ms)
+  -  581 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent accept
+  -  582 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent decline
+  -  583 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent accept
+  -  584 [inventory] › e2e/inventory.spec.ts:246:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent decline
+  -  585 [inventory] › e2e/inventory.spec.ts:275:3 › data inventory (opt-in, network) › every wallet the selector lists, one by one (fresh profile each, no signing)
+  -  586 [inventory] › e2e/inventory.spec.ts:359:3 › data inventory (opt-in, network) › zero CSP violations across the inventory runs
+
+
+  1) [desktop] › e2e/live-views.spec.ts:29:3 › real views on testnet › a real /quote/[id] renders its figures and Note link 
+
+    Error: list_quotes: {"jsonrpc":"2.0","error":{"code":-429,"message":"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com"},"id":"1"}
+
+      13 |   });
+      14 |   const j = (await r.json()) as { result?: { result?: number[] } };
+    > 15 |   if (!j.result?.result) throw new Error(`${method}: ${JSON.stringify(j).slice(0, 200)}`);
+         |                                ^
+      16 |   return JSON.parse(Buffer.from(j.result.result).toString()) as T;
+      17 | }
+      18 |
+        at view (/private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/live-views.spec.ts:15:32)
+        at /private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/live-views.spec.ts:30:20
+
+    Error Context: test-results/live-views-real-views-on-t-d6a1b-s-its-figures-and-Note-link-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/live-views-real-views-on-t-d6a1b-s-its-figures-and-Note-link-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/live-views-real-views-on-t-d6a1b-s-its-figures-and-Note-link-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: list_quotes: {"jsonrpc":"2.0","error":{"code":-429,"message":"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com"},"id":"1"}
+
+      13 |   });
+      14 |   const j = (await r.json()) as { result?: { result?: number[] } };
+    > 15 |   if (!j.result?.result) throw new Error(`${method}: ${JSON.stringify(j).slice(0, 200)}`);
+         |                                ^
+      16 |   return JSON.parse(Buffer.from(j.result.result).toString()) as T;
+      17 | }
+      18 |
+        at view (/private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/live-views.spec.ts:15:32)
+        at /private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/live-views.spec.ts:30:20
+
+    Error Context: test-results/live-views-real-views-on-t-d6a1b-s-its-figures-and-Note-link-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/live-views-real-views-on-t-d6a1b-s-its-figures-and-Note-link-desktop-retry1/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/live-views-real-views-on-t-d6a1b-s-its-figures-and-Note-link-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e/live-views.spec.ts:53:3 › real views on testnet › a real closed remote position shows the contract's remote status 
+
+    Error: list_positions: {"jsonrpc":"2.0","error":{"code":-429,"message":"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com"},"id":"1"}
+
+      13 |   });
+      14 |   const j = (await r.json()) as { result?: { result?: number[] } };
+    > 15 |   if (!j.result?.result) throw new Error(`${method}: ${JSON.stringify(j).slice(0, 200)}`);
+         |                                ^
+      16 |   return JSON.parse(Buffer.from(j.result.result).toString()) as T;
+      17 | }
+      18 |
+        at view (/private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/live-views.spec.ts:15:32)
+        at /private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/live-views.spec.ts:54:17
+
+    Error Context: test-results/live-views-real-views-on-t-b62ed-he-contract-s-remote-status-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/live-views-real-views-on-t-b62ed-he-contract-s-remote-status-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/live-views-real-views-on-t-b62ed-he-contract-s-remote-status-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/^(owner|Pyth) · \d+s · /).first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText(/^(owner|Pyth) · \d+s · /).first() with timeout 5000ms
+      - waiting for getByText(/^(owner|Pyth) · \d+s · /).first()
+
+
+      22 |     await page.goto("/feed");
+      23 |     await expect(page.getByText("no 1Click route").first()).toBeVisible({ timeout: 20_000 });
+    > 24 |     await expect(page.getByText(/^(owner|Pyth) · \d+s · /).first()).toBeVisible();
+         |                                                                     ^
+      25 |     await expect(page.getByText(/P0 static pricing|OutLayer quoter/).first()).toBeVisible();
+      26 |     await expect(page.getByRole("heading", { name: "Settlement history" })).toBeVisible();
+      27 |     await expect(page.getByText(/Feed indexer not configured|Feed API unavailable|Recent pre-liquidation settlements|No settlements yet/).first()).toBeVisible({ timeout: 10_000 });
+        at /private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/p1.spec.ts:24:69
+
+    Error Context: test-results/p1-P1-read-only-surfaces-f-ed0d5-or-NVDAx-settlement-history-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/p1-P1-read-only-surfaces-f-ed0d5-or-NVDAx-settlement-history-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/p1-P1-read-only-surfaces-f-ed0d5-or-NVDAx-settlement-history-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Owner actions · quoter and oracle')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Owner actions · quoter and oracle') with timeout 20000ms
+      - waiting for getByText('Owner actions · quoter and oracle')
+
+
+      31 |     test.skip(TESTNET_PENDING, PENDING_MSG);
+      32 |     await page.goto("/console");
+    > 33 |     await expect(page.getByText("Owner actions · quoter and oracle")).toBeVisible({ timeout: 20_000 });
+         |                                                                       ^
+      34 |     await expect(page.getByRole("button", { name: "Use owner oracle" })).toBeDisabled();
+      35 |     await page.getByText("Payload: set_oracle_source").click();
+      36 |     await expect(page.locator("pre").filter({ hasText: '"source": "Owner"' })).toBeVisible();
+        at /private/tmp/verify-g3b-20261111T2144Z/apps/web/e2e/p1.spec.ts:33:71
+
+    Error Context: test-results/p1-P1-read-only-surfaces-c-a2f43-d-only-with-payload-preview-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/p1-P1-read-only-surfaces-c-a2f43-d-only-with-payload-preview-desktop/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results/p1-P1-read-only-surfaces-c-a2f43-d-only-with-payload-preview-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › e2e/live-views.spec.ts:29:3 › real views on testnet › a real /quote/[id] renders its figures and Note link 
+  3 flaky
+    [desktop] › e2e/live-views.spec.ts:53:3 › real views on testnet › a real closed remote position shows the contract's remote status 
+    [desktop] › e2e/p1.spec.ts:17:3 › P1 read-only surfaces › feed shows oracle badge, no 1Click route for NVDAx, settlement history 
+    [desktop] › e2e/p1.spec.ts:30:3 › P1 read-only surfaces › console exposes owner forms read-only with payload preview 
+  106 skipped
+  472 passed (9.1m)
+/private/tmp/verify-g3b-20261111T2144Z/apps/web:
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  web@0.1.0 e2e: `playwright test`
+Exit status 1
+e2e exit 1

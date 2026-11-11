@@ -1,0 +1,3 @@
+desktop mock: undefined banner: false wallets: 6 allFullyVisible: false Meteor Wallet(NOT VISIBLE), Intear Wallet(NOT VISIBLE), Ledger(NOT VISIBLE), Nightly Wallet(NOT VISIBLE), Ethereum Wallets(NOT VISIBLE), NEAR CLI(NOT VISIBLE)
+phone mock: undefined banner: false wallets: 6 allFullyVisible: false Meteor Wallet(NOT VISIBLE), Intear Wallet(NOT VISIBLE), Ledger(NOT VISIBLE), Nightly Wallet(NOT VISIBLE), Ethereum Wallets(NOT VISIBLE), NEAR CLI(NOT VISIBLE)
+probe exit 0
