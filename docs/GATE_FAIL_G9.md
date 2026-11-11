@@ -6,4 +6,4 @@ docs-site pages/nav/static) — finds exactly this line; wired into `pnpm verify
 Everything else in G9 passed: quick start ~3 min, `pnpm verify` green, docs build, gitleaks (268 commits) clean, Feed MCP live from the README (agents claimable),
 no unbacked claim, mock-ft upgrade now recorded.
 **Fix (WO-38, docs):** remove the sentence; README staleness the verifier hit (Feed env line 68, date/timings, routes, MCP pointer); HUMAN_HANDOFF H-NEAR-FAUCET → DONE.
-**Then:** wire the check, re-run G9 (verifier, fresh clone). Status: OPEN.
+**Then:** wire the check, re-run G9 (verifier, fresh clone). Status: FIX MERGED (WO-38 b143b72; check wired into verify:quick) — G9 re-run pending.

@@ -10,7 +10,7 @@
     "lint": "pnpm -r --if-present lint",
     "typecheck": "pnpm -r --if-present typecheck",
     "test": "pnpm -r --if-present test",
-    "verify:quick": "pnpm lint && pnpm typecheck && pnpm test",
+    "verify:quick": "node scripts/check-no-branding-all.mjs && pnpm lint && pnpm typecheck && pnpm test",
     "verify": "pnpm verify:quick && bash scripts/50-verify.sh",
     "demo:testnet": "bash scripts/50-verify.sh",
     "demo:capture": "pnpm --filter web demo:capture"

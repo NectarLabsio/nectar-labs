@@ -16,4 +16,7 @@ A skipped env-gated block is not a skipped spec: `REMOTE_SCREENS` / `NOTES_SCREE
 **Why:** a claim of missing coverage is as false as a claim of coverage that isn't there.
 **How to apply:** grep the e2e.log per test line (`✓` vs `-`, both `[desktop]` and `[phone]`) before saying a spec was skipped.
 
+Docs-site copy rule is wider than the word "hackathon": G9 failed (2026-11-11) on one Evidence-page sentence; WO-38 also removed "agents track", "pre-submission", "reviewers and their agents". `node scripts/check-no-branding-all.mjs` only greps /hackathon/i, so grep track|judg|submission|deadline by hand.
+Before naming web routes, run `npx next dev -p <spare>` in apps/web and curl each (e.g. /quote is a 307 to /quote/new; /markets, /earn 404).
+
 Fresh worktrees have no node_modules: run `pnpm install --frozen-lockfile --offline` (about 1 min) before `pnpm --filter docs-site build`.
