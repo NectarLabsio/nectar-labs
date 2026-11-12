@@ -185,3 +185,59 @@ test.describe("v2 path (mocked view fixture), flags on", () => {
     await expect(page.getByTestId("referrer")).toBeVisible();
   });
 });
+
+// WO-35i: the #chains section made one claim in the server HTML and another after hydration, and named Base without "local fork".
+const norm = (t: string | null | undefined) => (t ?? "").replace(/\s+/g, " ").trim();
+
+/** Every sentence in #chains (text and aria-labels) that names Base as a word. */
+function baseSentences(page: Page): Promise<string[]> {
+  return page.locator("section#chains").evaluate((sec) => {
+    const texts = [...sec.querySelectorAll("h2, h3, p, li, span")].map((e) => e.textContent ?? "");
+    texts.push(...[...sec.querySelectorAll("[aria-label]")].map((e) => e.getAttribute("aria-label") ?? ""));
+    return texts.flatMap((t) => t.replace(/\s+/g, " ").split(/(?<=[.!?])\s+/)).map((x) => x.trim()).filter((x) => /\bBase\b/.test(x));
+  });
+}
+
+test.describe("landing #chains: same claims before and after hydration; Base always says local fork", () => {
+  test("config flags (no pin), v2 contract: hydrated #chains text equals the server HTML", async ({ page, request }) => {
+    const serverHtml = await (await request.get("/")).text();
+    await prime(page, "dark");
+    await mockV2(page);
+    // useFeature flipped the heading once contract_version came back as v2; wait for that read before comparing.
+    const versionRead = page.waitForResponse((r) => /fastnear/.test(r.url()) && (r.request().postData() ?? "").includes("contract_version"));
+    await page.goto("/");
+    await versionRead;
+    await page.waitForLoadState("networkidle");
+    const server = await page.evaluate((html) => {
+      const sec = new DOMParser().parseFromString(html, "text/html").querySelector("section#chains");
+      return sec ? sec.textContent : null;
+    }, serverHtml);
+    const chains = page.locator("section#chains");
+    if (server === null) {
+      await expect(chains).toHaveCount(0);
+      return;
+    }
+    await expect(page.locator("#hublinks path").first()).toBeAttached(); // drawn in an effect: the section has hydrated
+    const hydrated = await chains.evaluate((el) => el.textContent);
+    console.log(`#chains server  : ${norm(server).slice(0, 160)}…\n#chains hydrated: ${norm(hydrated).slice(0, 160)}…`);
+    expect(norm(hydrated)).toBe(norm(server));
+    expect(norm(server)).toContain("local fork");
+    const named = await baseSentences(page);
+    console.log(`#chains Base sentences (${named.length}):\n  ${named.join("\n  ")}`);
+    expect(named.length).toBeGreaterThan(0);
+    expect(named.filter((x) => !x.includes("local fork"))).toEqual([]);
+  });
+
+  for (const on of [["solana_remote"], ["base"], ["solana_remote", "base"]] as const) {
+    test(`pinned ${on.join(" + ")}: every #chains sentence that names Base says local fork`, async ({ page }) => {
+      await prime(page, "dark");
+      await pinFlags(page, on);
+      await page.goto("/");
+      await expect(page.locator("section#chains")).toBeVisible();
+      const named = await baseSentences(page);
+      expect(named.length).toBeGreaterThan(0);
+      expect(named.filter((x) => !x.includes("local fork"))).toEqual([]);
+      await expect(page.locator("#nbase")).toHaveCount((on as readonly string[]).includes("base") ? 1 : 0);
+    });
+  }
+});

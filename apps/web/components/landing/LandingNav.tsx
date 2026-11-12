@@ -3,17 +3,19 @@ import { HostLink as Link } from "../HostLink";
 import { useEffect, useState } from "react";
 import { currentTheme, setTheme } from "@nectar/ui";
 import { docsHref } from "@/lib/env";
-import { useFeature } from "../AppProvider";
+import { useChain } from "../AppProvider";
 import s from "./landing.module.css";
 
 /** Landing top bar (landing/index.html): section anchors in a glass pill, theme, menu, "Try on testnet" into the app. */
 export function LandingNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const shields = useFeature("shields");
-  const reserve = useFeature("reserve");
-  const sol = useFeature("solana_remote");
-  const base = useFeature("base");
+  // WO-35i: the same config flags as the landing sections (Module / On), so the anchors match the server HTML before and after hydration.
+  const { features } = useChain().config;
+  const shields = features.shields === true;
+  const reserve = features.reserve === true;
+  const sol = features.solana_remote === true;
+  const base = features.base === true;
   const chains = sol || base;
   useEffect(() => {
     const on = () => setScrolled(scrollY > 8);
