@@ -40,7 +40,11 @@
   - docs dpl_5pYWUsABpAs4RUGZ5cHGa2dNeEM6: 55/55 pages 200 at clean URLs; `.html` → 308.
     **But it does not render** (Kunal ~07:15Z: "Your Docusaurus site did not load properly … baseUrl = /docs/"). Pages reference `/docs/assets/…`; the flat build
     serves `/assets/…` (F-393), so every asset 404s when the docs deployment is opened directly. The smoke test checked status codes only.
-    Fix: WO-34r6 facts F-433–F-436 (merged) → WO-34s docs (in flight): vercel.json rewrites `/docs/` → `/` and `/docs/:path*` → `/:path*`.
+    Fix: WO-34r6 facts F-433–F-436 → WO-34s docs, both MERGED (4f7702b, verify:quick 0): vercel.json rewrites `/docs/` → `/` and `/docs/:path*` → `/:path*`.
+    **Docs preview of 4f7702b: dpl_rCb371fxU9G4fVWhKoHRA126BwQE PASS** (tarball sha256 e1d70b94…de70ae0):
+    smoke-docs.sh 56 pages + 6 referenced assets, 0 failures (F-435 confirmed live: rewrite destinations resolve through cleanUrls);
+    system Chrome: no baseUrl banner, hydrated, client navigation works, 0 failed requests, 0 console errors; app links → web preview.
+    Logs: evidence/WO-34/preview-{smoke,browser}-docs-20261112T07*.{log,png}. Open it at `<docs-host>/docs/` (the bare root is not an entry point).
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
     Docs project env: APP_URL (preview only) = the 46c35ea web preview, so navbar/footer app links stop pointing at localhost:3100.
     Share links: fetching a deployment through the connector can replace its share link; the earlier docs link stopped working. Hand out fresh ones.
