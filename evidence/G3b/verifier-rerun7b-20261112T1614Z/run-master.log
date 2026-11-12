@@ -1,0 +1,19 @@
+[16:14:17Z] start
+[16:14:25Z] clone exit 0
+[16:14:25Z] checkout exit 0 HEAD 5f011bb7f2ddc1df18c11c1464cdf12f3b993dd0
+[16:14:25Z] diff 4c2a0bb..HEAD (apps packages services contracts):  2 files changed, 2 insertions(+), 2 deletions(-)
+[16:14:39Z] install exit 0
+[16:14:58Z] pnpm --filter docs-site build exit 0
+[16:14:58Z] feed hrefs (count url):    2 https://feed-production-2f2776c9.up.railway.app/health; on 2 pages
+[16:14:59Z] feed curl: https://feed-production-2f2776c9.up.railway.app/health -> 200 0.718694s;-- bare origin (control) -> 404;
+[16:15:01Z] docs :3984 up pid 12106
+[16:15:16Z] build-hosted exit 0
+[16:15:17Z] hosted :3983 up pid 12256; app /docs/integrate/feed-rest -> 200
+[16:15:17Z] crawl start
+[16:30:28Z] (d) crawl exit 0
+[16:30:30Z] kill 3983 pid 12256 -> 0; listeners left: none
+[16:30:32Z] kill 3984 pid 12106 -> 0; listeners left: none
+/private/tmp/claude-501/-Volumes-T7-nectar-labs/287a71ca-7606-413d-ba02-4ab86f1493b2/scratchpad/r7b.sh: line 14: 12106 Terminated: 15          node apps/web/scripts/serve-docs.mjs --port 3984 > ev/server-docs.log 2>&1
+[16:30:32Z] listeners 3983/3984: 0
+[16:30:32Z] git status: 0 changed tracked/untracked (excl ev/)
+[16:30:32Z] r7b done
