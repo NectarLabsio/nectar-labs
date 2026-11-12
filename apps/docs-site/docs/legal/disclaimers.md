@@ -5,7 +5,7 @@ description: Testnet, mock collateral, unaudited code, disclosed fallbacks and k
 ---
 # Risk disclaimers
 
-_Last updated 2026-11-12 · Part of the [Terms of use](/legal/terms) · Operator: **TODO-H-LEGAL** (OPERATOR) · Contact: **TODO-H-LEGAL** (CONTACT)_
+_Last updated 2026-11-12 · Part of the [Terms of use](/legal/terms) · Operator: **Nectar Labs** · Contact: [kunal@nectarnetwork.fun](mailto:kunal@nectarnetwork.fun)_
 
 ## The short version
 

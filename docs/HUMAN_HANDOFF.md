@@ -88,7 +88,12 @@ What Claude Code does then: waits for Vercel to show the domain as verified and 
   (wo-34v) on the custom domain and records them in EVIDENCE.
 Default if silent: the platform URLs from H-DOMAIN's default stay the public URLs.
 
-## H-LEGAL — operator, country, contact, X handle     status: OPEN   needed by: 2026-11-13 12:00 UTC (production promotion)
+## H-LEGAL — operator, country, contact, X handle     status: CLOSED 2026-11-12
+Answer (Kunal, 2026-11-12): operator "Nectar Labs" · country "United States / India" · contact "kunal@nectarnetwork.fun" · X "@xNectarNetwork".
+  Typo correction: he typed "kunal@nectarnetwork.funm"; the orchestrator corrected it to ".fun", the address the site already uses, and capitalised
+  the product name. No governing-law clause (Kunal): terms §12 names operator and contact only. Filled in `packages/config/config.yaml` `site:` and
+  in the legal pages (privacy, terms, disclaimers; WO-34u). Also closes H9.
+Original request (kept for the record):
 Why a human: the legal pages name who operates the site and where; only Kunal can state his legal identity and choose a public contact. Overlaps H9
   (entity name, TODO-H9); one answer covers both.
 Where it goes: `packages/config/config.yaml` → `site:` (`operator`, `country`, `contact`, `x_handle`; all null today, marked TODO-H-LEGAL). The pages read
@@ -152,7 +157,10 @@ Why a human: key issued per partner; lowers displayed fee from 25 to 20 bps.
 What Kunal does: request a key per https://docs.near-intents.org/ ; `echo 'ONE_CLICK_API_KEY=<paste>' >> services/keeper/.env.local`; reply `H8 done`.
 Default if silent: unauthenticated dry quotes; Feed shows the fee the quote returns.
 
-## H9 — legal identity and contact                    status: OPEN   needed by: WO-4 legal pages
+## H9 — legal identity and contact                    status: CLOSED 2026-11-12
+Closed by the H-LEGAL answer (Kunal, 2026-11-12): entity name "Nectar Labs", contact "kunal@nectarnetwork.fun" (mailto links). No `TODO-H9`
+  marker remains in the legal pages (WO-34u).
+Original request (kept for the record):
 Why a human: entity name, controller address, contact email, form provider are legal statements.
 What Kunal does (2 min): reply `H9 <entity name> | <contact email> | <form provider or mailto>`.
 What Claude Code does then: replaces `TODO-H9` in `apps/docs-site/docs/legal/*.md` and the web footer; rebuilds docs.

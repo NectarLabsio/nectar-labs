@@ -5,7 +5,7 @@ description: Terms for the Nectar Labs site, web app, docs, Feed and testnet con
 ---
 # Terms of use
 
-_Last updated 2026-11-12 · Draft, not legal advice · Operator: **TODO-H-LEGAL** (OPERATOR) · Country: **TODO-H-LEGAL** (COUNTRY) · Contact: **TODO-H-LEGAL** (CONTACT)_
+_Last updated 2026-11-12 · Draft, not legal advice · Operator: **Nectar Labs** · Country: **United States / India** · Contact: [kunal@nectarnetwork.fun](mailto:kunal@nectarnetwork.fun)_
 
 These terms cover the Nectar Labs site, the web app, this documentation, the Nectar Feed API and MCP server, and the Nectar Labs contracts and programs on public test networks (together, "the service"). The [risk disclaimers](/legal/disclaimers) are part of these terms. By using the service you accept both.
 
@@ -57,10 +57,9 @@ To the extent the applicable law allows, the operator is not liable for any loss
 
 Changes to these terms are dated at the top of this page and recorded in the [Changelog](/changelog). Continued use after a change means you accept it.
 
-## 12. Operator, governing law and contact
+## 12. Operator and contact
 
-- Operator: **TODO-H-LEGAL** (OPERATOR)
-- Governing law and venue: the law and courts of **TODO-H-LEGAL** (COUNTRY)
-- Contact: **TODO-H-LEGAL** (CONTACT)
+- Operator: **Nectar Labs**, operated from the United States / India
+- Contact: [kunal@nectarnetwork.fun](mailto:kunal@nectarnetwork.fun)
 
 _Sources: SECURITY.md "What remains" and review 2 R2-10, R2-12 (2026-11-11) · README "Live on testnet" table · docs/DECISIONS.md D-026, D-030, D-031 · `packages/config/config.yaml` `site.hosted_until` · FACTS F-328._
