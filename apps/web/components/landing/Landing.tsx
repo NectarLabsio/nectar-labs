@@ -13,7 +13,7 @@ import tokD from "@nectar/ui/3d/tokD.webp";
 import { docsHref, hostHref } from "@/lib/env";
 import { CopyContact } from "../CopyContact";
 import { useChain, useView } from "../AppProvider";
-import type { ExitCapacity, FeatureName } from "@nectar/sdk";
+import { formatNoticePeriod, formatUsdE6, type ExitCapacity, type FeatureName, type ReserveView } from "@nectar/sdk";
 import { Module, On } from "../FeatureGate";
 import { LandingStats, LiveLimitCard } from "../LandingLive";
 import { ART } from "./art";
@@ -39,8 +39,9 @@ const Pill = ({ href, children }: { href: string; children: React.ReactNode }) =
 const Art = ({ k }: { k: keyof typeof ART }) => <div className={s.tile} dangerouslySetInnerHTML={{ __html: ART[k] }} />;
 
 // Chamber: one position, four states (PRD §4.2 example: 300 mock NVDAx at $185, $28,000 drawn). Q and D are example figures; LTV and
-// haircuts are the deployed parameters (config.yaml collaterals[0]: base_ltv_bps, max_nectar_ltv_bps, base/weekend_haircut_bps) and R is
-// the Nectar Reserve read from get_exit_capacity (r_usd_e6), never a hard-coded figure (WO-35w).
+// haircuts are the deployed parameters (config.yaml collaterals[0]: base_ltv_bps, max_nectar_ltv_bps, base/weekend_haircut_bps, equal to
+// get_collateral on nectar-core-v2, evidence/claims/deployed-params-20261112T192755Z.json) and R is the Nectar Reserve read from
+// get_exit_capacity (r_usd_e6), never a hard-coded figure (WO-35w, WO-62a B2/B3). The copy says which figure is which.
 const EX = { v: 55_500, debt: 28_000, q: 80_000, d: 12_000 } as const;
 export interface ExParams { base: number; max: number; h: number; hw: number }
 type Ex = ReturnType<typeof example>;
@@ -61,9 +62,12 @@ function example(p: ExParams, rLive: number | null) {
     { badge: "Weekend parameters", big: usd(wk), pct: pctOf(wk), fill: pc(wk), sub: `Market closed: DEX depth counts as zero, haircut ${bp(p.hw)}`, q: EX.q, r, d: 0, h: p.hw / 100, hl: bp(p.hw), tone: "var(--ch-warn)", m: 2, glow: 0.45, form: <>min({usd(byLtv)}, (1 − <em>{bp(p.hw)}</em>) × ({usd(EX.q)} + {rT} + $0) − {usd(EX.debt)}) = <em>{usd(wk)}</em></> },
     { badge: "Health below 1", big: usd(wk), pct: pctOf(wk), fill: pc(wk), sub: "Collateral goes to committed quotes first", q: EX.q, r, d: 0, h: p.hw / 100, hl: bp(p.hw), tone: "var(--ch-danger)", m: 2, glow: 1, form: null },
   ];
+  // WO-62a B2: say what is example data (Q, D) and what is deployed (the Reserve, read from the chain; the LTV cap, from config = chain).
+  const reserveNow = rLive === null ? "an amount read from the contract" : usd(r);
+  const reach = sess >= byLtv ? `reach the deployed ${bp(p.max)} cap` : `support ${pctOf(sess)}, under the deployed ${bp(p.max)} cap`;
   const phases = [
     [`A static lender stops at ${bp(p.base)}.`, "A tokenized stock can trade at fair value all week and have no buyer on Saturday night. Lenders price that exit, so the limit stays low."],
-    ["Committed quotes raise the ceiling.", `Market makers escrow USDC behind quotes that can't leave without notice. Add the Reserve and verified DEX depth, and the same 300 shares support up to ${bp(p.max)}.`],
+    ["Committed quotes raise the ceiling.", `Market makers escrow USDC behind quotes that can't leave without notice. In this example (quotes ${usd(EX.q)} and DEX depth ${usd(EX.d)} are example figures; the Reserve as deployed holds ${reserveNow}), the same 300 shares ${reach}.`],
     ["The weekend guard tightens it on its own.", `When the market closes or the price is older than 15 minutes, DEX depth drops to zero and the haircut widens to ${bp(p.hw)}. Nothing outside the contract can switch the session back on.`],
     ["A bad loan sells to a buyer who already committed.", "If health falls below 1, collateral goes to a committed quote at no more than its stated discount. The Reserve fills only after every quote is used."],
   ] as const;
@@ -160,7 +164,7 @@ function Chamber({ ex }: { ex: Ex }) {
               </div>
               <div className={s.legend}>
                 <span style={{ "--c": "var(--ch-accent)" } as React.CSSProperties}>Quotes Q <b id="lq">{usd(st.q)}</b></span>
-                <span style={{ "--c": "var(--ch-teal)" } as React.CSSProperties}>Reserve R <b id="lr">{st.q === 0 ? usd(0) : ex.rLabel}</b></span>
+                <span style={{ "--c": "var(--ch-teal)" } as React.CSSProperties}>Reserve R, deployed <b id="lr">{st.q === 0 ? usd(0) : ex.rLabel}</b></span>
                 <span style={{ "--c": "var(--ch-sky)" } as React.CSSProperties}>DEX depth D <b id="ld">{usd(st.d)}</b></span>
                 <span style={{ "--c": "var(--ch-warn)" } as React.CSSProperties}>Haircut h <b id="lh">{st.hl}</b></span>
               </div>
@@ -178,7 +182,7 @@ function Chamber({ ex }: { ex: Ex }) {
   );
 }
 
-function CodeTabs({ agent }: { agent: boolean }) {
+function CodeTabs({ agent, p }: { agent: boolean; p: ExParams }) {
   const tabs = [
     { id: "a", label: "limit.rs" },
     ...(agent ? [{ id: "b", label: "agent call" }] : []),
@@ -211,12 +215,12 @@ function CodeTabs({ agent }: { agent: boolean }) {
         <L><C>{"// Borrow limit for one asset (spec §4.2). Integers only: _e6 USD, bps."}</C></L>
         <L><K>pub fn</K> borrow_limit_e6(<K>&amp;self</K>, a: <K>&amp;</K>Asset) -&gt; <K>u128</K> {"{"}</L>
         <L>{"    "}<K>let</K> weekend = !<K>self</K>.guard.session_open(a);</L>
-        <L>{"    "}<K>let</K> h_bps = <K>if</K> weekend {"{"} a.h_weekend_bps {"}"} <K>else</K> {"{"} a.h_session_bps {"}"}; <C>{"// 2500 / 1000 on testnet"}</C></L>
+        <L>{"    "}<K>let</K> h_bps = <K>if</K> weekend {"{"} a.h_weekend_bps {"}"} <K>else</K> {"{"} a.h_session_bps {"}"}; <C>{`// ${p.hw} / ${p.h} on testnet`}</C></L>
         <L>{"    "}<K>let</K> d = <K>if</K> weekend {"{"} <N>0</N> {"}"} <K>else</K> {"{"} a.dex_depth_e6 {"}"};</L>
         <L />
         <L>{"    "}<K>let</K> backing = a.quotes_e6 + a.reserve_e6 + d;{"           "}<C>{"// Q + R + D"}</C></L>
         <L>{"    "}<K>let</K> by_exit = backing * (<N>10_000</N> - h_bps) / <N>10_000</N>;</L>
-        <L>{"    "}<K>let</K> by_ltv{"  "}= a.value_e6() * a.ltv_max_bps / <N>10_000</N>;{"  "}<C>{"// 70% on testnet"}</C></L>
+        <L>{"    "}<K>let</K> by_ltv{"  "}= a.value_e6() * a.ltv_max_bps / <N>10_000</N>;{"  "}<C>{`// ${bp(p.max)} on testnet`}</C></L>
         <L />
         <L>{"    "}<C>{"// the exit term is shared by every loan in the asset"}</C></L>
         <L>{"    "}by_ltv.min(by_exit.saturating_sub(a.total_debt_e6))</L>
@@ -306,6 +310,23 @@ function NoteObject() {
   );
 }
 
+/** WO-62a B2: the Reserve as deployed, from get_reserve (never hard-coded). Placeholders until the read answers. */
+function ReserveSpec({ symbol }: { symbol: string }) {
+  const { deployed } = useChain();
+  const r = useView<ReserveView>((v) => v.getReserve(symbol), [symbol]);
+  const d = r.data;
+  const wait = !deployed ? "read after deployment" : r.error ? "RPC error, retry later" : "reading…";
+  const fills = !d ? wait : d.discount_bps === 0 ? "Disabled (discount 0 bps)" : `After all quotes, at ${d.discount_bps} bps`;
+  return (
+    <dl className={s.spec} data-testid="landing-reserve" aria-live="polite">
+      <div><dt>Holds now, on testnet</dt><dd className={s.num} data-testid="landing-reserve-r">{d ? formatUsdE6(d.r_usd_e6) : wait}</dd></div>
+      <div><dt>Fills</dt><dd data-testid="landing-reserve-discount">{fills}</dd></div>
+      <div><dt>Minimum deposit</dt><dd className={s.num} data-testid="landing-reserve-min">{d ? `${formatUsdE6(d.min_deposit_usd_e6, 0)} USDC` : wait}</dd></div>
+      <div><dt>Notice to exit</dt><dd data-testid="landing-reserve-notice">{d ? formatNoticePeriod(d.notice_period_ns) : wait}</dd></div>
+    </dl>
+  );
+}
+
 /** Solid connectors from the hub to each spoke node (redrawn on resize). */
 function HubLinks({ hub }: { hub: React.RefObject<HTMLDivElement | null> }) {
   const [paths, setPaths] = useState<string[]>([]);
@@ -359,10 +380,9 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
   const cta = shields ? { href: "/shield", label: "Open a weekend shield" } : { href: "/borrow", label: "Preview a borrow" };
   const col = config.collaterals[0];
   const capR = useView<ExitCapacity>((v) => v.getExitCapacity(col?.symbol ?? "NVDAx"), [col?.symbol]);
-  const ex = example(
-    { base: col?.base_ltv_bps ?? 4000, max: col?.max_nectar_ltv_bps ?? 7000, h: col?.base_haircut_bps ?? 1000, hw: col?.weekend_haircut_bps ?? 2500 },
-    capR.data ? Number(BigInt(capR.data.r_usd_e6) / 1_000_000n) : null,
-  );
+  // Deployed parameters from config.yaml collaterals[0] (server-rendered, so the server HTML and the hydrated page agree).
+  const params: ExParams = { base: col?.base_ltv_bps ?? 0, max: col?.max_nectar_ltv_bps ?? 0, h: col?.base_haircut_bps ?? 0, hw: col?.weekend_haircut_bps ?? 0 };
+  const ex = example(params, capR.data ? Number(BigInt(capR.data.r_usd_e6) / 1_000_000n) : null);
 
   // Scroll engine: --p on [data-sp] (finale parallax), settlement line progress, hero progress for the 3D mark.
   useEffect(() => {
@@ -407,7 +427,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
     ["NEAR Intents", "1Click quotes, dry run"],
     ["Pyth", "price feed"],
     ...(sol ? ([["Solana", solanaLive ? "spoke, devnet" : "spoke, not live yet"]] as Array<[string, string]>) : []),
-    ...(base ? ([["Base", "spoke, local fork"]] as Array<[string, string]>) : []),
+    ...(base ? ([["Base", "local fork of Base Sepolia"]] as Array<[string, string]>) : []),
     ...(x402 ? ([["x402", "paid API calls"]] as Array<[string, string]>) : []),
     ["NEAR AI Cloud", "copilot"],
   ];
@@ -473,7 +493,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
         <div className={s.wrap}>
           <div className={s["sec-head"]}>
             <h2>Lenders price the exit, not the asset.</h2>
-            <p><strong>Example.</strong> Follow one position through four states. The numbers are the example from the hero: 300 mock NVDAx at $185, with $28,000 already drawn against the asset.</p>
+            <p><strong>Example.</strong> Follow one position through four states. The numbers are the example from the hero: 300 mock NVDAx at $185, with $28,000 already drawn against the asset. Quotes and DEX depth are example figures; the LTV limits, the haircuts and the Reserve are the deployed testnet values.</p>
           </div>
         </div>
         <Chamber ex={ex} />
@@ -528,14 +548,9 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
             <Art k="reserve" />
             <div className={s.copy}>
               <span className={s.tag}><b />For the Reserve</span>
-              <h2>Stand behind the loans from $10.</h2>
-              <p>Pool USDC per asset. The Reserve earns a share of every borrower premium and buys collateral at the Reserve discount only after every committed quote is used. Your deposit is a Note you can hold or transfer.</p>
-              <dl className={s.spec}>
-                <div><dt>Minimum</dt><dd>$10 USDC</dd></div>
-                <div><dt>Fills</dt><dd>After all quotes, at 400 bps</dd></div>
-                <div><dt>Notice to exit</dt><dd>7 days</dd></div>
-                <div><dt>Realised APR</dt><dd>Shown once premiums settle</dd></div>
-              </dl>
+              <h2>Stand behind every loan in the asset.</h2>
+              <p>Pool USDC per asset. The Reserve earns a share of every borrower premium and buys collateral at the Reserve discount only after every committed quote is used. Your deposit is a Note you can hold or transfer. It is deployed on testnet and still small: the figures below are read from the contract.</p>
+              <ReserveSpec symbol={col?.symbol ?? "NVDAx"} />
               <div><Pill href="/reserve">Deposit to the Reserve</Pill></div>
             </div>
           </Module>
@@ -599,8 +614,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
       <Module name={["solana_remote", "base"]} className={s.alt} id="chains">
         <div className={s.wrap}>
           <div className={s["sec-head"]} style={{ marginInline: "auto", textAlign: "center", justifyItems: "center" }}>
-            <h2>NEAR holds the book. {sol && base ? "Solana and a Base Sepolia local fork hold" : sol ? "Solana holds" : "A Base Sepolia local fork holds"} the stock.</h2>
-            <p>A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself.</p>
+            <h2>NEAR holds the book. {sol && base ? "Solana and a local fork of Base Sepolia hold" : sol ? "Solana holds" : "A local fork of Base Sepolia holds"} the stock.</h2>
+            <p>A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.</p>
           </div>
           <div className={s.hub} id="hub" ref={hub}>
             <HubLinks hub={hub} />
@@ -619,8 +634,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
             <On name="base">
               <div className={s.node} id="nbase">
                 <div className={s.art} dangerouslySetInnerHTML={{ __html: ART.base }} />
-                <div className={s.body}><h3>Base Sepolia local fork</h3><span className={s.t}>B20-style mock collateral, secp256k1 · local fork, not deployed</span>
-                  <ul><li>NectarVaultBase with EIP-712, on the local fork</li><li>Checks the issuer&apos;s transfer policy first</li></ul></div>
+                <div className={s.body}><h3>Base, on a local fork of Base Sepolia</h3><span className={s.t}>B20-style mock collateral, secp256k1 · Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia</span>
+                  <ul><li>NectarVaultBase with EIP-712, on the local fork of Base Sepolia</li><li>Checks the issuer&apos;s transfer policy first</li></ul></div>
               </div>
             </On>
           </div>
@@ -628,8 +643,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
           <div className={s.seq} id="settle">
             <div><span className={s.k}>01 Flag</span><h3>Health falls below 1</h3><p>Any keeper calls <code>trigger_preliquidation(position_id)</code> with a function-call key. No deposit, no price, no hash.</p><span className={s.who}>nectar-core on NEAR testnet</span></div>
             <div><span className={s.k}>02 Price</span><h3>A TEE computes the discount, verifiably</h3><p>A pinned, attested OutLayer program returns <code>disc_bps</code>, so the computation can be verified, and the contract clamps it to the quote&apos;s ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement&apos;s discount reveals their product.</p><span className={s.who}>OutLayer, attested</span></div>
-            <div><span className={s.k}>03 Sign</span><h3>Chain Signatures signs</h3><p>The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork). The keeper never holds a key.</p><span className={s.who}>v1.signer-prod.testnet</span></div>
-            <div><span className={s.k}>04 Settle</span><h3>The vault verifies, then pays</h3><p>Solana checks the Ed25519 instruction before <code>settle</code>. On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with <code>ecrecover</code>. Then the buyer is paid and the result is relayed home.</p><span className={s.who}>nectar_vault, NectarVaultBase</span></div>
+            <div><span className={s.k}>03 Sign</span><h3>Chain Signatures signs</h3><p>The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.</p><span className={s.who}>v1.signer-prod.testnet</span></div>
+            <div><span className={s.k}>04 Settle</span><h3>The vault verifies, then pays</h3><p>Solana checks the Ed25519 instruction before <code>settle</code>. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with <code>ecrecover</code>. Then the buyer is paid and the result is relayed home.</p><span className={s.who}>nectar_vault, NectarVaultBase</span></div>
           </div>
         </div>
       </Module>
@@ -643,7 +658,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
             <On name="agent_skill"><p>Agents get the same surface: the Feed MCP server returns the exact transaction to sign, and an agent that refers a borrower earns half of the 0.3% origination fee.</p></On>
             <div><Pill href={agent ? "/agents" : docsHref()}>{agent ? "Agent quick start" : "Read the docs"}</Pill></div>
           </div>
-          <CodeTabs agent={agent} />
+          <CodeTabs agent={agent} p={params} />
         </div>
       </section>
 
@@ -667,7 +682,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
         <div className={c(s.wrap, s.faqgrid)}>
           <div className={s["sec-head"]} style={{ margin: 0 }}><h2>Questions market makers and borrowers ask</h2><p>Can&apos;t find yours? Write to the address below.</p></div>
           <div className={s.faq}>
-            <details><summary>Is any of this on mainnet?</summary><p>No. NEAR testnet{sol ? " and Solana devnet" : ""}{base ? ", plus a local fork of Base Sepolia" : ""}, with mock tokens. Mainnet needs an audit, a DAO owner with a timelock, and issuer approval for real tokenized stocks.</p></details>
+            <details><summary>Is any of this on mainnet?</summary><p>No. NEAR testnet{sol ? " and Solana devnet" : ""}, with mock tokens.{base ? " Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia." : ""} Mainnet needs an audit, a DAO owner with a timelock, and issuer approval for real tokenized stocks.</p></details>
             <details><summary>Why mock collateral?</summary><p>No tokenized equity exists on NEAR testnet. The mock token has the same interface (NEP-141, 6 decimals), and every page says &quot;mock&quot; where you would first meet it.</p></details>
             {shields ? <details><summary>What does a Shield guarantee?</summary><p>It opens your loan at the weekend limit for a fixed window so the limit can&apos;t be cut mid-weekend. If the price gaps, committed buyers take collateral at no more than their stated discount. It does not cover a fall in the stock&apos;s price.</p></details> : null}
             <details><summary>What happens on weekends and holidays?</summary><p>When the market is closed or the price is older than 15 minutes, the contract sets DEX depth to zero and widens the haircut on its own. It reopens only with a fresh price inside its own NYSE calendar.</p></details>

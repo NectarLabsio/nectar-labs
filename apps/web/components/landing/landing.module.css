@@ -80,6 +80,11 @@
 .counter strong{display:block;font:500 clamp(24px,2.3vw,34px)/1.1 var(--font-display);color:var(--heading);letter-spacing:-.02em;margin-top:4px}
 .counters small{font-size:11px;color:var(--dim);max-width:24ch}
 .roll{display:inline-flex;vertical-align:top}
+.roll .reels{display:inline-flex;vertical-align:top}
+/* WO-62a B4: before hydration a counter is plain text. While the intro runs (JS on, motion allowed) it waits for its reels, so it does not
+   flash its value before rolling up from zero; if the reels never come (script error) the plain value shows after 2.5 s. */
+:global(.intro) .roll[data-plain="intro"]{animation:plainin .2s linear 2.5s both}
+@keyframes plainin{from{opacity:0}to{opacity:1}}
 .roll .dg{display:inline-block;height:1.1em;overflow:hidden;position:relative;transition:width 1.1s var(--ease)}
 .roll .reel{display:block;transition:transform 1.5s var(--ease);transition-delay:var(--d,0ms)}
 .roll .reel::before{content:"0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";display:block;white-space:pre;line-height:1.1em;text-align:center}

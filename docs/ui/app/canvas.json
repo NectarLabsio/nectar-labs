@@ -94,7 +94,7 @@
     "data": {
       "fill": "teal",
       "size": 24,
-      "text": "Every figure is the PRD v7 demo state, the same as the landing page: 300 mock NVDAx at $185, quotes Q = $65,000 (buyer1 $40,000 at 2.50%, buyer2 $25,000 at 3.50%), Reserve R = $5,000, DEX depth D = $12,000 in session and $0 when closed, haircut 4% / 12%, $28,000 drawn by loan p-1. Charts are derived from those numbers and the NYSE calendar, not from history. Solana and Base stay 'Not live yet' until their gates pass.",
+      "text": "Every figure is the PRD v7 demo state, the same as the landing page: 300 mock NVDAx at $185, quotes Q = $65,000 (buyer1 $40,000 at 2.50%, buyer2 $25,000 at 3.50%), Reserve R = $5,000, DEX depth D = $12,000 in session and $0 when closed, haircut 10% / 25%, $28,000 drawn by loan p-1. Charts are derived from those numbers and the NYSE calendar, not from history. Solana and Base stay 'Not live yet' until their gates pass.",
       "w": 440,
       "x": 4600,
       "y": 0

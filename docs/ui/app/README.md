@@ -34,12 +34,12 @@ acceptance): `docs/work/wo-33-web-design-port.md`. Files here are the canvas as 
 `/keepers`, `/talk`, `/security`, `/legal/*` and dedicated phone frames are still to draw. Pages reflow at phone width.
 
 ## Demo numbers (Illustrative — different parameters)
-These mock-up numbers use h 4% / 12%. The deployed testnet parameters are LTV ceiling 70%, haircut 10% in session and 25% closed
+These mock-up numbers use the deployed testnet parameters: LTV ceiling 70%, haircut 10% in session and 25% closed, Reserve discount 6%
 (packages/config/config.yaml `max_nectar_ltv_bps` 7000, `base_haircut_bps` 1000, `weekend_haircut_bps` 2500).
 300 mock NVDAx at $185. Q $65,000 (q-1 $40,000 at 2.50%, q-2 $25,000 at 3.50%), R $5,000, D $12,000 in session / $0
-closed, h 4% / 12%, $28,000 drawn by p-1. Exit capacity $78,720 / $61,600. p-1 health 1.59, flag price $116.67.
-Buy-side ladder: 221.76 + 140.04 + 28.15 = 389.95 NVDAx at ≤ 4%. Borrow example: second loan of 300 NVDAx with a
-Weekend Shield, limit $33,600, $20,000 borrowed, fees $90, health 2.22.
+closed, h 10% / 25%, $28,000 drawn by p-1. Exit capacity $73,800 / $52,500. p-1 health 1.59, flag price $116.67.
+Buy-side ladder: 221.76 + 140.04 + 28.75 = 390.55 NVDAx at ≤ 6%. Borrow example: second loan of 300 NVDAx with a
+Weekend Shield, limit $24,500, $20,000 borrowed, fees $90, health 2.22.
 
 ## Open issue (H19)
 Profit-Lock on p-1 needs $28,140 of voluntary fills; the daily cap is $20,000. The Position screen offers "Repay

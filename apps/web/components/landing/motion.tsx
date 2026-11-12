@@ -20,15 +20,18 @@ export function useReducedMotion(): boolean | null {
 }
 
 /** Digits roll on reels; text for assistive tech stays the plain value. `intro` rolls up from zero once on load.
- * The reel digits are CSS generated content (landing.module.css `.reel::before`), not DOM text, so crawlers and the page text see only
- * the value; every glyph column is aria-hidden and the wrapper carries the value as an aria-label plus sr-only text (WO-35w). */
+ * WO-62a B4: the server HTML (and the first client render) holds only the final value as plain text, readable with JS off and by
+ * screen readers. The reels are added by a client effect after hydration, inside one aria-hidden wrapper (`data-reels`), and the value
+ * stays as sr-only text. The reel digits are CSS generated content (landing.module.css `.reel::before`), never DOM text. */
 export function Roll({ value, className, id, intro }: { value: string; className?: string; id?: string; intro?: boolean }) {
   const reduce = useReducedMotion();
+  const [hydrated, setHydrated] = useState(false);
   const [shown, setShown] = useState(value);
   const [instant, setInstant] = useState(false);
   const first = useRef(true);
+  useEffect(() => setHydrated(true), []);
   useIso(() => {
-    if (reduce === null) return;
+    if (!hydrated || reduce === null) return;
     if (first.current && intro && !reduce) {
       first.current = false;
       setInstant(true);
@@ -41,23 +44,32 @@ export function Roll({ value, className, id, intro }: { value: string; className
     }
     first.current = false;
     setShown(value);
-  }, [value, reduce, intro]);
+  }, [value, reduce, intro, hydrated]);
+  const cls = `${className ?? ""} ${s.roll}`;
+  if (!hydrated) {
+    return (
+      <strong className={cls} id={id} data-roll={value} data-plain={intro ? "intro" : ""}>
+        {value}
+      </strong>
+    );
+  }
   const chars = shown.length === value.length ? shown : value;
   return (
-    <strong className={`${className ?? ""} ${s.roll}`} id={id} data-roll={value}>
+    <strong className={cls} id={id} data-roll={value}>
       <span className={s.srOnly}>{value}</span>
-      {Array.from(value).map((ch, i) =>
-        /\d/.test(ch) ? (
-          <span key={i} className={s.dg} aria-hidden="true">
-            <span className={s.reel} style={{ transform: `translateY(-${Number(chars[i] ?? ch) * 1.1}em)`, transitionDelay: `${i * 55}ms`, ...(instant ? { transition: "none" } : {}) }}>
+      <span className={s.reels} aria-hidden="true" data-reels="">
+        {Array.from(value).map((ch, i) =>
+          /\d/.test(ch) ? (
+            <span key={i} className={s.dg}>
+              <span className={s.reel} style={{ transform: `translateY(-${Number(chars[i] ?? ch) * 1.1}em)`, transitionDelay: `${i * 55}ms`, ...(instant ? { transition: "none" } : {}) }} />
             </span>
-          </span>
-        ) : (
-          <span key={i} className={s.ch} aria-hidden="true">
-            {ch}
-          </span>
-        ),
-      )}
+          ) : (
+            <span key={i} className={s.ch}>
+              {ch}
+            </span>
+          ),
+        )}
+      </span>
     </strong>
   );
 }

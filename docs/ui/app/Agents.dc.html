@@ -84,7 +84,7 @@ class Component extends DCLogic {
     const st = this.state;
     const theme = this.props.theme ?? 'dark';
     const raw = [
-      { call: 'preview_borrow', sum: 'Limit $7,862.50 for 50 NVDAx. Fits.', code: 'preview_borrow({ symbol: "NVDAx", units: 50, borrow_usd: 4000 })\n\n→ { limit_usd: 7862.50, premium_usd: 0, ok: true,\n    reason: "set by 85% of collateral" }' },
+      { call: 'preview_borrow', sum: 'Limit $7,862.50 for 50 NVDAx. Fits.', code: 'preview_borrow({ symbol: "NVDAx", units: 50, borrow_usd: 4000 })\n\n→ { limit_usd: 7862.50, premium_usd: 0, ok: true,\n    reason: "set by 70% of collateral" }' },
       { call: 'open_protected_stock_loan', sum: 'Unsigned ft_transfer_call plus a full preview', code: 'open_protected_stock_loan({\n  account_id: "agent1.testnet", collateral: "NVDAx",\n  units: 50, borrow_usd: 4000, shield: "weekend",\n  referrer: "agent1.testnet" })\n\n→ call:    ft_transfer_call on nvdax-mock.nectar.testnet, deposit 1\n  preview: fees  shield $6.00, origination $12.00 (referrer $6.00)\n           health now 1.85, −5% 1.76, −10% 1.67, −20% 1.48' },
       { call: 'sign with near-api-js', sum: 'The agent signs with its own key. Loan opened.', code: '// the agent, not the server, signs\naccount.signAndSendTransaction(call)\n\n→ confirmed on NEAR testnet\n  $3,982.00 USDC to agent1.testnet' },
       { call: 'GET /api/feed/export.csv', sum: '402, paid 0.01 mock USDC, then 200', code: 'GET /api/feed/export.csv\n→ 402 Payment Required  (0.01 mock USDC, near:testnet)\n\n// pays with a NEP-366 SignedDelegate from its key\nGET /api/feed/export.csv  + signed payment\n→ 200 OK  text/csv' }
