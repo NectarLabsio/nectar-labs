@@ -29,6 +29,22 @@ What Kunal does (1 min): open in a browser and confirm each shows a contract wit
 What Claude Code does then: marks the links human-verified in EVIDENCE §G2.
 Default if silent: RPC evidence (view_account code_hash = G1 wasm) stands; README links stay; G9 notes "explorer pages not machine-verified".
 
+## H-ORACLE — keep the owner price fresh                status: OPEN   needed by: judging 16–18 Nov (next stale ≈ 2026-11-13 15:10Z)
+Why a human: the owner (fallback) oracle goes stale 86,400 s after each refresh (`max_age_s_closed` in packages/config/config.yaml); then borrows
+  and `trigger_preliquidation` fail with `oracle stale` (RUNBOOK standing duty 1). On 2026-11-12 it was about 31 h stale (age 112,379 s) and was
+  refreshed at ~15:12Z with the same price 135000000 (tx 3E92xm8KDQcVC2FZh4MRn4dkBvZ1uS3H7eCvCubXM8rH, evidence/ops/owner-price-refresh-20261112T151114Z.log).
+  Next stale ≈ 2026-11-13 15:10Z; judging runs 16–18 Nov. Keeping it fresh needs a long-running host loop, and an agent may not start one
+  (the permission classifier blocks it as unauthorized persistence).
+What Kunal does, Option A (one command; the machine stays on through 18 Nov):
+  `cd /Volumes/T7/nectar-labs && scripts/ops/refresh-owner-price.sh >> evidence/ops/owner-price-refresher.log 2>&1 &`
+  It re-asserts the current on-chain price when it is older than 12 h, signs as nectar.testnet via the OS keychain and never changes the price.
+  Reply `H-ORACLE A` (or `H-ORACLE B` to choose Option B).
+Option B: the orchestrator runs the one-shot RUNBOOK `update_owner_price` with the same price (current `oracle_price_usd_e6`) in every session.
+What Claude Code does then: A — reads evidence/ops/owner-price-refresher.log each session and checks `oracle_age_s` < 86,400 with
+  `get_exit_capacity`; B — runs the one-shot refresh at session start and records the tx in evidence/ops/.
+Default if silent: Option B while a session runs; with no session running the price goes stale and the app shows "oracle stale" on borrow
+  (disclosed fallback).
+
 ## H13 — Pyth API key (for a live NVDA price, G5)        status: OPEN   needed by: P1 / G5 (2026-11-13 12:00 UTC)
 Why a human: Hermes `/v2/updates/price/latest` returns 401 without a key (C-007, F-056); keys are tied to a personal account at app.pyth.com.
 What Kunal does (5 min): 1. https://app.pyth.com → sign up (free) → create an API key (name: nectar-labs-testnet).

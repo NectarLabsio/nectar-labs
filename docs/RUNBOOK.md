@@ -10,7 +10,10 @@ KEEPER=keeper.nectar.testnet   # function-call key only (D-012); keeper not runn
 ## Standing duties (P0 testnet)
 1. **Refresh the owner price at least every 24 h while the session is closed.** The oracle max age is 120 s in session and
    86,400 s closed (`max_age_s_session` / `max_age_s_closed` in config.yaml; contract `set_oracle_params`). Past it, borrows and
-   `trigger_preliquidation` fail with `oracle stale` (contracts/nectar-core/src/lib.rs). Command: `update_owner_price` (below).
+   `trigger_preliquidation` fail with `oracle stale` (contracts/nectar-core/src/lib.rs). Command: `update_owner_price` (below), sending the
+   current `oracle_price_usd_e6` from `get_exit_capacity` (the value in the example line is a placeholder, not the live price). Automated form:
+   `scripts/ops/refresh-owner-price.sh` (checks every 30 min, re-asserts the current on-chain price once it is older than 12 h, never changes it,
+   signs as `nectar.testnet` via the OS keychain). Only Kunal may start that loop; who runs what is in HUMAN_HANDOFF H-ORACLE.
 2. **Keeper allowance.** `keeper.nectar.testnet` has only a function-call key with a 1 NEAR allowance
    (evidence/G2/keeper-key-20261109T2050Z.log) and no full-access key, so it cannot be rotated or topped up in place. When the
    allowance runs out (`/healthz` `allowance` near 0, trigger txs rejected): create a new keeper account, add a function-call key
