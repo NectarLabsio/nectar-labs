@@ -18,6 +18,11 @@ grep -o '<loc>[^<]*</loc>' "$W/sitemap.xml" | sed -E 's#</?loc>##g; s#^https?://
 : > "$W/assets"; fail=0; n=0
 while read -r p; do
   n=$((n+1)); c=$(get "$p" "$W/page.html")
+  # Behind the APP (Next.js), `/docs/` answers 308 → `/docs` (trailing-slash normalisation, WO-34t); follow that one hop only.
+  if [ "$c" = 308 ] && [ "${p%/}" != "$p" ]; then
+    l=$(curl -s -o /dev/null -w '%{redirect_url}' -b "$J" "$BASE$p")
+    if [ "$l" = "$BASE${p%/}" ]; then echo "note page $p → 308 ${p%/} (trailing slash)"; p="${p%/}"; c=$(get "$p" "$W/page.html"); fi
+  fi
   if [ "$c" != 200 ]; then echo "FAIL page $p → $c"; fail=$((fail+1)); continue; fi
   grep -oE '(href|src)="/docs/(assets|img)/[^"]+"' "$W/page.html" | sed -E 's/^(href|src)="//; s/"$//' >> "$W/assets" || true
 done < "$W/pages"

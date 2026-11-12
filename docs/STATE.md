@@ -57,6 +57,16 @@
     Done (11:05Z): project domains nectarlabs.vercel.app + nectarlabs-app.vercel.app on nectar-labs-web (verified; F-443 settled live);
     production env web SITE_URL/APP_URL/DOCS_URL/DOCS_ORIGIN, docs APP_URL/DOCS_ORIGIN_URL; ssoProtection `preview` on both projects
     (no production deployment had ever served, so nothing old became public). Waiting: G3b run 5 PASS → production deploy of ca34111.
+  - G3b re-run 5 (ca34111): **PASS with one deviation** (nodejs22.x not observable; engines pin) — (a)–(g) PASS, (h) reviewed (cd45374, 7932947).
+    Final status audit merged (2b15ddb, docs/FINAL_REPORT.md).
+  - **PRODUCTION LIVE 2026-11-12 ~13:35Z from ca34111** (tarball sha256 689b93c6…8ccaaba):
+    web dpl_6yqaQJPFBGYmM8e2Veofgr32BpRw → https://nectarlabs.vercel.app (SITE), https://nectarlabs-app.vercel.app (APP), DOCS = APP/docs;
+    docs dpl_BtPA8juRKQKGfJbTkkYNEJzTwNNX → https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app (proxy target; `/` → 307 `/docs/`).
+    Feed FEED_CORS_ORIGINS = SITE,APP (redeployed, health ok, views mode). Production guard passed at build.
+    Orchestrator public smoke PASS (evidence/WO-34/prod-smoke-20261112T13*.log): 28 routes, 56 docs pages + assets via APP, host split 308s, HSTS/CSP,
+    no noindex; Chrome on APP /docs 0 failed requests, 0 console errors. APP `/docs/` → 308 `/docs` (Next trailing slash; renders fine).
+    Extra auto hosts nectar-labs-web.vercel.app + the project domain serve the app in single-host mode (duplicate host; low; note for WO-34v).
+    **Timebox 2026-11-13 18:00 UTC met** (pending the independent WO-34v acceptance). Next: WO-34v (verifier) ‖ WO-34y (docs) → G9 run 4 → submission-rc.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
     Docs project env: APP_URL (preview only) = the 46c35ea web preview, so navbar/footer app links stop pointing at localhost:3100.
     Share links: fetching a deployment through the connector can replace its share link; the earlier docs link stopped working. Hand out fresh ones.
@@ -268,7 +278,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T10:50:19Z · commit f1e02c9
+Last activity: 2026-11-12T13:29:02Z · commit 4de94dc
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
