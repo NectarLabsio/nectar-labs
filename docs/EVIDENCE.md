@@ -2,6 +2,7 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
+| G3b re-run 8b (WO-66b: (d), (k), (p) hydration, local only) | PASS, all 3 items. Since run 8, product code changed only in the crawler: `git diff --stat 31809b1 c95cd0c -- apps packages services contracts` lists exactly apps/web/scripts/crawl.mjs, crawl-hosts.mjs and crawl-hosts.test.mjs (3 files, +265/−31). docs/ui changed 1 line: the Console mockup's Reserve discount went from 4.00% to 6.00%. Runs 8 and 8b together cover c95cd0c. (d) Hosted `crawl.mjs --polite` with all five env vars on *.localhost exits 0. It found 83 internal URLs and rendered site 15, app 9, status 1 and docs 56 (all 56 sitemap URLs, 0 unlinked). Redirect checks 14/14, incl. SITE/APP/STATUS /docs/<rest> → DOCS/<rest>. **0 failures**, 0 of our console errors, 0 third-party failures. 29 bot-wall warnings: nearblocks 403 ×25, explorer.solana.com 429 ×3, solana.com 429 ×1. (k) The strict home-path grep finds **0 lines**, and the WO-62b log has 0 hits. (p) 40 plain loads (SITE / and STATUS /, 10× each, desktop + phone, networkidle + 2 s) show **0 hydration errors**, 0 console errors and 0 page errors. Supplements, not criteria: 80 parallel crawler-style loads, one fast (non-polite) crawl and a second set of 40 plain loads all show 0 hydration errors. React #418 did not reproduce | 2026-11-12T21:33Z–21:55Z | c95cd0c | evidence/G3b/verifier-rerun8b-20261112T2132Z/ (see §G3b re-run 8b) |
 | G3b re-run 8 (release candidate, WO-66 (a)–(o), local only) | FAIL, 2 reasons. Neither is a product assertion. (d): `crawl.mjs --polite` exits 1 with 1 failure, and that failure is the crawler's own stale check. crawl.mjs:83 still expects the WO-34a 308 "SITE /docs/* → APP/docs/*". The release candidate answers 308 → DOCS_URL/security/audits, which is what WO-62b asks for and what hosts.spec checks. The crawler also treats only SITE + APP as internal, so with docs at the DOCS root it renders no docs page. My supplement covers this: 56 docs pages + 6 assets answer 200 at the root, and 112 Chrome loads show 0 problems. (k): evidence/WO-62b/hosts-spec-20261112T195948Z.log:20,42 contain a real macOS home path (a Playwright cache path). Every product assertion PASSES. (a) e2e 510/0/116, 0 flaky. (b) hosts.spec 11/11 incl. the browser check (system Chrome) + legacy old-site 1/1. (c) inventory 6/6, CSP 0 violations, 12 = 12 hosts. (e) LH 40/40 = 100. (f) prod build exit 0 and guard exit 1. (g) check-trace 0 ×2. (i), (j), (l) PASS. (m) claims 10 + test-assets 16, and the hand probe 20/20 against live views. (n) see the next row. (o) PASS. (h) not in this run (local only) | 2026-11-12T20:19Z–21:06Z | 31809b1 | evidence/G3b/verifier-rerun8-20261112T2019Z/, evidence/G3b/claims-how-20261112T2019Z.png (see §G3b re-run 8) |
 | G11 delta (mock-ft), WO-66 (n) | PASS (host SDK env workaround, see block). `cargo test -p mock-ft`: 38 unit + sandbox_faucet 1/1 (code-only upgrade from tests/fixtures/mock-ft-deployed.wasm). The fixture equals archival view_code of both tokens at block 277406854. `cargo near build non-reproducible-wasm` sha256 e3d4ded5…6d14 = view_code of usdc-mock and nvdax-mock (view_account code_hash GLMp3W4J… = base58). faucet_config on both = config.yaml faucet. Tx 2A4jN155… is FINAL SuccessValue: borrower1 → nvdax-mock faucet_mint, ft_mint 5000000 to borrower1. `cargo test --workspace` 710/0: nectar-core 608 unit + 51 sandbox, mock-ft 39, test-stubs 12 | 2026-11-12T20:38Z–21:04Z | 31809b1 | evidence/G3b/verifier-rerun8-20261112T2019Z/n/ (see §G3b re-run 8 (n)) |
 | G9 run 5c (step 3 on c194c8f) | PASS (step 3 only). Product code still equals release 3: `git diff --stat 5f011bb c194c8f -- apps packages services contracts` is empty. Since 88b99b3 only docs changed. README:153 no longer says "live oracle"; it now reads "oracle (G5: owner-oracle fallback, disclosed)", which matches §G5 FALLBACK. Every remaining "live" in README.md and docs/SUBMISSION.md is either backed by §G2b, §G4, §G7 or §G14 PASS, or is a negation or neutral use. docs/X_POST.md has 0 hits. Pointers resolve to the newest blocks: §"WO-34 production" opens with release 3 PASS, §G3b with 7b PASS (7 + 7b), §G9 with 5b PASS (and now 5c). SUBMISSION's runs 5 + 5b cite (87be719, b945f42) is correct. Nothing contradicts STATE (~17:10Z entry). Notes, not counted: SUBMISSION.md:53 still cites G3b re-run 2 (dated); tag submission-rc (4b20f05) predates the 6d3e72f docs fix | 2026-11-12T17:20Z–17:24Z | c194c8f | evidence/G9/run5c-20261112T172003Z/checks.txt (see §G9 run 5c) |
@@ -166,6 +167,79 @@ Verdict: **PASS on the local fork of Base Sepolia (D-026), not Base Sepolia.** f
 - "addresses on explorer": N/A for a local fork of Base Sepolia (D-026).
 
 ## G3b
+
+### G3b re-run 8b — c95cd0c, WO-66b items (d), (k), (p) hydration, local only — PASS — 2026-11-12T21:33Z–21:55Z — commit c95cd0c
+Order: docs/work/wo-66b-verifier-g3b-run8b.md (at 9aa6661).
+- Fresh clone /tmp/verify-G3b-r8b-20261112T2132Z (`git clone /Volumes/T7/nectar-labs`, `git checkout c95cd0c`, HEAD c95cd0cf9d3f56f570ba3847a9c8aed370e688e0) on the internal disk.
+  - node v22.23.4, pnpm 10.34.9. `pnpm install --frozen-lockfile` exit 0.
+  - No secrets. E2E keys and FEED env were unset. PW_CHANNEL=chrome (system Chrome).
+- Own ports: 3992 hosted web, 3994 docs. Both stopped with 0 listeners left on 3990–3999.
+  - Host services 8545 and 8788–8791 kept listening throughout. I signed nothing.
+  - The clone ends with 1 change: my untracked probe (apps/web/hydration-probe.mjs).
+- One background master script (r8b.sh), 21:33:07–21:54:57Z.
+Scope check: $ git diff --stat 31809b1 c95cd0c -- apps packages services contracts → exactly 3 files, 265 insertions and 31 deletions: apps/web/scripts/crawl-hosts.mjs (new), crawl-hosts.test.mjs (new) and crawl.mjs.
+- docs/ui: 1 line. Console.dc.html "Reserve discount" went from 4.00% to 6.00%, which now matches the deployed 600 bps (this resolves the run-8 (m) note).
+- de17c86 redacted the WO-62b log.
+- So run 8's PASS items (a), (b), (c), (e)–(j), (l)–(o) still hold for c95cd0c, and this run covers (d) and (k).
+- `node --test scripts/crawl-hosts.test.mjs` → 7/0.
+Hosted setup. Env HS = SITE_URL=http://site.localhost:3992 APP_URL=http://app.localhost:3992 DOCS_URL=http://docs.localhost:3994 STATUS_URL=http://status.localhost:3992 LEGACY_HOSTS=old-site.localhost:3992=site,old-app.localhost:3992=app.
+- $ env HS pnpm --filter ./apps/docs-site build → exit 0. The sitemap has 56 locs on http://docs.localhost:3994/…
+  - The order names DOCS_URL. I also set SITE/APP/STATUS so the docs' cross-host links point to the local hosts rather than the production fallback.
+- $ node apps/web/scripts/serve-docs.mjs --port 3994 (pages at the root).
+- $ (apps/web) env HS pnpm build → exit 0, then `env HS next start -p 3992`.
+- Checks: site / 200, status / 200, app / 307 → /feed. /api/health ok, nectar-core-v2.nectar.testnet 2.2.1-v7.
+(d) **PASS**. $ env HS PW_CHANNEL=chrome node apps/web/scripts/crawl.mjs --polite --out <ev>/crawl (21:36:06–21:49:48Z) → **exit 0**.
+- Summary: "crawl: 83 internal (rendered: site 15, app 9, status 1, docs 56), 41 external, 0 failures, 0 our console errors, 0 page loads with third-party network failures".
+- Internal hosts: site.localhost:3992, app.localhost:3992, status.localhost:3992, docs.localhost:3994 (docsOwnOrigin true).
+- 81 pages rendered in 4 variants (dark/light × 1440/400). 2 URLs redirect to a page already rendered. truncated false.
+  - DOCS sitemap: 56 queued, 0 not linked from a rendered page.
+  - Web routes: 15 + 9 + 1 = 25, the same as run 8.
+- Redirect checks 14/14 ok:
+  - APP / 307 → /feed
+  - SITE app route 308 → APP, and APP landing route 308 → SITE
+  - **SITE, APP and STATUS /docs/security/audits 308 → http://docs.localhost:3994/security/audits**. This is the run-8 failure, now expected correctly.
+  - SITE /docs?x=1 308 → DOCS/?x=1
+  - www 301
+  - SITE /status?x=1 308 → STATUS/?x=1, and STATUS /status 308 → STATUS/
+  - STATUS app/landing routes 308 → APP/SITE
+  - legacy old-site and old-app 308, path + query kept
+- Externals: 41. 12 answer 200, among them the hosted Feed railway URL. 29 are warnings, not failures (the crawler classes 403/429 as bot walls): testnet.nearblocks.io 403 ×25, explorer.solana.com 429 ×3, solana.com 429 ×1.
+Log:
+```
+crawl: 83 internal (rendered: site 15, app 9, status 1, docs 56), 41 external, 0 failures, 0 our console errors, 0 page loads with third-party network failures → /tmp/verify-G3b-r8b-20261112T2132Z.ev/crawl
+## Our console errors: 0
+## Third-party network failures: 0 on 0 page loads
+## Failures: 0
+```
+(k) **PASS**. $ git grep -n '/Users/[A-Za-z]' -- ':!*.wasm' → **0 lines**.
+- $ git grep -n "/Users/" -- evidence/WO-62b/hosts-spec-20261112T195948Z.log → 0 (redacted in de17c86).
+- Context: the loose `git grep -l "/Users/"` → 17 files, all in accepted classes:
+  - 7 wasm fixtures (the same 7 as run 8)
+  - 10 files that only quote the grep pattern: docs/EVIDENCE.md, 2 verifier memory notes, 3 run-7 and 4 run-8 evidence files
+- Copied evidence from this run: 0 strict hits.
+(p) **PASS: 0 hydration errors**. $ (apps/web) PW_CHANNEL=chrome node hydration-probe.mjs http://site.localhost:3992 http://status.localhost:3992 <out> plain 10 (21:33:36–21:36:06Z) → exit 0.
+- Method: fresh context per load, plain `page.goto`, waitUntil networkidle + 2 s, no throttling, no init script.
+- Viewports as in playwright.config: desktop = Desktop Chrome 1280×900, phone = Pixel 7 400×860.
+- What it collects: console error/warning, pageerror, and a hydration regex (#418/#419/#421–#425, "hydrat", "did not match", "server rendered HTML").
+- Result: **40 loads, 0 hydration errors, 0 console errors, 0 page errors, 0 navigation failures**. Load time 3.3–4.7 s.
+  - SITE / desktop 10/0, SITE / phone 10/0, STATUS / desktop 10/0, STATUS / phone 10/0.
+- Supplements (not PASS criteria; they test whether #418 is timing-dependent):
+  - Crawler-style: 80 loads. The crawler's 4 contexts, each with its localStorage theme + consent init script, load in parallel, waitUntil load + 800 ms, 10 rounds per URL. Result: 0 hydration, 0 console errors, 0 page errors.
+  - Fast crawl `env HS node apps/web/scripts/crawl.mjs --out <ev>/crawl-fast` (concurrency 4, no delay, 21:50:14–21:52:10Z) → exit 0: 84 internal (app 10, the extra one being /notes?tab=deposits, a link only found on this pass), 0 failures, 0 of our console errors, **0 hydration-like console texts**. 68 page loads had FastNEAR throttling: CORS refusal on a 429, then ERR_FAILED on test.rpc.fastnear.com / rpc.testnet.fastnear.com (third-party, listed).
+  - Plain probe again, right after the fast crawl (21:52:10–21:54:52Z): 40 loads, **0 hydration**, 0 page errors.
+    - It logged 216 console errors, all FastNEAR throttling while the RPC was still rate-limiting: 108 CORS refusals and 108 "Failed to load resource: net::ERR_FAILED" on those two hosts. 0 are ours.
+- Conclusion: React #418 (the WO-62d agent's fast-crawl observation) did not reproduce in 200 targeted loads or in a fast crawl. If it exists, it is rare and timing-dependent, not reproducible. No GATE_FAIL file.
+Explorer links: none opened. G3b has no explorer criterion, and the crawler classes nearblocks/explorer.solana.com 403/429 as bot walls.
+Screenshot: none.
+Evidence: evidence/G3b/verifier-rerun8b-20261112T2132Z/
+- Scripts: r8b.sh, r8b-copy.sh, hydration-probe.mjs, analyze.cjs (+ analyze.out).
+- Logs: run.txt, run-master.log, clone.log, install.log, build-docs.log, build-hosted.log, health-hosted.json.
+- Scope: diff-stat-31809b1-c95cd0c.txt, diff-stat-docs-ui.txt, crawl-hosts-test.log.
+- (k): k-git-grep-strict.log (empty), k-git-grep-l.log, k-git-grep-nonwasm-lines.log, k-wo62b-log.txt.
+- (d): crawl/ and crawl-fast/ (crawl.json, crawl.md), plus crawl.log and crawl-fast.log.
+- (p): hydration-plain.{json,log}, hydration-crawlstyle.{json,log}, hydration-plain-2.{json,log}.
+- clone-status.txt.
+**Final verdict, G3b re-run 8b: PASS for (d), (k), (p). With run 8's PASS items, G3b covers c95cd0c, except (h), which this order leaves out (local only).**
 
 ### G3b re-run 8 — release candidate 31809b1, WO-66 (a)–(o), local only — FAIL (2 non-product reasons: (d) stale crawler, (k) home path in an evidence log) — 2026-11-12T20:19Z–21:06Z — commit 31809b1
 Order: docs/work/wo-66-verifier-g3b-run8.md (at a568d5c) + docs/work/g9-g3b-final-4.md (a)–(l) as in run 7, without (h): this run is local, with no preview.

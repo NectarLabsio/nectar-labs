@@ -1,0 +1,22 @@
+.claude/agent-memory/verifier/reference_g3b_v2_web.md:16:G3b run 7 (4c2a0bb, 2026-11-12) FAIL on (d) only: the crawl caught a docs link to the bare hosted Feed origin (railway root → 404; /health 200). Reusing the run-6 
+.claude/agent-memory/verifier/reference_g9_rehearsal.md:23:- `git grep -l "/Users/"` skips the binary wasm unless you pass `-a`. Evidence/notes that quote the pattern also match: use `'[/]Users[/][A-Za-z]' -- ':!*.wasm'`
+docs/EVIDENCE.md:12:| G3b re-run 7 (release 2, run-7 order) | FAIL, 1 reason (docs only): (d) crawl --polite exit 1 with 1 failure. /docs/integrate/feed-rest links to the hosted Feed root https://feed-production-2f2776c9
+docs/EVIDENCE.md:236:(k) **FAIL (evidence hygiene)**. `git grep -l "/Users/"` → 14 files:
+docs/EVIDENCE.md:240:- The failing hit: **evidence/WO-62b/hosts-spec-20261112T195948Z.log:20 and :42**. Both lines hold a real home path, `/Users/<user>/Library/Caches/ms-playwright/chromium_headless_shell-1254/…` (commi
+docs/EVIDENCE.md:241:  - `git grep -l '/Users/[A-Za-z]' -- ':!*.wasm'` → exactly this 1 file.
+docs/EVIDENCE.md:300:- Cargo: n/ (cargo-phase.txt, chain-views.{json,log}, fixture-archival.log, mockft-test-sdkroot.log, workspace-summary.txt, workspace-tests-list.log, default-SDK failure tails; the home path in the c
+docs/EVIDENCE.md:374:(k) `git grep -l "/Users/"` → 7 files: the 6 contracts/nectar-core/tests/fixtures/*.wasm (sha256 in k-git-grep.log) + docs/work/g9-g3b-final-4.md:39.
+docs/EVIDENCE.md:375:- The 7th hit is the run-6 order line quoting the grep pattern itself (`git grep -l "/Users/"`), not a home path.
+docs/EVIDENCE.md:376:- `git grep -l '/Users/[A-Za-z]' -- ':!*.wasm'` → 0. PASS with this note. The literal list holds one more file than the order states.
+evidence/G3b/verifier-rerun7-20261112T1530Z/phase1.txt:2:[15:32:52Z] (k) git grep -l /Users/ -> 7 files; non-fixture: 1
+evidence/G3b/verifier-rerun7-20261112T1530Z/run-master.log:2:[15:32:52Z] (k) git grep -l /Users/ -> 7 files; non-fixture: 1
+evidence/G3b/verifier-rerun7-20261112T1530Z/run7.sh:30:git grep -l "/Users/" > "$EV/k-git-grep.log" 2>&1; log1 "(k) git grep -l /Users/ -> $(wc -l < "$EV/k-git-grep.log" | tr -d ' ') files; non-fixture: $(grep -vc '^cont
+evidence/G3b/verifier-rerun8-20261112T2019Z/phase1.txt:3:[20:23:39Z] (k) git grep -l /Users/ -> 14 files; non-fixture: 7
+evidence/G3b/verifier-rerun8-20261112T2019Z/phase1.txt:4:[20:23:39Z] (k) strict '/Users/[A-Za-z]' non-wasm -> 1 files
+evidence/G3b/verifier-rerun8-20261112T2019Z/r8-greps.sh:5:echo "== (k) git grep -l /Users/ (non-sha lines)"; /usr/bin/grep -v '^[0-9a-f]\{64\}' ev/k-git-grep.log
+evidence/G3b/verifier-rerun8-20261112T2019Z/r8-greps.sh:6:echo "== (k) strict hits with line"; git grep -n '/Users/[A-Za-z]' -- ':!*.wasm' | cut -c1-220
+evidence/G3b/verifier-rerun8-20261112T2019Z/r8-greps.sh:7:echo "== (k) /Users/ hits outside wasm, with line"; git grep -n "/Users/" -- ':!*.wasm' | cut -c1-200 | head -20
+evidence/G3b/verifier-rerun8-20261112T2019Z/run-master.log:3:[20:23:39Z] (k) git grep -l /Users/ -> 14 files; non-fixture: 7
+evidence/G3b/verifier-rerun8-20261112T2019Z/run-master.log:4:[20:23:39Z] (k) strict '/Users/[A-Za-z]' non-wasm -> 1 files
+evidence/G3b/verifier-rerun8-20261112T2019Z/run8.sh:36:git grep -l "/Users/" > "$EV/k-git-grep.log" 2>&1; log1 "(k) git grep -l /Users/ -> $(wc -l < "$EV/k-git-grep.log" | tr -d ' ') files; non-fixture: $(/usr/bin/grep -
+evidence/G3b/verifier-rerun8-20261112T2019Z/run8.sh:37:git grep -l '/Users/[A-Za-z]' -- ':!*.wasm' > "$EV/k-git-grep-strict.log" 2>&1; log1 "(k) strict '/Users/[A-Za-z]' non-wasm -> $(wc -l < "$EV/k-git-grep-strict.log" 
