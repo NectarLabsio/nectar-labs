@@ -132,6 +132,8 @@
   - G3b re-run 7b (d) on release 3: PASS (crawl 0 failures; Feed links /health 200) — runs 7 + 7b cover release 3 (49d0b5a).
     Release 3 docs preview dpl_BjAPZQm4rEwhGovwPtcFo9ygEmKu: 56 pages + assets, Feed links 200. ~16:35Z production deploy of release 3 started:
     docs dpl_DQubre8taPieUo4EBshyyrRNVjcT, web dpl_BJNxqxnSZQWHtiouXYeWknkScxtY (tarball sha256 c1c17da2…ffaa9). Feed stays on 3974b5b (no feed change).
+    **PRODUCTION = RELEASE 3 (~16:40Z).** Public smoke PASS (evidence/WO-34/prod-smoke-release3-*.log): 28 routes, 56 docs pages + assets, hydrated
+    landing server = hydrated text with 3/3 Base sentences "local fork", Feed link /health. Next: WO-34v3 ‖ G9 run 5 → submission-rc → FINAL_REPORT re-audit.
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.

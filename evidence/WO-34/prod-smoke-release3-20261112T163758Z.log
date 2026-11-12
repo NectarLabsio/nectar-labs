@@ -1,0 +1,65 @@
+production smoke release 3 5f011bb web dpl_BJNxqxnSZQWHtiouXYeWknkScxtY docs dpl_DQubre8taPieUo4EBshyyrRNVjcT 20261112T163758Z
+== APP routes
+307 /
+200 /feed
+200 /borrow
+307 /quote
+200 /notes
+200 /reserve
+200 /shield
+200 /console
+308 /about
+308 /status
+308 /security
+308 /changelog
+308 /brand
+308 /talk
+308 /legal/privacy
+308 /legal/terms
+308 /legal/cookies
+308 /legal/disclaimers
+200 /docs
+200 /robots.txt
+200 /sitemap.xml
+200 /api/health
+200 /api/feed
+200 /api/indexer/health
+200 /feed/NVDAX
+200 /position/1
+200 /note/1
+200 /quote/1
+/api/health ok:true
+web smoke https://nectarlabs-app.vercel.app: routes 28, failures 0
+== docs under APP /docs (proxied, prefix kept)
+note page /docs/ → 308 /docs (trailing slash)
+docs smoke https://nectarlabs-app.vercel.app: pages 56, assets 6, failures 0
+== host split (WO-34a)
+ok   SITE / answers (200)
+ok   SITE /about answers (200)
+ok   SITE /borrow → APP (308) (308)
+ok   SITE /borrow location (https://nectarlabs-app.vercel.app/borrow)
+ok   APP / → /feed (307)
+ok   APP /about → SITE (308) (308)
+ok   APP /about location (https://nectarlabs.vercel.app/about)
+== docs origin
+ok   docs origin / → /docs/ (307) (307)
+ok   docs origin /docs/ answers (200)
+== headers (APP /feed, SITE /)
+ok   HSTS https://nectarlabs-app.vercel.app/feed
+ok   CSP https://nectarlabs-app.vercel.app/feed
+ok   no noindex https://nectarlabs-app.vercel.app/feed
+ok   HSTS https://nectarlabs.vercel.app/
+ok   CSP https://nectarlabs.vercel.app/
+ok   no noindex https://nectarlabs.vercel.app/
+production smoke: failures 0
+exit 0
+== hydrated landing
+#chains present: server=true hydrated=true
+server text == hydrated text: true
+hydrated heading: NEAR holds the book. Solana holds the stock.
+sentences naming Base: 3, without "local fork": 0
+"0123456789" in page text: false
+console errors: 0
+hydration exit 0
+== Feed links
+href="https://feed-production-2f2776c9.up.railway.app/health"
