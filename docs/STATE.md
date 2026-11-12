@@ -33,7 +33,19 @@
     **6 dynamic routes 500** (config.yaml not traced into the function) and the runtime is nodejs26.x → WO-34p (web, dispatched).
   - docs dpl_BdCQyTjeFVjzmd1ph4VCEkj412A9 READY. **Pages 404 without .html** (no clean URLs) → WO-34q (docs, after WO-34r5 facts). Sitemap says
     localhost: set DOCS_ORIGIN_URL on the docs project before production.
-- Production still needs WO-34p + WO-34q + H-LEGAL → G3b re-run 5 (add a Vercel-preview check of the dynamic routes) → new tarball → production.
+- 05:50Z: WO-34p (web: config.yaml traced, engines `>=22.22.2 <23`, check-trace.mjs) and WO-34q (docs: vercel.json cleanUrls) MERGED.
+  Facts F-428–F-432. verify:quick 0 after each merge.
+  Previews from **46c35ea** (tarball sha256 1b0293aa…1d24c1c):
+  - web dpl_31rptco1tfm4aPXyKomUaRhqgsZe: 28/28 routes 200/307 incl. the 6 that 500'd; /api/health ok:true with live pool data.
+  - docs dpl_5pYWUsABpAs4RUGZ5cHGa2dNeEM6: 55/55 pages 200 at clean URLs; `.html` → 308.
+  - Logs: evidence/WO-34/preview-smoke-{web,docs}-2026111205*.log. The Node 22 runtime is not observable without an error log → G3b item (h).
+  - Follow-up (not blocking): Turbopack traces all of apps/web into each function because of packages/sdk/src/config-node.ts. Fix in packages/sdk.
+- G3b order docs/work/g9-g3b-final-4.md gained (g) check-trace and (h) Vercel preview checks.
+- Production still needs H-LEGAL → G3b re-run 5 on the code-final commit → tarball → production deploy. Also at production:
+  - ssoProtection → previews only;
+  - web env SITE_URL, APP_URL, DOCS_URL, DOCS_ORIGIN, REPO_URL="", NEXT_PUBLIC_EXPLORER_TX;
+  - docs env DOCS_ORIGIN_URL;
+  - Feed FEED_CORS_ORIGINS.
   H-DOMAIN default (vercel.app) at 2026-11-13 06:00 UTC. The production *.vercel.app URL is behind Vercel Authentication
   ("all_except_custom_domains") until ssoProtection is changed.
 - Dispatched: WO-34n docs (HUMAN_HANDOFF H-HOST + RUNBOOK connector section); researcher follow-up (live notes on F-415/418/423/427, C-024).
@@ -229,7 +241,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T05:18:06Z · commit 2e7f8cb
+Last activity: 2026-11-12T05:38:55Z · commit ba96640
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

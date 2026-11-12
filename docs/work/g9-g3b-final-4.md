@@ -15,6 +15,10 @@ WO-34 additions (all on your own ports, from the fresh clone):
 - (e) Lighthouse default route list (now including /about /status /changelog /brand /talk /security) ≥ 90, both themes.
 - (f) A production build with `NECTAR_PRODUCTION=1` and the site URLs set must FAIL while config.yaml `site:` operator fields are null or any page
   contains `TODO-H`. That failure is expected; record it as PASS of the guard.
+- (g) WO-34p: after `pnpm --filter web build`, `node apps/web/scripts/check-trace.mjs` exits 0 (6/6 dynamic routes carry packages/config/config.yaml).
+- (h) Vercel preview of the G3b commit (the orchestrator deploys it and hands you the share links; you never deploy):
+  - web: every route in the crawl list answers 200 (or its expected redirect); /api/health ok:true; runtime logs show `nodejs22.x`.
+  - docs: every page of the build answers 200 without `.html` (clean URLs, WO-34q).
 **G9 (verifier B) runs only after the deploy step** (README "Hosted demo" lands first), or on Kunal's deadline if hosting is skipped.
 
 **G9 (verifier B):** docs/work/g9-final.md steps 1–7 + docs/work/g9-final-2.md steps 8–10, plus:

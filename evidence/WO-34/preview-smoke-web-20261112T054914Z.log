@@ -1,0 +1,33 @@
+preview https://nectar-labs-f6wqvmtcz-kunals-projects-35d3a237.vercel.app (46c35ea, dpl_31rptco1tfm4aPXyKomUaRhqgsZe) 2026-11-12T05:49:14Z
+share: 307
+200 /
+200 /feed
+200 /borrow
+307 /quote
+200 /notes
+200 /reserve
+200 /shield
+200 /console
+200 /about
+200 /status
+200 /security
+200 /changelog
+200 /brand
+200 /talk
+200 /legal/privacy
+200 /legal/terms
+200 /legal/cookies
+200 /legal/disclaimers
+200 /docs
+200 /robots.txt
+200 /sitemap.xml
+200 /api/health
+200 /api/feed
+200 /api/indexer/health
+200 /feed/NVDAX
+200 /position/1
+200 /note/1
+200 /quote/1
+non-2xx/3xx: 0
+--- /api/health
+{"ok":true,"deployed":true,"core":"nectar-core-v2.nectar.testnet","version":"2.2.1-v7","pool":{"available_usd_e6":"40771000000","utilised_usd_e6":"9229000000","treasury_usd_e6":"80662710","lenders_fees_usd_e6":"17652060"},"network":"testnet","rpc":["https://test.rpc.fastnear.com","https://rpc.testnet.fastnear.com","https://near-testnet.drpc.org","https://testnet-rpc.intea.rs"],"as_of":"2026-11-12T05:49:50.776Z","age_s":0}
