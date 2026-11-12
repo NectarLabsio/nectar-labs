@@ -147,7 +147,7 @@ Note: the mocked E2E for the remote screens (withdraw, claim, Re-sign, owed coll
 flow is only in the G7/G13 re-runs, so rehearse every screen before recording.
 
 ## Real-wallet borrow on the hosted app
-Kunal runs this once after the deploy (WO-34 acceptance). `<APP_URL>` is the hosted app; the orchestrator fills it in after the deploy.
+Kunal runs this once after the deploy (WO-34 acceptance). The hosted app is https://nectarlabs-app.vercel.app (production from ca34111, 2026-11-12).
 Nothing here is in docs/EVIDENCE.md yet, and no wallet has signed a borrow on the hosted app: this run is the first. NEAR testnet only,
 mock collateral, mock USDC. Tick each box.
 
@@ -176,7 +176,7 @@ near contract call-function as-read-only nvdax-mock.nectar.testnet ft_balance_of
 ```
 
 ### Path
-1. [ ] Open `<APP_URL>/borrow` in a fresh browser profile.
+1. [ ] Open `https://nectarlabs-app.vercel.app/borrow` in a fresh browser profile.
 2. [ ] Banner "Cookies and storage": press **Decline** or **Accept analytics**. Either works; analytics load only after Accept and only when a
    GA id is configured (apps/web/components/SiteChrome.tsx). The choice is stored as `localStorage nectar-consent`.
 3. [ ] Press **Connect wallet** (top bar) or **Connect a wallet to borrow** (composer button).
@@ -208,7 +208,7 @@ near contract call-function as-read-only nvdax-mock.nectar.testnet ft_balance_of
 - [ ] **Explorer.** The toast shows "View transaction `<hash>`…" as a link only if the deploy sets `NEXT_PUBLIC_EXPLORER_TX`
   (apps/web/.env.example leaves it unset); otherwise it prints `tx <hash>`, so open `https://testnet.nearblocks.io/txns/<hash>`. Look for
   `ft_transfer_call` on `nvdax-mock.nectar.testnet`, then a `position_opened` event in the nectar-core receipt logs. Note the block height.
-- [ ] **`<APP_URL>/status`.** "Contract (NEAR testnet RPC)" reads Answering. "Feed indexer" reads Indexing, with Last indexed block,
+- [ ] **`https://nectarlabs-app.vercel.app/status`.** "Contract (NEAR testnet RPC)" reads Answering. "Feed indexer" reads Indexing, with Last indexed block,
   Chain head, Lag (blocks) and Last poll.
 - [ ] **Feed lag.** On an empty database the hosted Feed starts at the chain head (`FEED_START_BLOCK` default `head`,
   services/feed/src/hosted.ts). With the defaults it polls every 10 s (`FEED_POLL_MS`) and reads up to 100 final blocks per poll

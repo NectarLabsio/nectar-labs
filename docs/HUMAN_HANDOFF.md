@@ -6,7 +6,8 @@ in Claude Code with the id (for example `H7 done`). The orchestrator then does e
 entry's "What Claude Code does then" line says.
 
 Status values: OPEN · WAITING (agent did its part, needs Kunal) · DONE · DEFAULTED (deadline passed,
-default applied, disclosed in README) · SUPERSEDED (replaced by the entries it names; history kept).
+default applied, disclosed in README) · SUPERSEDED (replaced by the entries it names; history kept) · CLOSED (answered or done; the answer
+is recorded in the entry, history kept) · N/A (not needed unless the condition the entry names occurs).
 
 ---
 
@@ -66,7 +67,13 @@ What Kunal does (5 min): in Vercel create projects `nectar-labs-web` and `nectar
 What Claude Code does then: with a token, deploys previews after each green gate via `vercel deploy --prebuilt`; without, prints the exact `vercel` commands in EVIDENCE.
 Default if silent: no hosted preview; README links to `pnpm --filter web dev` and screenshots in evidence/.
 
-## H-DOMAIN — a domain for the hosted demo             status: OPEN   needed by: 2026-11-13 06:00 UTC (WO-34 deploy, round 3)
+## H-DOMAIN — a domain for the hosted demo             status: CLOSED 2026-11-12
+Answer (Kunal, ~11:00Z): "go for it, i will set domain later" → production on `*.vercel.app`: SITE https://nectarlabs.vercel.app, APP https://nectarlabs-app.vercel.app,
+  docs under APP `/docs`. No domain was bought.
+Switching to a domain later: Kunal names the domain (one he owns or buys himself; agents never buy one) → the orchestrator adds it to
+  nectar-labs-web, updates SITE_URL/APP_URL/DOCS_URL (web) and APP_URL/DOCS_ORIGIN_URL (docs), redeploys the same commit, and writes the DNS
+  records Vercel returns into H-DNS. No code change.
+Original request (kept for the record):
 Why a human: registering a domain spends real money and binds a registrar account. Agents never buy a domain.
 Facts: nectarlabs.io is **not registered** (F-395: whois.nic.io "Domain not found", NXDOMAIN at a0.nic.io, 2026-11-11T19:43Z). The orchestrator's
   pre-check (docs/work/wo-34-deploy.md) saw the Vercel registry offer it at $14.99 for the first year, $46 renewal. That contradicts the brief, which said it
@@ -80,7 +87,7 @@ What Claude Code does then: adds the domain to the new Vercel web project (SITE 
 Default if silent by 2026-11-13 06:00 UTC: `*.vercel.app` aliases for SITE and APP (docs under APP `/docs`) and `*.up.railway.app` for the Feed. A domain
   added later is an env + alias change, no code change.
 
-## H-DNS — DNS records for the chosen domain           status: OPEN (blocked on H-DOMAIN; records are filled in at deploy time)   needed by: production on a custom domain
+## H-DNS — DNS records for the chosen domain           status: N/A until a domain is named (H-DOMAIN closed on the platform URLs)   needed by: production on a custom domain
 Why a human: only the domain's owner can edit its DNS zone (unless the domain uses Vercel DNS, where Vercel sets the records itself).
 What Kunal does (5 min): after H-DOMAIN, add exactly the records listed below at the domain's DNS provider, then reply `H-DNS done`.
   Records: TODO-H-DNS (the orchestrator pastes the A/CNAME/TXT values Vercel returns when the domain is added to the project; none yet).
@@ -117,7 +124,10 @@ What Claude Code does then, on yes: creates the new function-call key on testnet
   On no: nothing leaves `~/.nectar/`.
 Default if silent: the keeper stays local (it runs when the operator runs it). The hosted app says when settlement runs.
 
-## H-HOST — approve the Vercel connector's team access   status: OPEN   needed by: 2026-11-13 06:00 UTC (WO-34 deploy, round 3)
+## H-HOST — approve the Vercel connector's team access   status: CLOSED 2026-11-12
+Closed (2026-11-12): the deploy went through the Vercel and Railway connectors instead of CLI logins. Kunal approved the Vercel connector's team
+  access (~05:20Z, docs/STATE.md); the Railway connector already had access. Production was deployed from ca34111 at ~13:35Z (docs/STATE.md).
+Original request (kept for the record):
 Decision (Kunal, 2026-11-12: "use mcp for vercel and railway"): deploy through the Vercel and Railway connectors, not the CLIs. **No CLI login is
   needed.** Path: docs/work/wo-34m-mcp-deploy.md; operations: RUNBOOK "Deploy through the connectors (no CLI login)".
 Why a human: the Vercel connector has no write access to the team "kunal's projects" (create refused with 403). Only Kunal can grant it. Agents never
@@ -180,7 +190,11 @@ What Kunal does: read README "Prior work", edit if needed, reply `H12 approved`.
 Default if silent: drafted text stands with the note "draft — approve" removed only after H12.
 
 ## H2 — repo public, push, final tag                 status: OPEN   needed by: Nov 14   NEVER by an agent
-What Kunal does: `git tag submission-rc && git remote add origin <url> && git push -u origin main --tags`; make public in GitHub settings; reply `H2 done <url>`.
+Tag: `submission-rc` already exists, so `git tag submission-rc` fails. The orchestrator moves it (`git tag -f submission-rc <commit>`) after
+  G9 run 4; Kunal does not tag.
+What Kunal does (after the tag has moved): `git remote add origin <url> && git push -u origin main --tags`, then make the repo public in GitHub
+  settings; reply `H2 done <url>`.
+Order (HACKATHON.md): repo public (H2) → demo post (H3) → send (H1).
 What Claude Code does then: fills repo URL in SUBMISSION.md and X_POST.md; re-runs G9 against the public URL.
 
 ## H1 — send the submission                            status: OPEN   needed by: Nov 14 23:59 UTC   NEVER by an agent
