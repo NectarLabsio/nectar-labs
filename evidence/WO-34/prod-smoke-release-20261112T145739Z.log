@@ -1,0 +1,72 @@
+production smoke release 3974b5b web dpl_5YACVWKHkdB6RKZY788okPYRF7Uk docs dpl_9SobCo6o34dpRvhgwpBnUqq8jjoj feed SRC 3974b5b 20261112T145739Z
+== APP routes
+307 /
+200 /feed
+200 /borrow
+307 /quote
+200 /notes
+200 /reserve
+200 /shield
+200 /console
+308 /about
+308 /status
+308 /security
+308 /changelog
+308 /brand
+308 /talk
+308 /legal/privacy
+308 /legal/terms
+308 /legal/cookies
+308 /legal/disclaimers
+200 /docs
+200 /robots.txt
+200 /sitemap.xml
+200 /api/health
+200 /api/feed
+200 /api/indexer/health
+200 /feed/NVDAX
+200 /position/1
+200 /note/1
+200 /quote/1
+/api/health ok:true
+web smoke https://nectarlabs-app.vercel.app: routes 28, failures 0
+== docs under APP /docs (proxied, prefix kept)
+note page /docs/ → 308 /docs (trailing slash)
+docs smoke https://nectarlabs-app.vercel.app: pages 56, assets 6, failures 0
+== host split (WO-34a)
+ok   SITE / answers (200)
+ok   SITE /about answers (200)
+ok   SITE /borrow → APP (308) (308)
+ok   SITE /borrow location (https://nectarlabs-app.vercel.app/borrow)
+ok   APP / → /feed (307)
+ok   APP /about → SITE (308) (308)
+ok   APP /about location (https://nectarlabs.vercel.app/about)
+== docs origin
+ok   docs origin / → /docs/ (307) (307)
+ok   docs origin /docs/ answers (200)
+== headers (APP /feed, SITE /)
+ok   HSTS https://nectarlabs-app.vercel.app/feed
+ok   CSP https://nectarlabs-app.vercel.app/feed
+ok   no noindex https://nectarlabs-app.vercel.app/feed
+ok   HSTS https://nectarlabs.vercel.app/
+ok   CSP https://nectarlabs.vercel.app/
+ok   no noindex https://nectarlabs.vercel.app/
+production smoke: failures 0
+exit 0
+== noindex on APP /docs pages
+/docs no x-robots-tag
+/docs/start/quick-start no x-robots-tag
+/docs/legal/terms no x-robots-tag
+/docs/integrate/feed-rest no x-robots-tag
+== localhost hrefs in APP /docs/integrate/feed-rest: 0
+== Chrome APP /docs
+/docs/ {"url":"/docs","banner":false,"hydrated":"true","h1":"What Nectar Labs is"}
+/docs {"url":"/docs","banner":false,"hydrated":"true","h1":"What Nectar Labs is"}
+/docs/start/quick-start {"url":"/docs/start/quick-start","banner":false,"hydrated":"true","h1":"Quick start (no keys needed)"}
+/docs/legal/terms {"url":"/docs/legal/terms","banner":false,"hydrated":"true","h1":"Terms of use"}
+navbar Docs click → {"url":"/docs/","banner":false,"hydrated":"true","h1":"What Nectar Labs is"}
+web app /feed docs links: ["https://docs.near.org/chain-abstraction/chain-signatures","https://nectarlabs-app.vercel.app/docs/","https://nectarlabs-app.vercel.app/docs/integrate/sdk","https://nectarlabs-app.vercel.app/docs/integrate/feed-mcp","https://nectarlabs-app.vercel.app/docs/project/evidence"]
+failed requests: 0 
+console errors: 0 
+== Feed
+{"ok":true,"last_indexed_block":277378360,"chain_head":277378360,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T14:58:43.981Z","poll_age_s":0,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavai
