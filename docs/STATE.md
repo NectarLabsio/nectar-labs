@@ -7,7 +7,7 @@
 - **Railway** project `nectar-labs` (76a8bcaf…, env production 1d58afe0…):
   - bucket `artifacts-bucket` (iad);
   - function `artifacts`: https://artifacts-production-bf757206.up.railway.app, /health + token-gated /presign;
-  - **Feed LIVE** at https://feed-production-2f2776c9.up.railway.app from fd06e11: health ok, lag 0; volume feed-data /data; image node:22.22.2-bookworm.
+  - **Feed up** at https://feed-production-2f2776c9.up.railway.app from fd06e11: health ok, lag 0; volume feed-data /data; image node:22.22.2-bookworm.
 - Tarball src-fd06e11….tar.gz, sha256 edae5d5a…44d8e3, 4.74 MB. A local no-git build of web and docs from it passed
   (evidence/WO-34/artifact-buildtest-20261112T014418Z.log). Upload + verify round-trip ok.
 - Token: ~/.nectar/deploy/artifact-token (0600). Railway stores only its sha256. No token at Vercel; each deployment gets a 1 h presigned GET.
@@ -211,7 +211,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T01:45:47Z · commit 6bc2acd
+Last activity: 2026-11-12T01:53:00Z · commit 60d7721
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
