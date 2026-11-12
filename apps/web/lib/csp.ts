@@ -79,8 +79,9 @@ const uniq = (xs: (string | null)[]): string[] => [...new Set(xs.filter((x): x i
 export function buildCsp(env: Record<string, string | undefined> = process.env): string {
   const connect = uniq([
     "'self'",
-    // No SITE/APP cross entry: cross-host links are plain anchors since WO-34f (no RSC prefetch to the other host), and API
-    // routes are shared paths served same-origin on both hosts.
+    // No SITE/APP/STATUS/DOCS cross entry: cross-host links are plain anchors since WO-34f (no RSC prefetch to another host), API
+    // routes are shared paths served same-origin on every host (the status page reads /api/health on STATUS, WO-62b), and docs are
+    // a 308 to DOCS_URL (a navigation, not a fetch). Every other directive is 'self'/'none' or a third-party host: nothing per origin.
     ...MEASURED.connect,
     originOf(env.NEXT_PUBLIC_NEAR_RPC),
     originOf(env.NEXT_PUBLIC_SOLANA_RPC) ?? "https://api.devnet.solana.com",

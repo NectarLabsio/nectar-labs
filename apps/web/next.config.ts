@@ -2,9 +2,9 @@ import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import type { NextConfig } from "next";
 import { buildCsp } from "./lib/csp";
-import { docsOrigin, docsUrl, readHosts } from "./lib/hosts";
+import { docsUrl, readHosts } from "./lib/hosts";
 
-// Hosted env (WO-34a, apps/web/.env.example). All unset = local single-host mode: no redirects, no rewrites, same headers as before.
+// Hosted env (WO-34a, WO-62b; apps/web/.env.example). All unset = local single-host mode: no redirects, same headers as before.
 const env = process.env;
 const hosts = readHosts(env);
 const production = env.VERCEL_ENV === "production" || env.NECTAR_PRODUCTION === "1";
@@ -29,8 +29,6 @@ const securityHeaders = [
   ...(production ? [] : [{ key: "X-Robots-Tag", value: "noindex" }]),
 ];
 
-const DOCS_ORIGIN = docsOrigin(env);
-
 // WO-34p: serverless bundles. loadConfig (@nectar/sdk/config-node) finds packages/config/config.yaml by walking up from process.cwd()
 // at request time; the file tracer cannot follow that walk, so Vercel functions shipped without it (500 "not found above
 // /var/task/apps/web"). Trace from the repo root (the same walk, run here at build time) and add the file to every server trace.
@@ -53,11 +51,13 @@ const config: NextConfig = {
   transpilePackages: ["@nectar/ui", "@nectar/sdk"],
   // The repo lives on exFAT: macOS "._*" files corrupt the Turbopack persistent cache ("invalid digit found in string").
   experimental: { turbopackFileSystemCacheForDev: false, turbopackFileSystemCacheForBuild: false },
-  // Non-secret URLs only (inlined into the client bundle). FEED_URL, DOCS_ORIGIN and every key stay server-side.
+  // Non-secret URLs only (inlined into the client bundle). FEED_URL, LEGACY_HOSTS and every key stay server-side.
+  // NEXT_PUBLIC_DOCS_URL = DOCS_URL (WO-62b): docs pages live at its root, so links carry no /docs/ prefix (lib/env.ts docsHref).
   env: {
     NEXT_PUBLIC_DOCS_URL: docsUrl(env) || env.NEXT_PUBLIC_DOCS_URL || "",
     NEXT_PUBLIC_SITE_URL: hosts?.site ?? "",
     NEXT_PUBLIC_APP_URL: hosts?.app ?? "",
+    NEXT_PUBLIC_STATUS_URL: hosts?.status ?? "",
     NEXT_PUBLIC_REPO_URL: env.REPO_URL ?? "",
   },
   async headers() {
@@ -72,23 +72,10 @@ const config: NextConfig = {
     ];
   },
   async rewrites() {
-    // APP /docs → the docs deployment WITH the /docs prefix kept (WO-34t; F-433/F-434): since WO-34s the docs deployment serves
-    // its pages under /docs/* itself (its vercel.json rewrites /docs/ → / and /docs/:path* → /:path* onto the flat build, F-393),
-    // and its bare / will redirect to /docs/. Proxying to ${DOCS_ORIGIN}/ would loop on that redirect, so the APP never asks for /.
-    // Its pages reference /docs/assets/…, which this same rule serves. beforeFiles beats app/docs/page.tsx (local mode only).
-    // No docs deployment (local single-host mode): every /docs/<slug> link (legal pages, landing) gets the in-app docs explainer
-    // instead of a 404.
-    if (!hosts || !DOCS_ORIGIN) return [{ source: "/docs/:path+", destination: "/docs" }];
-    // `has: host` is matched against the hostname with the port stripped (next/dist/shared/lib/router/utils/prepare-destination.js).
-    const has = [{ type: "host" as const, value: new URL(hosts.app).hostname.replace(/\./g, "\\.") }];
-    return {
-      beforeFiles: [
-        { source: "/docs", destination: `${DOCS_ORIGIN}/docs/`, has },
-        { source: "/docs/:path*", destination: `${DOCS_ORIGIN}/docs/:path*`, has },
-      ],
-      afterFiles: [],
-      fallback: [],
-    };
+    // WO-62b: no docs proxy any more. Hosted with DOCS_URL, proxy.ts 308s SITE/APP/STATUS `/docs[/<rest>]` to `${DOCS_URL}/<rest>`
+    // before rewrites run (F-460: proxy before beforeFiles; this array is afterFiles). Local mode (or hosted without DOCS_URL):
+    // every /docs/<slug> link (legal pages, landing) gets the in-app docs explainer instead of a 404.
+    return [{ source: "/docs/:path+", destination: "/docs" }];
   },
 };
 

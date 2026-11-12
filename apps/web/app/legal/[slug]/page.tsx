@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { findConfigPath } from "@nectar/sdk/config-node";
 import { guardContent } from "@/lib/config.server";
+import { hostHref } from "@/lib/env";
 
 const SLUGS = ["privacy", "cookies", "terms", "disclaimers"] as const;
 type Slug = (typeof SLUGS)[number];
@@ -26,7 +27,10 @@ function load(slug: Slug): { title: string; html: string } | null {
     .parse(src, { async: false })
     .replace(/<pre>/g, "<pre tabindex=\"0\">")
     .replace(/<table>/g, "<div class=\"table-wrap\" tabindex=\"0\" role=\"region\" aria-label=\"Table\"><table class=\"t\">")
-    .replace(/<\/table>/g, "</table></div>");
+    .replace(/<\/table>/g, "</table></div>")
+    // The shared Markdown links docs pages as /docs/<slug> (docs-site paths). WO-62b: docs live at the DOCS_URL root, so point
+    // them there directly (prefix dropped); local mode keeps /docs/<slug> (in-app explainer rewrite, next.config.ts).
+    .replace(/href="(\/docs(?:\/[^"]*)?)"/g, (_m, href: string) => `href="${hostHref(href)}"`);
   return { title, html };
 }
 

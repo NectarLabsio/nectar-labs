@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePagePath } from "./usePagePath";
 import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { hostTarget } from "@/lib/env";
 
@@ -11,7 +11,7 @@ type Props = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & { href: str
  * external URL: a plain <a> to the absolute URL, so no RSC prefetch is sent to an origin that would answer with a CORS error.
  */
 export function HostLink({ href, children, ...rest }: Props) {
-  const t = hostTarget(href, usePathname() ?? "/");
+  const t = hostTarget(href, usePagePath());
   if (t.cross)
     return (
       <a href={t.href} {...rest}>

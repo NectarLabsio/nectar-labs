@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePagePath } from "./usePagePath";
 import { useEffect, useState } from "react";
 import { CONSENT_CHANGED_EVENT, CONSENT_YIELD_TO, ChainMark, Chip, ConsentBanner, Footer, Nav, SessionChip, analyticsAllowed, type LinkLike, type NavLink } from "@nectar/ui";
 import { sessionHeadline, sessionReasonText, sessionStatus, type ExitCapacity } from "@nectar/sdk";
@@ -50,7 +50,7 @@ function NavSession() {
 }
 
 export function SiteHeader() {
-  const pathname = usePathname() ?? "/";
+  const pathname = usePagePath();
   if (pathname === "/") return <LandingNav />;
   const links: NavLink[] = [
     { href: "/feed", label: "Markets", match: ["/feed"] },
@@ -81,7 +81,7 @@ export function SiteHeader() {
 export function SiteFooter({ contact }: { contact: string | null }) {
   const docs = docsHref();
   const repo = repoHref();
-  const pathname = usePathname() ?? "/";
+  const pathname = usePagePath();
   const shieldsOn = useFeature("shields");
   const reserveOn = useFeature("reserve");
   const notesOn = useFeature("notes");

@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
-import { isLandingPath, readHosts } from "@/lib/hosts";
+import { hostKind, isLandingPath, readHosts } from "@/lib/hosts";
 
-// Per-host sitemap (WO-34a §5). headers() makes this a request-time route (sitemap.md: "cached by default unless it uses a
-// Request-time API"), so SITE and APP each list only their own routes. Local mode: every route on the requesting origin.
+// Per-host sitemap (WO-34a §5, WO-62b; F-460 sitemap.md). headers() makes this a request-time route ("cached by default unless it
+// uses a Request-time API"), so SITE, APP and STATUS each list only their own routes (STATUS: its root, the status page). Local mode: every route on the requesting origin.
 // Static routes only; dynamic ones (/feed/[symbol], /position/[id], /quote/[id], /note/[id]) are reached from these pages.
 const ROUTES = [
   "/",
@@ -36,7 +36,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const proto = h.get("x-forwarded-proto") ?? "http";
     return ROUTES.map((p) => ({ url: `${proto}://${host}${p}` }));
   }
-  const onSite = host === hosts.siteHost;
+  const kind = hostKind(hosts, host);
+  if (kind === "status") return [{ url: `${hosts.status}/` }];
+  const onSite = kind === "site";
   const origin = onSite ? hosts.site : hosts.app;
-  return ROUTES.filter((p) => isLandingPath(p) === onSite && !(p === "/" && !onSite)).map((p) => ({ url: `${origin}${p}` }));
+  // Landing routes on SITE, the rest on APP; /status moves to the STATUS sitemap when STATUS_URL is set.
+  const listed = ROUTES.filter((p) => isLandingPath(p) === onSite && !(hosts.status && p === "/status"));
+  return listed.map((p) => ({ url: `${origin}${p}` }));
 }

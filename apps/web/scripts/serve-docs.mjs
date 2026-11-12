@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Local stand-in for the docs deployment (WO-34c, WO-34t). The build output is flat (no baseUrl folder, F-393); the hosted docs
-// project serves it under /docs/* through its vercel.json rewrites (`/docs/` → `/`, `/docs/:path*` → `/:path*`; F-433/F-434).
-// This server does the same: `/docs`, `/docs/` → index.html and `/docs/<path>` → <path>, so APP `/docs/:path*` →
-// DOCS_ORIGIN `/docs/:path*` (prefix kept) resolves locally. Paths outside /docs are still served from the build root, as before.
+// Local stand-in for the docs deployment (WO-34c, WO-34t, WO-62b). The build output is flat (no baseUrl folder, F-393, F-459):
+// pages at the root, which is what DOCS_URL points at since WO-62b (APP/SITE /docs/<rest> 308 to DOCS_URL/<rest>). Old
+// `/docs`, `/docs/` and `/docs/<path>` requests are still answered from the root (index.html / <path>), like the docs host's
+// own /docs/:path* redirect (F-459), so links with the old prefix keep resolving locally.
 // `docusaurus serve` is not used: it redirects non-asset URLs to the trailing-slash form, unlike the deployment (cleanUrls).
 // Usage: node apps/web/scripts/serve-docs.mjs --port 3742 [--dir apps/docs-site/build]
 import { createServer } from "node:http";
