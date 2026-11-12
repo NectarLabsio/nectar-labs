@@ -25,6 +25,12 @@ Supersedes the upload step of wo-34-deploy.md §Hosting (scripts/deploy/deploy-{
    - root `package.json`, `pnpm-workspace.yaml`, the app's `package.json`, `scripts/deploy/fetch-artifact.mjs` (Node; curl and sha256sum are not documented in the build image, F-425), and `.nectar-artifact` (`<name> <sha> <sha256>`).
    - installCommand `node ../../scripts/deploy/fetch-artifact.mjs <filter>` (cwd = rootDirectory, F-424): presigned URL from `.nectar-artifact` → download → sha256 check → extract → `pnpm@10.34.9 install --frozen-lockfile --filter <app>...`.
    - buildCommand: web `pnpm exec next build` (changelog pre-generated, same script, same commit); docs `pnpm build`.
+   - Observed 2026-11-12 on the first two deployments (both ERROR at install, nothing served):
+     - API deployments ignore the project's rootDirectory unless the request carries `projectSettings`, so every deployment sends them.
+     - `engines.node ">=22.22.2"` makes Vercel pick Node 26.x over the project's 22.x. So the two stub package.json files carry
+       `engines.node "22.x"` (the major G3b ran on); the tarball restores the real files before install.
+     - A project's **first** deployment goes to production whatever the commitRef is (web: ERROR at install; docs: cancelled at once).
+       `target: "preview"` is rejected. Later deployments with no target are previews; they use commitRef `preview-<sha7>`.
    - No token at Vercel: `.nectar-artifact` carries a 1 h presigned GET. Env: the WO-34 deploy env list in docs/STATE.md.
 4. **Railway service `feed`**: public image `node:22.22.2-bookworm`, volume `/data`.
    - Start command:

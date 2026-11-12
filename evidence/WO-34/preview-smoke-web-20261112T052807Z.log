@@ -1,0 +1,49 @@
+preview https://nectar-labs-7wbct2dj9-kunals-projects-35d3a237.vercel.app (fd06e11, dpl_E1CJ9onhpkBYwKaMA3mTYjMJeDd9) 2026-11-12T05:28:07Z
+share: 307
+200 65866B 1.485775s /
+200 19745B 1.159766s /feed
+200 19148B 1.249583s /borrow
+307 15B 0.492731s /quote
+200 17238B 0.988317s /notes
+200 17471B 1.169686s /reserve
+200 17337B 1.021333s /shield
+200 17318B 1.027649s /about
+200 46067B 1.112963s /status
+200 113220B 1.308230s /security
+200 165620B 1.208597s /changelog
+200 22080B 1.007438s /brand
+200 17475B 1.086624s /talk
+200 61224B 1.110001s /legal/privacy
+200 30841B 1.064907s /legal/terms
+200 29733B 0.982800s /legal/cookies
+200 33785B 0.914241s /legal/disclaimers
+200 17263B 1.251818s /docs
+500 0B 1.021859s /api/health
+404 17864B 0.947061s /api/indexer
+200 114B 0.903030s /robots.txt
+200 2078B 0.779412s /sitemap.xml
+404 17864B 0.535822s /nope-404
+--- headers /
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.gith
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+x-robots-tag: noindex
+--- /api/health
+
+--- /api/indexer
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><link rel="preload" as="image" href="/brand/mark-flat-96.png"/><link rel="preload" as="image" href="/brand/wordmark-muted-100.png"/><link rel="preload"
+--- changelog git flag
+--- TODO-H markers in rendered pages
+/ TODO-H lines: 0
+/about TODO-H lines: 0
+/legal/privacy TODO-H lines: 4
+/legal/terms TODO-H lines: 5
+/talk TODO-H lines: 0
+500 /api/feed
+200 /api/indexer/health
+404 /api/indexer/v1/events
+500 /feed/NVDAx
+500 /position/1
+500 /note/1
+500 /quote/1
+200 /console
