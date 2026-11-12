@@ -1,0 +1,11 @@
+docs preview browser check https://nectar-labs-docs-l5tlzksl5-kunals-projects-35d3a237.vercel.app (ca34111, system Chrome headless) 20261112T104350Z
+bare root:
+{"url":"/docs/","banner":false,"h1":"What Nectar Labs is"}
+{"path":"/docs/","banner":false,"hydrated":"true","docusaurus":"object","h1":"What Nectar Labs is","feedLink":"https://nectar-labs-f6wqvmtcz-kunals-projects-35d3a237.vercel.app/feed"}
+{"path":"/docs/start/quick-start","banner":false,"hydrated":"true","docusaurus":"object","h1":"Quick start (no keys needed)","feedLink":"https://nectar-labs-f6wqvmtcz-kunals-projects-35d3a237.vercel.app/feed"}
+{"path":"/docs/legal/privacy","banner":false,"hydrated":"true","docusaurus":"object","h1":"Privacy policy","feedLink":"https://nectar-labs-f6wqvmtcz-kunals-projects-35d3a237.vercel.app/feed"}
+{"path":"/docs/changelog","banner":false,"hydrated":"true","docusaurus":"object","h1":null,"feedLink":"https://nectar-labs-f6wqvmtcz-kunals-projects-35d3a237.vercel.app/feed"}
+client nav → /docs/start/quick-start h1: Quick start (no keys needed)
+failed same-origin requests: 0
+console errors: 0
+exit 0

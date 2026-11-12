@@ -1,0 +1,11 @@
+docs preview https://nectar-labs-docs-l5tlzksl5-kunals-projects-35d3a237.vercel.app (ca34111, dpl_ChooYyB6JkGq4YYZ8WKsaRXomSk4) 20261112T104350Z
+/ → 307 location=https://nectar-labs-docs-l5tlzksl5-kunals-projects-35d3a237.vercel.app/docs/
+/docs/ → 200 location=
+/docs → 200 location=
+/index.html → 308 location=https://nectar-labs-docs-l5tlzksl5-kunals-projects-35d3a237.vercel.app/
+follow / : final 200 after 1 redirects
+legal/terms: operator=8 contact=3 TODO-H=0 governing=0
+legal/privacy: operator=6 contact=3 TODO-H=0 governing=0
+legal/disclaimers: operator=6 contact=2 TODO-H=0 governing=0
+docs smoke https://nectar-labs-docs-l5tlzksl5-kunals-projects-35d3a237.vercel.app: pages 56, assets 6, failures 0
+smoke exit 0

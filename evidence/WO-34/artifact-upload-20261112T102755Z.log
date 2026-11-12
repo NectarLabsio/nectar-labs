@@ -1,0 +1,7 @@
+Preparing worktree (detached HEAD ca34111)
+Updating files:  92% (1513/1629)Updating files:  93% (1515/1629)Updating files:  94% (1532/1629)Updating files:  95% (1548/1629)Updating files:  96% (1564/1629)Updating files:  97% (1581/1629)Updating files:  98% (1597/1629)Updating files:  99% (1613/1629)Updating files: 100% (1629/1629)Updating files: 100% (1629/1629), done.
+changelog: 247 commits in 5 groups
+src-ca3411115aed1d6c127e2d82ba9f31a163221496.tar.gz 689b93c6527fbc074353d03270ea043efd26d808924871292ea1c97848ccaaba
+curl: (22) The requested URL returned error: 500
+uploaded src-ca3411115aed1d6c127e2d82ba9f31a163221496.tar.gz (4780482 bytes)
+verify ok src-ca3411115aed1d6c127e2d82ba9f31a163221496.tar.gz 689b93c6527fbc074353d03270ea043efd26d808924871292ea1c97848ccaaba

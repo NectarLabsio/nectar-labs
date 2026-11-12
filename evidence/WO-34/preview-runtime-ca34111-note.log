@@ -1,0 +1,5 @@
+ca34111 web preview dpl_5H5zajgbxqNk9w4ykj2swc3y5NUB — Node runtime (G3b (h) "runtime logs show nodejs22.x"):
+- Runtime logs for the deployment (2026-11-12T10:28–10:43Z) are empty: no function logged and none errored, so the runtime line is not observable.
+- Build log: install via fetch-artifact.mjs, "sha256 ok, commit ca3411115aed1d6c127e2d82ba9f31a163221496, 4780482 bytes".
+- Pin in force: apps/web/package.json engines.node ">=22.22.2 <23" (WO-34p) → Vercel selects 22.x (F-432); project nodeVersion 22.x.
+- Status: NOT OBSERVED live; covered by the pin. WO-34v re-checks on production if a function log appears.
