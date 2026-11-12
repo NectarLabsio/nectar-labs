@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node --disable-warning=ExperimentalWarning src/main.ts",
     "oracle-updater": "node --disable-warning=ExperimentalWarning src/oracle-updater-main.ts",
+    "oracle-refresher": "node --disable-warning=ExperimentalWarning src/oracle-refresher-main.ts",
     "test": "node --disable-warning=ExperimentalWarning --test \"test/**/*.test.ts\"",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },

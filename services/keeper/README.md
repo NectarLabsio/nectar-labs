@@ -59,6 +59,22 @@ Unverified shapes are configurable: `PYTH_AUTH_HEADER` (default `Authorization`)
 empty = raw key), `ORACLE_UPDATER_FEE_VIEW`, `ORACLE_UPDATER_DATA_ARG` (default `data`). Fee cap: `ORACLE_UPDATER_MAX_FEE_YOCTO`
 (default 0.1 NEAR). The API key is never logged. Tests use a synthetic Hermes fixture (no key exists yet).
 
+## Owner-price refresher (WO-63, H-ORACLE option A)
+
+`pnpm --filter keeper oracle-refresher` (or from the repo root, prod deps only:
+`node --disable-warning=ExperimentalWarning services/keeper/src/oracle-refresher-main.ts`) re-asserts the **current** on-chain
+owner price on `accounts.core` with `update_owner_price {symbol, price_usd_e6}` (0 deposit, 30 Tgas). It never computes or
+changes a price. Params: `packages/config/config.yaml` `ops.oracle_refresher` (`tick_s`, `session_max_age_s` while
+`session_open` or `session_reason = "stale_price"`, else `closed_max_age_s`, `run_until`); skips unless `oracle_source` is
+`Owner`; stops (exit 0) after `run_until`.
+Key: `ORACLE_REFRESHER_KEY_PATH` (0600 JSON `{account_id, public_key, private_key}`, `account_id` = `accounts.owner`). With
+`ORACLE_REFRESHER_GENERATE=1` and no file there, it generates one in place (dir 0700, file 0600) and logs one
+`{"event":"key_generated","public_key":"ed25519:…"}` line; add that public key on the owner account as a function-call key with
+receiver `accounts.core` and method `update_owner_price` only. Each tick checks `view_access_key`: absent → `waiting_for_key`;
+FullAccess, another receiver or any other method list → `key_refused` (logged, skipped, keeps polling). Exit 1 only on key/config
+errors; RPC errors back off (near-rpc.ts fallback list). Log lines: `event`, `decision`, `age_s`, `threshold_s`, `tx_hash`, `rpc`,
+`allowance_yocto`; never key material.
+
 ## Base relay (P2b, WO-29b)
 
 Enabled by `BASE_RPC_URL` (chain 84532 only: Base Sepolia or the disclosed local fork; 8453 and mainnet hosts are refused,
