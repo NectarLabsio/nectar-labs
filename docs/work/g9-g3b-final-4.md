@@ -19,6 +19,9 @@ WO-34 additions (all on your own ports, from the fresh clone):
 - (h) Vercel preview of the G3b commit (the orchestrator deploys it and hands you the share links; you never deploy):
   - web: every route in the crawl list answers 200 (or its expected redirect); /api/health ok:true; runtime logs show `nodejs22.x`.
   - docs: every page of the build answers 200 without `.html` (clean URLs, WO-34q).
+  - docs opened directly at `<docs-host>/docs/<slug>` (WO-34s): every page answers 200, and every `/docs/assets/*.css|js` and `/docs/img/*` it references
+    answers 200. In real Chrome, `/docs/` shows no "Your Docusaurus site did not load properly" banner and the page hydrates (theme toggle works).
+  - Status codes alone are not a pass: the 46c35ea docs preview answered 200 on all 55 pages while every asset under `/docs/assets/` was 404.
 **G9 (verifier B) runs only after the deploy step** (README "Hosted demo" lands first), or on Kunal's deadline if hosting is skipped.
 
 **G9 (verifier B):** docs/work/g9-final.md steps 1–7 + docs/work/g9-final-2.md steps 8–10, plus:
