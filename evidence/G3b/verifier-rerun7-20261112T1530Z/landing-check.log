@@ -1,0 +1,22 @@
+PASS no 0123456789 in visible text
+PASS no 0123456789 in meta descriptions — description="Committed market-maker quotes raise borrowing limits on thin-exit collateral. NEAR testnet" | og:description="Committed buyers. Higher limits. NEAR testnet, mock collateral." | twitter:description="Committed buyers. Higher limits. NEAR testnet, mock collateral."
+info: 0123456789 anywhere in raw HTML (incl. scripts/RSC payload): false
+Base lines (3):
+  · A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself.
+  · The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork). The keeper never holds a key.
+  · Solana checks the Ed25519 instruction before settle. On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.
+PASS Base section says 'local fork'
+PASS no Base line claims a Base Sepolia deployment without 'local fork'/'not deployed'
+TEE lines (5):
+  · OutLayerverifiable TEE pricing
+  · Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers' limit premiums fund your commitment fees. The OutLayer TEE makes the discount computation verifiable: a pinned, attested program,
+  · 02 PriceA TEE computes the discount, verifiably
+  · Stale or wide prices are rejected and the weekend guard fails closed. TEE output is verifiable: accepted only from a pinned, attested program and clamped on-chain.
+  · What if the verifiable TEE pricing or the oracle is down?
+PASS every TEE line says verifiable/verifiably
+PASS no TEE line says private/confidential
+info: 'confidential' anywhere in visible text: false; 'private' lines: none
+PASS no 'until the Reserve ships'
+worked example found: true; percentages in it: 40%, 70%, 25%, 57.7%, 0%, 100%
+worked example excerpt: Example. Follow one position through four states. The numbers are the example from the hero: 300 mock NVDAx at $185, with $28,000 already drawn against the asset. 01A static lender stops at 40%. A tokenized stock can trade at fair value all week and have no buyer on Saturday night. Lenders price that exit, so the limit stays low. 02Committed quotes raise the ceiling. Market makers escrow USDC behind quotes that can't leave without notice. Add the Reserve and verified DEX depth, and the same 300 shares support up to 70%. 03The weekend guard tightens it on its own. When the market closes or the price is older than 15 minutes, DEX depth drops to zero and the haircut widens to 25%. Nothing outside the contract can switch the session back on. 04A bad loan sells to a buyer who already committed. If health falls below 1, collateral goes to a committed quote at no more than its stated discount. 
+FAIL worked example uses LTV 40/70 and haircut 10/25 (config.yaml 4000/7000/1000/2500) — missing: 10%

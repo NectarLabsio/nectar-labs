@@ -1,0 +1,25 @@
+[15:47:44Z] build-docs exit 0
+[15:47:45Z] docs :3974 up pid 6484
+[15:47:51Z] build-hosts exit 0
+[15:47:53Z] hosts :3972 up pid 6664
+[15:47:54Z] (b) e2e-hosts exit 0
+[15:47:56Z] kill 3972 pid 6664 -> 0; listeners left: none
+[15:48:00Z] build-inv exit 0
+[15:48:01Z] inv :3973 up pid 6919; app /docs/start/quick-start -> 200
+[15:48:01Z] inventory start
+[15:52:18Z] (c) inventory exit 0
+[15:52:18Z] (c) inv-compare exit 0
+[15:52:18Z] crawl start
+[16:07:15Z] (d) crawl exit 1
+[16:07:17Z] kill 3973 pid 6919 -> 0; listeners left: none
+[16:07:19Z] kill 3974 pid 6484 -> 0; listeners left: none
+[16:07:25Z] (f) build-prod (operator filled) exit 0 (expect 0)
+[16:07:25Z] (g) check-trace after prod build exit 0
+[16:07:25Z]  1 file changed, 1 insertion(+), 1 deletion(-) / 108:  operator: null
+[16:07:29Z] (f) build-prod (operator null) exit 1 (expect non-zero)
+[16:07:29Z] guard msg: Production build refused (WO-34a guard): config.yaml site.operator is null (TODO-H-LEGAL)
+[16:07:29Z] config restored: 0 changed files under packages/config
+[16:07:45Z] pnpm verify exit 0
+[16:07:45Z] branding exit 0
+[16:07:45Z] listeners 3971-3977: 0
+[16:07:45Z] phase2 done

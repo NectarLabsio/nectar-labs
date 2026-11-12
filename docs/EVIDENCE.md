@@ -2,7 +2,7 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
-| G3b re-run 7 (release 2, run-7 order) | IN PROGRESS — fresh clone /tmp/verify-G3b-20261112T1530Z at 4c2a0bb, master script running (a)–(l); verdict follows in this row | 2026-11-12T15:30Z– | 4c2a0bb | evidence/G3b/verifier-rerun7-20261112T1530Z/ (pending) |
+| G3b re-run 7 (release 2, run-7 order) | FAIL, 1 reason (docs only): (d) crawl --polite exit 1 with 1 failure. /docs/integrate/feed-rest links to the hosted Feed root https://feed-production-2f2776c9.up.railway.app, which answers 404; /health answers 200. The link arrived in 1419028 (WO-35g docs), after run 6. All other items PASS. (l) WO-35i hydrated: v7.spec #chains 8/8 (desktop + phone). My hand probe in real Chrome on my own `next start` found the following. With config flags, the hydrated #chains text equals the server HTML on desktop and phone ("NEAR holds the book. Solana holds the stock."). The section has 3 sentences naming Base, and all 3 say "local fork". Each pinned flag set (none, solana_remote, base, both) has 0 Base sentences without "local fork". The LandingNav "Chains" link is present exactly when section#chains is. (a) site-pages 19+19, screens 46+46 incl. /docs. Full e2e: exit 0, 483 passed / 0 failed / 108 skipped / 1 flaky. The flaky test is phone remote.spec:199, a mocked flow: remote-authority took longer than 5 s, and the retry passed. (b) hosts 7/7. (c) inventory 6/6: CSP enforced, 0 violations, 6/6 wallets, 12 hosts = committed, all in privacy.md. (e) LH 20×2 = 40/40 at 100. (f) prod build exit 0; the build with the null operator gives exit 1 + the guard message. (g) check-trace exit 0 twice. (h) orchestrator-run, reviewed: web 28/0, /api/health ok, hydrated landing check PASS; docs 56 pages + 6 assets, 0 failures, 307 → /docs/, XFO DENY + frame-ancestors, theme toggle reaches both themes. nodejs22.x = the same deviation as runs 5/6. (i) PASS in both the raw HTML and the hydrated text. (j) feed 79/0, keeper 301/0; /health has chain_head_source, history, rpc; chain_head = last block. (k) PASS with a note: the only hit besides the 6 wasm fixtures is the order file's own `"/Users/"` pattern, with 0 home paths. Real selector 6/6 in viewport. Headers OK, `pnpm verify` exit 0, branding exit 0 | 2026-11-12T15:30Z–16:09Z | 4c2a0bb | evidence/G3b/verifier-rerun7-20261112T1530Z/, evidence/G3b/chains-hydrated-20261112T1530Z.png (see §G3b re-run 7) |
 | WO-34 production (release 3974b5b) | FAIL, 1 reason: in hydrated Chrome the production landing https://nectarlabs.vercel.app/ never says "local fork". Base still appears in settle steps 03/04 ("secp256k1 (Base)", "Base checks EIP-712 with ecrecover"). The server HTML heading reads "A Base local fork holds the stock.", but after hydration it becomes "Solana holds the stock." All three previous FAILs now PASS: 0/56 APP /docs pages send x-robots-tag; the docs origin /docs/ sends XFO DENY + frame-ancestors 'none'; 0 localhost/127.0.0.1 hrefs in the 56 pages. Also PASS: host check (14 hosts, 12 third party, 0 missing on /legal/privacy, 12 keys, 0 missing on /legal/cookies, 6/6 wallets, 0 CSP violations), SITE/APP headers + redirects, Feed /health + CORS, no "0123456789", TEE verifiable, worked example 40/70 + 10/25, event-history banner on /feed and /keepers, LH landing 2/2 = 100 and docs 10/10 ≥ 90 (min 93). Not checked: crawl --polite (still running at commit time) | 2026-11-12T15:00Z–15:18Z | 3974b5b (web dpl_5YACVWKHkdB6RKZY788okPYRF7Uk, docs dpl_9SobCo6o34dpRvhgwpBnUqq8jjoj, Railway feed SRC_SHA 3974b5b) | evidence/WO-34/production-release-3974b5b/ (see §WO-34 production (release 3974b5b)) |
 | WO-34 production | FAIL. 3 reasons: (1) production APP sends `x-robots-tag: noindex` on https://nectarlabs-app.vercel.app/docs and /docs/start/quick-start; (2) the public docs origin https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app/docs/ answers 200 with no CSP, no X-Frame-Options and no frame-ancestors; (3) https://nectarlabs-app.vercel.app/docs/integrate/feed-rest links to http://127.0.0.1:8788/. PASS: crawl (90 internal 200, 0 of our console errors, no failures in re-run 2 other than script/N/A items), redirects 308/308/307, LH 162/162 ≥ 90 (min 93), host check 12 third-party hosts all on /legal/privacy, 12 storage keys all on /legal/cookies, 0 cookies, SITE/APP headers, Feed health/CORS/MCP, wallet selector 6/6 rows clickable at 1440 and 400. N/A: www, preview noindex, x402, Node runtime log. Not checked: per-route screenshots | 2026-11-12T13:38Z–14:45Z | ca34111 (deployed; web dpl_6yqaQJPFBGYmM8e2Veofgr32BpRw, docs dpl_BtPA8juRKQKGfJbTkkYNEJzTwNNX) | evidence/WO-34/production-20261112/ (see §WO-34 production) |
 | G0 toolchain + facts | PASS | 2026-11-09T23:09Z | b3a9090 | evidence/G0/verifier-20261109T230923Z/ (re-record: F-181/F-182/F-183 now record installed rustc/cargo 1.95.0 and node v22.23.4; network probes reused from verifier-20261109T230153Z; anchor/solana absent = P2 dependency H-TOOLCHAIN-SOLANA; prior FAIL 23:01Z 90af048: see §G0) |
@@ -159,6 +159,93 @@ Verdict: **PASS on the local fork of Base Sepolia (D-026), not Base Sepolia.** f
 - "addresses on explorer": N/A for a local fork of Base Sepolia (D-026).
 
 ## G3b
+
+### G3b re-run 7 — RELEASE 2 4c2a0bb, run-7 order (a)–(l) + real selector — FAIL (1 docs-only reason, (d)) — 2026-11-12T15:30Z–16:09Z — commit 4c2a0bb
+Order: docs/work/g9-g3b-final-4.md at 4c2a0bb (run 6 block + run 7 block) + wo-50 (→ wo-48).
+- Fresh clone /tmp/verify-G3b-20261112T1530Z (`git clone /Volumes/T7/nectar-labs`, `git checkout 4c2a0bba01296f932d26bda131163adbb3c8bae6`) on the internal disk.
+- No secrets: NECTAR_E2E_BORROWER_KEY / NEXT_PUBLIC_E2E_KEY_ADAPTER / SITE_URL / APP_URL / FEED_URL unset. node v22.23.4, pnpm 10.34.9, `pnpm install --frozen-lockfile` exit 0.
+- Own ports: 3971 local, 3972 hosts, 3973 inventory/crawl, 3974 docs, 3975 Feed (views mode), 3977 web + FEED_URL.
+- Host services were untouched: 8545/8788–8791 kept listening throughout. I signed nothing.
+- All 7 of my servers stopped on kill, none refused, and afterwards 0 listeners were left on 3971–3977.
+- One master script ran every step (run7.sh = the run-6 run.sh plus (l)), with timestamps in phase1.txt and phase2.txt.
+Spec diff 3126773..4c2a0bb (e2e/, playwright.config): only v7.spec.ts, +56 lines (the WO-35i #chains tests). No assertion was removed, and playwright.config is unchanged.
+$ pnpm --filter web build → exit 0. (g) $ node apps/web/scripts/check-trace.mjs → exit 0.
+$ curl -sI :3971{/,/borrow,/api/health,/docs,/about} → all 5 carry XFO DENY, HSTS, CSP frame-ancestors 'none'. /api/health → ok true, nectar-core-v2.nectar.testnet 2.2.1-v7.
+$ PW_CHANNEL=chrome PORT=3971 E2E_BASE_URL=http://localhost:3971 pnpm --filter web e2e (15:33:44–15:42:02Z) → exit 0: 483 passed · 0 failed · 108 skipped · 1 flaky.
+- The flaky test is phone remote.spec.ts:199 (Solana remote borrow, mocked). getByTestId('remote-authority') was not found within 5 s, and retry #1 passed.
+- The spec is unchanged since run 6, which had 0 flaky. This is a timing flake, non-blocking; the error context is in flaky-remote-199-phone-error-context.md.
+- (a) site-pages.spec 19/19 desktop + 19/19 phone. screens.spec 46/46 + 46/46, incl. /docs dark/light.
+$ LH_BASE_URL=http://localhost:3971 pnpm --filter web lighthouse → exit 0. (e) 20 routes × 2 themes = 40/40 at a11y 100.
+Real selector (g3b-selector-probe.mjs, real Chrome, fresh context, mock undefined, /borrow):
+- The banner is visible before Connect. 6 wallets: Meteor, Intear, Ledger, Nightly, Ethereum Wallets, NEAR CLI.
+- Desktop rows y 268–692, phone y 420–844. 6/6 rows are in the viewport without scrolling, with the centre hit inside each. 0 overlap the banner, which is hidden while the selector is open.
+- As in R3–R6, the corner hit-tests miss. I clicked no wallet.
+(l) WO-35i, hydrated.
+- `npx playwright test e2e/v7.spec.ts -g "landing #chains"` → 8 passed (desktop + phone), covering config flags with a v2 mock plus pinned solana_remote / base / both.
+- The hand check (g3b-chains-probe.mjs) ran in real Chrome on my `next start` :3971 against the real testnet RPC, with consent declined and no pins except the localhost __NECTAR_E2E_MOCK__ flags. Output: chains-probe.{json,log}, PASS.
+- Config flags as shipped (solana_remote true, base false):
+  - On desktop and phone, the hydrated section#chains textContent equals the server-HTML section text (normalised). The heading is "NEAR holds the book. Solana holds the stock.", and #hublinks is drawn.
+  - 3 sentences name Base, and all 3 say "local fork": "The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself." / "…secp256k1 (the Base Sepolia local fork)." / "On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover."
+  - 0 console errors.
+- Pinned flags:
+  - [] → no section, no Chains link.
+  - [solana_remote] → text equals the server HTML, 3/3 Base sentences say local fork.
+  - [base] → heading "A Base Sepolia local fork holds the stock.", #nbase present, 6/6 Base sentences say local fork.
+  - [both] → "Solana and a Base Sepolia local fork hold the stock.", 6/6.
+  - The pinned runs differ from the server HTML only where the pin differs from config.yaml. Pins act on the client only, so this is expected.
+- LandingNav: the "Chains" link (#chains) is present exactly when section#chains is, in both the server HTML and the hydrated DOM, in all 6 runs.
+- The console errors in the pinned runs are FastNEAR CORS refusals (a throttled 429 without a CORS header) and net::ERR_FAILED. Third-party.
+- Screenshot: evidence/G3b/chains-hydrated-20261112T1530Z.png (hydrated section, config flags, desktop).
+(i) WO-35w claims.
+- Raw HTML (landing-check.cjs): no "0123456789" in the text or meta. 3 Base lines, all with local fork. TEE 5/5 verifiable, 0 private/confidential. No "until the Reserve ships".
+  - landing-check exits 1 only because 10% is absent from the static HTML, which holds state 01 only (as in run 6).
+- Chamber probe: phase 01 40%, phase 02 70% + haircut 10%, weekend 25%, matching config.yaml 4000/7000/1000/2500.
+- Hydrated innerText (per the WO-34v2 trap): no 0123456789; Base lines 3/3 local fork; TEE lines all verifiable, none private/confidential; no "until the Reserve ships".
+- Banner with a views-mode Feed from this clone (:3975 → web :3977):
+  - /feed: banner + views-empty settlements line. /keepers: banner. /status: "isn't indexed on this host (the Feed reads contract views only)".
+  - Negative control, :3971 with no Feed: no banner; "not configured" ×2.
+(j) feed 79/0, keeper 301/0.
+- Feed /health: chain_head_source "view_block", history "unavailable", rpc {4 endpoints, last_served test.rpc.fastnear.com, failovers 4, cooling []}.
+- chain_head 277383379 = last_indexed_block (lag 0) ≤ RPC final 277383382. Second sample: 277383442 = 277383442.
+(k) `git grep -l "/Users/"` → 7 files: the 6 contracts/nectar-core/tests/fixtures/*.wasm (sha256 in k-git-grep.log) + docs/work/g9-g3b-final-4.md:39.
+- The 7th hit is the run-6 order line quoting the grep pattern itself (`git grep -l "/Users/"`), not a home path.
+- `git grep -l '/Users/[A-Za-z]' -- ':!*.wasm'` → 0. PASS with this note. The literal list holds one more file than the order states.
+(b) Hosted build, `next start -p 3972`, docs via serve-docs :3974: `E2E_HOSTED=1 E2E_DOCS=1 … hosts.spec.ts --project=desktop` → 7/7, incl. the APP /docs/* proxy.
+(c) Hosted build on site/app.localhost:3973; app /docs/start/quick-start → 200.
+- `E2E_INVENTORY=1 … --project=inventory` → 6/6 in 4.3 min. cspBypassed false, cspViolations [], 6/6 wallets reached the prompt with 0 violations each.
+- 12 measured hosts = 12 committed, all in backticks in privacy.md (inv-compare.log). The clone's content/ was restored.
+(d) **FAIL.** `PW_CHANNEL=chrome node apps/web/scripts/crawl.mjs --polite --site http://site.localhost:3973 --app http://app.localhost:3973` (15:52–16:07Z) → exit 1: 89 internal, 45 external, **1 failure**, 0 of our console errors, 25 page loads with third-party network failures.
+- The failure is external https://feed-production-2f2776c9.up.railway.app/ → status 404, linked from http://app.localhost:3973/docs/integrate/feed-rest.
+- The source is apps/docs-site/docs/integrate/feed-rest.md:9, which reads "Hosted, read-only, at [https://feed-production-2f2776c9.up.railway.app](…)". It was added in 1419028 ("fix(docs-site): security headers; no localhost link"), after 3126773.
+- Re-probed 16:08:51Z: / → 404, /health → 200 (feed-root-probe.txt).
+- The third-party failures are FastNEAR CORS refusals on 429 replies. They are listed, not counted.
+(f) `NECTAR_PRODUCTION=1 SITE_URL=… APP_URL=… pnpm build` → exit 0, and check-trace after it → exit 0.
+- With `operator: null` at config.yaml:108 (clone only), the build exits 1 with "Production build refused (WO-34a guard): config.yaml site.operator is null (TODO-H-LEGAL)". Restored, 0 changes left.
+$ pnpm verify → exit 0: ui 7/0, feed 79/0, keeper 301/0, x402 41/0, sdk 203/203. demo-testnet read: 2.2.1-v7, Q_c $16,119.22, R_c $10.00, session closed.
+$ node scripts/check-no-branding-all.mjs → exit 0.
+(h) Orchestrator-run, reviewed read-only (main repo evidence/WO-34/*4c2a0bb*):
+- Web (preview-smoke-web-4c2a0bb-20261112T153223Z.log, dpl_5Uwn…): 28 routes, 0 failures (/quote 307, the rest 200), /api/health ok:true.
+- The hydrated landing check in the same log: #chains present on server + hydrated, server text == hydrated text, heading "Solana holds the stock.", 3 Base sentences with 0 lacking local fork, no 0123456789. This agrees with my (l).
+- 2 console errors on the preview = third-party (FastNEAR CORS / vercel.live feedback.js blocked by CSP), as classified in earlier runs.
+- Docs (preview-smoke-docs-4c2a0bb-20261112T153401Z.log, dpl_ArXm…):
+  - / → 307 /docs/, with CSP frame-ancestors 'none' and XFO DENY.
+  - "pages 56, assets 6, failures 0", smoke exit 0.
+  - Client nav to quick-start works, 0 failed same-origin requests, 0 console errors.
+  - The theme toggle reaches both dark and light.
+- The PNG shows the docs hydrated with no "did not load properly" banner.
+- nodejs22.x: no runtime log, the same accepted deviation as runs 5/6 (engines `>=22.22.2 <23`).
+- My call: (h) = PASS with deviation.
+Explorer links: none opened (G3b has no explorer criterion).
+Evidence: evidence/G3b/verifier-rerun7-20261112T1530Z/
+- Scripts: run7.sh, r7-setup.sh, r7-copy.sh.
+- Phase logs: phase1/2.txt, run-master.log.
+- Test logs: e2e-local.log, e2e-v7-chains.log, chains-probe.{mjs,json,log}, lh.log, selector-*.
+- Landing and banner: landing.html, landing-check.*, chamber-probe.json, banner-probe.*.
+- Feed: feed-*.json, rpc-final.json.
+- Item logs: k-git-grep.log, e2e-hosts.log, e2e-inventory.log, inv-compare.log, crawl/ (crawl.json, crawl.md), feed-root-probe.txt, verify.log, branding.log.
+**Final verdict, G3b re-run 7: FAIL, 1 reason (d).**
+- The docs link to the hosted Feed root answers 404, so the crawl exits 1. A docs-only fix is possible, e.g. link /health or /api/feed instead of the bare origin.
+- (a)–(c), (e)–(g), (i), (j), (l) PASS. (h) PASS with deviation (nodejs22.x). (k) PASS with a note.
 
 ### G3b re-run 6 — FROZEN commit 3126773, run-6 order (a)–(k) + real selector — PASS with one disclosed deviation — 2026-11-12T14:13Z–14:58Z — commit 3126773
 Order: docs/work/g9-g3b-final-4.md at b684b64 ("Run 6" block) + wo-50 (→ wo-48). Fresh clone /tmp/verify-G3b-20261112T1413Z (`git clone /Volumes/T7/nectar-labs`, `git checkout 312677303720a70e76823901f7968e4ff7c0891d`), on the internal disk. Setup:
