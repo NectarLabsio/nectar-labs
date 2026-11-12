@@ -1,0 +1,62 @@
+[20:23:39Z] HEAD 31809b1326c6c83480dae071ce6fd508c9d483f3
+[20:23:39Z] spec diff 4c2a0bb..HEAD (e2e, playwright.config):  5 files changed, 433 insertions(+), 73 deletions(-)
+[20:23:39Z] (k) git grep -l /Users/ -> 14 files; non-fixture: 7
+[20:23:39Z] (k) strict '/Users/[A-Za-z]' non-wasm -> 1 files
+[20:23:40Z] (o) git grep ac.nectarlabs.io|vercel.app -> 3063 lines in 87 files
+[20:23:41Z] (j) feed unit tests exit 0
+[20:23:41Z] (j) keeper unit tests exit 0
+[20:23:50Z] build-local exit 0
+[20:23:50Z] (g) check-trace exit 0
+[20:23:51Z] local :3981 up pid 72201
+[20:23:52Z] health {"ok":true,"deployed":true,"core":"nectar-core-v2.nectar.testnet","version":"2.2.1-v7","pool":{"available_usd_e6":"40771000000","utilised_usd_e6":"9229000000","treasury_usd_e6":"80662710","lenders_fees_usd_e6":"17652060"},"network":"testnet","rpc":["https://test.rpc.fastnear.com","https://rpc.testne
+[20:23:52Z] (i) landing.html saved (   65093 bytes)
+[20:23:52Z] (i) landing-check exit 1
+[20:23:54Z] (i) chamber probe exit 0
+[20:24:24Z] (l) chains hand probe exit 0
+[20:24:29Z] (l) v7.spec #chains exit 0
+[20:24:40Z] (m) claims hand probe exit 0
+[20:24:53Z] (m) claims.spec + test-assets.spec (desktop + phone) exit 0
+[20:24:53Z] e2e start
+[20:33:07Z] e2e exit 0
+[20:33:07Z] lh start
+[20:37:35Z] lh exit 0
+[20:37:43Z] selector exit 0
+[20:37:45Z] feed :3985 up pid 74855
+[20:38:10Z] (j) feed /health {"ok":true,"last_indexed_block":277413364,"chain_head":277413364,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T20:38:09.436Z","poll_age_s":1,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":4,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit
+[20:38:10Z] rpc final height 277413367
+[20:38:12Z] web+feed :3987 up pid 74879
+[20:38:12Z] web /api/indexer/healthz {"ok":true,"last_block_seen":277413364,"last_poll_at":"2026-11-12T20:38:09.436Z","last_error":"","source":"views","events_indexed":0,"history":"unavailable"}
+[20:38:49Z] (i) banner probe exit 0
+[20:38:49Z] (j) feed /health (2nd) {"ok":true,"last_indexed_block":277413426,"chain_head":277413426,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T20:38:46.573Z","poll_age_s":3,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":
+[20:38:51Z] kill 3987 pid 74879 -> 0; listeners left: none
+[20:38:53Z] kill 3985 pid 74855 -> 0; listeners left: none
+[20:38:55Z] kill 3981 pid 72201 -> 0; listeners left: none
+[20:38:55Z] phase1 done
+[20:38:55Z] cargo job started pid 74961
+[20:39:08Z] build-docs exit 0
+[20:39:09Z] docs :3984 up pid 75413; / -> 200 ; /start/quick-start -> 200
+[20:39:09Z] hosted env: SITE_URL=http://site.localhost:3982 APP_URL=http://app.localhost:3982 DOCS_URL=http://docs.localhost:3984 STATUS_URL=http://status.localhost:3982 LEGACY_HOSTS=old-site.localhost:3982=site,old-app.localhost:3982=app
+[20:39:15Z] build-hosted exit 0
+[20:39:16Z] hosted :3982 up pid 75628
+[20:39:19Z] (b) hosts.spec (all, incl. browser; legacy old-app=app) exit 0
+[20:39:20Z] (b) hosts.spec legacy old-site=site exit 0
+[20:39:20Z] (d+) docs-at-root sweep exit 0 : docs at root: 56 sitemap pages (origins http://localhost:3000), 6 assets, 4 old-prefix paths, 9 redirects; failures 0
+[20:39:20Z] inventory start
+[20:43:44Z] (c) inventory exit 0
+[20:43:44Z] (c) inv-compare exit 0
+[20:43:44Z] crawl start
+[20:47:56Z] (d) crawl exit 1
+[20:47:58Z] kill 3982 pid 75628 -> 0; listeners left: none
+[20:48:00Z] kill 3984 pid 75413 -> 0; listeners left: none
+/private/tmp/claude-501/-Volumes-T7-nectar-labs/287a71ca-7606-413d-ba02-4ab86f1493b2/scratchpad/run8.sh: line 18: 75413 Terminated: 15          node apps/web/scripts/serve-docs.mjs --port 3984 > "$EV/server-docs.log" 2>&1
+[20:48:04Z] (f) build-prod (five env, operator filled) exit 0 (expect 0)
+[20:48:04Z] (g) check-trace after prod build exit 0
+[20:48:04Z]  1 file changed, 1 insertion(+), 1 deletion(-) / 108:  operator: null
+[20:48:08Z] (f) build-prod (operator null) exit 1 (expect non-zero)
+[20:48:08Z] guard msg: Production build refused (WO-34a guard): config.yaml site.operator is null (TODO-H-LEGAL)
+[20:48:08Z] config restored: 0 changed files under packages/config
+[20:48:27Z] pnpm verify exit 0
+[20:48:27Z] branding exit 0
+[20:48:27Z] listeners 3981-3987: 0
+[20:48:27Z] host services: 127.0.0.1:8791 127.0.0.1:8788 127.0.0.1:8789 127.0.0.1:8545 127.0.0.1:8790 
+[20:48:27Z] phase2 done

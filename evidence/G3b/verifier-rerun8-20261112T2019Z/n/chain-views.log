@@ -1,0 +1,8 @@
+built sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14 (= expected: true) base58 GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+nvdax-mock.nectar.testnet: view_code 171771 B sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14 = built true = expected true; view_account code_hash GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB = b58(sha) true (block 277413504)
+  faucet_config {"enabled":true,"amount_per_claim":"5000000","cap_per_account":"15000000","cooldown_s":3600} vs config.yaml {"amount_per_claim":"5000000","cap_per_account":"15000000","cooldown_s":3600} -> MATCH
+usdc-mock.nectar.testnet: view_code 171771 B sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14 = built true = expected true; view_account code_hash GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB = b58(sha) true (block 277413519)
+  faucet_config {"enabled":true,"amount_per_claim":"500000000","cap_per_account":"1500000000","cooldown_s":3600} vs config.yaml {"amount_per_claim":"500000000","cap_per_account":"1500000000","cooldown_s":3600} -> MATCH
+tx 2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW: signer borrower1.nectar.testnet -> nvdax-mock.nectar.testnet; actions [{"FunctionCall":{"args":"e30=","deposit":"930000000000000000000","gas":30000000000000,"method_name":"faucet_mint"}}]; status {"SuccessValue":""}; FINAL; block 277410673 @ 2026-11-12T20:11:54.296Z; receipt failure false
+  log nvdax-mock.nectar.testnet: EVENT_JSON:{"standard":"nep141","version":"1.0.0","event":"ft_mint","data":[{"owner_id":"borrower1.nectar.testnet","amount":"5000000","memo":"faucet"}]}
+CHAIN VIEWS PASS

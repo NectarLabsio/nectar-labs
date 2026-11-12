@@ -1,0 +1,8 @@
+== Host status.localhost:3982 GET /: 200 
+== Host site.localhost:3982 GET /docs/integrate/sdk?x=1: 308 http://docs.localhost:3984/integrate/sdk?x=1
+== Host app.localhost:3982 GET /docs?x=1: 308 http://docs.localhost:3984/?x=1
+== Host old-app.localhost:3982 GET /feed?x=1: 308 http://app.localhost:3982/feed?x=1
+== Host old-site.localhost:3982 GET /about?y=2: 308 http://site.localhost:3982/about?y=2
+== Host site.localhost:3982 GET /status?x=1: 308 http://status.localhost:3982/?x=1
+== Host status.localhost:3982 GET /robots.txt: 200 
+== Host status.localhost:3982 GET /sitemap.xml: 200 

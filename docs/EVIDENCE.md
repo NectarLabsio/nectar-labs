@@ -2,6 +2,8 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
+| G3b re-run 8 (release candidate, WO-66 (a)–(o), local only) | FAIL, 2 reasons. Neither is a product assertion. (d): `crawl.mjs --polite` exits 1 with 1 failure, and that failure is the crawler's own stale check. crawl.mjs:83 still expects the WO-34a 308 "SITE /docs/* → APP/docs/*". The release candidate answers 308 → DOCS_URL/security/audits, which is what WO-62b asks for and what hosts.spec checks. The crawler also treats only SITE + APP as internal, so with docs at the DOCS root it renders no docs page. My supplement covers this: 56 docs pages + 6 assets answer 200 at the root, and 112 Chrome loads show 0 problems. (k): evidence/WO-62b/hosts-spec-20261112T195948Z.log:20,42 contain a real macOS home path (a Playwright cache path). Every product assertion PASSES. (a) e2e 510/0/116, 0 flaky. (b) hosts.spec 11/11 incl. the browser check (system Chrome) + legacy old-site 1/1. (c) inventory 6/6, CSP 0 violations, 12 = 12 hosts. (e) LH 40/40 = 100. (f) prod build exit 0 and guard exit 1. (g) check-trace 0 ×2. (i), (j), (l) PASS. (m) claims 10 + test-assets 16, and the hand probe 20/20 against live views. (n) see the next row. (o) PASS. (h) not in this run (local only) | 2026-11-12T20:19Z–21:06Z | 31809b1 | evidence/G3b/verifier-rerun8-20261112T2019Z/, evidence/G3b/claims-how-20261112T2019Z.png (see §G3b re-run 8) |
+| G11 delta (mock-ft), WO-66 (n) | PASS (host SDK env workaround, see block). `cargo test -p mock-ft`: 38 unit + sandbox_faucet 1/1 (code-only upgrade from tests/fixtures/mock-ft-deployed.wasm). The fixture equals archival view_code of both tokens at block 277406854. `cargo near build non-reproducible-wasm` sha256 e3d4ded5…6d14 = view_code of usdc-mock and nvdax-mock (view_account code_hash GLMp3W4J… = base58). faucet_config on both = config.yaml faucet. Tx 2A4jN155… is FINAL SuccessValue: borrower1 → nvdax-mock faucet_mint, ft_mint 5000000 to borrower1. `cargo test --workspace` 710/0: nectar-core 608 unit + 51 sandbox, mock-ft 39, test-stubs 12 | 2026-11-12T20:38Z–21:04Z | 31809b1 | evidence/G3b/verifier-rerun8-20261112T2019Z/n/ (see §G3b re-run 8 (n)) |
 | G9 run 5c (step 3 on c194c8f) | PASS (step 3 only). Product code still equals release 3: `git diff --stat 5f011bb c194c8f -- apps packages services contracts` is empty. Since 88b99b3 only docs changed. README:153 no longer says "live oracle"; it now reads "oracle (G5: owner-oracle fallback, disclosed)", which matches §G5 FALLBACK. Every remaining "live" in README.md and docs/SUBMISSION.md is either backed by §G2b, §G4, §G7 or §G14 PASS, or is a negation or neutral use. docs/X_POST.md has 0 hits. Pointers resolve to the newest blocks: §"WO-34 production" opens with release 3 PASS, §G3b with 7b PASS (7 + 7b), §G9 with 5b PASS (and now 5c). SUBMISSION's runs 5 + 5b cite (87be719, b945f42) is correct. Nothing contradicts STATE (~17:10Z entry). Notes, not counted: SUBMISSION.md:53 still cites G3b re-run 2 (dated); tag submission-rc (4b20f05) predates the 6d3e72f docs fix | 2026-11-12T17:20Z–17:24Z | c194c8f | evidence/G9/run5c-20261112T172003Z/checks.txt (see §G9 run 5c) |
 | G9 run 5b (step 3 on 88b99b3) | PASS (step 3 only). This resolves the G9 run 5 step-3 FAIL. Product code equals release 3: `git diff --stat 5f011bb 88b99b3 -- apps packages services contracts` is empty, and services/feed is unchanged since 3974b5b. README lines 3, 11, 26 and 139 point to EVIDENCE §"WO-34 production". The newest block there is "WO-34 production (release 3)" PASS 5f011bb, and its deployments match STATE's "PRODUCTION = RELEASE 3" (web dpl_BJNxqx…, docs dpl_DQubre…, Feed 3974b5b). README lines 3, 52, 84 and 139 point to §G3b / §G9. The newest G3b block is re-run 7b PASS on 5f011bb (runs 7 + 7b cover release 3), and the newest G9 block is this one. Hosted URLs: SITE 200, SITE /borrow 308 → APP, APP / 307 → /feed, /feed /borrow /docs 200, Feed /health 200 with commit 3974b5b and events_indexed 0 (as README says), 1 docs Feed href (/health), 0 x-robots-tag. Nothing in SUBMISSION.md or X_POST.md contradicts EVIDENCE or STATE. One note, not counted: SUBMISSION.md:85 still cites G9 run 3 as "G9 today". G9 run 5 (every step except 3) and run 5b (step 3) together cover release 3 | 2026-11-12T17:02Z–17:05Z | 88b99b3 | evidence/G9/run5b-20261112T170216Z/ (pointers.txt, hosted.txt, scripts) |
 | WO-34 production (release 3) | PASS, which resolves the WO-34v2 FAIL. (1) In hydrated Chrome (networkidle + 4 s), the landing #chains innerText equals the JS-off server render, and textContent matches too. Both read "NEAR holds the book. Solana holds the stock." The Base node is off, so the heading names no Base. Each of the 3 sentences that names Base says "local fork": the intro, step 03 and step 04. 0 Base sentences without it anywhere in the hydrated body; 0 console errors. (2) crawl --polite over SITE + APP incl. /docs/*: 90 internal routes, all 200; 0 of our console errors; 12 FastNEAR CORS/429 page loads (third party); 29 external-soft warnings (nearblocks 403, solana 429). The script exits 1 on 2 redirect assertions that are not links, both identical to WO-34v and classed script/N/A there: APP / 307 `location: /feed` is relative where the script expects an absolute URL to the same target; www.<site> has no certificate on *.vercel.app. (3) curl: 0 x-robots-tag on SITE /, APP /feed, APP /docs + 4 docs pages. The docs origin sends XFO DENY + frame-ancestors 'none'. Feed /health has history "unavailable", chain_head_source "view_block", rpc 4 endpoints with 0 failovers, and chain_head = last_indexed. CORS: SITE and APP allowed, evil.example.com refused with 403. The release-3 Feed hrefs go to /health (200). (4) Lighthouse a11y on the landing: dark 100 / light 100 | 2026-11-12T16:40Z–17:01Z | 5f011bb (web dpl_BJNxqxnSZQWHtiouXYeWknkScxtY, docs dpl_DQubre8taPieUo4EBshyyrRNVjcT, Railway feed 3974b5b) | evidence/WO-34/production-release3-5f011bb/, evidence/WO-34/production-release3-5f011bb/claims/chains-hydrated.png (see §WO-34 production (release 3)) |
@@ -164,6 +166,144 @@ Verdict: **PASS on the local fork of Base Sepolia (D-026), not Base Sepolia.** f
 - "addresses on explorer": N/A for a local fork of Base Sepolia (D-026).
 
 ## G3b
+
+### G3b re-run 8 — release candidate 31809b1, WO-66 (a)–(o), local only — FAIL (2 non-product reasons: (d) stale crawler, (k) home path in an evidence log) — 2026-11-12T20:19Z–21:06Z — commit 31809b1
+Order: docs/work/wo-66-verifier-g3b-run8.md (at a568d5c) + docs/work/g9-g3b-final-4.md (a)–(l) as in run 7, without (h): this run is local, with no preview.
+- Fresh clone /tmp/verify-G3b-r8-20261112T2019Z (`git clone /Volumes/T7/nectar-labs`, `git checkout 31809b1`, HEAD 31809b1326c6c83480dae071ce6fd508c9d483f3) on the internal disk.
+  - node v22.23.4, pnpm 10.34.9; `pnpm install --frozen-lockfile` exit 0.
+  - No secrets: E2E keys, SITE/APP/DOCS/STATUS/LEGACY/FEED env all unset unless stated.
+  - PW_CHANNEL=chrome (system Chrome). The Playwright headless shell 1254 is absent; only 1248 is cached.
+- Own ports: 3981 local, 3982 hosted, 3984 docs, 3985 Feed (views), 3987 web + FEED_URL.
+  - Every server stopped on kill, none refused, and 0 listeners were left on 3981–3987.
+  - Host services 8545/8788–8791 kept listening throughout. I signed nothing.
+- One master script (run8.sh) ran phase 1 20:23:39–20:38:55Z and phase 2 20:38:55–20:48:27Z. The cargo job ran in parallel (r8-cargo.sh, r8-cargo2.sh).
+- Spec diff 4c2a0bb..31809b1 (e2e/, playwright.config): 5 files, +433/−73 (claims.spec + test-assets.spec new, hosts.spec rewritten for WO-62b, design-app.spec, inventory.spec comments).
+  - design-app.spec only swaps the demo parameters for the deployed ones (haircut 400→1000, weekend 1200→2500, max LTV 8500→7000, Reserve 400→600 bps), with re-derived expected values (e.g. $78,720→$73,800, the −$820 delta kept).
+  - No assertion was removed, and playwright.config is unchanged.
+$ pnpm --filter web build → exit 0. (g) $ node apps/web/scripts/check-trace.mjs → exit 0.
+$ curl -sI :3981{/,/borrow,/api/health,/docs,/about,/status} → all 6 carry XFO DENY, HSTS max-age=63072000, CSP frame-ancestors 'none' (local: X-Robots-Tag noindex). /api/health → ok true, nectar-core-v2.nectar.testnet 2.2.1-v7.
+(a) $ PW_CHANNEL=chrome PORT=3981 E2E_BASE_URL=http://localhost:3981 pnpm --filter web e2e (20:24:53–20:33:07Z) → **exit 0: 510 passed · 0 failed · 116 skipped · 0 flaky**, 0 retries (desktop 282 ✓, phone 228 ✓).
+- site-pages.spec 38 ✓ (19 + 19). screens.spec 92 ✓ (46 + 46), incl. /docs dark/light.
+(e) $ LH_BASE_URL=http://localhost:3981 pnpm --filter web lighthouse → exit 0: 20 routes × 2 themes = 40/40 at a11y 100.
+Real selector (g3b-selector-probe.mjs, real Chrome, fresh context, mock undefined, /borrow):
+- The banner is visible before Connect. 6 wallets: Meteor, Intear, Ledger, Nightly, Ethereum Wallets, NEAR CLI.
+- Desktop rows y 268–692, phone from y 420. 6/6 are in the viewport without scrolling, with the centre hit inside each. 0 overlap the banner, which is hidden while the selector is open.
+- The corner hit-tests miss, as in R3–R7. I clicked no wallet.
+(b) PASS. Hosted build with all five env vars on *.localhost: SITE_URL=http://site.localhost:3982 APP_URL=http://app.localhost:3982 DOCS_URL=http://docs.localhost:3984 STATUS_URL=http://status.localhost:3982 LEGACY_HOSTS=old-site.localhost:3982=site,old-app.localhost:3982=app.
+- `pnpm build` exit 0, then `next start -p 3982`. Docs: `node apps/web/scripts/serve-docs.mjs --port 3984` (WO-62b version, pages at the root).
+- $ E2E_HOSTED=1 E2E_HOSTED_BROWSER=1 E2E_BASE_URL=http://localhost:3982 E2E_{SITE,APP,DOCS,STATUS}_URL=<same> E2E_LEGACY_HOST=old-app.localhost:3982=app npx playwright test e2e/hosts.spec.ts --project=desktop → **11/11**. It covers:
+  - www 301
+  - APP / 307
+  - SITE app routes and APP landing routes 308
+  - docs 308s from SITE/APP/STATUS, prefix dropped, query kept
+  - the status host serving / and /status 308
+  - STATUS other paths 308
+  - legacy 308 with path + query kept
+  - per-host robots/sitemap/canonical/og:url
+  - the browser check "status host hydrates with the app shell and no console errors" (system Chrome, 1.8 s)
+- The same suite with `E2E_LEGACY_HOST=old-site.localhost:3982=site -g "legacy host"` → 1/1.
+- curl spot checks (hosted-curl.txt):
+  - status / 200
+  - SITE /docs/integrate/sdk?x=1 → 308 http://docs.localhost:3984/integrate/sdk?x=1
+  - APP /docs?x=1 → 308 …:3984/?x=1
+  - old-app /feed?x=1 → 308 APP/feed?x=1
+  - old-site /about?y=2 → 308 SITE/about?y=2
+  - SITE /status?x=1 → 308 STATUS/?x=1
+(c) PASS. Same hosted server. $ E2E_INVENTORY=1 INV_SITE=http://site.localhost:3982 INV_APP=http://app.localhost:3982 … --project=inventory → 6/6 in 4.4 min.
+- cspBypassed false, cspViolations []. 6/6 wallets reached the prompt with 0 violations each.
+- 12 measured third-party hosts = 12 committed, and all are in backticks in privacy.md (inv-compare.log). The clone's content/ was restored.
+(d) **FAIL (tool-only)**. $ PW_CHANNEL=chrome node apps/web/scripts/crawl.mjs --polite --site http://site.localhost:3982 --app http://app.localhost:3982 --docs http://docs.localhost:3984 (20:43:44–20:47:56Z) → exit 1.
+- Result: 26 internal, 20 external, **1 failure**, 0 of our console errors, 30 page loads with third-party failures (FastNEAR CORS on 429; listed, not counted).
+- The failure: redirect "SITE /docs/* → APP (legal pages link /docs/<slug>)": got 308 http://docs.localhost:3984/security/audits; want 308 http://app.localhost:3982/docs/security/audits.
+  - The expectation is hard-coded at crawl.mjs:83 (WO-34a). WO-62b §2 replaced it ("APP and SITE `/docs` and `/docs/<rest>` → 308 `${DOCS_URL}/<rest>`").
+  - hosts.spec asserts the new behaviour. **The product is right and the crawler is stale.**
+- Coverage gap in the same tool: `internal` = SITE + APP only. The DOCS host (and the STATUS host) count as external, so the crawler renders no docs page. It only GET-checks 13 docs-host links (all 200) and status / (200).
+  - The 25 web routes = run 7b's 26 minus SITE /status, which moved to the status host.
+- Supplement 1 (docs-sweep.mjs), docs at the root: 56 sitemap pages answer 200 with no /docs/ prefix, 0 old-prefix hrefs, 6 /assets|/img files 200. Old /docs, /docs/, /docs/<slug> still answer 200 (serve-docs rewrite). /docs?x=1, /docs/start/quick-start?x=1 and /docs/integrate/feed-rest from SITE, APP and STATUS → 308 to DOCS/<rest> with the query kept, then 200 (9/9). 0 failures.
+- Supplement 2 (g3b-docs-render.mjs): real Chrome, 56 pages × (dark@1440, light@400) = 112 loads, 0 problems (console errors, page errors, docs-origin ≥ 400 or failed requests, "did not load properly" banner).
+- The docs build ran without DOCS_URL (local-mode docs: sitemap origin localhost:3000, app links to localhost:3100), as in runs 7/7b.
+- Fix (web, apps/web/scripts/crawl.mjs): when --docs is its own origin, expect `${DOCS}/security/audits`, and add the DOCS and STATUS hosts to `internal`. Then re-run (d) alone.
+(f) PASS. `NECTAR_PRODUCTION=1 SITE_URL=https://nectarlabs.io APP_URL=https://testnet.nectarlabs.io DOCS_URL=https://docs.nectarlabs.io STATUS_URL=https://status.nectarlabs.io LEGACY_HOSTS=old-site.example.dev=site,old-app.example.dev=app pnpm build` → exit 0, and check-trace after it → exit 0.
+- With `operator: null` at config.yaml:108 (clone only), the build exits 1 with "Production build refused (WO-34a guard): config.yaml site.operator is null (TODO-H-LEGAL)". Restored, 0 changes under packages/config.
+(i) WO-35w claims PASS.
+- Raw HTML (landing-check.cjs): no "0123456789" in the text or meta. Base lines all say "local fork". TEE lines all verifiable, 0 private/confidential. No "until the Reserve ships".
+  - landing-check exits 1 only on "10% missing from the worked example". The static HTML holds state 01 only, as in runs 6/7. ("20040%" in its list is "$22,200" + "40%" joined by the tag stripper.)
+- Chamber probe: phase 01 40%, phase 02 haircut 10% + 70%, weekend 25%, health < 1 25% = config.yaml 4000/7000/1000/2500.
+- Banner with a views-mode Feed from this clone (:3985 → web :3987): /feed shows the banner + views-empty settlements line, /keepers the banner, /status "isn't indexed on this host (the Feed reads contract views only)". Negative control :3981 without a Feed: no banner, "not configured" ×2.
+(j) PASS. feed 79/0, keeper 327/0 (keeper grew from 301 with the WO-63 refresher tests).
+- Feed /health: chain_head_source "view_block", history "unavailable", rpc {4 endpoints, last_served test.rpc.fastnear.com, failovers 4, cooling []}.
+- chain_head 277413364 = last_indexed_block (lag 0) ≤ RPC final 277413367. Second sample: 277413426 = 277413426.
+(k) **FAIL (evidence hygiene)**. `git grep -l "/Users/"` → 14 files:
+- The 7 wasm fixtures: the 6 contracts/nectar-core/tests/fixtures/*.wasm, plus the new contracts/mock-ft/tests/fixtures/mock-ft-deployed.wasm.
+  - The mock-ft fixture is byte-identical to the deployed pre-upgrade code: archival view_code of usdc-mock and nvdax-mock at block 277406854 have sha256 f96721a6… = fixture (n/fixture-archival.log), so it is the same accepted class.
+- 6 files only quote the grep pattern: docs/EVIDENCE.md, .claude/agent-memory/verifier/reference_g3b_v2_web.md and reference_g9_rehearsal.md, and evidence/G3b/verifier-rerun7-…/{phase1.txt, run-master.log, run7.sh}.
+- The failing hit: **evidence/WO-62b/hosts-spec-20261112T195948Z.log:20 and :42**. Both lines hold a real home path, `/Users/<user>/Library/Caches/ms-playwright/chromium_headless_shell-1254/…` (committed in fae7e36).
+  - `git grep -l '/Users/[A-Za-z]' -- ':!*.wasm'` → exactly this 1 file.
+  - Fix (orchestrator owns evidence/WO-62b): redact the two lines.
+(l) WO-35i hydrated, PASS.
+- `npx playwright test e2e/v7.spec.ts -g "landing #chains"` → 8/8 (desktop + phone).
+- Hand probe (g3b-chains-probe.mjs, real Chrome on :3981, real RPC):
+  - Config flags: hydrated #chains text == server HTML on desktop and phone, 3 Base sentences, 0 without "local fork", 0 console errors.
+  - Pins:
+    - [] → no hydrated section, no Chains link.
+    - [solana_remote] → equal, 3/3.
+    - [base] → 8 Base sentences, 0 without local fork, #nbase present.
+    - [both] → 8 Base sentences, 0 without local fork, #nbase present.
+  - The pinned base runs differ from the server HTML only by the client-side pin, which is expected.
+  - LandingNav "Chains" link consistent in all 6 runs.
+(m) Claims PASS.
+- `npx playwright test e2e/claims.spec.ts e2e/test-assets.spec.ts` (desktop + phone) → 26/26: claims 5 × 2, test-assets 8 × 2. The full e2e also ran these 26, all ✓.
+- By hand (g3b-claims-probe.mjs, :3981, no mocks, consent declined, live views from test.rpc.fastnear.com at block 277411972) → 20/20 PASS:
+  - JS off: section#chains says "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.", and all 3 Base sentences say local fork. Hydrated: the same text, and the same 3 sentences.
+  - The Reserve card shows **$10.00** = live get_reserve r_usd_e6 10000000, and "After all quotes, at 600 bps" = discount_bps 600, notice "7 days". The #how prose says "the Reserve as deployed holds $10". Chamber R (#lr) $10 = live get_exit_capacity r_usd_e6 10000000.
+  - LTV/haircut shown: "A static lender stops at 40%." / "reach the deployed 70% cap" / #lh 10% / "haircut widens to 25%" / code panel "// 2500 / 1000 on testnet", "// 70% on testnet". These equal **live get_collateral** base_ltv 4000, max_nectar_ltv 7000, base_haircut 1000, weekend_haircut 2500.
+    - The landing takes these four from config.yaml (Landing.tsx:384, server-rendered), and config.yaml = chain.
+    - The page also calls get_collateral, get_reserve and get_exit_capacity (RPC methods seen).
+  - Counters: the raw server HTML has no "0123456789" anywhere. JS off: 3 [data-roll] counters show plain values ($80,000 / 57.7% / $22,200), 0 [data-reels]. Hydrated: each counter's reels are aria-hidden="true" with the plain value readable. Hydrated innerText has no 0123456789 and 0 console errors.
+- Grep for 85% / 4% / 12% in apps/web, packages/ui, docs/ui, landing/index.html (m/param-grep-raw.txt) → 12 lines, 0 parameter figures:
+  - CSS gradient positions (12% −12% / 12% 112%) in tokens.css, app.css, nectar-app.css, landing.module.css, landing/index.html
+  - claims.spec's own "no 85%" checks
+  - docs/ui/app/Console.dc.html:110 "Reserve discount 4.00%" (design mockup). Note: the mockup shows 4.00% while the deployed discount is 600 bps. It is not a haircut/LTV parameter, and B3 lists only 85% / 4%, 12% haircut figures, so it is reported, not counted.
+  - Parameter words within 60 chars of 85/4/12%: 0. `8500|1200` hits: 0.
+(n) G11 delta (mock-ft) PASS.
+- Host SDK trap (env only, no repo change; same as the D-027 run): with the default CLT SDK MacOSX27.0, build scripts fail to link ("tapi error: malformed file … unknown architecture arm64e.x1-macos"). This hit both `cargo test` and `cargo near build` (first attempts: n/*-default-sdk.tail.log). Re-run with `SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk`.
+- $ cargo test -p mock-ft → exit 0: unit 38/0, sandbox_faucet 1/0 (`deployed_mock_ft_upgrades_code_only_and_faucet_works`: deploys tests/fixtures/mock-ft-deployed.wasm, asserts its sha256, upgrades code-only, faucet works).
+- $ (contracts/mock-ft) cargo near build non-reproducible-wasm → target/near/mock_ft/mock_ft.wasm, 171771 B, sha256 **e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14** = expected.
+- RPC view_code (final, blocks 277413504 / 277413519): usdc-mock.nectar.testnet and nvdax-mock.nectar.testnet are both 171771 B with sha256 e3d4ded5… = built. view_account code_hash GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB = base58(sha256).
+- faucet_config:
+  - nvdax-mock {enabled true, amount_per_claim 5000000, cap_per_account 15000000, cooldown_s 3600}
+  - usdc-mock {enabled true, 500000000, 1500000000, 3600}
+  - Both = config.yaml `faucet`.
+- EXPERIMENTAL_tx_status 2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW: signer borrower1.nectar.testnet → nvdax-mock.nectar.testnet, FunctionCall faucet_mint args {} deposit 0.00093 NEAR gas 30 Tgas.
+  - Status SuccessValue "", FINAL, block 277410673 at 2026-11-12T20:11:54Z, no receipt failure.
+  - Log EVENT_JSON nep141 ft_mint {owner_id borrower1.nectar.testnet, amount 5000000, memo "faucet"} (5 NVDAx).
+- $ cargo test --workspace → exit 0, 710 passed / 0 failed / 0 ignored: mock-ft 38 + 1; nectar-core unit 608; nectar-core sandbox 51 (sandbox 5, evm 20, p1 5, p2 6, reserve 2, v7 9, v7b 4); test-stubs 12.
+(o) PASS. `git grep -n -I -e "ac.nectarlabs.io" -e "vercel.app"` → 3063 lines in 87 files (o-git-grep.log). Every hit is in an allowed class:
+- Redirect config: apps/web/lib/hosts.ts:38 and apps/web/.env.example:17, the LEGACY_HOSTS docs ("the real *.vercel.app list lives in the Vercel env only").
+- Test fixture: apps/web/lib/test-assets.test.ts:28 (`nectar-git-branch.vercel.app`).
+- Historical records: evidence/ (75 files, mostly WO-34 crawl/inventory JSON), docs/EVIDENCE.md, docs/STATE.md, docs/FACTS.md, docs/work/* (13), docs/FINAL_REPORT.md, docs/PRD.md, docs/PRD-v6.md, docs/BUILD_PROMPT.md.
+- docs/HUMAN_HANDOFF.md:108,124: lines under "Earlier answer" / "Original request (kept for the record)" in the CLOSED H-DOMAIN entry.
+- 0 hits in README.md, docs/SUBMISSION.md, docs/X_POST.md, apps/docs-site, packages, services.
+(h) Not part of this run. WO-66: local only, no preview. Production acceptance and G9 follow in WO-67.
+$ pnpm verify → exit 0: ui 7/0, feed 79/0, keeper 327/0, x402 41/0, sdk 218/218, web unit 43 pass / 0 fail / 1 skipped. demo-testnet read: 2.2.1-v7, Q_c $16,119.22, R_c $10.00, haircut 2500 bps, session closed.
+$ node scripts/check-no-branding-all.mjs → exit 0.
+Clone state afterwards: 145 tracked changes, all regenerated test output (evidence/G3/screens 92, evidence/G3/design 45 PNGs from the e2e, apps/web 6 LH/test outputs, .feedtmp, ev). No source file changed. config.yaml restored.
+Explorer links: none opened (G3b has no explorer criterion; tx 2A4jN155… was proven through RPC tx status).
+Screenshot: evidence/G3b/claims-how-20261112T2019Z.png (hydrated #how section, live Reserve $10, desktop).
+Evidence: evidence/G3b/verifier-rerun8-20261112T2019Z/
+- Scripts: run8.sh, r8-setup.sh, r8-cargo.sh, r8-cargo2.sh, r8-copy.sh, r8-greps.sh, r8-paramgrep.sh, r8-docs-render.sh; probes g3b-claims-probe.mjs, g3b-docs-render.mjs, docs-sweep.mjs, chain-views.mjs.
+- Phase logs: phase1/2.txt, run-master.log.
+- Test logs: e2e-local.log, e2e-claims-assets.log, e2e-v7-chains.log, e2e-hosts*.log, e2e-inventory.log, lh.log, selector-*.
+- Claims: claims-probe.{json,log}, chains-probe.*, landing.html, landing-check.*, chamber-probe.json, banner-probe.*.
+- Hosts and docs: hosted-curl.txt, docs-sweep.*, docs-render.*, crawl/ (crawl.json, crawl.md).
+- Greps: k-git-grep*.log, o-git-grep.log, m/param-grep-*.txt.
+- Cargo: n/ (cargo-phase.txt, chain-views.{json,log}, fixture-archival.log, mockft-test-sdkroot.log, workspace-summary.txt, workspace-tests-list.log, default-SDK failure tails; the home path in the cargo-near command line of mockft-build-default-sdk.tail.log is redacted to `~`, so my evidence adds 0 `/Users/[A-Za-z]` hits).
+- Feed: feed-*.json.
+- Other: verify.log, branding.log.
+**Final verdict, G3b re-run 8: FAIL, 2 reasons. Neither is a product assertion, so no GATE_FAIL_G3B_R8.md, per the gate rule.**
+- (d): crawl.mjs:83 expects the pre-WO-62b docs redirect, and the crawler does not crawl a separate DOCS/STATUS origin. Fix in apps/web/scripts/crawl.mjs, then re-run (d).
+- (k): a real home path in evidence/WO-62b/hosts-spec-20261112T195948Z.log:20,42. Redact it.
+- PASS: (a), (b), (c), (e), (f), (g), (i), (j), (l), (m), (n), (o) and the real selector. (h) was not run (local only, by order).
 
 ### G3b re-run 7b — RELEASE 3 5f011bb, item (d) only — PASS — 2026-11-12T16:14Z–16:31Z — commit 5f011bb
 Order: item (d) of docs/work/g9-g3b-final-4.md + `pnpm --filter docs-site build`, plus a curl of every hosted-Feed href in the docs build.

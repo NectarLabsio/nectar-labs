@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [desktop] › e2e/hosts.spec.ts:105:3 › host routing (hosted mode) › legacy host → its canonical origin with 308, same path and query (12ms)
+
+  1 passed (257ms)

@@ -1,0 +1,25 @@
+
+Running 8 tests using 1 worker
+
+#chains server  : NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derive…
+#chains hydrated: NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derive…
+#chains Base sentences (3):
+  Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.
+  The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).
+  Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover.
+  ✓  1 [desktop] › e2e/v7.spec.ts:202:3 › landing #chains: same claims before and after hydration; Base always says local fork › config flags (no pin), v2 contract: hydrated #chains text equals the server HTML (861ms)
+  ✓  2 [desktop] › e2e/v7.spec.ts:232:5 › landing #chains: same claims before and after hydration; Base always says local fork › pinned solana_remote: every #chains sentence that names Base says local fork (294ms)
+  ✓  3 [desktop] › e2e/v7.spec.ts:232:5 › landing #chains: same claims before and after hydration; Base always says local fork › pinned base: every #chains sentence that names Base says local fork (276ms)
+  ✓  4 [desktop] › e2e/v7.spec.ts:232:5 › landing #chains: same claims before and after hydration; Base always says local fork › pinned solana_remote + base: every #chains sentence that names Base says local fork (275ms)
+#chains server  : NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derive…
+#chains hydrated: NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derive…
+#chains Base sentences (3):
+  Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.
+  The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).
+  Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover.
+  ✓  5 [phone] › e2e/v7.spec.ts:202:3 › landing #chains: same claims before and after hydration; Base always says local fork › config flags (no pin), v2 contract: hydrated #chains text equals the server HTML (853ms)
+  ✓  6 [phone] › e2e/v7.spec.ts:232:5 › landing #chains: same claims before and after hydration; Base always says local fork › pinned solana_remote: every #chains sentence that names Base says local fork (296ms)
+  ✓  7 [phone] › e2e/v7.spec.ts:232:5 › landing #chains: same claims before and after hydration; Base always says local fork › pinned base: every #chains sentence that names Base says local fork (279ms)
+  ✓  8 [phone] › e2e/v7.spec.ts:232:5 › landing #chains: same claims before and after hydration; Base always says local fork › pinned solana_remote + base: every #chains sentence that names Base says local fork (278ms)
+
+  8 passed (4.4s)

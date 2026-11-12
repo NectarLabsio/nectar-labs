@@ -1,0 +1,7 @@
+config desktop: section server=true hydrated=true equal=true base_sentences=3 without_local_fork=0 nav_consistent=true nav_chains_hydrated=true nbase=0 cv_calls=1 console_err=0
+config phone: section server=true hydrated=true equal=true base_sentences=3 without_local_fork=0 nav_consistent=true nav_chains_hydrated=true nbase=0 cv_calls=1 console_err=0
+pinned[] desktop: section server=true hydrated=false equal=false base_sentences=0 without_local_fork=0 nav_consistent=true nav_chains_hydrated=false nbase=0 cv_calls=1 console_err=0
+pinned[solana_remote] desktop: section server=true hydrated=true equal=true base_sentences=3 without_local_fork=0 nav_consistent=true nav_chains_hydrated=true nbase=0 cv_calls=1 console_err=0
+pinned[base] desktop: section server=true hydrated=true equal=false base_sentences=8 without_local_fork=0 nav_consistent=true nav_chains_hydrated=true nbase=1 cv_calls=1 console_err=0
+pinned[solana_remote+base] desktop: section server=true hydrated=true equal=false base_sentences=8 without_local_fork=0 nav_consistent=true nav_chains_hydrated=true nbase=1 cv_calls=1 console_err=0
+(l) hand check: PASS

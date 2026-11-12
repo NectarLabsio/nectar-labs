@@ -1,0 +1,10 @@
+{
+  "docs": "http://docs.localhost:3984",
+  "pages": 56,
+  "variants": [
+    "dark@1440",
+    "light@400"
+  ],
+  "loads": 112,
+  "problems": []
+}

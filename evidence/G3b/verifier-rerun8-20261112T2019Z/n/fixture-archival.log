@@ -1,0 +1,5 @@
+fixture sha256 f96721a600e5902fb5907ace675f70400524996a5d914564c670f328c9dca59e
+https://archival-rpc.testnet.fastnear.com usdc-mock.nectar.testnet @277406854 sha256 f96721a600e5902fb5907ace675f70400524996a5d914564c670f328c9dca59e = fixture true
+https://archival-rpc.testnet.fastnear.com nvdax-mock.nectar.testnet @277406854 sha256 f96721a600e5902fb5907ace675f70400524996a5d914564c670f328c9dca59e = fixture true
+https://archival-rpc.testnet.near.org usdc-mock.nectar.testnet @277406854 sha256 f96721a600e5902fb5907ace675f70400524996a5d914564c670f328c9dca59e = fixture true
+https://archival-rpc.testnet.near.org nvdax-mock.nectar.testnet @277406854 sha256 f96721a600e5902fb5907ace675f70400524996a5d914564c670f328c9dca59e = fixture true

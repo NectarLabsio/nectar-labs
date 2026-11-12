@@ -1,0 +1,12 @@
+apps/web/components/landing/landing.module.css:122:  radial-gradient(70% 60% at 12% 112%,color-mix(in srgb,var(--ch-accent) calc((.16 + var(--glow,0)*.22)*100%),transparent),transparent 70%),
+apps/web/e2e/claims.spec.ts:8:// equal the deployed values (evidence/claims fixture = config.yaml collaterals), no 85%; B4 counters are plain text until hydration.
+apps/web/e2e/claims.spec.ts:78:  test("config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85%", async ({ page }) => {
+apps/web/e2e/claims.spec.ts:102:    expect(body.match(/.{0,40}(\b85%|\b12%|400 bps|1200 \/ 400|Reserve[^.]{0,40}(absent|not deployed|not live)).{0,20}/g) ?? []).toEqual([]);
+docs/ui/app/Console.dc.html:110:        <div class="kvr"><span>Reserve discount</span><b>4.00%</b></div>
+docs/ui/app/nectar-app.css:7:--glow:radial-gradient(1100px 520px at 12% -12%,rgba(22,243,169,.075),transparent 62%),radial-gradient(900px 480px at 100% -5%,rgba(81,184,236,.055),transparent 60%);
+docs/ui/app/nectar-app.css:15:--glow:radial-gradient(1100px 520px at 12% -12%,rgba(31,220,159,.10),transparent 62%),radial-gradient(900px 480px at 100% -5%,rgba(43,143,196,.07),transparent 60%);color-scheme:light}
+landing/index.html:188:  radial-gradient(70% 60% at 12% 112%,rgba(22,243,169,calc(.16 + var(--glow,0)*.22)),transparent 70%),
+packages/ui/app.css:225:.nx-notice.pos .ic { background: var(--accent-fill); color: var(--accent); } .nx-notice.neg .ic { background: var(--danger-fill); color: var(--danger); } .nx-notice.info .ic { color: var(--info); background: color-mix(in srgb, var(--info) 12%, transparent); }
+packages/ui/tokens.css:23:  --glow: radial-gradient(1100px 520px at 12% -12%, rgba(22,243,169,.075), transparent 62%), radial-gradient(900px 480px at 100% -5%, rgba(81,184,236,.055), transparent 60%);
+packages/ui/tokens.css:56:    --glow: radial-gradient(1100px 520px at 12% -12%, rgba(31,220,159,.10), transparent 62%), radial-gradient(900px 480px at 100% -5%, rgba(43,143,196,.07), transparent 60%);
+packages/ui/tokens.css:79:  --glow: radial-gradient(1100px 520px at 12% -12%, rgba(31,220,159,.10), transparent 62%), radial-gradient(900px 480px at 100% -5%, rgba(43,143,196,.07), transparent 60%);

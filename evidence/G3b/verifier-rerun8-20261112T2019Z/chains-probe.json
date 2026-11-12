@@ -1,0 +1,284 @@
+[
+  {
+    "label": "config",
+    "pin": "config.yaml (no pin)",
+    "viewport": "desktop",
+    "hydrated_equals_server": true,
+    "server_section": true,
+    "hydrated_section": true,
+    "hublinks_drawn": true,
+    "nbase": 0,
+    "server_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "server_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "base_without_local_fork": [],
+    "nav_server": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_hydrated": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_consistent": true,
+    "rpc_calls": 6,
+    "contract_version_calls": 1,
+    "console_errors": [],
+    "hydrated_claims": {
+      "no_0123456789": true,
+      "base_lines_page": [
+        "A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+        "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.",
+        "Solana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home."
+      ],
+      "tee_lines": [
+        "verifiable TEE pricing",
+        "verifiable TEE pricing",
+        "Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers' limit premiums fund your commitment fees. The OutLayer TEE makes the discount computation verifiable: a pinned, attested program, clamped on-chain. In this testnet build it prices with operator-set demo parameters (published in the docs), and each settlement's discount reveals their product.",
+        "A TEE computes the discount, verifiably",
+        "Stale or wide prices are rejected and the weekend guard fails closed. TEE output is verifiable: accepted only from a pinned, attested program and clamped on-chain.",
+        "What if the verifiable TEE pricing or the oracle is down?"
+      ],
+      "tee_all_verifiable": true,
+      "tee_none_private": true,
+      "confidential_anywhere": false,
+      "no_until_reserve_ships": true
+    }
+  },
+  {
+    "label": "config",
+    "pin": "config.yaml (no pin)",
+    "viewport": "phone",
+    "hydrated_equals_server": true,
+    "server_section": true,
+    "hydrated_section": true,
+    "hublinks_drawn": true,
+    "nbase": 0,
+    "server_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "server_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "base_without_local_fork": [],
+    "nav_server": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_hydrated": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_consistent": true,
+    "rpc_calls": 6,
+    "contract_version_calls": 1,
+    "console_errors": []
+  },
+  {
+    "label": "pinned[]",
+    "pin": [],
+    "viewport": "desktop",
+    "hydrated_equals_server": false,
+    "server_section": true,
+    "hydrated_section": false,
+    "hublinks_drawn": false,
+    "nbase": 0,
+    "server_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_text": "",
+    "hydrated_base_sentences": [],
+    "server_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "base_without_local_fork": [],
+    "nav_server": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_hydrated": [
+      "#how|How it works",
+      "#makers|Market makers",
+      "#faq|FAQ"
+    ],
+    "nav_consistent": true,
+    "rpc_calls": 6,
+    "contract_version_calls": 1,
+    "console_errors": []
+  },
+  {
+    "label": "pinned[solana_remote]",
+    "pin": [
+      "solana_remote"
+    ],
+    "viewport": "desktop",
+    "hydrated_equals_server": true,
+    "server_section": true,
+    "hydrated_section": true,
+    "hublinks_drawn": true,
+    "nbase": 0,
+    "server_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "server_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "base_without_local_fork": [],
+    "nav_server": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_hydrated": [
+      "#how|How it works",
+      "#makers|Market makers",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_consistent": true,
+    "rpc_calls": 6,
+    "contract_version_calls": 1,
+    "console_errors": []
+  },
+  {
+    "label": "pinned[base]",
+    "pin": [
+      "base"
+    ],
+    "viewport": "desktop",
+    "hydrated_equals_server": false,
+    "server_section": true,
+    "hydrated_section": true,
+    "hublinks_drawn": true,
+    "nbase": 1,
+    "server_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_text": "NEAR holds the book. A local fork of Base Sepolia holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign secp256k1EIP-712Base, on a local fork of Base SepoliaB20-style mock collateral, secp256k1 · Base settlement ran on a local fork of Base Sepolia, not on Base SepoliaNectarVaultBase with EIP-712, on the local fork of Base SepoliaChecks the issuer's transfer policy firstEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_base_sentences": [
+      "A local fork of Base Sepolia holds the stock.",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "Base, on a local fork of Base Sepolia",
+      "B20-style mock collateral, secp256k1 · Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia",
+      "NectarVaultBase with EIP-712, on the local fork of Base Sepolia",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover.",
+      "secp256k1 and EIP-712 check on the Base Sepolia local fork"
+    ],
+    "server_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "base_without_local_fork": [],
+    "nav_server": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_hydrated": [
+      "#how|How it works",
+      "#makers|Market makers",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_consistent": true,
+    "rpc_calls": 6,
+    "contract_version_calls": 1,
+    "console_errors": []
+  },
+  {
+    "label": "pinned[solana_remote+base]",
+    "pin": [
+      "solana_remote",
+      "base"
+    ],
+    "viewport": "desktop",
+    "hydrated_equals_server": false,
+    "server_section": true,
+    "hydrated_section": true,
+    "hublinks_drawn": true,
+    "nbase": 1,
+    "server_text": "NEAR holds the book. Solana holds the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvarEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_text": "NEAR holds the book. Solana and a local fork of Base Sepolia hold the stock.A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hubnectar-coreQuotes, Reserve, loans and NotesLimits, weekend guard, multiplierBuilds every message it asks the MPC to sign Ed25519Solana devnetxStocks-style mock collateral, Ed25519 · devnet, round trip verifiednectar_vault programVerifies the signature through the Instructions sysvar secp256k1EIP-712Base, on a local fork of Base SepoliaB20-style mock collateral, secp256k1 · Base settlement ran on a local fork of Base Sepolia, not on Base SepoliaNectarVaultBase with EIP-712, on the local fork of Base SepoliaChecks the issuer's transfer policy firstEach link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.01 FlagHealth falls below 1Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.nectar-core on NEAR testnet02 PriceA TEE computes the discount, verifiablyA pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product.OutLayer, attested03 SignChain Signatures signsThe contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key.v1.signer-prod.testnet04 SettleThe vault verifies, then paysSolana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home.nectar_vault, NectarVaultBase",
+    "hydrated_base_sentences": [
+      "Solana and a local fork of Base Sepolia hold the stock.",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "Base, on a local fork of Base Sepolia",
+      "B20-style mock collateral, secp256k1 · Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia",
+      "NectarVaultBase with EIP-712, on the local fork of Base Sepolia",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover.",
+      "secp256k1 and EIP-712 check on the Base Sepolia local fork"
+    ],
+    "server_base_sentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "base_without_local_fork": [],
+    "nav_server": [
+      "#how|How it works",
+      "#borrow|Borrowers",
+      "#makers|Market makers",
+      "#reserve|Reserve",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_hydrated": [
+      "#how|How it works",
+      "#makers|Market makers",
+      "#chains|Chains",
+      "#faq|FAQ"
+    ],
+    "nav_consistent": true,
+    "rpc_calls": 6,
+    "contract_version_calls": 1,
+    "console_errors": []
+  }
+]
