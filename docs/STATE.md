@@ -38,6 +38,12 @@
   Previews from **46c35ea** (tarball sha256 1b0293aa…1d24c1c):
   - web dpl_31rptco1tfm4aPXyKomUaRhqgsZe: 28/28 routes 200/307 incl. the 6 that 500'd; /api/health ok:true with live pool data.
   - docs dpl_5pYWUsABpAs4RUGZ5cHGa2dNeEM6: 55/55 pages 200 at clean URLs; `.html` → 308.
+    **But it does not render** (Kunal ~07:15Z: "Your Docusaurus site did not load properly … baseUrl = /docs/"). Pages reference `/docs/assets/…`; the flat build
+    serves `/assets/…` (F-393), so every asset 404s when the docs deployment is opened directly. The smoke test checked status codes only.
+    Fix: WO-34r6 facts F-433–F-436 (merged) → WO-34s docs (in flight): vercel.json rewrites `/docs/` → `/` and `/docs/:path*` → `/:path*`.
+    New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
+    Docs project env: APP_URL (preview only) = the 46c35ea web preview, so navbar/footer app links stop pointing at localhost:3100.
+    Share links: fetching a deployment through the connector can replace its share link; the earlier docs link stopped working. Hand out fresh ones.
   - Logs: evidence/WO-34/preview-smoke-{web,docs}-2026111205*.log. The Node 22 runtime is not observable without an error log → G3b item (h).
   - Follow-up (not blocking): Turbopack traces all of apps/web into each function because of packages/sdk/src/config-node.ts. Fix in packages/sdk.
 - G3b order docs/work/g9-g3b-final-4.md gained (g) check-trace and (h) Vercel preview checks.
@@ -241,7 +247,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T05:38:55Z · commit ba96640
+Last activity: 2026-11-12T07:27:28Z · commit 073ef29
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
