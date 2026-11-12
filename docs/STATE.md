@@ -16,6 +16,14 @@ capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept
   key; FC key added by the orchestrator after `key_generated`). B5: hosted Feed records no events (views mode); /api/settlements empty; demo steps
   need no events except the position page's settlements link. x402 :8791 has no FEED_URL → stale local Feed :8788 (since 11-11); planned restart
   with FEED_URL = hosted Feed before the recording. Refresher allowance → 1 NEAR.
+- ~20:00Z H-ORACLE: Kunal chose "Deploy on Railway" (AskUserQuestion), but the accept-deploy tool approval was declined twice → NOT running.
+  Staged in Railway nectar-labs/production (patch 1d6ac914…): service oracle-refresher (796516c0…), volume oracle-data /data 1 GB, start cmd
+  scripts/deploy/railway-oracle-start.cmd, ON_FAILURE ×10, vars SRC_SHA 525697c…, SRC_SHA256 661d74f5…, SRC_URL (24 h, until ~2026-11-13 19:55Z),
+  ORACLE_REFRESHER_KEY_PATH /data/keys/oracle-refresher.json, ORACLE_REFRESHER_GENERATE 1. Kunal action: apply the staged changes in the Railway
+  dashboard (or approve the tool prompt). Then orchestrator: read `key_generated` public key from logs → near account add-key nectar.testnet
+  grant-function-call-access --allowance '1 NEAR' --contract-account-id nectar-core-v2.nectar.testnet --function-names update_owner_price
+  use-manually-provided-public-key <pk> network-config testnet sign-with-keychain send → watch first refresh tx. Price stale ≈ 2026-11-13 15:10Z.
+- WO-62a merged c165332 (claims.spec 10/10, v7 28/28, LH landing 100/100). WO-62b, WO-64, WO-61, WO-62c running.
 Round 1 dispatched: WO-60 researcher · WO-61 contract (mock-ft faucet) · WO-62a web (B1–B4) · WO-63 keeper (refresher + B5/x402 answers).
 Round 2 (after facts): WO-62b web hosts/redirects/status host · WO-64 docs-site baseUrl "/" · WO-62c web Get-test-assets button.
 Orchestrator: mock-ft upgrade deploy + set_faucet; FC key + Railway refresher; demo account (~/.nectar, 0600); Feed CORS; vercel.app → 308 after release.
