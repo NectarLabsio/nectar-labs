@@ -1,0 +1,486 @@
+{
+  "summary": {
+    "mode": "plain",
+    "n": 10,
+    "at": "2026-11-12T21:36:06.802Z",
+    "loads": 40,
+    "hydrationErrors": 0,
+    "loadsWithHydration": 0,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "navFailures": 0,
+    "byTarget": {
+      "SITE / desktop": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "navFail": 0
+      },
+      "SITE / phone": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "navFail": 0
+      },
+      "STATUS / desktop": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "navFail": 0
+      },
+      "STATUS / phone": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "navFail": 0
+      }
+    },
+    "distinctErrors": []
+  },
+  "loads": [
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #1",
+      "ms": 3978,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #2",
+      "ms": 3700,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #3",
+      "ms": 3632,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #4",
+      "ms": 3669,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #5",
+      "ms": 3610,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #6",
+      "ms": 3646,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #7",
+      "ms": 3947,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #8",
+      "ms": 3649,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #9",
+      "ms": 3605,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #10",
+      "ms": 3593,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #1",
+      "ms": 4016,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #2",
+      "ms": 3586,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #3",
+      "ms": 3829,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #4",
+      "ms": 4009,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #5",
+      "ms": 3763,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #6",
+      "ms": 3615,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #7",
+      "ms": 4694,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #8",
+      "ms": 3624,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #9",
+      "ms": 3689,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #10",
+      "ms": 3696,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #1",
+      "ms": 3413,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #2",
+      "ms": 3284,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #3",
+      "ms": 3321,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #4",
+      "ms": 3447,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #5",
+      "ms": 4269,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #6",
+      "ms": 3895,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #7",
+      "ms": 3634,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #8",
+      "ms": 3353,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #9",
+      "ms": 3399,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #10",
+      "ms": 3461,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #1",
+      "ms": 4458,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #2",
+      "ms": 3324,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #3",
+      "ms": 3514,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #4",
+      "ms": 3350,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #5",
+      "ms": 3441,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #6",
+      "ms": 3336,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #7",
+      "ms": 3436,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #8",
+      "ms": 3298,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #9",
+      "ms": 3388,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #10",
+      "ms": 3308,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    }
+  ]
+}

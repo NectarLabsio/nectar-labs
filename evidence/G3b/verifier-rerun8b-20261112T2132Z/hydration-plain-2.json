@@ -1,0 +1,1376 @@
+{
+  "summary": {
+    "mode": "plain",
+    "n": 10,
+    "at": "2026-11-12T21:54:52.773Z",
+    "loads": 40,
+    "hydrationErrors": 0,
+    "loadsWithHydration": 0,
+    "consoleErrors": 216,
+    "pageErrors": 0,
+    "navFailures": 0,
+    "byTarget": {
+      "SITE / desktop": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 76,
+        "pageErrors": 0,
+        "navFail": 0
+      },
+      "SITE / phone": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 98,
+        "pageErrors": 0,
+        "navFail": 0
+      },
+      "STATUS / desktop": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 42,
+        "pageErrors": 0,
+        "navFail": 0
+      },
+      "STATUS / phone": {
+        "loads": 10,
+        "hydration": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "navFail": 0
+      }
+    },
+    "distinctErrors": [
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."
+    ]
+  },
+  "loads": [
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #1",
+      "ms": 3648,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #2",
+      "ms": 5201,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #3",
+      "ms": 4604,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #4",
+      "ms": 4214,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #5",
+      "ms": 4466,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #6",
+      "ms": 3650,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #7",
+      "ms": 4325,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #8",
+      "ms": 4403,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #9",
+      "ms": 4247,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / desktop #10",
+      "ms": 4813,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #1",
+      "ms": 3605,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #2",
+      "ms": 4512,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #3",
+      "ms": 4122,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #4",
+      "ms": 4248,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #5",
+      "ms": 4327,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #6",
+      "ms": 4336,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #7",
+      "ms": 4207,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #8",
+      "ms": 4970,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #9",
+      "ms": 4229,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://site.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://site.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://site.localhost:3992/",
+      "label": "SITE / phone #10",
+      "ms": 3665,
+      "nav": "ok",
+      "htmlTheme": "intro",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #1",
+      "ms": 3404,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #2",
+      "ms": 3753,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #3",
+      "ms": 4463,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #4",
+      "ms": 3299,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #5",
+      "ms": 3332,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #6",
+      "ms": 3528,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #7",
+      "ms": 4285,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #8",
+      "ms": 3410,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #9",
+      "ms": 3580,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / desktop #10",
+      "ms": 4168,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://test.rpc.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        },
+        {
+          "text": "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'http://status.localhost:3992' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+          "at": "http://status.localhost:3992/:0:0"
+        },
+        {
+          "text": "Failed to load resource: net::ERR_FAILED",
+          "at": "https://rpc.testnet.fastnear.com/:0:0"
+        }
+      ],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #1",
+      "ms": 3293,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #2",
+      "ms": 3399,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #3",
+      "ms": 3451,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #4",
+      "ms": 3285,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #5",
+      "ms": 3288,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #6",
+      "ms": 3273,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #7",
+      "ms": 4458,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #8",
+      "ms": 3572,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #9",
+      "ms": 3255,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    },
+    {
+      "url": "http://status.localhost:3992/",
+      "label": "STATUS / phone #10",
+      "ms": 3409,
+      "nav": "ok",
+      "htmlTheme": "",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydrationWarnings": [],
+      "hydration": []
+    }
+  ]
+}

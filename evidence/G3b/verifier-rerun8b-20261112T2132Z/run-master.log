@@ -1,0 +1,38 @@
+[21:33:07Z] start; node v22.23.4; pnpm 10.34.9
+[21:33:09Z] clone exit 0
+[21:33:09Z] checkout exit 0; HEAD c95cd0cf9d3f56f570ba3847a9c8aed370e688e0
+[21:33:09Z] diff --stat 31809b1 c95cd0c -- apps packages services contracts:
+ apps/web/scripts/crawl-hosts.mjs      | 122 ++++++++++++++++++++++++++++++++++
+ apps/web/scripts/crawl-hosts.test.mjs |  86 ++++++++++++++++++++++++
+ apps/web/scripts/crawl.mjs            |  88 +++++++++++++++---------
+ 3 files changed, 265 insertions(+), 31 deletions(-)
+[21:33:09Z] docs/ui diff:  1 file changed, 1 insertion(+), 1 deletion(-)
+[21:33:09Z] (k) git grep -n '/Users/[A-Za-z]' -- ':!*.wasm' -> 0 lines
+[21:33:09Z] (k) git grep -l /Users/ -> 17 files (7 wasm)
+[21:33:09Z] (k) WO-62b hosts-spec log /Users/ lines: 0
+[21:33:15Z] install exit 0
+[21:33:15Z] crawl-hosts.test.mjs exit 0 (# pass 7 # fail 0 )
+[21:33:15Z] hosted env: SITE_URL=http://site.localhost:3992 APP_URL=http://app.localhost:3992 DOCS_URL=http://docs.localhost:3994 STATUS_URL=http://status.localhost:3992 LEGACY_HOSTS=old-site.localhost:3992=site,old-app.localhost:3992=app
+[21:33:25Z] build-docs (hosted env) exit 0
+[21:33:25Z] docs sitemap first loc: <loc>http://docs.localhost:3994/changelog</loc>; locs 56
+[21:33:26Z] docs :3994 up pid 88211; / -> 200
+[21:33:34Z] build-hosted exit 0
+[21:33:36Z] hosted :3992 up pid 88353; site / 200, status / 200, app / 307 http://app.localhost:3992/feed
+[21:33:36Z] health {"ok":true,"deployed":true,"core":"nectar-core-v2.nectar.testnet","version":"2.2.1-v7","pool":{"available_usd_e6":"40771000000","utilised_usd_e6":"9229000000","treasury_usd_e6":"80662710","lenders_fee
+[21:33:36Z] (p) plain start
+[21:36:06Z] (p) plain exit 0 : SUMMARY {"mode":"plain","n":10,"at":"2026-11-12T21:36:06.802Z","loads":40,"hydrationErrors":0,"loadsWithHydration":0,"consoleErrors":0,"pageErrors":0,"navFailures":0,"byTarget":{"SITE / desktop":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0},"SITE / phone":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0},"STATUS / desktop":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0},"STATUS / phone":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0}},"distinctErrors":[]}
+[21:36:06Z] (d) crawl --polite start
+[21:49:48Z] (d) crawl exit 0 : crawl: 83 internal (rendered: site 15, app 9, status 1, docs 56), 41 external, 0 failures, 0 our console errors, 0 page loads with third-party network failures → /tmp/verify-G3b-r8b-20261112T2132Z.ev/crawl
+[21:49:48Z] (p+) crawlstyle start
+[21:50:14Z] (p+) crawlstyle exit 0 : SUMMARY {"mode":"crawlstyle","n":10,"at":"2026-11-12T21:50:14.476Z","loads":80,"hydrationErrors":0,"loadsWithHydration":0,"consoleErrors":0,"pageErrors":0,"navFailures":0,"byTarget":{"SITE / dark@1440":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0},"SITE / light@1440":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0},"SITE / light@400":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0},"SITE / dark@400":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0},"STATUS / dark@1440":{"loads":10,"hydration":0,"conso
+[21:50:14Z] (d+) fast crawl start
+[21:52:10Z] (d+) fast crawl exit 0 : crawl: 84 internal (rendered: site 15, app 10, status 1, docs 56), 41 external, 0 failures, 0 our console errors, 68 page loads with third-party network failures → /tmp/verify-G3b-r8b-20261112T2132Z.ev/crawl-fast
+[21:52:10Z] (p) plain re-run after load start
+[21:54:52Z] (p) plain-2 exit 0 : SUMMARY {"mode":"plain","n":10,"at":"2026-11-12T21:54:52.773Z","loads":40,"hydrationErrors":0,"loadsWithHydration":0,"consoleErrors":216,"pageErrors":0,"navFailures":0,"byTarget":{"SITE / desktop":{"loads":10,"hydration":0,"consoleErrors":76,"pageErrors":0,"navFail":0},"SITE / phone":{"loads":10,"hydration":0,"consoleErrors":98,"pageErrors":0,"navFail":0},"STATUS / desktop":{"loads":10,"hydration":0,"consoleErrors":42,"pageErrors":0,"navFail":0},"STATUS / phone":{"loads":10,"hydration":0,"consoleErrors":0,"pageErrors":0,"navFail":0}},"distinctErrors":["Access to fetch at 'https://test.rpc.fast
+[21:54:54Z] kill 3992 pid 88353 -> 0; listeners left: none
+[21:54:56Z] kill 3994 pid 88211 -> 0; listeners left: none
+/private/tmp/claude-501/-Volumes-T7-nectar-labs/287a71ca-7606-413d-ba02-4ab86f1493b2/scratchpad/r8b.sh: line 15: 88211 Terminated: 15          node apps/web/scripts/serve-docs.mjs --port 3994 > "$EV/server-docs.log" 2>&1
+[21:54:56Z] listeners 3990-3999: 0
+[21:54:56Z] host services: 127.0.0.1:8791 127.0.0.1:8788 127.0.0.1:8789 127.0.0.1:8545 127.0.0.1:8790 
+[21:54:57Z] clone tracked changes: 1
+[21:54:57Z] done

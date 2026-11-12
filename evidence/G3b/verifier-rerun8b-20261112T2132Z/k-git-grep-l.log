@@ -1,0 +1,17 @@
+.claude/agent-memory/verifier/reference_g3b_v2_web.md
+.claude/agent-memory/verifier/reference_g9_rehearsal.md
+contracts/mock-ft/tests/fixtures/mock-ft-deployed.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_p0.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v1.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v1c.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v2.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v21.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v22.wasm
+docs/EVIDENCE.md
+evidence/G3b/verifier-rerun7-20261112T1530Z/phase1.txt
+evidence/G3b/verifier-rerun7-20261112T1530Z/run-master.log
+evidence/G3b/verifier-rerun7-20261112T1530Z/run7.sh
+evidence/G3b/verifier-rerun8-20261112T2019Z/phase1.txt
+evidence/G3b/verifier-rerun8-20261112T2019Z/r8-greps.sh
+evidence/G3b/verifier-rerun8-20261112T2019Z/run-master.log
+evidence/G3b/verifier-rerun8-20261112T2019Z/run8.sh

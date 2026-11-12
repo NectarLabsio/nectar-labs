@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: hosted, five values: DOCS and STATUS are internal hosts and seeds
+ok 1 - hosted, five values: DOCS and STATUS are internal hosts and seeds
+  ---
+  duration_ms: 0.778334
+  type: 'test'
+  ...
+# Subtest: hosted: /docs/<rest> on SITE, APP and STATUS → DOCS/<rest> (prefix dropped), never APP/docs
+ok 2 - hosted: /docs/<rest> on SITE, APP and STATUS → DOCS/<rest> (prefix dropped), never APP/docs
+  ---
+  duration_ms: 0.475292
+  type: 'test'
+  ...
+# Subtest: hosted: status host routing and legacy hosts
+ok 3 - hosted: status host routing and legacy hosts
+  ---
+  duration_ms: 0.187375
+  type: 'test'
+  ...
+# Subtest: two hosts only (no DOCS_URL / STATUS_URL): WO-34a expectations, docs = APP/docs on the APP host
+ok 4 - two hosts only (no DOCS_URL / STATUS_URL): WO-34a expectations, docs = APP/docs on the APP host
+  ---
+  duration_ms: 0.095041
+  type: 'test'
+  ...
+# Subtest: DOCS_URL or STATUS_URL on a taken host count as unset (readHosts)
+ok 5 - DOCS_URL or STATUS_URL on a taken host count as unset (readHosts)
+  ---
+  duration_ms: 0.157583
+  type: 'test'
+  ...
+# Subtest: parseLegacy drops canonical hosts, unset targets, bad kinds and malformed hosts
+ok 6 - parseLegacy drops canonical hosts, unset targets, bad kinds and malformed hosts
+  ---
+  duration_ms: 0.06375
+  type: 'test'
+  ...
+# Subtest: sitemapUrls re-bases another origin onto DOCS and keeps DOCS URLs
+ok 7 - sitemapUrls re-bases another origin onto DOCS and keeps DOCS URLs
+  ---
+  duration_ms: 0.197416
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 35.259541
