@@ -1,3 +1,17 @@
+## NOW (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
+Decisions typed this session: hosts nectarlabs.io (site) · docs. · status. · testnet. (app) · www → apex, replacing ac.nectarlabs.io; H-ORACLE option A
+on Railway, FC key limited to update_owner_price, every 10 min in NYSE windows / 12 h outside, through 2026-11-18; mock-ft code-only upgrade for a
+capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept. Repo URL for H2: https://github.com/NectarLabsio/nectar-labs.
+- A1 done 19:31Z: nectarlabs.io is in the Vercel team (Vercel DNS zone, Kunal added it); attached testnet./status./www.(308 → apex) to web
+  prj_LDWS…, docs. to docs prj_3HZc…. dig @ns1.vercel-dns.com answers all five; no records needed from Kunal (H-DNS). Hosts still serve release 3.
+- Deployed params (evidence/claims/deployed-params-20261112T192755Z.json): LTV 40/70, haircut 10/25, Reserve $10 live, D 0, oracle Owner $135.
+- Feed (hosted) views mode: events_indexed 0 (B5 → WO-63/WO-62a reports).
+- nectar.testnet 1.80 NEAR; token accounts ~0.10 NEAR free storage each (mock-ft growth > ~8 KB needs a top-up).
+Round 1 dispatched: WO-60 researcher · WO-61 contract (mock-ft faucet) · WO-62a web (B1–B4) · WO-63 keeper (refresher + B5/x402 answers).
+Round 2 (after facts): WO-62b web hosts/redirects/status host · WO-64 docs-site baseUrl "/" · WO-62c web Get-test-assets button.
+Orchestrator: mock-ft upgrade deploy + set_faucet; FC key + Railway refresher; demo account (~/.nectar, 0600); Feed CORS; vercel.app → 308 after release.
+Round 3: WO-65 docs (URLs everywhere, DEMO_SCRIPT ≤ 2 min, snapshot, HUMAN_HANDOFF). Then deploy → production check, G3b, G9 → submission-rc → audit.
+
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
 ## In flight (2026-11-12 ~01:55Z) — WO-34m: deploy through the connectors (Kunal: "use mcp for vercel and railway")
@@ -356,7 +370,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T17:19:53Z · commit c194c8f
+Last activity: 2026-11-12T19:11:37Z · commit 39d3bd8
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
