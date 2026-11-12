@@ -91,7 +91,8 @@ SQLite meta, so restarts resume; event inserts are idempotent. Env: `FEED_INDEXE
 `neardata`; `views` = fallback, view polling + keeper tx-status logs), `FEED_NEARDATA_URL` (default
 `https://testnet.neardata.xyz`), `FEED_NEARDATA_START_HEIGHT` (first run only; default = current final block;
 `276971305` holds the G2 seed `liquidity_supplied`), `FEED_NEARDATA_MAX_BLOCKS` (per poll, default 100),
-`FEED_NEARDATA_API_KEY_PATH` (optional FastNear key, sent as Bearer). Tests use a captured block,
+`FEED_NEARDATA_API_KEY_PATH` (optional FastNear key file, sent as Bearer) or `FEED_NEARDATA_API_KEY` (the key value itself, e.g. a
+Railway sealed variable; the path wins if both are set; the key and its length are never logged). Tests use a captured block,
 `test/fixtures/neardata-block-276971305.json`.
 
 
@@ -106,6 +107,7 @@ Railway specifics (PORT injection, Dockerfile path, volumes) are not yet in docs
 | `PORT` | ignored unless single-port | injected | listen port (wins over `FEED_PORT` in single-port mode) |
 | `FEED_HOST` | `127.0.0.1` | `0.0.0.0` | bind address |
 | `FEED_DB_PATH` | `~/.nectar/feed.sqlite` | `/data/feed.sqlite` | SQLite on a volume mounted at `/data` |
+| `FEED_NEARDATA_API_KEY` | unset (keyless) | sealed variable | Neardata key value (Bearer); `FEED_NEARDATA_API_KEY_PATH` (a file) wins if both are set; never logged |
 | `FEED_START_BLOCK` | `head` | `head` | `head`, `head-N` or a height; only used when the DB has no cursor |
 | `NEAR_RPC_URLS` | FastNEAR ×2, dRPC, Intear (F-413) | same | comma list, exact order. `NEAR_RPC_URL` = that endpoint first, then the same fallbacks (WO-35k); a loopback URL or `NEAR_RPC_FALLBACK=off` stays alone. A 429 / 5xx / timeout rotates to the next endpoint with backoff; logs `rpc_failover` / `rpc_endpoint` carry the host only |
 | `FEED_CORS_ORIGINS` | unset (`*`, no preflight) | SITE_URL,APP_URL | exact origins; others get no allow header and a 403 preflight |
