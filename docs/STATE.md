@@ -24,7 +24,18 @@
   - Restore needs a FastNear/neardata API key → H-NEARDATA, optional. The code reads FEED_NEARDATA_API_KEY_PATH, a file, so it needs a start-command tweak.
   - Follow-up for the keeper agent: in views mode, /health `chain_head` stays at the old neardata value (277297242) while last_indexed_block is current.
   - The Vercel connector still has no team grant: list_teams is empty and even reads return 403. The approval never happened; a new link was sent 05:16Z.
-- Production still needs H-LEGAL → G3b re-run 5 → new tarball → `target: production`. H-DOMAIN default (vercel.app) at 2026-11-13 06:00 UTC.
+- 05:20Z: Kunal approved Vercel team access. Projects:
+  - nectar-labs-web prj_LDWShDagwIbzBzBaRmBIvj8Aw7oa (FEED_URL env set);
+  - nectar-labs-docs prj_3HZc8bIECi9htd1g6NwgSykhP9Gu.
+- First deployments are always production. Web dpl_4jAWW… ERROR at install, nothing served; docs dpl_FadAW… cancelled at once.
+  Previews from fd06e11 (projectSettings in each request; stubs pin engines 22.x):
+  - web dpl_E1CJ9onhpkBYwKaMA3mTYjMJeDd9 READY. Static pages 200; headers (HSTS, XFO, CSP, noindex) ok; /api/indexer/* ok.
+    **6 dynamic routes 500** (config.yaml not traced into the function) and the runtime is nodejs26.x → WO-34p (web, dispatched).
+  - docs dpl_BdCQyTjeFVjzmd1ph4VCEkj412A9 READY. **Pages 404 without .html** (no clean URLs) → WO-34q (docs, after WO-34r5 facts). Sitemap says
+    localhost: set DOCS_ORIGIN_URL on the docs project before production.
+- Production still needs WO-34p + WO-34q + H-LEGAL → G3b re-run 5 (add a Vercel-preview check of the dynamic routes) → new tarball → production.
+  H-DOMAIN default (vercel.app) at 2026-11-13 06:00 UTC. The production *.vercel.app URL is behind Vercel Authentication
+  ("all_except_custom_domains") until ssoProtection is changed.
 - Dispatched: WO-34n docs (HUMAN_HANDOFF H-HOST + RUNBOOK connector section); researcher follow-up (live notes on F-415/418/423/427, C-024).
 
 ## Earlier in flight (2026-11-11 ~19:50Z) — WO-34 hosting + rest of the second request (no push / post / send)
@@ -218,7 +229,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T01:55:15Z · commit 4c7071e
+Last activity: 2026-11-12T05:18:06Z · commit 2e7f8cb
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
