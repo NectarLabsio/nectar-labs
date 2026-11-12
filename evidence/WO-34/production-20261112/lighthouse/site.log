@@ -1,0 +1,17 @@
+
+| route | dark | light |
+| --- | --- | --- |
+| / | 100 | 100 |
+| /about | 100 | 100 |
+| /security | 100 | 100 |
+| /status | 100 | 100 |
+| /changelog | 100 | 100 |
+| /brand | 100 | 100 |
+| /talk | 100 | 100 |
+| /legal/privacy | 100 | 100 |
+| /legal/cookies | 100 | 100 |
+| /legal/terms | 100 | 100 |
+| /legal/disclaimers | 100 | 100 |
+
+reports: /private/tmp/verify-wo34v-20261112/evidence/G3/lighthouse
+exit 0

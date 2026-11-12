@@ -1,0 +1,209 @@
+captured 2026-11-12T13:38:26Z
+
+==== GET -I https://nectarlabs.vercel.app/
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /
+x-vercel-id: bom1::657g6-1794490707546-56313c6ee10c
+
+==== GET -I https://nectarlabs.vercel.app/legal/privacy
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /legal/privacy
+x-vercel-id: bom1::ppw6v-1794490708031-78c70f6cc7d1
+
+==== GET -I https://nectarlabs-app.vercel.app/feed
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /feed
+x-vercel-id: bom1::gxxv6-1794490708696-5c3a77e51122
+
+==== GET -I https://nectarlabs-app.vercel.app/borrow
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /borrow
+x-vercel-id: bom1::ncjjs-1794490709156-53b3dcafd1e7
+
+==== GET -I https://nectarlabs-app.vercel.app/docs
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-robots-tag: noindex
+x-vercel-id: bom1:bom1:bom1::xhfgs-1794490709451-9fef0031374d
+
+==== GET -I https://nectarlabs-app.vercel.app/docs/
+HTTP/2 308 
+location: /docs
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-vercel-id: bom1::6vttt-1794490709851-cc74792b490b
+
+==== GET -I https://nectarlabs-app.vercel.app/docs/start/quick-start
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-robots-tag: noindex
+x-vercel-id: bom1:bom1:bom1::fvvd5-1794490710004-05d79184d66a
+
+==== GET -I https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app/
+HTTP/2 307 
+location: /docs/
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-robots-tag: noindex
+x-vercel-id: bom1::5tt5r-1794490710226-e81c6b3a54f5
+
+==== GET -I https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app/docs/
+HTTP/2 200 
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-robots-tag: noindex
+x-vercel-id: bom1::5wkbj-1794490710381-2069ce024355
+
+==== GET -I https://nectar-labs-web.vercel.app/
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /
+x-vercel-id: bom1::kwjmm-1794490710577-6ee1fee56fa5
+
+==== GET -I https://nectar-labs-web-kunals-projects-35d3a237.vercel.app/
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /
+x-robots-tag: noindex
+x-vercel-id: bom1::gk878-1794490710786-e73f20db58f1
+
+==== GET -I https://nectar-labs-web.vercel.app/feed
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /feed
+x-vercel-id: bom1::kvzld-1794490711386-ccf81ccd52dd
+
+==== GET -I https://nectar-labs-web-kunals-projects-35d3a237.vercel.app/feed
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com https://rsms.me; img-src 'self' data: blob: https://raw.githubusercontent.com https://storage.herewallet.app https://evm-on-near.dev https://meteorwallet.app; font-src 'self' data: https://fonts.cdnfonts.com https://rsms.me; connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech https://evm-on-near.dev https://api.devnet.solana.com; frame-src 'self' https://wallet.intear.tech; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-matched-path: /feed
+x-robots-tag: noindex
+x-vercel-id: bom1::vmqcc-1794490711801-e3d474782657
+
+==== redirects (status + location, no follow)
+https://nectarlabs.vercel.app/borrow?asset=NVDAx -> 308 https://nectarlabs-app.vercel.app/borrow?asset=NVDAx
+https://nectarlabs.vercel.app/feed -> 308 https://nectarlabs-app.vercel.app/feed
+https://nectarlabs.vercel.app/docs/security/audits -> 308 https://nectarlabs-app.vercel.app/docs/security/audits
+https://nectarlabs-app.vercel.app/ -> 307 https://nectarlabs-app.vercel.app/feed
+https://nectarlabs-app.vercel.app/about -> 308 https://nectarlabs.vercel.app/about
+https://nectarlabs-app.vercel.app/security -> 308 https://nectarlabs.vercel.app/security
+https://nectarlabs-app.vercel.app/legal/privacy -> 308 https://nectarlabs.vercel.app/legal/privacy
+https://nectarlabs-app.vercel.app/docs/ -> 308 https://nectarlabs-app.vercel.app/docs
+https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app/ -> 307 https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app/docs/
+
+==== www host on vercel.app (expected N/A)
+curl exit 0
+
+==== FEED /health
+{"ok":true,"last_indexed_block":277370086,"chain_head":277297242,"lag_blocks":0,"last_poll_at":"2026-11-12T13:38:38.066Z","poll_age_s":2,"last_error":"","source":"views","start_block":"head","events_indexed":0,"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"fd06e11dbb5b979ac334968d78cf06a248ae028f"}
+HTTP 200
+
+
+==== FEED headers /health
+HTTP/2 200 
+
+==== FEED CORS GET /api/feed Origin: https://nectarlabs.vercel.app
+HTTP/2 200 
+access-control-allow-origin: https://nectarlabs.vercel.app
+access-control-expose-headers: *
+vary: Origin
+
+==== FEED CORS preflight OPTIONS /mcp Origin: https://nectarlabs.vercel.app
+HTTP/2 204 
+access-control-allow-headers: *
+access-control-allow-methods: POST, OPTIONS
+access-control-allow-origin: https://nectarlabs.vercel.app
+access-control-expose-headers: *
+access-control-max-age: 600
+vary: Origin
+
+==== FEED CORS GET /api/feed Origin: https://nectarlabs-app.vercel.app
+HTTP/2 200 
+access-control-allow-origin: https://nectarlabs-app.vercel.app
+access-control-expose-headers: *
+vary: Origin
+
+==== FEED CORS preflight OPTIONS /mcp Origin: https://nectarlabs-app.vercel.app
+HTTP/2 204 
+access-control-allow-headers: *
+access-control-allow-methods: POST, OPTIONS
+access-control-allow-origin: https://nectarlabs-app.vercel.app
+access-control-expose-headers: *
+access-control-max-age: 600
+vary: Origin
+
+==== FEED CORS GET /api/feed Origin: https://evil.example.com
+HTTP/2 200 
+vary: Origin
+
+==== FEED CORS preflight OPTIONS /mcp Origin: https://evil.example.com
+HTTP/2 403 
+vary: Origin
+
+==== FEED MCP tools/list
+event: message
+data: {"result":{"tools":[{"name":"get_exit_capacity","title":"Exit capacity","description":"Committed exit capacity for a collateral: Q_c (escrowed quotes), R_c (reserve), D_c (verified depth), haircut, oracle state, plus the latest 1Click dry-quote sample.","inputSchema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral symbol, e.g. NVDAx"}},"required":["symbol"]},"annotations":{"readOnlyHint":true,"destructiveHint":false,"idempotentHint":true,"openWorldHint":true},"execution":{"taskSupport":"forbidden"}},{"name":"preview_borrow","title":"Preview borrow","description":"Runs the nectar-core `preview_borrow` view: Cramér limit B_c, static limit, limit premium, and whether the borrow would pass. Read-only; signs nothing.","inputSchema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral symbol, e.g. NVDAx"},"units":{"type":"string","pattern":"^\\d{1,39}$","description":"collateral base units (integer string)"},"borrow_usd_e6":{"type":"string","pattern":"^\\d{1,39}$","description":"borrow in USD e6 (integer string)"}},"required":["symbol","units","borrow_usd_e6"]},"annotations":{"readOnlyHint":true,"destructiveHint":false,"idempotentHint":true,"openWorldHint":true},"execution":{"taskSupport":"forbidden"}},{"name":"list_quotes","title":"List quotes","description":"Live Pappus exit quotes for a collateral: ids, sizes, max discount, notice. Buyer identities are never returned.","inputSchema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral symbol, e.g. NVDAx"},"limit":{"type":"integer","minimum":1,"maximum":50}},"required":["symbol"]},"annotations":{"readOnlyHint":true,"destructiveHint":false,"idempotentHint":true,"openWorldHint":true},"execution":{"taskSupport":"forbidden"}},{"name":"explain_limit","title":"Explain limit","description":"The Cramér limit (D-009, PRD §4.2) B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)) with live numbers substituted, as text. Optional units adds V_c and the contract-checked B_c.","inputSchema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"symbol":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}$","description":"collateral 
