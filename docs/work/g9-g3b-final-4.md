@@ -39,6 +39,11 @@ WO-34 additions (all on your own ports, from the fresh clone):
   - (k) `git grep -l "/Users/"` lists only contracts/nectar-core/tests/fixtures/*.wasm (accepted: byte-identical to deployed code).
   - (h) for run 6: orchestrator-run preview checks of 3126773 (evidence/WO-34/preview-*-3126773-*.log), reviewed by you as in run 5.
   - Disk: clone into /tmp (internal disk, ~80 GB free); never install dependencies under /Volumes/T7.
+- **Run 7 (RELEASE 2 = the commit the orchestrator names; frozen 3126773 + WO-35g docs + WO-35i landing + docs-only):** everything in run 6, plus:
+  - (l) WO-35i in a HYDRATED browser (not curl only): the landing "chains" section text after hydration equals the server HTML text for that section, and
+    every sentence naming Base says "local fork" — with the flags as config.yaml ships them and with each flag pinned (v7.spec.ts:189-243 covers this; run
+    it and also check by hand in Chrome on your local `next start`). LandingNav "Chains" link consistent.
+  - (h) for run 7: orchestrator preview logs evidence/WO-34/preview-*-<release2 sha7>-*.log, incl. a hydrated landing check.
 **G9 (verifier B) runs only after the deploy step** (README "Hosted demo" lands first), or on Kunal's deadline if hosting is skipped.
 
 **G9 (verifier B):** docs/work/g9-final.md steps 1–7 + docs/work/g9-final-2.md steps 8–10, plus:

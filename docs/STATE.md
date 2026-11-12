@@ -119,6 +119,10 @@
     In flight: WO-35i (web: server/client-consistent chains copy, "local fork" everywhere Base is named) ‖ WO-35h (docs: README points to EVIDENCE for
     the deployed commit/acceptance; H-ORACLE; RUNBOOK). Then: release 2 → G3b run 7 → production → WO-34v3 (landing hydrated + crawl) ‖ G9 run 5 →
     submission-rc → FINAL_REPORT re-audit. Info for Kunal: nectar-labs-web.vercel.app serves a duplicate (canonical → SITE/APP, no noindex).
+  - ~16:05Z MERGED: WO-35h docs (README hosted + gate-run refs → EVIDENCE; H-ORACLE; RUNBOOK) and WO-35i web (Landing.tsx:341-353 + LandingNav read the
+    server's config.yaml flags so server HTML = hydrated text; every Base sentence says "local fork"; v7.spec.ts:189-243 hydrated tests 16/16).
+    verify:quick 0; web build + check-trace 6/6. **RELEASE 2 = this STATE commit.** Next: tarball → previews + (h) incl. hydrated landing →
+    G3b run 7 (order block "Run 7") → production → WO-34v3 (hydrated landing + crawl) ‖ G9 run 5 → submission-rc → FINAL_REPORT re-audit.
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
@@ -332,7 +336,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T15:18:20Z · commit 5c82ffe
+Last activity: 2026-11-12T15:28:29Z · commit 437bb45
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
