@@ -1,0 +1,3 @@
+routes r7 89 r7b 88 only r7: ['http://app.localhost:PORT/notes?tab=deposits'] only r7b: []
+externals only r7: ['https://feed-production-2f2776c9.up.railway.app/'] only r7b: ['https://feed-production-2f2776c9.up.railway.app/health']
+r7b railway external: {'href': 'https://feed-production-2f2776c9.up.railway.app/health', 'from': 'http://app.localhost:3983/docs/integrate/feed-rest', 'status': 200, 'ok': True}

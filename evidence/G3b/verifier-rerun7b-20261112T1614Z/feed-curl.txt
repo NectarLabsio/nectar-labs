@@ -1,0 +1,4 @@
+https://feed-production-2f2776c9.up.railway.app/health -> 200 0.718694s
+-- bare origin (control) -> 404
+https://feed-production-2f2776c9.up.railway.app/healthz -> 200
+https://feed-production-2f2776c9.up.railway.app/api/feed -> 200
