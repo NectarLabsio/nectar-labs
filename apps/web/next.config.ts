@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
 import type { NextConfig } from "next";
 import { buildCsp } from "./lib/csp";
 import { docsOrigin, docsUrl, readHosts } from "./lib/hosts";
@@ -29,9 +31,25 @@ const securityHeaders = [
 
 const DOCS_ORIGIN = docsOrigin(env);
 
+// WO-34p: serverless bundles. loadConfig (@nectar/sdk/config-node) finds packages/config/config.yaml by walking up from process.cwd()
+// at request time; the file tracer cannot follow that walk, so Vercel functions shipped without it (500 "not found above
+// /var/task/apps/web"). Trace from the repo root (the same walk, run here at build time) and add the file to every server trace.
+// Keys are route globs (picomatch, `contains`), values are globs resolved from this project dir (next 16.4.5
+// dist/build/collect-build-traces.js:476-490, dist/docs/01-app/03-api-reference/05-config/01-next-config-js/output.md:82-160;
+// `next build` here is Turbopack, which applies the same option natively). Static pages carry no trace and read repo files only at build time. scripts/check-trace.mjs asserts the result after `next build`.
+function repoRoot(start: string): string {
+  for (let dir = start; ; dir = dirname(dir)) {
+    if (existsSync(join(dir, "packages", "config", "config.yaml"))) return dir;
+    if (dirname(dir) === dir) throw new Error(`next.config: packages/config/config.yaml not found above ${start}`);
+  }
+}
+const RUNTIME_REPO_FILES = ["../../packages/config/config.yaml"];
+
 const config: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  outputFileTracingRoot: repoRoot(process.cwd()),
+  outputFileTracingIncludes: { "/**": RUNTIME_REPO_FILES },
   transpilePackages: ["@nectar/ui", "@nectar/sdk"],
   // The repo lives on exFAT: macOS "._*" files corrupt the Turbopack persistent cache ("invalid digit found in string").
   experimental: { turbopackFileSystemCacheForDev: false, turbopackFileSystemCacheForBuild: false },

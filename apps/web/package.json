@@ -7,6 +7,7 @@
     "dev": "next dev -p 3100",
     "build": "node scripts/build-changelog.mjs && next build",
     "changelog": "node scripts/build-changelog.mjs",
+    "check:trace": "node scripts/check-trace.mjs",
     "start": "next start -p 3100",
     "typecheck": "next typegen && tsc --noEmit -p tsconfig.json",
     "lint": "node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs",
@@ -48,6 +49,6 @@
     "yaml": "^2.9.1"
   },
   "engines": {
-    "node": ">=22.22.2"
+    "node": ">=22.22.2 <23"
   }
 }
