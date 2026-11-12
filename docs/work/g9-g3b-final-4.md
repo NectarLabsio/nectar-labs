@@ -31,6 +31,14 @@ WO-34 additions (all on your own ports, from the fresh clone):
     apps/web/scripts/serve-docs.mjs; the live hosted check is WO-34v (production acceptance).
 - Run 5 target: the code-final commit the orchestrator names (c4f143b or a docs-only descendant). Playwright on this machine needs `PW_CHANNEL=chrome`
   (the bundled headless shell 1254 is not installed).
+- **Run 6 (FROZEN commit 312677303720a70e76823901f7968e4ff7c0891d, Kunal's freeze 2026-11-12):** everything above, plus:
+  - (i) WO-35w claims on the built landing (local build, rendered HTML): no "0123456789" in visible text or meta description; the Base section says
+    "local fork"; every TEE line says verifiable (no private/confidential); no "until the Reserve ships"; the worked example uses config.yaml parameters
+    (LTV 40/70, haircut 10/25). Event-history banner appears when the Feed reports `history: "unavailable"` (views mode).
+  - (j) WO-35k: keeper + feed unit tests pass; Feed /health shape has `chain_head_source`, `history`, `rpc`; in views mode `chain_head` ≥ last block.
+  - (k) `git grep -l "/Users/"` lists only contracts/nectar-core/tests/fixtures/*.wasm (accepted: byte-identical to deployed code).
+  - (h) for run 6: orchestrator-run preview checks of 3126773 (evidence/WO-34/preview-*-3126773-*.log), reviewed by you as in run 5.
+  - Disk: clone into /tmp (internal disk, ~80 GB free); never install dependencies under /Volumes/T7.
 **G9 (verifier B) runs only after the deploy step** (README "Hosted demo" lands first), or on Kunal's deadline if hosting is skipped.
 
 **G9 (verifier B):** docs/work/g9-final.md steps 1–7 + docs/work/g9-final-2.md steps 8–10, plus:
