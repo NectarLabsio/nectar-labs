@@ -1,0 +1,36 @@
+web preview https://nectar-labs-q10asadem-kunals-projects-35d3a237.vercel.app (3126773 frozen, dpl_5etJbR4bLKM94YzBbo5HkYKZE4MG) 20261112T141408Z
+200 /
+200 /feed
+200 /borrow
+307 /quote
+200 /notes
+200 /reserve
+200 /shield
+200 /console
+200 /about
+200 /status
+200 /security
+200 /changelog
+200 /brand
+200 /talk
+200 /legal/privacy
+200 /legal/terms
+200 /legal/cookies
+200 /legal/disclaimers
+200 /docs
+200 /robots.txt
+200 /sitemap.xml
+200 /api/health
+200 /api/feed
+200 /api/indexer/health
+200 /feed/NVDAX
+200 /position/1
+200 /note/1
+200 /quote/1
+/api/health ok:true
+web smoke https://nectar-labs-q10asadem-kunals-projects-35d3a237.vercel.app: routes 28, failures 0
+exit 0
+landing: 0123456789=0 local_fork=1 verifiable=5 tee_private=0 reserve_stale=0
+/about operator=1 contact=1 TODO-H=0
+/talk operator=1 contact=1 TODO-H=0
+/security operator=2 contact=3 TODO-H=0

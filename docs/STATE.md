@@ -87,7 +87,14 @@
     Orchestrator checks: web build + check-trace 6/6; rendered landing: no "0123456789", "local fork" present, TEE "verifiable", no "until the Reserve ships".
     Host keeper restarted on the merged code (healthy; rpc endpoints ×4). Feed start command now removes stale /data/src trees.
     **Disk incident:** two worktree `pnpm install`s filled /Volumes/T7 (26–62 GB each); now ~67 GB free. Agents symlink node_modules from main instead.
-  - Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
+  - **FROZEN 2026-11-12 ~14:10Z at 3126773** (tarball sha256 7eadb5d7…605e05). Previews: web dpl_5etJbR4bLKM94YzBbo5HkYKZE4MG 28/28 + claims checks;
+    docs dpl_DT8r3LWtBbf1o3mA1YezwdwYZpeA 56 pages + assets, root 307 no loop, Chrome + theme clean (evidence/WO-34/preview-*-3126773-*). G3b run 6 running.
+    WO-35e merged (evidence paths redacted; only *.wasm fixtures keep a home path). WO-34v (ca34111 production) FAIL on 3 → post-freeze fixes:
+    (1) docs noindex via the proxy: team-suffixed *.vercel.app sends x-robots-tag noindex → docs project domain nectarlabs-docs.vercel.app added (200,
+    no noindex) and web production DOCS_ORIGIN → it (config only); (2) docs origin lacks XFO/frame-ancestors → WO-35f facts → WO-35g vercel.json headers;
+    (3) localhost link in docs integrate/feed-rest → WO-35g. Not a gate item: nectar-labs-web.vercel.app serves the app (canonical → SITE/APP, no noindex).
+    G3b run 6 on 3126773 covers apps/web (unchanged by WO-35g); the docs delta is re-checked by G9 (fresh clone) + WO-34v re-run on production.
+  - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
     Docs project env: APP_URL (preview only) = the 46c35ea web preview, so navbar/footer app links stop pointing at localhost:3100.
