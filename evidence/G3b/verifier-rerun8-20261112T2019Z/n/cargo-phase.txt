@@ -1,0 +1,27 @@
+[20:38:56Z] rustc rustc 1.95.0 (59807616e 2026-04-14) / cargo-near cargo-near-near 0.23.0
+[20:38:57Z] cargo test -p mock-ft exit 101
+[20:38:57Z] mock-ft results: 
+[20:38:58Z] cargo near build (mock-ft) exit 1
+[20:39:27Z] retry with SDKROOT=MacOSX26.5.sdk exit 0
+[20:39:27Z] built wasm: target/near/mock_ft/mock_ft.wasm   171771 bytes sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+[20:39:46Z] chain views exit 0
+built sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14 (= expected: true) base58 GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+nvdax-mock.nectar.testnet: view_code 171771 B sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14 = built true = expected true; view_account code_hash GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB = b58(sha) true (block 277413504)
+  faucet_config {"enabled":true,"amount_per_claim":"5000000","cap_per_account":"15000000","cooldown_s":3600} vs config.yaml {"amount_per_claim":"5000000","cap_per_account":"15000000","cooldown_s":3600} -> MATCH
+usdc-mock.nectar.testnet: view_code 171771 B sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14 = built true = expected true; view_account code_hash GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB = b58(sha) true (block 277413519)
+  faucet_config {"enabled":true,"amount_per_claim":"500000000","cap_per_account":"1500000000","cooldown_s":3600} vs config.yaml {"amount_per_claim":"500000000","cap_per_account":"1500000000","cooldown_s":3600} -> MATCH
+tx 2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW: signer borrower1.nectar.testnet -> nvdax-mock.nectar.testnet; actions [{"FunctionCall":{"args":"e30=","deposit":"930000000000000000000","gas":30000000000000,"method_name":"faucet_mint"}}]; status {"SuccessValue":""}; FINAL; block 277410673 @ 2026-11-12T20:11:54.296Z; receipt failure false
+  log nvdax-mock.nectar.testnet: EVENT_JSON:{"standard":"nep141","version":"1.0.0","event":"ft_mint","data":[{"owner_id":"borrower1.nectar.testnet","amount":"5000000","memo":"faucet"}]}
+CHAIN VIEWS PASS
+[20:39:46Z] tracked changes after build: 10
+[20:39:46Z] workspace test start
+[20:39:47Z] cargo test --workspace exit 101
+[20:39:47Z] workspace results: passed , failed , ignored 
+[20:39:47Z] cargo done
+[20:51:52Z] re-run with SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX26.5.sdk
+[20:53:13Z] cargo test -p mock-ft exit 0
+[20:53:13Z] mock-ft results:      Running unittests src/lib.rs (target/debug/deps/mock_ft-ada380bd0a9ff4d7) test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s      Running tests/sandbox_faucet.rs (target/debug/deps/sandbox_faucet-cf819a7a19056137) test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.74s test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s 
+[20:53:13Z] workspace test start
+[21:04:19Z] cargo test --workspace exit 0
+[21:04:19Z] workspace results: passed 710, failed 0, ignored 0
+[21:04:19Z] cargo2 done

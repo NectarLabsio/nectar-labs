@@ -1,0 +1,6 @@
+committed third-party hosts: 12 measured: 12
+only committed: []
+only measured: []
+measured cspBypassed: false cspViolations: []
+measured wallets: Meteor Wallet [sandboxed frame loaded (1)] viol=0; Intear Wallet [sandboxed frame loaded (1); shows: "CONNECT INTEAR WALLET Choose your preferred wallet connection method 🌐 Web 📱💻 App 🧪 Web (Beta) 🔧 Self-Hosted Close"] viol=0; Ledger [sandboxed frame loaded (1); shows: "Connect Ledger Before continuing, please ensure the NEAR app is installed on your Ledger device. You may install it via Ledger Live. USB Wir"] viol=0; Nightly Wallet [sandboxed frame loaded (1); shows: "Nightly Wallet Download Nightly Download"] viol=0; Ethereum Wallets [sandboxed frame loaded (1); opened 1 window(s); shows: ":root { --background-color: rgb(40, 40, 40); --text-color: rgb(255, 255, 255); --border-color: rgb(209, 209, 209); } * { font-family: system"] viol=0; NEAR CLI [sandboxed frame loaded (1); shows: "STEP 1 OF 2 Connect with NEAR CLI Enter your NEAR account ID Next"] viol=0
+measured hosts not in backticks in privacy.md: []

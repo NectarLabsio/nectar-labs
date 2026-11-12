@@ -1,0 +1,1701 @@
+{
+  "generated": "2026-11-12T20:47:56.033Z",
+  "site": "http://site.localhost:3982",
+  "app": "http://app.localhost:3982",
+  "docs": "http://docs.localhost:3984",
+  "variants": [
+    "dark@1440",
+    "light@1440",
+    "dark@400",
+    "light@400"
+  ],
+  "politeness": {
+    "polite": true,
+    "concurrency": 1,
+    "delayMs": 1500
+  },
+  "ourConsoleErrors": 0,
+  "thirdPartyNetworkFailures": [
+    {
+      "where": "http://site.localhost:3982/ [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/ [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/ [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/feed [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/feed [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/shield [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/shield [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/shield [dark@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/shield [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/reserve [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/notes [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/agents [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/keepers [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/keepers [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/changelog [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/security [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/brand [dark@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/brand [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/talk [dark@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/legal/privacy [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/legal/terms [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://site.localhost:3982/legal/disclaimers [dark@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/borrow [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/borrow [dark@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/borrow [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/quote/new [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/console [dark@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/console [light@1440]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/console [dark@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    },
+    {
+      "where": "http://app.localhost:3982/console [light@400]",
+      "detail": [
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+        "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+        "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+        "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "label": "APP / → /feed",
+      "url": "http://app.localhost:3982/",
+      "host": "app.localhost:3982",
+      "status": 307,
+      "location": "http://app.localhost:3982/feed",
+      "want": "307 http://app.localhost:3982/feed",
+      "ok": true
+    },
+    {
+      "label": "app route on SITE → APP",
+      "url": "http://site.localhost:3982/borrow?asset=NVDAx",
+      "host": "site.localhost:3982",
+      "status": 308,
+      "location": "http://app.localhost:3982/borrow?asset=NVDAx",
+      "want": "308 http://app.localhost:3982/borrow?asset=NVDAx",
+      "ok": true
+    },
+    {
+      "label": "SITE /docs/* → APP (legal pages link /docs/<slug>)",
+      "url": "http://site.localhost:3982/docs/security/audits",
+      "host": "site.localhost:3982",
+      "status": 308,
+      "location": "http://docs.localhost:3984/security/audits",
+      "want": "308 http://app.localhost:3982/docs/security/audits",
+      "ok": false
+    },
+    {
+      "label": "landing route on APP → SITE",
+      "url": "http://app.localhost:3982/security",
+      "host": "app.localhost:3982",
+      "status": 308,
+      "location": "http://site.localhost:3982/security",
+      "want": "308 http://site.localhost:3982/security",
+      "ok": true
+    },
+    {
+      "label": "www.<site> → SITE",
+      "url": "http://site.localhost:3982/talk",
+      "host": "www.site.localhost:3982",
+      "status": 301,
+      "location": "http://site.localhost:3982/talk",
+      "want": "301 http://site.localhost:3982/talk",
+      "ok": true
+    }
+  ],
+  "routes": [
+    {
+      "url": "http://site.localhost:3982/",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "dark@400": [],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ]
+      },
+      "links": 45
+    },
+    {
+      "url": "http://app.localhost:3982/feed",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/feed",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/feed",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "http://docs.localhost:3984/",
+      "status": 200,
+      "finalUrl": "http://docs.localhost:3984/",
+      "hops": [
+        {
+          "url": "http://docs.localhost:3984/",
+          "status": 200
+        }
+      ],
+      "console": {},
+      "thirdParty": {},
+      "links": 0
+    },
+    {
+      "url": "http://app.localhost:3982/shield",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/shield",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/shield",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "dark@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ]
+      },
+      "links": 38
+    },
+    {
+      "url": "http://app.localhost:3982/reserve",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/reserve",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/reserve",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ]
+      },
+      "links": 33
+    },
+    {
+      "url": "http://app.localhost:3982/notes",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/notes",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/notes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 35
+    },
+    {
+      "url": "http://app.localhost:3982/agents",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/agents",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/agents",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "http://app.localhost:3982/keepers",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/keepers",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/keepers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ]
+      },
+      "links": 34
+    },
+    {
+      "url": "http://app.localhost:3982/quote/new",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/quote/new",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/quote/new",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "http://site.localhost:3982/changelog",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/changelog",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/changelog",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://site.localhost:3982/security",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/security",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/security",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 34
+    },
+    {
+      "url": "http://site.localhost:3982/brand",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/brand",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/brand",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ]
+      },
+      "links": 41
+    },
+    {
+      "url": "http://site.localhost:3982/about",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/about",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/about",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://site.localhost:3982/talk",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/talk",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/talk",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ],
+        "light@400": []
+      },
+      "links": 35
+    },
+    {
+      "url": "http://site.localhost:3982/legal/privacy",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/legal/privacy",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/legal/privacy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ]
+      },
+      "links": 43
+    },
+    {
+      "url": "http://site.localhost:3982/legal/cookies",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/legal/cookies",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/legal/cookies",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://site.localhost:3982/legal/terms",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/legal/terms",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/legal/terms",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a rpc.testnet.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED rpc.testnet.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://rpc.testnet.fastnear.com/)"
+        ],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 42
+    },
+    {
+      "url": "http://site.localhost:3982/legal/disclaimers",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/legal/disclaimers",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/legal/disclaimers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@400": []
+      },
+      "links": 41
+    },
+    {
+      "url": "http://app.localhost:3982/borrow",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/borrow",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/borrow",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@1440": [],
+        "dark@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ]
+      },
+      "links": 34
+    },
+    {
+      "url": "http://app.localhost:3982/quote",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/quote/new",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/quote",
+          "status": 307
+        },
+        {
+          "url": "http://app.localhost:3982/quote/new",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "http://app.localhost:3982/console",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3982/console",
+      "hops": [
+        {
+          "url": "http://app.localhost:3982/console",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@1440": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "dark@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ],
+        "light@400": [
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)",
+          "console: CORS refusal of a test.rpc.fastnear.com answer (throttled: no CORS header on the 429)",
+          "requestfailed: net::ERR_FAILED test.rpc.fastnear.com/",
+          "console: Failed to load resource: net::ERR_FAILED (https://test.rpc.fastnear.com/)"
+        ]
+      },
+      "links": 33
+    },
+    {
+      "url": "http://site.localhost:3982/brand/mark.svg",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/brand/mark.svg",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/brand/mark.svg",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3982/brand/mark-256.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/brand/mark-256.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/brand/mark-256.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3982/brand/mark-flat-96.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/brand/mark-flat-96.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/brand/mark-flat-96.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3982/brand/wordmark-dark-100.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/brand/wordmark-dark-100.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/brand/wordmark-dark-100.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3982/brand/wordmark-muted-100.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3982/brand/wordmark-muted-100.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3982/brand/wordmark-muted-100.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    }
+  ],
+  "externals": [
+    {
+      "href": "http://docs.localhost:3984/",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/project/evidence",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://near.org/",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://solana.com/",
+      "from": "http://site.localhost:3982/",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://docs.near.org/chain-abstraction/chain-signatures",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://outlayer.ai/",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://near-intents.org/",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/integrate/sdk",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/integrate/feed-mcp",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://status.localhost:3982/",
+      "from": "http://site.localhost:3982/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/integrate/feed-rest",
+      "from": "http://app.localhost:3982/feed",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/operations/runbook",
+      "from": "http://app.localhost:3982/shield",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://x.com/xNectarNetwork",
+      "from": "http://site.localhost:3982/talk",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/security/trust-model",
+      "from": "http://site.localhost:3982/legal/terms",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/security/audits",
+      "from": "http://site.localhost:3982/legal/terms",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/security/disclosure",
+      "from": "http://site.localhost:3982/legal/terms",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/start/live-on-testnet",
+      "from": "http://site.localhost:3982/legal/disclaimers",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/protocol/oracle-policy",
+      "from": "http://site.localhost:3982/legal/disclaimers",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/protocol/quoter-tee",
+      "from": "http://site.localhost:3982/legal/disclaimers",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://docs.localhost:3984/concepts/position-notes",
+      "from": "http://site.localhost:3982/legal/disclaimers",
+      "status": 200,
+      "ok": true
+    }
+  ],
+  "failures": [
+    {
+      "kind": "redirect",
+      "where": "SITE /docs/* → APP (legal pages link /docs/<slug>)",
+      "detail": "got 308 http://docs.localhost:3984/security/audits; want 308 http://app.localhost:3982/docs/security/audits"
+    }
+  ],
+  "warnings": [
+    {
+      "kind": "external-soft",
+      "where": "https://solana.com/",
+      "detail": "status 429 (linked from http://site.localhost:3982/)"
+    }
+  ],
+  "truncated": false
+}

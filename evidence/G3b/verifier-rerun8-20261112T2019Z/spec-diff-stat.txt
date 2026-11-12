@@ -1,0 +1,6 @@
+ apps/web/e2e/claims.spec.ts      | 140 +++++++++++++++++++++++++++++++++++
+ apps/web/e2e/design-app.spec.ts  |  52 ++++++-------
+ apps/web/e2e/hosts.spec.ts       | 151 +++++++++++++++++++++++++++-----------
+ apps/web/e2e/inventory.spec.ts   |   9 ++-
+ apps/web/e2e/test-assets.spec.ts | 154 +++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 433 insertions(+), 73 deletions(-)

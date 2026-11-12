@@ -1,0 +1,325 @@
+{
+  "docs": "http://docs.localhost:3984",
+  "sitemapPages": 56,
+  "sitemapOrigins": [
+    "http://localhost:3000"
+  ],
+  "pages": [
+    {
+      "path": "/changelog",
+      "status": 200
+    },
+    {
+      "path": "/changelog/archive",
+      "status": 200
+    },
+    {
+      "path": "/changelog/docs-and-spec",
+      "status": 200
+    },
+    {
+      "path": "/search",
+      "status": 200
+    },
+    {
+      "path": "/concepts/aggregate-limit",
+      "status": 200
+    },
+    {
+      "path": "/concepts/corporate-actions",
+      "status": 200
+    },
+    {
+      "path": "/concepts/cramer-limits",
+      "status": 200
+    },
+    {
+      "path": "/concepts/exit-gap",
+      "status": 200
+    },
+    {
+      "path": "/concepts/fee-stack",
+      "status": 200
+    },
+    {
+      "path": "/concepts/nectar-reserve",
+      "status": 200
+    },
+    {
+      "path": "/concepts/notice-periods",
+      "status": 200
+    },
+    {
+      "path": "/concepts/pappus-quotes",
+      "status": 200
+    },
+    {
+      "path": "/concepts/position-notes",
+      "status": 200
+    },
+    {
+      "path": "/concepts/pre-liquidation",
+      "status": 200
+    },
+    {
+      "path": "/concepts/premium-and-fee-index",
+      "status": 200
+    },
+    {
+      "path": "/concepts/profit-lock",
+      "status": 200
+    },
+    {
+      "path": "/concepts/shields",
+      "status": 200
+    },
+    {
+      "path": "/concepts/weekend-oracle-guard",
+      "status": 200
+    },
+    {
+      "path": "/concepts/whitepaper",
+      "status": 200
+    },
+    {
+      "path": "/integrate/agent-skill-x402",
+      "status": 200
+    },
+    {
+      "path": "/integrate/feed-mcp",
+      "status": 200
+    },
+    {
+      "path": "/integrate/feed-rest",
+      "status": 200
+    },
+    {
+      "path": "/integrate/oneclick-depth",
+      "status": 200
+    },
+    {
+      "path": "/integrate/post-quotes",
+      "status": 200
+    },
+    {
+      "path": "/integrate/remote-collateral-solana",
+      "status": 200
+    },
+    {
+      "path": "/integrate/run-a-keeper",
+      "status": 200
+    },
+    {
+      "path": "/integrate/sdk",
+      "status": 200
+    },
+    {
+      "path": "/legal/cookies",
+      "status": 200
+    },
+    {
+      "path": "/legal/disclaimers",
+      "status": 200
+    },
+    {
+      "path": "/legal/privacy",
+      "status": 200
+    },
+    {
+      "path": "/legal/terms",
+      "status": 200
+    },
+    {
+      "path": "/operations/incidents",
+      "status": 200
+    },
+    {
+      "path": "/operations/monitoring",
+      "status": 200
+    },
+    {
+      "path": "/operations/runbook",
+      "status": 200
+    },
+    {
+      "path": "/operations/upgrades",
+      "status": 200
+    },
+    {
+      "path": "/project/brand",
+      "status": 200
+    },
+    {
+      "path": "/project/evidence",
+      "status": 200
+    },
+    {
+      "path": "/project/prior-work",
+      "status": 200
+    },
+    {
+      "path": "/project/roadmap",
+      "status": 200
+    },
+    {
+      "path": "/project/team",
+      "status": 200
+    },
+    {
+      "path": "/protocol/chain-signatures",
+      "status": 200
+    },
+    {
+      "path": "/protocol/contract-reference",
+      "status": 200
+    },
+    {
+      "path": "/protocol/oracle-policy",
+      "status": 200
+    },
+    {
+      "path": "/protocol/preimage-format",
+      "status": 200
+    },
+    {
+      "path": "/protocol/quoter-tee",
+      "status": 200
+    },
+    {
+      "path": "/protocol/settlement-flow",
+      "status": 200
+    },
+    {
+      "path": "/protocol/solana-vault",
+      "status": 200
+    },
+    {
+      "path": "/protocol/storage-and-gas",
+      "status": 200
+    },
+    {
+      "path": "/security/audits",
+      "status": 200
+    },
+    {
+      "path": "/security/disclosure",
+      "status": 200
+    },
+    {
+      "path": "/security/keys-and-roles",
+      "status": 200
+    },
+    {
+      "path": "/security/threats",
+      "status": 200
+    },
+    {
+      "path": "/security/trust-model",
+      "status": 200
+    },
+    {
+      "path": "/start/live-on-testnet",
+      "status": 200
+    },
+    {
+      "path": "/start/quick-start",
+      "status": 200
+    },
+    {
+      "path": "/",
+      "status": 200
+    }
+  ],
+  "assets": {
+    "/img/favicon.png": 200,
+    "/assets/css/styles.159040d2.css": 200,
+    "/assets/js/runtime~main.c967a54e.js": 200,
+    "/assets/js/main.9b642e30.js": 200,
+    "/img/lockup-light.png": 200,
+    "/img/lockup-dark.png": 200
+  },
+  "prefixed": [
+    {
+      "path": "/docs",
+      "status": 200
+    },
+    {
+      "path": "/docs/",
+      "status": 200
+    },
+    {
+      "path": "/docs/start/quick-start",
+      "status": 200
+    },
+    {
+      "path": "/docs/integrate/sdk",
+      "status": 200
+    }
+  ],
+  "redirects": [
+    {
+      "from": "http://site.localhost:3982/docs?x=1",
+      "status": 308,
+      "location": "http://docs.localhost:3984/?x=1",
+      "want": "http://docs.localhost:3984/?x=1",
+      "final": 200
+    },
+    {
+      "from": "http://site.localhost:3982/docs/start/quick-start?x=1",
+      "status": 308,
+      "location": "http://docs.localhost:3984/start/quick-start?x=1",
+      "want": "http://docs.localhost:3984/start/quick-start?x=1",
+      "final": 200
+    },
+    {
+      "from": "http://site.localhost:3982/docs/integrate/feed-rest",
+      "status": 308,
+      "location": "http://docs.localhost:3984/integrate/feed-rest",
+      "want": "http://docs.localhost:3984/integrate/feed-rest",
+      "final": 200
+    },
+    {
+      "from": "http://app.localhost:3982/docs?x=1",
+      "status": 308,
+      "location": "http://docs.localhost:3984/?x=1",
+      "want": "http://docs.localhost:3984/?x=1",
+      "final": 200
+    },
+    {
+      "from": "http://app.localhost:3982/docs/start/quick-start?x=1",
+      "status": 308,
+      "location": "http://docs.localhost:3984/start/quick-start?x=1",
+      "want": "http://docs.localhost:3984/start/quick-start?x=1",
+      "final": 200
+    },
+    {
+      "from": "http://app.localhost:3982/docs/integrate/feed-rest",
+      "status": 308,
+      "location": "http://docs.localhost:3984/integrate/feed-rest",
+      "want": "http://docs.localhost:3984/integrate/feed-rest",
+      "final": 200
+    },
+    {
+      "from": "http://status.localhost:3982/docs?x=1",
+      "status": 308,
+      "location": "http://docs.localhost:3984/?x=1",
+      "want": "http://docs.localhost:3984/?x=1",
+      "final": 200
+    },
+    {
+      "from": "http://status.localhost:3982/docs/start/quick-start?x=1",
+      "status": 308,
+      "location": "http://docs.localhost:3984/start/quick-start?x=1",
+      "want": "http://docs.localhost:3984/start/quick-start?x=1",
+      "final": 200
+    },
+    {
+      "from": "http://status.localhost:3982/docs/integrate/feed-rest",
+      "status": 308,
+      "location": "http://docs.localhost:3984/integrate/feed-rest",
+      "want": "http://docs.localhost:3984/integrate/feed-rest",
+      "final": 200
+    }
+  ],
+  "failures": []
+}

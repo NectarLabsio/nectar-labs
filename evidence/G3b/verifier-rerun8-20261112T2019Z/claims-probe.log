@@ -1,0 +1,22 @@
+PASS server HTML: no 0123456789 anywhere in the raw HTML
+PASS server HTML text: no 0123456789
+PASS JS off: #chains present
+PASS JS off: names Base settlement as a local fork of Base Sepolia
+PASS JS off: every Base sentence says local fork
+PASS JS off: >= 3 counters, each plain text = data-roll
+PASS JS off: no reel nodes
+PASS JS off: no 85%/12%/400 bps parameter text
+PASS hydrated #chains text == server #chains text
+PASS hydrated: every Base sentence says local fork
+PASS Reserve card amount = live get_reserve r_usd_e6
+PASS Reserve card discount = live get_reserve discount_bps
+PASS #how prose names the Reserve as deployed = live amount
+PASS chamber R (#lr) = live get_exit_capacity r_usd_e6
+PASS LTV shown = live get_collateral (static 40%, cap 70%)
+PASS haircut shown = live get_collateral (10% in session #lh, 25% weekend)
+PASS code panel carries the live bps
+PASS hydrated: every counter's reels aria-hidden, plain value readable
+PASS hydrated innerText: no 0123456789
+PASS hydrated: no 85%/12%/400 bps parameter text, Reserve not called absent
+rpc methods seen: test.rpc.fastnear.com:get_exit_capacity, test.rpc.fastnear.com:list_quotes, test.rpc.fastnear.com:get_collateral, test.rpc.fastnear.com:get_reserve, test.rpc.fastnear.com:get_config, test.rpc.fastnear.com:contract_version
+CLAIMS PROBE PASS

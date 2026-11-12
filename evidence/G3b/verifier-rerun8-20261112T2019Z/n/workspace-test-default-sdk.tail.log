@@ -1,0 +1,12 @@
+          /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+                             arm64e.x1-macos, arm64e.x1-maccatalyst ]
+                             ^~~~~~~~~~~~~~~
+           in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libm.tbd'; tapi error: malformed file
+          /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+                             arm64e.x1-macos, arm64e.x1-maccatalyst ]
+                             ^~~~~~~~~~~~~~~
+           in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libc.tbd'
+          clang: error: linker command failed with exit code 1 (use -v to see invocation)
+          
+
+error: could not compile `libc` (build script) due to 1 previous error

@@ -1,0 +1,30 @@
+ │ error: could not compile `serde_json` (build script) due to 1 previous error
+ │ error: linking with `cc` failed: exit status: 1
+ │   |
+ │   = note:  "cc" "/private/tmp/verify-G3b-r8-20261112T2019Z/target/cargo-near-abi/debug/build/libc-926685c023ecd4c3/rustcs9gkcD/symbols.o" "<6 object files omitted>" "<sysroot>/lib/rustlib/aarch64-apple-darwin/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-lSystem" "-lc" "-lm" "-arch" "arm64" "-mmacosx-version-min=11.0.0" "-o" "/private/tmp/verify-G3b-r8-20261112T2019Z/target/cargo-near-abi/debug/build/libc-926685c023ecd4c3/build_script_build-926685c023ecd4c3" "-Wl,-dead_strip" "-nodefaultlibs"
+ │   = note: some arguments are omitted. use `--verbose` to show all linker arguments
+ │   = note: ld: multiple errors: tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libc.tbd'; tapi error: malformed file
+ │           /Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libSystem.B.tbd:4:20: error: unknown architecture
+ │                              arm64e.x1-macos, arm64e.x1-maccatalyst ]
+ │                              ^~~~~~~~~~~~~~~
+ │            in '/Library/Developer/CommandLineTools/SDKs/MacOSX27.0.sdk/usr/lib/libm.tbd'
+ │           clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ │           
+ │ 
+ │ error: could not compile `libc` (build script) due to 1 previous error
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+
+Error: 
+   0: [91m`cd "/private/tmp/verify-G3b-r8-20261112T2019Z/contracts/mock-ft" && env -u CARGO_ENCODED_RUSTFLAGS CARGO_NEAR_ABI_GENERATION="true" CARGO_NEAR_ABI_SCHEMA_VERSION="0.4.0" CARGO_NEAR_VERSION="cargo-near-build 0.11.5" CARGO_PROFILE_DEV_DEBUG="0" CARGO_PROFILE_DEV_LTO="off" CARGO_PROFILE_DEV_OPT_LEVEL="0" CARGO_TARGET_DIR="/private/tmp/verify-G3b-r8-20261112T2019Z/target/cargo-near-abi" NEP330_BUILD_INFO_BUILD_COMMAND="[\"cargo\",\"near\",\"build\",\"non-reproducible-wasm\"]" NEP330_BUILD_INFO_OUTPUT_WASM_PATH="/private/tmp/verify-G3b-r8-20261112T2019Z/target/near/mock_ft/mock_ft.wasm" NEP330_VERSION="0.1.0" RUSTFLAGS="-Awarnings" RUSTUP_TOOLCHAIN="1.95.0-aarch64-apple-darwin" "~/.rustup/toolchains/1.95.0-aarch64-apple-darwin/bin/cargo" "build" "--message-format=json-render-diagnostics" "--features" "near-sdk/__abi-generate" "--color" "never"` failed with exit code: Some(101)[0m
+
+Location:
+   [35mcargo-near-build/src/cargo_native/compile.rs[0m:[35m216[0m

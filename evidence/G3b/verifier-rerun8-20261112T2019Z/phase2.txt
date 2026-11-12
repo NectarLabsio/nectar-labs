@@ -1,0 +1,27 @@
+[20:38:55Z] cargo job started pid 74961
+[20:39:08Z] build-docs exit 0
+[20:39:09Z] docs :3984 up pid 75413; / -> 200 ; /start/quick-start -> 200
+[20:39:09Z] hosted env: SITE_URL=http://site.localhost:3982 APP_URL=http://app.localhost:3982 DOCS_URL=http://docs.localhost:3984 STATUS_URL=http://status.localhost:3982 LEGACY_HOSTS=old-site.localhost:3982=site,old-app.localhost:3982=app
+[20:39:15Z] build-hosted exit 0
+[20:39:16Z] hosted :3982 up pid 75628
+[20:39:19Z] (b) hosts.spec (all, incl. browser; legacy old-app=app) exit 0
+[20:39:20Z] (b) hosts.spec legacy old-site=site exit 0
+[20:39:20Z] (d+) docs-at-root sweep exit 0 : docs at root: 56 sitemap pages (origins http://localhost:3000), 6 assets, 4 old-prefix paths, 9 redirects; failures 0
+[20:39:20Z] inventory start
+[20:43:44Z] (c) inventory exit 0
+[20:43:44Z] (c) inv-compare exit 0
+[20:43:44Z] crawl start
+[20:47:56Z] (d) crawl exit 1
+[20:47:58Z] kill 3982 pid 75628 -> 0; listeners left: none
+[20:48:00Z] kill 3984 pid 75413 -> 0; listeners left: none
+[20:48:04Z] (f) build-prod (five env, operator filled) exit 0 (expect 0)
+[20:48:04Z] (g) check-trace after prod build exit 0
+[20:48:04Z]  1 file changed, 1 insertion(+), 1 deletion(-) / 108:  operator: null
+[20:48:08Z] (f) build-prod (operator null) exit 1 (expect non-zero)
+[20:48:08Z] guard msg: Production build refused (WO-34a guard): config.yaml site.operator is null (TODO-H-LEGAL)
+[20:48:08Z] config restored: 0 changed files under packages/config
+[20:48:27Z] pnpm verify exit 0
+[20:48:27Z] branding exit 0
+[20:48:27Z] listeners 3981-3987: 0
+[20:48:27Z] host services: 127.0.0.1:8791 127.0.0.1:8788 127.0.0.1:8789 127.0.0.1:8545 127.0.0.1:8790 
+[20:48:27Z] phase2 done

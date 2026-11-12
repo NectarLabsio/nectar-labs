@@ -1,0 +1,252 @@
+{
+  "base": "http://localhost:3981",
+  "at": "2026-11-12T20:24:30.081Z",
+  "checks": [
+    {
+      "name": "server HTML: no 0123456789 anywhere in the raw HTML",
+      "pass": true
+    },
+    {
+      "name": "server HTML text: no 0123456789",
+      "pass": true
+    },
+    {
+      "name": "JS off: #chains present",
+      "pass": true
+    },
+    {
+      "name": "JS off: names Base settlement as a local fork of Base Sepolia",
+      "pass": true
+    },
+    {
+      "name": "JS off: every Base sentence says local fork",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "JS off: >= 3 counters, each plain text = data-roll",
+      "pass": true,
+      "detail": [
+        {
+          "id": "",
+          "roll": "$80,000",
+          "text": "$80,000",
+          "visible": true
+        },
+        {
+          "id": "",
+          "roll": "57.7%",
+          "text": "57.7%",
+          "visible": true
+        },
+        {
+          "id": "ibig",
+          "roll": "$22,200",
+          "text": "$22,200",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "name": "JS off: no reel nodes",
+      "pass": true,
+      "detail": 0
+    },
+    {
+      "name": "JS off: no 85%/12%/400 bps parameter text",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "hydrated #chains text == server #chains text",
+      "pass": true
+    },
+    {
+      "name": "hydrated: every Base sentence says local fork",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "Reserve card amount = live get_reserve r_usd_e6",
+      "pass": true,
+      "detail": "shown $10.00, live $10.00 (r_usd_e6 10000000)"
+    },
+    {
+      "name": "Reserve card discount = live get_reserve discount_bps",
+      "pass": true,
+      "detail": "After all quotes, at 600 bps"
+    },
+    {
+      "name": "#how prose names the Reserve as deployed = live amount",
+      "pass": true
+    },
+    {
+      "name": "chamber R (#lr) = live get_exit_capacity r_usd_e6",
+      "pass": true,
+      "detail": "shown $10, live $10"
+    },
+    {
+      "name": "LTV shown = live get_collateral (static 40%, cap 70%)",
+      "pass": true,
+      "detail": "40% / 70%"
+    },
+    {
+      "name": "haircut shown = live get_collateral (10% in session #lh, 25% weekend)",
+      "pass": true,
+      "detail": "#lh 10%; 10% / 25%"
+    },
+    {
+      "name": "code panel carries the live bps",
+      "pass": true
+    },
+    {
+      "name": "hydrated: every counter's reels aria-hidden, plain value readable",
+      "pass": true,
+      "detail": [
+        {
+          "id": "",
+          "roll": "$80,000",
+          "reelsAriaHidden": [
+            "true"
+          ],
+          "plain": "$80,000"
+        },
+        {
+          "id": "",
+          "roll": "57.7%",
+          "reelsAriaHidden": [
+            "true"
+          ],
+          "plain": "57.7%"
+        },
+        {
+          "id": "ibig",
+          "roll": "$38,850",
+          "reelsAriaHidden": [
+            "true"
+          ],
+          "plain": "$38,850"
+        }
+      ]
+    },
+    {
+      "name": "hydrated innerText: no 0123456789",
+      "pass": true
+    },
+    {
+      "name": "hydrated: no 85%/12%/400 bps parameter text, Reserve not called absent",
+      "pass": true
+    }
+  ],
+  "live": {
+    "rpc": "https://test.rpc.fastnear.com",
+    "block": 277411972,
+    "get_collateral": {
+      "base_ltv_bps": 4000,
+      "max_nectar_ltv_bps": 7000,
+      "base_haircut_bps": 1000,
+      "weekend_haircut_bps": 2500
+    },
+    "get_reserve": {
+      "symbol": "NVDAx",
+      "r_usd_e6": "10000000",
+      "shares": "10000000",
+      "usdc_e6": "10000000",
+      "notice_usdc_e6": "0",
+      "units": "0",
+      "discount_bps": 600,
+      "acc_fee_per_share_e18": "1043200000000000",
+      "acc_units_per_share_e18": "0",
+      "share_price_e6": "1000000",
+      "min_deposit_usd_e6": "10000000",
+      "notice_period_ns": "604800000000000",
+      "fees_7d_usd_e6": "10432",
+      "realised_apr_7d_bps": "543"
+    },
+    "get_exit_capacity_r_usd_e6": "10000000"
+  },
+  "server": {
+    "chains": "NEAR holds the book. Solana holds the stock. A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hub nectar-core Quotes, Reserve, loans and Notes Limits, weekend guard, multiplier Builds every message it asks the MPC to sign Ed25519 Solana devnet xStocks-style mock collateral, Ed25519 · devnet, round trip verified nectar_vault program Verifies the signature through the Instructions sysvar Each link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower. 01 Flag Health falls below 1 Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash. nectar-core on NEAR testnet 02 Price A TEE computes the discount, verifiably A pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product. OutLayer, attested 03 Sign Chain Signatures signs The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key. v1.signer-prod.testnet 04 Settle The vault verifies, then pays Solana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home. nectar_vault, NectarVaultBase",
+    "baseSentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "rolls": [
+      {
+        "id": "",
+        "roll": "$80,000",
+        "text": "$80,000",
+        "visible": true
+      },
+      {
+        "id": "",
+        "roll": "57.7%",
+        "text": "57.7%",
+        "visible": true
+      },
+      {
+        "id": "ibig",
+        "roll": "$22,200",
+        "text": "$22,200",
+        "visible": true
+      }
+    ],
+    "reels": 0
+  },
+  "hydrated": {
+    "chains": "NEAR holds the book. Solana holds the stock. A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hub nectar-core Quotes, Reserve, loans and Notes Limits, weekend guard, multiplier Builds every message it asks the MPC to sign Ed25519 Solana devnet xStocks-style mock collateral, Ed25519 · devnet, round trip verified nectar_vault program Verifies the signature through the Instructions sysvar Each link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower. 01 Flag Health falls below 1 Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash. nectar-core on NEAR testnet 02 Price A TEE computes the discount, verifiably A pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product. OutLayer, attested 03 Sign Chain Signatures signs The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia). The keeper never holds a key. v1.signer-prod.testnet 04 Settle The vault verifies, then pays Solana checks the Ed25519 instruction before settle. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home. nectar_vault, NectarVaultBase",
+    "baseSentences": [
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+      "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+      "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+    ],
+    "reserve": {
+      "shownR": "$10.00",
+      "shownDisc": "After all quotes, at 600 bps",
+      "shownNotice": "7 days"
+    },
+    "chamber": {
+      "lh": "10%",
+      "lr": "$10"
+    },
+    "howExcerpt": "Lenders price the exit, not the asset. Example. Follow one position through four states. The numbers are the example from the hero: 300 mock NVDAx at $185, with $28,000 already drawn against the asset. Quotes and DEX depth are example figures; the LTV limits, the haircuts and the Reserve are the deployed testnet values. 01 A static lender stops at 40%. A tokenized stock can trade at fair value all week and have no buyer on Saturday night. Lenders price that exit, so the limit stays low. 02 Committed quotes raise the ceiling. Market makers escrow USDC behind quotes that can't leave without notice. In this example (quotes $80,000 and DEX depth $12,000 are example figures; the Reserve as deployed holds $10), the same 300 shares reach the deployed 70% cap. 03 The weekend guard tightens it on its own. When the market closes or the price is older than 15 minutes, DEX depth drops to zero and the haircut widens to 25%. Nothing outside the contract can switch the session back on. 04 A bad loan sells to a buyer who already committed. If health falls below 1, collateral goes to a committed quote at no more than its stated discount. The Reserve fills only after every quote is used. Example: 30",
+    "panAExcerpt": "// Borrow limit for one asset (spec §4.2). Integers only: _e6 USD, bps.pub fn borrow_limit_e6(&self, a: &Asset) -> u128 { let weekend = !self.guard.session_open(a); let h_bps = if weekend { a.h_weekend_bps } else { a.h_session_bps }; // 2500 / 1000 on testnet let d = if weekend { 0 } else { a.dex_depth_e6 }; let backing = a.quotes_e6 + a.reserve_e6 + d; // Q + R + D let by_exit = backing * (10_000 - h_bps) / 10_000; let by_ltv = a.value_e6() * a.ltv_max_bps / 10_000; // 70% on testnet // the exit term is shared by every loan in the asset by_ltv.min(by_exit.saturating_sub(a.total_debt_e6))}",
+    "reels": [
+      {
+        "id": "",
+        "roll": "$80,000",
+        "reelsAriaHidden": [
+          "true"
+        ],
+        "plain": "$80,000"
+      },
+      {
+        "id": "",
+        "roll": "57.7%",
+        "reelsAriaHidden": [
+          "true"
+        ],
+        "plain": "57.7%"
+      },
+      {
+        "id": "ibig",
+        "roll": "$38,850",
+        "reelsAriaHidden": [
+          "true"
+        ],
+        "plain": "$38,850"
+      }
+    ],
+    "rpcMethods": [
+      "test.rpc.fastnear.com:get_exit_capacity",
+      "test.rpc.fastnear.com:list_quotes",
+      "test.rpc.fastnear.com:get_collateral",
+      "test.rpc.fastnear.com:get_reserve",
+      "test.rpc.fastnear.com:get_config",
+      "test.rpc.fastnear.com:contract_version"
+    ],
+    "consoleErrors": []
+  },
+  "pass": true
+}

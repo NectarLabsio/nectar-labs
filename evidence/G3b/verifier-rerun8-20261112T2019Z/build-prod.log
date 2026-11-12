@@ -1,0 +1,129 @@
+
+> web@0.1.0 build /private/tmp/verify-G3b-r8-20261112T2019Z/apps/web
+> node scripts/build-changelog.mjs && next build
+
+changelog: 271 commits in 5 groups
+▲ Next.js 16.4.5 (Turbopack)
+✓ Running next.config.ts took 18ms
+- Experiments (use with caution):
+  ⨯ turbopackFileSystemCacheForBuild
+  ⨯ turbopackFileSystemCacheForDev
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1653ms
+  Running TypeScript ...
+  Finished TypeScript in 1080ms ...
+  Collecting page data using 9 workers ...
+  Generating static pages using 9 workers (0/26) ...
+  Generating static pages using 9 workers (6/26) 
+  Generating static pages using 9 workers (12/26) 
+  Generating static pages using 9 workers (19/26) 
+✓ Generating static pages using 9 workers (26/26) in 230ms
+Turbopack build encountered 2 warnings:
+./packages/sdk/src/config-node.ts:20:22
+Warning: Dynamic filesystem access causes tracing of the whole project
+  [90m18 |[0m
+  [90m19 |[0m [36mexport[0m [36mfunction[0m loadConfig(start?: string): [33mNectarConfigYaml[0m {
+[33m[1m>[0m [90m20 |[0m   [36mreturn[0m parseConfig(readFileSync(findConfigPath(start), [32m"utf8"[0m));
+  [90m   |[0m                      [33m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m21 |[0m }
+  [90m22 |[0m
+  [90m23 |[0m [36mexport[0m [36mfunction[0m loadPublicConfig(start?: string): [33mPublicConfig[0m {
+
+Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+This can slow down deployments or lead to failures when size limits are exceeded.
+To resolve this, you can
+- make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+- only use them in development, or
+- opt out by adding an ignore comment to the highlighted call: fs.readFileSync(/*turbopackIgnore: true*/ ...), or
+- remove them.
+
+Import traces:
+  App Route:
+    ./packages/sdk/src/config-node.ts
+    ./apps/web/lib/config.server.ts
+    ./apps/web/app/api/health/route.ts
+
+  Server Component:
+    ./packages/sdk/src/config-node.ts
+    ./apps/web/lib/config.server.ts
+    ./apps/web/app/layout.tsx
+
+
+./packages/sdk/src/config-node.ts:9:13
+Warning: Dynamic filesystem access causes tracing of the whole project
+  [90m 7 |[0m [36mexport[0m [36mfunction[0m findConfigPath(start: string = process.cwd()): string {
+  [90m 8 |[0m   [36mif[0m (process.env.[33mNECTAR_CONFIG[0m) [36mreturn[0m resolve(process.env.[33mNECTAR_CONFIG[0m);
+[33m[1m>[0m [90m 9 |[0m   [36mlet[0m dir = resolve(start);
+  [90m   |[0m             [33m[1m^^^^^^^^^^^^^^[0m
+  [90m10 |[0m   [36mfor[0m (;;) {
+  [90m11 |[0m     [36mconst[0m p = join(dir, [32m"packages"[0m, [32m"config"[0m, [32m"config.yaml"[0m);
+  [90m12 |[0m     [36mif[0m (existsSync(p)) [36mreturn[0m p;
+
+Static analysis determined that this filesystem access causes the whole project to be traced and included in the output.
+This is usually unintentional and leads to all source files (including the public folder) to be deployed as part of the server code.
+This can slow down deployments or lead to failures when size limits are exceeded.
+To resolve this, you can
+- make sure the path is statically scoped to some subfolder, for example path.join(process.cwd(), 'data', bar), or
+- only use them in development, or
+- opt out by adding an ignore comment to the highlighted call: path.resolve(/*turbopackIgnore: true*/ ...), or
+- remove them.
+
+Import traces:
+  App Route:
+    ./packages/sdk/src/config-node.ts
+    ./apps/web/lib/config.server.ts
+    ./apps/web/app/api/health/route.ts
+
+  Server Component:
+    ./packages/sdk/src/config-node.ts
+    ./apps/web/lib/config.server.ts
+    ./apps/web/app/layout.tsx
+
+
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ○ /agents
+├ ƒ /api/copilot
+├ ƒ /api/feed
+├ ƒ /api/health
+├ ƒ /api/indexer/[...path]
+├ ○ /borrow
+├ ○ /brand
+├ ○ /changelog
+├ ○ /console
+├ ○ /docs
+├ ○ /feed
+├ ƒ /feed/[symbol]
+├ ○ /keepers
+├   /legal/[slug]
+│ ├ ● /legal/privacy
+│ ├ ● /legal/cookies
+│ ├ ● /legal/terms
+│ └ ● /legal/disclaimers
+├ ƒ /note/[id]
+├ ○ /notes
+├ ƒ /position/[id]
+├ ○ /quote
+├ ƒ /quote/[id]
+├ ○ /quote/new
+├ ○ /reserve
+├ ƒ /robots.txt
+├ ○ /security
+├ ○ /shield
+├ ƒ /sitemap.xml
+├ ○ /status
+└ ○ /talk
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

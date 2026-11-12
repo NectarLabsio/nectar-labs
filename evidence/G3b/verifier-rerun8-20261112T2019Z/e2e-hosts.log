@@ -1,0 +1,16 @@
+
+Running 11 tests using 1 worker
+
+  ✓   1 [desktop] › e2e/hosts.spec.ts:41:3 › host routing (hosted mode) › www.<site> → SITE with 301, path and query kept (12ms)
+  ✓   2 [desktop] › e2e/hosts.spec.ts:47:3 › host routing (hosted mode) › APP / → /feed (3ms)
+  ✓   3 [desktop] › e2e/hosts.spec.ts:53:3 › host routing (hosted mode) › app routes on SITE → APP with 308 (8ms)
+  ✓   4 [desktop] › e2e/hosts.spec.ts:61:3 › host routing (hosted mode) › landing-only routes on APP → SITE with 308 (11ms)
+  ✓   5 [desktop] › e2e/hosts.spec.ts:69:3 › host routing (hosted mode) › /docs and /docs/<rest> on SITE, APP and STATUS → DOCS root with 308, prefix dropped, query kept (6ms)
+  ✓   6 [desktop] › e2e/hosts.spec.ts:80:3 › host routing (hosted mode) › STATUS / serves the status page; /status anywhere → STATUS / with 308 (16ms)
+  ✓   7 [desktop] › e2e/hosts.spec.ts:95:3 › host routing (hosted mode) › other paths on STATUS → their canonical host with 308; shared paths served (10ms)
+  ✓   8 [desktop] › e2e/hosts.spec.ts:105:3 › host routing (hosted mode) › legacy host → its canonical origin with 308, same path and query (3ms)
+  ✓   9 [desktop] › e2e/hosts.spec.ts:113:3 › host routing (hosted mode) › each host serves its own routes; /api serves on all (19ms)
+  ✓  10 [desktop] › e2e/hosts.spec.ts:120:3 › host routing (hosted mode) › per-host robots, sitemap, canonical and og:url (22ms)
+  ✓  11 [desktop] › e2e/hosts.spec.ts:151:3 › host routing (hosted mode) › status host hydrates with the app shell and no console errors (1.8s)
+
+  11 passed (2.6s)
