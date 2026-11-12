@@ -86,8 +86,7 @@ only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret 
     per WO-34m; not deployed yet, so confirm it at the first docs deployment.
   - Env: the WO-34 deploy env list in docs/STATE.md. Previews first (`VERCEL_ENV=preview`); `target: production` only after H-LEGAL and the G3b re-run.
     After the first web deployment, set `FEED_CORS_ORIGINS` on the Feed to the web origins.
-  - Docs deployment opened directly: read it at `<docs-host>/docs/` (apps/docs-site/vercel.json rewrites `/docs/*` to the flat build, WO-34s); its bare
-    root `<docs-host>/` redirects 307 to `/docs/` (WO-34w, F-437–F-439; confirm live: `/docs/` = 200, no loop). Through the APP it stays `<app-host>/docs/`.
+  - Docs: its own project and host, https://docs.nectarlabs.io, pages at the root (WO-64; section "Hosts and docs" below).
 - **Feed** (Railway service `feed`, project nectar-labs, environment production): image `node:22.22.2-bookworm`, volume at `/data`, start command =
   the one line in scripts/deploy/railway-feed-start.cmd.
   - First boot: download `SRC_URL`, check `SRC_SHA256` with sha256sum, extract into `/data/src/<SRC_SHA>`, run
@@ -109,21 +108,19 @@ only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret 
 - **Fallback:** the CLI path, `scripts/deploy/deploy-vercel.sh` and `scripts/deploy/deploy-railway.sh`, stays in the repo. It needs the CLI logins that
   H-HOST no longer asks for.
 
-## Docs site under /docs (WO-34d, D-030)
-- **Local URLs changed.** Dev: `pnpm --filter docs-site start` → http://localhost:3000/docs/. Preview a build: `pnpm --filter docs-site build` then
-  `pnpm --filter docs-site serve` → http://localhost:3000/docs/ (`docusaurus serve` honours baseUrl and redirects any other path to `/docs/`, F-393).
-  Sitemap: `/docs/sitemap.xml` (F-392). Checked 2026-11-12 on a spare port: `/docs/`, `/docs/start/quick-start`, `/docs/sitemap.xml`, `/docs/changelog` 200;
-  `/start/quick-start` 302 → `/docs/`.
-- **Config** (`apps/docs-site/docusaurus.config.ts`): `baseUrl: '/docs/'`, docs `routeBasePath: '/'` → pages at `/docs/<slug>` (F-391). Env at build time:
-  `DOCS_ORIGIN_URL` = the public origin that serves `/docs`, i.e. the APP origin (for example `https://ac.<domain>`), origin only, no path (F-391); it is
-  NOT the docs deployment's own host (that is web's `DOCS_ORIGIN`, the rewrite target). Falls back to the origin of `DOCS_URL`, then `http://localhost:3000`.
-  `APP_URL` sets the web-app links (default: the docs origin when hosted, `http://localhost:3100` locally). `REPO_URL` empty (default until H2) hides
+## Hosts and docs (WO-62b, WO-64; hosts in config.yaml `site.production_hosts`)
+- **Hosts.** Site https://nectarlabs.io (www 308 → apex) · App https://testnet.nectarlabs.io · Docs https://docs.nectarlabs.io · Status
+  https://status.nectarlabs.io. Vercel DNS, no records needed from Kunal (F-458, H-DNS closed). Feed REST stays on Railway (above).
+- **Web env** (apps/web/.env.example): `SITE_URL`, `APP_URL`, `DOCS_URL`, `STATUS_URL`, `LEGACY_HOSTS` (comma list `host=site|app|docs|status`; the real
+  platform-host list lives only in the Vercel env), `FEED_URL`, `REPO_URL`. SITE/APP `/docs` and `/docs/<rest>` 308 to `DOCS_URL/<rest>`; SITE/APP
+  `/status` 308 to the status host; STATUS_URL unset keeps `/status` on SITE.
+- **Docs env** (apps/docs-site/docusaurus.config.ts): `DOCS_URL` (origin only, F-391; sitemap and canonicals use it, F-459), `APP_URL`, `SITE_URL`,
+  `STATUS_URL`; unset hosts fall back to the production hosts when `DOCS_URL` is set, to localhost otherwise. `REPO_URL` empty (until H2) hides
   every GitHub link.
-- **Hosting.** The build output is flat, with no `/docs` folder (F-393). The APP rewrite therefore strips the prefix: `/docs/:path*` →
-  `<docs deployment>/:path*`. Opened directly, the docs deployment serves the same `/docs/*` URLs through its own rewrites (WO-34s) and redirects
-  its root `/` to `/docs/` (WO-34w); safe because the APP keeps the `/docs` prefix when proxying (WO-34t) and never requests the docs root `/`.
-- **VERIFY at the first deploy.** `trailingSlash: false` writes `<path>.html` files (F-392), so the docs host must answer `/start/quick-start` from
-  `start/quick-start.html`. That host behaviour is not in FACTS yet. Check `curl -sI "$APP_URL/docs/start/quick-start"` = 200; if it is 404, record the
-  host's clean-URL setting in FACTS before changing any config.
-- **Links in pages.** Markdown links (`[x](/concepts/…)`) and config `to:` items get the baseUrl automatically. Raw HTML anchors in `.md` pages do not:
-  write them as `href="/docs/…"` (three today, in protocol/solana-vault.md and start/live-on-testnet.md); the broken-link check does not see them.
+- **Local.** `pnpm --filter docs-site start` → http://localhost:3000/; `pnpm --filter docs-site build && pnpm --filter docs-site serve` → same URL.
+- **apps/docs-site/vercel.json.** `cleanUrls` (F-428). Permanent (308) redirects: the two platform docs hosts (host-scoped `has`, F-456) →
+  `https://docs.nectarlabs.io/<path>` (root and `/docs/<path>` in one hop); `/docs`, `/docs/` → `/` and `/docs/:path*` → `/:path*` for old links (F-437,
+  F-459). Headers on `/(.*)`: X-Frame-Options, `frame-ancestors 'none'`, nosniff, Referrer-Policy (F-452). Checked offline with
+  @vercel/routing-utils 6.6.1 (F-453); confirm after the deploy: `curl -sI https://<platform docs host>/start/quick-start` → 308 to the docs host.
+- **Production deploys need Kunal's approval** in this session (HUMAN_HANDOFF H-DEPLOY). Until the release with WO-62b/WO-64 is deployed, the
+  status host shows the landing page and docs.nectarlabs.io redirects to `/docs/`.

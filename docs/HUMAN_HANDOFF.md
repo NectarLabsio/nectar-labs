@@ -29,7 +29,18 @@ What Kunal does (1 min): open in a browser and confirm each shows a contract wit
 What Claude Code does then: marks the links human-verified in EVIDENCE §G2.
 Default if silent: RPC evidence (view_account code_hash = G1 wasm) stands; README links stay; G9 notes "explorer pages not machine-verified".
 
-## H-ORACLE — keep the owner price fresh                status: OPEN   needed by: judging 16–18 Nov (next stale ≈ 2026-11-13 15:10Z)
+## H-ORACLE — keep the owner price fresh                status: WAITING (option A on Railway chosen 2026-11-12; staged, Kunal applies)   needed by: judging 16–18 Nov (next stale ≈ 2026-11-13 15:10Z)
+Current (2026-11-12): Kunal chose option A on Railway. The orchestrator STAGED the service `oracle-refresher` in Railway project nectar-labs
+  (environment production: volume `oracle-data` at /data, start command scripts/deploy/railway-oracle-start.cmd; docs/STATE.md). The tool approval
+  for accept-deploy was declined twice, so it is NOT running. It re-asserts the current price every 10 min inside NYSE session windows and every
+  12 h outside them, through 2026-11-18 (`ops.oracle_refresher` in packages/config/config.yaml), and generates its own key on the Railway volume.
+What Kunal does (2 min): Railway dashboard → project nectar-labs → environment production → review and apply (deploy) the staged changes. Reply
+  `H-ORACLE applied`.
+What Claude Code does then: reads the `key_generated` public key from the service logs, adds it to nectar.testnet as a function-call key for
+  `nectar-core-v2.nectar.testnet` limited to `update_owner_price` with a 1 NEAR allowance, then watches for the first refresh tx and records it in
+  evidence/ops/.
+Default if silent: no refresher; the orchestrator sends the one-shot RUNBOOK `update_owner_price` (current price) before recording and in each
+  session (option B below). The history below is kept.
 Why a human: the owner (fallback) oracle goes stale 86,400 s after each refresh (`max_age_s_closed` in packages/config/config.yaml); then borrows
   and `trigger_preliquidation` fail with `oracle stale` (RUNBOOK standing duty 1). On 2026-11-12 it was about 31 h stale (age 112,379 s) and was
   refreshed at ~15:12Z with the same price 135000000 (tx 3E92xm8KDQcVC2FZh4MRn4dkBvZ1uS3H7eCvCubXM8rH, evidence/ops/owner-price-refresh-20261112T151114Z.log).
@@ -89,8 +100,12 @@ What Kunal does (5 min): in Vercel create projects `nectar-labs-web` and `nectar
 What Claude Code does then: with a token, deploys previews after each green gate via `vercel deploy --prebuilt`; without, prints the exact `vercel` commands in EVIDENCE.
 Default if silent: no hosted preview; README links to `pnpm --filter web dev` and screenshots in evidence/.
 
-## H-DOMAIN — a domain for the hosted demo             status: CLOSED 2026-11-12
-Answer (Kunal, ~11:00Z): "go for it, i will set domain later" → production on `*.vercel.app`: SITE https://nectarlabs.vercel.app, APP https://nectarlabs-app.vercel.app,
+## H-DOMAIN — a domain for the hosted demo             status: CLOSED 2026-11-12 (nectarlabs.io)
+Final answer (Kunal, 2026-11-12, evening): nectarlabs.io. Hosts (`site.production_hosts` in packages/config/config.yaml): site https://nectarlabs.io
+  (www 308 → apex), app https://testnet.nectarlabs.io, docs https://docs.nectarlabs.io (pages at the root), status https://status.nectarlabs.io.
+  Registered 2026-11-12T18:54Z, delegated to Vercel DNS (F-458). The earlier platform hosts redirect (308) to these from the release with WO-62b
+  and WO-64 (H-DEPLOY).
+Earlier answer (Kunal, ~11:00Z): "go for it, i will set domain later" → production on `*.vercel.app`: SITE https://nectarlabs.vercel.app, APP https://nectarlabs-app.vercel.app,
   docs under APP `/docs`. No domain was bought.
 Switching to a domain later: Kunal names the domain (one he owns or buys himself; agents never buy one) → the orchestrator adds it to
   nectar-labs-web, updates SITE_URL/APP_URL/DOCS_URL (web) and APP_URL/DOCS_ORIGIN_URL (docs), redeploys the same commit, and writes the DNS
@@ -109,7 +124,9 @@ What Claude Code does then: adds the domain to the new Vercel web project (SITE 
 Default if silent by 2026-11-13 06:00 UTC: `*.vercel.app` aliases for SITE and APP (docs under APP `/docs`) and `*.up.railway.app` for the Feed. A domain
   added later is an env + alias change, no code change.
 
-## H-DNS — DNS records for the chosen domain           status: N/A until a domain is named (H-DOMAIN closed on the platform URLs)   needed by: production on a custom domain
+## H-DNS — DNS records for the chosen domain           status: CLOSED 2026-11-12 (Vercel DNS; no records needed)   needed by: production on a custom domain
+Closed: nectarlabs.io uses Vercel DNS (ns1/ns2.vercel-dns.com), and the authoritative servers answer for all five names (apex, www, testnet,
+  status, docs) with no record added by Kunal (F-458, 2026-11-12T19:31Z). Original request kept below.
 Why a human: only the domain's owner can edit its DNS zone (unless the domain uses Vercel DNS, where Vercel sets the records itself).
 What Kunal does (5 min): after H-DOMAIN, add exactly the records listed below at the domain's DNS provider, then reply `H-DNS done`.
   Records: TODO-H-DNS (the orchestrator pastes the A/CNAME/TXT values Vercel returns when the domain is added to the project; none yet).
@@ -119,6 +136,7 @@ Default if silent: the platform URLs from H-DOMAIN's default stay the public URL
 
 ## H-LEGAL — operator, country, contact, X handle     status: CLOSED 2026-11-12
 Answer (Kunal, 2026-11-12): operator "Nectar Labs" · country "United States / India" · contact "kunal@nectarnetwork.fun" · X "@xNectarNetwork".
+  Contact email kept as is after the domain change (Kunal, 2026-11-12).
   Typo correction: he typed "kunal@nectarnetwork.funm"; the orchestrator corrected it to ".fun", the address the site already uses, and capitalised
   the product name. No governing-law clause (Kunal): terms §12 names operator and contact only. Filled in `packages/config/config.yaml` `site:` and
   in the legal pages (privacy, terms, disclaimers; WO-34u). Also closes H9.
@@ -131,6 +149,25 @@ What Kunal does (2 min): reply `H-LEGAL operator="<person or company name>" coun
 What Claude Code does then: the orchestrator fills `site:`; the legal pages (privacy, cookies, terms, disclaimers; WO-34e) and the site footer show the
   values; the production guard passes; the deploy is promoted to production.
 Default if silent by 2026-11-13 12:00 UTC: no production promotion (previews only, noindex). The submission continues without hosting.
+
+## H-DEPLOY — approve production deploys                status: OPEN   needed by: the release with WO-62b, WO-64, WO-62c (before recording)
+Why a human: the web production deploy was denied by the auto-mode classifier on 2026-11-12, so production deploys need Kunal's approval in
+  this session. Merged but not deployed: status host, docs at the root of docs.nectarlabs.io, platform-host 308s (WO-62b, WO-64), "Get test
+  assets" button (WO-62c).
+What Kunal does (1 min): approve the Vercel deploy prompt when the orchestrator asks, or add a permission rule for the Vercel connector's
+  create_deployment tool. Reply `H-DEPLOY ok`.
+What Claude Code does then: deploys the G3b-passed commit to both Vercel projects (RUNBOOK "Deploy through the connectors"), sets `STATUS_URL`,
+  `DOCS_URL` and `LEGACY_HOSTS` in the web env, and asks the verifier for the production check on the custom hosts (EVIDENCE §"WO-34 production").
+Default if silent: production keeps the release recorded in EVIDENCE §"WO-34 production" on the custom hosts; README says what it lacks.
+
+## H-DEMO-WALLET — import demo.nectar.testnet into a wallet   status: OPEN   needed by: the demo recording (H11)
+Why a human: the account's recovery phrase must never reach an agent, a log, the screen or the repo. It is only in
+  `~/.nectar/keys/demo.nectar.testnet.json` (0600; account created 2026-11-12, tx 5NbjrugATtcyoqz5sjo9vGmAQz5EmMNkdafK5Em3bTC7).
+What Kunal does (3 min, off camera, in his own terminal):
+  `node -e 'console.log(require(process.env.HOME + "/.nectar/keys/demo.nectar.testnet.json").seed_phrase)'`
+  then imports the phrase into a testnet wallet from the near-connect selector, clears the terminal and closes the window. Reply `H-DEMO-WALLET done`.
+What Claude Code does then: makes sure the account holds test assets (docs/DEMO_SCRIPT.md "Before recording" step 5, path A or B).
+Default if silent: the take uses `pnpm demo:capture` (captioned silent screens), DEMO_SCRIPT fallback.
 
 ## H-KEYS — keeper testnet signing key as a Railway secret   status: OPEN (treated as not confirmed)   needed by: hosted keeper only
 Why a human: storing a signing key with a third party changes where keys live (CLAUDE.md: OS keychain or `0600` files under `~/.nectar/`). Kunal's

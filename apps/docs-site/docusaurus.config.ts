@@ -24,6 +24,8 @@ const plausibleDomain = process.env.DOCS_PLAUSIBLE_DOMAIN ?? ''; // TODO-H4/H5: 
 // slash, F-433) and `/docs/:path*` -> `/:path*`, query passed through (F-437). Redirects run before the filesystem
 // (F-438/F-453); the build has no /docs folder, so nothing is shadowed. The old `/` -> `/docs/` redirect and both /docs rewrites are gone:
 // kept next to a `/docs/` -> `/` redirect they would loop (F-459). Old links on the app and landing hosts are 308ed to DOCS_URL by apps/web.
+// Platform docs hosts (WO-65): host-scoped permanent redirects (`has: [{type: "host"}]`, F-456; F-457: no project-domain redirect for them) send
+// both to DOCS_URL with the path kept (`/` and `/docs/<path>` in one hop). Listed first, so they win over the `/docs` rules.
 // Headers (F-452): source `/(.*)` sets X-Frame-Options DENY, `Content-Security-Policy: frame-ancestors 'none'`, X-Content-Type-Options nosniff,
 // Referrer-Policy strict-origin-when-cross-origin. No script/style CSP directives (Docusaurus inline scripts). Headers sit after redirects and
 // before the filesystem (F-453, derived), so the 308 responses probably carry none (not tested live; check `curl -sI` after deploy).
