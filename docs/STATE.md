@@ -78,6 +78,17 @@
   WO-35k (RPC fallback keeper+Feed; views-mode chain_head). Next: WO-35d docs (X_POST URLs, docs claims, H16/H17/H-NEARDATA, SECURITY.md) after WO-35r;
   evidence-log /Users redaction (verifier). Wasm fixtures keep embedded build paths (byte-identical to deployed code; on-chain anyway) — told Kunal.
   Costs: Vercel Hobby $0 (F-402, non-commercial). Railway plan tier not readable via connector; usage 24 h tiny; $ estimate after WO-35r rates.
+  - ~14:40Z MERGED (verify:quick 0 after each): WO-35r facts F-444–F-451 (Railway ≈ $0.64/mo: Free $0 within $1 credit, Hobby $5 flat; max-RAM risk
+    $2.32 > Free credit; neardata key at dashboard.fastnear.com, Bearer), WO-35w web (Reserve line, Base local fork heading, example aligned to config
+    40/70/10/25 with quotes $80k, TEE verifiable, counters CSS reel + aria-hidden, event-history banner on views mode, shell.spec allowlist),
+    WO-35k keeper+feed (4-endpoint RPC fallback; Feed /health `chain_head_source`, `history`, `rpc`; settlements empty in views mode) + Feed
+    FEED_NEARDATA_API_KEY (dff819a), WO-35d docs (X_POST URLs, TEE/Base/illustrative wording, H16 nfts not added, H17 fire-sales, H-NEARDATA,
+    SECURITY.md: 7 Docusaurus advisories build-time only — 0 matches in build output; zod not reachable via the x402 decoders).
+    Orchestrator checks: web build + check-trace 6/6; rendered landing: no "0123456789", "local fork" present, TEE "verifiable", no "until the Reserve ships".
+    Host keeper restarted on the merged code (healthy; rpc endpoints ×4). Feed start command now removes stale /data/src trees.
+    **Disk incident:** two worktree `pnpm install`s filled /Volumes/T7 (26–62 GB each); now ~67 GB free. Agents symlink node_modules from main instead.
+  - Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
+    Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
     Docs project env: APP_URL (preview only) = the 46c35ea web preview, so navbar/footer app links stop pointing at localhost:3100.
     Share links: fetching a deployment through the connector can replace its share link; the earlier docs link stopped working. Hand out fresh ones.
@@ -289,7 +300,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T13:36:56Z · commit bb25420
+Last activity: 2026-11-12T13:56:09Z · commit d764098
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
