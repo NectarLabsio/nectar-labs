@@ -18,6 +18,8 @@ export interface WalletAdapter {
   connect(): Promise<string | null>;
   disconnect(): Promise<void>;
   signAndSend(intent: TxIntent): Promise<TxOutcome>;
+  /** Several transactions in ONE wallet request (near-connect `signAndSendTransactions`), outcomes in the same order. Throws when the wallet refuses. */
+  signAndSendMany(intents: readonly TxIntent[]): Promise<TxOutcome[]>;
 }
 
 interface RawOutcome {

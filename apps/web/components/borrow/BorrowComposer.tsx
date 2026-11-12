@@ -44,6 +44,7 @@ import { useBalance } from "@/components/useBalance";
 import { CorporateActionBanner, MultiplierLine, SessionBadge } from "@/components/Session";
 import { RemoteBorrow } from "@/components/remote/RemoteBorrow";
 import { shieldWindowFor, useNowS } from "@/components/Shields";
+import { TestAssets } from "@/components/TestAssets";
 
 export type Protection = "standard" | "weekend" | "event";
 type ChainPick = "near" | "solana" | "base";
@@ -303,6 +304,7 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
         {cap.data && col ? <SessionBadge cap={cap.data} compact /> : null}
       </div>
       <Gate wallet action="borrow" blockOnPause>
+        <TestAssets />
         {cap.data && col ? <CorporateActionBanner cap={cap.data} symbol={col.symbol} /> : null}
         {chain === "solana" && solanaOn ? (
           <div className="nx-stack" style={{ gap: 20 }}>

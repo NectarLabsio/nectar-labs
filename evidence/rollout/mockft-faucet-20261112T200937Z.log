@@ -1,0 +1,47 @@
+wasm 171771 B sha256 e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14 commit 7cddf2a
+== 1 storage headroom
+usdc-mock.nectar.testnet balance_yocto 1696352235467317700000043 storage 159424 code 158465 → new 171771; top-up milliNEAR needed: 51
+    [33mnear tokens nectar.testnet send-near usdc-mock.nectar.testnet '0.071 NEAR' network-config testnet sign-with-keychain send[39m
+
+nvdax-mock.nectar.testnet balance_yocto 1696353141759597700000034 storage 159508 code 158465 → new 171771; top-up milliNEAR needed: 52
+    [33mnear tokens nectar.testnet send-near nvdax-mock.nectar.testnet '0.072 NEAR' network-config testnet sign-with-keychain send[39m
+
+== 2 before
+usdc-mock.nectar.testnet supply "140510000000" meta {"spec":"ft-1.0.0","name":"Mock USDC","symbol":"USDC","icon":null,"reference":null,"reference_hash":null,"decimals":6}
+  nectar-core-v2.nectar.testnet "57060316980"
+  nectar.testnet "40000"
+  buyer1.nectar.testnet "0"
+  agent1.nectar.testnet "39840000"
+nvdax-mock.nectar.testnet supply "332000000" meta {"spec":"ft-1.0.0","name":"Mock NVDAx","symbol":"NVDAx","icon":null,"reference":null,"reference_hash":null,"decimals":6}
+  nectar-core-v2.nectar.testnet "106000000"
+  nectar.testnet "0"
+  buyer1.nectar.testnet "103757770"
+  agent1.nectar.testnet "8000000"
+== 3 deploy (code-only)
+    [33mnear contract deploy usdc-mock.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/mock_ft/mock_ft.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+    [33mnear contract deploy nvdax-mock.nectar.testnet use-file /Volumes/T7/nectar-labs/target/near/mock_ft/mock_ft.wasm without-init-call network-config testnet sign-with-keychain send[39m
+
+== 4 after
+usdc-mock.nectar.testnet supply "140510000000" meta {"spec":"ft-1.0.0","name":"Mock USDC","symbol":"USDC","icon":null,"reference":null,"reference_hash":null,"decimals":6}
+  nectar-core-v2.nectar.testnet "57060316980"
+  nectar.testnet "40000"
+  buyer1.nectar.testnet "0"
+  agent1.nectar.testnet "39840000"
+nvdax-mock.nectar.testnet supply "332000000" meta {"spec":"ft-1.0.0","name":"Mock NVDAx","symbol":"NVDAx","icon":null,"reference":null,"reference_hash":null,"decimals":6}
+  nectar-core-v2.nectar.testnet "106000000"
+  nectar.testnet "0"
+  buyer1.nectar.testnet "103757770"
+  agent1.nectar.testnet "8000000"
+state unchanged: OK
+== 5 set_faucet
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nvdax-mock.nectar.testnet set_faucet json-args '{"amount_per_claim":"5000000","cap_per_account":"15000000","cooldown_s":3600,"enabled":true}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction usdc-mock.nectar.testnet set_faucet json-args '{"amount_per_claim":"500000000","cap_per_account":"1500000000","cooldown_s":3600,"enabled":true}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+== 6 faucet_config
+usdc-mock.nectar.testnet {"enabled":true,"amount_per_claim":"500000000","cap_per_account":"1500000000","cooldown_s":3600}
+nvdax-mock.nectar.testnet {"enabled":true,"amount_per_claim":"5000000","cap_per_account":"15000000","cooldown_s":3600}
+done: evidence/rollout/mockft-faucet-20261112T200937Z.log

@@ -12,6 +12,12 @@ export const NEAR_CONNECT_POPUP = ".hot-connector-popup";
 
 type Wallet = Awaited<ReturnType<NearConnector["wallet"]>>;
 
+/** One FunctionCall transaction, exactly as the sign modal showed it. */
+const toTx = (i: TxIntent) => ({
+  receiverId: i.receiverId,
+  actions: [{ type: "FunctionCall" as const, params: { methodName: i.methodName, args: i.args, gas: i.gas, deposit: i.deposit } }],
+});
+
 export class NearConnectAdapter implements WalletAdapter {
   readonly id = "near-connect";
   readonly label = "Meteor and other testnet wallets";
@@ -72,10 +78,22 @@ export class NearConnectAdapter implements WalletAdapter {
 
   async signAndSend(intent: TxIntent): Promise<TxOutcome> {
     const w = this.wallet ?? (await (await this.get()).wallet());
-    const raw: unknown = await w.signAndSendTransaction({
-      receiverId: intent.receiverId,
-      actions: [{ type: "FunctionCall", params: { methodName: intent.methodName, args: intent.args, gas: intent.gas, deposit: intent.deposit } }],
-    });
+    const raw: unknown = await w.signAndSendTransaction(toTx(intent));
     return parseOutcome(raw);
+  }
+
+  /**
+   * near-connect 0.12.0 `signAndSendTransactions({ transactions })` → FinalExecutionOutcome[] (build/types/index.d.ts:96-103, 183):
+   * one wallet prompt for the whole batch. A wallet whose manifest says it cannot batch gets the same transactions one by one.
+   */
+  async signAndSendMany(intents: readonly TxIntent[]): Promise<TxOutcome[]> {
+    const w = this.wallet ?? (await (await this.get()).wallet());
+    if (w.manifest?.features?.signAndSendTransactions === false) {
+      const out: TxOutcome[] = [];
+      for (const i of intents) out.push(parseOutcome(await w.signAndSendTransaction(toTx(i))));
+      return out;
+    }
+    const raw: unknown = await w.signAndSendTransactions({ transactions: intents.map(toTx) });
+    return (Array.isArray(raw) ? raw : [raw]).map(parseOutcome);
   }
 }

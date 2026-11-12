@@ -39,4 +39,10 @@ export class E2EKeyAdapter implements WalletAdapter {
     });
     return parseOutcome(raw);
   }
+  /** The demo key signs locally, so a batch is the same calls in order (no wallet prompt exists here). */
+  async signAndSendMany(intents: readonly TxIntent[]): Promise<TxOutcome[]> {
+    const out: TxOutcome[] = [];
+    for (const i of intents) out.push(await this.signAndSend(i));
+    return out;
+  }
 }

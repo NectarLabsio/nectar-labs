@@ -15,14 +15,17 @@ export interface E2EMock {
   /** When set: exactly these `features.*` are on and every other flag is off, whatever config.yaml says. Unset: config.yaml. */
   features?: FeatureName[];
   solana?: { vaultProgram?: string; mint?: string };
-  /** A NEAR "wallet" that records intents in window.__NECTAR_E2E_CALLS__ and returns canned outcomes per method. */
-  near?: { accountId: string; outcomes?: Record<string, E2EMockOutcome> };
+  /**
+   * A NEAR "wallet" that records intents in window.__NECTAR_E2E_CALLS__ and returns canned outcomes per method; a
+   * `<receiverId>:<method>` key wins over the bare method name. `reject`: the wallet throws this message instead of signing.
+   */
+  near?: { accountId: string; outcomes?: Record<string, E2EMockOutcome>; reject?: string };
 }
 
 declare global {
   interface Window {
     __NECTAR_E2E_MOCK__?: E2EMock;
-    __NECTAR_E2E_CALLS__?: Array<{ receiverId: string; methodName: string; args: Record<string, unknown> }>;
+    __NECTAR_E2E_CALLS__?: Array<{ receiverId: string; methodName: string; args: Record<string, unknown>; gas?: string; deposit?: string; batch?: number }>;
   }
 }
 

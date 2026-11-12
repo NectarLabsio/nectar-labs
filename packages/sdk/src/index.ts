@@ -16,3 +16,4 @@ export * from "./evm";
 export * from "./shields";
 export * from "./notes";
 export * from "./earn";
+export * from "./faucet";
