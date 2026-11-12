@@ -4,6 +4,7 @@
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
 import { corsHeaders, handlePreflight, type CorsPolicy } from './cors.ts';
 import type { AssetSnapshot, FeedDb, SettlementRow } from './db.ts';
+import type { RpcStatus } from './near-rpc.ts';
 
 export const ROUTES = ['/api/feed', '/api/feed/export.csv', '/api/asset/{id}', '/api/settlements', '/api/oneclick', '/healthz', '/health'] as const;
 /** Columns of /api/feed/export.csv (the x402-paid export, services/x402). No account ids. */
@@ -27,6 +28,20 @@ export interface ApiOptions {
   startBlock?: string;
   /** CORS allowlist (FEED_CORS_ORIGINS); undefined = legacy `*`. */
   cors?: CorsPolicy;
+  /**
+   * WO-35k event-history marker: `indexed` = a Neardata block tail feeds the event tables; `unavailable` = views mode
+   * (FEED_INDEXER=views), no block tail, so event lists answer empty with this marker. Default: from `source` (contains
+   * `neardata` → indexed), else indexed when `source` is unset.
+   */
+  history?: 'indexed' | 'unavailable';
+  /** NEAR RPC fallback status (near-rpc.ts), reported by /health as `rpc`. */
+  rpcStatus?: () => RpcStatus;
+}
+
+export function historyMode(opts: ApiOptions): 'indexed' | 'unavailable' {
+  if (opts.history !== undefined) return opts.history;
+  if (opts.source === undefined) return 'indexed';
+  return opts.source.split('+').includes('neardata') ? 'indexed' : 'unavailable';
 }
 
 export const LEGACY_CORS: CorsPolicy = { origins: null, legacyWildcard: true, methods: 'GET, HEAD, POST, OPTIONS' };
@@ -106,28 +121,36 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
   const path = u.pathname.replace(/\/+$/, '') || '/';
   const lastBlock = db.meta('last_block');
   const asOf = { as_of_block: lastBlock === null ? null : Number(lastBlock), as_of: new Date(now).toISOString() };
+  const history = historyMode(opts);
 
   if (path === '/healthz' || path === '/health') {
     const lastPoll = db.meta('last_poll_at');
     const pollMs = opts.pollMs ?? 10_000;
     const fresh = lastPoll !== null && now - Number(lastPoll) <= 3 * pollMs;
     if (path === '/health') {
-      // Chain head = the latest final height the Neardata tail saw (null in views mode, where the view block is the head).
-      const headRaw = db.meta('neardata_final');
-      const head = headRaw === null ? asOf.as_of_block : Number(headRaw);
+      // WO-35k honest head. Indexed: the Neardata final height, never below the last indexed block (a final view at block X
+      // proves the head is >= X). Views mode: no block tail runs, so the head is the block height of the latest final view
+      // (a neardata_final left in the DB by an earlier run is stale and ignored); lag is then 0 by construction.
+      const ndRaw = history === 'indexed' ? db.meta('neardata_final') : null;
+      const nd = ndRaw === null ? null : Number(ndRaw);
+      const head = nd === null ? asOf.as_of_block : asOf.as_of_block === null ? nd : Math.max(nd, asOf.as_of_block);
+      const headSource = head === null ? null : nd !== null && head === nd ? 'neardata_final' : 'view_block';
       return {
         status: fresh ? 200 : 503,
         body: {
           ok: fresh,
           last_indexed_block: asOf.as_of_block,
           chain_head: head,
-          lag_blocks: head === null || asOf.as_of_block === null ? null : Math.max(0, head - asOf.as_of_block),
+          chain_head_source: headSource,
+          lag_blocks: head === null || asOf.as_of_block === null ? null : head - asOf.as_of_block,
           last_poll_at: lastPoll === null ? null : new Date(Number(lastPoll)).toISOString(),
           poll_age_s: lastPoll === null ? null : Math.max(0, Math.round((now - Number(lastPoll)) / 1000)),
           last_error: db.meta('last_error'),
           source: opts.source ?? 'views',
           start_block: opts.startBlock ?? 'head',
           events_indexed: db.eventCount(),
+          history,
+          rpc: opts.rpcStatus?.() ?? null,
           contracts: opts.contracts ?? {},
           version: opts.version?.version ?? null,
           commit: opts.version?.commit ?? null,
@@ -144,6 +167,7 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
         last_error: db.meta('last_error'),
         source: opts.source ?? 'views',
         events_indexed: db.eventCount(),
+        history,
       },
       cacheable: false,
     };
@@ -184,7 +208,8 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
     const limit = intParam(u, 'limit', 50, 500);
     const pid = u.searchParams.get('position_id');
     if (limit === null || (pid !== null && !/^\d{1,20}$/.test(pid))) return { status: 400, body: { error: 'bad query' }, cacheable: false };
-    return { status: 200, body: { ...asOf, items: db.settlements(limit, pid).map(settlement) }, cacheable: true };
+    // Views mode has no event history: an empty list with the marker, never rows synthesized from view status changes.
+    return { status: 200, body: { ...asOf, history, items: history === 'indexed' ? db.settlements(limit, pid).map(settlement) : [] }, cacheable: true };
   }
   return { status: 404, body: { error: 'not found' }, cacheable: false };
 }

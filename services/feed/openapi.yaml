@@ -106,6 +106,7 @@ paths:
                 properties:
                   as_of_block: { type: [integer, 'null'] }
                   as_of: { type: string, format: date-time }
+                  history: { type: string, enum: [indexed, unavailable], description: 'unavailable (views mode) = items is always empty' }
                   items:
                     type: array
                     items: { $ref: '#/components/schemas/Settlement' }
@@ -204,14 +205,24 @@ components:
             properties:
               ok: { type: boolean }
               last_indexed_block: { type: [integer, 'null'] }
-              chain_head: { type: [integer, 'null'], description: 'latest final height seen by the Neardata tail (views mode: the view block)' }
-              lag_blocks: { type: [integer, 'null'] }
+              chain_head: { type: [integer, 'null'], description: 'Neardata tail final height, never below last_indexed_block; views mode: block height of the latest final view' }
+              chain_head_source: { type: [string, 'null'], enum: [neardata_final, view_block, null] }
+              lag_blocks: { type: [integer, 'null'], description: 'chain_head - last_indexed_block (0 in views mode)' }
               last_poll_at: { type: [string, 'null'], format: date-time }
               poll_age_s: { type: [integer, 'null'] }
               last_error: { type: [string, 'null'] }
               source: { type: string }
               start_block: { type: string, description: 'head | head-N | <height> (where an empty DB started)' }
               events_indexed: { type: integer }
+              history: { type: string, enum: [indexed, unavailable], description: 'unavailable = views mode (FEED_INDEXER=views): no event history; event lists answer empty' }
+              rpc:
+                type: [object, 'null']
+                description: NEAR RPC fallback status (hosts only)
+                properties:
+                  endpoints: { type: array, items: { type: string } }
+                  last_served: { type: [string, 'null'] }
+                  failovers: { type: integer }
+                  cooling: { type: array, items: { type: string } }
               contracts: { type: object, additionalProperties: { type: [string, 'null'] } }
               version: { type: [string, 'null'] }
               commit: { type: [string, 'null'] }
@@ -227,8 +238,9 @@ components:
               last_block_seen: { type: [integer, 'null'] }
               last_poll_at: { type: [string, 'null'], format: date-time }
               last_error: { type: [string, 'null'] }
-              source: { type: string, description: 'views | views+tx_status | none' }
+              source: { type: string, description: 'views | views+tx_status | views+neardata | none' }
               events_indexed: { type: integer }
+              history: { type: string, enum: [indexed, unavailable] }
   schemas:
     Asset:
       type: object

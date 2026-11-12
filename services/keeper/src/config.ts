@@ -2,12 +2,14 @@
 // from the environment. Account ids default to packages/config/config.yaml (accounts.core, accounts.keeper);
 // env overrides; `TODO-*` values are treated as unset. KEEPER_KEY_PATH has no default (no default key).
 
+import { nearRpcUrls } from './near-rpc.ts';
 import { homedir } from 'node:os';
 import { resolve } from 'node:path';
 import { loadRepoIds, type RepoIds } from './repo-config.ts';
 
 export interface KeeperConfig {
-  rpcUrl: string;
+  /** NEAR RPC endpoints in fallback order (near-rpc.ts nearRpcUrls: NEAR_RPC_URL first, then FastNEAR x2, dRPC, Intear). */
+  rpcUrls: string[];
   coreAccountId: string;
   keeperAccountId: string;
   keyPath: string;
@@ -112,7 +114,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): KeeperConfig {
   const solanaKeypairPath = isPlaceholder(env.KEEPER_SOLANA_KEYPAIR) ? null : expandHome(env.KEEPER_SOLANA_KEYPAIR as string);
   if (solanaKeypairPath !== null) assertSolanaPinned(ids);
   return {
-    rpcUrl: env.NEAR_RPC_URL && env.NEAR_RPC_URL !== '' ? env.NEAR_RPC_URL : 'https://test.rpc.fastnear.com',
+    rpcUrls: nearRpcUrls(env),
     coreAccountId: ids.core as string,
     keeperAccountId: ids.keeper as string,
     keyPath: expandHome(env.KEEPER_KEY_PATH as string),

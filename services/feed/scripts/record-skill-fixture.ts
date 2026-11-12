@@ -4,13 +4,14 @@
 // Default core = accounts.core from packages/config/config.yaml (v1); pass nectar-core-v2 once it exists.
 
 import { writeFileSync } from 'node:fs';
-import { NearViewReader } from '../src/near.ts';
+import { NearViewReader, rpcUrls } from '../src/near.ts';
+import { fallbackRpc } from '../src/near-rpc.ts';
 import { loadRepoIds } from '../src/repo-config.ts';
 
 const core = process.argv[2] ?? loadRepoIds().core;
 if (core === null || core === undefined) throw new Error('no core account: pass one or set accounts.core');
-const rpc = process.env.NEAR_RPC_URL ?? 'https://test.rpc.fastnear.com';
-const v = new NearViewReader(rpc, core);
+const near = fallbackRpc({ urls: rpcUrls(process.env) });
+const v = new NearViewReader(near.provider, core);
 // [label, method, args]; the borrow amounts are an accepted and a refused case for 100 NVDAx.
 const calls: Array<[string, string, Record<string, unknown>]> = [
   ['contract_version', 'contract_version', {}],
@@ -24,6 +25,6 @@ for (const [label, m, a] of calls) {
   const r = await v.view(m, a);
   views[label] = { method: m, args: a, block_height: r.blockHeight, value: r.value };
 }
-const out = JSON.stringify({ recorded_at: new Date().toISOString(), rpc, contract: core, views }, null, 2) + '\n';
+const out = JSON.stringify({ recorded_at: new Date().toISOString(), rpc: near.status().last_served, contract: core, views }, null, 2) + '\n';
 if (process.argv[3] !== undefined) writeFileSync(process.argv[3], out);
 else process.stdout.write(out);

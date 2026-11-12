@@ -8,7 +8,7 @@
 // function-call key cannot attach deposits anyway), and it never prices or builds payloads: it sends a
 // position id and, for relays, the Solana tx signature it observed (a result, not an input).
 
-import { Account, JsonRpcProvider, KeyPairSigner } from 'near-api-js';
+import { Account, KeyPairSigner, type Provider } from 'near-api-js';
 import { KEEPER_METHODS, type KeeperMethod } from './abi.ts';
 
 export interface ViewResult {
@@ -62,13 +62,14 @@ export function assertKeeperMethod(m: string): asserts m is KeeperMethod {
 }
 
 export class NearCoreReader implements CoreReader {
-  private readonly provider: JsonRpcProvider;
+  private readonly provider: Provider;
   private readonly contractId: string;
   private readonly keeperAccountId: string | null;
   private readonly keeperPublicKey: string | null;
 
-  constructor(rpcUrl: string, contractId: string, keeperAccountId: string | null = null, keeperPublicKey: string | null = null) {
-    this.provider = new JsonRpcProvider({ url: rpcUrl });
+  /** `provider`: the WO-35k fallback provider (near-rpc.ts fallbackRpc), so every view walks FastNEAR x2, dRPC, Intear. */
+  constructor(provider: Provider, contractId: string, keeperAccountId: string | null = null, keeperPublicKey: string | null = null) {
+    this.provider = provider;
     this.contractId = contractId;
     this.keeperAccountId = keeperAccountId;
     this.keeperPublicKey = keeperPublicKey;
@@ -102,8 +103,7 @@ export class NearKeeperWriter implements KeeperWriter {
   private readonly contractId: string;
   private readonly gas: bigint;
 
-  constructor(rpcUrl: string, keeperAccountId: string, secretKey: `ed25519:${string}`, contractId: string, gasTgas: number) {
-    const provider = new JsonRpcProvider({ url: rpcUrl });
+  constructor(provider: Provider, keeperAccountId: string, secretKey: `ed25519:${string}`, contractId: string, gasTgas: number) {
     this.account = new Account(keeperAccountId, provider, KeyPairSigner.fromSecretKey(secretKey));
     this.contractId = contractId;
     this.gas = BigInt(gasTgas) * 10n ** 12n;

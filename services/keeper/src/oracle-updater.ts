@@ -15,7 +15,8 @@
 //   also used for `update_price_feeds`).
 // The API key is never logged; any error text is scrubbed of it before logging.
 
-import { Account, JsonRpcProvider, KeyPairSigner } from 'near-api-js';
+import { Account, KeyPairSigner, type Provider } from 'near-api-js';
+import { fallbackRpc, nearRpcUrls } from './near-rpc.ts';
 import { expandHome, isPlaceholder } from './config.ts';
 import { loadKeeperKey, loadSecretFile } from './keyfile.ts';
 import { errMsg, type Logger } from './log.ts';
@@ -31,7 +32,8 @@ export interface UpdaterConfig {
   maxFeeYocto: bigint;
   gasTgas: number;
   intervalMs: number;
-  rpcUrl: string;
+  /** NEAR RPC endpoints in fallback order (WO-35k near-rpc.ts). */
+  rpcUrls: string[];
   accountId: string;
   keyPath: string;
   apiKeyPath: string;
@@ -71,7 +73,7 @@ export function loadUpdaterConfig(env: NodeJS.ProcessEnv = process.env): Updater
       maxFeeYocto: BigInt(maxFee),
       gasTgas: n('ORACLE_UPDATER_GAS_TGAS', 150, 10, 300),
       intervalMs: n('ORACLE_UPDATER_INTERVAL_MS', 30_000, 1_000, 3_600_000),
-      rpcUrl: pick('NEAR_RPC_URL', 'https://test.rpc.fastnear.com'),
+      rpcUrls: nearRpcUrls(env),
       accountId: env.ORACLE_UPDATER_ACCOUNT_ID as string,
       keyPath: expandHome(env.ORACLE_UPDATER_KEY_PATH as string),
       apiKeyPath: expandHome(env.PYTH_API_KEY_PATH as string),
@@ -216,13 +218,13 @@ export class OracleUpdater {
 
 /** near-api-js 7.4.0 adapter (same calls as chain.ts, F-012). Only ever calls the fee view and update_price_feeds. */
 export class NearPythChain implements PythChain {
-  private readonly provider: JsonRpcProvider;
+  private readonly provider: Provider;
   private readonly account: Account;
   private readonly contractId: string;
   private readonly gas: bigint;
 
-  constructor(rpcUrl: string, accountId: string, secretKey: `ed25519:${string}`, contractId: string, gasTgas: number) {
-    this.provider = new JsonRpcProvider({ url: rpcUrl });
+  constructor(provider: Provider, accountId: string, secretKey: `ed25519:${string}`, contractId: string, gasTgas: number) {
+    this.provider = provider;
     this.account = new Account(accountId, this.provider, KeyPairSigner.fromSecretKey(secretKey));
     this.contractId = contractId;
     this.gas = BigInt(gasTgas) * 10n ** 12n;
@@ -262,7 +264,8 @@ export function createOracleUpdater(env: NodeJS.ProcessEnv, log: Logger): { upda
   try {
     const apiKey = loadSecretFile(cfg.apiKeyPath, 'PYTH_API_KEY_PATH');
     const key = loadKeeperKey(cfg.keyPath, cfg.accountId, 'ORACLE_UPDATER_KEY_PATH', 'ORACLE_UPDATER_ACCOUNT_ID');
-    const chain = new NearPythChain(cfg.rpcUrl, cfg.accountId, key.secretKey, cfg.pythContractId, cfg.gasTgas);
+    const near = fallbackRpc({ urls: cfg.rpcUrls, log: (level, msg, f) => log[level](msg, f) });
+    const chain = new NearPythChain(near.provider, cfg.accountId, key.secretKey, cfg.pythContractId, cfg.gasTgas);
     return { updater: new OracleUpdater(cfg, apiKey, fetchGet, chain, log) };
   } catch (e) {
     return { disabled: errMsg(e) };

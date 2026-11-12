@@ -1,6 +1,7 @@
 // /healthz and /runs (read-only). No request logging of addresses or headers: the server never reads
 // `req.socket.remoteAddress` or forwarding headers, so no wallet ↔ IP join can be produced here.
 
+import type { RpcStatus } from './near-rpc.ts';
 import { createServer, type Server } from 'node:http';
 import type { KeeperDb } from './db.ts';
 import type { KeeperStatus } from './keeper.ts';
@@ -19,6 +20,8 @@ export interface HealthBody {
   pending_settlements: number;
   triggers_sent: number;
   uptime_s: number;
+  /** WO-35k NEAR RPC fallback: endpoint hosts in order, the one that served last, failovers since start, hosts cooling down. */
+  rpc: RpcStatus | null;
   /** P2 Solana relay; null when KEEPER_SOLANA_KEYPAIR is unset. */
   solana: {
     v2: boolean | null;
@@ -63,9 +66,10 @@ export function allowanceLabel(a: KeeperStatus['allowance']): string {
   }
 }
 
-export function healthBody(s: KeeperStatus, pollMs: number, now: number, relay: RelayStatus | null = null, base: BaseRelayStatus | null = null): HealthBody {
+export function healthBody(s: KeeperStatus, pollMs: number, now: number, relay: RelayStatus | null = null, base: BaseRelayStatus | null = null, rpc: RpcStatus | null = null): HealthBody {
   const fresh = s.lastTickAt !== null && now - s.lastTickAt <= 3 * pollMs;
   return {
+    rpc,
     ok: fresh && s.consecutiveErrors < 3 && s.allowance.kind !== 'full_access',
     last_block_seen: s.lastBlockSeen,
     last_tick_at: s.lastTickAt === null ? null : new Date(s.lastTickAt).toISOString(),
@@ -122,6 +126,7 @@ export function startHealthServer(
   now: () => number = Date.now,
   relay: RelayStatus | null = null,
   base: BaseRelayStatus | null = null,
+  rpc: (() => RpcStatus) | null = null,
 ): Server {
   const server = createServer((req, res) => {
     const path = (req.url ?? '/').split('?')[0];
@@ -131,7 +136,7 @@ export function startHealthServer(
     };
     if (req.method !== 'GET') return send(405, { error: 'method not allowed' });
     if (path === '/healthz') {
-      const body = healthBody(status, pollMs, now(), relay, base);
+      const body = healthBody(status, pollMs, now(), relay, base, rpc === null ? null : rpc());
       return send(body.ok ? 200 : 503, body);
     }
     if (path === '/runs') return send(200, { runs: db.runs(50) });

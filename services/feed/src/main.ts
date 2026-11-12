@@ -20,6 +20,7 @@ import { seedOneClickFromFixtures } from './fixtures.ts';
 import { createMcpHttpServer } from './mcp.ts';
 import { OneClickClient, OneClickSampler, defaultSamplerConfig } from './oneclick.ts';
 import { rpcUrls, txFetcherFor, viewReaderFor } from './near.ts';
+import { endpointHost, fallbackRpc } from './near-rpc.ts';
 import { HttpNeardataFetcher, NeardataSource } from './neardata.ts';
 import { loadRepoIds } from './repo-config.ts';
 import { createFeedServer } from './server.ts';
@@ -32,6 +33,8 @@ const home = (p: string): string => (p.startsWith('~/') ? resolve(homedir(), p.s
 function main(): void {
   const log = createLogger('feed');
   const rpcs = rpcUrls(env);
+  // WO-35k: one fallback provider for every NEAR view / tx-status call (rotate on 429 / 5xx / timeout; host-only logs).
+  const near = fallbackRpc({ urls: rpcs, log: (level, msg, f) => log[level](msg, f) });
   const pollMs = Number(env.FEED_POLL_MS ?? 10_000);
   const listen = listenConfig(env);
   const start = startBlock(env);
@@ -42,7 +45,7 @@ function main(): void {
   const sources: Source[] = [];
   if (ids.core !== null) {
     const core = ids.core;
-    sources.push(new ViewPollingSource(viewReaderFor(rpcs, core), log));
+    sources.push(new ViewPollingSource(viewReaderFor(near.provider, core), log));
     // FEED_INDEXER=neardata (default): events from Neardata blocks (F-122). FEED_INDEXER=views: fallback,
     // view polling only (+ keeper tx-status logs below).
     const mode = unset(env.FEED_INDEXER) ? 'neardata' : (env.FEED_INDEXER as string);
@@ -66,7 +69,7 @@ function main(): void {
       const kdb = new DatabaseSync(home(env.KEEPER_DB_PATH as string), { readOnly: true });
       const hashes = (): string[] =>
         (kdb.prepare("SELECT tx_hash FROM keeper_runs WHERE tx_hash IS NOT NULL ORDER BY id DESC LIMIT 200").all() as Array<{ tx_hash: string }>).map((r) => r.tx_hash);
-      sources.push(new TxStatusSource(txFetcherFor(rpcs, ids.keeper, core), hashes, log));
+      sources.push(new TxStatusSource(txFetcherFor(near.provider, ids.keeper, core), hashes, log));
     }
   } else {
     log.warn('polling_disabled', { reason: 'no CORE_ACCOUNT_ID and no accounts.core in config.yaml' });
@@ -75,6 +78,8 @@ function main(): void {
   const apiOpts: ApiOptions = {
     pollMs,
     source: sources.map((s) => s.kind).join('+') || 'none',
+    history: sources.some((s) => s.kind === 'neardata') ? 'indexed' : 'unavailable',
+    rpcStatus: near.status,
     contracts: { core: ids.core, usdc: ids.usdcMock, nvdax: ids.nvdaxToken },
     version: feedVersion(env),
     startBlock: startBlockLabel(start),
@@ -82,7 +87,7 @@ function main(): void {
   };
   // Feed MCP over Streamable HTTP (read-only): own port (FEED_MCP_PORT, `off` disables) or, with FEED_SINGLE_PORT=1,
   // `POST /mcp` on the REST port.
-  const views = ids.core === null ? null : viewReaderFor(rpcs, ids.core);
+  const views = ids.core === null ? null : viewReaderFor(near.provider, ids.core);
   const mcpDeps = { db, views, coreId: ids.core };
   const server = listen.single ? createFeedServer(db, apiOpts, mcpDeps) : createApi(db, apiOpts);
   server.listen(listen.port, listen.host);
@@ -115,8 +120,7 @@ function main(): void {
     core: ids.core,
     nvdax: ids.nvdaxToken,
     mcp_port: listen.single ? 'single' : listen.mcpPort === null ? 'off' : String(listen.mcpPort),
-    rpc_primary: rpcs[0] ?? null,
-    rpc_fallbacks: rpcs.length - 1,
+    rpc_endpoints: rpcs.map(endpointHost).join(','),
     start_block: startBlockLabel(start),
     cors: corsOrigins === null ? 'legacy' : `${corsOrigins.size} origin(s)`,
     oneclick,
