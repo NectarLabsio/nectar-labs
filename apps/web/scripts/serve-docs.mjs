@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-// Local stand-in for the docs deployment (WO-34c). Serves apps/docs-site/build at the ROOT, the way the hosted docs project
-// serves its flat output (F-393), so APP `/docs/:path*` → DOCS_ORIGIN `/:path*` resolves locally. `docusaurus serve` cannot
-// play this role: it redirects every path outside baseUrl (/docs/) back to /docs/, which breaks the prefix-stripping rewrite.
+// Local stand-in for the docs deployment (WO-34c, WO-34t). The build output is flat (no baseUrl folder, F-393); the hosted docs
+// project serves it under /docs/* through its vercel.json rewrites (`/docs/` → `/`, `/docs/:path*` → `/:path*`; F-433/F-434).
+// This server does the same: `/docs`, `/docs/` → index.html and `/docs/<path>` → <path>, so APP `/docs/:path*` →
+// DOCS_ORIGIN `/docs/:path*` (prefix kept) resolves locally. Paths outside /docs are still served from the build root, as before.
+// `docusaurus serve` is not used: it redirects non-asset URLs to the trailing-slash form, unlike the deployment (cleanUrls).
 // Usage: node apps/web/scripts/serve-docs.mjs --port 3742 [--dir apps/docs-site/build]
 import { createServer } from "node:http";
 import { createReadStream, existsSync, statSync } from "node:fs";
@@ -28,7 +30,9 @@ function pick(path) {
 }
 
 createServer((req, res) => {
-  const path = new URL(req.url ?? "/", "http://x").pathname;
+  const raw = new URL(req.url ?? "/", "http://x").pathname;
+  // The deployment's rewrites: /docs and /docs/ → /, /docs/<path> → /<path>.
+  const path = raw === "/docs" || raw.startsWith("/docs/") ? raw.slice("/docs".length) || "/" : raw;
   const file = pick(path);
   const status = file ? 200 : 404;
   const f = file ?? join(dir, "404.html");
