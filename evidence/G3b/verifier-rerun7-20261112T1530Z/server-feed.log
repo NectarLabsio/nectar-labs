@@ -1,0 +1,13 @@
+{"ts":"2026-11-12T15:46:23.031Z","level":"info","service":"feed","msg":"feed_started","port":3975,"single_port":false,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"off","rpc_endpoints":"test.rpc.fastnear.com,rpc.testnet.fastnear.com,near-testnet.drpc.org,testnet-rpc.intea.rs","start_block":"head","cors":"legacy","oneclick":true,"fixtures":false,"sources":"views","poll_ms":10000}
+{"ts":"2026-11-12T15:46:23.458Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"test.rpc.fastnear.com","previous":"none","method":"callFunctionRaw"}
+{"ts":"2026-11-12T15:46:23.497Z","level":"warn","service":"feed","msg":"rpc_failover","endpoint":"test.rpc.fastnear.com","reason":"throttled","method":"callFunctionRaw","cooldown_ms":218}
+{"ts":"2026-11-12T15:46:23.589Z","level":"warn","service":"feed","msg":"rpc_failover","endpoint":"rpc.testnet.fastnear.com","reason":"throttled","method":"callFunctionRaw","cooldown_ms":145}
+{"ts":"2026-11-12T15:46:23.935Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"near-testnet.drpc.org","previous":"test.rpc.fastnear.com","method":"callFunctionRaw"}
+{"ts":"2026-11-12T15:46:23.970Z","level":"warn","service":"feed","msg":"rpc_failover","endpoint":"test.rpc.fastnear.com","reason":"throttled","method":"callFunctionRaw","cooldown_ms":487}
+{"ts":"2026-11-12T15:46:24.008Z","level":"warn","service":"feed","msg":"rpc_failover","endpoint":"rpc.testnet.fastnear.com","reason":"throttled","method":"callFunctionRaw","cooldown_ms":464}
+{"ts":"2026-11-12T15:46:25.485Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:46:35.082Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"test.rpc.fastnear.com","previous":"near-testnet.drpc.org","method":"callFunctionRaw"}
+{"ts":"2026-11-12T15:46:58.681Z","level":"warn","service":"feed","msg":"rpc_failover","endpoint":"test.rpc.fastnear.com","reason":"throttled","method":"callFunctionRaw","cooldown_ms":371}
+{"ts":"2026-11-12T15:46:58.775Z","level":"warn","service":"feed","msg":"rpc_failover","endpoint":"rpc.testnet.fastnear.com","reason":"throttled","method":"callFunctionRaw","cooldown_ms":1471}
+{"ts":"2026-11-12T15:46:59.164Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"near-testnet.drpc.org","previous":"test.rpc.fastnear.com","method":"callFunctionRaw"}
+{"ts":"2026-11-12T15:47:09.503Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"test.rpc.fastnear.com","previous":"near-testnet.drpc.org","method":"callFunctionRaw"}
