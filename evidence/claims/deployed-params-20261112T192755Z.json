@@ -1,0 +1,137 @@
+{
+ "get_collateral": {
+  "block": 277406134,
+  "value": {
+   "symbol": "NVDAx",
+   "token": "nvdax-mock.nectar.testnet",
+   "decimals": 6,
+   "price_feed_id": "b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593",
+   "base_ltv_bps": 4000,
+   "max_nectar_ltv_bps": 7000,
+   "base_haircut_bps": 1000,
+   "weekend_haircut_bps": 2500,
+   "limit_premium_bps": 300,
+   "pre_liq_min_bps": 6500,
+   "pre_liq_max_bps": 8000,
+   "oracle_price_usd_e6": "135000000",
+   "oracle_updated_ns": "1794496277644909568",
+   "verified_dex_depth_usd_e6": "0",
+   "active_committed_q_usd_e6": "16119220000",
+   "acc_fee_per_dollar_e18": "3968253227770507",
+   "remote_chain": {
+    "chain_id": "solana-devnet",
+    "vault_program": "ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW",
+    "mpc_domain_id": 1
+   },
+   "total_debt_usd_e6": "9229000000",
+   "multiplier_e18": "1000000000000000000",
+   "multiplier_updated_ns": "1794327862212968504",
+   "price_kind": "Underlying",
+   "ca_pending": false,
+   "ca_effective_ns": "0",
+   "ca_multiplier_e18": "0",
+   "forced_closed": false,
+   "weekend_ref_price_e6": "0",
+   "weekend_ref_updated_ns": "0",
+   "shield": {
+    "weekend_fee_bps": 15,
+    "event_fee_bps": 25,
+    "event_window_end_ns": "0"
+   },
+   "max_voluntary_fill_usd_e6_per_day": "5000000000",
+   "voluntary_filled_today_e6": "4522500000",
+   "voluntary_day": 20767,
+   "ca_suggested_multiplier_e18": "0",
+   "ca_suggested_ns": "0",
+   "reserve": {
+    "shares": "10000000",
+    "usdc_e6": "10000000",
+    "notice_usdc_e6": "0",
+    "units": "0",
+    "discount_bps": 600,
+    "acc_fee_per_share_e18": "1043200000000000",
+    "acc_units_per_share_e18": "0",
+    "notice_ns": "604800000000000",
+    "fee_days": [
+     {
+      "day": 20767,
+      "fees_usd_e6": "3282"
+     },
+     {
+      "day": 20768,
+      "fees_usd_e6": "7150"
+     }
+    ]
+   }
+  }
+ },
+ "get_exit_capacity": {
+  "block": 277406135,
+  "value": {
+   "q_usd_e6": "16119220000",
+   "r_usd_e6": "10000000",
+   "d_usd_e6": "0",
+   "haircut_bps": 2500,
+   "session_open": false,
+   "oracle_price_usd_e6": "135000000",
+   "oracle_age_s": "15396",
+   "oracle_fresh": true,
+   "b_c_usd_per_unit_e6": "94500000",
+   "limit_bps_effective": 7000,
+   "capacity_usd_e6": "12096915000",
+   "oracle_source": "Owner",
+   "session_reason": "stale_price",
+   "total_debt_usd_e6": "9229000000",
+   "aggregate_capacity_usd_e6": "12096915000",
+   "aggregate_headroom_usd_e6": "2867915000",
+   "multiplier_e18": "1000000000000000000",
+   "price_kind": "Underlying",
+   "ca_pending": false,
+   "ca_effective_ns": "0",
+   "forced_closed": false
+  }
+ },
+ "get_reserve": {
+  "block": 277406135,
+  "value": {
+   "symbol": "NVDAx",
+   "r_usd_e6": "10000000",
+   "shares": "10000000",
+   "usdc_e6": "10000000",
+   "notice_usdc_e6": "0",
+   "units": "0",
+   "discount_bps": 600,
+   "acc_fee_per_share_e18": "1043200000000000",
+   "acc_units_per_share_e18": "0",
+   "share_price_e6": "1000000",
+   "min_deposit_usd_e6": "10000000",
+   "notice_period_ns": "604800000000000",
+   "fees_7d_usd_e6": "10432",
+   "realised_apr_7d_bps": "543"
+  }
+ },
+ "get_config": {
+  "block": 277406136,
+  "contract_version": "2.2.1-v7",
+  "keys": [
+   "contract_version",
+   "owner",
+   "usdc_token",
+   "keeper",
+   "keeper_fee_bps",
+   "fee_split",
+   "paused",
+   "min_notice_period_ns",
+   "min_quote_usd_e6",
+   "max_age_ns_session",
+   "max_age_ns_closed",
+   "band_bps",
+   "gas_reserve_yocto",
+   "next_quote_id",
+   "next_position_id",
+   "max_quotes_per_asset",
+   "max_quotes_per_settlement",
+   "origination_fee_bps"
+  ]
+ }
+}

@@ -110,4 +110,23 @@ site: # WO-34 hosting. Operator fields: Kunal, H-LEGAL answered 2026-11-12 (cont
   contact: "kunal@nectarnetwork.fun"
   x_handle: "@xNectarNetwork"
   hosted_until: "2026-11-25"
-  # Hosts come from env: SITE_URL, APP_URL, DOCS_URL, FEED_URL, REPO_URL. All unset = local single-host mode (G9 default).
+  # Hosts come from env: SITE_URL, APP_URL, DOCS_URL, STATUS_URL, FEED_URL, REPO_URL. All unset = local single-host mode (G9 default).
+  # Production hosts (Kunal, 2026-11-12; Vercel DNS, domain in the team; www.nectarlabs.io → 308 nectarlabs.io is a Vercel domain redirect):
+  production_hosts:
+    site: https://nectarlabs.io
+    app: https://testnet.nectarlabs.io
+    docs: https://docs.nectarlabs.io
+    status: https://status.nectarlabs.io
+faucet: # WO-53/WO-54c "Get test assets": public mint on the mock tokens (Kunal approved the mock-ft code-only upgrade 2026-11-12; account ids unchanged)
+  cooldown_s: 3600 # one claim per account per hour
+  tokens:
+    - {symbol: NVDAx, token: nvdax-mock.nectar.testnet, amount_per_claim: "5000000", cap_per_account: "15000000"} # 5 per claim, 15 per account (6 decimals)
+    - {symbol: USDC, token: usdc-mock.nectar.testnet, amount_per_claim: "500000000", cap_per_account: "1500000000"} # 500 per claim, 1,500 per account
+  gas_faucet: https://near-faucet.io/ # F-154; re-verified by WO-52
+ops:
+  oracle_refresher: # H-ORACLE option A on Railway (Kunal 2026-11-12): FC key on nectar.testnet → nectar-core-v2 update_owner_price only
+    run_until: "2026-11-18T23:59:00Z"
+    tick_s: 60
+    session_max_age_s: 600 # inside NYSE session windows: re-assert when the price is ≥ 10 min old (session opens below 15 min, lib.rs:75)
+    closed_max_age_s: 43200 # outside session windows: re-assert when ≥ 12 h old (borrows need < 24 h)
+    allowance_near: "0.5"
