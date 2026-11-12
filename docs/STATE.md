@@ -113,6 +113,12 @@
     scripts/ops/refresh-owner-price.sh (re-asserts the current price when > 12 h old) — starting it as a background host loop was DENIED by the
     permission classifier (unauthorized persistence) → Kunal decides: run it himself, or the orchestrator runs the one-shot refresh each session (H-ORACLE).
   - Feed NECTAR_GIT_SHA → 3974b5b (was fd06e11; /health `commit`).
+  - WO-34v2 (release 3974b5b) merged: the 3 ca34111 FAILs now PASS (no noindex on 56 APP /docs pages; docs origin XFO + frame-ancestors; 0 localhost hrefs);
+    host check, headers, Feed/CORS, Lighthouse PASS. **New FAIL:** hydrated landing never says "local fork" (client flags swap the heading to "Solana
+    holds the stock"; steps 03/04 name Base unqualified) — G3b (i) checked only server HTML. Crawl not checked (still running at commit).
+    In flight: WO-35i (web: server/client-consistent chains copy, "local fork" everywhere Base is named) ‖ WO-35h (docs: README points to EVIDENCE for
+    the deployed commit/acceptance; H-ORACLE; RUNBOOK). Then: release 2 → G3b run 7 → production → WO-34v3 (landing hydrated + crawl) ‖ G9 run 5 →
+    submission-rc → FINAL_REPORT re-audit. Info for Kunal: nectar-labs-web.vercel.app serves a duplicate (canonical → SITE/APP, no noindex).
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
@@ -326,7 +332,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T15:05:43Z · commit 1f28a2f
+Last activity: 2026-11-12T15:18:20Z · commit 5c82ffe
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
