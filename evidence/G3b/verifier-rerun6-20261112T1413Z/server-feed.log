@@ -1,0 +1,3 @@
+{"ts":"2026-11-12T14:28:41.757Z","level":"info","service":"feed","msg":"feed_started","port":3965,"single_port":false,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"off","rpc_endpoints":"test.rpc.fastnear.com,rpc.testnet.fastnear.com,near-testnet.drpc.org,testnet-rpc.intea.rs","start_block":"head","cors":"legacy","oneclick":true,"fixtures":false,"sources":"views","poll_ms":10000}
+{"ts":"2026-11-12T14:28:42.268Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"test.rpc.fastnear.com","previous":"none","method":"callFunctionRaw"}
+{"ts":"2026-11-12T14:28:44.225Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}

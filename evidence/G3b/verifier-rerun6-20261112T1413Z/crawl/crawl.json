@@ -1,0 +1,2720 @@
+{
+  "generated": "2026-11-12T14:49:40.346Z",
+  "site": "http://site.localhost:3963",
+  "app": "http://app.localhost:3963",
+  "docs": "http://app.localhost:3963/docs",
+  "variants": [
+    "dark@1440",
+    "light@1440",
+    "dark@400",
+    "light@400"
+  ],
+  "politeness": {
+    "polite": true,
+    "concurrency": 1,
+    "delayMs": 1500
+  },
+  "ourConsoleErrors": 0,
+  "thirdPartyNetworkFailures": [],
+  "redirects": [
+    {
+      "label": "APP / → /feed",
+      "url": "http://app.localhost:3963/",
+      "host": "app.localhost:3963",
+      "status": 307,
+      "location": "http://app.localhost:3963/feed",
+      "want": "307 http://app.localhost:3963/feed",
+      "ok": true
+    },
+    {
+      "label": "app route on SITE → APP",
+      "url": "http://site.localhost:3963/borrow?asset=NVDAx",
+      "host": "site.localhost:3963",
+      "status": 308,
+      "location": "http://app.localhost:3963/borrow?asset=NVDAx",
+      "want": "308 http://app.localhost:3963/borrow?asset=NVDAx",
+      "ok": true
+    },
+    {
+      "label": "SITE /docs/* → APP (legal pages link /docs/<slug>)",
+      "url": "http://site.localhost:3963/docs/security/audits",
+      "host": "site.localhost:3963",
+      "status": 308,
+      "location": "http://app.localhost:3963/docs/security/audits",
+      "want": "308 http://app.localhost:3963/docs/security/audits",
+      "ok": true
+    },
+    {
+      "label": "landing route on APP → SITE",
+      "url": "http://app.localhost:3963/security",
+      "host": "app.localhost:3963",
+      "status": 308,
+      "location": "http://site.localhost:3963/security",
+      "want": "308 http://site.localhost:3963/security",
+      "ok": true
+    },
+    {
+      "label": "www.<site> → SITE",
+      "url": "http://site.localhost:3963/talk",
+      "host": "www.site.localhost:3963",
+      "status": 301,
+      "location": "http://site.localhost:3963/talk",
+      "want": "301 http://site.localhost:3963/talk",
+      "ok": true
+    }
+  ],
+  "routes": [
+    {
+      "url": "http://site.localhost:3963/",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 42
+    },
+    {
+      "url": "http://app.localhost:3963/feed",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/feed",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/feed",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "http://app.localhost:3963/docs/",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "http://app.localhost:3963/borrow",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/borrow",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/borrow",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 34
+    },
+    {
+      "url": "http://app.localhost:3963/shield",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/shield",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/shield",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "http://app.localhost:3963/quote/new",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/quote/new",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/quote/new",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "http://app.localhost:3963/reserve",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/reserve",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/reserve",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "http://app.localhost:3963/notes",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/notes",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/notes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 38
+    },
+    {
+      "url": "http://app.localhost:3963/docs/project/evidence",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/project/evidence",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/project/evidence",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 69
+    },
+    {
+      "url": "http://app.localhost:3963/keepers",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/keepers",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/keepers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 34
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/sdk",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/sdk",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/sdk",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/feed-mcp",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/feed-mcp",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/feed-mcp",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "http://site.localhost:3963/status",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/status",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/status",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://site.localhost:3963/changelog",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/changelog",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/changelog",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://site.localhost:3963/security",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/security",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/security",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "http://site.localhost:3963/brand",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/brand",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/brand",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 41
+    },
+    {
+      "url": "http://site.localhost:3963/about",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/about",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/about",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://site.localhost:3963/talk",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/talk",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/talk",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 38
+    },
+    {
+      "url": "http://site.localhost:3963/legal/privacy",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/legal/privacy",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/legal/privacy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 46
+    },
+    {
+      "url": "http://site.localhost:3963/legal/cookies",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/legal/cookies",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/legal/cookies",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://site.localhost:3963/legal/terms",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/legal/terms",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/legal/terms",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 45
+    },
+    {
+      "url": "http://site.localhost:3963/legal/disclaimers",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/legal/disclaimers",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/legal/disclaimers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 44
+    },
+    {
+      "url": "http://app.localhost:3963/quote",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/quote/new",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/quote",
+          "status": 307
+        },
+        {
+          "url": "http://app.localhost:3963/quote/new",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "http://app.localhost:3963/agents",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/agents",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/agents",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://app.localhost:3963/console",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/console",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/console",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/feed-rest",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/feed-rest",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/feed-rest",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 66
+    },
+    {
+      "url": "http://app.localhost:3963/docs",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/start/live-on-testnet",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 105
+    },
+    {
+      "url": "http://app.localhost:3963/docs/changelog",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/changelog",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/changelog",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "http://app.localhost:3963/docs/start/quick-start",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/start/quick-start",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/start/quick-start",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 59
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/cramer-limits",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/cramer-limits",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/cramer-limits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 70
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/pappus-quotes",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/pappus-quotes",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/pappus-quotes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 73
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/premium-and-fee-index",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/premium-and-fee-index",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/premium-and-fee-index",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 70
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/pre-liquidation",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/pre-liquidation",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/pre-liquidation",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 71
+    },
+    {
+      "url": "http://app.localhost:3963/docs/project/roadmap",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/project/roadmap",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/project/roadmap",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 58
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/whitepaper",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/whitepaper",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/whitepaper",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 83
+    },
+    {
+      "url": "http://app.localhost:3963/docs/security/trust-model",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/trust-model",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/security/trust-model",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "http://app.localhost:3963/docs/project/brand",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/project/brand",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/project/brand",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "http://app.localhost:3963/docs/project/team",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/project/team",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/project/team",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 53
+    },
+    {
+      "url": "http://app.localhost:3963/docs/legal/privacy",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/legal/privacy",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/legal/privacy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 93
+    },
+    {
+      "url": "http://app.localhost:3963/docs/legal/cookies",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/legal/cookies",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/legal/cookies",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 57
+    },
+    {
+      "url": "http://app.localhost:3963/docs/legal/terms",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/legal/terms",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/legal/terms",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 84
+    },
+    {
+      "url": "http://app.localhost:3963/docs/legal/disclaimers",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/legal/disclaimers",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/legal/disclaimers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 68
+    },
+    {
+      "url": "http://app.localhost:3963/notes?tab=deposits",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/notes?tab=deposits",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/notes?tab=deposits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 38
+    },
+    {
+      "url": "http://app.localhost:3963/docs/project/prior-work",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/project/prior-work",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/project/prior-work",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 52
+    },
+    {
+      "url": "http://app.localhost:3963/docs/security/audits",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/audits",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/security/audits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "http://app.localhost:3963/docs/operations/monitoring",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/operations/monitoring",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/operations/monitoring",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/oneclick-depth",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/oneclick-depth",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/oneclick-depth",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 64
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/run-a-keeper",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/run-a-keeper",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/run-a-keeper",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 66
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/post-quotes",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/post-quotes",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/post-quotes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/remote-collateral-solana",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/remote-collateral-solana",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/remote-collateral-solana",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 77
+    },
+    {
+      "url": "http://app.localhost:3963/docs/integrate/agent-skill-x402",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/integrate/agent-skill-x402",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/integrate/agent-skill-x402",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 78
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/contract-reference",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/contract-reference",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/contract-reference",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 73
+    },
+    {
+      "url": "http://site.localhost:3963/brand/mark.svg",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/brand/mark.svg",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/brand/mark.svg",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3963/brand/mark-256.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/brand/mark-256.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/brand/mark-256.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3963/brand/mark-flat-96.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/brand/mark-flat-96.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/brand/mark-flat-96.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3963/brand/wordmark-dark-100.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/brand/wordmark-dark-100.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/brand/wordmark-dark-100.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3963/brand/wordmark-muted-100.png",
+      "status": 200,
+      "finalUrl": "http://site.localhost:3963/brand/wordmark-muted-100.png",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/brand/wordmark-muted-100.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "http://site.localhost:3963/docs/security/trust-model",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/trust-model",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/docs/security/trust-model",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs/security/trust-model",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "http://site.localhost:3963/docs/security/audits",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/audits",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/docs/security/audits",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs/security/audits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "http://site.localhost:3963/docs/security/disclosure",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/disclosure",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/docs/security/disclosure",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs/security/disclosure",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "http://site.localhost:3963/docs/start/live-on-testnet",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/docs/start/live-on-testnet",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs/start/live-on-testnet",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 105
+    },
+    {
+      "url": "http://site.localhost:3963/docs/protocol/oracle-policy",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/oracle-policy",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/docs/protocol/oracle-policy",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs/protocol/oracle-policy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "http://site.localhost:3963/docs/protocol/quoter-tee",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/quoter-tee",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/docs/protocol/quoter-tee",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs/protocol/quoter-tee",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 68
+    },
+    {
+      "url": "http://site.localhost:3963/docs/concepts/position-notes",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/position-notes",
+      "hops": [
+        {
+          "url": "http://site.localhost:3963/docs/concepts/position-notes",
+          "status": 308
+        },
+        {
+          "url": "http://app.localhost:3963/docs/concepts/position-notes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/nectar-reserve",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/nectar-reserve",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/nectar-reserve",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/chain-signatures",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/chain-signatures",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/chain-signatures",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/aggregate-limit",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/aggregate-limit",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/aggregate-limit",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 77
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/weekend-oracle-guard",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/weekend-oracle-guard",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/weekend-oracle-guard",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 76
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/quoter-tee",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/quoter-tee",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/quoter-tee",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 68
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/position-notes",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/position-notes",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/position-notes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/shields",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/shields",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/shields",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 72
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/profit-lock",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/profit-lock",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/profit-lock",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/oracle-policy",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/oracle-policy",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/oracle-policy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "http://app.localhost:3963/docs/operations/upgrades",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/operations/upgrades",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/operations/upgrades",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/corporate-actions",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/corporate-actions",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/corporate-actions",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/fee-stack",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/fee-stack",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/fee-stack",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 77
+    },
+    {
+      "url": "http://app.localhost:3963/docs/changelog/docs-and-spec",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/changelog/docs-and-spec",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/changelog/docs-and-spec",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 34
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/exit-gap",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/exit-gap",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/exit-gap",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 67
+    },
+    {
+      "url": "http://app.localhost:3963/docs/concepts/notice-periods",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/concepts/notice-periods",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/concepts/notice-periods",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 66
+    },
+    {
+      "url": "http://app.localhost:3963/docs/security/threats",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/threats",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/security/threats",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 52
+    },
+    {
+      "url": "http://app.localhost:3963/docs/security/keys-and-roles",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/keys-and-roles",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/security/keys-and-roles",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 58
+    },
+    {
+      "url": "http://app.localhost:3963/docs/security/disclosure",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/security/disclosure",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/security/disclosure",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "http://app.localhost:3963/docs/operations/runbook",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/operations/runbook",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/operations/runbook",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 72
+    },
+    {
+      "url": "http://app.localhost:3963/docs/operations/incidents",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/operations/incidents",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/operations/incidents",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 52
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/settlement-flow",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/settlement-flow",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/settlement-flow",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/solana-vault",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/solana-vault",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/solana-vault",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 63
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/preimage-format",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/preimage-format",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/preimage-format",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 59
+    },
+    {
+      "url": "http://app.localhost:3963/docs/protocol/storage-and-gas",
+      "status": 200,
+      "finalUrl": "http://app.localhost:3963/docs/protocol/storage-and-gas",
+      "hops": [
+        {
+          "url": "http://app.localhost:3963/docs/protocol/storage-and-gas",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 64
+    }
+  ],
+  "externals": [
+    {
+      "href": "https://near.org/",
+      "from": "http://site.localhost:3963/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://solana.com/",
+      "from": "http://site.localhost:3963/",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://docs.near.org/chain-abstraction/chain-signatures",
+      "from": "http://site.localhost:3963/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://outlayer.ai/",
+      "from": "http://site.localhost:3963/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://near-intents.org/",
+      "from": "http://site.localhost:3963/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://localhost:3100/feed",
+      "from": "http://app.localhost:3963/docs",
+      "status": null,
+      "ok": true,
+      "note": "local-run link, not fetched"
+    },
+    {
+      "href": "http://localhost:3100/",
+      "from": "http://app.localhost:3963/docs",
+      "status": null,
+      "ok": true,
+      "note": "local-run link, not fetched"
+    },
+    {
+      "href": "http://localhost:3100/keepers",
+      "from": "http://app.localhost:3963/docs",
+      "status": null,
+      "ok": true,
+      "note": "local-run link, not fetched"
+    },
+    {
+      "href": "http://localhost:3100/quote/new",
+      "from": "http://app.localhost:3963/docs",
+      "status": null,
+      "ok": true,
+      "note": "local-run link, not fetched"
+    },
+    {
+      "href": "https://outlayer.fastnear.com/docs/getting-started",
+      "from": "http://app.localhost:3963/docs",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://docs.near-intents.org/",
+      "from": "http://app.localhost:3963/docs",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://explorer.solana.com/tx/5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv?cluster=devnet",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://explorer.solana.com/tx/3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6?cluster=devnet",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/E2suM2LC4ac2AE9TZ66AGY72ZDrBdu1Yz8pEnwAs65hz",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/4vW2tPF5Gqemkm5uoafQE6eaXidSMSCuqLcDVMTTB77b",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/7UFpexpdEH2nhmDVqXar8vZHQcK1iBFXznu9rybn24wU",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/EskZKj9sXxcpTWYoKRiagRvvkh3H5hjz8KQFL7qNRQQ7",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt",
+      "from": "http://app.localhost:3963/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://x.com/xNectarNetwork",
+      "from": "http://site.localhost:3963/talk",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://127.0.0.1:8788/",
+      "from": "http://app.localhost:3963/docs/integrate/feed-rest",
+      "status": null,
+      "ok": true,
+      "note": "local-run link, not fetched"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/7J1DsrKP19HTd1c2AWuoRbW2AyCUR75nd8hLGwNuKPAr",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/keeper-v2.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/8hNqxAdC61nAwmTWeUbK5auA4CbB35ppkPcnNX7PYe5C",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://explorer.solana.com/address/ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW?cluster=devnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/v1.signer-prod.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nectar-core.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/keeper.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet-api.outlayer.ai/attestations/by-request/15148",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/buyer1.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/buyer2.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/borrower1.nectar.testnet",
+      "from": "http://app.localhost:3963/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://near-faucet.io/",
+      "from": "http://app.localhost:3963/docs/start/quick-start",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://defillama.com/protocol/near-intents",
+      "from": "http://app.localhost:3963/docs/concepts/whitepaper",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://defillama.com/protocol/rhea-finance",
+      "from": "http://app.localhost:3963/docs/concepts/whitepaper",
+      "status": 200,
+      "ok": true
+    }
+  ],
+  "failures": [],
+  "warnings": [
+    {
+      "kind": "external-soft",
+      "where": "https://solana.com/",
+      "detail": "status 429 (linked from http://site.localhost:3963/)"
+    },
+    {
+      "kind": "local-link",
+      "where": "http://localhost:3100/feed",
+      "detail": "linked from http://app.localhost:3963/docs"
+    },
+    {
+      "kind": "local-link",
+      "where": "http://localhost:3100/",
+      "detail": "linked from http://app.localhost:3963/docs"
+    },
+    {
+      "kind": "local-link",
+      "where": "http://localhost:3100/keepers",
+      "detail": "linked from http://app.localhost:3963/docs"
+    },
+    {
+      "kind": "local-link",
+      "where": "http://localhost:3100/quote/new",
+      "detail": "linked from http://app.localhost:3963/docs"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://explorer.solana.com/tx/5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv?cluster=devnet",
+      "detail": "status 429 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://explorer.solana.com/tx/3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6?cluster=devnet",
+      "detail": "status 429 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/E2suM2LC4ac2AE9TZ66AGY72ZDrBdu1Yz8pEnwAs65hz",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/4vW2tPF5Gqemkm5uoafQE6eaXidSMSCuqLcDVMTTB77b",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/7UFpexpdEH2nhmDVqXar8vZHQcK1iBFXznu9rybn24wU",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/EskZKj9sXxcpTWYoKRiagRvvkh3H5hjz8KQFL7qNRQQ7",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/project/evidence)"
+    },
+    {
+      "kind": "local-link",
+      "where": "http://127.0.0.1:8788/",
+      "detail": "linked from http://app.localhost:3963/docs/integrate/feed-rest"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/7J1DsrKP19HTd1c2AWuoRbW2AyCUR75nd8hLGwNuKPAr",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/keeper-v2.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/8hNqxAdC61nAwmTWeUbK5auA4CbB35ppkPcnNX7PYe5C",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://explorer.solana.com/address/ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW?cluster=devnet",
+      "detail": "status 429 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/v1.signer-prod.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nectar-core.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/keeper.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/buyer1.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/buyer2.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/borrower1.nectar.testnet",
+      "detail": "status 403 (linked from http://app.localhost:3963/docs/start/live-on-testnet)"
+    }
+  ],
+  "truncated": false
+}

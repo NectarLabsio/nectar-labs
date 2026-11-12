@@ -1,0 +1,29 @@
+
+> web@0.1.0 lighthouse /private/tmp/verify-G3b-20261112T1413Z/apps/web
+> node scripts/lighthouse.mjs
+
+
+| route | dark | light |
+| --- | --- | --- |
+| / | 100 | 100 |
+| /feed | 100 | 100 |
+| /feed/NVDAx | 100 | 100 |
+| /borrow | 100 | 100 |
+| /shield | 100 | 100 |
+| /position/0 | 100 | 100 |
+| /quote | 100 | 100 |
+| /quote/new | 100 | 100 |
+| /quote/0 | 100 | 100 |
+| /reserve | 100 | 100 |
+| /notes | 100 | 100 |
+| /console | 100 | 100 |
+| /agents | 100 | 100 |
+| /keepers | 100 | 100 |
+| /about | 100 | 100 |
+| /status | 100 | 100 |
+| /changelog | 100 | 100 |
+| /brand | 100 | 100 |
+| /talk | 100 | 100 |
+| /security | 100 | 100 |
+
+reports: /private/tmp/verify-G3b-20261112T1413Z/evidence/G3/lighthouse

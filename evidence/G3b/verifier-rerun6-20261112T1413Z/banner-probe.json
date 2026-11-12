@@ -1,0 +1,32 @@
+{
+  "withFeed": {
+    "/feed": {
+      "banner": true,
+      "bannerCount": 1,
+      "settlementsViewsEmpty": 1,
+      "notConfigured": 0
+    },
+    "/keepers": {
+      "banner": true,
+      "bannerCount": 1
+    },
+    "/status": {
+      "feedEvents": "isn't indexed on this host (the Feed reads contract views only)"
+    }
+  },
+  "noFeed": {
+    "/feed": {
+      "banner": false,
+      "bannerCount": 0,
+      "settlementsViewsEmpty": 0,
+      "notConfigured": 2
+    },
+    "/keepers": {
+      "banner": false,
+      "bannerCount": 0
+    },
+    "/status": {
+      "feedEvents": null
+    }
+  }
+}

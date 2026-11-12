@@ -1,0 +1,262 @@
+{
+  "desktop": {
+    "mockType": "undefined",
+    "bannerVisibleBeforeConnect": true,
+    "bannerVisibleWithSelector": false,
+    "bannerBox": null,
+    "walletCount": 6,
+    "allFullyVisible": false,
+    "rows": [
+      {
+        "label": "Meteor Wallet",
+        "box": {
+          "x": 447,
+          "y": 268,
+          "width": 386,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Intear Wallet",
+        "box": {
+          "x": 447,
+          "y": 340,
+          "width": 386,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Ledger",
+        "box": {
+          "x": 447,
+          "y": 412,
+          "width": 386,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Nightly Wallet",
+        "box": {
+          "x": 447,
+          "y": 484,
+          "width": 386,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Ethereum Wallets",
+        "box": {
+          "x": 447,
+          "y": 556,
+          "width": 386,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "NEAR CLI",
+        "box": {
+          "x": 447,
+          "y": 628,
+          "width": 386,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      }
+    ]
+  },
+  "phone": {
+    "mockType": "undefined",
+    "bannerVisibleBeforeConnect": true,
+    "bannerVisibleWithSelector": false,
+    "bannerBox": null,
+    "walletCount": 6,
+    "allFullyVisible": false,
+    "rows": [
+      {
+        "label": "Meteor Wallet",
+        "box": {
+          "x": 16,
+          "y": 420,
+          "width": 368,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Intear Wallet",
+        "box": {
+          "x": 16,
+          "y": 492,
+          "width": 368,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Ledger",
+        "box": {
+          "x": 16,
+          "y": 564,
+          "width": 368,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Nightly Wallet",
+        "box": {
+          "x": 16,
+          "y": 636,
+          "width": 368,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "Ethereum Wallets",
+        "box": {
+          "x": 16,
+          "y": 708,
+          "width": 368,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      },
+      {
+        "label": "NEAR CLI",
+        "box": {
+          "x": 16,
+          "y": 780,
+          "width": 368,
+          "height": 64
+        },
+        "inViewport": true,
+        "inViewportNoScroll": true,
+        "overlapsBanner": false,
+        "hitsInside": [
+          true,
+          false,
+          false,
+          false,
+          false
+        ],
+        "fullyVisible": false
+      }
+    ]
+  }
+}

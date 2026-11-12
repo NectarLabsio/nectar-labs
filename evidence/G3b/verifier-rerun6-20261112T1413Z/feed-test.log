@@ -1,0 +1,683 @@
+
+> feed@0.1.0 test /private/tmp/verify-G3b-20261112T1413Z/services/feed
+> node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+
+TAP version 13
+# Subtest: repo config defaults
+    # Subtest: flattens nested scalars and strips comments
+    ok 1 - flattens nested scalars and strips comments
+      ---
+      duration_ms: 0.594292
+      type: 'test'
+      ...
+    # Subtest: reads config.yaml with no env; env overrides; TODO-* is unset
+    ok 2 - reads config.yaml with no env; env overrides; TODO-* is unset
+      ---
+      duration_ms: 4.580583
+      type: 'test'
+      ...
+    1..2
+ok 1 - repo config defaults
+  ---
+  duration_ms: 6.485667
+  type: 'suite'
+  ...
+# Subtest: MCP stdio
+    # Subtest: writes only JSON-RPC to stdout (first byte is "{")
+    ok 1 - writes only JSON-RPC to stdout (first byte is "{")
+      ---
+      duration_ms: 229.840542
+      type: 'test'
+      ...
+    1..1
+ok 2 - MCP stdio
+  ---
+  duration_ms: 229.967084
+  type: 'suite'
+  ...
+# Subtest: NEP-297 parsing
+    # Subtest: accepts nectar events and rejects everything else with a reason
+    ok 1 - accepts nectar events and rejects everything else with a reason
+      ---
+      duration_ms: 3.171875
+      type: 'test'
+      ...
+    1..1
+ok 3 - NEP-297 parsing
+  ---
+  duration_ms: 4.223625
+  type: 'suite'
+  ...
+# Subtest: indexer store
+    # Subtest: ingests logs idempotently (restart / replay safe)
+    ok 1 - ingests logs idempotently (restart / replay safe)
+      ---
+      duration_ms: 2.016458
+      type: 'test'
+      ...
+    # Subtest: view polling writes snapshots, quotes and Open→Settling transitions
+    ok 2 - view polling writes snapshots, quotes and Open→Settling transitions
+      ---
+      duration_ms: 1.034834
+      type: 'test'
+      ...
+    # Subtest: backs off on RPC failure and records the error
+    ok 3 - backs off on RPC failure and records the error
+      ---
+      duration_ms: 2.117333
+      type: 'test'
+      ...
+    # Subtest: tx-status source feeds receipt logs once per tx
+    ok 4 - tx-status source feeds receipt logs once per tx
+      ---
+      duration_ms: 0.528958
+      type: 'test'
+      ...
+    1..4
+ok 4 - indexer store
+  ---
+  duration_ms: 5.866959
+  type: 'suite'
+  ...
+# Subtest: REST API
+    # Subtest: serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+    ok 1 - serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+      ---
+      duration_ms: 35.7095
+      type: 'test'
+      ...
+    # Subtest: healthz is 503 when the indexer has not polled recently
+    ok 2 - healthz is 503 when the indexer has not polled recently
+      ---
+      duration_ms: 0.460958
+      type: 'test'
+      ...
+    # Subtest: export.csv: header + one row per snapshot, text/csv, no account ids
+    ok 3 - export.csv: header + one row per snapshot, text/csv, no account ids
+      ---
+      duration_ms: 0.417708
+      type: 'test'
+      ...
+    # Subtest: openapi.yaml documents exactly the served routes
+    ok 4 - openapi.yaml documents exactly the served routes
+      ---
+      duration_ms: 0.386084
+      type: 'test'
+      ...
+    1..4
+ok 5 - REST API
+  ---
+  duration_ms: 37.285667
+  type: 'suite'
+  ...
+# Subtest: single-port Feed server (FEED_SINGLE_PORT=1)
+    # Subtest: serves REST, /health and POST /mcp tools/list on one port
+    ok 1 - serves REST, /health and POST /mcp tools/list on one port
+      ---
+      duration_ms: 34.044833
+      type: 'test'
+      ...
+    # Subtest: PORT wins in single-port mode; local defaults unchanged otherwise
+    ok 2 - PORT wins in single-port mode; local defaults unchanged otherwise
+      ---
+      duration_ms: 0.291208
+      type: 'test'
+      ...
+    1..2
+ok 6 - single-port Feed server (FEED_SINGLE_PORT=1)
+  ---
+  duration_ms: 34.740083
+  type: 'suite'
+  ...
+# Subtest: CORS allowlist (FEED_CORS_ORIGINS)
+    # Subtest: allows exactly the listed origins on REST and /mcp, refuses others
+    ok 1 - allows exactly the listed origins on REST and /mcp, refuses others
+      ---
+      duration_ms: 17.508167
+      type: 'test'
+      ...
+    # Subtest: unset keeps today's `*` and no preflight handling
+    ok 2 - unset keeps today's `*` and no preflight handling
+      ---
+      duration_ms: 3.674458
+      type: 'test'
+      ...
+    # Subtest: rejects malformed origins
+    ok 3 - rejects malformed origins
+      ---
+      duration_ms: 0.352875
+      type: 'test'
+      ...
+    1..3
+ok 7 - CORS allowlist (FEED_CORS_ORIGINS)
+  ---
+  duration_ms: 21.808541
+  type: 'suite'
+  ...
+# Subtest: /health
+    # Subtest: reports lag against the Neardata head, contract ids and version
+    ok 1 - reports lag against the Neardata head, contract ids and version
+      ---
+      duration_ms: 0.50675
+      type: 'test'
+      ...
+    1..1
+ok 8 - /health
+  ---
+  duration_ms: 0.713292
+  type: 'suite'
+  ...
+# Subtest: FEED_START_BLOCK
+    # Subtest: parses head, head-N and heights
+    ok 1 - parses head, head-N and heights
+      ---
+      duration_ms: 0.278
+      type: 'test'
+      ...
+    # Subtest: an empty DB starts N blocks behind the final head; a saved cursor wins
+    ok 2 - an empty DB starts N blocks behind the final head; a saved cursor wins
+      ---
+      duration_ms: 0.482792
+      type: 'test'
+      ...
+    1..2
+ok 9 - FEED_START_BLOCK
+  ---
+  duration_ms: 0.859167
+  type: 'suite'
+  ...
+# Subtest: RPC fallback
+    # Subtest: orders D-025 primary first; NEAR_RPC_URL alone stays single
+    ok 1 - orders D-025 primary first; NEAR_RPC_URL alone stays single
+      ---
+      duration_ms: 0.222625
+      type: 'test'
+      ...
+    # Subtest: moves to the next backend on error and sticks to the one that answered
+    ok 2 - moves to the next backend on error and sticks to the one that answered
+      ---
+      duration_ms: 0.295208
+      type: 'test'
+      ...
+    1..2
+ok 10 - RPC fallback
+  ---
+  duration_ms: 0.5535
+  type: 'suite'
+  ...
+# Subtest: Neardata key source (FEED_NEARDATA_API_KEY)
+    # Subtest: value from FEED_NEARDATA_API_KEY; the path wins when both are set; neither = keyless
+    ok 1 - value from FEED_NEARDATA_API_KEY; the path wins when both are set; neither = keyless
+      ---
+      duration_ms: 0.088333
+      type: 'test'
+      ...
+    1..1
+ok 11 - Neardata key source (FEED_NEARDATA_API_KEY)
+  ---
+  duration_ms: 0.111958
+  type: 'suite'
+  ...
+# Subtest: Feed MCP (in-memory transport)
+    # Subtest: lists exactly the read-only tools (four feed + four skill)
+    ok 1 - lists exactly the read-only tools (four feed + four skill)
+      ---
+      duration_ms: 11.442417
+      type: 'test'
+      ...
+    # Subtest: get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+    ok 2 - get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+      ---
+      duration_ms: 3.201042
+      type: 'test'
+      ...
+    # Subtest: list_quotes never returns buyer identities
+    ok 3 - list_quotes never returns buyer identities
+      ---
+      duration_ms: 2.376917
+      type: 'test'
+      ...
+    # Subtest: preview_borrow relays the contract view; refuses without live views
+    ok 4 - preview_borrow relays the contract view; refuses without live views
+      ---
+      duration_ms: 3.134542
+      type: 'test'
+      ...
+    # Subtest: explain_limit renders the D-009 formula with live numbers and the contract check
+    ok 5 - explain_limit renders the D-009 formula with live numbers and the contract check
+      ---
+      duration_ms: 11.8025
+      type: 'test'
+      ...
+    # Subtest: DB-only mode serves from the Feed store; unknown symbol is a tool error
+    ok 6 - DB-only mode serves from the Feed store; unknown symbol is a tool error
+      ---
+      duration_ms: 4.518834
+      type: 'test'
+      ...
+    # Subtest: usd() formats e6 amounts
+    ok 7 - usd() formats e6 amounts
+      ---
+      duration_ms: 0.240459
+      type: 'test'
+      ...
+    1..7
+ok 12 - Feed MCP (in-memory transport)
+  ---
+  duration_ms: 37.346167
+  type: 'suite'
+  ...
+# Subtest: Feed MCP (Streamable HTTP, stateless)
+    # Subtest: serves tools/list and tools/call over POST /mcp
+    ok 1 - serves tools/list and tools/call over POST /mcp
+      ---
+      duration_ms: 39.223208
+      type: 'test'
+      ...
+    1..1
+ok 13 - Feed MCP (Streamable HTTP, stateless)
+  ---
+  duration_ms: 39.514917
+  type: 'suite'
+  ...
+# Subtest: neardata block shape (captured fixture)
+    # Subtest: reads the height and extracts only nectar-core receipts
+    ok 1 - reads the height and extracts only nectar-core receipts
+      ---
+      duration_ms: 1.751084
+      type: 'test'
+      ...
+    # Subtest: skips failed receipts
+    ok 2 - skips failed receipts
+      ---
+      duration_ms: 0.3385
+      type: 'test'
+      ...
+    1..2
+ok 14 - neardata block shape (captured fixture)
+  ---
+  duration_ms: 5.326791
+  type: 'suite'
+  ...
+# Subtest: NeardataSource
+    # Subtest: ingests the event, advances the cursor, and is idempotent on replay
+    ok 1 - ingests the event, advances the cursor, and is idempotent on replay
+      ---
+      duration_ms: 10.988334
+      type: 'test'
+      ...
+    # Subtest: starts at the final block without a cursor or start height, and caps blocks per poll
+    ok 2 - starts at the final block without a cursor or start height, and caps blocks per poll
+      ---
+      duration_ms: 0.522625
+      type: 'test'
+      ...
+    # Subtest: rejects a block whose height does not match the request
+    ok 3 - rejects a block whose height does not match the request
+      ---
+      duration_ms: 0.426625
+      type: 'test'
+      ...
+    # Subtest: a Neardata outage is a poll error with backoff, not a crash
+    ok 4 - a Neardata outage is a poll error with backoff, not a crash
+      ---
+      duration_ms: 0.30475
+      type: 'test'
+      ...
+    1..4
+ok 15 - NeardataSource
+  ---
+  duration_ms: 12.359958
+  type: 'suite'
+  ...
+# Subtest: 1Click recorded fixtures (F-062)
+    # Subtest: the recorded live dry quotes verify with the SDK manager key
+    ok 1 - the recorded live dry quotes verify with the SDK manager key
+      ---
+      duration_ms: 34.316417
+      type: 'test'
+      ...
+    # Subtest: any tampering breaks the signature
+    ok 2 - any tampering breaks the signature
+      ---
+      duration_ms: 4.8055
+      type: 'test'
+      ...
+    # Subtest: the token list has no NVDA route (F-063)
+    ok 3 - the token list has no NVDA route (F-063)
+      ---
+      duration_ms: 0.186291
+      type: 'test'
+      ...
+    1..3
+ok 16 - 1Click recorded fixtures (F-062)
+  ---
+  duration_ms: 39.810083
+  type: 'suite'
+  ...
+# Subtest: 1Click helpers
+    # Subtest: toE6 parses decimal strings without floats
+    ok 1 - toE6 parses decimal strings without floats
+      ---
+      duration_ms: 0.183375
+      type: 'test'
+      ...
+    # Subtest: unitsForUsd sizes the notional in base units
+    ok 2 - unitsForUsd sizes the notional in base units
+      ---
+      duration_ms: 0.054625
+      type: 'test'
+      ...
+    # Subtest: buildDryQuote always sets dry:true and INTENTS rails
+    ok 3 - buildDryQuote always sets dry:true and INTENTS rails
+      ---
+      duration_ms: 0.679875
+      type: 'test'
+      ...
+    # Subtest: sizes are 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD (default $1,000)
+    ok 4 - sizes are 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD (default $1,000)
+      ---
+      duration_ms: 0.461125
+      type: 'test'
+      ...
+    1..4
+ok 17 - 1Click helpers
+  ---
+  duration_ms: 1.684958
+  type: 'suite'
+  ...
+# Subtest: 1Click impact math (base units, C-014)
+    # Subtest: rate_e6 handles decimals 24 in / 6 out
+    ok 1 - rate_e6 handles decimals 24 in / 6 out
+      ---
+      duration_ms: 0.137958
+      type: 'test'
+      ...
+    # Subtest: rate_e6 handles decimals 6 in / 24 out (inverse direction)
+    ok 2 - rate_e6 handles decimals 6 in / 24 out (inverse direction)
+      ---
+      duration_ms: 0.120625
+      type: 'test'
+      ...
+    # Subtest: impact_bps floors, is 0 for the reference and for better rates
+    ok 3 - impact_bps floors, is 0 for the reference and for better rates
+      ---
+      duration_ms: 0.129209
+      type: 'test'
+      ...
+    1..3
+ok 18 - 1Click impact math (base units, C-014)
+  ---
+  duration_ms: 0.4645
+  type: 'suite'
+  ...
+# Subtest: 1Click client is dry-only (Q-007)
+    # Subtest: refuses a non-dry body before any network call
+    ok 1 - refuses a non-dry body before any network call
+      ---
+      duration_ms: 0.246958
+      type: 'test'
+      ...
+    1..1
+ok 19 - 1Click client is dry-only (Q-007)
+  ---
+  duration_ms: 0.27325
+  type: 'suite'
+  ...
+# Subtest: 1Click sampler (3 sizes)
+    # Subtest: NVDAx: no_route from the token list, no quote sent; ref pair: verified 3-size set from base units
+    ok 1 - NVDAx: no_route from the token list, no quote sent; ref pair: verified 3-size set from base units
+      ---
+      duration_ms: 37.806125
+      type: 'test'
+      ...
+    # Subtest: NVDAx becomes "route" (and is sampled) as soon as the token list carries it
+    ok 2 - NVDAx becomes "route" (and is sampled) as soon as the token list carries it
+      ---
+      duration_ms: 8.454541
+      type: 'test'
+      ...
+    # Subtest: drops the whole set when one of the three signatures does not verify
+    ok 3 - drops the whole set when one of the three signatures does not verify
+      ---
+      duration_ms: 11.528042
+      type: 'test'
+      ...
+    # Subtest: drops a set whose response does not echo the request (validly signed but for another amount)
+    ok 4 - drops a set whose response does not echo the request (validly signed but for another amount)
+      ---
+      duration_ms: 8.632125
+      type: 'test'
+      ...
+    1..4
+ok 20 - 1Click sampler (3 sizes)
+  ---
+  duration_ms: 66.571416
+  type: 'suite'
+  ...
+# Subtest: FEED_FIXTURES=1: GET /api/oneclick from recorded fixtures
+    # Subtest: serves the documented shape with verified pairs and NVDAx no_route
+    ok 1 - serves the documented shape with verified pairs and NVDAx no_route
+      ---
+      duration_ms: 8.484667
+      type: 'test'
+      ...
+    1..1
+ok 21 - FEED_FIXTURES=1: GET /api/oneclick from recorded fixtures
+  ---
+  duration_ms: 8.533542
+  type: 'suite'
+  ...
+# Subtest: 1Click live (NECTAR_IT=1; read-only, dry only)
+ok 22 - 1Click live (NECTAR_IT=1; read-only, dry only) # SKIP
+  ---
+  duration_ms: 0.029625
+  type: 'suite'
+  ...
+# Subtest: Feed RPC fallback + views-mode /health (WO-35k)
+    # Subtest: a 429 on the first endpoint → the second serves the view
+    ok 1 - a 429 on the first endpoint → the second serves the view
+      ---
+      duration_ms: 0.958583
+      type: 'test'
+      ...
+    # Subtest: views mode: head = latest view block (stale neardata_final ignored), lag 0, history unavailable, rpc status
+    ok 2 - views mode: head = latest view block (stale neardata_final ignored), lag 0, history unavailable, rpc status
+      ---
+      duration_ms: 1.592042
+      type: 'test'
+      ...
+    # Subtest: views mode: /api/settlements is an empty list with the marker, never view-synthesized rows
+    ok 3 - views mode: /api/settlements is an empty list with the marker, never view-synthesized rows
+      ---
+      duration_ms: 0.533708
+      type: 'test'
+      ...
+    # Subtest: indexed mode: head never below the last indexed block; lag consistent
+    ok 4 - indexed mode: head never below the last indexed block; lag consistent
+      ---
+      duration_ms: 0.409667
+      type: 'test'
+      ...
+    # Subtest: history marker defaults from source
+    ok 5 - history marker defaults from source
+      ---
+      duration_ms: 0.051291
+      type: 'test'
+      ...
+    1..5
+ok 23 - Feed RPC fallback + views-mode /health (WO-35k)
+  ---
+  duration_ms: 4.030792
+  type: 'suite'
+  ...
+# Subtest: agent skill: tool schemas
+    # Subtest: registers the four skill tools, read-only, with the PRD §10.5 inputs
+    ok 1 - registers the four skill tools, read-only, with the PRD §10.5 inputs
+      ---
+      duration_ms: 10.812584
+      type: 'test'
+      ...
+    # Subtest: schema rejects a bad account id and a float-y borrow amount
+    ok 2 - schema rejects a bad account id and a float-y borrow amount
+      ---
+      duration_ms: 2.82625
+      type: 'test'
+      ...
+    # Subtest: parseUsdE6 is exact
+    ok 3 - parseUsdE6 is exact
+      ---
+      duration_ms: 0.155417
+      type: 'test'
+      ...
+    1..3
+ok 24 - agent skill: tool schemas
+  ---
+  duration_ms: 14.138375
+  type: 'suite'
+  ...
+# Subtest: agent skill: open_protected_stock_loan
+    # Subtest: v1: unsigned-call snapshot, v1 fee fields marked absent, health table
+    ok 1 - v1: unsigned-call snapshot, v1 fee fields marked absent, health table
+      ---
+      duration_ms: 1.812958
+      type: 'test'
+      ...
+    # Subtest: v1: a borrow the contract would refuse returns the preview and no call
+    ok 2 - v1: a borrow the contract would refuse returns the preview and no call
+      ---
+      duration_ms: 1.520875
+      type: 'test'
+      ...
+    # Subtest: v1: pay_to and referrer are refused (v1 would silently ignore them)
+    ok 3 - v1: pay_to and referrer are refused (v1 would silently ignore them)
+      ---
+      duration_ms: 1.602541
+      type: 'test'
+      ...
+    # Subtest: v2: fee stack from preview_borrow, pay_to + referrer in msg, v2 gas
+    ok 4 - v2: fee stack from preview_borrow, pay_to + referrer in msg, v2 gas
+      ---
+      duration_ms: 1.623833
+      type: 'test'
+      ...
+    # Subtest: v2: plain borrow keeps the v1 msg shape and gas; pre_liq override changes the -20% row
+    ok 5 - v2: plain borrow keeps the v1 msg shape and gas; pre_liq override changes the -20% row
+      ---
+      duration_ms: 1.387625
+      type: 'test'
+      ...
+    # Subtest: v2: aggregate_limit refusal; referrer == borrower refused before any view
+    ok 6 - v2: aggregate_limit refusal; referrer == borrower refused before any view
+      ---
+      duration_ms: 2.35225
+      type: 'test'
+      ...
+    # Subtest: pre_liq_ltv_bps refusal (SR-33)
+        # Subtest: v2: above pre_liq but under the LTV cap fails with the contract reason and no call
+        ok 1 - v2: above pre_liq but under the LTV cap fails with the contract reason and no call
+          ---
+          duration_ms: 2.253458
+          type: 'test'
+          ...
+        # Subtest: boundary matches math::triggerable: exactly at pre_liq passes, one e6 above fails
+        ok 2 - boundary matches math::triggerable: exactly at pre_liq passes, one e6 above fails
+          ---
+          duration_ms: 1.8195
+          type: 'test'
+          ...
+        # Subtest: the same borrow passes at a pre_liq that allows it
+        ok 3 - the same borrow passes at a pre_liq that allows it
+          ---
+          duration_ms: 0.879583
+          type: 'test'
+          ...
+        # Subtest: v2: value uses the multiplier, as the contract does
+        ok 4 - v2: value uses the multiplier, as the contract does
+          ---
+          duration_ms: 0.745833
+          type: 'test'
+          ...
+        # Subtest: v1: the deployed contract has the same rule
+        ok 5 - v1: the deployed contract has the same rule
+          ---
+          duration_ms: 0.699125
+          type: 'test'
+          ...
+        # Subtest: an earlier contract refusal keeps its own reason
+        ok 6 - an earlier contract refusal keeps its own reason
+          ---
+          duration_ms: 0.708083
+          type: 'test'
+          ...
+        1..6
+    ok 7 - pre_liq_ltv_bps refusal (SR-33)
+      ---
+      duration_ms: 7.215416
+      type: 'suite'
+      ...
+    # Subtest: shield returns unsupported_until_v2_shields; no live views is a clear error
+    ok 8 - shield returns unsupported_until_v2_shields; no live views is a clear error
+      ---
+      duration_ms: 1.292208
+      type: 'test'
+      ...
+    # Subtest: healthTable matches model.csv demo_borrow (ltv 6250, not triggerable at pre_liq 7500)
+    ok 9 - healthTable matches model.csv demo_borrow (ltv 6250, not triggerable at pre_liq 7500)
+      ---
+      duration_ms: 0.057541
+      type: 'test'
+      ...
+    1..9
+ok 25 - agent skill: open_protected_stock_loan
+  ---
+  duration_ms: 19.211167
+  type: 'suite'
+  ...
+# Subtest: agent skill: companions
+    # Subtest: quote_capacity on v1 marks aggregate fields absent; on v2 returns total debt + headroom
+    ok 1 - quote_capacity on v1 marks aggregate fields absent; on v2 returns total debt + headroom
+      ---
+      duration_ms: 1.526791
+      type: 'test'
+      ...
+    # Subtest: get_note and build_self_settle return not_available
+    ok 2 - get_note and build_self_settle return not_available
+      ---
+      duration_ms: 0.73275
+      type: 'test'
+      ...
+    1..2
+ok 26 - agent skill: companions
+  ---
+  duration_ms: 2.302459
+  type: 'suite'
+  ...
+# Subtest: agent skill: keyless guarantee
+    # Subtest: skill.ts and mcp.ts import no fs/crypto-key APIs and never touch process.env or key paths
+    ok 1 - skill.ts and mcp.ts import no fs/crypto-key APIs and never touch process.env or key paths
+      ---
+      duration_ms: 0.267875
+      type: 'test'
+      ...
+    # Subtest: every tool runs with process.env locked (any read throws)
+    ok 2 - every tool runs with process.env locked (any read throws)
+      ---
+      duration_ms: 2.90175
+      type: 'test'
+      ...
+    1..2
+ok 27 - agent skill: keyless guarantee
+  ---
+  duration_ms: 3.236334
+  type: 'suite'
+  ...
+1..27
+# tests 79
+# suites 28
+# pass 79
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 339.426625

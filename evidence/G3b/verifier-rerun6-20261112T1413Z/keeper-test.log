@@ -1,0 +1,1994 @@
+
+> keeper@0.1.0 test /private/tmp/verify-G3b-20261112T1413Z/services/keeper
+> node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+
+TAP version 13
+# Subtest: base: calldata byte-exactness (eip712_vectors.json, cast calldata)
+    # Subtest: settle preliq_pos7: selector, encoding, digest and signer
+    ok 1 - settle preliq_pos7: selector, encoding, digest and signer
+      ---
+      duration_ms: 3.506916
+      type: 'test'
+      ...
+    # Subtest: settle self_pos0_max: selector, encoding, digest and signer
+    ok 2 - settle self_pos0_max: selector, encoding, digest and signer
+      ---
+      duration_ms: 1.628709
+      type: 'test'
+      ...
+    # Subtest: release pos42_nonce_max: selector, encoding, digest and signer
+    ok 3 - release pos42_nonce_max: selector, encoding, digest and signer
+      ---
+      duration_ms: 1.567625
+      type: 'test'
+      ...
+    # Subtest: release pos7: selector, encoding, digest and signer
+    ok 4 - release pos7: selector, encoding, digest and signer
+      ---
+      duration_ms: 1.427458
+      type: 'test'
+      ...
+    # Subtest: ERC-8021 suffix: appended verbatim only when injected
+    ok 5 - ERC-8021 suffix: appended verbatim only when injected
+      ---
+      duration_ms: 0.084708
+      type: 'test'
+      ...
+    # Subtest: rejects bad kind, non-canonical numbers, u64 overflow and bad v
+    ok 6 - rejects bad kind, non-canonical numbers, u64 overflow and bad v
+      ---
+      duration_ms: 0.207291
+      type: 'test'
+      ...
+    # Subtest: slotKey = keccak256(abi.encode(id, depositor)) (§E), from the raw 64-byte encoding
+    ok 7 - slotKey = keccak256(abi.encode(id, depositor)) (§E), from the raw 64-byte encoding
+      ---
+      duration_ms: 0.168042
+      type: 'test'
+      ...
+    1..7
+ok 1 - base: calldata byte-exactness (eip712_vectors.json, cast calldata)
+  ---
+  duration_ms: 9.027083
+  type: 'suite'
+  ...
+# Subtest: base: Foundry keystore (generated in the test)
+    # Subtest: decrypts to the same key and address; the password file newline is stripped
+    ok 1 - decrypts to the same key and address; the password file newline is stripped
+      ---
+      duration_ms: 3.47825
+      type: 'test'
+      ...
+    # Subtest: wrong password → MAC mismatch; tampered ciphertext → MAC mismatch
+    ok 2 - wrong password → MAC mismatch; tampered ciphertext → MAC mismatch
+      ---
+      duration_ms: 2.815375
+      type: 'test'
+      ...
+    # Subtest: refuses a group-readable password file, path-like account names, non-v3 / non-scrypt files
+    ok 3 - refuses a group-readable password file, path-like account names, non-v3 / non-scrypt files
+      ---
+      duration_ms: 0.494541
+      type: 'test'
+      ...
+    # Subtest: a mismatching address field is refused
+    ok 4 - a mismatching address field is refused
+      ---
+      duration_ms: 1.733292
+      type: 'test'
+      ...
+    # Subtest: raw key env vars are detected; config needs the keystore triple, never a key
+    ok 5 - raw key env vars are detected; config needs the keystore triple, never a key
+      ---
+      duration_ms: 0.75775
+      type: 'test'
+      ...
+    1..5
+ok 2 - base: Foundry keystore (generated in the test)
+  ---
+  duration_ms: 9.522333
+  type: 'suite'
+  ...
+# Subtest: base: chain-id refusal
+    # Subtest: 84532 only; 8453 and anything else refused; mainnet RPC hosts refused
+    ok 1 - 84532 only; 8453 and anything else refused; mainnet RPC hosts refused
+      ---
+      duration_ms: 0.160917
+      type: 'test'
+      ...
+    # Subtest: a relay whose RPC reports 8453 never reads NEAR, signs or relays
+    ok 2 - a relay whose RPC reports 8453 never reads NEAR, signs or relays
+      ---
+      duration_ms: 0.9805
+      type: 'test'
+      ...
+    1..2
+ok 3 - base: chain-id refusal
+  ---
+  duration_ms: 1.174667
+  type: 'suite'
+  ...
+# Subtest: base: relay with a mocked RPC
+    # Subtest: settle: signs settle calldata to the vault once, relays the 0x hash; a second tick sends nothing
+    ok 1 - settle: signs settle calldata to the vault once, relays the 0x hash; a second tick sends nothing
+      ---
+      duration_ms: 2.48775
+      type: 'test'
+      ...
+    # Subtest: builder suffix (when injected) ends the calldata
+    ok 2 - builder suffix (when injected) ends the calldata
+      ---
+      duration_ms: 3.076167
+      type: 'test'
+      ...
+    # Subtest: restart after broadcast: the stored hash is relayed by receipt, nothing re-signed
+    ok 3 - restart after broadcast: the stored hash is relayed by receipt, nothing re-signed
+      ---
+      duration_ms: 0.484916
+      type: 'test'
+      ...
+    # Subtest: stored hash without a receipt: wait (tx_pending), then after the timeout re-evaluate from chain state
+    ok 4 - stored hash without a receipt: wait (tx_pending), then after the timeout re-evaluate from chain state
+      ---
+      duration_ms: 1.969958
+      type: 'test'
+      ...
+    # Subtest: nonce already used (landed elsewhere / before a crash): relays the event tx, nothing signed
+    ok 5 - nonce already used (landed elsewhere / before a crash): relays the event tx, nothing signed
+      ---
+      duration_ms: 0.503459
+      type: 'test'
+      ...
+    # Subtest: vault position closed (nonce unused), expired signature, wrong vault authority → skip with backoff, nothing signed
+    ok 6 - vault position closed (nonce unused), expired signature, wrong vault authority → skip with backoff, nothing signed
+      ---
+      duration_ms: 3.221167
+      type: 'test'
+      ...
+    # Subtest: a tampered view (field != signed digest), a foreign vault or chain, a bad v is refused before any signing
+    ok 7 - a tampered view (field != signed digest), a foreign vault or chain, a bad v is refused before any signing
+      ---
+      duration_ms: 0.791417
+      type: 'test'
+      ...
+    # Subtest: a reverted tx clears the stored hash and backs off
+    ok 8 - a reverted tx clears the stored hash and backs off
+      ---
+      duration_ms: 1.586
+      type: 'test'
+      ...
+    # Subtest: release: release calldata, then relay_release_result with the 0x hash
+    ok 9 - release: release calldata, then relay_release_result with the 0x hash
+      ---
+      duration_ms: 1.539042
+      type: 'test'
+      ...
+    # Subtest: only base-sepolia positions: Solana / NEAR-held positions are never looked at
+    ok 10 - only base-sepolia positions: Solana / NEAR-held positions are never looked at
+      ---
+      duration_ms: 0.152709
+      type: 'test'
+      ...
+    # Subtest: deposit watcher (OutLayer read on): confirm_remote_deposit once amount >= reserved and authority matches; then cooldown
+    ok 11 - deposit watcher (OutLayer read on): confirm_remote_deposit once amount >= reserved and authority matches; then cooldown
+      ---
+      duration_ms: 0.448417
+      type: 'test'
+      ...
+    # Subtest: SR-8: a squatter slot under another depositor is invisible to the deposit watcher
+    ok 12 - SR-8: a squatter slot under another depositor is invisible to the deposit watcher
+      ---
+      duration_ms: 0.14675
+      type: 'test'
+      ...
+    # Subtest: SR-28: without attestation or an OutLayer read, a deposit is reported unsupported and never confirmed
+    ok 13 - SR-28: without attestation or an OutLayer read, a deposit is reported unsupported and never confirmed
+      ---
+      duration_ms: 0.217541
+      type: 'test'
+      ...
+    # Subtest: N4: an unchanged deposit is retried on a doubling, capped cooldown, never abandoned; a changed amount re-arms it
+    ok 14 - N4: an unchanged deposit is retried on a doubling, capped cooldown, never abandoned; a changed amount re-arms it
+      ---
+      duration_ms: 0.98025
+      type: 'test'
+      ...
+    # Subtest: N4: late and short deposits are confirmed once the reservation has expired
+    ok 15 - N4: late and short deposits are confirmed once the reservation has expired
+      ---
+      duration_ms: 0.30325
+      type: 'test'
+      ...
+    # Subtest: N4: a position already marked Expired on NEAR is watched; with a proven deposit it is left alone
+    ok 16 - N4: a position already marked Expired on NEAR is watched; with a proven deposit it is left alone
+      ---
+      duration_ms: 0.170833
+      type: 'test'
+      ...
+    # Subtest: N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+    ok 17 - N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+      ---
+      duration_ms: 0.150333
+      type: 'test'
+      ...
+    # Subtest: N4, attest mode: a late full deposit is attested; a short one is not, because attestation books the reserved units
+    ok 18 - N4, attest mode: a late full deposit is attested; a short one is not, because attestation books the reserved units
+      ---
+      duration_ms: 0.294667
+      type: 'test'
+      ...
+    # Subtest: N3: a settled slot under NEAR's authority with the current nonce unused relays the older leg, nothing signed
+    ok 19 - N3: a settled slot under NEAR's authority with the current nonce unused relays the older leg, nothing signed
+      ---
+      duration_ms: 0.418875
+      type: 'test'
+      ...
+    # Subtest: N3: a released slot relays the older release
+    ok 20 - N3: a released slot relays the older release
+      ---
+      duration_ms: 0.323792
+      type: 'test'
+      ...
+    # Subtest: N3: no log yet → retried with backoff, not dropped
+    ok 21 - N3: no log yet → retried with backoff, not dropped
+      ---
+      duration_ms: 0.513458
+      type: 'test'
+      ...
+    # Subtest: N3: a slot closed under another key, or by the other op, is not relayed and not searched
+    ok 22 - N3: a slot closed under another key, or by the other op, is not relayed and not searched
+      ---
+      duration_ms: 0.518417
+      type: 'test'
+      ...
+    # Subtest: a check in flight or a proven deposit is not confirmed
+    ok 23 - a check in flight or a proven deposit is not confirmed
+      ---
+      duration_ms: 0.255792
+      type: 'test'
+      ...
+    # Subtest: SR-29: a used nonce scans logs from the reservation block, however long the keeper was down
+    ok 24 - SR-29: a used nonce scans logs from the reservation block, however long the keeper was down
+      ---
+      duration_ms: 0.321416
+      type: 'test'
+      ...
+    # Subtest: SR-29: a used nonce with no log yet is retried after backoff, not dropped
+    ok 25 - SR-29: a used nonce with no log yet is retried after backoff, not dropped
+      ---
+      duration_ms: 0.440917
+      type: 'test'
+      ...
+    # Subtest: SR-1: a nonce burned on another slot does not count as landed
+    ok 26 - SR-1: a nonce burned on another slot does not count as landed
+      ---
+      duration_ms: 1.49275
+      type: 'test'
+      ...
+    # Subtest: a landed-leg lookup is bound to the committed depositor
+    ok 27 - a landed-leg lookup is bound to the committed depositor
+      ---
+      duration_ms: 0.318083
+      type: 'test'
+      ...
+    # Subtest: SR-31: a position naming a vault other than the pinned one is refused before any signing
+    ok 28 - SR-31: a position naming a vault other than the pinned one is refused before any signing
+      ---
+      duration_ms: 0.159542
+      type: 'test'
+      ...
+    # Subtest: a missing committed depositor is read from get_position; none at all skips
+    ok 29 - a missing committed depositor is read from get_position; none at all skips
+      ---
+      duration_ms: 1.694792
+      type: 'test'
+      ...
+    # Subtest: BASE_KEEPER_ATTEST=1: keeper_attest_deposit(position_id, tx_ref, depositor) instead
+    ok 30 - BASE_KEEPER_ATTEST=1: keeper_attest_deposit(position_id, tx_ref, depositor) instead
+      ---
+      duration_ms: 0.188625
+      type: 'test'
+      ...
+    # Subtest: /healthz carries the base section
+    ok 31 - /healthz carries the base section
+      ---
+      duration_ms: 0.204667
+      type: 'test'
+      ...
+    1..31
+ok 4 - base: relay with a mocked RPC
+  ---
+  duration_ms: 25.613291
+  type: 'suite'
+  ...
+# Subtest: base: ViemEvmPort against a local JSON-RPC stub
+    # Subtest: findEventTx: a newer event from a squatter slot with the same (id, nonce) is passed over
+    ok 1 - findEventTx: a newer event from a squatter slot with the same (id, nonce) is passed over
+      ---
+      duration_ms: 28.016209
+      type: 'test'
+      ...
+    # Subtest: N2c: a leg landed through another contract is found from the vault log
+    ok 2 - N2c: a leg landed through another contract is found from the vault log
+      ---
+      duration_ms: 6.036333
+      type: 'test'
+      ...
+    # Subtest: N2c: a direct call on this slot beats a newer tx whose slot cannot be read
+    ok 3 - N2c: a direct call on this slot beats a newer tx whose slot cannot be read
+      ---
+      duration_ms: 2.747166
+      type: 'test'
+      ...
+    # Subtest: N3: without a nonce filter, an event whose nonce this slot never consumed is passed over
+    ok 4 - N3: without a nonce filter, an event whose nonce this slot never consumed is passed over
+      ---
+      duration_ms: 3.068625
+      type: 'test'
+      ...
+    # Subtest: findEventTx: scans from the given block through every chunk, beyond the lookback window
+    ok 5 - findEventTx: scans from the given block through every chunk, beyond the lookback window
+      ---
+      duration_ms: 3.00825
+      type: 'test'
+      ...
+    # Subtest: blockAtOrBefore: binary search over block timestamps
+    ok 6 - blockAtOrBefore: binary search over block timestamps
+      ---
+      duration_ms: 9.879875
+      type: 'test'
+      ...
+    1..6
+ok 5 - base: ViemEvmPort against a local JSON-RPC stub
+  ---
+  duration_ms: 52.923917
+  type: 'suite'
+  ...
+# Subtest: health maths vs contracts/nectar-core/tests/model.csv
+    # Subtest: CSV has limit rows and the health + limit columns
+    ok 1 - CSV has limit rows and the health + limit columns
+      ---
+      duration_ms: 1.039667
+      type: 'test'
+      ...
+    # Subtest: health: demo_borrow
+    ok 2 - health: demo_borrow
+      ---
+      duration_ms: 0.149167
+      type: 'test'
+      ...
+    # Subtest: limit: demo_borrow
+    ok 3 - limit: demo_borrow
+      ---
+      duration_ms: 0.163
+      type: 'test'
+      ...
+    # Subtest: health: demo_price_155
+    ok 4 - health: demo_price_155
+      ---
+      duration_ms: 0.094875
+      type: 'test'
+      ...
+    # Subtest: limit: demo_price_155
+    ok 5 - limit: demo_price_155
+      ---
+      duration_ms: 0.09925
+      type: 'test'
+      ...
+    # Subtest: health: demo_price_140
+    ok 6 - health: demo_price_140
+      ---
+      duration_ms: 0.035458
+      type: 'test'
+      ...
+    # Subtest: limit: demo_price_140
+    ok 7 - limit: demo_price_140
+      ---
+      duration_ms: 0.084541
+      type: 'test'
+      ...
+    # Subtest: health: open_session_counts_depth
+    ok 8 - health: open_session_counts_depth
+      ---
+      duration_ms: 0.11875
+      type: 'test'
+      ...
+    # Subtest: limit: open_session_counts_depth
+    ok 9 - limit: open_session_counts_depth
+      ---
+      duration_ms: 0.129875
+      type: 'test'
+      ...
+    # Subtest: health: zero_capacity
+    ok 10 - health: zero_capacity
+      ---
+      duration_ms: 0.252291
+      type: 'test'
+      ...
+    # Subtest: limit: zero_capacity
+    ok 11 - limit: zero_capacity
+      ---
+      duration_ms: 0.047125
+      type: 'test'
+      ...
+    # Subtest: health: reserve_only_no_quotes
+    ok 12 - health: reserve_only_no_quotes
+      ---
+      duration_ms: 0.028
+      type: 'test'
+      ...
+    # Subtest: limit: reserve_only_no_quotes
+    ok 13 - limit: reserve_only_no_quotes
+      ---
+      duration_ms: 0.027583
+      type: 'test'
+      ...
+    # Subtest: health: below_static_no_premium
+    ok 14 - health: below_static_no_premium
+      ---
+      duration_ms: 0.036041
+      type: 'test'
+      ...
+    # Subtest: limit: below_static_no_premium
+    ok 15 - limit: below_static_no_premium
+      ---
+      duration_ms: 0.025042
+      type: 'test'
+      ...
+    # Subtest: health: above_pre_liq
+    ok 16 - health: above_pre_liq
+      ---
+      duration_ms: 0.020959
+      type: 'test'
+      ...
+    # Subtest: limit: above_pre_liq
+    ok 17 - limit: above_pre_liq
+      ---
+      duration_ms: 0.024375
+      type: 'test'
+      ...
+    # Subtest: health: value_zero
+    ok 18 - health: value_zero
+      ---
+      duration_ms: 0.0565
+      type: 'test'
+      ...
+    # Subtest: limit: value_zero
+    ok 19 - limit: value_zero
+      ---
+      duration_ms: 0.090792
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_00
+    ok 20 - health: grid_limit_00
+      ---
+      duration_ms: 0.023458
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_00
+    ok 21 - limit: grid_limit_00
+      ---
+      duration_ms: 0.026375
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_01
+    ok 22 - health: grid_limit_01
+      ---
+      duration_ms: 0.021792
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_01
+    ok 23 - limit: grid_limit_01
+      ---
+      duration_ms: 0.023375
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_02
+    ok 24 - health: grid_limit_02
+      ---
+      duration_ms: 0.019958
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_02
+    ok 25 - limit: grid_limit_02
+      ---
+      duration_ms: 0.021834
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_03
+    ok 26 - health: grid_limit_03
+      ---
+      duration_ms: 0.0185
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_03
+    ok 27 - limit: grid_limit_03
+      ---
+      duration_ms: 0.0205
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_04
+    ok 28 - health: grid_limit_04
+      ---
+      duration_ms: 0.01925
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_04
+    ok 29 - limit: grid_limit_04
+      ---
+      duration_ms: 0.020792
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_05
+    ok 30 - health: grid_limit_05
+      ---
+      duration_ms: 0.019167
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_05
+    ok 31 - limit: grid_limit_05
+      ---
+      duration_ms: 0.020625
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_06
+    ok 32 - health: grid_limit_06
+      ---
+      duration_ms: 1.044417
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_06
+    ok 33 - limit: grid_limit_06
+      ---
+      duration_ms: 0.090958
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_07
+    ok 34 - health: grid_limit_07
+      ---
+      duration_ms: 0.049584
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_07
+    ok 35 - limit: grid_limit_07
+      ---
+      duration_ms: 0.051125
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_08
+    ok 36 - health: grid_limit_08
+      ---
+      duration_ms: 0.046375
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_08
+    ok 37 - limit: grid_limit_08
+      ---
+      duration_ms: 0.06775
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_09
+    ok 38 - health: grid_limit_09
+      ---
+      duration_ms: 0.041458
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_09
+    ok 39 - limit: grid_limit_09
+      ---
+      duration_ms: 0.044
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_10
+    ok 40 - health: grid_limit_10
+      ---
+      duration_ms: 0.04025
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_10
+    ok 41 - limit: grid_limit_10
+      ---
+      duration_ms: 0.044125
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_11
+    ok 42 - health: grid_limit_11
+      ---
+      duration_ms: 0.040459
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_11
+    ok 43 - limit: grid_limit_11
+      ---
+      duration_ms: 0.052208
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_12
+    ok 44 - health: grid_limit_12
+      ---
+      duration_ms: 0.042333
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_12
+    ok 45 - limit: grid_limit_12
+      ---
+      duration_ms: 0.042709
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_13
+    ok 46 - health: grid_limit_13
+      ---
+      duration_ms: 0.038833
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_13
+    ok 47 - limit: grid_limit_13
+      ---
+      duration_ms: 0.042458
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_14
+    ok 48 - health: grid_limit_14
+      ---
+      duration_ms: 0.038834
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_14
+    ok 49 - limit: grid_limit_14
+      ---
+      duration_ms: 0.043208
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_15
+    ok 50 - health: grid_limit_15
+      ---
+      duration_ms: 0.03925
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_15
+    ok 51 - limit: grid_limit_15
+      ---
+      duration_ms: 0.043084
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_16
+    ok 52 - health: grid_limit_16
+      ---
+      duration_ms: 0.039083
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_16
+    ok 53 - limit: grid_limit_16
+      ---
+      duration_ms: 0.045667
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_17
+    ok 54 - health: grid_limit_17
+      ---
+      duration_ms: 0.042875
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_17
+    ok 55 - limit: grid_limit_17
+      ---
+      duration_ms: 0.04575
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_18
+    ok 56 - health: grid_limit_18
+      ---
+      duration_ms: 0.048333
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_18
+    ok 57 - limit: grid_limit_18
+      ---
+      duration_ms: 0.074084
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_19
+    ok 58 - health: grid_limit_19
+      ---
+      duration_ms: 0.04475
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_19
+    ok 59 - limit: grid_limit_19
+      ---
+      duration_ms: 0.046833
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_20
+    ok 60 - health: grid_limit_20
+      ---
+      duration_ms: 2.61025
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_20
+    ok 61 - limit: grid_limit_20
+      ---
+      duration_ms: 0.099834
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_21
+    ok 62 - health: grid_limit_21
+      ---
+      duration_ms: 0.058458
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_21
+    ok 63 - limit: grid_limit_21
+      ---
+      duration_ms: 0.053208
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_22
+    ok 64 - health: grid_limit_22
+      ---
+      duration_ms: 0.046958
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_22
+    ok 65 - limit: grid_limit_22
+      ---
+      duration_ms: 0.054167
+      type: 'test'
+      ...
+    # Subtest: health: grid_limit_23
+    ok 66 - health: grid_limit_23
+      ---
+      duration_ms: 0.044833
+      type: 'test'
+      ...
+    # Subtest: limit: grid_limit_23
+    ok 67 - limit: grid_limit_23
+      ---
+      duration_ms: 0.052375
+      type: 'test'
+      ...
+    # Subtest: health: agg_a_borrow
+    ok 68 - health: agg_a_borrow
+      ---
+      duration_ms: 0.045291
+      type: 'test'
+      ...
+    # Subtest: limit: agg_a_borrow
+    ok 69 - limit: agg_a_borrow
+      ---
+      duration_ms: 0.076125
+      type: 'test'
+      ...
+    # Subtest: health: agg_b_full
+    ok 70 - health: agg_b_full
+      ---
+      duration_ms: 0.044667
+      type: 'test'
+      ...
+    # Subtest: limit: agg_b_full
+    ok 71 - limit: agg_b_full
+      ---
+      duration_ms: 0.049125
+      type: 'test'
+      ...
+    # Subtest: health: agg_b_headroom
+    ok 72 - health: agg_b_headroom
+      ---
+      duration_ms: 0.044291
+      type: 'test'
+      ...
+    # Subtest: limit: agg_b_headroom
+    ok 73 - limit: agg_b_headroom
+      ---
+      duration_ms: 0.0485
+      type: 'test'
+      ...
+    # Subtest: health: agg_b_one_more
+    ok 74 - health: agg_b_one_more
+      ---
+      duration_ms: 0.04775
+      type: 'test'
+      ...
+    # Subtest: limit: agg_b_one_more
+    ok 75 - limit: agg_b_one_more
+      ---
+      duration_ms: 0.056583
+      type: 'test'
+      ...
+    # Subtest: health: agg_after_repay
+    ok 76 - health: agg_after_repay
+      ---
+      duration_ms: 0.044334
+      type: 'test'
+      ...
+    # Subtest: limit: agg_after_repay
+    ok 77 - limit: agg_after_repay
+      ---
+      duration_ms: 0.048625
+      type: 'test'
+      ...
+    # Subtest: health: agg_a_price_130
+    ok 78 - health: agg_a_price_130
+      ---
+      duration_ms: 0.04425
+      type: 'test'
+      ...
+    # Subtest: limit: agg_a_price_130
+    ok 79 - limit: agg_a_price_130
+      ---
+      duration_ms: 0.049833
+      type: 'test'
+      ...
+    # Subtest: health: agg_after_settle
+    ok 80 - health: agg_after_settle
+      ---
+      duration_ms: 0.044375
+      type: 'test'
+      ...
+    # Subtest: limit: agg_after_settle
+    ok 81 - limit: agg_after_settle
+      ---
+      duration_ms: 0.047375
+      type: 'test'
+      ...
+    # Subtest: health: mult_pre_split
+    ok 82 - health: mult_pre_split
+      ---
+      duration_ms: 0.043292
+      type: 'test'
+      ...
+    # Subtest: limit: mult_pre_split
+    ok 83 - limit: mult_pre_split
+      ---
+      duration_ms: 0.046834
+      type: 'test'
+      ...
+    # Subtest: health: mult_post_split
+    ok 84 - health: mult_post_split
+      ---
+      duration_ms: 0.043667
+      type: 'test'
+      ...
+    # Subtest: limit: mult_post_split
+    ok 85 - limit: mult_post_split
+      ---
+      duration_ms: 0.053
+      type: 'test'
+      ...
+    # Subtest: health: mult_dividend_2pct
+    ok 86 - health: mult_dividend_2pct
+      ---
+      duration_ms: 0.051041
+      type: 'test'
+      ...
+    # Subtest: limit: mult_dividend_2pct
+    ok 87 - limit: mult_dividend_2pct
+      ---
+      duration_ms: 0.065042
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_00
+    ok 88 - health: grid_mult_00
+      ---
+      duration_ms: 0.04425
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_00
+    ok 89 - limit: grid_mult_00
+      ---
+      duration_ms: 0.049292
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_01
+    ok 90 - health: grid_mult_01
+      ---
+      duration_ms: 0.045416
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_01
+    ok 91 - limit: grid_mult_01
+      ---
+      duration_ms: 0.0765
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_02
+    ok 92 - health: grid_mult_02
+      ---
+      duration_ms: 0.041833
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_02
+    ok 93 - limit: grid_mult_02
+      ---
+      duration_ms: 0.052667
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_03
+    ok 94 - health: grid_mult_03
+      ---
+      duration_ms: 0.043959
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_03
+    ok 95 - limit: grid_mult_03
+      ---
+      duration_ms: 0.046042
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_04
+    ok 96 - health: grid_mult_04
+      ---
+      duration_ms: 0.145417
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_04
+    ok 97 - limit: grid_mult_04
+      ---
+      duration_ms: 0.069083
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_05
+    ok 98 - health: grid_mult_05
+      ---
+      duration_ms: 0.048459
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_05
+    ok 99 - limit: grid_mult_05
+      ---
+      duration_ms: 0.048708
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_06
+    ok 100 - health: grid_mult_06
+      ---
+      duration_ms: 0.043
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_06
+    ok 101 - limit: grid_mult_06
+      ---
+      duration_ms: 0.044125
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_07
+    ok 102 - health: grid_mult_07
+      ---
+      duration_ms: 0.04075
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_07
+    ok 103 - limit: grid_mult_07
+      ---
+      duration_ms: 0.043083
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_08
+    ok 104 - health: grid_mult_08
+      ---
+      duration_ms: 0.041167
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_08
+    ok 105 - limit: grid_mult_08
+      ---
+      duration_ms: 0.042875
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_09
+    ok 106 - health: grid_mult_09
+      ---
+      duration_ms: 0.039792
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_09
+    ok 107 - limit: grid_mult_09
+      ---
+      duration_ms: 0.04375
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_10
+    ok 108 - health: grid_mult_10
+      ---
+      duration_ms: 0.040417
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_10
+    ok 109 - limit: grid_mult_10
+      ---
+      duration_ms: 0.04425
+      type: 'test'
+      ...
+    # Subtest: health: grid_mult_11
+    ok 110 - health: grid_mult_11
+      ---
+      duration_ms: 0.041875
+      type: 'test'
+      ...
+    # Subtest: limit: grid_mult_11
+    ok 111 - limit: grid_mult_11
+      ---
+      duration_ms: 0.042083
+      type: 'test'
+      ...
+    # Subtest: every limit row was checked
+    ok 112 - every limit row was checked
+      ---
+      duration_ms: 0.068625
+      type: 'test'
+      ...
+    1..112
+ok 6 - health maths vs contracts/nectar-core/tests/model.csv
+  ---
+  duration_ms: 16.089042
+  type: 'suite'
+  ...
+# Subtest: health maths edge cases
+    # Subtest: V == 0 with debt is infinitely leveraged and breached
+    ok 1 - V == 0 with debt is infinitely leveraged and breached
+      ---
+      duration_ms: 0.115667
+      type: 'test'
+      ...
+    # Subtest: rejects negatives and bad divisors
+    ok 2 - rejects negatives and bad divisors
+      ---
+      duration_ms: 0.336709
+      type: 'test'
+      ...
+    # Subtest: closed session forces D_c = 0 and uses the weekend haircut
+    ok 3 - closed session forces D_c = 0 and uses the weekend haircut
+      ---
+      duration_ms: 0.099834
+      type: 'test'
+      ...
+    # Subtest: aggregate headroom floors at 0 when total debt exceeds capacity
+    ok 4 - aggregate headroom floors at 0 when total debt exceeds capacity
+      ---
+      duration_ms: 0.082166
+      type: 'test'
+      ...
+    # Subtest: TokenIncludesMultiplier ignores M; a 2-for-1 split with halved price leaves V unchanged
+    ok 5 - TokenIncludesMultiplier ignores M; a 2-for-1 split with halved price leaves V unchanged
+      ---
+      duration_ms: 0.250625
+      type: 'test'
+      ...
+    # Subtest: reads v1 views: no multiplier / total debt ⇒ defaults; session from market_session_open; missing ⇒ closed
+    ok 6 - reads v1 views: no multiplier / total debt ⇒ defaults; session from market_session_open; missing ⇒ closed
+      ---
+      duration_ms: 0.60825
+      type: 'test'
+      ...
+    # Subtest: reads v2 views
+    ok 7 - reads v2 views
+      ---
+      duration_ms: 0.227208
+      type: 'test'
+      ...
+    1..7
+ok 7 - health maths edge cases
+  ---
+  duration_ms: 1.891041
+  type: 'suite'
+  ...
+# Subtest: testnet integration (read-only)
+ok 8 - testnet integration (read-only) # SKIP set NECTAR_IT=1
+  ---
+  duration_ms: 0.188625
+  type: 'suite'
+  ...
+# Subtest: keeper loop
+    # Subtest: triggers only Open + triggerable + fresh positions, paging through list_positions
+    ok 1 - triggers only Open + triggerable + fresh positions, paging through list_positions
+      ---
+      duration_ms: 4.301875
+      type: 'test'
+      ...
+    # Subtest: backs off per position after a failed call, persisted across restart
+    ok 2 - backs off per position after a failed call, persisted across restart
+      ---
+      duration_ms: 3.426917
+      type: 'test'
+      ...
+    # Subtest: marks runs interrupted by a crash as failed on restart
+    ok 3 - marks runs interrupted by a crash as failed on restart
+      ---
+      duration_ms: 2.2935
+      type: 'test'
+      ...
+    # Subtest: logs health_mismatch when contract verdict disagrees with local maths, and still follows the contract
+    ok 4 - logs health_mismatch when contract verdict disagrees with local maths, and still follows the contract
+      ---
+      duration_ms: 1.593958
+      type: 'test'
+      ...
+    # Subtest: RPC outage: tick fails, consecutive errors grow, delay backs off, healthz degrades
+    ok 5 - RPC outage: tick fails, consecutive errors grow, delay backs off, healthz degrades
+      ---
+      duration_ms: 1.657542
+      type: 'test'
+      ...
+    # Subtest: logs JSON lines with no address fields
+    ok 6 - logs JSON lines with no address fields
+      ---
+      duration_ms: 0.075541
+      type: 'test'
+      ...
+    1..6
+ok 9 - keeper loop
+  ---
+  duration_ms: 13.800333
+  type: 'suite'
+  ...
+# Subtest: backoff and method allowlist
+    # Subtest: doubles up to the cap; jitter only shortens
+    ok 1 - doubles up to the cap; jitter only shortens
+      ---
+      duration_ms: 0.440416
+      type: 'test'
+      ...
+    # Subtest: the writer refuses any method outside the function-call key scope
+    ok 2 - the writer refuses any method outside the function-call key scope
+      ---
+      duration_ms: 0.232167
+      type: 'test'
+      ...
+    1..2
+ok 10 - backoff and method allowlist
+  ---
+  duration_ms: 0.849625
+  type: 'suite'
+  ...
+# Subtest: key file
+    # Subtest: loads a 0600 near-cli credentials file
+    ok 1 - loads a 0600 near-cli credentials file
+      ---
+      duration_ms: 0.893042
+      type: 'test'
+      ...
+    # Subtest: refuses group/world-readable files
+    ok 2 - refuses group/world-readable files
+      ---
+      duration_ms: 0.790125
+      type: 'test'
+      ...
+    # Subtest: refuses missing, non-JSON, keyless and wrong-account files without echoing contents
+    ok 3 - refuses missing, non-JSON, keyless and wrong-account files without echoing contents
+      ---
+      duration_ms: 3.212417
+      type: 'test'
+      ...
+    1..3
+ok 11 - key file
+  ---
+  duration_ms: 5.548334
+  type: 'suite'
+  ...
+# Subtest: config
+    # Subtest: treats TODO-* ids as unset and falls back to config.yaml
+    ok 1 - treats TODO-* ids as unset and falls back to config.yaml
+      ---
+      duration_ms: 0.608584
+      type: 'test'
+      ...
+    # Subtest: still requires KEEPER_KEY_PATH (no default key)
+    ok 2 - still requires KEEPER_KEY_PATH (no default key)
+      ---
+      duration_ms: 0.177333
+      type: 'test'
+      ...
+    # Subtest: parses ids, defaults and the key path
+    ok 3 - parses ids, defaults and the key path
+      ---
+      duration_ms: 0.324875
+      type: 'test'
+      ...
+    1..3
+ok 12 - config
+  ---
+  duration_ms: 1.21125
+  type: 'suite'
+  ...
+# Subtest: near-rpc fallback (WO-35k)
+    # Subtest: a 429 on the first endpoint → the second serves; the switch is logged by host only
+    ok 1 - a 429 on the first endpoint → the second serves; the switch is logged by host only
+      ---
+      duration_ms: 1.200667
+      type: 'test'
+      ...
+    # Subtest: both FastNEAR hosts throttled / 503 → dRPC serves; then a cooled endpoint is skipped on the next call
+    ok 2 - both FastNEAR hosts throttled / 503 → dRPC serves; then a cooled endpoint is skipped on the next call
+      ---
+      duration_ms: 0.390417
+      type: 'test'
+      ...
+    # Subtest: a contract error is final: no rotation, no cooldown
+    ok 3 - a contract error is final: no rotation, no cooldown
+      ---
+      duration_ms: 0.368583
+      type: 'test'
+      ...
+    # Subtest: a hung endpoint times out and the next one serves
+    ok 4 - a hung endpoint times out and the next one serves
+      ---
+      duration_ms: 22.173084
+      type: 'test'
+      ...
+    # Subtest: every endpoint failing rethrows the last transport error after the passes
+    ok 5 - every endpoint failing rethrows the last transport error after the passes
+      ---
+      duration_ms: 0.356625
+      type: 'test'
+      ...
+    # Subtest: classifies transport errors and leaves request errors alone
+    ok 6 - classifies transport errors and leaves request errors alone
+      ---
+      duration_ms: 0.298
+      type: 'test'
+      ...
+    # Subtest: endpoint order: NEAR_RPC_URL first then the fallbacks; loopback / NEAR_RPC_FALLBACK=off stay alone; NEAR_RPC_URLS exact
+    ok 7 - endpoint order: NEAR_RPC_URL first then the fallbacks; loopback / NEAR_RPC_FALLBACK=off stay alone; NEAR_RPC_URLS exact
+      ---
+      duration_ms: 0.204541
+      type: 'test'
+      ...
+    # Subtest: mirrors packages/sdk TESTNET_RPC_FALLBACKS, and the Feed copy is byte-identical
+    ok 8 - mirrors packages/sdk TESTNET_RPC_FALLBACKS, and the Feed copy is byte-identical
+      ---
+      duration_ms: 0.470375
+      type: 'test'
+      ...
+    1..8
+ok 13 - near-rpc fallback (WO-35k)
+  ---
+  duration_ms: 26.196625
+  type: 'suite'
+  ...
+# Subtest: oracle updater config (gating)
+    # Subtest: is disabled without PYTH_API_KEY_PATH
+    ok 1 - is disabled without PYTH_API_KEY_PATH
+      ---
+      duration_ms: 0.79475
+      type: 'test'
+      ...
+    # Subtest: is disabled without the updater account or key path, or with TODO placeholders
+    ok 2 - is disabled without the updater account or key path, or with TODO placeholders
+      ---
+      duration_ms: 0.719209
+      type: 'test'
+      ...
+    # Subtest: is disabled without feed ids, with a malformed id, or when reusing the keeper account
+    ok 3 - is disabled without feed ids, with a malformed id, or when reusing the keeper account
+      ---
+      duration_ms: 0.721417
+      type: 'test'
+      ...
+    # Subtest: enabled config has the documented defaults and normalised ids
+    ok 4 - enabled config has the documented defaults and normalised ids
+      ---
+      duration_ms: 0.626917
+      type: 'test'
+      ...
+    # Subtest: createOracleUpdater refuses a world-readable API key file
+    ok 5 - createOracleUpdater refuses a world-readable API key file
+      ---
+      duration_ms: 0.404
+      type: 'test'
+      ...
+    # Subtest: createOracleUpdater builds an updater when everything is present (no network)
+    ok 6 - createOracleUpdater builds an updater when everything is present (no network)
+      ---
+      duration_ms: 1.213625
+      type: 'test'
+      ...
+    1..6
+ok 14 - oracle updater config (gating)
+  ---
+  duration_ms: 4.968208
+  type: 'suite'
+  ...
+# Subtest: oracle updater run (fixture)
+    # Subtest: parses the Hermes hex update
+    ok 1 - parses the Hermes hex update
+      ---
+      duration_ms: 0.30325
+      type: 'test'
+      ...
+    # Subtest: fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+    ok 2 - fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+      ---
+      duration_ms: 1.1845
+      type: 'test'
+      ...
+    # Subtest: honours a custom header and raw scheme
+    ok 3 - honours a custom header and raw scheme
+      ---
+      duration_ms: 0.395583
+      type: 'test'
+      ...
+    # Subtest: 401 → logged failure with status, no push, key never logged, backoff grows
+    ok 4 - 401 → logged failure with status, no push, key never logged, backoff grows
+      ---
+      duration_ms: 0.733917
+      type: 'test'
+      ...
+    # Subtest: non-200 bodies echoing the key are redacted
+    ok 5 - non-200 bodies echoing the key are redacted
+      ---
+      duration_ms: 0.299542
+      type: 'test'
+      ...
+    # Subtest: refuses a fee above the cap and a non-U128 fee
+    ok 6 - refuses a fee above the cap and a non-U128 fee
+      ---
+      duration_ms: 0.337625
+      type: 'test'
+      ...
+    # Subtest: a failed update_price_feeds surfaces as an error
+    ok 7 - a failed update_price_feeds surfaces as an error
+      ---
+      duration_ms: 0.182041
+      type: 'test'
+      ...
+    # Subtest: redact ignores tiny secrets
+    ok 8 - redact ignores tiny secrets
+      ---
+      duration_ms: 0.032084
+      type: 'test'
+      ...
+    1..8
+ok 15 - oracle updater run (fixture)
+  ---
+  duration_ms: 3.647042
+  type: 'suite'
+  ...
+# Subtest: solana: preimage transcription
+    # Subtest: the vector key reproduces the recorded v1 signature; the recorded program id is not a Solana address
+    ok 1 - the vector key reproduces the recorded v1 signature; the recorded program id is not a Solana address
+      ---
+      duration_ms: 0.591917
+      type: 'test'
+      ...
+    # Subtest: parses the recorded v1 vector (kind 0) and round-trips
+    ok 2 - parses the recorded v1 vector (kind 0) and round-trips
+      ---
+      duration_ms: 0.08675
+      type: 'test'
+      ...
+    # Subtest: kind from the suffix: PRELIQ = 1, SELF = 2
+    ok 3 - kind from the suffix: PRELIQ = 1, SELF = 2
+      ---
+      duration_ms: 0.147833
+      type: 'test'
+      ...
+    # Subtest: rejects non-canonical numbers and u64 overflow
+    ok 4 - rejects non-canonical numbers and u64 overflow
+      ---
+      duration_ms: 0.143792
+      type: 'test'
+      ...
+    # Subtest: parses a release message
+    ok 5 - parses a release message
+      ---
+      duration_ms: 0.149834
+      type: 'test'
+      ...
+    1..5
+ok 16 - solana: preimage transcription
+  ---
+  duration_ms: 1.475542
+  type: 'suite'
+  ...
+# Subtest: solana: instruction bytes and account order (solana/deploy.md)
+    # Subtest: settle data is discriminator + borsh args, byte for byte
+    ok 1 - settle data is discriminator + borsh args, byte for byte
+      ---
+      duration_ms: 0.552416
+      type: 'test'
+      ...
+    # Subtest: release data is discriminator + position_id u64 + nonce u64 + expires i64
+    ok 2 - release data is discriminator + position_id u64 + nonce u64 + expires i64
+      ---
+      duration_ms: 0.166917
+      type: 'test'
+      ...
+    # Subtest: [ed25519 verify, settle]: recorded signature verifies; v2 accounts in order with roles
+    ok 3 - [ed25519 verify, settle]: recorded signature verifies; v2 accounts in order with roles
+      ---
+      duration_ms: 8.396292
+      type: 'test'
+      ...
+    # Subtest: [ed25519 verify, release]: v2 accounts move no tokens; recipient must be the depositor
+    ok 4 - [ed25519 verify, release]: v2 accounts move no tokens; recipient must be the depositor
+      ---
+      duration_ms: 1.426875
+      type: 'test'
+      ...
+    # Subtest: §E seeds: the position PDA depends on the depositor, the nonce PDA on the slot and the authority
+    ok 5 - §E seeds: the position PDA depends on the depositor, the nonce PDA on the slot and the authority
+      ---
+      duration_ms: 2.094125
+      type: 'test'
+      ...
+    # Subtest: §E seeds: the nonce PDA is exactly [b"nonce", position, authority, nonce_le]
+    ok 6 - §E seeds: the nonce PDA is exactly [b"nonce", position, authority, nonce_le]
+      ---
+      duration_ms: 1.562708
+      type: 'test'
+      ...
+    # Subtest: matches the vault client (solana/client, checked against the program): PDAs, layouts, settle and release
+    ok 7 - matches the vault client (solana/client, checked against the program): PDAs, layouts, settle and release
+      ---
+      duration_ms: 6.326416
+      type: 'test'
+      ...
+    # Subtest: NonceRecord v2: Anchor discriminator rule, 91 bytes, every field decoded
+    ok 8 - NonceRecord v2: Anchor discriminator rule, 91 bytes, every field decoded
+      ---
+      duration_ms: 0.683875
+      type: 'test'
+      ...
+    # Subtest: Position account offsets (deploy.md) and NEAR authority decoding
+    ok 9 - Position account offsets (deploy.md) and NEAR authority decoding
+      ---
+      duration_ms: 0.7965
+      type: 'test'
+      ...
+    1..9
+ok 17 - solana: instruction bytes and account order (solana/deploy.md)
+  ---
+  duration_ms: 22.268417
+  type: 'suite'
+  ...
+# Subtest: solana: relay with a mocked RPC
+    # Subtest: settle: sends [ed25519, settle] once, relays the tx sig; a second tick sends nothing
+    ok 1 - settle: sends [ed25519, settle] once, relays the tx sig; a second tick sends nothing
+      ---
+      duration_ms: 14.455917
+      type: 'test'
+      ...
+    # Subtest: restart after a landed tx: a valid record and its tx → no send, relays that tx
+    ok 2 - restart after a landed tx: a valid record and its tx → no send, relays that tx
+      ---
+      duration_ms: 4.186334
+      type: 'test'
+      ...
+    # Subtest: position PDA closed (without our nonce) or signature expired → skip with backoff, nothing sent
+    ok 3 - position PDA closed (without our nonce) or signature expired → skip with backoff, nothing sent
+      ---
+      duration_ms: 4.28075
+      type: 'test'
+      ...
+    # Subtest: a tampered preimage (fields != pending) is refused before any send
+    ok 4 - a tampered preimage (fields != pending) is refused before any send
+      ---
+      duration_ms: 1.0975
+      type: 'test'
+      ...
+    # Subtest: v1 (no contract_version): releases and deposits are not attempted
+    ok 5 - v1 (no contract_version): releases and deposits are not attempted
+      ---
+      duration_ms: 0.704917
+      type: 'test'
+      ...
+    # Subtest: v2 release: sends [ed25519, release]; falls back to relay_settlement_result if relay_release_result is missing
+    ok 6 - v2 release: sends [ed25519, release]; falls back to relay_settlement_result if relay_release_result is missing
+      ---
+      duration_ms: 3.101333
+      type: 'test'
+      ...
+    # Subtest: v2 deposit watcher: confirm_remote_deposit only when amount >= reserved and authority matches; then cooldown
+    ok 7 - v2 deposit watcher: confirm_remote_deposit only when amount >= reserved and authority matches; then cooldown
+      ---
+      duration_ms: 2.195
+      type: 'test'
+      ...
+    # Subtest: chain gate (WO-29b): Base positions next to Solana ones are skipped before any pending view or parse
+    ok 8 - chain gate (WO-29b): Base positions next to Solana ones are skipped before any pending view or parse
+      ---
+      duration_ms: 3.946542
+      type: 'test'
+      ...
+    # Subtest: chain gate: a Solana-pinned v2 position uses its pinned vault; a non-Solana primary chain is skipped
+    ok 9 - chain gate: a Solana-pinned v2 position uses its pinned vault; a non-Solana primary chain is skipped
+      ---
+      duration_ms: 1.150417
+      type: 'test'
+      ...
+    # Subtest: the Vault account decodes (mint after the symbol)
+    ok 10 - the Vault account decodes (mint after the symbol)
+      ---
+      duration_ms: 0.977209
+      type: 'test'
+      ...
+    1..10
+ok 18 - solana: relay with a mocked RPC
+  ---
+  duration_ms: 36.30625
+  type: 'suite'
+  ...
+# Subtest: SR-2: a nonce PDA is proof only when the vault wrote it
+    # Subtest: a system-owned account at the nonce PDA is not accepted: the leg is sent, the attacker signature is never relayed
+    ok 1 - a system-owned account at the nonce PDA is not accepted: the leg is sent, the attacker signature is never relayed
+      ---
+      duration_ms: 4.372459
+      type: 'test'
+      ...
+    # Subtest: a system-owned nonce PDA with no position to settle relays nothing
+    ok 2 - a system-owned nonce PDA with no position to settle relays nothing
+      ---
+      duration_ms: 2.648916
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with short data is refused: nothing sent, nothing relayed
+    ok 3 - a program-owned record with short data is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 3.164
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with wrong discriminator is refused: nothing sent, nothing relayed
+    ok 4 - a program-owned record with wrong discriminator is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 3.298042
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with version 1 is refused: nothing sent, nothing relayed
+    ok 5 - a program-owned record with version 1 is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 2.948167
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with another vault is refused: nothing sent, nothing relayed
+    ok 6 - a program-owned record with another vault is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 3.084875
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with another authority is refused: nothing sent, nothing relayed
+    ok 7 - a program-owned record with another authority is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 2.994791
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with another nonce is refused: nothing sent, nothing relayed
+    ok 8 - a program-owned record with another nonce is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 3.066625
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with another position is refused: nothing sent, nothing relayed
+    ok 9 - a program-owned record with another position is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 3.118583
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with the other op is refused: nothing sent, nothing relayed
+    ok 10 - a program-owned record with the other op is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 2.979084
+      type: 'test'
+      ...
+    # Subtest: a program-owned record with another kind is refused: nothing sent, nothing relayed
+    ok 11 - a program-owned record with another kind is refused: nothing sent, nothing relayed
+      ---
+      duration_ms: 3.188416
+      type: 'test'
+      ...
+    # Subtest: N2a: a valid record is proof whatever the slot shows now: reopened, withdrawn, or any status
+    ok 12 - N2a: a valid record is proof whatever the slot shows now: reopened, withdrawn, or any status
+      ---
+      duration_ms: 12.430167
+      type: 'test'
+      ...
+    # Subtest: N2d: a landing tx with trailing instruction bytes (Anchor ignores them) is the landing tx
+    ok 13 - N2d: a landing tx with trailing instruction bytes (Anchor ignores them) is the landing tx
+      ---
+      duration_ms: 4.193375
+      type: 'test'
+      ...
+    # Subtest: N2b: padding appended after the landing does not hide it: pages to the oldest and reads that first
+    ok 14 - N2b: padding appended after the landing does not hide it: pages to the oldest and reads that first
+      ---
+      duration_ms: 3.053459
+      type: 'test'
+      ...
+    # Subtest: N2b: a rate-limited listing resumes from its cursor on the next attempt
+    ok 15 - N2b: a rate-limited listing resumes from its cursor on the next attempt
+      ---
+      duration_ms: 3.876875
+      type: 'test'
+      ...
+    # Subtest: N2b: the per-tick budget stops the search and the next tick continues it, nothing relayed meanwhile
+    ok 16 - N2b: the per-tick budget stops the search and the next tick continues it, nothing relayed meanwhile
+      ---
+      duration_ms: 3.837708
+      type: 'test'
+      ...
+    # Subtest: N2b: a finished nonce walk is not repeated while the slot fallback is still running
+    ok 17 - N2b: a finished nonce walk is not repeated while the slot fallback is still running
+      ---
+      duration_ms: 3.661083
+      type: 'test'
+      ...
+    # Subtest: N2b: a search that finds nothing starts over next time, so a landing indexed later is seen
+    ok 18 - N2b: a search that finds nothing starts over next time, so a landing indexed later is seen
+      ---
+      duration_ms: 3.717917
+      type: 'test'
+      ...
+    # Subtest: N2b: when the nonce history does not show the landing, the slot history does
+    ok 19 - N2b: when the nonce history does not show the landing, the slot history does
+      ---
+      duration_ms: 3.027958
+      type: 'test'
+      ...
+    # Subtest: a valid record on a Settled position (not yet withdrawn) relays the landed tx
+    ok 20 - a valid record on a Settled position (not yet withdrawn) relays the landed tx
+      ---
+      duration_ms: 3.321125
+      type: 'test'
+      ...
+    # Subtest: a landed release (status Released) relays the tx that ran it
+    ok 21 - a landed release (status Released) relays the tx that ran it
+      ---
+      duration_ms: 1.824375
+      type: 'test'
+      ...
+    # Subtest: a position already Settled or Released with no record for this nonce is not sent or relayed
+    ok 22 - a position already Settled or Released with no record for this nonce is not sent or relayed
+      ---
+      duration_ms: 2.629083
+      type: 'test'
+      ...
+    # Subtest: a tx on another slot that lists the committed slot as trailing accounts is not the landing tx
+    ok 23 - a tx on another slot that lists the committed slot as trailing accounts is not the landing tx
+      ---
+      duration_ms: 6.242292
+      type: 'test'
+      ...
+    # Subtest: a squatter settling its own slot with the public signature leaves the committed slot unlanded: the leg is sent
+    ok 24 - a squatter settling its own slot with the public signature leaves the committed slot unlanded: the leg is sent
+      ---
+      duration_ms: 4.461167
+      type: 'test'
+      ...
+    # Subtest: only a tx that ran this vault instruction on this slot is relayed, wherever it sits among padding transfers
+    ok 25 - only a tx that ran this vault instruction on this slot is relayed, wherever it sits among padding transfers
+      ---
+      duration_ms: 4.21075
+      type: 'test'
+      ...
+    # Subtest: a valid record with only a transfer in its history → skip with backoff, nothing relayed
+    ok 26 - a valid record with only a transfer in its history → skip with backoff, nothing relayed
+      ---
+      duration_ms: 2.850333
+      type: 'test'
+      ...
+    # Subtest: SR-1: a nonce burned on another slot is a different PDA and does not block the leg
+    ok 27 - SR-1: a nonce burned on another slot is a different PDA and does not block the leg
+      ---
+      duration_ms: 3.876708
+      type: 'test'
+      ...
+    # Subtest: N1: a nonce burned on this slot under another key is a different PDA: the leg is sent under NEAR's authority
+    ok 28 - N1: a nonce burned on this slot under another key is a different PDA: the leg is sent under NEAR's authority
+      ---
+      duration_ms: 3.870667
+      type: 'test'
+      ...
+    # Subtest: a release whose recipient is not the committed depositor is refused before any send
+    ok 29 - a release whose recipient is not the committed depositor is refused before any send
+      ---
+      duration_ms: 1.402625
+      type: 'test'
+      ...
+    # Subtest: unknown authority or depositor skips; the depositor falls back to get_position
+    ok 30 - unknown authority or depositor skips; the depositor falls back to get_position
+      ---
+      duration_ms: 3.294333
+      type: 'test'
+      ...
+    1..30
+ok 19 - SR-2: a nonce PDA is proof only when the vault wrote it
+  ---
+  duration_ms: 111.248417
+  type: 'suite'
+  ...
+# Subtest: N3: an older nonce of this leg landed before a re-sign
+    # Subtest: settled slot, no record for the current nonce: relays the older tx, sends nothing
+    ok 1 - settled slot, no record for the current nonce: relays the older tx, sends nothing
+      ---
+      duration_ms: 4.037125
+      type: 'test'
+      ...
+    # Subtest: withdrawn slot (account gone): the older tx is still found through the slot history
+    ok 2 - withdrawn slot (account gone): the older tx is still found through the slot history
+      ---
+      duration_ms: 3.454208
+      type: 'test'
+      ...
+    # Subtest: a release that landed under an older nonce is relayed as the release
+    ok 3 - a release that landed under an older nonce is relayed as the release
+      ---
+      duration_ms: 2.843833
+      type: 'test'
+      ...
+    # Subtest: a leg the depositor ran under its own key is never relayed as NEAR's
+    ok 4 - a leg the depositor ran under its own key is never relayed as NEAR's
+      ---
+      duration_ms: 3.373416
+      type: 'test'
+      ...
+    # Subtest: an older candidate record that is system-owned proves nothing
+    ok 5 - an older candidate record that is system-owned proves nothing
+      ---
+      duration_ms: 3.216084
+      type: 'test'
+      ...
+    # Subtest: an older candidate record that is absent proves nothing
+    ok 6 - an older candidate record that is absent proves nothing
+      ---
+      duration_ms: 3.683416
+      type: 'test'
+      ...
+    # Subtest: an older candidate record that is the wrong op proves nothing
+    ok 7 - an older candidate record that is the wrong op proves nothing
+      ---
+      duration_ms: 3.610458
+      type: 'test'
+      ...
+    # Subtest: an older candidate record that is another position proves nothing
+    ok 8 - an older candidate record that is another position proves nothing
+      ---
+      duration_ms: 3.295333
+      type: 'test'
+      ...
+    # Subtest: an older candidate record that is a nonce that does not derive this address proves nothing
+    ok 9 - an older candidate record that is a nonce that does not derive this address proves nothing
+      ---
+      duration_ms: 3.565209
+      type: 'test'
+      ...
+    # Subtest: a slot left by the other op is not searched
+    ok 10 - a slot left by the other op is not searched
+      ---
+      duration_ms: 3.186042
+      type: 'test'
+      ...
+    # Subtest: an open slot is sent to, not searched
+    ok 11 - an open slot is sent to, not searched
+      ---
+      duration_ms: 3.802042
+      type: 'test'
+      ...
+    1..11
+ok 20 - N3: an older nonce of this leg landed before a re-sign
+  ---
+  duration_ms: 38.305
+  type: 'suite'
+  ...
+# Subtest: SR-8: depositor-bound slots
+    # Subtest: a squatter slot for the same id under another depositor is never read
+    ok 1 - a squatter slot for the same id under another depositor is never read
+      ---
+      duration_ms: 1.7465
+      type: 'test'
+      ...
+    # Subtest: an account at the slot recording another depositor is refused
+    ok 2 - an account at the slot recording another depositor is refused
+      ---
+      duration_ms: 1.584125
+      type: 'test'
+      ...
+    # Subtest: a pre-funded (system-owned) slot counts as not deposited
+    ok 3 - a pre-funded (system-owned) slot counts as not deposited
+      ---
+      duration_ms: 1.395083
+      type: 'test'
+      ...
+    1..3
+ok 21 - SR-8: depositor-bound slots
+  ---
+  duration_ms: 4.8055
+  type: 'suite'
+  ...
+# Subtest: SR-11: deposits below the reserved units do not trigger confirm
+    # Subtest: top-level units are 0, the reserved amount binds: 1 unit against 1e12 reserved is never confirmed
+    ok 1 - top-level units are 0, the reserved amount binds: 1 unit against 1e12 reserved is never confirmed
+      ---
+      duration_ms: 2.278125
+      type: 'test'
+      ...
+    # Subtest: a Settled or Released slot is not an open deposit, however large its amount
+    ok 2 - a Settled or Released slot is not an open deposit, however large its amount
+      ---
+      duration_ms: 3.264209
+      type: 'test'
+      ...
+    # Subtest: a position without reserved_units is not confirmed
+    ok 3 - a position without reserved_units is not confirmed
+      ---
+      duration_ms: 0.975416
+      type: 'test'
+      ...
+    # Subtest: N4: a rejected confirm is spaced out, never abandoned; a changed amount re-arms it
+    ok 4 - N4: a rejected confirm is spaced out, never abandoned; a changed amount re-arms it
+      ---
+      duration_ms: 3.951542
+      type: 'test'
+      ...
+    # Subtest: the cooldown doubles per unchanged attempt, and the count survives a restart
+    ok 5 - the cooldown doubles per unchanged attempt, and the count survives a restart
+      ---
+      duration_ms: 2.55075
+      type: 'test'
+      ...
+    # Subtest: a failing confirm keeps the same doubling cooldown: the error backoff never shortens it
+    ok 6 - a failing confirm keeps the same doubling cooldown: the error backoff never shortens it
+      ---
+      duration_ms: 2.050417
+      type: 'test'
+      ...
+    # Subtest: cappedCooldownMs: doubles from the base, stops at the cap, survives huge attempt counts
+    ok 7 - cappedCooldownMs: doubles from the base, stops at the cap, survives huge attempt counts
+      ---
+      duration_ms: 0.043833
+      type: 'test'
+      ...
+    # Subtest: N4: a full deposit that arrives after expiry is confirmed, so it can be released
+    ok 8 - N4: a full deposit that arrives after expiry is confirmed, so it can be released
+      ---
+      duration_ms: 1.475083
+      type: 'test'
+      ...
+    # Subtest: N4: a short deposit is confirmed once the reservation has expired, and not before
+    ok 9 - N4: a short deposit is confirmed once the reservation has expired, and not before
+      ---
+      duration_ms: 1.864958
+      type: 'test'
+      ...
+    # Subtest: N4: a position already marked Expired on NEAR is watched too (status Closed at the top level)
+    ok 10 - N4: a position already marked Expired on NEAR is watched too (status Closed at the top level)
+      ---
+      duration_ms: 1.331542
+      type: 'test'
+      ...
+    # Subtest: N4: an Expired position with a proven deposit is left alone
+    ok 11 - N4: an Expired position with a proven deposit is left alone
+      ---
+      duration_ms: 0.630709
+      type: 'test'
+      ...
+    # Subtest: N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+    ok 12 - N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+      ---
+      duration_ms: 1.165416
+      type: 'test'
+      ...
+    # Subtest: N4: an expired slot under another authority is still not confirmed
+    ok 13 - N4: an expired slot under another authority is still not confirmed
+      ---
+      duration_ms: 1.266375
+      type: 'test'
+      ...
+    # Subtest: confirm_in_flight: no confirm
+    ok 14 - confirm_in_flight: no confirm
+      ---
+      duration_ms: 0.795292
+      type: 'test'
+      ...
+    # Subtest: deposit_already_proven: no confirm
+    ok 15 - deposit_already_proven: no confirm
+      ---
+      duration_ms: 1.033083
+      type: 'test'
+      ...
+    1..15
+ok 22 - SR-11: deposits below the reserved units do not trigger confirm
+  ---
+  duration_ms: 24.93225
+  type: 'suite'
+  ...
+# Subtest: SR-12 / SR-31: program and mint are pinned
+    # Subtest: SR-12: a look-alike vault under another mint changes nothing
+    ok 1 - SR-12: a look-alike vault under another mint changes nothing
+      ---
+      duration_ms: 3.515958
+      type: 'test'
+      ...
+    # Subtest: a vault PDA that is missing, foreign-owned or for another mint or symbol is refused
+    ok 2 - a vault PDA that is missing, foreign-owned or for another mint or symbol is refused
+      ---
+      duration_ms: 3.419667
+      type: 'test'
+      ...
+    # Subtest: SR-31: a lying RPC pointing at another program is refused before the fee payer signs (pinned position)
+    ok 3 - SR-31: a lying RPC pointing at another program is refused before the fee payer signs (pinned position)
+      ---
+      duration_ms: 0.78825
+      type: 'test'
+      ...
+    # Subtest: SR-31: the same through the collateral primary remote_chain
+    ok 4 - SR-31: the same through the collateral primary remote_chain
+      ---
+      duration_ms: 0.691375
+      type: 'test'
+      ...
+    # Subtest: config: the relay defaults to config.yaml, env overrides, and an unpinned relay refuses to start
+    ok 5 - config: the relay defaults to config.yaml, env overrides, and an unpinned relay refuses to start
+      ---
+      duration_ms: 1.018209
+      type: 'test'
+      ...
+    # Subtest: config: differing solana.program_id and solana.vault_program are refused
+    ok 6 - config: differing solana.program_id and solana.vault_program are refused
+      ---
+      duration_ms: 0.069625
+      type: 'test'
+      ...
+    1..6
+ok 23 - SR-12 / SR-31: program and mint are pinned
+  ---
+  duration_ms: 9.58425
+  type: 'suite'
+  ...
+# Subtest: KitSolanaPort against a local JSON-RPC stub
+    # Subtest: getTransaction: resolves loaded addresses and flattens inner instructions
+    ok 1 - getTransaction: resolves loaded addresses and flattens inner instructions
+      ---
+      duration_ms: 13.32275
+      type: 'test'
+      ...
+    # Subtest: getTransaction: a failed or unknown tx is not a success
+    ok 2 - getTransaction: a failed or unknown tx is not a success
+      ---
+      duration_ms: 5.062375
+      type: 'test'
+      ...
+    # Subtest: getSignaturesForAddress: one page per call, the cursor is passed, failed txs are marked
+    ok 3 - getSignaturesForAddress: one page per call, the cursor is passed, failed txs are marked
+      ---
+      duration_ms: 2.815042
+      type: 'test'
+      ...
+    1..3
+ok 24 - KitSolanaPort against a local JSON-RPC stub
+  ---
+  duration_ms: 21.281791
+  type: 'suite'
+  ...
+# Subtest: startup full-access refusal
+    # Subtest: refuses a FullAccess key with a clear message
+    ok 1 - refuses a FullAccess key with a clear message
+      ---
+      duration_ms: 1.055375
+      type: 'test'
+      ...
+    # Subtest: accepts function-call keys (limited and unlimited)
+    ok 2 - accepts function-call keys (limited and unlimited)
+      ---
+      duration_ms: 0.602583
+      type: 'test'
+      ...
+    # Subtest: does not refuse when the key cannot be read (RPC down); healthz reports it
+    ok 3 - does not refuse when the key cannot be read (RPC down); healthz reports it
+      ---
+      duration_ms: 0.129084
+      type: 'test'
+      ...
+    1..3
+ok 25 - startup full-access refusal
+  ---
+  duration_ms: 2.61225
+  type: 'suite'
+  ...
+1..25
+# tests 301
+# suites 25
+# pass 301
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 559.996667

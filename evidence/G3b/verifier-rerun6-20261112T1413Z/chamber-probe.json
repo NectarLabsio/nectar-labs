@@ -1,0 +1,57 @@
+[
+  {
+    "phase": 0,
+    "badge": "Static lender",
+    "haircut": "n/a",
+    "pcts": [
+      "40%",
+      "57.7%",
+      "70%",
+      "0%",
+      "100%"
+    ],
+    "inst": "Example: 300 NVDAx at $185 = $55,500 Static lender $22,200 $ , 40% Borrow limit with DEX exit only 40% 57.7% 70% 0% LTV 100% Exit backing $12,000 Quotes Q $0 Reserve R $0 DEX depth D $12,000 Haircut h n/a 40% static LTV × $55,500 = $22,200 Collateral Committed quotes Reserve Order book"
+  },
+  {
+    "phase": 1,
+    "badge": "In session",
+    "haircut": "10%",
+    "pcts": [
+      "70%",
+      "40%",
+      "57.7%",
+      "0%",
+      "100%",
+      "10%"
+    ],
+    "inst": "Example: 300 NVDAx at $185 = $55,500 In session $38,850 $ , 70% Borrow limit with committed quotes, Reserve and DEX depth 40% 57.7% 70% 0% LTV 100% Exit backing $92,000 Quotes Q $80,000 Reserve R reading… DEX depth D $12,000 Haircut h 10% min(70% × $55,500, (1 − 10%) × ($80,000 + R + $12,000) − $28,000) = min($38,850, $54,800) = $38,850 Collateral Committed quotes Reserve Order book"
+  },
+  {
+    "phase": 2,
+    "badge": "Weekend parameters",
+    "haircut": "25%",
+    "pcts": [
+      "57.7%",
+      "25%",
+      "40%",
+      "70%",
+      "0%",
+      "100%"
+    ],
+    "inst": "Example: 300 NVDAx at $185 = $55,500 Weekend parameters $32,008 $ , 57.7% Market closed: DEX depth counts as zero, haircut 25% 40% 57.7% 70% 0% LTV 100% Exit backing $80,010 Quotes Q $80,000 Reserve R $10 DEX depth D $0 Haircut h 25% min($38,850, (1 − 25%) × ($80,000 + $10 + $0) − $28,000) = $32,008 Collateral Committed quotes Reserve Order book"
+  },
+  {
+    "phase": 3,
+    "badge": "Health below 1",
+    "haircut": "25%",
+    "pcts": [
+      "57.7%",
+      "40%",
+      "70%",
+      "0%",
+      "100%",
+      "25%"
+    ],
+    "inst": "Example: 300 NVDAx at $185 = $55,500 Health below 1 $32,008 $ , 57.7% Collateral goes to committed quotes first 40% 57.7% 70% 0% LTV 100% Exit backing $80,010 Quotes Q $80,000 Reserve R $10 DEX depth D $0 Haircut h 25% min($38,850, (1 − 25%) × ($80,000 + $10 + $0) − $28,000) = $32,008 Collateral Committed quotes Reserve Order book"
+  }
+]
