@@ -1,0 +1,81 @@
+== request_remote_release ==
+contracts/nectar-core/src/remote.rs:957:    pub fn request_remote_release(&mut self, position_id: U64) {
+12:        let depositor = r.depositor.clone().unwrap_or_else(|| env::panic_str("no deposit recorded"));
+13:        // SR-26: a refused loan may be retried until expiry; only the borrower can give that up.
+15:            require!(env::predecessor_account_id() == p.borrower, "borrower only during the retry window");
+38:            let (digest, rec) = evm::release_digest_for(&r, position_id.0, &depositor, nonce, expires)
+42:            let message = chainsig::build_release_preimage(&r.chain_id, &r.vault_program, position_id.0, &depositor, nonce, expires);
+== SECURITY item 12 full ==
+12. **Remote Loan Notes do not carry the collateral release.** A Loan Note transfer (`nft_transfer` → `move_note`, contracts/nectar-core/src/notes.rs:332-349) sets `position.borrower` to the new owner, and repay is permissionless (`on_repay`, contracts/nectar-core/src/lib.rs:824). For collateral held on NEAR, a full repay releases the units to the current Note owner (lib.rs:852-858). For remote positions (Solana devnet, Base local fork), `request_remote_release` (contracts/nectar-core/src/remote.rs:957) signs the release to the **depositor recorded at deposit**, not to the Note owner, and the vault pays only that depositor (`withdraw`). A new owner who repays a remote loan therefore does not receive the collateral. The review's verifiers rejected this as a finding (documented behaviour, below); it is listed here so that nobody takes a remote Loan Note expecting the collateral.
+== SECURITY item 11 full ==
+11. **FACTS C-020, kept by decision: no Note transfer from the web app to a `0s` / `0u` account that does not exist yet.** The web app's Note-transfer receiver check (R2-09: `isImplicitAccount` in packages/sdk/src/network.ts, `receiverNeedsLookup` in packages/sdk/src/notes.ts) treats only 64-hex and `0x` + 40-hex ids as implicit (F-381). Deterministic `0s` and universal `0u` ids, which near-account-id 3.0.0 also calls implicit (F-382), take the `view_account` path. A missing account answers `UNKNOWN_ACCOUNT` (F-380), so Transfer stays off. This errs on the safe side: such a Note cannot be sent before the account exists, and nothing is stranded. Kunal kept the behaviour on 2026-11-11 (D-029). The contract does not check receivers; this is a web app and SDK rule, and a direct `nft_transfer` call is not affected.
+== SDK implicit regex ==
+5:const IMPLICIT_HEX64 = /^[0-9a-f]{64}$/;
+6:const IMPLICIT_ETH = /^0x[0-9a-f]{40}$/;
+== zod versions in lockfile ==
+7984:  zod@3.25.76:
+7987:  zod@4.6.7:
+18176:  zod@3.25.76: {}
+18178:  zod@4.6.7: {}
+3351:  '@x402/core@2.18.0':
+12821:  '@x402/core@2.18.0':
+3370:       zod: ^3.22.0 || ^4.0.0
+12823:       zod: 3.25.76
+== X_POST privacy framing ==
+docs/X_POST.md
+== handoffs ==
+1:# HUMAN_HANDOFF.md
+14:## H-TOOLCHAIN — pinned P0 toolchain                status: DONE 2026-11-10   (Kunal asked; installed by Claude Code)
+17:## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1   status: DONE 2026-11-10 (Kunal asked; installed by Claude Code: anchor-cli 0.32.1 via avm, active solana-cli 2.3.0
+24:## H-EXPLORER — open the three testnet explorer links once   status: OPEN   needed by: G9 (non-blocking for G2/G3)
+32:## H13 — Pyth API key (for a live NVDA price, G5)        status: OPEN   needed by: P1 / G5 (2026-11-13 12:00 UTC)
+42:## H-NEAR-FAUCET — top up nectar.testnet with testnet NEAR     status: DONE 2026-11-10 (Kunal replied `H-NEAR-FAUCET done`; nectar-core-v2 deployed after, EVIDENCE §G2
+57:## H4 — analytics vendor                             status: OPEN   needed by: WO-4 (any time before Nov 14)
+64:## H5 — domains and hosting                          status: SUPERSEDED 2026-11-12 by H-HOST + H-DOMAIN (+ H-DNS), D-030; history below   needed by: G3 (previews fine 
+70:## H-DOMAIN — a domain for the hosted demo             status: CLOSED 2026-11-12
+90:## H-DNS — DNS records for the chosen domain           status: N/A until a domain is named (H-DOMAIN closed on the platform URLs)   needed by: production on a custom d
+98:## H-LEGAL — operator, country, contact, X handle     status: CLOSED 2026-11-12
+113:## H-KEYS — keeper testnet signing key as a Railway secret   status: OPEN (treated as not confirmed)   needed by: hosted keeper only
+127:## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed   status: OPEN (optional)   needed by: event history on the hosted Feed
+137:## H-HOST — approve the Vercel connector's team access   status: CLOSED 2026-11-12
+161:## H7 — NEAR AI Cloud API key                         status: OPEN   needed by: P2 / G8 (live test only)
+175:## H8 — 1Click API key (optional)                     status: OPEN   needed by: WO-11 (optional)
+180:## H9 — legal identity and contact                    status: CLOSED 2026-11-12
+189:## H10 — team and second-project check               status: OPEN   needed by: SUBMISSION.md
+193:## H11 — demo video voice-over                         status: OPEN   needed by: Nov 14
+198:## H12 — prior-work disclosure wording               status: OPEN   needed by: README before H2
+202:## H2 — repo public, push, final tag                 status: OPEN   needed by: Nov 14   NEVER by an agent
+210:## H1 — send the submission                            status: OPEN   needed by: Nov 14 23:59 UTC   NEVER by an agent
+214:## H3 — X post                                         status: OPEN   needed by: before H1   NEVER by an agent
+219:## H14 — payout account, contact consent                status: OPEN   needed by: H1   NEVER by an agent
+225:## H6 — mainnet (post-hackathon)                       status: not in scope
+229:# v7 handoffs (2026-11-10, D-017). Addendum ids: H13 → **H19**, H14 → **H20** here (H13/H14 were already used); H15–H18 unchanged.
+231:## H-GUARD-V7 — install the v7 guard rules + evm agent        status: OPEN (Kunal-only; no product claim depends on it: Base runs on the local fork, D-026)   needed b
+238:## H15 — Base Sepolia ETH for the deployer          status: OPEN (optional since D-026)   needed by: real-Base-Sepolia G12/G13 only
+246:## H16 — final track list                            status: CLOSED 2026-11-12 (`nfts` NOT added; tracks stay `defi`, `security`, `agents`)   needed by: submission
+251:## H17 — consumer line                               status: CLOSED 2026-11-12 ("fire-sales")   needed by: landing copy
+254:## H18 — thesis notebook                             status: OPEN
+257:## H19 — Base builder code (addendum H13)            status: OPEN   needed by: G13 (optional)
+261:## H20 — market.near.ai task (addendum H14, optional) status: OPEN
+265:## H-NEAR-FAUCET — v7 update (2026-11-10 11:30Z)     status: DONE 2026-11-10 (see the entry above; v2 deployed)
+270:## H-SOL-AIRDROP — devnet SOL for the vault deploy          status: DONE 2026-11-10 ~18:10Z (deployer showed 5 SOL at the end of the CLI retry loop; source not record
+== status words per handoff ==
+== README/SECURITY G14 + G1 ==
+README.md:3:G1 gas-row check on 2
+README.md:30:G1 gas rows on 2
+README.md:139:G1 gas rows PASS on re-check
+== SECURITY claims of PASS/live/verified ==
+10:** the code in this repository and the testnet deployments in the README table "Live on testnet"
+36:### What is deployed after the fix wave
+40:1 (tx `EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay`), deployed code hash `3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk`
+40:lt from a fresh clone with `cargo near build non-reproducible-wasm` matched the deployed code hash (3mv4LRm6…) on the verifier's machine; it is not the Docker reproduci
+42: Last deployed in slot 521021977 | same rollout log, step 4; solana/deploy
+51:69 Tgas; forge 105 pass / 3 skip; Solana 10 cargo + 55 TS; keeper 293, x402 17, feed 63, sdk 178
+51:72 Tgas per tx), and the tested wasm equals the deployed code hash
+51:1, tested wasm = deployed code hash
+52:- G3b, §G3b re-run (recorded in 5083d30): e2e 392 pass / 82 skip, accessibility ≥ 90 on all 22 route/theme pairs
+56: The verifier ran those suites on the deployed versions (docs/EVIDENCE
+56:…SR-33 has at least one test named after it, and 124 `sr*`-named contract tests pass
+86:| SR-27 | low | `mock-ft` free registration drained storage stake | fixed and deployed (mock tokens upgraded) | `sr27_free_registration_refused` |
+112:` id segments are refused | "feed proxy allow-list: documented paths pass; '
+133:** A remote loan must pass two checks

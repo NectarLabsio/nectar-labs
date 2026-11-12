@@ -1,0 +1,7 @@
+/borrow → 200
+request https://raw.githubusercontent.com/hot-dao/near-selector/refs/heads/main/repository/manifest.json → 200
+selector text contains "Select wallet": false
+wallet entries found: 
+CSP console messages: 0
+console errors: 0
+Screenshot connect-wallet.png shows the "Select wallet" dialog with Meteor Wallet, Intear Wallet, Ledger, Nightly Wallet, Ethereum Wallets, NEAR CLI (6). The DOM-text probe above did not reach the selector's root, so its empty list is a probe limit; the screenshot is the record. Nothing signed.

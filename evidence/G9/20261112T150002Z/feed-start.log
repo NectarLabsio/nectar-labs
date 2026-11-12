@@ -1,0 +1,11 @@
+
+> feed@0.1.0 start /private/tmp/verify-G9-20261112T150002Z/services/feed
+> node --disable-warning=ExperimentalWarning src/main.ts
+
+{"ts":"2026-11-12T15:02:42.308Z","level":"info","service":"feed","msg":"feed_started","port":18988,"single_port":false,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"18989","rpc_endpoints":"test.rpc.fastnear.com,rpc.testnet.fastnear.com,near-testnet.drpc.org,testnet-rpc.intea.rs","start_block":"head","cors":"legacy","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
+{"ts":"2026-11-12T15:02:42.874Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"test.rpc.fastnear.com","previous":"none","method":"callFunctionRaw"}
+{"ts":"2026-11-12T15:02:44.730Z","level":"info","service":"feed","msg":"neardata_cursor_init","height":277378758}
+{"ts":"2026-11-12T15:02:44.968Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:02:45.077Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277378758 HTTP 429"}
+{"ts":"2026-11-12T15:03:08.171Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277378761 HTTP 429"}
+{"ts":"2026-11-12T15:04:03.652Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277378792 HTTP 429"}
