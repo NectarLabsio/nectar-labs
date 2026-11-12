@@ -137,7 +137,10 @@
   - **~17:10Z ALL GATES GREEN ON RELEASE 3 (5f011bb):** G3b re-runs 7 + 7b PASS (one deviation: nodejs22.x not observable, engines pin);
     WO-34 production (release 3) PASS on all 4 items (hydrated landing, crawl 90/90, headers/Feed/CORS, LH 100/100); G9 runs 5 + 5b PASS.
     Docs-only after release 3: WO-35k2 (README G9 pointer, H-ORACLE session window, DEMO_SCRIPT prep), SUBMISSION G9 citation. Product code since
-    5f011bb: none. **submission-rc → this STATE commit** (local tag only; nothing pushed). Next: FINAL_REPORT re-audit (verifier, read-only).
+    5f011bb: none. (submission-rc first moved to 4b20f05.) Final audit re-run (9fea230, docs/FINAL_REPORT.md): ready; 1 copy FAIL — README:153
+    "live oracle" (G5 is a fallback) → fixed (6d3e72f) with the SUBMISSION header; G9 run 5c step 3 on c194c8f PASS. Product code since 5f011bb: none.
+    **submission-rc → this STATE commit** (local annotated tag; nothing pushed). Local services: keeper /healthz 200; x402 has no health route
+    (paid route proven at G14); the local Feed :8788 is stale since 2026-11-11 09:45Z (neardata 429) — production uses the Railway Feed.
     Open for Kunal: kill 14369; testnet account id for the real-wallet borrow (mint mock NVDAx first); H-ORACLE A/B (price stale ≈ 2026-11-13 15:10Z;
     NYSE-hours session needs < 15 min); optional H-NEARDATA key; H2 push + public, H3 X post, H10, H11 video, H12, H14, H1 send.
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
@@ -353,7 +356,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T17:05:16Z · commit 2ab2a1c
+Last activity: 2026-11-12T17:19:53Z · commit c194c8f
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
