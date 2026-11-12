@@ -43,6 +43,12 @@ capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept
 - ~20:20Z WO-65 merged 044d340 (hosts in README/X_POST/RUNBOOK/HUMAN_HANDOFF; DEMO_SCRIPT v5 2:00; snapshot 20:07Z; H-DEPLOY, H-DEMO-WALLET new;
   docs vercel.json host-scoped 308s for the 2 docs vercel.app hosts). Smoke scripts updated 31809b1. RELEASE CANDIDATE = 31809b1.
   WO-66 verifier dispatched: G3b run 8 (local) + G11 mock-ft delta + claims (m) + grep (o) on 31809b1. Deploy only after G3b PASS.
+- ~21:40Z G3b run 8 on 31809b1 merged ba90508: FAIL on 2 non-product items — (d) crawl.mjs:83 stale /docs expectation + crawler ignores DOCS/STATUS
+  hosts → WO-62d web dispatched; (k) home path in evidence/WO-62b/hosts-spec-…log → redacted de17c86. Everything else PASS (e2e 510/0/116, hosts
+  11/11 incl. browser, inventory 6/6, LH 40/40 = 100, claims + test-assets 26/26, live-claim hand check 20/20). G11 mock-ft delta PASS (38 unit +
+  sandbox, deployed code = rebuild e3d4ded5… on both tokens, faucet_config = config, tx 2A4jN155… final, workspace 710/0).
+  Also removed macOS AppleDouble `._pack-*` files from .git/objects/pack (git "non-monotonic index" noise; magic 00051607, not packs).
+  Next: merge WO-62d → verifier G3b run 8b = (d) + (k) only → deploy (Kunal approval) → WO-67 production acceptance + G9 → submission-rc → audit.
 - Next (old line kept): WO-65 (resumed) → merge → production deploy web+docs (needs Kunal approval) + Feed CORS (custom origins) → verifier WO-66 (production
   acceptance on custom hosts, G3b, G11 delta mock-ft, G9) → submission-rc → FINAL_REPORT audit. Refresher waits on Kunal (Railway staged).
 Round 1 dispatched: WO-60 researcher · WO-61 contract (mock-ft faucet) · WO-62a web (B1–B4) · WO-63 keeper (refresher + B5/x402 answers).
@@ -408,7 +414,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T20:12:44Z · commit fdc41be
+Last activity: 2026-11-12T21:05:07Z · commit edf3214
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
