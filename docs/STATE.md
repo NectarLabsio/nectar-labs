@@ -105,6 +105,14 @@
     start command (health: history "unavailable", chain_head = last block, rpc ×4). Public smoke PASS (evidence/WO-34/prod-smoke-release-*.log): 28 routes,
     56 docs pages + assets, no noindex on APP /docs, docs origin XFO + frame-ancestors, 0 localhost hrefs, Chrome 0 failed requests / 0 console errors.
     Next: WO-34v2 (production re-run) ‖ G9 run 4 → `git tag -f submission-rc` → FINAL_REPORT re-audit.
+  - G9 run 4 (1f28a2f): **FAIL on step 3 only** — README lines 3/11 say hosted from ca34111 (now release 3974b5b) and lines 25–26/139 say WO-34v
+    "not in EVIDENCE yet". All other steps PASS (quick start 4.3 min, verify, dry run tracks defi/security/agents, handoffs, headers, wallet, SECURITY).
+    Fix after WO-34v2 reports (docs WO-35h), then a G9 step-3 re-check.
+  - **Owner oracle was stale (age 112,379 s → borrows refused).** Refreshed same price 135000000 at ~15:12Z, tx 3E92xm8KDQcVC2FZh4MRn4dkBvZ1uS3H7eCvCubXM8rH
+    (evidence/ops/owner-price-refresh-*.log); fresh, session "open". Goes stale 24 h later (~2026-11-13 15:10Z) and again before judging (16–18 Nov).
+    scripts/ops/refresh-owner-price.sh (re-asserts the current price when > 12 h old) — starting it as a background host loop was DENIED by the
+    permission classifier (unauthorized persistence) → Kunal decides: run it himself, or the orchestrator runs the one-shot refresh each session (H-ORACLE).
+  - Feed NECTAR_GIT_SHA → 3974b5b (was fd06e11; /health `commit`).
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
@@ -318,7 +326,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T14:25:57Z · commit 3974b5b
+Last activity: 2026-11-12T15:05:43Z · commit 1f28a2f
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
