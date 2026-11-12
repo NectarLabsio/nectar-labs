@@ -7,6 +7,15 @@ capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept
 - Deployed params (evidence/claims/deployed-params-20261112T192755Z.json): LTV 40/70, haircut 10/25, Reserve $10 live, D 0, oracle Owner $135.
 - Feed (hosted) views mode: events_indexed 0 (B5 → WO-63/WO-62a reports).
 - nectar.testnet 1.80 NEAR; token accounts ~0.10 NEAR free storage each (mock-ft growth > ~8 KB needs a top-up).
+- ~19:50Z Kunal: apex didn't load, status wrong, testnet showed the landing. Cause: the deployed release had SITE_URL/APP_URL = vercel.app hosts.
+  Fix (no code): Vercel production env SITE_URL https://nectarlabs.io, APP_URL https://testnet.nectarlabs.io, DOCS_URL https://testnet.nectarlabs.io/docs
+  (interim), then release 3 (5f011bb) rebuilt as dpl_22L1aJ6GZdBxL2pirew2jBLM8Qm2 (production, READY 19:59Z). Now: apex 200 landing, /borrow 308 →
+  testnet, testnet / 307 → /feed, landing paths on testnet 308 → apex. Still open until WO-62b/WO-64: status. serves the landing; vercel.app hosts
+  serve as-is (no 308 yet; F-457 → LEGACY_HOSTS env in code); docs. still under /docs/. Apex/www failures on this Mac = cached NXDOMAIN (public DNS ok).
+- WO-60 FACTS F-455–F-464 (4c337cd). WO-63 merged 1d7961b (keeper 327 tests; refresher generates its key on the Railway volume, logs only the public
+  key; FC key added by the orchestrator after `key_generated`). B5: hosted Feed records no events (views mode); /api/settlements empty; demo steps
+  need no events except the position page's settlements link. x402 :8791 has no FEED_URL → stale local Feed :8788 (since 11-11); planned restart
+  with FEED_URL = hosted Feed before the recording. Refresher allowance → 1 NEAR.
 Round 1 dispatched: WO-60 researcher · WO-61 contract (mock-ft faucet) · WO-62a web (B1–B4) · WO-63 keeper (refresher + B5/x402 answers).
 Round 2 (after facts): WO-62b web hosts/redirects/status host · WO-64 docs-site baseUrl "/" · WO-62c web Get-test-assets button.
 Orchestrator: mock-ft upgrade deploy + set_faucet; FC key + Railway refresher; demo account (~/.nectar, 0600); Feed CORS; vercel.app → 308 after release.
@@ -370,7 +379,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T19:11:37Z · commit 39d3bd8
+Last activity: 2026-11-12T19:35:04Z · commit 8cf4d3b
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

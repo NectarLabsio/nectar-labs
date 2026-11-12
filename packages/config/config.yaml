@@ -129,4 +129,4 @@ ops:
     tick_s: 60
     session_max_age_s: 600 # inside NYSE session windows: re-assert when the price is ≥ 10 min old (session opens below 15 min, lib.rs:75)
     closed_max_age_s: 43200 # outside session windows: re-assert when ≥ 12 h old (borrows need < 24 h)
-    allowance_near: "0.5"
+    allowance_near: "1" # WO-63 estimate: ~0.003 NEAR of allowance per tx (30 Tgas prepaid), ~36 tx per NYSE day
