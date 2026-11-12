@@ -20,7 +20,12 @@ const plausibleDomain = process.env.DOCS_PLAUSIBLE_DOMAIN ?? ''; // TODO-H4/H5: 
 // host (web's DOCS_ORIGIN, the rewrite target). Fallbacks: the origin of DOCS_URL, then local.
 // The build output is flat, with no /docs folder (F-393): the APP rewrite `/docs/:path*` -> `<docs deployment>/:path*`
 // strips the prefix. Locally `pnpm --filter docs-site serve` honours baseUrl (http://localhost:3000/docs/).
-// apps/docs-site/vercel.json = {"cleanUrls": true}: serves a/b.html at /a/b (F-428), read from the docs rootDirectory (F-430); trailingSlash unset (F-429); the orchestrator ships it as an inline stub because Vercel reads it before install.
+// apps/docs-site/vercel.json: "cleanUrls": true serves a/b.html at /a/b (F-428), read from the docs rootDirectory (F-430); trailingSlash unset (F-429);
+// the orchestrator ships it as an inline stub because Vercel reads it before install. Its two rewrites (WO-34s) let the docs deployment, opened
+// directly, serve the same /docs/* URLs the pages reference: `/docs/` -> `/` (the baseUrl home link; `/docs/:path*` does not match a trailing
+// slash, F-433), then `/docs/:path*` -> `/:path*` (assets and /docs/<slug>). The filesystem is checked first, so flat files are never shadowed (F-434);
+// how cleanUrls resolves a rewrite destination is confirmed live (F-435). Read it directly at <docs host>/docs/; its bare root is not an entry point.
+// No `/` -> `/docs/` redirect: the APP proxies `/docs` to the docs root `/`, so that redirect would loop.
 const originOf = (u: string | undefined): string | undefined => (u ? new URL(u).origin : undefined);
 const ORIGIN = originOf(process.env.DOCS_ORIGIN_URL) ?? originOf(process.env.DOCS_URL) ?? 'http://localhost:3000';
 // Web app links. Hosted: APP_URL (TODO-H-DOMAIN; *.vercel.app if H-DOMAIN is silent). Local: `pnpm --filter web dev`.

@@ -83,6 +83,8 @@ only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret 
     per WO-34m; not deployed yet, so confirm it at the first docs deployment.
   - Env: the WO-34 deploy env list in docs/STATE.md. Previews first (`VERCEL_ENV=preview`); `target: production` only after H-LEGAL and the G3b re-run.
     After the first web deployment, set `FEED_CORS_ORIGINS` on the Feed to the web origins.
+  - Docs deployment opened directly: read it at `<docs-host>/docs/` (apps/docs-site/vercel.json rewrites `/docs/*` to the flat build, WO-34s); its bare
+    root `<docs-host>/` is not a supported entry point. Through the APP it stays `<app-host>/docs/`.
 - **Feed** (Railway service `feed`, project nectar-labs, environment production): image `node:22.22.2-bookworm`, volume at `/data`, start command =
   the one line in scripts/deploy/railway-feed-start.cmd.
   - First boot: download `SRC_URL`, check `SRC_SHA256` with sha256sum, extract into `/data/src/<SRC_SHA>`, run
