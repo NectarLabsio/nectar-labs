@@ -75,4 +75,23 @@ test.describe("host routing (hosted mode)", () => {
     expect((await hit(APP, "/keepers")).body).toContain(`<link rel="canonical" href="https://${APP}/keepers"`);
     expect((await hit(SITE, "/security")).body).toContain(`<link rel="canonical" href="https://${SITE}/security"`);
   });
+
+  // WO-34t: APP /docs/* → DOCS_ORIGIN/docs/* with the prefix kept. Needs a reachable docs origin, e.g. DOCS_ORIGIN=http://localhost:3742
+  // with `node scripts/serve-docs.mjs --port 3742` (it strips /docs exactly like the docs deployment's vercel.json), and E2E_DOCS=1.
+  test("APP /docs/* proxies to the docs deployment with the /docs prefix kept", async () => {
+    test.skip(process.env.E2E_DOCS !== "1", "needs DOCS_ORIGIN pointing at a running docs server (see comment)");
+    for (const p of ["/docs", "/docs/"]) {
+      const r = await hit(APP, p);
+      expect(r.status, p).toBe(200);
+      expect(r.body, p).toContain("<html");
+    }
+    const page = await hit(APP, "/docs/start/quick-start");
+    expect(page.status).toBe(200);
+    expect(page.body).toMatch(/<title[^>]*>[^<]*Quick start/i);
+    const main = page.body.match(/\/docs\/assets\/js\/main\.[0-9a-f]+\.js/)?.[0];
+    expect(main, "page references /docs/assets/js/main.<hash>.js").toBeTruthy();
+    const js = await hit(APP, main ?? "/docs/assets/js/main.js");
+    expect(js.status).toBe(200);
+    expect(js.body.length).toBeGreaterThan(1000);
+  });
 });

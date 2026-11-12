@@ -72,8 +72,10 @@ const config: NextConfig = {
     ];
   },
   async rewrites() {
-    // APP /docs → the docs deployment (F-393: the Docusaurus build is served at its root, prefix stripped; its pages reference
-    // /docs/assets/…, which this same rule serves). beforeFiles beats app/docs/page.tsx, which stays for local mode only.
+    // APP /docs → the docs deployment WITH the /docs prefix kept (WO-34t; F-433/F-434): since WO-34s the docs deployment serves
+    // its pages under /docs/* itself (its vercel.json rewrites /docs/ → / and /docs/:path* → /:path* onto the flat build, F-393),
+    // and its bare / will redirect to /docs/. Proxying to ${DOCS_ORIGIN}/ would loop on that redirect, so the APP never asks for /.
+    // Its pages reference /docs/assets/…, which this same rule serves. beforeFiles beats app/docs/page.tsx (local mode only).
     // No docs deployment (local single-host mode): every /docs/<slug> link (legal pages, landing) gets the in-app docs explainer
     // instead of a 404.
     if (!hosts || !DOCS_ORIGIN) return [{ source: "/docs/:path+", destination: "/docs" }];
@@ -81,8 +83,8 @@ const config: NextConfig = {
     const has = [{ type: "host" as const, value: new URL(hosts.app).hostname.replace(/\./g, "\\.") }];
     return {
       beforeFiles: [
-        { source: "/docs", destination: `${DOCS_ORIGIN}/`, has },
-        { source: "/docs/:path*", destination: `${DOCS_ORIGIN}/:path*`, has },
+        { source: "/docs", destination: `${DOCS_ORIGIN}/docs/`, has },
+        { source: "/docs/:path*", destination: `${DOCS_ORIGIN}/docs/:path*`, has },
       ],
       afterFiles: [],
       fallback: [],
