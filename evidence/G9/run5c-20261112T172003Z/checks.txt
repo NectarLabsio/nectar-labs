@@ -1,0 +1,50 @@
+G9 run 5c — step 3 (claims) only — fresh clone /tmp/verify-G9-5c/repo of the repo, checkout c194c8fee90332c7832686800a9e1aca0c405e9c — 2026-11-12T17:20:03Z
+Nothing installed, nothing signed, no network calls (step 3 has no explorer link).
+
+$ git rev-parse HEAD
+c194c8fee90332c7832686800a9e1aca0c405e9c
+$ git diff --stat 5f011bb c194c8f -- apps packages services contracts
+(empty)                                   # product code = release 3
+$ git diff --stat 4b20f05 c194c8f         # since tag submission-rc (tag points at 4b20f05)
+ README.md            |   2 +-
+ docs/FINAL_REPORT.md | 295 ++++----
+ docs/SUBMISSION.md   |   2 +-
+$ git diff 88b99b3 c194c8f -- README.md   (only change)
+-P0 core credit (G0–G3) → P1 TEE pricing, live oracle, 1Click depth, Feed MCP (G4–G6) → ...
++P0 core credit (G0–G3) → P1 TEE pricing, oracle (G5: owner-oracle fallback, disclosed), 1Click depth, Feed MCP (G4–G6) → ...
+$ git diff 88b99b3 c194c8f -- docs/SUBMISSION.md   (header: "re-read the live https://nearhackathon.com/HACKATHON.md" → "re-read the published ..."; G9 cite → runs 5 + 5b, 87be719 + b945f42)
+
+$ grep -niwE 'live|lives' README.md docs/SUBMISSION.md docs/X_POST.md    (classified)
+README 29 table title "Live on testnet"                       backed: §G2b, §G7, §G14
+README 34/36/37/38 core-v2, usdc-mock, nvdax-mock, owner       backed: §G2b re-run on 2.2.1-v7 PASS
+README 39 aggregate limit + calendar views                     backed: §G2b
+README 40/41 OutLayer quoter / attested deposits               backed: §G7 (requests 16453, 16443/16449)
+README 42 Solana round trip                                    backed: §G7 PASS (vault v2 + v1)
+README 43 x402                                                 backed: §G14 PASS
+README 45 Position Notes                                       backed: §G2b nft_tokens, §G14 nft_mint
+README 47 oracle "is not live", G5 FALLBACK                    negation, = §G5 FALLBACK
+README 51 copilot "no live NEAR AI answer"                     negation, = §G8 PASS (fixture)
+README 65 "Live state is not hard-coded"                       neutral
+README 108/113/114 "not live" / "live table" / 30 bps fee live backed: §G14 borrow tx
+README 122/123/128 P1 / P2 live                                backed: §G4, §G7 PASS
+README 139 "live Pyth waits on H13"                            negation
+README 153 roadmap                                             no "live" any more (was "live oracle")
+SUBMISSION 32 "no live answer yet" / 34 "no live NVDA price"   negations, = §G8, §G5
+SUBMISSION 46 "live derived_public_key"                        describes the signer view, = §G7
+SUBMISSION 50 "1 skipped live" / 64 "lives in README" / 88 README table name   neutral
+X_POST                                                          0 hits; post 4 "Price: owner oracle for now (disclosed)" = §G5
+
+$ grep -nE '^### (G3b re-run 7|G9 run 5|WO-34 production .release 3.)' docs/EVIDENCE.md
+167  ### G3b re-run 7b — RELEASE 3 5f011bb, item (d) only — PASS
+186  ### G3b re-run 7 — RELEASE 2 4c2a0bb ... FAIL (1 docs-only reason, (d))
+942  ### G9 run 5b — step 3 (claims) only, on 88b99b3 — PASS
+960  ### G9 run 5 — fresh-clone rehearsal on release 3 (verifier B) — FAIL (step 3 ...)
+2032 ### WO-34 production (release 3) (WO-34v3): PASS (4/4 items ...) release 3 5f011bb...
+Each is the first block under its section (§G3b 165, §G9 940, §"WO-34 production" 2030).
+
+Pointers: README 3/11/26/139 → §"WO-34 production" (newest = release 3 PASS); README 3/52/84/139 → §G3b / §G9 ("latest"),
+newest = 7b PASS / 5b PASS; SUBMISSION 85–88 → §G9 runs 5 + 5b, commits 87be719 ("test: evidence — G9 run 5 on release 3")
+and b945f42 ("test: evidence — G9 run 5b step 3") exist; run 5 = every step except 3, as SUBMISSION says.
+STATE (~17:10Z entry): release 3 5f011bb, G3b 7 + 7b PASS, WO-34 (release 3) PASS, G9 5 + 5b PASS, submission-rc → 4b20f05 — matches.
+Notes (not counted): SUBMISSION.md:53 still cites G3b re-run 2 (fd6592d), dated and attributed, not claimed as latest;
+tag submission-rc (4b20f05) predates the README:153 / SUBMISSION header fix (6d3e72f).
