@@ -5,3 +5,4 @@
 - [Stub secp gas](stub_secp_gas.md) — k256 stub Ecdsa sign ~10 Tgas in wasm; sandbox signer gas_tgas 50 for domain-0 tests
 - [G1 gas-row labels](g1_gas_row_labels.md) — every non-private change method needs a sandbox GAS row; label = name or name( / name+
 - [Store cache](near_sdk_store_cache.md) — store maps write on Drop: flush before measuring storage_usage; mock raw keys outlive Nectar::new in a test
+- [Mock-ft test tricks](mock_ft_test_tricks.md) — json! preserve_order; 102-byte receiver wasm; storage_byte_cost const; token accounts ~10 KB headroom
