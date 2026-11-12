@@ -1,0 +1,14 @@
+$ git grep -l "<slash>Users<slash>"   (literal home-path prefix; spelled out here so this log does not match itself)  (commit 3126773)
+contracts/nectar-core/tests/fixtures/nectar_core_p0.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v1.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v1c.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v2.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v21.wasm
+contracts/nectar-core/tests/fixtures/nectar_core_v22.wasm
+files: 6; non-fixture-wasm: 0
+6bd1ec5125806ad71e370953447ac635d9e86d4ce801100d03dc05eda15e2a46  contracts/nectar-core/tests/fixtures/nectar_core_p0.wasm
+d617e19238877f6e2f8d6aa015c8fe0f690b174763989dbd059f114fda7b963e  contracts/nectar-core/tests/fixtures/nectar_core_v1.wasm
+fa2bb4f18192eddb87320417a085b92912e1f16178fb61824f932d939be90f4e  contracts/nectar-core/tests/fixtures/nectar_core_v1c.wasm
+252a6abe1803b2628b0adadb7b5ec120853ddbd8e1f698dddf4f629a29e8937a  contracts/nectar-core/tests/fixtures/nectar_core_v2.wasm
+d2fbc44b0f0335834833d0318561c4a544a397b9ca31139986acbbc464251124  contracts/nectar-core/tests/fixtures/nectar_core_v21.wasm
+b261ad6b07c464955c9fbb96bcf800821b8e5735bba65f0ceed16197cf5b97ca  contracts/nectar-core/tests/fixtures/nectar_core_v22.wasm

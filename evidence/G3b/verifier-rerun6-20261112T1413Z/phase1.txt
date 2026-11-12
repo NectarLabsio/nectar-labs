@@ -1,0 +1,23 @@
+[14:16:35Z] (j) feed unit tests exit 0
+[14:16:35Z] (j) keeper unit tests exit 0
+[14:16:44Z] build-local exit 0
+[14:16:44Z] (g) check-trace exit 0
+[14:16:45Z] local :3961 up pid 76946
+[14:16:45Z] health {"ok":true,"deployed":true,"core":"nectar-core-v2.nectar.testnet","version":"2.2.1-v7","pool":{"available_usd_e6":"40771000000","utilised_usd_e6":"9229000000","treasury_usd_e6":"80662710","lenders_fees_usd_e6":"17652060"},"network":"testnet","rpc":["https://test.rpc.fastnear.com","https://rpc.testne
+[14:16:45Z] (i) landing.html saved (   64057 bytes)
+[14:16:45Z] e2e start
+[14:24:33Z] e2e exit 0
+[14:24:33Z] lh start
+[14:28:33Z] lh exit 0
+[14:28:41Z] selector exit 0
+[14:28:42Z] feed :3965 up pid 83412
+[14:29:07Z] (j) feed /health {"ok":true,"last_indexed_block":277375290,"chain_head":277375290,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T14:29:06.241Z","poll_age_s":1,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit
+[14:29:08Z] rpc final height 277375294
+[14:29:09Z] web+feed :3967 up pid 83437
+[14:29:09Z] web /api/indexer/healthz {"ok":true,"last_block_seen":277375290,"last_poll_at":"2026-11-12T14:29:06.241Z","last_error":"","source":"views","events_indexed":0,"history":"unavailable"}
+[14:29:46Z] (i) banner probe exit 0
+[14:29:46Z] (j) feed /health (2nd) {"ok":true,"last_indexed_block":277375349,"chain_head":277375349,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T14:29:42.452Z","poll_age_s":5,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":
+[14:29:49Z] kill 3967 pid 83437 -> 0; listeners left: none
+[14:29:51Z] kill 3965 pid 83412 -> 0; listeners left: none
+[14:29:53Z] kill 3961 pid 76946 -> 0; listeners left: none
+[14:29:53Z] phase1 done
