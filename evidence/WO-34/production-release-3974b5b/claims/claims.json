@@ -1,0 +1,65 @@
+{
+  "digits": {
+    "innerText": false,
+    "innerTextNoWs": false,
+    "a11yText": false,
+    "rawHtmlText": false,
+    "rawHtmlTextNoWs": false,
+    "meta": [
+      "Committed market-maker quotes raise borrowing limits on thin-exit collateral. NEAR testnet, mock collateral.",
+      "Committed buyers. Higher limits. NEAR testnet, mock collateral.",
+      "Committed buyers. Higher limits. NEAR testnet, mock collateral."
+    ],
+    "metaHit": false
+  },
+  "baseLines": [
+    "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base). The keeper never holds a key.",
+    "Solana checks the Ed25519 instruction before settle. Base checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home."
+  ],
+  "localForkCount": 0,
+  "teeLines": [
+    "verifiable TEE pricing",
+    "verifiable TEE pricing",
+    "Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers' limit premiums fund your commitment fees. The OutLayer TEE makes the discount computation verifiable: a pinned, attested program, clamped on-chain. In this testnet build it prices with operator-set demo parameters (published in the docs), and each settlement's discount reveals their product.",
+    "A TEE computes the discount, verifiably",
+    "Stale or wide prices are rejected and the weekend guard fails closed. TEE output is verifiable: accepted only from a pinned, attested program and clamped on-chain.",
+    "What if the verifiable TEE pricing or the oracle is down?"
+  ],
+  "teeBad": [],
+  "teeAllVerifiable": true,
+  "privateAnywhere": [],
+  "exampleLines": [
+    "A static lender stops at 40%.",
+    "40%",
+    "40%",
+    "70%",
+    "LTV",
+    "Haircut h",
+    "40% static LTV × $55,500 = $22,200",
+    "static 40 % → 70 % LTV",
+    "haircut 25 % · stale price (> 15 min)",
+    "haircut 10 % · verified DEX depth $0 counts",
+    "haircut 25 % · DEX depth counts 0",
+    "Per-position ceiling\t70 % LTV (static 40 %)",
+    "weekend haircut",
+    "25%",
+    "NVDAx after a 25% rally\t$231.00",
+    "LTV",
+    "The contract draws the picture from its own state: LTV, health, backing, multiplier.",
+    "Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash.",
+    "let by_ltv  = a.value_e6() * a.ltv_max_bps / 10_000;  // 70% on testnet",
+    "by_ltv.min(by_exit.saturating_sub(a.total_debt_e6))"
+  ],
+  "reserveShips": false,
+  "landingConsoleErrors": [],
+  "/feed": {
+    "bannerVisible": true,
+    "bannerText": "i Event history isn't indexed on this host This host's Feed reads contract views only (no event indexer), so past settlements from past contract events are not listed here. Current loans, quotes and the Reserve still come from live views.",
+    "consoleErrors": []
+  },
+  "/keepers": {
+    "bannerVisible": true,
+    "bannerText": "i Event history isn't indexed on this host This host's Feed reads contract views only (no event indexer), so past keeper triggers from past contract events are not listed here. Current loans, quotes and the Reserve still come from live views.",
+    "consoleErrors": []
+  }
+}

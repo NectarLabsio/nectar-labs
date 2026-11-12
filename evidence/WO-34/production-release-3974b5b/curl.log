@@ -1,0 +1,112 @@
+captured 2026-11-12T15:00:56Z
+== 1a sitemap + noindex on every APP /docs page ==
+sitemap locs:       56
+https://nectarlabs-app.vercel.app/docs/changelog
+https://nectarlabs-app.vercel.app/docs/changelog/archive
+docs paths:       56
+pages fetched 56, non-200 0, with x-robots-tag 0
+-- APP /docs
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com 
+strict-transport-security: max-age=63072000; includeSubDomains
+x-frame-options: DENY
+-- APP /docs/start/quick-start
+HTTP/2 200 
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.cdnfonts.com 
+strict-transport-security: max-age=63072000; includeSubDomains
+x-frame-options: DENY
+-- https://nectarlabs.vercel.app/ x-robots: 0
+-- https://nectarlabs-app.vercel.app/feed x-robots: 0
+== 1b docs origin headers ==
+-- https://nectarlabs-docs.vercel.app/
+HTTP/2 307 
+location: /docs/
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+-- https://nectarlabs-docs.vercel.app/docs/
+HTTP/2 200 
+content-security-policy:  … frame-ancestors 'none'
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-frame-options: DENY
+-- https://nectarlabs-docs.vercel.app/docs/start/quick-start
+HTTP/2 200 
+content-security-policy:  … frame-ancestors 'none'
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-frame-options: DENY
+== 1c localhost/127.0.0.1 hrefs in APP /docs pages ==
+       0
+any 127.0.0.1/localhost text at all:
+   1 /tmp/verify-wo34v2-20261112/ev/pages/_docs_integrate_feed-mcp.html:127.0.0.1
+   2 /tmp/verify-wo34v2-20261112/ev/pages/_docs_integrate_feed-mcp.html:127.0.0.1:8789/
+   1 /tmp/verify-wo34v2-20261112/ev/pages/_docs_integrate_feed-rest.html:127.0.0.1:8788
+   3 /tmp/verify-wo34v2-20261112/ev/pages/_docs_integrate_feed-rest.html:127.0.0.1:8788/
+   1 /tmp/verify-wo34v2-20261112/ev/pages/_docs_integrate_oneclick-depth.html:127.0.0.1:8788/
+   1 /tmp/verify-wo34v2-20261112/ev/pages/_docs_integrate_run-a-keeper.html:127.0.0.1
+   2 /tmp/verify-wo34v2-20261112/ev/pages/_docs_integrate_run-a-keeper.html:localhost:8787/
+   1 /tmp/verify-wo34v2-20261112/ev/pages/_docs_operations_monitoring.html:127.0.0.1:8787
+   2 /tmp/verify-wo34v2-20261112/ev/pages/_docs_start_quick-start.html:localhost:3000/
+   3 /tmp/verify-wo34v2-20261112/ev/pages/_docs_start_quick-start.html:localhost:3100
+feed-rest Feed link:
+href="#without-the-feed-read-the-chain-directly"
+href="/docs/integrate/feed-mcp"
+href="/docs/integrate/feed-rest"
+href="https://feed-production-2f2776c9.up.railway.app"
+href="https://nectarlabs-app.vercel.app/docs/integrate/feed-rest"
+== 2 headers SITE/APP ==
+-- https://nectarlabs.vercel.app/
+HTTP/2 200 
+referrer-policy: strict-origin-when-cross-origin
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech http
+frame-ancestors 'none'
+-- https://nectarlabs.vercel.app/legal/privacy
+HTTP/2 200 
+referrer-policy: strict-origin-when-cross-origin
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech http
+frame-ancestors 'none'
+-- https://nectarlabs-app.vercel.app/feed
+HTTP/2 200 
+referrer-policy: strict-origin-when-cross-origin
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech http
+frame-ancestors 'none'
+-- https://nectarlabs-app.vercel.app/borrow
+HTTP/2 200 
+referrer-policy: strict-origin-when-cross-origin
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+x-frame-options: DENY
+connect-src 'self' https://test.rpc.fastnear.com https://rpc.testnet.fastnear.com https://near-testnet.drpc.org https://testnet-rpc.intea.rs https://raw.githubusercontent.com https://mc.meteorwallet.app wss://mc.meteorwallet.app https://wallet.intear.tech http
+frame-ancestors 'none'
+== redirects ==
+https://nectarlabs.vercel.app/borrow?asset=NVDAx -> 308 https://nectarlabs-app.vercel.app/borrow?asset=NVDAx
+https://nectarlabs-app.vercel.app/about -> 308 https://nectarlabs.vercel.app/about
+https://nectarlabs-app.vercel.app/ -> 307 https://nectarlabs-app.vercel.app/feed
+== 2 Feed ==
+{"ok":true,"last_indexed_block":277378612,"chain_head":277378612,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T15:01:16.112Z","poll_age_s":0,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"fd06e11dbb5b979ac334968d78cf06a248ae028f"}
+-- Origin https://nectarlabs.vercel.app GET: access-control-allow-origin: https://nectarlabs.vercel.app
+   preflight: 204 access-control-allow-origin: https://nectarlabs.vercel.app
+-- Origin https://nectarlabs-app.vercel.app GET: access-control-allow-origin: https://nectarlabs-app.vercel.app
+   preflight: 204 access-control-allow-origin: https://nectarlabs-app.vercel.app
+-- Origin https://evil.example.com GET: 
+   preflight: 403 
+== 5 nectar-labs-web.vercel.app (info) ==
+-- https://nectar-labs-web.vercel.app/
+HTTP/2 200 
+x-frame-options: DENY
+x-vercel-id: bom1::4dt7f-1794495717551-073a4412ac42
+-- https://nectar-labs-web.vercel.app/feed
+HTTP/2 200 
+x-frame-options: DENY
+x-vercel-id: bom1::npx6p-1794495717992-3bfbf876021c
+-- https://nectar-labs-web.vercel.app/docs
+HTTP/2 200 
+x-frame-options: DENY
+x-vercel-id: bom1::6vttt-1794495718922-9cc97fa8e552
+<title>Nectar Labs</title>

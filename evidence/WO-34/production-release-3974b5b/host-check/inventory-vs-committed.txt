@@ -1,0 +1,6 @@
+ apps/web/content/data-inventory.json | 940 ++++++++++++++---------------------
+ 1 file changed, 366 insertions(+), 574 deletions(-)
+-      "host": "app.localhost:3961",
++      "host": "nectarlabs-app.vercel.app",
++      "host": "nectarlabs.vercel.app",
+-      "host": "site.localhost:3961",

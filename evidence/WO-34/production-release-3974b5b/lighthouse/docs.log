@@ -1,0 +1,11 @@
+
+| route | dark | light |
+| --- | --- | --- |
+| /docs | 100 | 100 |
+| /docs/start/quick-start | 93 | 93 |
+| /docs/integrate/feed-rest | 93 | 93 |
+| /docs/integrate/agent-skill-x402 | 93 | 93 |
+| /docs/integrate/feed-mcp | 97 | 97 |
+
+reports: /private/tmp/verify-wo34v2-20261112/evidence/G3/lighthouse
+exit 0
