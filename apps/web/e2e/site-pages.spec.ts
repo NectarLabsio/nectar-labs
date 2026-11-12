@@ -1,8 +1,13 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { siteConfig } from "@nectar/sdk";
+import { loadConfig } from "@nectar/sdk/config-node";
 import { config, noHorizontalScroll, prime } from "./helpers";
 
-// WO-34b: site pages in local mode (no SITE_URL / APP_URL, config.yaml site.* null). Axe both themes, 400 px on the phone project.
+// WO-34b: site pages in local mode (no SITE_URL / APP_URL). Axe both themes, 400 px on the phone project.
+// Operator fields come from config.yaml `site:` through the loader the app uses (lib/config.server.ts), so the content tests
+// follow the config: filled (H-LEGAL answered 2026-11-12) or null (the "not configured" text).
+const site = siteConfig(loadConfig(process.cwd()));
 const PAGES = ["/about", "/status", "/changelog", "/brand", "/talk", "/security"] as const;
 
 for (const theme of ["dark", "light"] as const) {
@@ -22,16 +27,34 @@ for (const theme of ["dark", "light"] as const) {
 test.describe("content", () => {
   test.beforeEach(async ({ page }) => prime(page, "dark"));
 
-  test("/about says what it is and that no operator is configured locally", async ({ page }) => {
+  test("/about says what it is and who operates it (config.yaml site.operator, site.country)", async ({ page }) => {
     await page.goto("/about");
     await expect(page.locator("main").getByText(/Nectar Labs is testnet software/)).toBeVisible();
-    await expect(page.getByTestId("operator-missing")).toHaveText("Operator not configured in this build.");
+    if (site.operator) {
+      await expect(page.getByTestId("operator")).toHaveText(`Operated by ${site.operator}${site.country ? `, ${site.country}` : ""}.`);
+      await expect(page.getByTestId("operator-missing")).toHaveCount(0);
+    } else {
+      await expect(page.getByTestId("operator-missing")).toHaveText("Operator not configured in this build.");
+    }
   });
 
-  test("/talk has no form and shows the local contact text", async ({ page }) => {
+  test("/talk has no form and shows the configured contact and X handle", async ({ page }) => {
     await page.goto("/talk");
     await expect(page.locator("main form")).toHaveCount(0);
-    await expect(page.getByTestId("contact-missing")).toHaveText("Contact not configured in this build");
+    if (site.contact) {
+      await expect(page.getByTestId("contact-address")).toHaveText(site.contact);
+      await expect(page.getByTestId("contact-copy")).toHaveAccessibleName(`Copy contact address ${site.contact}`);
+      await expect(page.getByTestId("contact-missing")).toHaveCount(0);
+    } else {
+      await expect(page.getByTestId("contact-missing")).toHaveText("Contact not configured in this build");
+    }
+    const x = site.x_handle?.replace(/^@/, "") ?? null;
+    if (x) {
+      await expect(page.getByTestId("x-handle")).toHaveText(`@${x}`);
+      await expect(page.getByTestId("x-handle")).toHaveAttribute("href", `https://x.com/${encodeURIComponent(x)}`);
+    } else {
+      await expect(page.getByTestId("x-handle")).toHaveCount(0);
+    }
   });
 
   test("/status shows live checks, the hosted split, contract ids and the gate table with its source", async ({ page }) => {
@@ -62,7 +85,8 @@ test.describe("content", () => {
   test("/security renders SECURITY.md and the reporting contact", async ({ page }) => {
     await page.goto("/security");
     await expect(page.getByTestId("security-md")).toContainText("Reporting a vulnerability");
-    await expect(page.getByTestId("security-contact-missing")).toBeVisible();
+    if (site.contact) await expect(page.getByTestId("security-contact-address")).toHaveText(site.contact);
+    else await expect(page.getByTestId("security-contact-missing")).toBeVisible();
   });
 
   test("footer links the new pages; no whitepaper link; landing worked example labelled", async ({ page }) => {
