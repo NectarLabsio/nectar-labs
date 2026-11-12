@@ -40,7 +40,10 @@ capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept
   apps/web/package.json test script resolved: hosts + test-assets tests; web unit 43/44 + 1 skip; verify:quick 0). C4 real call: borrower1
   faucet_mint on nvdax-mock tx 2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW, ft_mint 5 NVDAx (evidence/C/). C is green before the 12:00Z timebox
   except deploy of the button (blocked with the rest of the production deploy).
-- Next: WO-65 (resumed) → merge → production deploy web+docs (needs Kunal approval) + Feed CORS (custom origins) → verifier WO-66 (production
+- ~20:20Z WO-65 merged 044d340 (hosts in README/X_POST/RUNBOOK/HUMAN_HANDOFF; DEMO_SCRIPT v5 2:00; snapshot 20:07Z; H-DEPLOY, H-DEMO-WALLET new;
+  docs vercel.json host-scoped 308s for the 2 docs vercel.app hosts). Smoke scripts updated 31809b1. RELEASE CANDIDATE = 31809b1.
+  WO-66 verifier dispatched: G3b run 8 (local) + G11 mock-ft delta + claims (m) + grep (o) on 31809b1. Deploy only after G3b PASS.
+- Next (old line kept): WO-65 (resumed) → merge → production deploy web+docs (needs Kunal approval) + Feed CORS (custom origins) → verifier WO-66 (production
   acceptance on custom hosts, G3b, G11 delta mock-ft, G9) → submission-rc → FINAL_REPORT audit. Refresher waits on Kunal (Railway staged).
 Round 1 dispatched: WO-60 researcher · WO-61 contract (mock-ft faucet) · WO-62a web (B1–B4) · WO-63 keeper (refresher + B5/x402 answers).
 Round 2 (after facts): WO-62b web hosts/redirects/status host · WO-64 docs-site baseUrl "/" · WO-62c web Get-test-assets button.
@@ -405,7 +408,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T20:08:24Z · commit 8498d92
+Last activity: 2026-11-12T20:12:44Z · commit fdc41be
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
