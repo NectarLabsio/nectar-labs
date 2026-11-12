@@ -1,0 +1,34 @@
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  demo.nectar.testnet
+│    actions:
+│       -- create account:      demo.nectar.testnet
+│       -- transfer deposit:    0.5 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:3XTFXuRbKnp9gFjjjpJ2LEBhGhZKVLeCBiF3XgejdiQV
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:5RLriPscoxHpUfFppyG7jt1EtcJ1xFqXKvabLkD1pieVz5ghQQTfrBamyEoXRyiZYEoQh2vJR6ZY2aMFhpPE6MEg
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: 5NbjrugATtcyoqz5sjo9vGmAQz5EmMNkdafK5Em3bTC7
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/5NbjrugATtcyoqz5sjo9vGmAQz5EmMNkdafK5Em3bTC7
+│     [0m
+
+
+New account <demo.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 0.5 NEAR to <demo.nectar.testnet> successfully.
+Added access key = ed25519:3XTFXuRbKnp9gFjjjpJ2LEBhGhZKVLeCBiF3XgejdiQV to demo.nectar.testnet.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself demo.nectar.testnet '0.5 NEAR' use-manually-provided-public-key ed25519:3XTFXuRbKnp9gFjjjpJ2LEBhGhZKVLeCBiF3XgejdiQV sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
