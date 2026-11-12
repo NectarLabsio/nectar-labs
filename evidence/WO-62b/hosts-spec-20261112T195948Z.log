@@ -17,7 +17,7 @@ Running 11 tests using 1 worker
 
   1) [desktop] › e2e/hosts.spec.ts:151:3 › host routing (hosted mode) › status host hydrates with the app shell and no console errors 
 
-    Error: browserType.launch: Executable doesn't exist at /Users/lemmalabs/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
     ╔════════════════════════════════════════════════════════════╗
     ║ Looks like Playwright was just installed or updated.       ║
     ║ Please run the following command to download new browsers: ║
@@ -39,7 +39,7 @@ Running 11 tests using 1 worker
 
     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
 
-    Error: browserType.launch: Executable doesn't exist at /Users/lemmalabs/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
     ╔════════════════════════════════════════════════════════════╗
     ║ Looks like Playwright was just installed or updated.       ║
     ║ Please run the following command to download new browsers: ║
