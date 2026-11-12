@@ -36,7 +36,8 @@ WO-34 additions (all on your own ports, from the fresh clone):
     "local fork"; every TEE line says verifiable (no private/confidential); no "until the Reserve ships"; the worked example uses config.yaml parameters
     (LTV 40/70, haircut 10/25). Event-history banner appears when the Feed reports `history: "unavailable"` (views mode).
   - (j) WO-35k: keeper + feed unit tests pass; Feed /health shape has `chain_head_source`, `history`, `rpc`; in views mode `chain_head` ≥ last block.
-  - (k) `git grep -l "/Users/"` lists only contracts/nectar-core/tests/fixtures/*.wasm (accepted: byte-identical to deployed code).
+  - (k) a git grep for the macOS home-directory prefix (slash, "Users", slash) lists only contracts/nectar-core/tests/fixtures/*.wasm (accepted:
+    byte-identical to deployed code).
   - (h) for run 6: orchestrator-run preview checks of 3126773 (evidence/WO-34/preview-*-3126773-*.log), reviewed by you as in run 5.
   - Disk: clone into /tmp (internal disk, ~80 GB free); never install dependencies under /Volumes/T7.
 - **Run 7 (RELEASE 2 = the commit the orchestrator names; frozen 3126773 + WO-35g docs + WO-35i landing + docs-only):** everything in run 6, plus:
