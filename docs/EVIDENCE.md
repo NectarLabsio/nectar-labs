@@ -41,6 +41,8 @@
 | G9 fresh-clone rehearsal (re-run after WO-38) | PASS — quick start under 2 min; demo:testnet, verify (ui 7, feed 63, keeper 293, x402 17, sdk 178; 0 failed), verify:quick (repo-wide branding check first), docs build and gitleaks (272 commits, no leaks) all exit 0; no "hackathon" in the product sources, the built docs site or search-index.json; 21 README routes 200; Feed MCP stdio + HTTP live; no unbacked claim; payload builds with `website` absent | 2026-11-11T08:57Z–09:00Z | 0af5cdd | evidence/G9/20261111T085721Z/ (see §G9 re-run) |
 | G9 (first run) | FAIL — superseded by the re-run above; one copy-rule breach: docs-site page Project › Evidence (`apps/docs-site/docs/project/evidence.md:11`, built to /project/evidence) says "built for the NEAR Hackathon". Everything else passed: quick start in about 3 min, demo:testnet / verify / docs build / gitleaks (268 commits) exit 0, Feed MCP stdio + HTTP live with no env, ids answer on RPC | 2026-11-11T08:43Z–08:50Z | c5f6349 | evidence/G9/20261111T084317Z/ (see §G9) |
 
+Log notes: 2026-11-12: absolute home-directory paths in evidence logs replaced by `~/` at Kunal's request; no other content changed.
+
 Block format (one per run, newest first within a gate):
 
 ```

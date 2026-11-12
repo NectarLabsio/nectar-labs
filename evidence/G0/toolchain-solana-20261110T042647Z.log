@@ -19,17 +19,17 @@ Preparing pnpm@10.34.9 for immediate activation...
 downloading stable installer
   ✨ stable commit 0f131d3 initialized
 Adding 
-export PATH="/Users/lemmalabs/.local/share/solana/install/active_release/bin:$PATH" to /Users/lemmalabs/.profile
+export PATH="~/.local/share/solana/install/active_release/bin:$PATH" to ~/.profile
 
 Close and reopen your terminal to apply the PATH changes or run the following in your existing shell:
   
-export PATH="/Users/lemmalabs/.local/share/solana/install/active_release/bin:$PATH"
+export PATH="~/.local/share/solana/install/active_release/bin:$PATH"
 
     Updating git repository `https://github.com/solana-foundation/anchor`
 warning: spurious network error (3 tries remaining): SecureTransport error: I/O error.; class=Net (12)
 warning: spurious network error (2 tries remaining): error receiving data from socket: Can't assign requested address; class=Net (12)
 warning: spurious network error (1 try remaining): failed to resolve address for github.com: nodename nor servname provided, or not known; class=Net (12)
-error: failed to clone into: /Users/lemmalabs/.cargo/git/db/anchor-3eeed4e738e6d335
+error: failed to clone into: ~/.cargo/git/db/anchor-3eeed4e738e6d335
 
 Caused by:
   network failure seems to have happened

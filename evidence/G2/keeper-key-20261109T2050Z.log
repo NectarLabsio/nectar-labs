@@ -22,8 +22,8 @@
 
 Added access key = ed25519:Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ to keeper.nectar.testnet.
 
-The data for the access key is saved in a file /Users/lemmalabs/.near-credentials/testnet/keeper.nectar.testnet/ed25519_Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ.json
-The data for the access key is saved in a file /Users/lemmalabs/.near-credentials/testnet/keeper.nectar.testnet.json
+The data for the access key is saved in a file ~/.near-credentials/testnet/keeper.nectar.testnet/ed25519_Gx7eX95TzYQq4c4pjg2ZfsHWdtUw9csLMfETKswnyXgQ.json
+The data for the access key is saved in a file ~/.near-credentials/testnet/keeper.nectar.testnet.json
 
 
 Here is your console command if you need to script it or re-run:
