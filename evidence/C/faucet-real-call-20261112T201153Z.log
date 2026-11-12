@@ -1,0 +1,40 @@
+C4 real faucet_mint call, signer borrower1.nectar.testnet (not the demo account), 2026-11-12T20:11:53Z, commit 27c8b95, mock-ft wasm e3d4ded5…
+├  Unsigned transaction:
+│    signer_id:    borrower1.nectar.testnet
+│    receiver_id:  nvdax-mock.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  faucet_mint
+│                       args:         {}
+│                       gas:          30.0 Tgas
+│                       deposit:      0.00093 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:Dpn6xupWdsxoixqi5e1kgB8ge4Ze9h9aSiiG67ic2wjV
+│    Signature:  ed25519:5rUj6sAus3GPuTJbZvBiooMtU2E7M1iYgXq5jXVY6mGm8AChcbvMCPUJ3mzkZ7xvrVc3Rw21YD1PVcmYdmkM2e7k
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 2.4 Tgas
+│    Transaction fee: 0.0002141961863781 NEAR
+│    Transaction ID: 2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nvdax-mock.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nep141","version":"1.0.0","event":"ft_mint","data":[{"owner_id":"borrower1.nectar.testnet","amount":"5000000","memo":"faucet"}]}
+│    [36mLogs [borrower1.nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+├  Function execution return value:
+│    Empty return value
+│     [0m
+
+
+The "faucet_mint" call to <nvdax-mock.nectar.testnet> on behalf of <borrower1.nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nvdax-mock.nectar.testnet faucet_mint json-args {} prepaid-gas '30.0 Tgas' attached-deposit '0.00093 NEAR' sign-as borrower1.nectar.testnet network-config testnet sign-with-keychain send[39m
+
