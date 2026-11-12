@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { isHealthView, isPositionView, positionIdOf } from '../src/abi.ts';
 import { NearCoreReader } from '../src/chain.ts';
+import { fallbackRpc, nearRpcUrls } from '../src/near-rpc.ts';
 import { isPreLiqBreached } from '../src/health.ts';
 import { loadRepoIds } from '../src/repo-config.ts';
 
@@ -14,7 +15,7 @@ const enabled = process.env.NECTAR_IT === '1' && core !== null;
 const rpc = process.env.NEAR_RPC_URL || 'https://test.rpc.fastnear.com';
 
 describe('testnet integration (read-only)', { skip: enabled ? false : 'set NECTAR_IT=1' }, () => {
-  const reader = new NearCoreReader(rpc, core as string);
+  const reader = new NearCoreReader(fallbackRpc({ urls: nearRpcUrls({ NEAR_RPC_URL: rpc }) }).provider, core as string);
 
   it('contract_version answers', async () => {
     const { value, blockHeight } = await reader.view('contract_version', {});

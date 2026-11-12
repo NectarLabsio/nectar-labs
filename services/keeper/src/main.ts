@@ -4,6 +4,7 @@
 
 import { BASE_CONFIRM_UNSUPPORTED, BaseRelay, ChainRefusedError, ViemEvmPort, assertBaseSepoliaRpc, loadFoundryKeystore, rawKeyEnvVars } from './base.ts';
 import { NearCoreReader, NearKeeperWriter } from './chain.ts';
+import { fallbackRpc } from './near-rpc.ts';
 import { ConfigError, loadConfig } from './config.ts';
 import { KeeperDb } from './db.ts';
 import { Keeper } from './keeper.ts';
@@ -30,7 +31,10 @@ async function main(): Promise<void> {
     }
     throw e;
   }
-  const reader = new NearCoreReader(cfg.rpcUrl, cfg.coreAccountId, cfg.keeperAccountId, key.publicKey);
+  // WO-35k: one fallback provider for every NEAR RPC call (views, access key, tx send); logs carry the endpoint host only.
+  const near = fallbackRpc({ urls: cfg.rpcUrls, log: (level, msg, f) => log[level](msg, f) });
+  log.info('near_rpc_endpoints', { endpoints: near.status().endpoints.join(',') });
+  const reader = new NearCoreReader(near.provider, cfg.coreAccountId, cfg.keeperAccountId, key.publicKey);
   try {
     const allowance = await assertNotFullAccess(reader, cfg.keeperAccountId);
     if (allowance.kind === 'unknown') log.warn('allowance_unknown_at_startup', { reason: allowance.reason });
@@ -42,7 +46,7 @@ async function main(): Promise<void> {
     }
     throw e;
   }
-  const writer = new NearKeeperWriter(cfg.rpcUrl, cfg.keeperAccountId, key.secretKey, cfg.coreAccountId, cfg.gasTgas);
+  const writer = new NearKeeperWriter(near.provider, cfg.keeperAccountId, key.secretKey, cfg.coreAccountId, cfg.gasTgas);
   const db = new KeeperDb(cfg.dbPath);
   const keeper = new Keeper(reader, writer, db, log, { pollMs: cfg.pollMs, pageSize: cfg.pageSize });
   // P2 Solana relay: only with a fee-payer keypair (path from KEEPER_SOLANA_KEYPAIR; the key is never logged).
@@ -102,7 +106,7 @@ async function main(): Promise<void> {
       return;
     }
   }
-  const server = startHealthServer(keeper.status, db, cfg.pollMs, cfg.healthPort, cfg.healthHost, Date.now, relay?.status ?? null, baseRelay?.status ?? null);
+  const server = startHealthServer(keeper.status, db, cfg.pollMs, cfg.healthPort, cfg.healthHost, Date.now, relay?.status ?? null, baseRelay?.status ?? null, near.status);
   const ac = new AbortController();
   const stop = (): void => {
     log.info('shutdown');

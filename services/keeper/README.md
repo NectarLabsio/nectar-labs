@@ -13,6 +13,9 @@ Local health maths (`src/health.ts`) is a logged cross-check only, pinned to `co
 ```bash
 # required: KEEPER_KEY_PATH (0600 JSON: account_id, public_key, private_key; no default key)
 # ids: CORE_ACCOUNT_ID, KEEPER_ACCOUNT_ID default to accounts.core / accounts.keeper in packages/config/config.yaml
+# NEAR RPC (WO-35k): every call (views, access key, tx send) walks FastNEAR ×2, dRPC, Intear (F-413, keyless); 429 / 5xx / timeout
+#   rotates with backoff. NEAR_RPC_URL goes first (loopback or NEAR_RPC_FALLBACK=off = alone); NEAR_RPC_URLS = exact list.
+#   /healthz `rpc`: endpoint hosts, last_served, failovers, cooling. Logs `rpc_failover` / `rpc_endpoint` carry the host only.
 # optional: NEAR_RPC_URL, KEEPER_POLL_MS, KEEPER_PAGE_SIZE, KEEPER_GAS_TGAS (≤300), KEEPER_HEALTH_PORT (8787),
 #           KEEPER_HEALTH_HOST (127.0.0.1), KEEPER_DB_PATH (~/.nectar/keeper.sqlite)
 pnpm --filter keeper start

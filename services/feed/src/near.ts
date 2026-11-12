@@ -1,17 +1,19 @@
 // near-api-js 7.4.0 adapters for the feed (read-only; F-012). Names checked against the installed
-// package's type definitions: JsonRpcProvider({url}).callFunctionRaw({contractId, method, args,
-// blockQuery}) and .viewTransactionStatusWithReceipts({txHash, accountId, waitUntil}).
+// package's type definitions: Provider.callFunctionRaw({contractId, method, args, blockQuery}) and
+// .viewTransactionStatusWithReceipts({txHash, accountId, waitUntil}). WO-35k: both take the fallback provider from
+// near-rpc.ts (FastNEAR x2, dRPC, Intear; rotate on 429 / 5xx / timeout with backoff), shared by every view caller.
 
-import { JsonRpcProvider } from 'near-api-js';
+import type { Provider } from 'near-api-js';
+import { TESTNET_RPC_FALLBACKS, nearRpcUrls } from './near-rpc.ts';
 import type { LogBatch } from './db.ts';
 import type { TxOutcomeFetcher, ViewReader, ViewResult } from './sources.ts';
 
 export class NearViewReader implements ViewReader {
-  private readonly provider: JsonRpcProvider;
+  private readonly provider: Provider;
   private readonly contractId: string;
 
-  constructor(rpcUrl: string, contractId: string) {
-    this.provider = new JsonRpcProvider({ url: rpcUrl });
+  constructor(provider: Provider, contractId: string) {
+    this.provider = provider;
     this.contractId = contractId;
   }
 
@@ -23,12 +25,12 @@ export class NearViewReader implements ViewReader {
 }
 
 export class NearTxOutcomeFetcher implements TxOutcomeFetcher {
-  private readonly provider: JsonRpcProvider;
+  private readonly provider: Provider;
   private readonly senderId: string;
   private readonly contractId: string;
 
-  constructor(rpcUrl: string, senderId: string, contractId: string) {
-    this.provider = new JsonRpcProvider({ url: rpcUrl });
+  constructor(provider: Provider, senderId: string, contractId: string) {
+    this.provider = provider;
     this.senderId = senderId;
     this.contractId = contractId;
   }
@@ -45,33 +47,16 @@ export class NearTxOutcomeFetcher implements TxOutcomeFetcher {
   }
 }
 
-/**
- * NEAR testnet RPC fallback order (WO-34k). D-025 primary first; then the other FastNEAR host (F-369: answered
- * `status` with chain_id testnet, not on the providers page); then dRPC and Intear (F-369: listed on
- * docs.near.org/api/rpc/providers, not probed). rpc.testnet.near.org is left out (deprecated, throttled; F-369).
- */
-export const DEFAULT_RPC_FALLBACKS = [
-  'https://test.rpc.fastnear.com',
-  'https://rpc.testnet.fastnear.com',
-  'https://near-testnet.drpc.org',
-  'https://testnet-rpc.intea.rs',
-] as const;
+/** NEAR testnet RPC fallback order: near-rpc.ts TESTNET_RPC_FALLBACKS (mirror of packages/sdk/src/rpc.ts; F-413). */
+export const DEFAULT_RPC_FALLBACKS = TESTNET_RPC_FALLBACKS;
 
 /**
- * NEAR_RPC_URLS (comma list, in order) > NEAR_RPC_URL alone (as before: an explicit single endpoint, e.g. a
- * sandbox, never falls back to testnet) > DEFAULT_RPC_FALLBACKS.
+ * NEAR_RPC_URLS (comma list, exact) > NEAR_RPC_URL first, then DEFAULT_RPC_FALLBACKS (WO-35k: a single FastNEAR URL no longer
+ * runs without a fallback; a loopback sandbox URL or NEAR_RPC_FALLBACK=off stays alone) > DEFAULT_RPC_FALLBACKS.
  */
-export function rpcUrls(env: NodeJS.ProcessEnv): string[] {
-  const blank = (v: string | undefined): boolean => v === undefined || v.trim() === '' || v.startsWith('TODO-');
-  if (!blank(env.NEAR_RPC_URLS)) {
-    const list = [...new Set((env.NEAR_RPC_URLS as string).split(',').map((s) => s.trim()).filter((s) => s !== ''))];
-    if (list.length > 0) return list;
-  }
-  if (!blank(env.NEAR_RPC_URL)) return [(env.NEAR_RPC_URL as string).trim()];
-  return [...DEFAULT_RPC_FALLBACKS];
-}
+export const rpcUrls = (env: NodeJS.ProcessEnv): string[] => nearRpcUrls(env);
 
-/** Tries each backend in order, starting from the last one that answered; rethrows the last error if all fail. */
+/** Tries each backend in order, starting from the last one that answered; rethrows the last error if all fail. (Pre-WO-35k; RPC calls now use near-rpc.ts.) */
 export class Fallback<T> {
   private readonly items: readonly T[];
   private cur = 0;
@@ -121,10 +106,6 @@ export class FallbackTxOutcomeFetcher implements TxOutcomeFetcher {
   }
 }
 
-export const viewReaderFor = (urls: readonly string[], contractId: string): ViewReader =>
-  urls.length === 1 ? new NearViewReader(urls[0] as string, contractId) : new FallbackViewReader(urls.map((u) => new NearViewReader(u, contractId)));
+export const viewReaderFor = (provider: Provider, contractId: string): ViewReader => new NearViewReader(provider, contractId);
 
-export const txFetcherFor = (urls: readonly string[], senderId: string, contractId: string): TxOutcomeFetcher =>
-  urls.length === 1
-    ? new NearTxOutcomeFetcher(urls[0] as string, senderId, contractId)
-    : new FallbackTxOutcomeFetcher(urls.map((u) => new NearTxOutcomeFetcher(u, senderId, contractId)));
+export const txFetcherFor = (provider: Provider, senderId: string, contractId: string): TxOutcomeFetcher => new NearTxOutcomeFetcher(provider, senderId, contractId);

@@ -107,11 +107,16 @@ Railway specifics (PORT injection, Dockerfile path, volumes) are not yet in docs
 | `FEED_HOST` | `127.0.0.1` | `0.0.0.0` | bind address |
 | `FEED_DB_PATH` | `~/.nectar/feed.sqlite` | `/data/feed.sqlite` | SQLite on a volume mounted at `/data` |
 | `FEED_START_BLOCK` | `head` | `head` | `head`, `head-N` or a height; only used when the DB has no cursor |
-| `NEAR_RPC_URLS` | D-025 primary, then F-369 hosts | same | comma list, tried in order; `NEAR_RPC_URL` alone = single endpoint (as before) |
+| `NEAR_RPC_URLS` | FastNEAR ×2, dRPC, Intear (F-413) | same | comma list, exact order. `NEAR_RPC_URL` = that endpoint first, then the same fallbacks (WO-35k); a loopback URL or `NEAR_RPC_FALLBACK=off` stays alone. A 429 / 5xx / timeout rotates to the next endpoint with backoff; logs `rpc_failover` / `rpc_endpoint` carry the host only |
 | `FEED_CORS_ORIGINS` | unset (`*`, no preflight) | SITE_URL,APP_URL | exact origins; others get no allow header and a 403 preflight |
 | `NECTAR_GIT_SHA` | unset | optional | commit reported by `/health` |
 
-`GET /health` (and `/healthz`, unchanged): `last_indexed_block`, `chain_head`, `lag_blocks`, `poll_age_s`, contract ids, version;
-503 until the first poll succeeds. **History on a fresh volume:** starting at `head` (or `head-N`) means events (quotes, settlements,
+`GET /health` (and `/healthz`, unchanged): `last_indexed_block`, `chain_head`, `chain_head_source`, `lag_blocks`, `poll_age_s`,
+`source`, `events_indexed`, `history`, `rpc`, contract ids, version; 503 until the first poll succeeds. **`history`** (WO-35k, also on
+`/healthz` and `/api/settlements`): `"indexed"` = a Neardata block tail feeds the event tables; `"unavailable"` = views mode
+(`FEED_INDEXER=views`), no event history, so `/api/settlements` answers `items: []` (never rows synthesized from view status changes).
+`chain_head` in views mode is the block height of the latest final view (`chain_head_source: "view_block"`, `lag_blocks: 0`); with
+Neardata it is the tail's final height, never below `last_indexed_block` (`"neardata_final"`). `rpc`: endpoint hosts in order,
+`last_served`, `failovers`, `cooling`. **History on a fresh volume:** starting at `head` (or `head-N`) means events (quotes, settlements,
 pre-liquidations) emitted before that block are not in the DB; `/api/feed` is complete (current views), `/api/asset/{id}` history and
 `/api/settlements` begin at the start block. A kept volume resumes from its cursor. No request logging (no IPs, no Origin values).
