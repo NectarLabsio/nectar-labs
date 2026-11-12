@@ -28,5 +28,5 @@ Write only apps/docs-site/, README.md, docs/*.md except FACTS/EVIDENCE, SECURITY
    - zod GHSA-mrhx-c7xc-m3w5 (F-451): 3.25.76 only via @x402/core; our zod import (services/feed/src/mcp.ts) resolves 4.6.7. Check the two `@x402/core/http`
      decoders used in services/x402/src/agent.ts: grep node_modules/@x402/core's http entry for zod usage; record whether untrusted input reaches the
      vulnerable API (grep evidence inline).
-5. No absolute /Users/<name>/ paths in any file you own (keep ~/.nectar).
+5. No absolute home-directory paths in any file you own (keep ~/.nectar).
 Tests: `pnpm --filter docs-site build` 0; `pnpm verify:quick` 0; branding check 0. NO Co-Authored-By. Never --no-verify. Report ≤ 8 lines.

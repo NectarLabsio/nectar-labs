@@ -71,7 +71,7 @@
 - **Kunal ~13:40Z (two messages, pre-freeze):** H17 = fire-sales. H16 nfts only if the move_note tests assert new owner repays+closes and old owner cannot
   → **not met** (repay is permissionless by design; tests assert residual collateral + self_settle follow the Note, old owner self_settle refused) →
   tracks stay defi/security/agents. Domain: nectarlabs.io unregistered (F-395) → vercel.app URLs in README and X_POST; URLs fixed before the X post.
-  Footer email unchanged until Kunal confirms. Keep ~/.nectar paths; remove /Users/<name> paths. **Freeze target 2026-11-13 12:00 UTC**:
+  Footer email unchanged until Kunal confirms. Keep ~/.nectar paths; remove absolute home-directory paths paths. **Freeze target 2026-11-13 12:00 UTC**:
   fixes → redeploy production + Feed → freeze → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit.
   In flight: WO-34v (prod acceptance of ca34111), WO-35r (costs, neardata key, Docusaurus/zod, FACTS /Users), WO-35w (web claims: Reserve IS deployed so
   Formula "0 until the Reserve ships" is the wrong line; Base local fork; example params; TEE wording; counters; event empty states; shell.spec allowlist),
@@ -300,7 +300,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T13:56:09Z · commit d764098
+Last activity: 2026-11-12T14:10:05Z · commit 9209e2f
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
