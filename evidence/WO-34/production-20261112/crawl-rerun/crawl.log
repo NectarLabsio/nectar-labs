@@ -1,0 +1,2 @@
+crawl: 90 internal, 41 external, 2 failures, 0 our console errors, 0 page loads with third-party network failures → /Volumes/T7/nectar-labs/.claude/worktrees/agent-abb0e01e75afc115a/evidence/WO-34/production-20261112/crawl-rerun
+exit 1

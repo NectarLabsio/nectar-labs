@@ -2,6 +2,7 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
+| WO-34 production | FAIL. 3 reasons: (1) production APP sends `x-robots-tag: noindex` on https://nectarlabs-app.vercel.app/docs and /docs/start/quick-start; (2) the public docs origin https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app/docs/ answers 200 with no CSP, no X-Frame-Options and no frame-ancestors; (3) https://nectarlabs-app.vercel.app/docs/integrate/feed-rest links to http://127.0.0.1:8788/. PASS: crawl (90 internal 200, 0 of our console errors, no failures in re-run 2 other than script/N/A items), redirects 308/308/307, LH 162/162 ≥ 90 (min 93), host check 12 third-party hosts all on /legal/privacy, 12 storage keys all on /legal/cookies, 0 cookies, SITE/APP headers, Feed health/CORS/MCP, wallet selector 6/6 rows clickable at 1440 and 400. N/A: www, preview noindex, x402, Node runtime log. Not checked: per-route screenshots | 2026-11-12T13:38Z–14:45Z | ca34111 (deployed; web dpl_6yqaQJPFBGYmM8e2Veofgr32BpRw, docs dpl_BtPA8juRKQKGfJbTkkYNEJzTwNNX) | evidence/WO-34/production-20261112/ (see §WO-34 production) |
 | G0 toolchain + facts | PASS | 2026-11-09T23:09Z | b3a9090 | evidence/G0/verifier-20261109T230923Z/ (re-record: F-181/F-182/F-183 now record installed rustc/cargo 1.95.0 and node v22.23.4; network probes reused from verifier-20261109T230153Z; anchor/solana absent = P2 dependency H-TOOLCHAIN-SOLANA; prior FAIL 23:01Z 90af048: see §G0) |
 | G1 contract tests | PASS | 2026-11-09T20:43Z | b721641 | evidence/G1/verifier-20261109T2043Z.log, evidence/G1/verifier-gas-20261109T2043Z.csv (prior FAIL 20:33Z, 3bc0de8: see §G1 history) |
 | G2 testnet deploy | PASS | 2026-11-09T20:55Z | 5f27f44 | evidence/G2/verifier-20261109T2055Z.log (explorer pages returned HTTP 403 to WebFetch; see §G2) |
@@ -1689,3 +1690,54 @@ FAIL reason (criterion "gas per method < 100 Tgas recorded"): 7 public change me
   mock-ft mint / storage_deposit / ft_transfer have no standalone gas row either (ft_transfer runs inside
   the ft_transfer_call totals); flagged for the orchestrator to decide whether G1 scope includes mock-ft.
 Notes: clone tree clean after all runs (no files written by tests). Full log 1032 lines.
+
+## WO-34 production
+
+### WO-34 production acceptance (WO-34v): FAIL, 2026-11-12T13:38Z–14:45Z, deployed commit ca3411115aed1d6c127e2d82ba9f31a163221496
+- Deployments: Vercel web dpl_6yqaQJPFBGYmM8e2Veofgr32BpRw and docs dpl_BtPA8juRKQKGfJbTkkYNEJzTwNNX; Railway project nectar-labs, service feed (/health reports commit fd06e11).
+- URLs: SITE https://nectarlabs.vercel.app · APP https://nectarlabs-app.vercel.app · DOCS https://nectarlabs-app.vercel.app/docs (docs origin https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app) · FEED https://feed-production-2f2776c9.up.railway.app.
+- Scripts ran from a fresh clone of ca34111 at /tmp/verify-wo34v-20261112 and were not modified. Verifier probes were added in the clone and copied into evidence: wallet/wo34v-wallet-probe.mjs, host-check/wo34v-privacy-check.mjs, crawl/wo34v-load-probe.mjs. Everything was read-only. Nothing was signed.
+- WebFetch was not used: no explorer link is part of this gate. Lighthouse JSON reports (24 MB) were not kept; the score tables are in the logs.
+
+1. Crawl: PASS on the re-run, with 1 FAIL reason (the localhost link).
+   - Run 1 (`crawl.mjs`, concurrency 4) ran alongside LH and the inventory on the same host: 119 internal routes, 43 external, exit 1. Its 4 failures: 2 page.goto load timeouts on SITE `/` at 1440 px (dark and light), APP `/` → `/feed`, and www.
+   - The SITE `/` timeout did not reproduce. crawl/site-root-load-probe.json: load in 1.7 s, 0.6 s, 0.6 s at 1440 px and 0.5 s at 400 px, nothing pending. Run 1 also listed 71 page loads where FastNEAR returned a 429 without a CORS header. The script counts these as third party.
+   - Run 2 (`--polite`, crawl-rerun/): 90 internal routes, all final 200, 0 of our console errors, 0 third-party failures, exit 1. The remaining 2 failures are not product failures:
+     - (a) APP `/` answers 307 with the relative `Location: /feed`. The script compares against the absolute URL. The criterion "APP / → /feed" is met.
+     - (b) www: N/A, because *.vercel.app has no www host. curl reaches nothing.
+   - Run 2 found fewer routes than run 1 because the live /position/N and /note/p-N links were not rendered during run 2.
+   - External links: testnet.nearblocks.io returns 403 and explorer.solana.com / solana.com return 429. These are bot walls, which the script treats as soft warnings.
+   - **FAIL: https://nectarlabs-app.vercel.app/docs/integrate/feed-rest links to http://127.0.0.1:8788/.** That link never answers for a visitor (crawl-rerun/localhost-link.txt).
+   - Redirects: SITE /borrow?asset=NVDAx → 308 APP same path ✓; SITE /docs/security/audits → 308 APP ✓; APP /security, /about, /legal/privacy → 308 SITE ✓; APP / → 307 /feed ✓.
+   - APP `/docs/` → 308 `/docs` is Next's trailing-slash normalisation, and /docs renders 200. Recorded, not a failure.
+   - Not checked: per-route screenshots at 1440 and 400 px. crawl.mjs takes none, and the verifier limit is one screenshot per gate. The crawl covered all 4 variants (both themes × 1440/400) for console errors.
+2. Lighthouse a11y (`LH_BASE_URL` + `LH_ROUTES`, script unchanged, dark + light): PASS.
+   - SITE 11 routes: 22/22 at 100.
+   - APP 14 routes: 28/28 at 100.
+   - DOCS, all 56 sitemap routes: 112/112 ≥ 90, min 93 (/docs/start/quick-start, /docs/integrate/feed-rest, /docs/integrate/agent-skill-x402). lighthouse/{site,app,docs}.log, each exit 0.
+3. Host check: PASS. The inventory spec ran unchanged against production (E2E_INVENTORY=1, real Chrome, fresh profile per combo, 4 combos plus every wallet): 6/6 passed in 5.5 min with 0 CSP violations.
+   - 6/6 wallets opened with no signing: Meteor, Intear, Ledger, Nightly, Ethereum Wallets, NEAR CLI.
+   - 14 hosts were measured. 12 are third party: evm-on-near.dev, fonts.cdnfonts.com, mc.meteorwallet.app, meteorwallet.app, near-testnet.drpc.org, raw.githubusercontent.com, rpc.testnet.fastnear.com, rsms.me, storage.herewallet.app, test.rpc.fastnear.com, testnet-rpc.intea.rs (declared, not reached), wallet.intear.tech. All 12 appear in backticks on SITE /legal/privacy; 0 are missing.
+   - The host set equals the committed data-inventory.json apart from the own hosts.
+   - 0 cookies. All 12 storage keys appear on SITE /legal/cookies; the IndexedDB stores match the documented `hot-connector/wallets/<wallet id>:<version>` plus each listed id.
+   - `nectar-theme` was not set in this run, because the spec seeds it only on localhost.
+   - Files: host-check/{data-inventory.json,.md, privacy-cookies-check.json, inventory-vs-committed.txt, inventory-run.log}.
+4. Headers (headers.txt, captured 13:38Z): FAIL, 2 reasons.
+   - SITE `/`, SITE /legal/privacy, APP /feed and APP /borrow all send the same CSP with exact hosts. The CSP lists the 12 hosts above plus api.devnet.solana.com, with `frame-src https://wallet.intear.tech`. These pages also send `frame-ancestors 'none'`, X-Frame-Options DENY, HSTS max-age=63072000; includeSubDomains, nosniff and Referrer-Policy. No noindex on SITE `/` or APP /feed ✓.
+   - **FAIL (1): production APP sends `x-robots-tag: noindex` on https://nectarlabs-app.vercel.app/docs and https://nectarlabs-app.vercel.app/docs/start/quick-start.** It is most likely passed through from the docs origin by the /docs proxy.
+   - **FAIL (2): the docs origin https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app/docs/ is public** (200 without auth, / → 307 /docs/). It sends HSTS and noindex but no CSP, no X-Frame-Options and no frame-ancestors.
+   - Extra hosts:
+     - https://nectar-labs-web.vercel.app serves the whole product: `/` is the landing page and `/feed` answers 200 with no host-split redirect. It sends the same security headers and **no noindex**, so it is an indexable duplicate of production. This is a finding for the fix list.
+     - https://nectar-labs-web-kunals-projects-35d3a237.vercel.app serves the same with `x-robots-tag: noindex`.
+   - Preview noindex: N/A (previews are behind Vercel login).
+   - Feed: PASS.
+     - /health returns 200 with `lag_blocks` 0 and `last_indexed_block` 277370086. Note: that is above `chain_head` 277297242 in the same body.
+     - CORS: SITE and APP get an exact-origin ACAO on GET and on the OPTIONS /mcp preflight (204). https://evil.example.com gets no ACAO on GET, and its preflight is refused with 403.
+     - MCP `tools/list` POST returns 200 with the tools (get_exit_capacity, preview_borrow, list_quotes, explain_limit, …).
+     - Feed responses carry no HSTS header. Observation only.
+5. Wallet connect on APP /borrow: PASS (wallet/wallet-probe.json, wallet/selector-400.png).
+   - The real near-connect selector lists 6 rows at 1440 and at 400 px.
+   - Each row is fully inside the viewport, and elementFromPoint at its centre is the row.
+   - A Playwright trial click on the first row is actionable. Nothing was signed.
+   - x402 hosted: N/A (D-031).
+- Node runtime (nodejs22.x): N/A. The verifier has no Vercel log access, and no production function log was visible.

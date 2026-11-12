@@ -1,0 +1,172 @@
+[
+  {
+    "viewport": "1440x900",
+    "rowCount": 6,
+    "rows": [
+      {
+        "name": "Meteor Wallet",
+        "box": [
+          527,
+          268,
+          386,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Intear Wallet",
+        "box": [
+          527,
+          340,
+          386,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Ledger",
+        "box": [
+          527,
+          412,
+          386,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Nightly Wallet",
+        "box": [
+          527,
+          484,
+          386,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Ethereum Wallets",
+        "box": [
+          527,
+          556,
+          386,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "NEAR CLI",
+        "box": [
+          527,
+          628,
+          386,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      }
+    ],
+    "firstRowTrialClick": "ok (actionable: visible, stable, receives events)",
+    "consoleErrors": [
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Or",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Or",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Or",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://rpc.testnet.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Or",
+      "Failed to load resource: net::ERR_FAILED"
+    ]
+  },
+  {
+    "viewport": "400x860",
+    "rowCount": 6,
+    "rows": [
+      {
+        "name": "Meteor Wallet",
+        "box": [
+          16,
+          420,
+          368,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Intear Wallet",
+        "box": [
+          16,
+          492,
+          368,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Ledger",
+        "box": [
+          16,
+          564,
+          368,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Nightly Wallet",
+        "box": [
+          16,
+          636,
+          368,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "Ethereum Wallets",
+        "box": [
+          16,
+          708,
+          368,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      },
+      {
+        "name": "NEAR CLI",
+        "box": [
+          16,
+          780,
+          368,
+          64
+        ],
+        "fullyInViewport": true,
+        "topmostAtCentre": true
+      }
+    ],
+    "firstRowTrialClick": "ok (actionable: visible, stable, receives events)",
+    "consoleErrors": [
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Or",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Or",
+      "Failed to load resource: net::ERR_FAILED",
+      "Access to fetch at 'https://test.rpc.fastnear.com/' from origin 'https://nectarlabs-app.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Or",
+      "Failed to load resource: net::ERR_FAILED"
+    ]
+  }
+]

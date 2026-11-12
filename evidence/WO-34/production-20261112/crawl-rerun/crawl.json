@@ -1,0 +1,2711 @@
+{
+  "generated": "2026-11-12T14:11:00.940Z",
+  "site": "https://nectarlabs.vercel.app",
+  "app": "https://nectarlabs-app.vercel.app",
+  "docs": "https://nectarlabs-app.vercel.app/docs",
+  "variants": [
+    "dark@1440",
+    "light@1440",
+    "dark@400",
+    "light@400"
+  ],
+  "politeness": {
+    "polite": true,
+    "concurrency": 1,
+    "delayMs": 1500
+  },
+  "ourConsoleErrors": 0,
+  "thirdPartyNetworkFailures": [],
+  "redirects": [
+    {
+      "label": "APP / → /feed",
+      "url": "https://nectarlabs-app.vercel.app/",
+      "host": "nectarlabs-app.vercel.app",
+      "status": 307,
+      "location": "/feed",
+      "want": "307 https://nectarlabs-app.vercel.app/feed",
+      "ok": false
+    },
+    {
+      "label": "app route on SITE → APP",
+      "url": "https://nectarlabs.vercel.app/borrow?asset=NVDAx",
+      "host": "nectarlabs.vercel.app",
+      "status": 308,
+      "location": "https://nectarlabs-app.vercel.app/borrow?asset=NVDAx",
+      "want": "308 https://nectarlabs-app.vercel.app/borrow?asset=NVDAx",
+      "ok": true
+    },
+    {
+      "label": "SITE /docs/* → APP (legal pages link /docs/<slug>)",
+      "url": "https://nectarlabs.vercel.app/docs/security/audits",
+      "host": "nectarlabs.vercel.app",
+      "status": 308,
+      "location": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "want": "308 https://nectarlabs-app.vercel.app/docs/security/audits",
+      "ok": true
+    },
+    {
+      "label": "landing route on APP → SITE",
+      "url": "https://nectarlabs-app.vercel.app/security",
+      "host": "nectarlabs-app.vercel.app",
+      "status": 308,
+      "location": "https://nectarlabs.vercel.app/security",
+      "want": "308 https://nectarlabs.vercel.app/security",
+      "ok": true
+    },
+    {
+      "label": "www.<site> → SITE",
+      "url": "https://nectarlabs.vercel.app/talk",
+      "host": "www.nectarlabs.vercel.app",
+      "status": 0,
+      "location": null,
+      "want": "301 https://nectarlabs.vercel.app/talk",
+      "ok": false
+    }
+  ],
+  "routes": [
+    {
+      "url": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 42
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/feed",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/feed",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 35
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/borrow",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/borrow",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/shield",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/shield",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/shield",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 38
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/new",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/quote/new",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/quote/new",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/reserve",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/reserve",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/reserve",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 37
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/notes",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/notes",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/notes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 38
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 69
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/keepers",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/keepers",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/keepers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/sdk",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/sdk",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/sdk",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/feed-mcp",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/feed-mcp",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/feed-mcp",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/status",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/status",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/status",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/changelog",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/changelog",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/changelog",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/security",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/security",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/security",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 34
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/brand",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/brand",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 41
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/about",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/about",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/about",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/talk",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/talk",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/talk",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 38
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/privacy",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/legal/privacy",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/legal/privacy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 46
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/cookies",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/legal/cookies",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/legal/cookies",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/terms",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/legal/terms",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/legal/terms",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 45
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/disclaimers",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/legal/disclaimers",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/legal/disclaimers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 44
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/quote/new",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/quote",
+          "status": 307
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/quote/new",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/agents",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/agents",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/agents",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/console",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/console",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/console",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 33
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 105
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/changelog",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/changelog",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/changelog",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 36
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 59
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/cramer-limits",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/cramer-limits",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/cramer-limits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 70
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/pappus-quotes",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/pappus-quotes",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/pappus-quotes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 73
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/premium-and-fee-index",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/premium-and-fee-index",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/premium-and-fee-index",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 70
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/pre-liquidation",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/pre-liquidation",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/pre-liquidation",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 71
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/project/roadmap",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/project/roadmap",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/project/roadmap",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 58
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/feed",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/",
+          "status": 307
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/feed",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 35
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/whitepaper",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/whitepaper",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/whitepaper",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 83
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/trust-model",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/trust-model",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/trust-model",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/project/brand",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/project/brand",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/project/brand",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/project/team",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/project/team",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/project/team",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 53
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/legal/privacy",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/legal/privacy",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/legal/privacy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 93
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/legal/cookies",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/legal/cookies",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/legal/cookies",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 57
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/legal/terms",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/legal/terms",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/legal/terms",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 84
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/legal/disclaimers",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/legal/disclaimers",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/legal/disclaimers",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 68
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/operations/runbook",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/operations/runbook",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/operations/runbook",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 72
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/notes?tab=deposits",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/notes?tab=deposits",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/notes?tab=deposits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 35
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/project/prior-work",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/project/prior-work",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/project/prior-work",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 52
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/audits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/operations/monitoring",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/operations/monitoring",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/operations/monitoring",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/feed-rest",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/feed-rest",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/feed-rest",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 66
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/oneclick-depth",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/oneclick-depth",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/oneclick-depth",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 64
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/run-a-keeper",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/run-a-keeper",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/run-a-keeper",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 66
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/post-quotes",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/post-quotes",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/post-quotes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 60
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/remote-collateral-solana",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/remote-collateral-solana",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/remote-collateral-solana",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 77
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/integrate/agent-skill-x402",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/integrate/agent-skill-x402",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/integrate/agent-skill-x402",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 78
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/contract-reference",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/contract-reference",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/contract-reference",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 73
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand/mark.svg",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/brand/mark.svg",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/brand/mark.svg",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand/mark-256.png",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/brand/mark-256.png",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/brand/mark-256.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand/mark-flat-96.png",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/brand/mark-flat-96.png",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/brand/mark-flat-96.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand/wordmark-dark-100.png",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/brand/wordmark-dark-100.png",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/brand/wordmark-dark-100.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand/wordmark-muted-100.png",
+      "status": 200,
+      "finalUrl": "https://nectarlabs.vercel.app/brand/wordmark-muted-100.png",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/brand/wordmark-muted-100.png",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 0
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/docs/security/trust-model",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/trust-model",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/docs/security/trust-model",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/trust-model",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/docs/security/audits",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/docs/security/audits",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/audits",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/docs/security/disclosure",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/disclosure",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/docs/security/disclosure",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/disclosure",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/docs/start/live-on-testnet",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/docs/start/live-on-testnet",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 105
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/docs/protocol/oracle-policy",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/oracle-policy",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/docs/protocol/oracle-policy",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/oracle-policy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/docs/protocol/quoter-tee",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/quoter-tee",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/docs/protocol/quoter-tee",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/quoter-tee",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 68
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/docs/concepts/position-notes",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/position-notes",
+      "hops": [
+        {
+          "url": "https://nectarlabs.vercel.app/docs/concepts/position-notes",
+          "status": 308
+        },
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/position-notes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/aggregate-limit",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/aggregate-limit",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/aggregate-limit",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 77
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/weekend-oracle-guard",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/weekend-oracle-guard",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/weekend-oracle-guard",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 76
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/quoter-tee",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/quoter-tee",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/quoter-tee",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 68
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/position-notes",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/position-notes",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/position-notes",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/shields",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/shields",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/shields",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 72
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/profit-lock",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/profit-lock",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/profit-lock",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/nectar-reserve",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/nectar-reserve",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/nectar-reserve",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/oracle-policy",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/oracle-policy",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/oracle-policy",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/operations/upgrades",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/operations/upgrades",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/operations/upgrades",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/corporate-actions",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/corporate-actions",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/corporate-actions",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 74
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/fee-stack",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/fee-stack",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/fee-stack",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 77
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/changelog/docs-and-spec",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/changelog/docs-and-spec",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/changelog/docs-and-spec",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 34
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/exit-gap",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/exit-gap",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/exit-gap",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 67
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/concepts/notice-periods",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/concepts/notice-periods",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/concepts/notice-periods",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 66
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/threats",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/threats",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/threats",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 52
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/keys-and-roles",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/keys-and-roles",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/keys-and-roles",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 58
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/disclosure",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/security/disclosure",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/security/disclosure",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 55
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/operations/incidents",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/operations/incidents",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/operations/incidents",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 52
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/chain-signatures",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/chain-signatures",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/chain-signatures",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 62
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/settlement-flow",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/settlement-flow",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/settlement-flow",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 65
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/solana-vault",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/solana-vault",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/solana-vault",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 63
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/preimage-format",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/preimage-format",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/preimage-format",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 59
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/protocol/storage-and-gas",
+      "status": 200,
+      "finalUrl": "https://nectarlabs-app.vercel.app/docs/protocol/storage-and-gas",
+      "hops": [
+        {
+          "url": "https://nectarlabs-app.vercel.app/docs/protocol/storage-and-gas",
+          "status": 200
+        }
+      ],
+      "console": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "thirdParty": {
+        "dark@1440": [],
+        "light@1440": [],
+        "dark@400": [],
+        "light@400": []
+      },
+      "links": 64
+    }
+  ],
+  "externals": [
+    {
+      "href": "https://near.org/",
+      "from": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://solana.com/",
+      "from": "https://nectarlabs.vercel.app/",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://docs.near.org/chain-abstraction/chain-signatures",
+      "from": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://outlayer.ai/",
+      "from": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://near-intents.org/",
+      "from": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://outlayer.fastnear.com/docs/getting-started",
+      "from": "https://nectarlabs-app.vercel.app/docs",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://docs.near-intents.org/",
+      "from": "https://nectarlabs-app.vercel.app/docs",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://explorer.solana.com/tx/5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv?cluster=devnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://explorer.solana.com/tx/3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6?cluster=devnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/E2suM2LC4ac2AE9TZ66AGY72ZDrBdu1Yz8pEnwAs65hz",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/4vW2tPF5Gqemkm5uoafQE6eaXidSMSCuqLcDVMTTB77b",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/7UFpexpdEH2nhmDVqXar8vZHQcK1iBFXznu9rybn24wU",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/EskZKj9sXxcpTWYoKRiagRvvkh3H5hjz8KQFL7qNRQQ7",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt",
+      "from": "https://nectarlabs-app.vercel.app/docs/project/evidence",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://x.com/xNectarNetwork",
+      "from": "https://nectarlabs.vercel.app/talk",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/7J1DsrKP19HTd1c2AWuoRbW2AyCUR75nd8hLGwNuKPAr",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/keeper-v2.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/8hNqxAdC61nAwmTWeUbK5auA4CbB35ppkPcnNX7PYe5C",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://explorer.solana.com/address/ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW?cluster=devnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 429,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/v1.signer-prod.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/nectar-core.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/keeper.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet-api.outlayer.ai/attestations/by-request/15148",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/buyer1.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/buyer2.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://testnet.nearblocks.io/address/borrower1.nectar.testnet",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/live-on-testnet",
+      "status": 403,
+      "ok": false,
+      "note": "bot wall / rate limit: check by hand"
+    },
+    {
+      "href": "https://near-faucet.io/",
+      "from": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://defillama.com/protocol/near-intents",
+      "from": "https://nectarlabs-app.vercel.app/docs/concepts/whitepaper",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "https://defillama.com/protocol/rhea-finance",
+      "from": "https://nectarlabs-app.vercel.app/docs/concepts/whitepaper",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "href": "http://127.0.0.1:8788/",
+      "from": "https://nectarlabs-app.vercel.app/docs/integrate/feed-rest",
+      "status": null,
+      "ok": true,
+      "note": "local-run link, not fetched"
+    }
+  ],
+  "failures": [
+    {
+      "kind": "redirect",
+      "where": "APP / → /feed",
+      "detail": "got 307 /feed; want 307 https://nectarlabs-app.vercel.app/feed"
+    },
+    {
+      "kind": "redirect",
+      "where": "www.<site> → SITE",
+      "detail": "got 0 ; want 301 https://nectarlabs.vercel.app/talk"
+    }
+  ],
+  "warnings": [
+    {
+      "kind": "external-soft",
+      "where": "https://solana.com/",
+      "detail": "status 429 (linked from https://nectarlabs.vercel.app/)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://explorer.solana.com/tx/5fTihnbJz5dPndVbHnwk54WoLxKCtz96HfYaPAveDSJ9jw51BNBJQ9mAbxAjWRWJB8EfsP4wrvhrJcmiFwaULLGv?cluster=devnet",
+      "detail": "status 429 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://explorer.solana.com/tx/3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6?cluster=devnet",
+      "detail": "status 429 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/E2suM2LC4ac2AE9TZ66AGY72ZDrBdu1Yz8pEnwAs65hz",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/4vW2tPF5Gqemkm5uoafQE6eaXidSMSCuqLcDVMTTB77b",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/7UFpexpdEH2nhmDVqXar8vZHQcK1iBFXznu9rybn24wU",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/EskZKj9sXxcpTWYoKRiagRvvkh3H5hjz8KQFL7qNRQQ7",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/HvFX6YRaY64YWss7KBQSpucM1vnVUtHFraQvqjGs6Q1V",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/BemztvL9jzTCm5wzbA8tD7Kj3q7qKEe9fJTLA8Zsn35G",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/5VL1P4kgWAA6GVDjsuZSyWXx3GhKiBfznhLXwdGtHEyx",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/project/evidence)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/7J1DsrKP19HTd1c2AWuoRbW2AyCUR75nd8hLGwNuKPAr",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/EfTCTQbX4Vq2YbQdPPKWik1s56CEkK6e4EW54Q3hw5ay",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/keeper-v2.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/usdc-mock.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nvdax-mock.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/8hNqxAdC61nAwmTWeUbK5auA4CbB35ppkPcnNX7PYe5C",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://explorer.solana.com/address/ENZaNFHosYeNhsjC85K73feMFwX4w8i1dzuhQ3PzpubW?cluster=devnet",
+      "detail": "status 429 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/v1.signer-prod.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/nectar-core.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/keeper.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/txns/FCtApD2LMyPh9hEznyMuCrccvTHWqAhNH2eJ17agMHhe",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/buyer1.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/buyer2.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "external-soft",
+      "where": "https://testnet.nearblocks.io/address/borrower1.nectar.testnet",
+      "detail": "status 403 (linked from https://nectarlabs-app.vercel.app/docs/start/live-on-testnet)"
+    },
+    {
+      "kind": "local-link",
+      "where": "http://127.0.0.1:8788/",
+      "detail": "linked from https://nectarlabs-app.vercel.app/docs/integrate/feed-rest"
+    }
+  ],
+  "truncated": false
+}

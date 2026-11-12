@@ -1,0 +1,42 @@
+{
+  "url": "https://nectarlabs.vercel.app/",
+  "at": "2026-11-12T13:52:44.936Z",
+  "runs": [
+    {
+      "run": 1,
+      "width": 1440,
+      "dclMs": 1404,
+      "loadMs": 1687,
+      "err": null,
+      "pendingAtEnd": [],
+      "failed": []
+    },
+    {
+      "run": 2,
+      "width": 1440,
+      "dclMs": 384,
+      "loadMs": 565,
+      "err": null,
+      "pendingAtEnd": [],
+      "failed": []
+    },
+    {
+      "run": 3,
+      "width": 1440,
+      "dclMs": 475,
+      "loadMs": 570,
+      "err": null,
+      "pendingAtEnd": [],
+      "failed": []
+    },
+    {
+      "run": 4,
+      "width": 400,
+      "dclMs": 372,
+      "loadMs": 517,
+      "err": null,
+      "pendingAtEnd": [],
+      "failed": []
+    }
+  ]
+}
