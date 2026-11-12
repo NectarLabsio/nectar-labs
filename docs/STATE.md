@@ -134,6 +134,12 @@
     docs dpl_DQubre8taPieUo4EBshyyrRNVjcT, web dpl_BJNxqxnSZQWHtiouXYeWknkScxtY (tarball sha256 c1c17da2…ffaa9). Feed stays on 3974b5b (no feed change).
     **PRODUCTION = RELEASE 3 (~16:40Z).** Public smoke PASS (evidence/WO-34/prod-smoke-release3-*.log): 28 routes, 56 docs pages + assets, hydrated
     landing server = hydrated text with 3/3 Base sentences "local fork", Feed link /health. Next: WO-34v3 ‖ G9 run 5 → submission-rc → FINAL_REPORT re-audit.
+  - **~17:10Z ALL GATES GREEN ON RELEASE 3 (5f011bb):** G3b re-runs 7 + 7b PASS (one deviation: nodejs22.x not observable, engines pin);
+    WO-34 production (release 3) PASS on all 4 items (hydrated landing, crawl 90/90, headers/Feed/CORS, LH 100/100); G9 runs 5 + 5b PASS.
+    Docs-only after release 3: WO-35k2 (README G9 pointer, H-ORACLE session window, DEMO_SCRIPT prep), SUBMISSION G9 citation. Product code since
+    5f011bb: none. **submission-rc → this STATE commit** (local tag only; nothing pushed). Next: FINAL_REPORT re-audit (verifier, read-only).
+    Open for Kunal: kill 14369; testnet account id for the real-wallet borrow (mint mock NVDAx first); H-ORACLE A/B (price stale ≈ 2026-11-13 15:10Z;
+    NYSE-hours session needs < 15 min); optional H-NEARDATA key; H2 push + public, H3 X post, H10, H11 video, H12, H14, H1 send.
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
@@ -347,7 +353,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T16:16:33Z · commit f50d9ed
+Last activity: 2026-11-12T17:05:16Z · commit 2ab2a1c
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
