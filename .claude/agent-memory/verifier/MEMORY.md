@@ -5,7 +5,7 @@
 - [G6 1Click recipe](reference_g6_oneclick.md) — feed (not keeper) commands; C-014 amountOutUsd trap; web badge static
 - [G8 copilot recipe](reference_g8_copilot.md) — fixture is Phala sample + throwaway key; loose Key-missing spec; README overclaim trap
 - [G7 signer recipe](reference_g7_signer.md) — tx_status sign-args decode, neg control, code hash; gates.md G7 cmds absent pre-Solana
-- [G9 rehearsal recipe](reference_g9_rehearsal.md) — fresh-clone steps, Feed CORE_ACCOUNT_ID trap, docs-server kill, handoff blocker rule
+- [G9 rehearsal recipe](reference_g9_rehearsal.md) — fresh-clone steps, port-collision trap, docs-site branding grep, handoff classes
 - [G11 v7 contract recipe](reference_g11_v7_contract.md) — single --nocapture run, sr test naming, gitleaks anvil-address trap, GAS formats
 - [G2b v2 deploy recipe](reference_g2b_v2_deploy.md) — code-hash rebuild proof, view arg traps, calendar paging, state drift, stale v1 ids in tests
 - [G3b v2 web recipe](reference_g3b_v2_web.md) — flags-off specs fail with v7 flags on; LH script lacks v7 routes; no tx hashes in module logs
