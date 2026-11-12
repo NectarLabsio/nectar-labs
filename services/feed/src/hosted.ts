@@ -7,6 +7,20 @@ export class HostedConfigError extends Error {}
 
 const blank = (v: string | undefined): boolean => v === undefined || v.trim() === '' || v.startsWith('TODO-');
 
+/**
+ * Optional Neardata (FastNear) key, sent as Bearer. FEED_NEARDATA_API_KEY_PATH (a 0600 file; `~/` expands) wins; else
+ * FEED_NEARDATA_API_KEY holds the value itself (a Railway sealed variable). null = keyless. Callers must never log the key
+ * or its length; this function logs nothing.
+ */
+export function neardataApiKey(env: NodeJS.ProcessEnv, read: (path: string) => string = (p) => readFileSync(p, 'utf8'), home: (p: string) => string = (p) => p): string | null {
+  if (!blank(env.FEED_NEARDATA_API_KEY_PATH)) {
+    const k = read(home((env.FEED_NEARDATA_API_KEY_PATH as string).trim())).trim();
+    return k === '' ? null : k;
+  }
+  if (!blank(env.FEED_NEARDATA_API_KEY)) return (env.FEED_NEARDATA_API_KEY as string).trim();
+  return null;
+}
+
 export interface Listen {
   /** true: REST + `POST /mcp` on one server (FEED_SINGLE_PORT=1). */
   single: boolean;

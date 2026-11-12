@@ -7,7 +7,7 @@ import { LEGACY_CORS, createApi, route, type ApiOptions } from '../src/api.ts';
 import { CorsConfigError, parseCorsOrigins } from '../src/cors.ts';
 import { FeedDb } from '../src/db.ts';
 import { createLogger } from '../src/log.ts';
-import { HostedConfigError, listenConfig, startBlock } from '../src/hosted.ts';
+import { HostedConfigError, listenConfig, neardataApiKey, startBlock } from '../src/hosted.ts';
 import { DEFAULT_RPC_FALLBACKS, Fallback, rpcUrls } from '../src/near.ts';
 import { NeardataSource, type BlockFetcher } from '../src/neardata.ts';
 import { createFeedServer } from '../src/server.ts';
@@ -174,5 +174,22 @@ describe('RPC fallback', () => {
     assert.equal(await run(new Set()), 'b');
     await assert.rejects(run(new Set(['a', 'b', 'c'])), /a|b|c/);
     assert.deepEqual(calls, ['a', 'b', 'b', 'b', 'c', 'a']);
+  });
+});
+
+describe('Neardata key source (FEED_NEARDATA_API_KEY)', () => {
+  const files: Record<string, string> = { '/keys/neardata': 'file-key\n' };
+  const read = (p: string): string => {
+    const v = files[p];
+    if (v === undefined) throw new Error('ENOENT');
+    return v;
+  };
+  it('value from FEED_NEARDATA_API_KEY; the path wins when both are set; neither = keyless', () => {
+    assert.equal(neardataApiKey({ FEED_NEARDATA_API_KEY: ' sealed-key ' }, read), 'sealed-key');
+    assert.equal(neardataApiKey({ FEED_NEARDATA_API_KEY: 'sealed-key', FEED_NEARDATA_API_KEY_PATH: '/keys/neardata' }, read), 'file-key');
+    assert.equal(neardataApiKey({ FEED_NEARDATA_API_KEY_PATH: '/keys/neardata' }, read), 'file-key');
+    assert.equal(neardataApiKey({}, read), null);
+    assert.equal(neardataApiKey({ FEED_NEARDATA_API_KEY: 'TODO-H1', FEED_NEARDATA_API_KEY_PATH: '' }, read), null);
+    assert.throws(() => neardataApiKey({ FEED_NEARDATA_API_KEY_PATH: '/missing', FEED_NEARDATA_API_KEY: 'x' }, read), /ENOENT/);
   });
 });

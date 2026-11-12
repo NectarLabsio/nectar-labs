@@ -13,7 +13,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { createApi, LEGACY_CORS, type ApiOptions } from './api.ts';
 import { parseCorsOrigins } from './cors.ts';
 import { FeedDb } from './db.ts';
-import { feedVersion, listenConfig, startBlock, startBlockLabel } from './hosted.ts';
+import { feedVersion, listenConfig, neardataApiKey, startBlock, startBlockLabel } from './hosted.ts';
 import { Indexer } from './indexer.ts';
 import { createLogger, errMsg } from './log.ts';
 import { seedOneClickFromFixtures } from './fixtures.ts';
@@ -51,7 +51,8 @@ function main(): void {
     const mode = unset(env.FEED_INDEXER) ? 'neardata' : (env.FEED_INDEXER as string);
     if (mode !== 'neardata' && mode !== 'views') throw new Error('FEED_INDEXER must be neardata or views');
     if (mode === 'neardata') {
-      const apiKey = unset(env.FEED_NEARDATA_API_KEY_PATH) ? null : readFileSync(home(env.FEED_NEARDATA_API_KEY_PATH as string), 'utf8').trim();
+      // Key file (FEED_NEARDATA_API_KEY_PATH) wins over the value (FEED_NEARDATA_API_KEY, Railway sealed variable); never logged.
+      const apiKey = neardataApiKey(env, (p) => readFileSync(p, 'utf8'), home);
       const fetcher = new HttpNeardataFetcher(unset(env.FEED_NEARDATA_URL) ? undefined : env.FEED_NEARDATA_URL, apiKey);
       sources.push(
         new NeardataSource(
