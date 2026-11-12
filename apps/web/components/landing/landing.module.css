@@ -82,7 +82,7 @@
 .roll{display:inline-flex;vertical-align:top}
 .roll .dg{display:inline-block;height:1.1em;overflow:hidden;position:relative;transition:width 1.1s var(--ease)}
 .roll .reel{display:block;transition:transform 1.5s var(--ease);transition-delay:var(--d,0ms)}
-.roll .reel>span{display:block;height:1.1em;line-height:1.1em;text-align:center}
+.roll .reel::before{content:"0\A 1\A 2\A 3\A 4\A 5\A 6\A 7\A 8\A 9";display:block;white-space:pre;line-height:1.1em;text-align:center}
 .roll .ch{display:inline-block;height:1.1em;line-height:1.1em}
 .roll.go .reel{animation:rollblur 1.5s var(--ease) both;animation-delay:var(--d,0ms)}
 @keyframes rollblur{0%{filter:blur(0)}25%{filter:blur(1.6px)}75%{filter:blur(.4px)}100%{filter:blur(0)}}

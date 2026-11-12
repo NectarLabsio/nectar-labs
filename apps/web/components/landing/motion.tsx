@@ -19,7 +19,9 @@ export function useReducedMotion(): boolean | null {
   return r;
 }
 
-/** Digits roll on reels; text for assistive tech stays the plain value. `intro` rolls up from zero once on load. */
+/** Digits roll on reels; text for assistive tech stays the plain value. `intro` rolls up from zero once on load.
+ * The reel digits are CSS generated content (landing.module.css `.reel::before`), not DOM text, so crawlers and the page text see only
+ * the value; every glyph column is aria-hidden and the wrapper carries the value as an aria-label plus sr-only text (WO-35w). */
 export function Roll({ value, className, id, intro }: { value: string; className?: string; id?: string; intro?: boolean }) {
   const reduce = useReducedMotion();
   const [shown, setShown] = useState(value);
@@ -48,9 +50,6 @@ export function Roll({ value, className, id, intro }: { value: string; className
         /\d/.test(ch) ? (
           <span key={i} className={s.dg} aria-hidden="true">
             <span className={s.reel} style={{ transform: `translateY(-${Number(chars[i] ?? ch) * 1.1}em)`, transitionDelay: `${i * 55}ms`, ...(instant ? { transition: "none" } : {}) }}>
-              {Array.from({ length: 10 }, (_, k) => (
-                <span key={k}>{k}</span>
-              ))}
             </span>
           </span>
         ) : (

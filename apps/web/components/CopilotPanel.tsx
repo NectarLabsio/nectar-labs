@@ -96,7 +96,7 @@ function VerifiedPanel({ r }: { r: Result }) {
     <div className="stack-sm" aria-live="polite">
       <div className="row">
         {/* R2-12: provenance, not truth. */}
-        {v.verified ? <Badge kind="verified">Signed by an attested NEAR AI TEE</Badge> : <Badge kind="unverified">unverified — hidden</Badge>}
+        {v.verified ? <Badge kind="verified">Verifiable: signed by an attested NEAR AI TEE</Badge> : <Badge kind="unverified">unverified — hidden</Badge>}
         {r.source === "fixture" ? <Badge kind="mock">recorded fixture</Badge> : <Badge kind="live">live</Badge>}
       </div>
       {r.note ? <p className="small dim">Fixture: {r.note}. Chat signature made with a throwaway stand-in key; the Intel quote is a public sample with report_data patched, so DCAP must fail.</p> : null}

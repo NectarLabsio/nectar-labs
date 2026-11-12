@@ -1,4 +1,5 @@
 "use client";
+import { eventsUnindexed } from "./useFeedApi";
 import { Fragment, useEffect, useState } from "react";
 import { Badge } from "@nectar/ui";
 
@@ -7,6 +8,8 @@ type Load<T> = { state: "loading" } | { state: "ok"; data: T; at: string } | { s
 interface AppHealth { ok: boolean; deployed: boolean; core?: string; version?: string; network?: string; error?: string }
 interface FeedHealth {
   ok?: boolean;
+  source?: string;
+  events_indexed?: number;
   configured?: boolean;
   error?: string;
   last_indexed_block?: number | null;
@@ -74,6 +77,7 @@ export function StatusLive() {
               <dt>Last indexed block</dt><dd>{n(feed.data.last_indexed_block)}</dd>
               <dt>Chain head</dt><dd>{n(feed.data.chain_head)}</dd>
               <dt>Lag</dt><dd>{n(feed.data.lag_blocks)} blocks</dd>
+              <dt>Event history</dt><dd data-testid="feed-events">{eventsUnindexed(feed.data) ? "isn't indexed on this host (the Feed reads contract views only)" : `${feed.data.events_indexed ?? "n/a"} events indexed`}</dd>
               <dt>Last poll</dt><dd>{typeof feed.data.poll_age_s === "number" ? `${feed.data.poll_age_s} s ago` : "n/a"}</dd>
               <dt>Version</dt><dd>{feed.data.version ?? "n/a"}{feed.data.commit ? ` (${feed.data.commit.slice(0, 7)})` : ""}</dd>
               {Object.entries(feed.data.contracts ?? {}).map(([k, v]) => (

@@ -157,7 +157,7 @@ function QuoteComposer({ symbol, decimals }: { symbol: string; decimals: number 
           <div className="nx-ph">
             <span className="nx-strong">
               Discount ceiling
-              <Tip label="About the ceiling">The most you will take off the oracle price when a loan settles to you. A TEE may clear you cheaper, never higher.{reserveBps ? ` It must stay below the Reserve's ${pct2(reserveBps)}.` : ""}</Tip>
+              <Tip label="About the ceiling">The most you will take off the oracle price when a loan settles to you. The TEE makes that price computation verifiable and may clear you cheaper, never higher.{reserveBps ? ` It must stay below the Reserve's ${pct2(reserveBps)}.` : ""}</Tip>
             </span>
             <span className="nx-mid nx-num" data-testid="quote-ceiling">{pct2(cap)}</span>
           </div>

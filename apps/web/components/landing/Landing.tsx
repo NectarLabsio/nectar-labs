@@ -12,7 +12,8 @@ import tokC from "@nectar/ui/3d/tokC.webp";
 import tokD from "@nectar/ui/3d/tokD.webp";
 import { docsHref, hostHref } from "@/lib/env";
 import { CopyContact } from "../CopyContact";
-import { useFeature } from "../AppProvider";
+import { useChain, useFeature, useView } from "../AppProvider";
+import type { ExitCapacity } from "@nectar/sdk";
 import { Module, On } from "../FeatureGate";
 import { LandingStats, LiveLimitCard } from "../LandingLive";
 import { ART } from "./art";
@@ -37,23 +38,42 @@ const Pill = ({ href, children }: { href: string; children: React.ReactNode }) =
 );
 const Art = ({ k }: { k: keyof typeof ART }) => <div className={s.tile} dangerouslySetInnerHTML={{ __html: ART[k] }} />;
 
-// Chamber: one position, four states (PRD §4.2 example: 300 mock NVDAx at $185, $28,000 drawn).
-const P = [
-  { badge: "Static lender", big: "$22,200", pct: "40%", fill: 40, sub: "Borrow limit with DEX exit only", q: 0, r: 0, d: 12000, h: 0, hl: "n/a", tone: "var(--ch-static)", m: 0, glow: 0, form: <><em>40%</em> static LTV × $55,500 = <em>$22,200</em></> },
-  { badge: "In session", big: "$47,175", pct: "85%", fill: 85, sub: "Borrow limit with committed quotes, Reserve and DEX depth", q: 65000, r: 5000, d: 12000, h: 4, hl: "4%", tone: "var(--ch-accent)", m: 1, glow: 0.7, form: <>min(85% × $55,500, (1 − <em>4%</em>) × ($65,000 + $5,000 + $12,000) − $28,000) = min($47,175, $50,720) = <em>$47,175</em></> },
-  { badge: "Weekend parameters", big: "$33,600", pct: "60.5%", fill: 60.5, sub: "Market closed: DEX depth counts as zero, haircut 12%", q: 65000, r: 5000, d: 0, h: 12, hl: "12%", tone: "var(--ch-warn)", m: 2, glow: 0.45, form: <>min($47,175, (1 − <em>12%</em>) × ($65,000 + $5,000 + $0) − $28,000) = <em>$33,600</em></> },
-  { badge: "Health below 1", big: "$33,600", pct: "60.5%", fill: 60.5, sub: "Collateral goes to committed quotes first", q: 65000, r: 5000, d: 0, h: 12, hl: "12%", tone: "var(--ch-danger)", m: 2, glow: 1, form: null },
-] as const;
-const PHASES = [
-  ["A static lender stops at 40%.", "A tokenized stock can trade at fair value all week and have no buyer on Saturday night. Lenders price that exit, so the limit stays low."],
-  ["Committed quotes raise the ceiling.", "Market makers escrow USDC behind quotes that can't leave without notice. Add the Reserve and verified DEX depth, and the same 300 shares support up to 85%."],
-  ["The weekend guard tightens it on its own.", "When the market closes or the price is older than 15 minutes, DEX depth drops to zero and the haircut widens to 12%. Nothing outside the contract can switch the session back on."],
-  ["A bad loan sells to a buyer who already committed.", "If health falls below 1, collateral goes to a committed quote at no more than its stated discount. The Reserve fills only after every quote is used."],
-] as const;
+// Chamber: one position, four states (PRD §4.2 example: 300 mock NVDAx at $185, $28,000 drawn). Q and D are example figures; LTV and
+// haircuts are the deployed parameters (config.yaml collaterals[0]: base_ltv_bps, max_nectar_ltv_bps, base/weekend_haircut_bps) and R is
+// the Nectar Reserve read from get_exit_capacity (r_usd_e6), never a hard-coded figure (WO-35w).
+const EX = { v: 55_500, debt: 28_000, q: 80_000, d: 12_000 } as const;
+export interface ExParams { base: number; max: number; h: number; hw: number }
+type Ex = ReturnType<typeof example>;
+const pctOf = (x: number) => `${Number(((x / EX.v) * 100).toFixed(1))}%`;
+const bp = (b: number) => `${Number((b / 100).toFixed(2))}%`;
+function example(p: ExParams, rLive: number | null) {
+  const r = rLive ?? 0;
+  const byLtv = Math.round((EX.v * p.max) / 10_000);
+  const stat = Math.round((EX.v * p.base) / 10_000);
+  const exitS = Math.round(((10_000 - p.h) * (EX.q + r + EX.d)) / 10_000) - EX.debt;
+  const exitW = Math.round(((10_000 - p.hw) * (EX.q + r)) / 10_000) - EX.debt;
+  const sess = Math.max(0, Math.min(byLtv, exitS)), wk = Math.max(0, Math.min(byLtv, exitW));
+  const rT = rLive === null ? "R" : usd(r);
+  const pc = (x: number) => Number(((x / EX.v) * 100).toFixed(1));
+  const states = [
+    { badge: "Static lender", big: usd(stat), pct: pctOf(stat), fill: pc(stat), sub: "Borrow limit with DEX exit only", q: 0, r: 0, d: EX.d, h: 0, hl: "n/a", tone: "var(--ch-static)", m: 0, glow: 0, form: <><em>{bp(p.base)}</em> static LTV × {usd(EX.v)} = <em>{usd(stat)}</em></> },
+    { badge: "In session", big: usd(sess), pct: pctOf(sess), fill: pc(sess), sub: "Borrow limit with committed quotes, Reserve and DEX depth", q: EX.q, r, d: EX.d, h: p.h / 100, hl: bp(p.h), tone: "var(--ch-accent)", m: 1, glow: 0.7, form: <>min({bp(p.max)} × {usd(EX.v)}, (1 − <em>{bp(p.h)}</em>) × ({usd(EX.q)} + {rT} + {usd(EX.d)}) − {usd(EX.debt)}) = min({usd(byLtv)}, {usd(exitS)}) = <em>{usd(sess)}</em></> },
+    { badge: "Weekend parameters", big: usd(wk), pct: pctOf(wk), fill: pc(wk), sub: `Market closed: DEX depth counts as zero, haircut ${bp(p.hw)}`, q: EX.q, r, d: 0, h: p.hw / 100, hl: bp(p.hw), tone: "var(--ch-warn)", m: 2, glow: 0.45, form: <>min({usd(byLtv)}, (1 − <em>{bp(p.hw)}</em>) × ({usd(EX.q)} + {rT} + $0) − {usd(EX.debt)}) = <em>{usd(wk)}</em></> },
+    { badge: "Health below 1", big: usd(wk), pct: pctOf(wk), fill: pc(wk), sub: "Collateral goes to committed quotes first", q: EX.q, r, d: 0, h: p.hw / 100, hl: bp(p.hw), tone: "var(--ch-danger)", m: 2, glow: 1, form: null },
+  ];
+  const phases = [
+    [`A static lender stops at ${bp(p.base)}.`, "A tokenized stock can trade at fair value all week and have no buyer on Saturday night. Lenders price that exit, so the limit stays low."],
+    ["Committed quotes raise the ceiling.", `Market makers escrow USDC behind quotes that can't leave without notice. Add the Reserve and verified DEX depth, and the same 300 shares support up to ${bp(p.max)}.`],
+    ["The weekend guard tightens it on its own.", `When the market closes or the price is older than 15 minutes, DEX depth drops to zero and the haircut widens to ${bp(p.hw)}. Nothing outside the contract can switch the session back on.`],
+    ["A bad loan sells to a buyer who already committed.", "If health falls below 1, collateral goes to a committed quote at no more than its stated discount. The Reserve fills only after every quote is used."],
+  ] as const;
+  const marks: Array<[number, string, number]> = [[pc(stat), pctOf(stat), 0], [pc(wk), pctOf(wk), 2], [pc(sess), pctOf(sess), 1]];
+  return { states, phases, marks, rLabel: rLive === null ? "reading…" : usd(r), wkPct: pctOf(wk) };
+}
 const MAX = 90000;
 const usd = (n: number) => `$${n.toLocaleString("en-US")}`;
 
-function Chamber() {
+function Chamber({ ex }: { ex: Ex }) {
   const reduce = useReducedMotion();
   const [phase, setPhase] = useState(0);
   const [scrolly, setScrolly] = useState(false);
@@ -87,6 +107,7 @@ function Chamber() {
     on();
     return () => removeEventListener("scroll", sc);
   }, [scrolly]);
+  const P = ex.states;
   const st = P[phase]!;
   const back = st.q + st.r + st.d, hc = (back * st.h) / 100;
   const pick = (k: number) => {
@@ -101,7 +122,7 @@ function Chamber() {
       <div className={s.wrap}>
         <div className={c(s.chamber, s.grain, scrolly && s.scrolly)} id="chamber" style={{ "--tone": st.tone, "--glow": st.glow } as React.CSSProperties}>
           <ol className={s["steps-list"]} id="phases">
-            {PHASES.map(([h, p], k) => (
+            {ex.phases.map(([h, p], k) => (
               <li key={k} className={c(s.ph, k === phase && s.on)}>
                 <button type="button" data-ph={k} aria-pressed={k === phase} onClick={() => pick(k)}>
                   <span className={s.k}>0{k + 1}</span>
@@ -122,7 +143,7 @@ function Chamber() {
               <span className={s.sub} id="isub">{st.sub}</span>
             </div>
             <div className={s.ruler} aria-hidden="true">
-              {[[40, "40%", 0], [60.5, "60.5%", 2], [85, "85%", 1]].map(([l, t, m]) => (
+              {ex.marks.map(([l, t, m]) => (
                 <span key={String(t)} className={c(s.mk, m === st.m && s.on)} style={{ left: `${l}%` }}>{t}</span>
               ))}
               <div className={s.rt}><div className={s.fill} id="ifill" style={{ "--fill": st.fill } as React.CSSProperties} /></div>
@@ -139,13 +160,13 @@ function Chamber() {
               </div>
               <div className={s.legend}>
                 <span style={{ "--c": "var(--ch-accent)" } as React.CSSProperties}>Quotes Q <b id="lq">{usd(st.q)}</b></span>
-                <span style={{ "--c": "var(--ch-teal)" } as React.CSSProperties}>Reserve R <b id="lr">{usd(st.r)}</b></span>
+                <span style={{ "--c": "var(--ch-teal)" } as React.CSSProperties}>Reserve R <b id="lr">{st.q === 0 ? usd(0) : ex.rLabel}</b></span>
                 <span style={{ "--c": "var(--ch-sky)" } as React.CSSProperties}>DEX depth D <b id="ld">{usd(st.d)}</b></span>
                 <span style={{ "--c": "var(--ch-warn)" } as React.CSSProperties}>Haircut h <b id="lh">{st.hl}</b></span>
               </div>
             </div>
             <div className={s.slot}>
-              <p className={c(s.formula, !st.form && s.off)} id="iform">{st.form ?? P[2].form}</p>
+              <p className={c(s.formula, !st.form && s.off)} id="iform">{st.form ?? P[2]!.form}</p>
               <div className={c(s.route, st.form && s.off)} id="iroute">
                 <span>Collateral</span><i /><span className={s.go}>Committed quotes</span><i /><span>Reserve</span><span className={s.no}>Order book</span>
               </div>
@@ -190,12 +211,12 @@ function CodeTabs({ agent }: { agent: boolean }) {
         <L><C>{"// Borrow limit for one asset (spec §4.2). Integers only: _e6 USD, bps."}</C></L>
         <L><K>pub fn</K> borrow_limit_e6(<K>&amp;self</K>, a: <K>&amp;</K>Asset) -&gt; <K>u128</K> {"{"}</L>
         <L>{"    "}<K>let</K> weekend = !<K>self</K>.guard.session_open(a);</L>
-        <L>{"    "}<K>let</K> h_bps = <K>if</K> weekend {"{"} a.h_weekend_bps {"}"} <K>else</K> {"{"} a.h_session_bps {"}"}; <C>{"// 1200 / 400"}</C></L>
+        <L>{"    "}<K>let</K> h_bps = <K>if</K> weekend {"{"} a.h_weekend_bps {"}"} <K>else</K> {"{"} a.h_session_bps {"}"}; <C>{"// 2500 / 1000 on testnet"}</C></L>
         <L>{"    "}<K>let</K> d = <K>if</K> weekend {"{"} <N>0</N> {"}"} <K>else</K> {"{"} a.dex_depth_e6 {"}"};</L>
         <L />
         <L>{"    "}<K>let</K> backing = a.quotes_e6 + a.reserve_e6 + d;{"           "}<C>{"// Q + R + D"}</C></L>
         <L>{"    "}<K>let</K> by_exit = backing * (<N>10_000</N> - h_bps) / <N>10_000</N>;</L>
-        <L>{"    "}<K>let</K> by_ltv{"  "}= a.value_e6() * a.ltv_max_bps / <N>10_000</N>;{"  "}<C>{"// 85%"}</C></L>
+        <L>{"    "}<K>let</K> by_ltv{"  "}= a.value_e6() * a.ltv_max_bps / <N>10_000</N>;{"  "}<C>{"// 70% on testnet"}</C></L>
         <L />
         <L>{"    "}<C>{"// the exit term is shared by every loan in the asset"}</C></L>
         <L>{"    "}by_ltv.min(by_exit.saturating_sub(a.total_debt_e6))</L>
@@ -258,7 +279,7 @@ function NoteObject() {
   return (
     <div className={s["note-stage"]}>
       <div className={s["note-card"]} id="note" ref={ref}>
-        <svg viewBox="0 0 600 360" fontFamily="DM Mono, monospace" role="img" aria-label="Example loan Note p-1: LTV 50.5%, health 1.59, debt $28,000, backing $70,000">
+        <svg viewBox="0 0 600 360" fontFamily="DM Mono, monospace" role="img" aria-label="Example loan Note p-1: LTV 50.5%, health 1.59, debt $28,000, committed quotes $80,000">
           <rect width="600" height="360" rx="24" className="n-bg" />
           <rect x="0.5" y="0.5" width="599" height="359" rx="23.5" className="n-line" />
           <g className="n-acc">{hexes.map((p) => <polygon key={p} points={p} />)}</g>
@@ -271,8 +292,8 @@ function NoteObject() {
           <text x="320" y="182" fontFamily="Syne, sans-serif" fontSize="30" fontWeight="700" className="n-head">1.59</text>
           <text x="40" y="226" fontSize="12" letterSpacing="1.5" className="n-dim">DEBT</text>
           <text x="40" y="258" fontSize="20" className="n-head">$28,000</text>
-          <text x="320" y="226" fontSize="12" letterSpacing="1.5" className="n-dim">BACKING Q+R</text>
-          <text x="320" y="258" fontSize="20" className="n-head">$70,000</text>
+          <text x="320" y="226" fontSize="12" letterSpacing="1.5" className="n-dim">COMMITTED Q</text>
+          <text x="320" y="258" fontSize="20" className="n-head">$80,000</text>
           <rect x="40" y="286" width="520" height="8" rx="4" className="n-track" />
           <rect x="40" y="286" width="262.6" height="8" rx="4" className="n-acc" />
           <text x="40" y="330" fontSize="12" letterSpacing="1.5" className="n-acc">OPEN · IN SESSION</text>
@@ -331,6 +352,13 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
   const hub = useRef<HTMLDivElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const cta = shields ? { href: "/shield", label: "Open a weekend shield" } : { href: "/borrow", label: "Preview a borrow" };
+  const { config } = useChain();
+  const col = config.collaterals[0];
+  const capR = useView<ExitCapacity>((v) => v.getExitCapacity(col?.symbol ?? "NVDAx"), [col?.symbol]);
+  const ex = example(
+    { base: col?.base_ltv_bps ?? 4000, max: col?.max_nectar_ltv_bps ?? 7000, h: col?.base_haircut_bps ?? 1000, hw: col?.weekend_haircut_bps ?? 2500 },
+    capR.data ? Number(BigInt(capR.data.r_usd_e6) / 1_000_000n) : null,
+  );
 
   // Scroll engine: --p on [data-sp] (finale parallax), settlement line progress, hero progress for the 3D mark.
   useEffect(() => {
@@ -371,7 +399,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
   const chips: Array<[string, string]> = [
     ["NEAR", "hub, testnet"],
     ["Chain Signatures", "MPC signing"],
-    ["OutLayer", "TEE pricing"],
+    ["OutLayer", "verifiable TEE pricing"],
     ["NEAR Intents", "1Click quotes, dry run"],
     ["Pyth", "price feed"],
     ...(sol ? ([["Solana", solanaLive ? "spoke, devnet" : "spoke, not live yet"]] as Array<[string, string]>) : []),
@@ -417,8 +445,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
               </div>
             </div>
             <div className={s.counters}>
-              <div className={s.counter}><span>Committed quotes</span><Roll value="$65,000" className={s.num} intro /></div>
-              <div className={s.counter}><span>Weekend limit</span><Roll value="60.5%" className={s.num} intro /></div>
+              <div className={s.counter}><span>Committed quotes</span><Roll value={usd(EX.q)} className={s.num} intro /></div>
+              <div className={s.counter}><span>Weekend limit</span><Roll value={ex.wkPct} className={s.num} intro /></div>
               <small><b>Example</b> position on testnet: 300 mock NVDAx</small>
             </div>
           </div>
@@ -444,7 +472,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
             <p><strong>Example.</strong> Follow one position through four states. The numbers are the example from the hero: 300 mock NVDAx at $185, with $28,000 already drawn against the asset.</p>
           </div>
         </div>
-        <Chamber />
+        <Chamber ex={ex} />
       </div>
 
       <section id="testnet">
@@ -482,7 +510,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
             <div className={s.copy}>
               <span className={s.tag}><b />For market makers</span>
               <h2>Get paid to stand behind a price.</h2>
-              <p>Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers&apos; limit premiums fund your commitment fees. In this testnet build the OutLayer TEE prices with operator-set demo parameters (published in the docs), and each settlement&apos;s discount reveals their product.</p>
+              <p>Escrow USDC behind a quote with a discount ceiling, a size and a notice period. Borrowers&apos; limit premiums fund your commitment fees. The OutLayer TEE makes the discount computation verifiable: a pinned, attested program, clamped on-chain. In this testnet build it prices with operator-set demo parameters (published in the docs), and each settlement&apos;s discount reveals their product.</p>
               <dl className={s.spec}>
                 <div><dt>Escrow</dt><dd>USDC, held by nectar-core</dd></div>
                 <div><dt>Exit</dt><dd>After the notice period</dd></div>
@@ -567,8 +595,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
       <Module name={["solana_remote", "base"]} className={s.alt} id="chains">
         <div className={s.wrap}>
           <div className={s["sec-head"]} style={{ marginInline: "auto", textAlign: "center", justifyItems: "center" }}>
-            <h2>NEAR holds the book. {sol && base ? "Solana and Base hold" : sol ? "Solana holds" : "Base holds"} the stock.</h2>
-            <p>A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position.</p>
+            <h2>NEAR holds the book. {sol && base ? "Solana and a Base local fork hold" : sol ? "Solana holds" : "A Base local fork holds"} the stock.</h2>
+            <p>A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position.{base ? " The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself." : ""}</p>
           </div>
           <div className={s.hub} id="hub" ref={hub}>
             <HubLinks hub={hub} />
@@ -595,7 +623,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
           <p className={s.hubcap}>Each link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower.</p>
           <div className={s.seq} id="settle">
             <div><span className={s.k}>01 Flag</span><h3>Health falls below 1</h3><p>Any keeper calls <code>trigger_preliquidation(position_id)</code> with a function-call key. No deposit, no price, no hash.</p><span className={s.who}>nectar-core on NEAR testnet</span></div>
-            <div><span className={s.k}>02 Price</span><h3>A TEE computes the discount</h3><p>A pinned OutLayer program returns <code>disc_bps</code>, clamped to the quote&apos;s ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement&apos;s discount reveals their product.</p><span className={s.who}>OutLayer, attested</span></div>
+            <div><span className={s.k}>02 Price</span><h3>A TEE computes the discount, verifiably</h3><p>A pinned, attested OutLayer program returns <code>disc_bps</code>, so the computation can be verified, and the contract clamps it to the quote&apos;s ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement&apos;s discount reveals their product.</p><span className={s.who}>OutLayer, attested</span></div>
             <div><span className={s.k}>03 Sign</span><h3>Chain Signatures signs</h3><p>The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base). The keeper never holds a key.</p><span className={s.who}>v1.signer-prod.testnet</span></div>
             <div><span className={s.k}>04 Settle</span><h3>The vault verifies, then pays</h3><p>Solana checks the Ed25519 instruction before <code>settle</code>. Base checks EIP-712 with <code>ecrecover</code>. Then the buyer is paid and the result is relayed home.</p><span className={s.who}>nectar_vault, NectarVaultBase</span></div>
           </div>
@@ -620,7 +648,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
           <div className={s["sec-head"]}><h2>What you don&apos;t have to trust</h2></div>
           <div className={s.pillars}>
             <div><svg className={s.glyph} viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><circle cx="16" cy="22" r="7" /><path d="M23 22h16M33 22v6M38 22v4" /></svg><h3>The keeper</h3><p>A function-call key limited to a few methods. It cannot attach deposits, choose prices or supply hashes, and it holds no remote-chain authority.</p></div>
-            <div><svg className={s.glyph} viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M6 32l9-10 7 6 10-14 6 6" /><path d="M6 38h32" strokeDasharray="2 3" /></svg><h3>The price</h3><p>Stale or wide prices are rejected and the weekend guard fails closed. TEE output is accepted only from a pinned program and clamped on-chain.</p></div>
+            <div><svg className={s.glyph} viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M6 32l9-10 7 6 10-14 6 6" /><path d="M6 38h32" strokeDasharray="2 3" /></svg><h3>The price</h3><p>Stale or wide prices are rejected and the weekend guard fails closed. TEE output is verifiable: accepted only from a pinned, attested program and clamped on-chain.</p></div>
             {sol || base ? (
               <div><svg className={s.glyph} viewBox="0 0 44 44" fill="none" stroke="currentColor" strokeWidth="1.3" aria-hidden="true"><path d="M22 6l13 7.5v15L22 36 9 28.5v-15z" /><path d="M16 22l4 4 8-8" /></svg><h3>Remote deposits</h3><p>No remote loan pays out until an attested read of the vault matches the key NEAR derived for that position.</p></div>
             ) : (
@@ -641,7 +669,7 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
             <details><summary>What happens on weekends and holidays?</summary><p>When the market is closed or the price is older than 15 minutes, the contract sets DEX depth to zero and widens the haircut on its own. It reopens only with a fresh price inside its own NYSE calendar.</p></details>
             {profitLock ? <details><summary>Who buys my shares in a Profit-Lock?</summary><p>Committed buyers who opted into voluntary fills, at their discount, under a daily cap. You see the units sold and kept before you sign.</p></details> : null}
             {reserve ? <details><summary>How does the Reserve earn?</summary><p>A share of borrower premiums. The Reserve page shows realised trailing APR and never promises a rate; exiting takes 7 days&apos; notice.</p></details> : null}
-            <details><summary>What if the TEE or the oracle is down?</summary><p>Settlement prices at the quote&apos;s ceiling and says so. The oracle falls back to an owner price with a visible badge. Both paths are tested and disclosed.</p></details>
+            <details><summary>What if the verifiable TEE pricing or the oracle is down?</summary><p>Settlement prices at the quote&apos;s ceiling and says so. The oracle falls back to an owner price with a visible badge. Both paths are tested and disclosed.</p></details>
             <details><summary>Can the keeper steal anything?</summary><p>No. It cannot attach deposits or pass prices or hashes, and holds no remote-chain authority. The contract builds every message and re-checks the trigger against its own oracle state.</p></details>
             <details><summary>Where is the code?</summary><p>Open source under MIT once released. <code>pnpm demo:testnet</code> reads the testnet contract without any keys, and the docs cover the contract, the Feed REST and MCP endpoints and the runbook.</p></details>
           </div>

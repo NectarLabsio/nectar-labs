@@ -76,3 +76,30 @@ export function FeedApiNotice({ state, what }: { state: Pick<FeedApiState<unknow
     </Banner>
   );
 }
+
+/** Feed health fields that say whether contract events are indexed (services/feed /healthz). */
+export interface FeedEventMode {
+  source?: string;
+  events_indexed?: number;
+}
+
+/** True when the Feed reads contract views only (`source: "views"`) or has indexed no events: event history is not available. */
+export function eventsUnindexed(h: FeedEventMode | undefined | null): boolean {
+  return Boolean(h) && (h!.source === "views" || h!.events_indexed === 0);
+}
+
+/** Reads the Feed /healthz once; `unindexed` stays false until the Feed answers (local mode with events renders as before). */
+export function useEventHistory(): { unindexed: boolean; loading: boolean } {
+  const h = useFeedApi<FeedEventMode>("healthz");
+  return { unindexed: eventsUnindexed(h.data), loading: h.loading };
+}
+
+/** Honest empty state for screens built from Feed events (settlements, triggers, Note history) on a views-only Feed. */
+export function EventsNotIndexed({ what }: { what: string }) {
+  return (
+    <div data-testid="events-not-indexed"><Banner tone="info" title="Event history isn't indexed on this host">
+      This host&apos;s Feed reads contract views only (no event indexer), so {what} from past contract events are not listed here. Current
+      loans, quotes and the Reserve still come from live views.
+    </Banner></div>
+  );
+}

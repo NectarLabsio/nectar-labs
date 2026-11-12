@@ -4,7 +4,7 @@ import { Badge, Card, StatusPill, Table, TxLink } from "@nectar/ui";
 import { bpsToPct, formatUsdE6, type FeedHealth, type FeedSettlement, type FeedSettlements, type HealthView, type PositionView } from "@nectar/sdk";
 import { useChain, useView } from "@/components/AppProvider";
 import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
-import { FeedApiNotice, useFeedApi } from "@/components/useFeedApi";
+import { EventsNotIndexed, FeedApiNotice, eventsUnindexed, useFeedApi } from "@/components/useFeedApi";
 import { txUrl } from "@/lib/env";
 
 interface Row { p: PositionView; h: HealthView | null }
@@ -22,6 +22,7 @@ export default function KeepersPage() {
   }, []);
   const triggers = useFeedApi<FeedSettlements>("api/settlements?limit=20");
   const health = useFeedApi<FeedHealth>("healthz");
+  const unindexed = eventsUnindexed(health.data);
   return (
     <div className="page wrap">
       <div className="page-head">
@@ -35,13 +36,14 @@ export default function KeepersPage() {
             Last triggers{" "}
             {health.data ? <Badge kind={health.data.ok ? "live" : "stale"}>{health.data.ok ? `indexer live · block ${health.data.last_block_seen ?? "—"}` : "indexer stale"}</Badge> : null}
           </h2>
+          {unindexed ? <EventsNotIndexed what="past keeper triggers" /> : null}
           <FeedApiNotice state={triggers} what="Keeper triggers" />
           {triggers.loading ? <LoadingBlock lines={3} /> : triggers.data ? (
             <Table<FeedSettlement>
-              caption="Recent triggers and settlements from the Feed API"
+              caption={unindexed ? "Triggers observed through views since this host started" : "Recent triggers and settlements from the Feed API"}
               rows={triggers.data.items}
               rowKey={(s) => `${s.position_id}-${s.quote_id ?? "v"}-${s.block_height ?? s.observed_at}`}
-              empty={<Card><p>No triggers yet.</p></Card>}
+              empty={unindexed ? <p className="small" data-testid="triggers-views-empty">None observed through views since this host started.</p> : <Card><p>No triggers yet.</p></Card>}
               columns={[
                 { key: "p", header: "Position", cell: (s) => <Link className="link" href={`/position/${s.position_id}`}>#{s.position_id}</Link> },
                 { key: "k", header: "Keeper", cell: (s) => <span className="mono">{s.keeper ?? config.keeper ?? "—"}</span> },

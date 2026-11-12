@@ -26,7 +26,7 @@ test.describe("P1 read-only surfaces", () => {
     await expect(page.getByText(/^(owner|Pyth) · \d+s · /).first()).toBeVisible();
     await expect(page.getByText(/P0 static pricing|OutLayer quoter/).first()).toBeVisible();
     await expect(page.getByRole("heading", { name: "Settlement history" })).toBeVisible();
-    await expect(page.getByText(/Feed indexer not configured|Feed API unavailable|Recent pre-liquidation settlements|No settlements yet/).first()).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(/Feed indexer not configured|Feed API unavailable|Recent pre-liquidation settlements|No settlements yet|Event history isn't indexed/).first()).toBeVisible({ timeout: 10_000 });
   });
 
   test("console exposes owner forms read-only with payload preview", async ({ page }) => {
