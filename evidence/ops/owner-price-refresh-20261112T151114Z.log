@@ -1,0 +1,48 @@
+RUNBOOK standing duty 1: refresh owner price (same value 135000000; age was 112379 s) 2026-11-12T15:11:14Z
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  nectar-core-v2.nectar.testnet
+│    actions:
+│       -- function call:      
+│                       method name:  update_owner_price
+│                       args:         {
+│                                       "price_usd_e6": "135000000",
+│                                       "symbol": "NVDAx"
+│                                     }
+│                       gas:          30.0 Tgas
+│                       deposit:      0 NEAR
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:4FjVzoVJkdx7RwG4J6v9D6s6vR2VjvBcRuXemEHcpksHMiNLjMUeghTcJ6X6sMfgAC1aba6UPbvtNkNj3L2a9rir
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 3.1 Tgas
+│    Transaction fee: 0.000279946210606 NEAR
+│    Transaction ID: 3E92xm8KDQcVC2FZh4MRn4dkBvZ1uS3H7eCvCubXM8rH
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/3E92xm8KDQcVC2FZh4MRn4dkBvZ1uS3H7eCvCubXM8rH
+│     [0m
+├  Function execution logs:
+│    [36mLogs [nectar-core-v2.nectar.testnet]:[39m
+│      EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"135000000"}]}
+│    [36mLogs [nectar.testnet]:[39m   [2mNo logs[0m
+│     [0m
+
+Function execution return value (printed to stdout):
+true
+
+
+The "update_owner_price" call to <nectar-core-v2.nectar.testnet> on behalf of <nectar.testnet> succeeded.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear contract call-function as-transaction nectar-core-v2.nectar.testnet update_owner_price json-args '{"symbol":"NVDAx","price_usd_e6":"135000000"}' prepaid-gas '30.0 Tgas' attached-deposit '0 NEAR' sign-as nectar.testnet network-config testnet sign-with-keychain send[39m
+
+exit 0
+  "oracle_age_s": "7",
+  "oracle_fresh": true,
+  "oracle_price_usd_e6": "135000000",
+  "session_reason": "open",
