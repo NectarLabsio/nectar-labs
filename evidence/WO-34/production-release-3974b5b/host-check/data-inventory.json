@@ -1,0 +1,2783 @@
+{
+  "generated": "2026-11-12T15:10:40.338Z",
+  "how": "apps/web/e2e/inventory.spec.ts (real Chrome, fresh profile per combo, hosted mode, docs via the /docs rewrite)",
+  "site": "https://nectarlabs.vercel.app",
+  "app": "https://nectarlabs-app.vercel.app",
+  "combos": [
+    "dark/accept",
+    "light/decline",
+    "light/accept",
+    "dark/decline"
+  ],
+  "walletOpened": "NEAR CLI",
+  "cspBypassed": false,
+  "selectorHosts": [
+    "evm-on-near.dev",
+    "nectarlabs-app.vercel.app",
+    "raw.githubusercontent.com",
+    "storage.herewallet.app",
+    "test.rpc.fastnear.com"
+  ],
+  "wallets": [
+    {
+      "name": "Meteor Wallet",
+      "reached": "sandboxed frame loaded (1)",
+      "hosts": {
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage meteor-wallet:<random id>",
+        "localStorage meteor-wallet:met_bridge_partner::<per-session ids>",
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Intear Wallet",
+      "reached": "sandboxed frame loaded (1); shows: \"CONNECT INTEAR WALLET Choose your preferred wallet connection method 🌐 Web 📱💻 App 🧪 Web (Beta) 🔧 Self-Hosted Close\"",
+      "hosts": {
+        "wallet.intear.tech": [
+          "document@iframe",
+          "fetch"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Ledger",
+      "reached": "sandboxed frame loaded (1); shows: \"Connect Ledger Before continuing, please ensure the NEAR app is installed on your Ledger device. You may install it via Ledger Live. USB Wir\"",
+      "hosts": {},
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Nightly Wallet",
+      "reached": "sandboxed frame loaded (1); shows: \"Nightly Wallet Download Nightly Download\"",
+      "hosts": {
+        "storage.herewallet.app": [
+          "image@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Ethereum Wallets",
+      "reached": "sandboxed frame loaded (1); opened 1 window(s); shows: \":root { --background-color: rgb(40, 40, 40); --text-color: rgb(255, 255, 255); --border-color: rgb(209, 209, 209); } * { font-family: system\"",
+      "hosts": {
+        "evm-on-near.dev": [
+          "document",
+          "fetch"
+        ]
+      },
+      "windows": [
+        {
+          "url": "https://evm-on-near.dev/",
+          "hosts": [
+            "evm-on-near.dev"
+          ]
+        }
+      ],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "NEAR CLI",
+      "reached": "sandboxed frame loaded (1); shows: \"STEP 1 OF 2 Connect with NEAR CLI Enter your NEAR account ID Next\"",
+      "hosts": {
+        "rsms.me": [
+          "font@iframe",
+          "stylesheet@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    }
+  ],
+  "hosts": [
+    {
+      "host": "evm-on-near.dev",
+      "types": [
+        "image",
+        "document",
+        "fetch"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Ethereum Wallets)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet icons named in the wallet list",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "connect-src",
+        "frame-src",
+        "img-src"
+      ]
+    },
+    {
+      "host": "fonts.cdnfonts.com",
+      "types": [
+        "stylesheet@iframe"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's web fonts (stylesheet + font files)",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "style-src"
+      ]
+    },
+    {
+      "host": "mc.meteorwallet.app",
+      "types": [
+        "fetch@iframe"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's own API",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "meteorwallet.app",
+      "types": [
+        "image@iframe"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet images",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "img-src"
+      ]
+    },
+    {
+      "host": "near-testnet.drpc.org",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369)",
+      "when": "App pages that read the contracts, only while both FastNEAR hosts refuse or fail",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "nectarlabs-app.vercel.app",
+      "types": [
+        "document",
+        "fetch",
+        "font",
+        "image",
+        "other",
+        "script",
+        "stylesheet"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/feed",
+        "nectarlabs-app.vercel.app/feed/NVDAx",
+        "nectarlabs-app.vercel.app/borrow",
+        "nectarlabs-app.vercel.app/shield",
+        "nectarlabs-app.vercel.app/quote/new",
+        "nectarlabs-app.vercel.app/quote/0",
+        "nectarlabs-app.vercel.app/reserve",
+        "nectarlabs-app.vercel.app/notes",
+        "nectarlabs-app.vercel.app/note/0",
+        "nectarlabs-app.vercel.app/position/0",
+        "nectarlabs-app.vercel.app/console",
+        "nectarlabs-app.vercel.app/agents",
+        "nectarlabs-app.vercel.app/keepers",
+        "nectarlabs-app.vercel.app/docs/",
+        "nectarlabs-app.vercel.app/docs/start/quick-start",
+        "nectarlabs-app.vercel.app/docs/security/audits",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)"
+      ],
+      "who": "our code",
+      "purpose": "This site: pages, scripts, styles, fonts, same-origin API routes, docs via the /docs rewrite",
+      "when": "Every page",
+      "directives": [
+        "connect-src",
+        "font-src",
+        "frame-src",
+        "img-src",
+        "script-src",
+        "style-src"
+      ]
+    },
+    {
+      "host": "nectarlabs.vercel.app",
+      "types": [
+        "document",
+        "fetch",
+        "font",
+        "image",
+        "other",
+        "script",
+        "stylesheet"
+      ],
+      "pages": [
+        "nectarlabs.vercel.app/",
+        "nectarlabs.vercel.app/about",
+        "nectarlabs.vercel.app/security",
+        "nectarlabs.vercel.app/status",
+        "nectarlabs.vercel.app/changelog",
+        "nectarlabs.vercel.app/brand",
+        "nectarlabs.vercel.app/talk",
+        "nectarlabs.vercel.app/legal/privacy",
+        "nectarlabs.vercel.app/legal/cookies",
+        "nectarlabs.vercel.app/legal/terms",
+        "nectarlabs.vercel.app/legal/disclaimers"
+      ],
+      "who": "our code",
+      "purpose": "This site: pages, scripts, styles, fonts, same-origin API routes, docs via the /docs rewrite",
+      "when": "Every page",
+      "directives": [
+        "connect-src",
+        "font-src",
+        "frame-src",
+        "img-src",
+        "script-src",
+        "style-src"
+      ]
+    },
+    {
+      "host": "raw.githubusercontent.com",
+      "types": [
+        "fetch",
+        "image"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet list (manifest.json)",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "connect-src",
+        "img-src"
+      ]
+    },
+    {
+      "host": "rpc.testnet.fastnear.com",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "NEAR testnet RPC fallback (@nectar/sdk TESTNET_RPC_FALLBACKS)",
+      "when": "App pages that read the contracts",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "rsms.me",
+      "types": [
+        "stylesheet@iframe",
+        "font@iframe"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet)",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + NEAR CLI)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's web fonts (stylesheet + font files)",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "font-src",
+        "style-src"
+      ]
+    },
+    {
+      "host": "storage.herewallet.app",
+      "types": [
+        "image",
+        "image@iframe"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Nightly Wallet)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet icons named in the wallet list",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "img-src"
+      ]
+    },
+    {
+      "host": "test.rpc.fastnear.com",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "nectarlabs.vercel.app/",
+        "nectarlabs.vercel.app/about",
+        "nectarlabs.vercel.app/security",
+        "nectarlabs.vercel.app/status",
+        "nectarlabs.vercel.app/changelog",
+        "nectarlabs.vercel.app/brand",
+        "nectarlabs.vercel.app/talk",
+        "nectarlabs.vercel.app/legal/privacy",
+        "nectarlabs.vercel.app/legal/cookies",
+        "nectarlabs.vercel.app/legal/terms",
+        "nectarlabs.vercel.app/legal/disclaimers",
+        "nectarlabs-app.vercel.app/feed",
+        "nectarlabs-app.vercel.app/feed/NVDAx",
+        "nectarlabs-app.vercel.app/borrow",
+        "nectarlabs-app.vercel.app/shield",
+        "nectarlabs-app.vercel.app/quote/new",
+        "nectarlabs-app.vercel.app/quote/0",
+        "nectarlabs-app.vercel.app/reserve",
+        "nectarlabs-app.vercel.app/notes",
+        "nectarlabs-app.vercel.app/note/0",
+        "nectarlabs-app.vercel.app/position/0",
+        "nectarlabs-app.vercel.app/console",
+        "nectarlabs-app.vercel.app/agents",
+        "nectarlabs-app.vercel.app/keepers",
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)"
+      ],
+      "who": "our code",
+      "purpose": "NEAR testnet RPC: contract views, transaction status",
+      "when": "App pages that read the contracts; wallet selector",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "testnet-rpc.intea.rs",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369)",
+      "when": "App pages that read the contracts, only while both FastNEAR hosts refuse or fail",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "wallet.intear.tech",
+      "types": [
+        "document@iframe",
+        "fetch"
+      ],
+      "pages": [
+        "nectarlabs-app.vercel.app/borrow (wallet selector + Intear Wallet)"
+      ],
+      "who": "Intear Wallet (sandboxed frame, through near-connect)",
+      "purpose": "Code, styles, fonts, images or API of Intear Wallet",
+      "when": "Only after you open Intear Wallet in the selector",
+      "directives": [
+        "connect-src",
+        "frame-src"
+      ]
+    }
+  ],
+  "cookies": [],
+  "storage": [
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ethereum-wallets:0.1.4",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/intear-wallet:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ledger:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/meteor-wallet:1.1.1",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/near-cli:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/nightly-wallet:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:<random id>",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "the wallet you opened (through near-connect)",
+      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
+      "lifetime": "Until disconnect or you clear site data",
+      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:met_bridge_partner::<per-session ids>",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "the wallet you opened (through near-connect)",
+      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
+      "lifetime": "Until disconnect or you clear site data",
+      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-consent",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "our code",
+      "purpose": "Your cookie/analytics choice ({v, analytics, at})",
+      "lifetime": "Until you clear site data",
+      "source": "packages/ui/src/ConsentBanner.tsx"
+    },
+    {
+      "kind": "localStorage",
+      "name": "selected-wallet",
+      "origin": "https://nectarlabs-app.vercel.app",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Id of the wallet you picked",
+      "lifetime": "Set on connect, removed on disconnect",
+      "source": "@hot-labs/near-connect build/NearConnector.js"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-consent",
+      "origin": "https://nectarlabs.vercel.app",
+      "who": "our code",
+      "purpose": "Your cookie/analytics choice ({v, analytics, at})",
+      "lifetime": "Until you clear site data",
+      "source": "packages/ui/src/ConsentBanner.tsx"
+    }
+  ],
+  "cspViolations": [],
+  "pages": [
+    {
+      "url": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/about",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/security",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/status",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/changelog",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/talk",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/privacy",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/cookies",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/terms",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/disclaimers",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed/NVDAx",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/shield",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/new",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/0",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/reserve",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/notes",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/note/0",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/position/0",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/console",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/agents",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/keepers",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "dark/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/about",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/security",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/status",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/changelog",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/talk",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/privacy",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/cookies",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/terms",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/disclaimers",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed/NVDAx",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/shield",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/new",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/0",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/reserve",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/notes",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/note/0",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/position/0",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/console",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/agents",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/keepers",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "light/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/about",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/security",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/status",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/changelog",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/talk",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/privacy",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/cookies",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/terms",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/disclaimers",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed/NVDAx",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/shield",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/new",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/0",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/reserve",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/notes",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/note/0",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/position/0",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/console",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/agents",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/keepers",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "light/accept",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/about",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/security",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/status",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/changelog",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/brand",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/talk",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/privacy",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/cookies",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/terms",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs.vercel.app/legal/disclaimers",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/feed/NVDAx",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/shield",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/new",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/quote/0",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/reserve",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/notes",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/note/0",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/position/0",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/console",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/agents",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/keepers",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/start/quick-start",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/docs/security/audits",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet iframe)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "nectarlabs-app.vercel.app": [
+          "document",
+          "fetch",
+          "font",
+          "image",
+          "other",
+          "script",
+          "stylesheet"
+        ],
+        "test.rpc.fastnear.com": [
+          "fetch"
+        ],
+        "raw.githubusercontent.com": [
+          "fetch",
+          "image"
+        ],
+        "storage.herewallet.app": [
+          "image"
+        ],
+        "evm-on-near.dev": [
+          "image"
+        ],
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Meteor Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Intear Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "wallet.intear.tech": [
+          "document@iframe",
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Ledger)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {}
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Nightly Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "storage.herewallet.app": [
+          "image@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + Ethereum Wallets)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "evm-on-near.dev": [
+          "document",
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://nectarlabs-app.vercel.app/borrow (wallet selector + NEAR CLI)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "rsms.me": [
+          "font@iframe",
+          "stylesheet@iframe"
+        ]
+      }
+    }
+  ]
+}

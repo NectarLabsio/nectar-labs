@@ -1,0 +1,14 @@
+
+Running 6 tests using 1 worker
+
+[1/6] [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent accept
+[2/6] [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent decline
+[3/6] [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent accept
+[4/6] [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent decline
+[5/6] [inventory] › e2e/inventory.spec.ts:276:3 › data inventory (opt-in, network) › every wallet the selector lists, one by one (fresh profile each, no signing)
+[6/6] [inventory] › e2e/inventory.spec.ts:368:3 › data inventory (opt-in, network) › zero CSP violations across the inventory runs
+  Slow test file: [inventory] › e2e/inventory.spec.ts (5.1m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  6 passed (5.1m)
+inventory exit 0
+2026-11-12T15:10:41Z

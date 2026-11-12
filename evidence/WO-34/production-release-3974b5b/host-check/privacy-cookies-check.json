@@ -1,0 +1,105 @@
+{
+  "privacyCodeSpans": 39,
+  "cookiesCodeSpans": 24,
+  "measuredHosts": [
+    "evm-on-near.dev",
+    "fonts.cdnfonts.com",
+    "mc.meteorwallet.app",
+    "meteorwallet.app",
+    "near-testnet.drpc.org",
+    "nectarlabs-app.vercel.app",
+    "nectarlabs.vercel.app",
+    "raw.githubusercontent.com",
+    "rpc.testnet.fastnear.com",
+    "rsms.me",
+    "storage.herewallet.app",
+    "test.rpc.fastnear.com",
+    "testnet-rpc.intea.rs",
+    "wallet.intear.tech"
+  ],
+  "exemptOwn": [
+    "nectarlabs.vercel.app",
+    "nectarlabs-app.vercel.app"
+  ],
+  "missingHostsOnPrivacy": [],
+  "measuredKeys": [
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ethereum-wallets:0.1.4",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/intear-wallet:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ledger:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/meteor-wallet:1.1.1",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/near-cli:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/nightly-wallet:1.0.0",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:<random id>",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:met_bridge_partner::<per-session ids>",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-consent",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "localStorage",
+      "name": "selected-wallet",
+      "origin": "https://nectarlabs-app.vercel.app"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-consent",
+      "origin": "https://nectarlabs.vercel.app"
+    }
+  ],
+  "missingKeysOnCookies": [],
+  "walletsOpened": [
+    "Meteor Wallet: sandboxed frame loaded (1)",
+    "Intear Wallet: sandboxed frame loaded (1); shows: \"CONNECT INTEAR WALLET Choose your preferred wallet connection method 🌐 Web 📱💻 App 🧪 Web (Beta) 🔧 Self-Hosted Close\"",
+    "Ledger: sandboxed frame loaded (1); shows: \"Connect Ledger Before continuing, please ensure the NEAR app is installed on your Ledger device. You may install it via Ledger Live. USB Wir\"",
+    "Nightly Wallet: sandboxed frame loaded (1); shows: \"Nightly Wallet Download Nightly Download\"",
+    "Ethereum Wallets: sandboxed frame loaded (1); opened 1 window(s); shows: \":root { --background-color: rgb(40, 40, 40); --text-color: rgb(255, 255, 255); --border-color: rgb(209, 209, 209); } * { font-family: system\"",
+    "NEAR CLI: sandboxed frame loaded (1); shows: \"STEP 1 OF 2 Connect with NEAR CLI Enter your NEAR account ID Next\""
+  ],
+  "selectorHosts": [
+    "evm-on-near.dev",
+    "nectarlabs-app.vercel.app",
+    "raw.githubusercontent.com",
+    "storage.herewallet.app",
+    "test.rpc.fastnear.com"
+  ],
+  "cspViolations": []
+}
+privacy check exit 0
