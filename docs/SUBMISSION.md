@@ -82,7 +82,8 @@ mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3).
 ## Order of human steps (HACKATHON.md: send only once the repo is public and the post is up)
 H10 + H14 (identity, payout account, consent) → H12 (prior work) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →
 G9 PASS from the public URL → H1 (Kunal sends).
-G9 today: PASS from a local fresh clone (docs/EVIDENCE.md §G9 run 3, 2026-11-11T15:30Z–15:38Z, tested 3107a1a after review 2, recorded in 837cd12; the clone URL is TODO-H2,
-so the verifier used the local path). Earlier: PASS on 0af5cdd (89f83ee); the first run's FAIL (c5f6349) is superseded. A re-run from the public URL follows H2.
-Pre-send checklist: G9 PASS (local clone: done, run 3 recorded in 837cd12; public URL: after H2) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
+G9 today: PASS on release 3 (5f011bb) from a local fresh clone (docs/EVIDENCE.md §G9 runs 5 + 5b: run 5, 2026-11-12T16:40Z–16:47Z on 5dd2a50, every step except 3, recorded in 87be719;
+run 5b, 17:02Z–17:05Z on 88b99b3, step 3, recorded in b945f42; product code equals 5f011bb in both; the clone URL is TODO-H2, so the verifier used the local path).
+Earlier: PASS on 3107a1a (run 3, 837cd12) and on 0af5cdd (89f83ee); the first run's FAIL (c5f6349) is superseded. A re-run from the public URL follows H2.
+Pre-send checklist: G9 PASS (local clone: done, runs 5 + 5b recorded in 87be719 + b945f42; public URL: after H2) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
 matches EVIDENCE · tracks re-checked against the G9 MCP result.
