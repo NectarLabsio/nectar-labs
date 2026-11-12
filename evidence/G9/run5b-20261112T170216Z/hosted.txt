@@ -1,0 +1,22 @@
+UTC 2026-11-12T17:03:36Z
+HEAD 88b99b3c6c9002f8d3ba2e2fcc775c057d98e1b8
+diff-stat 5f011bb..88b99b3 apps packages services contracts: []
+services/feed diff 3974b5b..88b99b3: []
+5f011bb subject: chore: STATE — release 3 (release 2 + docs Feed link fix)
+5f011bb touches STATE: docs/STATE.md 
+https://nectarlabs.vercel.app/ -> 200 
+https://nectarlabs.vercel.app/borrow -> 308 https://nectarlabs-app.vercel.app/borrow
+https://nectarlabs-app.vercel.app/ -> 307 https://nectarlabs-app.vercel.app/feed
+https://nectarlabs-app.vercel.app/feed -> 200 
+https://nectarlabs-app.vercel.app/borrow -> 200 
+https://nectarlabs-app.vercel.app/docs -> 200 
+https://nectarlabs-app.vercel.app/docs/integrate/feed-rest -> 200 
+https://feed-production-2f2776c9.up.railway.app/health -> 200 
+--- Feed /health body:
+{"ok":true,"last_indexed_block":277391274,"chain_head":277391274,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T17:03:31.374Z","poll_age_s":9,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"3974b5bb2df4ff98772c758621a68932db30f653"}
+--- APP /api/health body:
+{"ok":true,"deployed":true,"core":"nectar-core-v2.nectar.testnet","version":"2.2.1-v7","pool":{"available_usd_e6":"40771000000","utilised_usd_e6":"9229000000","treasury_usd_e6":"80662710","lenders_fees_usd_e6":"17652060"},"network":"testnet","rpc":["https://test.rpc.fastnear.com","https://rpc.testnet.fastnear.com","https://near-testnet.drpc.org","https://testnet-rpc.intea.rs"],"as_of":"2026-11-12T17:03:41.129Z","age_s":0}
+--- Feed hrefs on hosted docs feed-rest:
+   1 href="https://feed-production-2f2776c9.up.railway.app/health"
+--- x-robots-tag count on APP /docs:
+0
