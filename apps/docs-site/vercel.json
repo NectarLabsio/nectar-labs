@@ -1,6 +1,42 @@
 {
   "cleanUrls": true,
   "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "nectarlabs-docs\\.vercel\\.app" }],
+      "destination": "https://docs.nectarlabs.io/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/:path*",
+      "has": [{ "type": "host", "value": "nectarlabs-docs\\.vercel\\.app" }],
+      "destination": "https://docs.nectarlabs.io/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "nectarlabs-docs\\.vercel\\.app" }],
+      "destination": "https://docs.nectarlabs.io/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "nectar-labs-docs\\.vercel\\.app" }],
+      "destination": "https://docs.nectarlabs.io/",
+      "permanent": true
+    },
+    {
+      "source": "/docs/:path*",
+      "has": [{ "type": "host", "value": "nectar-labs-docs\\.vercel\\.app" }],
+      "destination": "https://docs.nectarlabs.io/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "nectar-labs-docs\\.vercel\\.app" }],
+      "destination": "https://docs.nectarlabs.io/:path*",
+      "permanent": true
+    },
     { "source": "/docs", "destination": "/", "permanent": true },
     { "source": "/docs/", "destination": "/", "permanent": true },
     { "source": "/docs/:path*", "destination": "/:path*", "permanent": true }

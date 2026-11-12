@@ -9,13 +9,19 @@ Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nec
 
 ## Hosted demo (NEAR testnet, mock collateral)
 Production runs the release recorded in docs/EVIDENCE.md §"WO-34 production": the deployed commit and the verifier's acceptance result for each
-production release are there. Production is redeployed when a fix lands, so this README names no deployed commit. Hosted until at least 2026-11-25 (`site.hosted_until` in `packages/config/config.yaml`). The addresses are platform `*.vercel.app` and
-`*.up.railway.app` hosts: no custom domain yet (Kunal may name one later; HUMAN_HANDOFF H-DOMAIN).
+production release are there. Production is redeployed when a fix lands, so this README names no deployed commit. Hosted until at least 2026-11-25 (`site.hosted_until` in `packages/config/config.yaml`). Hosts: `site.production_hosts` in the same file;
+nectarlabs.io is on Vercel DNS (FACTS F-458). Since 2026-11-12 ~20:00Z the deployed release answers on these hosts (same code, rebuilt with the
+custom-host settings). The verifier's acceptance runs in §"WO-34 production" used the earlier platform hosts; no verifier run on these hosts is
+recorded yet. The status host, docs at the root of docs.nectarlabs.io and the "Get test assets" button come with the next production release
+(merged as WO-62b, WO-64, WO-62c; not deployed, it needs Kunal's approval, HUMAN_HANDOFF H-DEPLOY). Until then status.nectarlabs.io shows the
+landing page (the status page is at https://nectarlabs.io/status) and docs.nectarlabs.io redirects to its `/docs/` path. From that release on,
+the earlier platform hosts redirect (308) to these.
 | What | URL | Host | Notes |
 | --- | --- | --- | --- |
-| Site | https://nectarlabs.vercel.app | Vercel | landing, about, security, status, changelog, legal pages; any other path redirects (308) to the app |
-| App | https://nectarlabs-app.vercel.app | Vercel | borrow, quotes, Feed, Notes, console; NEAR testnet only, mock NVDAx and mock USDC |
-| Docs | https://nectarlabs-app.vercel.app/docs | Vercel, served under the app | this repo's `apps/docs-site` |
+| Site | https://nectarlabs.io | Vercel | landing, about, security, changelog, legal pages; any other path redirects (308) to the app |
+| App | https://testnet.nectarlabs.io | Vercel | borrow, quotes, Feed, Notes, console; NEAR testnet only, mock NVDAx and mock USDC |
+| Docs | https://docs.nectarlabs.io | Vercel (docs project) | this repo's `apps/docs-site` |
+| Status | https://status.nectarlabs.io | Vercel (web app) | status page from the next release; until then https://nectarlabs.io/status |
 | Feed REST | https://feed-production-2f2776c9.up.railway.app (e.g. `/health`) | Railway | read-only, no keys. Runs `FEED_INDEXER=views`: it reads contract state views, so snapshots and `/health` work, but the event history is empty (`events_indexed 0`) because testnet.neardata.xyz rate-limits Railway's egress (optional key, HUMAN_HANDOFF H-NEARDATA). CORS allows the Site and App origins only |
 
 Not hosted: the keeper and the x402 facilitator run on the operator's machine, with keys in the OS keychain or `0600` files under `~/.nectar/`.
@@ -23,8 +29,10 @@ x402 is never hosted because its relayer needs a full-access key (D-031); a host
 therefore run only while the operator runs the keeper.
 Checks: the orchestrator's public smoke test on the first deploy (2026-11-12 ~13:35Z) passed (evidence/WO-34/prod-smoke-20261112T133529Z.log: 28 app routes and 56 docs pages + 6 assets,
 0 failures; host redirects, HSTS and CSP present, no noindex; Chrome on the docs: 0 failed requests, 0 console errors). The verifier's production acceptance runs
-on these URLs (one block per deployed release, with its result) are in docs/EVIDENCE.md §"WO-34 production". No wallet has signed a borrow on the
-hosted app yet (docs/DEMO_SCRIPT.md "Real-wallet borrow on the hosted app"). All tokens are mocks with no value.
+(one block per deployed release, with its result; on the earlier platform hosts) are in docs/EVIDENCE.md §"WO-34 production". No wallet has signed a borrow on the
+hosted app yet (docs/DEMO_SCRIPT.md "Real-wallet borrow on the hosted app"). All tokens are mocks with no value. Test assets: the mock tokens
+have a capped public `faucet_mint` since 2026-11-12 (5 NVDAx / 500 USDC per claim, 1 h cooldown, 3 claims per account; `faucet` in config.yaml;
+evidence/rollout/mockft-faucet-20261112T200937Z.log); its web button is merged but not deployed.
 
 ## Live on testnet (ids from `packages/config/config.yaml`; evidence in docs/EVIDENCE.md §G2b, §G7, §G14 and `evidence/`)
 The current contract is `nectar-core-v2.nectar.testnet` (v7, deployed beside v1, D-018), now at `2.2.1-v7` after the 2026-11-11 security fix wave (D-027; findings, fixes and what remains in [SECURITY.md](SECURITY.md)). On 2026-11-11 the verifier re-ran the gates on the upgraded stack from a fresh clone: G2b, G7, G13 (local fork) and G14 (docs/EVIDENCE.md re-runs after D-027, recorded in commit b8784c1), then G11 and G3b (recorded in commit 5083d30). Later that day the verifier ran the G14 HTTP 402 → 200 step itself (fresh clone of 45ed1f3, recorded in commit 2e16f9b): PASS. It then re-ran G14 on HEAD with the guarded demo agent and re-checked the G1 gas rows on 2.2.1 (fresh clone of 48b5c5a, recorded in commit a677689): both PASS. Explorer pages returned HTTP 403 (NearBlocks) and 429
@@ -49,7 +57,7 @@ The current contract is `nectar-core-v2.nectar.testnet` (v7, deployed beside v1,
 | 1Click depth | `dry: true` quotes on the 1Click API (F-060) | read-only, signed quotes | **G6 PASS.** NVDAx has no 1Click route (F-063), so `D_c` = 0. The Feed shows signed dry-quote depth for a reference pair (wNEAR → USDC) at $500, $1,000 and $2,000. Nothing is ever deposited (Q-007) |
 | Feed REST / MCP + agent skill tools | REST hosted at https://feed-production-2f2776c9.up.railway.app (Railway); local: `pnpm --filter feed start` | read-only, no keys | REST hosted since 2026-11-12 in views mode (`FEED_INDEXER=views`): snapshots and `/health` come from contract views; events are not indexed (`events_indexed 0`; neardata.xyz rate-limits Railway's egress, H-NEARDATA). The final audit saw `/health` ok with lag 0 (docs/FINAL_REPORT.md, 2026-11-12T11:20Z). The MCP server was checked locally only (below). Tools: `get_exit_capacity`, `preview_borrow`, `list_quotes`, `explain_limit`, `open_protected_stock_loan` (returns an unsigned call), `quote_capacity`; `get_note` and `build_self_settle` still return `not_available`. In G9 run 3 (EVIDENCE §G9, fresh clone of 3107a1a, recorded in 837cd12) a scripted JSON-RPC client used it over stdio and HTTP with no env: 8 tools listed, `get_exit_capacity {"symbol":"NVDAx"}` returned the same Q_c and R_c as `pnpm demo:testnet`. No LLM agent client has been tested |
 | NEAR AI copilot | web app panel (`apps/web/lib/copilot/`) | P2; NEAR AI Cloud (F-070) | **built; no live NEAR AI answer has been verified yet.** Live mode needs key H7, and NEAR AI Cloud returned 500 on 2026-11-09 (F-078). The panel shows an answer only when it is signed by an attested NEAR AI TEE (signature and attestation checks pass); otherwise it shows "unverified — hidden". That is provenance, not advice. The answer is bound to the question you typed and the announced model: the browser rebuilds the request from the notes it sent and requires the signed request and model id to match (required checks `request_matches_input` and `model_id`; test "R2-03: an exchange signed for other notes or another model is not verified, even with an accepted DCAP verdict"). `/api/copilot` accepts same-origin JSON requests only (8 KB cap) and is rate-limited: 5 live calls a minute per client, 30 overall (`apps/web/lib/api/api.test.ts`). Tests (`pnpm --filter web test:copilot`, `e2e/copilot.spec.ts`) run on a fixture built from a real Intel-signed sample TDX quote (Phala dcap-qvl sample, MIT) plus a chat signed by a throwaway key, not a NEAR AI recording. Intel DCAP quote verification runs on the server (F-073); EIP-191 signer recovery and report_data/nonce checks run in the browser (F-075, F-076). **G8: PASS (fixture), 2026-11-09T23:56Z** |
-| Web app on v2 | `pnpm --filter web dev`; hosted at https://nectarlabs-app.vercel.app (Hosted demo above) | UI | Latest G3b and G9 runs, with commit and result: docs/EVIDENCE.md §G3b / §G9. The vault v2 screens (withdraw, claim, Re-sign settlement, claim owed collateral; WO-34w) passed their **mocked** E2E tests in the G3b re-run after D-027 (recorded in 5083d30) on desktop and phone (`e2e/remote.spec.ts`, describe "Solana remote borrow (mocked)": :382 withdraw, :401 withdraw remainder, :411/:437/:446 claim, :453/:465 Re-sign, :472 owed collateral; log `evidence/G3b/verifier-rerun-d027-20261111T0802Z/e2e.log`). Only screenshot capture was not run: the `remote screenshots` block (`REMOTE_SCREENS` unset, 14 per project) and the notes screenshots in `e2e/notes.spec.ts` (`NOTES_SCREENS` unset) |
+| Web app on v2 | `pnpm --filter web dev`; hosted at https://testnet.nectarlabs.io (Hosted demo above) | UI | Latest G3b and G9 runs, with commit and result: docs/EVIDENCE.md §G3b / §G9. The vault v2 screens (withdraw, claim, Re-sign settlement, claim owed collateral; WO-34w) passed their **mocked** E2E tests in the G3b re-run after D-027 (recorded in 5083d30) on desktop and phone (`e2e/remote.spec.ts`, describe "Solana remote borrow (mocked)": :382 withdraw, :401 withdraw remainder, :411/:437/:446 claim, :453/:465 Re-sign, :472 owed collateral; log `evidence/G3b/verifier-rerun-d027-20261111T0802Z/e2e.log`). Only screenshot capture was not run: the `remote screenshots` block (`REMOTE_SCREENS` unset, 14 per project) and the notes screenshots in `e2e/notes.spec.ts` (`NOTES_SCREENS` unset) |
 | Mainnet, real xStocks, keeper bonds, DAO owner | — | **PROD-only** | not in this repo |
 
 ### Earlier deployment: v1 (kept as evidence, not the current contract)
@@ -77,7 +85,7 @@ pnpm --filter web dev        # web app on http://localhost:3100
 Optional:
 ```
 pnpm --filter docs-site build   # static docs build (broken links fail the build)
-pnpm --filter docs-site start   # docs dev server on http://localhost:3000/docs/ (build + serve: same URL)
+pnpm --filter docs-site start   # docs dev server on http://localhost:3000/ (build + serve: same URL)
 pnpm --filter feed start        # Feed REST on :8788, MCP over HTTP at http://127.0.0.1:8789/mcp; no env needed
 pnpm -s --filter feed mcp          # Feed MCP over stdio (read-only tools; see services/feed/README.md)
 ```
