@@ -17,6 +17,13 @@
   - preview deploys of fd06e11 (inline stubs + .nectar-artifact);
   - smoke test;
   - set FEED_CORS_ORIGINS on the Feed (currently "legacy").
+- 05:17Z: **the Feed was degraded 01:50–05:17Z.** testnet.neardata.xyz answered HTTP 429 to the Railway egress on every poll; the Feed advanced about
+  29 blocks per 5 min and health said ok:false. Switched to the documented fallback `FEED_INDEXER=views` (README §Event source). Health is now
+  ok, poll age 1 s.
+  - Loss: no NEP-297 event history on the hosted Feed (events_indexed 0). Snapshots and health still work.
+  - Restore needs a FastNear/neardata API key → H-NEARDATA, optional. The code reads FEED_NEARDATA_API_KEY_PATH, a file, so it needs a start-command tweak.
+  - Follow-up for the keeper agent: in views mode, /health `chain_head` stays at the old neardata value (277297242) while last_indexed_block is current.
+  - The Vercel connector still has no team grant: list_teams is empty and even reads return 403. The approval never happened; a new link was sent 05:16Z.
 - Production still needs H-LEGAL → G3b re-run 5 → new tarball → `target: production`. H-DOMAIN default (vercel.app) at 2026-11-13 06:00 UTC.
 - Dispatched: WO-34n docs (HUMAN_HANDOFF H-HOST + RUNBOOK connector section); researcher follow-up (live notes on F-415/418/423/427, C-024).
 
@@ -211,7 +218,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T01:53:00Z · commit 60d7721
+Last activity: 2026-11-12T01:55:15Z · commit 4c7071e
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
