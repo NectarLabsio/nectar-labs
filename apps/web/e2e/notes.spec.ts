@@ -175,7 +175,7 @@ test.describe("/note/[id] (mocked v2)", () => {
     await page.goto("/note/p-7");
     await expect(page.getByTestId("note-svg")).toBeVisible({ timeout: 20_000 });
     await expect(page.getByTestId("note-owner")).toHaveText(OWNER);
-    await expect(page.getByTestId("note-history-empty")).toContainText("History not indexed yet");
+    await expect(page.getByTestId("note-history-empty")).toContainText(/History not indexed yet|Event history isn.t indexed on this host/);
     const share = page.getByTestId("note-share");
     await expect(share).toHaveText("Share to X");
     const href = new URL((await share.getAttribute("href"))!);

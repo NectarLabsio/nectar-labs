@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Badge, Banner } from "@nectar/ui";
 import { noteHref, noteKindLabel, noteSvgDataUri, parseNoteId, type NoteKind } from "@nectar/sdk";
 import { useFeature, useView } from "./AppProvider";
-import { useFeedApi } from "./useFeedApi";
+import { useEventHistory, useFeedApi } from "./useFeedApi";
 
 /**
  * The live Note SVG from `nft_token_svg`, rendered as an <img> from a sanitized data URI (never innerHTML).
@@ -64,12 +64,13 @@ const isEvents = (v: unknown): v is { events: FeedNoteEvent[] } =>
 /** Note history from the Feed API (`/api/note/<id>`) when it is indexed; otherwise an honest "not indexed yet". */
 export function NoteHistory({ tokenId }: { tokenId: string }) {
   const feed = useFeedApi<unknown>(`api/note/${encodeURIComponent(tokenId)}`);
+  const ev = useEventHistory();
   if (feed.loading) return <p className="small" role="status">Loading history…</p>;
   const events = !feed.error && isEvents(feed.data) ? feed.data.events.filter((e) => typeof e?.event === "string") : [];
   if (events.length === 0)
     return (
       <p className="small" data-testid="note-history-empty">
-        History not indexed yet. Mints and transfers are NEP-297 <code>nep171</code> events in the contract logs; the Feed API does not serve them for Notes yet.
+        {ev.unindexed ? <>Event history isn&apos;t indexed on this host. </> : <>History not indexed yet. </>}Mints and transfers are NEP-297 <code>nep171</code> events in the contract logs; this host&apos;s Feed {ev.unindexed ? "reads contract views only" : "does not serve them for Notes yet"}.
       </p>
     );
   return (

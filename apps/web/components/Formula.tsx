@@ -23,7 +23,7 @@ export const FORMULA_TERMS: Array<[ReactNode, string]> = [
   [<>V<sub>c</sub></>, "collateral units × oracle price (× multiplier on v2)"],
   [<>LTV<sub>c</sub></>, "max_nectar_ltv_bps (owner-set ceiling)"],
   [<>Q<sub>c</sub></>, "committed quotes: live Pappus quote remainders for the asset"],
-  [<>R<sub>c</sub></>, "Nectar Reserve (0 until the Reserve ships)"],
+  [<>R<sub>c</sub></>, "Nectar Reserve: pooled USDC per asset, deployed on nectar-core-v2; the value is read from get_exit_capacity (r_usd_e6)"],
   [<>D<sub>c</sub></>, "verified DEX depth; 0 outside the market session"],
   [<>h<sub>c</sub></>, "base haircut in session, weekend haircut otherwise"],
 ];

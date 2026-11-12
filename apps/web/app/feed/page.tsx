@@ -23,7 +23,7 @@ import { Gate, LoadingBlock, RpcErrorBanner } from "@/components/states";
 import { EquationCard } from "@/components/EquationCard";
 import { SessionBadge } from "@/components/Session";
 import { OracleBadge, optionalView, pricingLabel } from "@/components/OracleBadge";
-import { FeedApiNotice, useFeedApi } from "@/components/useFeedApi";
+import { EventsNotIndexed, FeedApiNotice, useEventHistory, useFeedApi } from "@/components/useFeedApi";
 import { OneClickPanel, RouteStatusBadge } from "@/components/OneClickPanel";
 import { txUrl } from "@/lib/env";
 
@@ -48,6 +48,7 @@ export default function FeedPage() {
     return { rows, quoter, positions: ps };
   }, []);
   const settlements = useFeedApi<FeedSettlements>("api/settlements?limit=20");
+  const events = useEventHistory();
   const oneclick = useFeedApi<FeedOneClick>("api/oneclick");
   const first = data.data?.rows[0];
   const firstCfg = config.collaterals.find((c) => c.symbol === first?.c.symbol) ?? config.collaterals[0];
@@ -130,15 +131,16 @@ export default function FeedPage() {
         <OneClickPanel state={oneclick} />
         <section className="stack" aria-labelledby="settlements-h">
           <h2 id="settlements-h">Settlement history</h2>
+          {events.unindexed ? <EventsNotIndexed what="past settlements" /> : null}
           <FeedApiNotice state={settlements} what="Settlements" />
           {settlements.loading ? (
             <LoadingBlock lines={3} />
           ) : settlements.data ? (
             <Table<FeedSettlement>
-              caption="Recent pre-liquidation settlements"
+              caption={events.unindexed ? "Settlements observed through views since this host started" : "Recent pre-liquidation settlements"}
               rows={settlements.data.items}
               rowKey={(s) => `${s.position_id}-${s.quote_id ?? "v"}-${s.block_height ?? s.observed_at}`}
-              empty={<Card><p>No settlements yet. A keeper triggers one when a position crosses its pre-liquidation LTV.</p></Card>}
+              empty={events.unindexed ? <p className="small" data-testid="settlements-views-empty">None observed through views since this host started.</p> : <Card><p>No settlements yet. A keeper triggers one when a position crosses its pre-liquidation LTV.</p></Card>}
               columns={[
                 { key: "p", header: "Position", cell: (s) => <Link className="link" href={`/position/${s.position_id}`}>#{s.position_id}</Link> },
                 { key: "q", header: "Quote", cell: (s) => (s.quote_id ? `#${s.quote_id}` : "—") },

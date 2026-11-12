@@ -2,7 +2,11 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { TESTNET_RPC_FALLBACKS } from "@nectar/sdk";
 import { ROUTES, noHorizontalScroll, prime } from "./helpers";
+
+// RPC hosts the SDK may fail over to (FastNEAR x2, dRPC, Intear; F-369): a phone run that lands on dRPC/Intear is not an external request.
+const RPC_HOSTS = new Set(TESTNET_RPC_FALLBACKS.map((u) => new URL(u).hostname));
 
 // Runs with or without deployed contracts: every page must render a real state (data, empty, loading or "not deployed").
 for (const theme of ["dark", "light"] as const) {
@@ -13,7 +17,7 @@ for (const theme of ["dark", "light"] as const) {
       const external: string[] = [];
       page.on("request", (r) => {
         const u = new URL(r.url());
-        if (u.hostname !== "localhost" && !u.hostname.endsWith("fastnear.com")) external.push(u.hostname);
+        if (u.hostname !== "localhost" && !u.hostname.endsWith("fastnear.com") && !RPC_HOSTS.has(u.hostname)) external.push(u.hostname);
       });
       await page.goto(route);
       await expect(page.locator("main#main")).toBeVisible();
