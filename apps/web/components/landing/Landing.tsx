@@ -12,8 +12,8 @@ import tokC from "@nectar/ui/3d/tokC.webp";
 import tokD from "@nectar/ui/3d/tokD.webp";
 import { docsHref, hostHref } from "@/lib/env";
 import { CopyContact } from "../CopyContact";
-import { useChain, useFeature, useView } from "../AppProvider";
-import type { ExitCapacity } from "@nectar/sdk";
+import { useChain, useView } from "../AppProvider";
+import type { ExitCapacity, FeatureName } from "@nectar/sdk";
 import { Module, On } from "../FeatureGate";
 import { LandingStats, LiveLimitCard } from "../LandingLive";
 import { ART } from "./art";
@@ -339,20 +339,24 @@ function HubLinks({ hub }: { hub: React.RefObject<HTMLDivElement | null> }) {
 
 /** `contact`: config.yaml site.contact. `solanaLive`: docs/EVIDENCE.md shows the G7 Solana gate PASS (read on the server at build). */
 export function Landing({ contact, solanaLive }: { contact: string | null; solanaLive: boolean }) {
-  const shields = useFeature("shields");
-  const reserve = useFeature("reserve");
-  const profitLock = useFeature("profit_lock");
-  const sol = useFeature("solana_remote");
-  const base = useFeature("base");
-  const agent = useFeature("agent_skill");
-  const x402 = useFeature("x402");
+  // WO-35i: landing copy reads config.yaml `features` straight from the server-rendered config, like Module / On. `useFeature` also
+  // waits for the RPC read of contract_version, so the server HTML and the hydrated page made different claims ("A Base local fork
+  // holds the stock." → "Solana holds the stock."). Config flags are fixed at build, so the hydrated text equals the server text.
+  const { config } = useChain();
+  const flag = (name: FeatureName) => config.features[name] === true;
+  const shields = flag("shields");
+  const reserve = flag("reserve");
+  const profitLock = flag("profit_lock");
+  const sol = flag("solana_remote");
+  const base = flag("base");
+  const agent = flag("agent_skill");
+  const x402 = flag("x402");
   const reduce = useReducedMotion();
   const frame = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const hub = useRef<HTMLDivElement>(null);
   const root = useRef<HTMLDivElement>(null);
   const cta = shields ? { href: "/shield", label: "Open a weekend shield" } : { href: "/borrow", label: "Preview a borrow" };
-  const { config } = useChain();
   const col = config.collaterals[0];
   const capR = useView<ExitCapacity>((v) => v.getExitCapacity(col?.symbol ?? "NVDAx"), [col?.symbol]);
   const ex = example(
@@ -595,8 +599,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
       <Module name={["solana_remote", "base"]} className={s.alt} id="chains">
         <div className={s.wrap}>
           <div className={s["sec-head"]} style={{ marginInline: "auto", textAlign: "center", justifyItems: "center" }}>
-            <h2>NEAR holds the book. {sol && base ? "Solana and a Base local fork hold" : sol ? "Solana holds" : "A Base local fork holds"} the stock.</h2>
-            <p>A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position.{base ? " The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself." : ""}</p>
+            <h2>NEAR holds the book. {sol && base ? "Solana and a Base Sepolia local fork hold" : sol ? "Solana holds" : "A Base Sepolia local fork holds"} the stock.</h2>
+            <p>A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself.</p>
           </div>
           <div className={s.hub} id="hub" ref={hub}>
             <HubLinks hub={hub} />
@@ -615,8 +619,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
             <On name="base">
               <div className={s.node} id="nbase">
                 <div className={s.art} dangerouslySetInnerHTML={{ __html: ART.base }} />
-                <div className={s.body}><h3>Base Sepolia</h3><span className={s.t}>B20-style mock collateral, secp256k1 · local fork, not deployed</span>
-                  <ul><li>NectarVaultBase with EIP-712</li><li>Checks the issuer&apos;s transfer policy first</li></ul></div>
+                <div className={s.body}><h3>Base Sepolia local fork</h3><span className={s.t}>B20-style mock collateral, secp256k1 · local fork, not deployed</span>
+                  <ul><li>NectarVaultBase with EIP-712, on the local fork</li><li>Checks the issuer&apos;s transfer policy first</li></ul></div>
               </div>
             </On>
           </div>
@@ -624,8 +628,8 @@ export function Landing({ contact, solanaLive }: { contact: string | null; solan
           <div className={s.seq} id="settle">
             <div><span className={s.k}>01 Flag</span><h3>Health falls below 1</h3><p>Any keeper calls <code>trigger_preliquidation(position_id)</code> with a function-call key. No deposit, no price, no hash.</p><span className={s.who}>nectar-core on NEAR testnet</span></div>
             <div><span className={s.k}>02 Price</span><h3>A TEE computes the discount, verifiably</h3><p>A pinned, attested OutLayer program returns <code>disc_bps</code>, so the computation can be verified, and the contract clamps it to the quote&apos;s ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement&apos;s discount reveals their product.</p><span className={s.who}>OutLayer, attested</span></div>
-            <div><span className={s.k}>03 Sign</span><h3>Chain Signatures signs</h3><p>The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base). The keeper never holds a key.</p><span className={s.who}>v1.signer-prod.testnet</span></div>
-            <div><span className={s.k}>04 Settle</span><h3>The vault verifies, then pays</h3><p>Solana checks the Ed25519 instruction before <code>settle</code>. Base checks EIP-712 with <code>ecrecover</code>. Then the buyer is paid and the result is relayed home.</p><span className={s.who}>nectar_vault, NectarVaultBase</span></div>
+            <div><span className={s.k}>03 Sign</span><h3>Chain Signatures signs</h3><p>The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork). The keeper never holds a key.</p><span className={s.who}>v1.signer-prod.testnet</span></div>
+            <div><span className={s.k}>04 Settle</span><h3>The vault verifies, then pays</h3><p>Solana checks the Ed25519 instruction before <code>settle</code>. On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with <code>ecrecover</code>. Then the buyer is paid and the result is relayed home.</p><span className={s.who}>nectar_vault, NectarVaultBase</span></div>
           </div>
         </div>
       </Module>
