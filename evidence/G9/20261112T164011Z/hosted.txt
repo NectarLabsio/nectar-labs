@@ -1,0 +1,11 @@
+2026-11-12T16:42:14Z
+https://nectarlabs.vercel.app/ 200 
+https://nectarlabs.vercel.app/borrow 308 https://nectarlabs-app.vercel.app/borrow
+https://nectarlabs-app.vercel.app/ 307 https://nectarlabs-app.vercel.app/feed
+https://nectarlabs-app.vercel.app/borrow 200 
+https://nectarlabs-app.vercel.app/docs 200 
+https://nectarlabs-app.vercel.app/docs/ 308 https://nectarlabs-app.vercel.app/docs
+https://nectarlabs-app.vercel.app/api/health 200 
+https://feed-production-2f2776c9.up.railway.app/health 200 
+{"ok":true,"last_indexed_block":277389115,"chain_head":277389115,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-12T16:42:16.385Z","poll_age_s":1,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"3974b5bb2df4ff98772c758621a68932db30f653"}
+{"ok":true,"deployed":true,"core":"nectar-core-v2.nectar.testnet","version":"2.2.1-v7","pool":{"available_usd_e6":"40771000000","utilised_usd_e6":"9229000000","treasury_usd_e6":"80662710","lenders_fees_usd_e6":"17652060"},"network":"testnet","rpc":["https://test.rpc.fastnear.com","https://rpc.testnet.fastnear.com","https://near-testnet.drpc.org","https://testnet-rpc.intea.rs"],"as_of":"2026-11-12T16:42:16.088Z","age_s":1}

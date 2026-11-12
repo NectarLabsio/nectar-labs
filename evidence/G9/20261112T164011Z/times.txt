@@ -1,0 +1,11 @@
+start 2026-11-12T16:41:18Z
+pnpm-i rc=0 secs=12
+demo-testnet rc=0 secs=4
+verify rc=0 secs=28
+web-dev ready secs=4
+quickstart total secs=55 end 2026-11-12T16:42:13Z
+docs-build rc=0 secs=20
+gitleaks rc=0 secs=3
+phaseA done 2026-11-12T16:42:39Z
+next-build rc=0 secs=12
+phaseC done 2026-11-12T16:44:09Z

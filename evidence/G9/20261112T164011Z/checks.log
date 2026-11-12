@@ -1,0 +1,97 @@
+== cited commits
+a677689:commit 2e16f9b:commit b8784c1:commit 5083d30:commit 837cd12:commit 89f83ee:commit 2bf99e1:commit 3107a1a:commit 48b5c5a:commit 45ed1f3:commit 5f011bb:commit 
+== diff 5f011bb..HEAD (names)
+ .../verifier-rerun7b-20261112T1614Z/feed-hrefs.txt |    1 +
+ .../verifier-rerun7b-20261112T1614Z/install.log    |   31 +
+ .../verifier-rerun7b-20261112T1614Z/r7b-copy.sh    |   11 +
+ .../G3b/verifier-rerun7b-20261112T1614Z/r7b.sh     |   57 +
+ .../verifier-rerun7b-20261112T1614Z/run-master.log |   19 +
+ .../G3b/verifier-rerun7b-20261112T1614Z/run.txt    |   22 +
+ .../server-docs.log                                |    1 +
+ .../server-hosted.log                              |    5 +
+ .../WO-34/artifact-upload-20261112T161324Z.log     |    5 +
+ ...preview-smoke-docs-5f011bb-20261112T161542Z.log |    5 +
+ .../WO-34/prod-smoke-release3-20261112T163758Z.log |   65 +
+ 24 files changed, 3318 insertions(+), 1 deletion(-)
+== evidence files
+prod-smoke-20261112T133338Z.log
+prod-smoke-20261112T133529Z.log
+prod-smoke-release-20261112T145739Z.log
+prod-smoke-release3-20261112T163758Z.log
+112:  hosted_until: "2026-11-25"
+30:| Railway Feed health and lag | VERIFIED (11:20:55Z) | `ok:true, source:"views", last_indexed_block 277355934, lag_blocks 0, poll_age_s 3, events_indexed 0, commit fd06e11`. Chain head (FastNEAR, final) 277355941 → **
+== table rows
+10:| G1 contract tests | PASS | 2026-11-09T20:43Z | b721641 | evidence/G1/verifier-20261109T2043Z.log, evidence/G1/verif
+13:| G4 OutLayer | PASS | 2026-11-09T22:10Z | d87eef6 | evidence/G4/verifier-20261109T2210Z/ (attestation via testnet-ap
+14:| G5 oracle | FALLBACK (disclosed) | 2026-11-09T22:55Z | 706d940 | evidence/G5/verifier-20261109T2254Z/ (no live Pyth
+15:| G6 1Click depth | PASS | 2026-11-09T22:58Z | fea52b7 | evidence/G6/verifier-20261109T224955Z/ (re-run after FAIL at
+16:| G7 Solana + signer (v7) | PASS — release + settle round trip verified from both chains (read-only) | 2026-11-10T16:
+17:| G7 Solana + signer (v6) | PARTIAL — superseded by G7 (v7) above | 2026-11-09T23:57Z | 97382fd | evidence/G7/verifie
+18:| G8 copilot | PASS (fixture) (re-run; earlier FAIL 2b49f42 was docs wording) | 2026-11-09T23:56Z | df4706f | evidenc
+19:| G1 (v7 additions) | PASS | 2026-11-10T13:34Z–14:05Z | 09c4316 | evidence/G1/verifier-v7-20261110T1334Z/ (unit 318/0
+20:| G10 v7 facts + toolchain | PASS with open items (F-351, F-352, F-353) | 2026-11-10T13:44Z | 09c4316 | evidence/G10/
+21:| G7 prep (not G7) | RECORDED: vault deployed + 25 anchor tests | 2026-11-10T13:44Z | 09c4316 | evidence/G7/prep-veri
+22:| G11 v7 contract (re-run after D-027) | PASS — 608 unit + 50 sandbox + mock-ft 23 green; wasm hash = deployed 2.2.1-
+23:| G11 v7 contract | PASS with open item (F-352) — re-run after WO-23c; prior FAIL block kept | 2026-11-10T15:47Z–16:1
+24:| G2b testnet deploy v2 | PASS (re-run after WO-16b; prior FAIL block kept) | 2026-11-10T16:45Z–16:52Z | 91db9ea | ev
+25:| G2b (first run) | FAIL — superseded by re-run above | 2026-11-10T16:34Z–16:45Z | 1c4cdb3 | evidence/G2b/verifier-20
+26:| G14 x402 | PASS (1–2 hold; F-328 keys hold) | 2026-11-10T16:48Z–16:52Z | 91db9ea (clone; tests) / 6ba1b09 (summary)
+38:| G12 Base toolchain + collateral | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; scripts/06 + 26 NOT 
+39:| G13 Base round trip | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; ERC-8021 suffix not appended (D-
+40:| G2b testnet deploy v2 (after D-027) | PASS — supersedes the 16:45Z row as current state; open item: rebuild needed 
+41:| G7 Solana + signer (re-run after D-027) | PASS — read-only, both chains | 2026-11-11T08:02Z–08:25Z | 3ab3026 | evid
+42:| G13 Base round trip (re-run after D-027) | PASS — local fork of Base Sepolia (D-026), not Base Sepolia; earlier cav
+43:| G14 x402 (re-run on HEAD; demo agent verifies the MCP borrow call before signing) | PASS — own x402 server from the
+44:| G14 x402 (re-run after D-027) | PASS — chain claims (08:02Z) + 402 → 200 verifier-run 2026-11-11T13:54Z–13:55Z: own
+45:| G1 (2.2.1 gas rows) | PASS (re-check after WO-45; prior FAIL 13:53Z at 45ed1f3 kept in §G1) — 67 of 67 non-private 
+== EVIDENCE section heads
+162:## G3b
+164:### G3b re-run 7b — RELEASE 3 5f011bb, item (d) only — PASS — 2026-11-12T16:14Z–16:31Z — commit 5f011bb
+183:### G3b re-run 7 — RELEASE 2 4c2a0bb, run-7 order (a)–(l) + real selector — FAIL (1 docs-only reason, (d)) — 2026-11-12T15:30Z–16:09Z — commit 4c2a0bb
+937:## G9
+1935:## WO-34 production
+1937:### WO-34 production (release 3974b5b) (WO-34v2): FAIL (1 reason), 2026-11-12T15:00Z–15:18Z, release 3974b5bb2df4ff98772c758621a68932db30f653
+1966:### WO-34 production acceptance (WO-34v): FAIL, 2026-11-12T13:38Z–14:45Z, deployed commit ca3411115aed1d6c127e2d82ba9f31a163221496
+CORS https://nectarlabs.vercel.app -> access-control-allow-origin: https://nectarlabs.vercel.app
+CORS https://nectarlabs-app.vercel.app -> access-control-allow-origin: https://nectarlabs-app.vercel.app
+CORS https://evil.example -> 
+== R2 spot checks
+119:  add("request_matches_input", "Signed request is the one built from your notes", pass(sameRequest), sameRequest ? `request ${sha256Hex(expected.requestBody).slice(0, 16)}… rebuilt in your browser` : "the server returned an exchange for a different request");
+54:/** `content-type: application/json` (parameters such as `charset` allowed). Anything else is a 415. */
+86:/** Origin (403) → content type (415) → size (413) → JSON (400). Returns the parsed body. */
+88:  if (!isSameOrigin(req)) return reject(403, "forbidden", "Cross-origin requests are not accepted.");
+89:  if (!isJsonContentType(req)) return reject(415, "unsupported_media_type", "content-type must be application/json.");
+96:  if (text === null) return reject(413, "payload_too_large", `Body over ${Math.floor(maxBytes / 1024)} KB.`);
+155:/** 429 with Retry-After, or null when the request may proceed. `key` defaults to the client key; pass "*" for a global bucket. */
+services/x402/src/borrow-guard.ts
+packages/sdk/src/views.ts:76:  accountExists = async (accountId: string): Promise<boolean> => {
+apps/web/lib/api/feed-paths.ts:2:// Id segments refuse "." and ".." (R2-11): `new URL(base + "/api/note/..")` would resolve outside the allow-list.
+apps/web/lib/api/feed-paths.ts:20:  if (segments.some((s) => s === "." || s === ".." || s.includes("/"))) return false;
+privacy phrases:
+== step 12 SECURITY
+115:Also from the report's notes (R2-13): the copilot server module imports `server-only`, so a client import fails the build; the E2E key adapter works on localhost only; the Feed's `zod` is now 4.6.7 (WO-44).
+123:- **Dependencies** (`pnpm audit --prod` in the report). The zod advisory GHSA-mrhx-c7xc-m3w5 / CVE-2023-54404 (high, CVSS 3.1 7.5, memory exhaustion on oversized arrays; zod < 4.6.6, no patched 3.x; F-383, F-384) still reaches `services/x402` through `@x40
+129:- **FACTS C-020 (kept by decision, D-029).** Sources define "implicit account" differently. The SDK takes the safe side: only 64-hex and `0x` ids count as implicit, and `0s` / `0u` receivers take the `view_account` path and fail closed (F-382). Kunal kept 
+148:11. **FACTS C-020, kept by decision: no Note transfer from the web app to a `0s` / `0u` account that does not exist yet.** The web app's Note-transfer receiver check (R2-09: `isImplicitAccount` in packages/sdk/src/network.ts, `receiverNeedsLookup` in packa
+149:12. **Remote Loan Notes do not carry the collateral release.** A Loan Note transfer (`nft_transfer` → `move_note`, contracts/nectar-core/src/notes.rs:332-349) sets `position.borrower` to the new owner, and repay is permissionless (`on_repay`, contracts/nec
+332:    fn move_note(&mut self, token_id: &str, r: NoteRef, from: &AccountId, to: &AccountId) {
+347:                p.borrower = to.clone();
+10://!    `.then(on_deposit_verified)`: authority and committed depositor must match (SR-8), depositor recorded; then the
+14://!    the depositor so the collateral can be released.
+38:/// SR-8 (WO-34a): the depositor committed at reservation (raw key: code-only upgrade, no struct layout change).
+39:pub const COMMITTED_DEPOSITOR_PREFIX: &[u8] = b"__v7c_depositor:";
+87:/// Vault depositor of the position's chain. SR-8: a 32-byte on-curve Solana key (domain 1) or a non-zero 0x address
+89:pub fn valid_depositor(s: &str, domain_id: u32) -> bool {
+5:const IMPLICIT_HEX64 = /^[0-9a-f]{64}$/;
+6:const IMPLICIT_ETH = /^0x[0-9a-f]{40}$/;
+234:| F-451 | 2026-11-12 | V (local command) + derived | zod: `pnpm why -r zod` → **2 versions**: **3.25.76** only via @x402/core 2.18.0 (← services/x402 direct, @x402/near 2.18.0, @x402/fetch 2.18.0, @fastnear/x402 2.5.0); **4.6.7** (≥ 4.6.6 = patched, F-383)
+340:| F-383 | 2026-11-11 | V | **GHSA-mrhx-c7xc-m3w5 = CVE-2023-54404**, severity **high**, CVSS 3.1 **7.5** `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H` (CVSS 4.0 8.2 `CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N`), CWE-770; published 202
+341:| F-384 | 2026-11-11 | V | Vulnerable construct (fix commit a0ebf970 = PR #6652 "fix(v4): check array, set and map size bounds before parsing elements", merged 2026-10-09T19:50:22Z, "Fixes #6643"): "`.max()`, `.length()` and `.size()` on arrays, sets and m
+342:| F-385 | 2026-11-11 | V (derived) | **Verdict: not reachable from untrusted input in services/x402.** @x402/core 2.18.0 imports zod v3 API (`import { z } from "zod"`, dist/esm/chunk-N4QXZG2Z.mjs:2). (a) **Paid route**: server.ts:90 `processHTTPRequest` de
+21:    "zod": "4.6.7"
+7984:  zod@3.25.76:
+7987:  zod@4.6.7:
+18176:  zod@3.25.76: {}
+18178:  zod@4.6.7: {}
+3351:  '@x402/core@2.18.0':
+12821:  '@x402/core@2.18.0':

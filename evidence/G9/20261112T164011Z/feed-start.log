@@ -1,0 +1,8 @@
+
+> feed@0.1.0 start /private/tmp/verify-G9-20261112T164011Z/services/feed
+> node --disable-warning=ExperimentalWarning src/main.ts
+
+{"ts":"2026-11-12T16:42:55.451Z","level":"info","service":"feed","msg":"feed_started","port":18788,"single_port":false,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"18789","rpc_endpoints":"test.rpc.fastnear.com,rpc.testnet.fastnear.com,near-testnet.drpc.org,testnet-rpc.intea.rs","start_block":"head","cors":"legacy","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
+{"ts":"2026-11-12T16:42:55.816Z","level":"info","service":"feed","msg":"rpc_endpoint","endpoint":"test.rpc.fastnear.com","previous":"none","method":"callFunctionRaw"}
+{"ts":"2026-11-12T16:42:58.440Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:43:08.592Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277378823 HTTP 429"}
