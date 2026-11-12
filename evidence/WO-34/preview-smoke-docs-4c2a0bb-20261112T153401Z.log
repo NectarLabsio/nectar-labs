@@ -1,0 +1,12 @@
+docs preview https://nectar-labs-docs-nicn4gxe3-kunals-projects-35d3a237.vercel.app (release 2 4c2a0bb, dpl_ArXmchrxzzRP827ELxcjVhSoRJRV) 20261112T153401Z
+/ → 307 https://nectar-labs-docs-nicn4gxe3-kunals-projects-35d3a237.vercel.app/docs/
+content-security-policy: frame-ancestors 'none'
+x-frame-options: DENY
+docs smoke https://nectar-labs-docs-nicn4gxe3-kunals-projects-35d3a237.vercel.app: pages 56, assets 6, failures 0
+smoke exit 0
+client nav → /docs/start/quick-start h1: Quick start (no keys needed)
+failed same-origin requests: 0
+console errors: 0
+themes after 0..3 clicks: dark/dark → light/light → dark/dark → light/light
+distinct data-theme values: 2 (light and dark both reached: true)
+console errors: 0
