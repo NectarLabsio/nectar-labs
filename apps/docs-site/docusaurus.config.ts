@@ -14,31 +14,44 @@ const analytics = isProd && (requested === 'ga4' || requested === 'plausible') ?
 const ga4Id = process.env.DOCS_GA4_ID ?? ''; // TODO-H4: GA4 measurement id; empty keeps GA4 off
 const plausibleDomain = process.env.DOCS_PLAUSIBLE_DOMAIN ?? ''; // TODO-H4/H5: empty keeps Plausible off
 
-// Hosting (WO-34, D-030). The docs are served at APP_URL + /docs: `baseUrl: '/docs/'` with docs
-// `routeBasePath: '/'` gives /docs/<slug> (F-391). `url` is the public origin only, no path (F-391), so
-// DOCS_ORIGIN_URL is the APP origin (for example https://ac.nectarlabs.io), NOT the docs deployment's own
-// host (web's DOCS_ORIGIN, the rewrite target). Fallbacks: the origin of DOCS_URL, then local.
-// The build output is flat, with no /docs folder (F-393): the APP rewrite `/docs/:path*` -> `<docs deployment>/:path*`
-// strips the prefix. Locally `pnpm --filter docs-site serve` honours baseUrl (http://localhost:3000/docs/).
-// apps/docs-site/vercel.json: "cleanUrls": true serves a/b.html at /a/b (F-428), read from the docs rootDirectory (F-430); trailingSlash unset (F-429);
-// the orchestrator ships it as an inline stub because Vercel reads it before install. Its two rewrites (WO-34s) let the docs deployment, opened
-// directly, serve the same /docs/* URLs the pages reference: `/docs/` -> `/` (the baseUrl home link; `/docs/:path*` does not match a trailing
-// slash, F-433), then `/docs/:path*` -> `/:path*` (assets and /docs/<slug>). The filesystem is checked first, so flat files are never shadowed (F-434);
-// how cleanUrls resolves a rewrite destination is confirmed live (F-435). Read it directly at <docs host>/docs/.
-// Root redirect (WO-34w): `/` -> `/docs/`, `permanent: false` = 307 (F-437); source `/` compiles to `^/$`, root only, query kept (F-439).
-// Safe only with WO-34t: the APP keeps the /docs prefix when proxying, so it never requests the docs origin `/` and cannot loop through the APP.
-// OPEN, check live (F-438): routing-utils source puts redirects before the filesystem, so `/` gets the 307 although index.html exists, but
-// that order and whether the `/docs/` -> `/` rewrite (check: true) re-enters the redirect are derived from source, not documented.
-// Expect `curl -sI <docs>/` = 307 `location: /docs/` and `curl -sI <docs>/docs/` = 200. If it loops, a `/docs/` -> `/index.html` rewrite does not
-// help: `/index.html` matches the cleanUrls 308 route (-> `/`) that also sits before the filesystem; remove the redirect instead.
-// Headers (WO-35g, F-452): source `/(.*)` sets X-Frame-Options DENY, `Content-Security-Policy: frame-ancestors 'none'`, X-Content-Type-Options
-// nosniff, Referrer-Policy strict-origin-when-cross-origin. No script/style CSP directives (Docusaurus inline scripts; the APP's own CSP covers
-// APP /docs). routing-utils puts headers after redirects and before the filesystem and rewrites, matching the incoming path, so clean URLs and
-// rewritten /docs/* get them (F-453, derived); the 307/308 redirect responses probably do not (runtime not tested; check `curl -sI` after deploy).
+// Hosting (WO-64). The docs are served at the root of their own host, DOCS_URL (https://docs.nectarlabs.io, config.yaml
+// site.production_hosts; DNS live F-458). `baseUrl: '/'` with docs `routeBasePath: '/'` gives /<slug>, home `/` (F-459, from F-391);
+// `url` is the origin only, no path (F-391), so the sitemap <loc> and the canonical are DOCS_URL + route (F-392). DOCS_URL unset (local):
+// `pnpm --filter docs-site start|serve` on http://localhost:3000/.
+// apps/docs-site/vercel.json (read from the docs rootDirectory, F-430; the orchestrator ships it as an inline stub because Vercel reads it
+// before install): "cleanUrls": true serves a/b.html at /a/b and 308s the .html form (F-428; `trailingSlash: false` writes <path>.html, F-392).
+// Old links on this host from the /docs era: permanent (308) redirects `/docs` and `/docs/` -> `/` (`/docs/:path*` does not match the trailing
+// slash, F-433) and `/docs/:path*` -> `/:path*`, query passed through (F-437). Redirects run before the filesystem
+// (F-438/F-453); the build has no /docs folder, so nothing is shadowed. The old `/` -> `/docs/` redirect and both /docs rewrites are gone:
+// kept next to a `/docs/` -> `/` redirect they would loop (F-459). Old links on the app and landing hosts are 308ed to DOCS_URL by apps/web.
+// Headers (F-452): source `/(.*)` sets X-Frame-Options DENY, `Content-Security-Policy: frame-ancestors 'none'`, X-Content-Type-Options nosniff,
+// Referrer-Policy strict-origin-when-cross-origin. No script/style CSP directives (Docusaurus inline scripts). Headers sit after redirects and
+// before the filesystem (F-453, derived), so the 308 responses probably carry none (not tested live; check `curl -sI` after deploy).
 const originOf = (u: string | undefined): string | undefined => (u ? new URL(u).origin : undefined);
-const ORIGIN = originOf(process.env.DOCS_ORIGIN_URL) ?? originOf(process.env.DOCS_URL) ?? 'http://localhost:3000';
-// Web app links. Hosted: APP_URL (TODO-H-DOMAIN; *.vercel.app if H-DOMAIN is silent). Local: `pnpm --filter web dev`.
-const APP = originOf(process.env.APP_URL) ?? (process.env.DOCS_ORIGIN_URL || process.env.DOCS_URL ? ORIGIN : 'http://localhost:3100');
+const hosted = Boolean(process.env.DOCS_URL);
+const DOCS = originOf(process.env.DOCS_URL) ?? 'http://localhost:3000';
+// Other hosts. Hosted: SITE_URL, APP_URL, STATUS_URL; if one is missing, the production host from config.yaml site.production_hosts.
+// Local (DOCS_URL unset): `pnpm --filter web dev` on http://localhost:3100 serves landing, app and /status on one host.
+const PROD = { site: 'https://nectarlabs.io', app: 'https://testnet.nectarlabs.io', status: 'https://status.nectarlabs.io' };
+const APP = originOf(process.env.APP_URL) ?? (hosted ? PROD.app : 'http://localhost:3100');
+const SITE = originOf(process.env.SITE_URL) ?? (hosted ? PROD.site : APP);
+// STATUS_URL serves the status page at its root; unset, the page stays on the landing host at /status (apps/web WO-62b).
+const STATUS = originOf(process.env.STATUS_URL) ?? (hosted ? PROD.status : `${SITE}/status`);
+// The legal pages (docs/legal/*.md) are also rendered by apps/web at /legal/<slug>, so they link docs pages as `/docs/<slug>`: on the app
+// and landing hosts that path is 308ed to DOCS_URL (hosted) or answered by the in-app /docs page (local). Here the prefix is dropped
+// before the links are resolved, so onBrokenLinks still checks every target.
+interface MdNode { type: string; url?: string; children?: MdNode[] }
+const DOCS_PREFIX = /^\/docs(?=[/#?]|$)/;
+const dropDocsPrefix = () => (tree: MdNode): void => {
+  const walk = (n: MdNode): void => {
+    if ((n.type === 'link' || n.type === 'definition') && n.url && DOCS_PREFIX.test(n.url)) {
+      const rest = n.url.replace(DOCS_PREFIX, '');
+      n.url = rest.startsWith('/') ? rest : `/${rest}`;
+    }
+    n.children?.forEach(walk);
+  };
+  walk(tree);
+};
 // TODO-H2: public repo URL. Empty (the default while the repo is private) hides every GitHub link.
 const REPO = (process.env.REPO_URL ?? '').replace(/\/+$/, '');
 const github = <T,>(item: T): T[] => (REPO ? [item] : []);
@@ -47,8 +60,8 @@ const config: Config = {
   title: 'Nectar Labs',
   tagline: 'Committed liquidity, verifiable settlement.',
   favicon: 'img/favicon.png',
-  url: ORIGIN,
-  baseUrl: '/docs/',
+  url: DOCS,
+  baseUrl: '/',
   trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'throw',
@@ -68,6 +81,7 @@ const config: Config = {
         sidebarPath: './sidebars.ts',
         routeBasePath: '/',
         exclude: ['**/._*'],
+        beforeDefaultRemarkPlugins: [dropDocsPrefix],
       },
       blog: {
         routeBasePath: 'changelog',
@@ -97,7 +111,7 @@ const config: Config = {
       logo: { alt: 'Nectar Labs', src: 'img/lockup-light.png', srcDark: 'img/lockup-dark.png', height: 28 },
       items: [
         { type: 'docSidebar', sidebarId: 'docs', label: 'Docs', position: 'left' },
-        { to: '/start/live-on-testnet', label: 'Status', position: 'left' },
+        { href: STATUS, label: 'Status', position: 'left' },
         { to: '/changelog', label: 'Changelog', position: 'left' },
         { href: `${APP}/feed`, label: 'Feed', position: 'right' },
         ...github({ href: REPO, label: 'GitHub', position: 'right' as const }),
@@ -108,7 +122,7 @@ const config: Config = {
       logo: { alt: 'Nectar Labs', src: 'img/lockup-light.png', srcDark: 'img/lockup-dark.png', height: 24 },
       links: [
         { title: 'Products', items: [
-          { label: 'Nectar Labs', href: APP }, { label: 'Nectar Feed', href: `${APP}/feed` },
+          { label: 'Nectar Labs', href: APP }, { label: 'Nectar Feed', href: `${APP}/feed` }, { label: 'Status', href: STATUS },
           { label: 'Keepers', href: `${APP}/keepers` }, { label: 'Post a quote', href: `${APP}/quote/new` } ] },
         { title: 'Protocols', items: [
           { label: 'NEAR', href: 'https://near.org' }, { label: 'Solana', href: 'https://solana.com' },
@@ -116,13 +130,13 @@ const config: Config = {
           { label: 'OutLayer', href: 'https://outlayer.fastnear.com/docs/getting-started' }, { label: 'NEAR Intents', href: 'https://docs.near-intents.org/' } ] },
         { title: 'Build', items: [
           { label: 'Docs', to: '/' }, { label: 'SDK', to: '/integrate/sdk' }, { label: 'Feed MCP', to: '/integrate/feed-mcp' },
-          ...github({ label: 'GitHub', href: REPO }), { label: 'Status', to: '/start/live-on-testnet' } ] },
+          ...github({ label: 'GitHub', href: REPO }), { label: 'Live on testnet', to: '/start/live-on-testnet' } ] },
         { title: 'Resources', items: [
           { label: 'Whitepaper', to: '/concepts/whitepaper' }, { label: 'Security', to: '/security/trust-model' },
           { label: 'Changelog', to: '/changelog' }, { label: 'Brand assets', to: '/project/brand' },
           { label: 'Evidence', to: '/project/evidence' } ] },
         { title: 'Company', items: [
-          { label: 'About', to: '/' }, { label: 'Talk to us', href: 'mailto:kunal@nectarnetwork.fun' },
+          { label: 'About', href: `${SITE}/about` }, { label: 'Talk to us', href: 'mailto:kunal@nectarnetwork.fun' },
           { label: 'Team', to: '/project/team' }, { label: 'kunal@nectarnetwork.fun', href: 'mailto:kunal@nectarnetwork.fun' } ] },
         { title: 'Legal', items: [
           { label: 'Privacy', to: '/legal/privacy' }, { label: 'Cookies', to: '/legal/cookies' },
