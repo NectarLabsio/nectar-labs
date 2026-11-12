@@ -35,7 +35,7 @@ Every borrow above the static limit pays a limit premium. The buyers' 70 % share
 
 ## What a quote costs
 
-When a position is pre-liquidated, quotes for that asset are consumed in ascending `max_discount_bps`, then oldest first, touching at most 8 quotes. The buyer's escrow repays the debt and the buyer receives collateral worth more than it paid, by up to the discount. In P0 the discount is exactly `max_discount_bps`. In P1 a TEE computes a clearing discount that can only be lower. See [Pre-liquidation](/concepts/pre-liquidation).
+When a position is pre-liquidated, quotes for that asset are consumed in ascending `max_discount_bps`, then oldest first, touching at most 8 quotes. The buyer's escrow repays the debt and the buyer receives collateral worth more than it paid, by up to the discount. In P0 the discount is exactly `max_discount_bps`. In P1 a TEE computes a clearing discount that can only be lower, and its attestation makes that computation verifiable. See [Pre-liquidation](/concepts/pre-liquidation).
 
 ## Leaving
 

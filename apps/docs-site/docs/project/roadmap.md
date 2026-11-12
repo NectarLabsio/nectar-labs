@@ -19,4 +19,4 @@ description: P0 to PROD, with the gate each phase must pass.
 
 **Cut order if time runs short** (last to first): copilot, Feed MCP, Solana leg (keeping the signer round-trip demo), 1Click depth, live oracle (stay on the disclosed owner oracle), OutLayer quoter (stay on disclosed static pricing). P0 is never cut.
 
-**Deliberately not built:** other chains (D-001), secp256k1 settlement, anything on mainnet, a token, governance UI, mobile apps. Only NEAR testnet and Solana devnet are used (F-003).
+**Deliberately not built:** other chains (D-001), secp256k1 settlement, anything on mainnet, a token, governance UI, mobile apps. Live networks: NEAR testnet and Solana devnet only (F-003). The EVM vault runs on a local fork of Base Sepolia (D-026), not on Base Sepolia.

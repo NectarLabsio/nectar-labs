@@ -65,7 +65,7 @@ Limits on this run: the harness refused `git -C /Volumes/T7/nectar-labs`, so I c
 | 7 | **Keeper unhealthy now**: `/healthz` ok:false with 4 consecutive FastNEAR -429 (11:21Z). Settlement triggers stall while this lasts | keeper agent / orchestrator | 30 min (RPC fallback or restart) |
 | 8 | **Local Feed :8788 stale**: 503, last poll 2026-11-11T09:45Z. DEMO_SCRIPT "Before recording" (per STATE) says restart it with a fresh FEED_DB_PATH, or use the Railway Feed | orchestrator (Kunal must not be the one to stop host services) | 10 min |
 | 9 | Hosted Feed has no event history (`events_indexed 0`, views mode, neardata 429). Restoring it needs a key (H-NEARDATA, optional) | Kunal (optional) | 5 min |
-| 10 | `nfts` track undecided (H16 partial) | Kunal | 1 min |
+| 10 | `nfts` track: decided 2026-11-12, not entered (H16 CLOSED; H17 CLOSED "fire-sales") | — | done |
 | 11 | Main checkout working-tree cleanliness | **not re-checked** (harness refused git outside my worktree) | orchestrator: `git status` |
 | 12 | Kunal's real-wallet borrow on the hosted app | **OPEN** (not reported; the hosted app is not deployed yet) | Kunal, 10 min after deploy |
 | 13 | Explorer pages (nearblocks / Solana Explorer) never opened by a human (H-EXPLORER) | Kunal | 3 min |
@@ -86,7 +86,7 @@ Limits on this run: the harness refused `git -C /Volumes/T7/nectar-labs`, so I c
 ## Needs Kunal (ordered by deadline)
 1. **Now:** `kill 14369` (stray preview server on :3217; still running at 11:21Z).
 2. **Before recording (2026-11-13):** after production is up, do the real-wallet borrow on https://nectarlabs-app.vercel.app (DEMO_SCRIPT "Real-wallet borrow on the hosted app"; the owner first storage_deposits and mints 2 NVDAx for your account), then report the result. Open the README explorer links once (H-EXPLORER).
-3. **Any time before H1, defaults exist:** reply `H10 team: … | projects: … | lead: … | email: … | size: …`; `H12 approved`; `H16 nfts yes|no`; `H17 fire-sales|liquidations`; optional `H18`, H13 Pyth key, H7 NEAR AI key, H-NEARDATA key; optionally `H-KEYS yes|no`.
+3. **Any time before H1, defaults exist:** reply `H10 team: … | projects: … | lead: … | email: … | size: …`; `H12 approved`; optional `H18`, H13 Pyth key, H7 NEAR AI key, H-NEARDATA key; optionally `H-KEYS yes|no`.
 4. **2026-11-14, morning UTC:** H11: record a voice-over on DEMO_SCRIPT.md, or accept the captioned `pnpm demo:capture` video.
 5. **2026-11-14, after the orchestrator moves `submission-rc` to the G9-run-4 commit (do not run `git tag submission-rc`: the tag exists):** H2: create the GitHub repo, then `git remote add origin <url> && git push -u origin main --tags`, make it public in GitHub Settings → General → Danger Zone → Change visibility; reply `H2 done <url>`. Then the verifier re-runs G9 from the public URL.
 6. **After H2 + H11:** H3: post the thread from docs/X_POST.md yourself (delete the bracketed sources, video on post 1); reply `H3 <post url>`.
