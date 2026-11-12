@@ -123,6 +123,12 @@
     server's config.yaml flags so server HTML = hydrated text; every Base sentence says "local fork"; v7.spec.ts:189-243 hydrated tests 16/16).
     verify:quick 0; web build + check-trace 6/6. **RELEASE 2 = this STATE commit.** Next: tarball → previews + (h) incl. hydrated landing →
     G3b run 7 (order block "Run 7") → production → WO-34v3 (hydrated landing + crawl) ‖ G9 run 5 → submission-rc → FINAL_REPORT re-audit.
+  - Release 2 (4c2a0bb) previews PASS incl. hydrated landing (server = hydrated; 3 Base sentences "local fork"). G3b re-run 7: PASS except (d) — the
+    docs Feed link went to the bare origin (404). WO-35j: links → /health (merged). Delta release 2 → now = 2 docs lines (feed-rest.md, monitoring.md).
+    **RELEASE 3 = this STATE commit.** Plan: G3b (d) crawl re-check on release 3 + docs preview smoke → production docs + web from release 3 (Feed
+    stays on 3974b5b: services/feed unchanged since) → WO-34v3 ‖ G9 run 5 → submission-rc → FINAL_REPORT re-audit.
+    Console noise (third-party): FastNEAR replies without CORS headers when rate-limiting browser RPC calls (SDK falls back); previews also log
+    vercel.live feedback.js blocked by our CSP.
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
@@ -336,7 +342,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T15:28:29Z · commit 437bb45
+Last activity: 2026-11-12T16:11:11Z · commit 053ede4
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
