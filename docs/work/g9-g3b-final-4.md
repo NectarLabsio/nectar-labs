@@ -13,8 +13,8 @@ WO-34 additions (all on your own ports, from the fresh clone):
   apps/docs-site/docs/legal/privacy.md.
 - (d) `node apps/web/scripts/crawl.mjs --polite` in hosted mode (docs via scripts/serve-docs.mjs): 0 failures, 0 of our console errors.
 - (e) Lighthouse default route list (now including /about /status /changelog /brand /talk /security) ≥ 90, both themes.
-- (f) A production build with `NECTAR_PRODUCTION=1` and the site URLs set must FAIL while config.yaml `site:` operator fields are null or any page
-  contains `TODO-H`. That failure is expected; record it as PASS of the guard.
+- (f) H-LEGAL is answered (config.yaml `site:` filled, 05b8c63). A production build with `NECTAR_PRODUCTION=1` and SITE_URL/APP_URL set must now
+  SUCCEED. Then, in your clone only, null `site.operator` and rebuild: it must FAIL with the guard message (record as PASS of the guard); restore the file.
 - (g) WO-34p: after `pnpm --filter web build`, `node apps/web/scripts/check-trace.mjs` exits 0 (6/6 dynamic routes carry packages/config/config.yaml).
 - (h) Vercel preview of the G3b commit (the orchestrator deploys it and hands you the share links; you never deploy):
   - web: every route in the crawl list answers 200 (or its expected redirect); /api/health ok:true; runtime logs show `nodejs22.x`.
@@ -22,6 +22,12 @@ WO-34 additions (all on your own ports, from the fresh clone):
   - docs opened directly at `<docs-host>/docs/<slug>` (WO-34s): every page answers 200, and every `/docs/assets/*.css|js` and `/docs/img/*` it references
     answers 200. In real Chrome, `/docs/` shows no "Your Docusaurus site did not load properly" banner and the page hydrates (theme toggle works).
   - Status codes alone are not a pass: the 46c35ea docs preview answered 200 on all 55 pages while every asset under `/docs/assets/` was 404.
+    `scripts/deploy/smoke-docs.sh <docs-origin> <share-token>` runs the page + asset check.
+  - docs root (WO-34w): `<docs-host>/` → 307 `location: /docs/`, and `/docs/` → 200 (no redirect loop).
+  - Hosted-mode proxy (WO-34t, APP `/docs/*` → docs origin `/docs/*`, prefix kept): covered locally by hosts.spec.ts with `E2E_DOCS=1` and
+    apps/web/scripts/serve-docs.mjs; the live hosted check is WO-34v (production acceptance).
+- Run 5 target: the code-final commit the orchestrator names (c4f143b or a docs-only descendant). Playwright on this machine needs `PW_CHANNEL=chrome`
+  (the bundled headless shell 1254 is not installed).
 **G9 (verifier B) runs only after the deploy step** (README "Hosted demo" lands first), or on Kunal's deadline if hosting is skipped.
 
 **G9 (verifier B):** docs/work/g9-final.md steps 1–7 + docs/work/g9-final-2.md steps 8–10, plus:
