@@ -16,9 +16,9 @@ assertProductionReady();
 export const metadata: Metadata = {
   title: { default: "Nectar Labs", template: "%s · Nectar Labs" },
   description: "Committed market-maker quotes raise borrowing limits on thin-exit collateral. NEAR testnet, mock collateral.",
-  // Favicon and OG image: packages/ui/logo artwork already copied to public/brand (no new artwork).
+  // Favicon: packages/ui/logo artwork already copied to public/brand (no new artwork). OG/Twitter text, image and the per-host
+  // canonical, og:url and metadataBase: lib/site-meta.ts (WO-62b).
   icons: { icon: "/brand/mark.svg", apple: "/brand/mark-256.png" },
-  openGraph: { title: "Nectar Labs", description: "Committed buyers. Higher limits. NEAR testnet, mock collateral.", images: ["/brand/mark-256.png"] },
   ...appMetadata(),
 };
 

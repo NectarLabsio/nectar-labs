@@ -5,9 +5,9 @@ import { parseGateTable, type GateRow } from "@nectar/sdk";
 import { StatusLive } from "@/components/StatusLive";
 import { getPublicConfig, keeperHosted } from "@/lib/config.server";
 import { SITE_URL, repoHref } from "@/lib/env";
-import { landingMetadata } from "@/lib/site-meta";
+import { statusMetadata } from "@/lib/site-meta";
 
-export const metadata = { title: "Status", ...landingMetadata() };
+export const metadata = { title: "Status", ...statusMetadata() };
 
 /** docs/EVIDENCE.md summary table, parsed when this page is prerendered (build time). Missing file: empty table, labelled. */
 function gates(): GateRow[] | null {

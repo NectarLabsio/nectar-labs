@@ -2,7 +2,7 @@ import { HostLink as Link } from "@/components/HostLink";
 
 export const metadata = { title: "Docs" };
 
-// Local mode only. Hosted (WO-34a): APP /docs and /docs/* are rewritten to DOCS_ORIGIN (next.config.ts) before this page is reached.
+// Local mode (or hosted without DOCS_URL) only. Hosted with DOCS_URL (WO-62b): proxy.ts 308s /docs and /docs/* to the DOCS_URL root first.
 export default function DocsPage() {
   return (
     <div className="page wrap">

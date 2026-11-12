@@ -5,8 +5,9 @@ import { TESTNET_RPC_FALLBACKS } from "@nectar/sdk";
 import { annotateHost, annotateStorage, directives, normalizeKey, type HostUse, type StorageEntry } from "./inventory-annotations";
 
 // WO-34c data inventory. Opt-in project `inventory` (needs network; not in the default run). Real Chrome, fresh profile per test:
-//   SITE_URL=http://site.localhost:3741 APP_URL=http://app.localhost:3741 DOCS_ORIGIN=http://localhost:3742 npx next build
-//   node scripts/serve-docs.mjs --port 3742 &   SITE_URL=… APP_URL=… DOCS_ORIGIN=… npx next start -p 3741 &
+//   SITE_URL=http://site.localhost:3741 APP_URL=http://app.localhost:3741 DOCS_URL=http://localhost:3742 npx next build
+//   node scripts/serve-docs.mjs --port 3742 &   SITE_URL=… APP_URL=… DOCS_URL=… npx next start -p 3741 &
+// (WO-62b: APP /docs/* 308s to DOCS_URL/<rest>; Chrome follows, so the docs rows are the docs origin's own requests.)
 //   E2E_INVENTORY=1 INV_SITE=http://site.localhost:3741 INV_APP=http://app.localhost:3741 PW_CHANNEL=chrome \
 //     npx playwright test --project=inventory
 // Writes content/data-inventory.json + .md. Also fails on any CSP violation in the console (the CSP check of WO-34c §2).
@@ -305,7 +306,7 @@ test.describe("data inventory (opt-in, network)", () => {
     }
     const report = {
       generated: new Date().toISOString(),
-      how: "apps/web/e2e/inventory.spec.ts (real Chrome, fresh profile per combo, hosted mode, docs via the /docs rewrite)",
+      how: "apps/web/e2e/inventory.spec.ts (real Chrome, fresh profile per combo, hosted mode, docs via the /docs → DOCS_URL redirect)",
       site: SITE,
       app: APP,
       combos: COMBOS.map((c) => `${c.theme}/${c.consent}`),
@@ -326,7 +327,7 @@ test.describe("data inventory (opt-in, network)", () => {
       "# Data inventory (measured)",
       "",
       `Generated ${report.generated} by \`apps/web/e2e/inventory.spec.ts\`: real Chrome, a fresh profile per run, every route on both hosts`,
-      `(SITE ${SITE}, APP ${APP}, docs through APP /docs), dark and light theme, consent accepted and declined, and the near-connect`,
+      `(SITE ${SITE}, APP ${APP}, docs reached through APP /docs), dark and light theme, consent accepted and declined, and the near-connect`,
       `wallet selector opened on /borrow with one wallet's sandboxed iframe (${walletPicked || "n/a"}), not signed. Analytics are off`,
       "(no analytics id is set), so accepting consent loads nothing extra. The privacy and cookie pages are written from this table.",
       "",
