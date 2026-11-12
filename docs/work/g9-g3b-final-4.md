@@ -16,7 +16,10 @@ WO-34 additions (all on your own ports, from the fresh clone):
 - (f) H-LEGAL is answered (config.yaml `site:` filled, 05b8c63). A production build with `NECTAR_PRODUCTION=1` and SITE_URL/APP_URL set must now
   SUCCEED. Then, in your clone only, null `site.operator` and rebuild: it must FAIL with the guard message (record as PASS of the guard); restore the file.
 - (g) WO-34p: after `pnpm --filter web build`, `node apps/web/scripts/check-trace.mjs` exits 0 (6/6 dynamic routes carry packages/config/config.yaml).
-- (h) Vercel preview of the G3b commit (the orchestrator deploys it and hands you the share links; you never deploy):
+- (h) Vercel preview of the G3b commit. Run 5 change: Vercel keeps only ONE valid share link at a time (observed 2026-11-12), so two links cannot be
+  handed over together. The orchestrator deploys web + docs previews of the run-5 commit, runs scripts/deploy/smoke-web.sh, smoke-docs.sh and the Chrome
+  check, and commits the logs as evidence/WO-34/preview-*-ca34111-*.log in the main repo. You review those logs (read-only, main repo path) against the
+  bullets below and record (h) as "orchestrator-run, reviewed"; the independent hosted check is WO-34v on the public production URLs. You never deploy.
   - web: every route in the crawl list answers 200 (or its expected redirect); /api/health ok:true; runtime logs show `nodejs22.x`.
   - docs: every page of the build answers 200 without `.html` (clean URLs, WO-34q).
   - docs opened directly at `<docs-host>/docs/<slug>` (WO-34s): every page answers 200, and every `/docs/assets/*.css|js` and `/docs/img/*` it references
