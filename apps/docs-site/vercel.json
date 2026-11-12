@@ -1,11 +1,9 @@
 {
   "cleanUrls": true,
   "redirects": [
-    { "source": "/", "destination": "/docs/", "permanent": false }
-  ],
-  "rewrites": [
-    { "source": "/docs/", "destination": "/" },
-    { "source": "/docs/:path*", "destination": "/:path*" }
+    { "source": "/docs", "destination": "/", "permanent": true },
+    { "source": "/docs/", "destination": "/", "permanent": true },
+    { "source": "/docs/:path*", "destination": "/:path*", "permanent": true }
   ],
   "headers": [
     {
