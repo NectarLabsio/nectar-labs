@@ -1,6 +1,26 @@
 **v7 adoption: state E at 3f002c4 (2026-11-10) — D-017/D-018.** PRD v7 + addendum in docs/; P0 delta + Solana lifecycle first, one nectar-core-v2 deploy (needs H-NEAR-FAUCET).
 
-## In flight (2026-11-11 ~19:50Z) — WO-34 hosting + rest of the second request (no push / post / send)
+## In flight (2026-11-12 ~01:55Z) — WO-34m: deploy through the connectors (Kunal: "use mcp for vercel and railway")
+- No CLI login is needed any more. Work order docs/work/wo-34m-mcp-deploy.md. Facts F-414–F-427, C-024/C-025 (WO-34r4, merged 06abab9). Scripts 2ed1edf.
+- Path: a pinned tarball of a G3b-passed commit → private Railway bucket via presigned URLs from the `artifacts` function → Vercel build / Railway Feed.
+  The bytes never pass through a tool argument.
+- **Railway** project `nectar-labs` (76a8bcaf…, env production 1d58afe0…):
+  - bucket `artifacts-bucket` (iad);
+  - function `artifacts`: https://artifacts-production-bf757206.up.railway.app, /health + token-gated /presign;
+  - **Feed LIVE** at https://feed-production-2f2776c9.up.railway.app from fd06e11: health ok, lag 0; volume feed-data /data; image node:22.22.2-bookworm.
+- Tarball src-fd06e11….tar.gz, sha256 edae5d5a…44d8e3, 4.74 MB. A local no-git build of web and docs from it passed
+  (evidence/WO-34/artifact-buildtest-20261112T014418Z.log). Upload + verify round-trip ok.
+- Token: ~/.nectar/deploy/artifact-token (0600). Railway stores only its sha256. No token at Vercel; each deployment gets a 1 h presigned GET.
+- **Vercel BLOCKED:** the connector has no write access to team kunals-projects-35d3a237 (403). Kunal must approve the authorize_team_access link
+  (single-use, 10 min; regenerate on request). Then:
+  - create nectar-labs-web and nectar-labs-docs;
+  - preview deploys of fd06e11 (inline stubs + .nectar-artifact);
+  - smoke test;
+  - set FEED_CORS_ORIGINS on the Feed (currently "legacy").
+- Production still needs H-LEGAL → G3b re-run 5 → new tarball → `target: production`. H-DOMAIN default (vercel.app) at 2026-11-13 06:00 UTC.
+- Dispatched: WO-34n docs (HUMAN_HANDOFF H-HOST + RUNBOOK connector section); researcher follow-up (live notes on F-415/418/423/427, C-024).
+
+## Earlier in flight (2026-11-11 ~19:50Z) — WO-34 hosting + rest of the second request (no push / post / send)
 - Kunal confirmed in session: deploy to production on Vercel (frontend, docs) and Railway (backend). Master WO: docs/work/wo-34-deploy.md.
 - **Pre-check:**
   - nectarlabs.io is UNREGISTERED (NXDOMAIN; Vercel shows it available, $14.99 / $46 renewal) → H-DOMAIN.
@@ -191,7 +211,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-11T23:45:31Z · commit dd06cb7
+Last activity: 2026-11-12T01:45:47Z · commit 6bc2acd
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
