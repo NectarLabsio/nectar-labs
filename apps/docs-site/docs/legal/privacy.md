@@ -13,11 +13,11 @@ description: What the Nectar Labs service processes, which third parties your br
 ---
 # Privacy policy
 
-_Last updated 2026-11-12 · Draft, not legal advice · Operator: **TODO-H-LEGAL** (OPERATOR) · Country: **TODO-H-LEGAL** (COUNTRY) · Contact: **TODO-H-LEGAL** (CONTACT)_
+_Last updated 2026-11-12 · Draft, not legal advice · Operator: **Nectar Labs** · Country: **United States / India** · Contact: [kunal@nectarnetwork.fun](mailto:kunal@nectarnetwork.fun)_
 
 ## What this covers
 
-This policy covers the Nectar Labs site, the web app, this documentation, and the Nectar Feed API and MCP server (together, "the service"). The operator is **TODO-H-LEGAL** (OPERATOR). The service is **testnet software**: it runs on NEAR testnet, Solana devnet and a local fork of Base Sepolia, with mock tokens and no real funds.
+This policy covers the Nectar Labs site, the web app, this documentation, and the Nectar Feed API and MCP server (together, "the service"). The operator is **Nectar Labs**, operated from the United States / India. The service is **testnet software**: it runs on NEAR testnet, Solana devnet and a local fork of Base Sepolia, with mock tokens and no real funds.
 
 In the hosted demo, Vercel serves the site, the web app and this documentation, and Railway serves the Feed. The x402 paid export is not hosted. It runs only on the operator's own machine, so the hosted service never contacts an x402 facilitator. The keeper, the bot that settles positions, works only with public chain data and receives nothing from your browser.
 
@@ -133,7 +133,7 @@ Quotes, positions, claims, Notes and settlements are recorded on NEAR testnet an
 
 ## Your rights
 
-Where GDPR, UK GDPR or India's Digital Personal Data Protection Act 2023 applies, you can ask for access, correction, erasure, restriction or portability, object to processing, and withdraw consent at any time on the [Cookie policy](/legal/cookies#cookie-settings). We hold almost nothing about you: settings live in your browser, and host logs expire as stated above. Write to **TODO-H-LEGAL** (CONTACT). You may also complain to your data-protection authority.
+Where GDPR, UK GDPR or India's Digital Personal Data Protection Act 2023 applies, you can ask for access, correction, erasure, restriction or portability, object to processing, and withdraw consent at any time on the [Cookie policy](/legal/cookies#cookie-settings). We hold almost nothing about you: settings live in your browser, and host logs expire as stated above. Write to [kunal@nectarnetwork.fun](mailto:kunal@nectarnetwork.fun). You may also complain to your data-protection authority.
 
 ## Children
 
