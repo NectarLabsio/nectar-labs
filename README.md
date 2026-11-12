@@ -150,7 +150,7 @@ hackathon (Oct 2026 product brief; SCF #42 material). That research is the basel
 contracts, programs, services and sites in this repository were written during the hackathon window (from 2026-11-09).
 
 ## Roadmap
-P0 core credit (G0–G3) → P1 TEE pricing, live oracle, 1Click depth, Feed MCP (G4–G6) → P2 Solana leg via Chain Signatures, copilot (G7–G8) → G9 fresh-clone rehearsal.
+P0 core credit (G0–G3) → P1 TEE pricing, oracle (G5: owner-oracle fallback, disclosed), 1Click depth, Feed MCP (G4–G6) → P2 Solana leg via Chain Signatures, copilot (G7–G8) → G9 fresh-clone rehearsal.
 PROD (not here): mainnet with a DAO owner and timelock, audit, real tokenized-equity collateral.
 Deliberately not built: other chains, a token, governance UI, mobile.
 

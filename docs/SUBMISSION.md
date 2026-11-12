@@ -1,6 +1,6 @@
 # SUBMISSION.md — payload draft, never sent by an agent
 
-Status: **DRAFT, 2026-11-11** (prose refreshed to docs/EVIDENCE.md as of commit a677689, plus review 2 fixes). Fields follow "Submission API" in docs/HACKATHON.md (verified 2026-11-09; re-read the live
+Status: **DRAFT until Kunal sends, 2026-11-12** (prose matches docs/EVIDENCE.md at tag `submission-rc`; check EVIDENCE for later runs). Fields follow "Submission API" in docs/HACKATHON.md (verified 2026-11-09; re-read the published
 https://nearhackathon.com/HACKATHON.md on Nov 14 before sending, F-001). Only Kunal sends it (H1). Agents run the submit
 script with `--dry-run` only. The JSON payload holds personal data (name, email, payout account), so it is printed, never committed.
 
