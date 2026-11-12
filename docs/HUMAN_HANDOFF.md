@@ -40,6 +40,12 @@ What Kunal does, Option A (one command; the machine stays on through 18 Nov):
   It re-asserts the current on-chain price when it is older than 12 h, signs as nectar.testnet via the OS keychain and never changes the price.
   Reply `H-ORACLE A` (or `H-ORACLE B` to choose Option B).
 Option B: the orchestrator runs the one-shot RUNBOOK `update_owner_price` with the same price (current `oracle_price_usd_e6`) in every session.
+In-session rule (both options): during NYSE hours the session counts as open only while the owner price is under 15 min old
+  (`SESSION_MAX_PRICE_AGE_NS` = 900 s, contracts/nectar-core/src/lib.rs:75, checked at lib.rs:348). Older than that, `get_exit_capacity` returns
+  `session_open: false`, `session_reason: "stale_price"`, and the closed-session (weekend) parameters apply: D_c forced to 0 and the weekend
+  haircut instead of the base one (math.rs:143–144). The 24 h max age still decides whether borrows work at all. Option A's 12 h refresher keeps
+  borrows working but does not keep the session open in NYSE hours; Option B's session-start refresh opens it for 15 min at most.
+  The choice stays A or B as written.
 What Claude Code does then: A — reads evidence/ops/owner-price-refresher.log each session and checks `oracle_age_s` < 86,400 with
   `get_exit_capacity`; B — runs the one-shot refresh at session start and records the tx in evidence/ops/.
 Default if silent: Option B while a session runs; with no session running the price goes stale and the app shows "oracle stale" on borrow

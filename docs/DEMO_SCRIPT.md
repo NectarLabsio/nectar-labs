@@ -11,6 +11,13 @@ Every number said on camera is read from the screen at recording time, never fro
 ## Before recording: v2 state and re-seed
 Run the steps that apply, in order. Each script prints what it did; keep every log in `evidence/demo/`. Testnet, devnet and the local fork only.
 
+**Recording in NYSE hours (14:30–21:00 UTC).** The session counts as open only while the owner price is under 15 min old
+(`SESSION_MAX_PRICE_AGE_NS` = 900 s, contracts/nectar-core/src/lib.rs:75 and :348). If the open-session limit should show, refresh the owner
+price within 15 min before recording: the RUNBOOK one-shot `update_owner_price` with the CURRENT price (`oracle_price_usd_e6` from
+`get_exit_capacity`), never a placeholder such as the RUNBOOK example value. Otherwise the screen shows the closed-session limit
+(`session_reason: "stale_price"`, D_c 0, weekend haircut), which is correct and disclosed. Outside NYSE hours the session is closed
+(`outside_hours`) whatever the price age. See H-ORACLE in docs/HUMAN_HANDOFF.md.
+
 ### 1. Live state snapshot (2026-11-11T08:25Z)
 Public read-only views on `nectar-core-v2.nectar.testnet` through `https://test.rpc.fastnear.com` (D-025), blocks 277190229–277190233:
 `contract_version`, `list_quotes {"symbol":"NVDAx"}`, `list_positions`, `get_pool`; `get_exit_capacity {"symbol":"NVDAx"}` and `ft_balance_of` at 08:28Z.
