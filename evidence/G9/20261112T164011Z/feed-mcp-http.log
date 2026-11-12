@@ -1,0 +1,9 @@
+REST /health: {"ok":false,"last_indexed_block":277378876,"chain_head":277378876,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":null,"poll_age_s":null,"last_error":"neardata: neardata block 277378792 HTTP 429","source":"views+neardata","start_block":"head","events_indexed":0,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":null,"failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.n
+HTTP 200 text/event-stream
+initialize {"name":"nectar-feed","version":"0.3.0"}
+notification 202
+HTTP 200 text/event-stream
+tools/list 8 get_exit_capacity,preview_borrow,list_quotes,explain_limit,open_protected_stock_loan,quote_capacity,get_note,build_self_settle
+HTTP 200 text/event-stream
+get_exit_capacity "{\n  \"symbol\": \"NVDAx\",\n  \"source\": \"view\",\n  \"block_height\": 277389183,\n  \"q_usd_e6\": \"16119220000\",\n  \"r_usd_e6\": \"10000000\",\n  \"d_usd_e6\": \"0\",\n  \"haircut_bps\": 2500,\n  \"session_open\": false,\n  \"oracle_price_usd_e6\": \"135000000\",\n  \"oracle_age_s\": \"5496\",\n  \"oracle_fresh\": true,\n  \"b_c_usd_per_unit_e6\": \"94500000\",\n  \"limit_bps_effective\": 7000,\n  \"capacity_usd_e6\": \"12096915000\",\n  \"oracle_source\": \"Owner\",\n  \"session_reason\": \"stale_price\",\n  \"total_debt_usd_e6\": \"9229000000\",\n  \"aggregate_capacity_usd_e6\": \"12
+killed my feed pid 17758

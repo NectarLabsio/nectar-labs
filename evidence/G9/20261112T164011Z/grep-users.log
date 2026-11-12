@@ -1,0 +1,6 @@
+.claude/agent-memory/verifier/reference_g3b_v2_web.md
+docs/EVIDENCE.md
+evidence/G3b/verifier-rerun7-20261112T1530Z/phase1.txt
+evidence/G3b/verifier-rerun7-20261112T1530Z/run-master.log
+evidence/G3b/verifier-rerun7-20261112T1530Z/run7.sh
+rc=0

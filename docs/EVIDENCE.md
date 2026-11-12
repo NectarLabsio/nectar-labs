@@ -2,7 +2,7 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
-| G9 run 5 (release 3, verifier B) | IN PROGRESS: fresh clone started 16:40Z; verdict pending | 2026-11-12T16:40Z– | 5dd2a50 | evidence/G9/20261112T164011Z/ |
+| G9 run 5 (release 3, verifier B) | FAIL, 1 reason (step 3; the remedy is evidence only). README lines 3, 11 and 139 send the reader to EVIDENCE §"WO-34 production" for the deployed commit and acceptance result "for each production release". At 5dd2a50 that section's newest block is release 3974b5b (FAIL). docs/STATE.md says PRODUCTION = RELEASE 3 (~16:40Z), and EVIDENCE has no release 3 block (WO-34v3 not recorded). The pointer resolves, but it gives a superseded release. No README edit is needed: the claim holds once the WO-34v3 block lands. Every other step PASSES: quick start about 2 min (pnpm i 12 s, demo:testnet 4 s, verify 28 s, docs build 20 s; ui 7, feed 79, keeper 301, x402 41, sdk 203, web 27 + 1 skip, 0 failed). `pnpm --filter web dev` on :3100 gave 21 README routes 200 (/markets, /earn 404 as README says). gitleaks found no leaks in 466 commits. Hosted SITE/APP/DOCS/Feed answer and match STATE (Feed commit 3974b5b, CORS SITE+APP only). Feed MCP stdio + HTTP return 8 tools and live values = demo. The payload builds with tracks defi/security/agents, `website` absent and no privacy text. Headers present; the Chrome selector shows 6 wallets with 0 CSP messages. R2, SECURITY items 11/12 and the zod line match code and FACTS. Home-path grep: only the 6 fixture wasm files hold a home path. Handoffs 11 DONE / 13 DEFAULT / 7 KUNAL-ONLY / 3 N/A / 0 OTHER-OPEN | 2026-11-12T16:40Z–16:47Z | 5dd2a50 | evidence/G9/20261112T164011Z/ (see §G9 run 5) |
 | G3b re-run 7b (d) on release 3 | PASS. (d) `crawl.mjs --polite` in hosted mode (docs via serve-docs.mjs) → exit 0: 88 internal, 45 external, 0 failures, 0 of our console errors. `pnpm --filter docs-site build` → exit 0. The docs build has 2 hrefs to the hosted Feed, both https://feed-production-2f2776c9.up.railway.app/health (feed-rest, monitoring); curl → 200 (bare origin control → 404). Release 3 differs from release 2 under apps/packages/services/contracts only in those 2 docs lines, so runs 7 (a)–(l) except (d) + 7b (d) together cover release 3 | 2026-11-12T16:14Z–16:31Z | 5f011bb | evidence/G3b/verifier-rerun7b-20261112T1614Z/ (see §G3b re-run 7b) |
 | G3b re-run 7 (release 2, run-7 order) | FAIL, 1 reason (docs only): (d) crawl --polite exit 1 with 1 failure. /docs/integrate/feed-rest links to the hosted Feed root https://feed-production-2f2776c9.up.railway.app, which answers 404; /health answers 200. The link arrived in 1419028 (WO-35g docs), after run 6. All other items PASS. (l) WO-35i hydrated: v7.spec #chains 8/8 (desktop + phone). My hand probe in real Chrome on my own `next start` found the following. With config flags, the hydrated #chains text equals the server HTML on desktop and phone ("NEAR holds the book. Solana holds the stock."). The section has 3 sentences naming Base, and all 3 say "local fork". Each pinned flag set (none, solana_remote, base, both) has 0 Base sentences without "local fork". The LandingNav "Chains" link is present exactly when section#chains is. (a) site-pages 19+19, screens 46+46 incl. /docs. Full e2e: exit 0, 483 passed / 0 failed / 108 skipped / 1 flaky. The flaky test is phone remote.spec:199, a mocked flow: remote-authority took longer than 5 s, and the retry passed. (b) hosts 7/7. (c) inventory 6/6: CSP enforced, 0 violations, 6/6 wallets, 12 hosts = committed, all in privacy.md. (e) LH 20×2 = 40/40 at 100. (f) prod build exit 0; the build with the null operator gives exit 1 + the guard message. (g) check-trace exit 0 twice. (h) orchestrator-run, reviewed: web 28/0, /api/health ok, hydrated landing check PASS; docs 56 pages + 6 assets, 0 failures, 307 → /docs/, XFO DENY + frame-ancestors, theme toggle reaches both themes. nodejs22.x = the same deviation as runs 5/6. (i) PASS in both the raw HTML and the hydrated text. (j) feed 79/0, keeper 301/0; /health has chain_head_source, history, rpc; chain_head = last block. (k) PASS with a note: the only hit besides the 6 wasm fixtures is the order file's own `"/Users/"` pattern, with 0 home paths. Real selector 6/6 in viewport. Headers OK, `pnpm verify` exit 0, branding exit 0 | 2026-11-12T15:30Z–16:09Z | 4c2a0bb | evidence/G3b/verifier-rerun7-20261112T1530Z/, evidence/G3b/chains-hydrated-20261112T1530Z.png (see §G3b re-run 7) |
 | WO-34 production (release 3974b5b) | FAIL, 1 reason: in hydrated Chrome the production landing https://nectarlabs.vercel.app/ never says "local fork". Base still appears in settle steps 03/04 ("secp256k1 (Base)", "Base checks EIP-712 with ecrecover"). The server HTML heading reads "A Base local fork holds the stock.", but after hydration it becomes "Solana holds the stock." All three previous FAILs now PASS: 0/56 APP /docs pages send x-robots-tag; the docs origin /docs/ sends XFO DENY + frame-ancestors 'none'; 0 localhost/127.0.0.1 hrefs in the 56 pages. Also PASS: host check (14 hosts, 12 third party, 0 missing on /legal/privacy, 12 keys, 0 missing on /legal/cookies, 6/6 wallets, 0 CSP violations), SITE/APP headers + redirects, Feed /health + CORS, no "0123456789", TEE verifiable, worked example 40/70 + 10/25, event-history banner on /feed and /keepers, LH landing 2/2 = 100 and docs 10/10 ≥ 90 (min 93). Not checked: crawl --polite (still running at commit time) | 2026-11-12T15:00Z–15:18Z | 3974b5b (web dpl_5YACVWKHkdB6RKZY788okPYRF7Uk, docs dpl_9SobCo6o34dpRvhgwpBnUqq8jjoj, Railway feed SRC_SHA 3974b5b) | evidence/WO-34/production-release-3974b5b/ (see §WO-34 production (release 3974b5b)) |
@@ -936,6 +936,80 @@ Explorer: none opened (G10 is facts + read-only RPC).
 Result: PASS with open items F-351 (ERC-8021 format, G12/G13 scope), F-352 (xStocks multiplier, G11), F-353 (Rhea ids). None used in code.
 
 ## G9
+
+### G9 run 5 — fresh-clone rehearsal on release 3 (verifier B) — FAIL (step 3: EVIDENCE has no WO-34 production block for release 3; evidence-only) — 2026-11-12T16:40Z–16:47Z — commit 5dd2a50
+Work order: docs/work/g9-g3b-final-4.md "G9 (verifier B)". It covers g9-final.md steps 1–7, g9-final-2.md steps 8–10, plus 11 and 12. Fresh clone `/tmp/verify-G9-20261112T164011Z` of
+`/Volumes/T7/nectar-labs` (`git clone`, then checkout 5dd2a50921e9767d5053d08e62dec03c80fde166). That commit is a docs/evidence-only descendant of RELEASE 3 5f011bb: `git diff --stat 5f011bb HEAD` touches only
+docs/ and evidence/. No secrets, nothing pushed, nothing installed under /Volumes/T7. Own ports: Feed REST :18788 / MCP :18789 (FEED_DB_PATH in my scratch dir), `next start -p 3517`.
+:3100 was free, so command 5 ran as written. Host keeper :8790, x402 :8791, Feed :8788/:8789 (pid 56878) and anvil :8545 were left running. PATH per the gates.md host notes.
+```
+$ git clone /Volumes/T7/nectar-labs /tmp/verify-G9-20261112T164011Z    16:40:11Z   checkout 5dd2a50
+$ pnpm i                         exit 0  12 s
+$ pnpm demo:testnet              exit 0   4 s   2.2.1-v7; Q_c $16,119.22 R_c $10.00 D_c $0; oracle $135.00 (age 5411 s, fresh), session closed;
+                                                pool $40,771 / $9,229; quotes #0–#4 live; positions #0–#15 (#1 #4 #5 #13 #14 #15 Open)
+$ pnpm verify                    exit 0  28 s   branding check, lint, typecheck; ui 7/0, feed 79/0, keeper 301/0, x402 41/0, sdk 203/0, web 27 pass / 0 fail / 1 skip; testnet views
+$ pnpm --filter web dev          ready 4 s on :3100; 21 README routes → 200 (/, /borrow, /feed, /feed/NVDAx, /quote/new, /console, /notes, /reserve, /shield, /agents, /keepers,
+                                 /security, /talk, /docs, /legal/{privacy,cookies,terms,disclaimers}, /position/0, /quote/0, /note/q-0); /markets 404, /earn 404   done 16:42:13Z
+$ pnpm --filter docs-site build  exit 0  20 s   [SUCCESS] Generated static files in "build".
+$ gitleaks detect --log-opts=--all -v            exit 0   466 commits scanned, no leaks found   (git rev-list --all --count = 629; merges carry no patch)
+$ git grep -l "[/]Users[/]"      5 text files, each quoting the grep pattern itself (EVIDENCE.md:6/230–232, G3b run-7 logs + run7.sh, verifier memory note).
+  git grep -n '[/]Users[/][A-Za-z]' -- ':!*.wasm' → 0 lines; git grep -c -a "[/]Users[/]" -- '*.wasm' → the 6 contracts/nectar-core/tests/fixtures/*.wasm
+$ node scripts/build-submission.mjs   exit 0   keys requestId,projectName,leadName,email,size,tracks,nearAddress,projectUrl,demoUrl,idea,consent; tracks ["defi","security","agents"];
+  website absent; 0 "privacy"/"private" in the payload. Open fields: leadName/email/size TODO-H10 · nearAddress/consent TODO-H14 · projectUrl TODO-H2 · demoUrl TODO-H3
+Feed MCP stdio (scripted JSON-RPC client): initialize nectar-feed 0.3.0 · tools/list 8 tools · get_exit_capacity{symbol:NVDAx} q_usd_e6 16119220000, r_usd_e6 10000000 (= demo)
+Feed MCP HTTP :18789/mcp: initialize 200 text/event-stream · tools/list 8 · get_exit_capacity same values. feed_started core nectar-core-v2.nectar.testnet (no env but ports/DB).
+  Local REST /health ok:false: neardata HTTP 429 from this host, the same as run 4. MCP is unaffected
+Hosted (16:42Z): SITE https://nectarlabs.vercel.app/ 200 · SITE /borrow 308 → APP · APP https://nectarlabs-app.vercel.app/ 307 → /feed, /borrow 200 · DOCS https://nectarlabs-app.vercel.app/docs 200
+  · APP /api/health 200 {ok, 2.2.1-v7, pool 40771/9229} · Feed https://feed-production-2f2776c9.up.railway.app/health 200 {ok:true, lag_blocks 0, source "views", events_indexed 0,
+  history "unavailable", commit 3974b5b…} · Feed CORS: SITE and APP origins echoed, https://evil.example gets no ACAO
+$ pnpm --filter web build        exit 0  12 s ;  next start -p 3517 ; curl -sI /
+HTTP/1.1 200 OK · X-Frame-Options: DENY · Strict-Transport-Security: max-age=63072000; includeSubDomains · CSP … frame-ancestors 'none'
+Chrome (Playwright, channel chrome) /borrow 200 → "Connect wallet": the selector lists Meteor Wallet, Intear Wallet, Ledger, Nightly Wallet, Ethereum Wallets and NEAR CLI
+  (connect-wallet.png). CSP console messages 0, console errors 0. Nothing signed.
+```
+Quick start: clone 16:40:11Z → last route 16:42:13Z, about 2 min including reading the README. Guesses: (1) the repo URL is TODO-H2, so I cloned the local path per gates.md.
+(2) The host Feed holds 8788/8789, so I used the FEED_PORT / FEED_MCP_PORT / FEED_DB_PATH that README documents (README says the default ports fail with EADDRINUSE). No other guess.
+Results per step:
+1. Quick start: PASS, about 2 min, with the 2 guesses above.
+2. Commands: PASS. pnpm i, demo:testnet, verify, docs build and gitleaks (466 commits) all exit 0, and gitleaks found no leaks.
+3. Claims: **FAIL**, 1 reason. The README names no deployed commit. Lines 3 and 11 ("Production runs the release recorded in docs/EVIDENCE.md §"WO-34 production": the deployed commit
+   and the verifier's acceptance result for each production release are there") and line 139 send the reader to that section. At 5dd2a50, and in the main working copy at 16:46Z,
+   the newest block there is "WO-34 production (release 3974b5b) (WO-34v2): FAIL". docs/STATE.md says "**PRODUCTION = RELEASE 3 (~16:40Z)**", with web dpl_BJNxqx… and docs dpl_DQubre….
+   Release 3 has no block, because WO-34v3 is not recorded yet. A stranger who follows the README pointer therefore lands on 3974b5b, a superseded release. That is the same symptom as run 4
+   by another route. The README needs no edit: the sentence becomes true when the WO-34v3 block for release 3 lands, whatever its verdict. The orchestrator's public smoke for release 3
+   (evidence/WO-34/prod-smoke-release3-20261112T163758Z.log) exists, but EVIDENCE does not cite it.
+   Backed: §G3b (re-run 7b, release 3, PASS) and §G9 resolve. The gate list in lines 3 and 139 matches the table rows (G1/G2/G3/G4/G6 PASS, G5 FALLBACK, G8 fixture, G1 v7, G10, G12/G13 fork,
+   G2b/G7/G11/G14 re-runs, G1 2.2.1 "67 of 67 … max tx-total 78.60" at 48b5c5a). The cited commits a677689, 2e16f9b, b8784c1, 5083d30, 837cd12, 89f83ee, 2bf99e1 and 3107a1a all exist.
+   The smoke log evidence/WO-34/prod-smoke-20261112T133529Z.log exists. FINAL_REPORT 11:20:55Z lag 0 is there. `site.hosted_until` "2026-11-25" is set. README ids match config.yaml accounts.
+   demo:testnet answers on public RPC and its state matches README line 66. Hosted URLs match STATE (SITE/APP/DOCS on vercel.app, Feed on Railway, which stays on 3974b5b per STATE).
+   Note, not counted: line 84 "What works today (2026-11-11, … §G9 run 3 …): G9 PASS" is dated and attributed to run 3, while the latest recorded G9 run (run 4) is FAIL. Rewording it
+   as "G9 run 3 PASS" would stop it reading as the current G9 status.
+4. Copy rules: PASS. "insurance" and "without liquidations" appear only in comments and specs that state the rule (Landing.tsx:5, Shields.tsx:3, e2e/v7.spec.ts:38). No "hackathon" in
+   apps/web app/components/lib/public, packages/ui, landing/, docs-site docs/src/config or the built docs site (incl. search index). The apps/web hits are e2e negatives and the
+   build-changelog.mjs filter. check-no-branding-all.mjs exits 0. "mock collateral" appears in 19 apps/web files, and landing/index.html says testnet 17 times.
+5. Feed MCP: PASS. Stdio and HTTP both answer initialize and tools/list (8 tools), and get_exit_capacity returns live values equal to demo:testnet.
+6. / 11. Submission dry run: PASS. The payload builds, `website` is absent and the tracks are ["defi","security","agents"]. SUBMISSION.md:18/56/61 and README:131 say `privacy` is not entered.
+   X_POST.md has no "privacy". No privacy-track framing remains. The open TODO-H fields are listed above.
+7. Handoffs (34 headings, H-NEAR-FAUCET twice, H-ORACLE new): PASS. DONE/CLOSED 11: H-TOOLCHAIN, H-TOOLCHAIN-SOLANA, H-NEAR-FAUCET ×2, H-SOL-AIRDROP, H-DOMAIN, H-LEGAL, H-HOST, H9, H16, H17.
+   DEFAULT-AT-DEADLINE 13: H-EXPLORER, H-ORACLE, H13, H4, H-KEYS, H-NEARDATA, H7, H8, H12, H15, H18, H19, H20. KUNAL-ONLY 7: H1, H2, H3, H10, H11, H14, H-GUARD-V7.
+   N/A / superseded 3: H5, H-DNS, H6. OTHER-OPEN 0.
+8. Review 2: PASS. The fixes are at these lines: R2-03 `request_matches_input` verify.ts:119; R2-04 guard.ts:86–96 (403 → 415 → 413) + 429 at :155; R2-05 services/x402/src/borrow-guard.ts; R2-06 "1,5" refused
+   packages/sdk/src/format.ts:28; R2-09 `accountExists` views.ts:76; R2-11 "."/".." refused feed-paths.ts:20. Neither "never joined to IPs" nor "instead of being published" appears in README, SUBMISSION, docs-site, apps/web or landing.
+   Privacy page: "No analytics vendor is configured" (legal/privacy.md:28).
+9. Headers + wallet selector: PASS (above).
+10. G14 / G1 2.2.1 rows: PASS. README cites what the rows say: G14 re-run on HEAD 48b5c5a (a677689), 67/67, max 78.60 Tgas.
+12. SECURITY.md: PASS. Item 11 (C-020) matches packages/sdk/src/network.ts:5–6. Item 12 matches notes.rs:332 `move_note` / :347 `p.borrower = to`, and also remote.rs:957 `request_remote_release`,
+    which takes `r.depositor` (:968). The zod lines (SECURITY.md:115 Feed zod 4.6.7; :123 zod 3.25.76 only via @x402/core 2.18.0, not reachable, F-385) match F-383–F-385 and F-451. The lockfile has
+    zod@3.25.76 + zod@4.6.7, and services/feed pins "zod": "4.6.7".
+Extra: hosted URLs PASS; home-path grep PASS (with the note above); gitleaks over the full history PASS; quick start under 15 min PASS.
+Note (for the orchestrator, not a README claim): `SESSION_MAX_PRICE_AGE_NS` = 900 s (lib.rs:75), so in NYSE hours the session is open only within 15 min of an owner price update.
+At 16:42Z (in hours) the oracle was "fresh" (age 5411 s < 86,400) yet the session was closed with `session_reason "stale_price"`. STATE's "fresh, session open" at ~15:12Z was therefore
+transient. H-ORACLE describes only the 86,400 s limit.
+Explorer: WebFetch https://testnet.nearblocks.io/address/nectar-core-v2.nectar.testnet → HTTP 403, body not returned. Ids were proven over public RPC (demo:testnet, MCP views, APP /api/health).
+Verdict: **FAIL** for one reason, step 3: EVIDENCE §"WO-34 production" has no block for release 3, which STATE says is in production. The remedy is the WO-34v3 evidence block, then a step-3
+re-check. Every command, code check and other claim passed.
+Logs: evidence/G9/20261112T164011Z/ (times.txt, pnpm-i, demo-testnet, verify, web-dev, web-dev-routes.txt, docs-build, gitleaks, grep-users, commit-count.txt, build-submission, feed-start,
+feed-mcp-stdio, feed-mcp-http, hosted.txt, checks.log, next-build, next-start, headers.txt, connect-wallet.log, connect-wallet.png).
 
 ### G9 run 4 — fresh-clone rehearsal on the release (verifier B) — FAIL (step 3, README hosted-demo status stale; docs-only) — 2026-11-12T15:00Z–15:10Z — commit 1f28a2f
 Work order docs/work/g9-g3b-final-4.md "G9 (verifier B)": g9-final.md steps 1–7, g9-final-2.md steps 8–10, plus 11 and 12. Fresh clone `/tmp/verify-G9-20261112T150002Z`

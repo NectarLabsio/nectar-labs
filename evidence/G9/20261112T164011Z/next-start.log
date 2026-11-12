@@ -1,0 +1,6 @@
+▲ Next.js 16.4.5
+- Local:         http://localhost:3517
+- Network:       http://172.20.10.5:3517
+✓ Ready in 133ms
+✓ Running next.config.ts took 29ms
+killed my next start pid 18515
