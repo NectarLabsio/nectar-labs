@@ -101,9 +101,14 @@
   - Waiting on Kunal: H-HOST (logins + Railway plan), H-LEGAL, H-DOMAIN, H-KEYS.
   - WO-34h MERGED (4d113a1): DEMO_SCRIPT "Real-wallet borrow on the hosted app". The owner (nectar.testnet) must storage_deposit usdc-mock + nvdax-mock
     and mint 2 NVDAx for Kunal's account first.
-- **On H-LEGAL:**
-  1. Orchestrator fills config.yaml `site:`.
-  2. Docs agent replaces every `TODO-H-LEGAL` in legal/*.md.
+- **H-LEGAL ANSWERED (Kunal, 2026-11-12 ~08:00Z):** operator "Nectar Labs", country "United States / India", contact kunal@nectarnetwork.fun (typo
+  ".funm" corrected), X @xNectarNetwork (confirmed as typed), **no governing-law clause** (his choice; Terms needs one jurisdiction).
+  1. DONE 05b8c63: config.yaml `site:` filled; verify:quick 0.
+  2. In flight: WO-34u docs (legal pages + HUMAN_HANDOFF H-LEGAL/H9 closed), WO-34t web (APP proxies /docs WITH the prefix; serve-docs.mjs mirrors),
+     WO-34r7 researcher (vercel.json redirects) → then a docs WO: docs deployment `/` → `/docs/` (Kunal opened the bare root twice; it shows
+     "Page Not Found" on the fixed preview). The redirect needs WO-34t first, else APP `/docs` → origin `/` → redirect loops.
+  - Share links: creating a new share link (get_access_to_vercel_url / web_fetch_vercel_url) invalidates the previous one, across projects, despite
+    the stated 23 h expiry. Kunal is a team member: give him plain deployment URLs; use share links only for scripted checks.
   3. G3b re-run 5 on that commit. Operator text changes rendered pages, so fd06e11 alone is not deployable because the production guard refuses null
      fields.
   4. Deploy that commit.
@@ -251,7 +256,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T07:27:28Z · commit 073ef29
+Last activity: 2026-11-12T07:39:45Z · commit 3a2baf7
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
