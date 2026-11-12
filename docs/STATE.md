@@ -94,6 +94,11 @@
     no noindex) and web production DOCS_ORIGIN → it (config only); (2) docs origin lacks XFO/frame-ancestors → WO-35f facts → WO-35g vercel.json headers;
     (3) localhost link in docs integrate/feed-rest → WO-35g. Not a gate item: nectar-labs-web.vercel.app serves the app (canonical → SITE/APP, no noindex).
     G3b run 6 on 3126773 covers apps/web (unchanged by WO-35g); the docs delta is re-checked by G9 (fresh clone) + WO-34v re-run on production.
+  - WO-35f facts F-452–F-454 + WO-35g docs fixes MERGED (10d19d4): docs vercel.json headers (XFO DENY, frame-ancestors 'none', nosniff,
+    Referrer-Policy), feed-rest/feed-mcp/monitoring no localhost links + monitoring Feed status. Product delta since the freeze = 5 apps/docs-site files
+    only (`git diff --stat 3126773 HEAD -- apps packages services contracts`). **Release commit = this STATE commit** (docs-only descendant).
+    Next on G3b run 6 PASS: tarball → production docs + web (DOCS_ORIGIN = nectarlabs-docs.vercel.app) + Feed (SRC_* + new start command) →
+    WO-34v re-run on production ‖ G9 run 4 on the release commit → submission-rc → FINAL_REPORT re-audit.
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
@@ -307,7 +312,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T14:10:05Z · commit 9209e2f
+Last activity: 2026-11-12T14:23:58Z · commit 3e4c2ea
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
