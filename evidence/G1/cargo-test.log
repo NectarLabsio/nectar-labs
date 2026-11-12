@@ -7,7 +7,7 @@ running 11 tests
 test tests::new_and_metadata ... ok
 test tests::mint_owner_only ... ok
 
-thread 'tests::ft_transfer_insufficient' (2867271) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests::ft_transfer_insufficient' (2867271) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "insufficient balance" })
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 test tests::ft_transfer_insufficient - should panic ... ok
@@ -17,7 +17,7 @@ thread 'tests::mint_rejects_non_owner' (2867275) panicked at contracts/mock-ft/s
 owner only
 test tests::mint_rejects_non_owner - should panic ... ok
 
-thread 'tests::ft_transfer_requires_one_yocto' (2867273) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/utils/mod.rs:85:5:
+thread 'tests::ft_transfer_requires_one_yocto' (2867273) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/utils/mod.rs:85:5:
 Requires attached deposit of exactly 1 yoctoNEAR
 test tests::ft_transfer_requires_one_yocto - should panic ... ok
 test tests::ft_transfer_moves_balance ... ok
@@ -71,7 +71,7 @@ apply in a later block
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 test tests::apply_price_same_block_rejected - should panic ... ok
 
-thread 'tests::apply_price_without_proposal' (2867293) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests::apply_price_without_proposal' (2867293) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "no proposed price" })
 test tests::apply_price_without_proposal - should panic ... ok
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
@@ -107,7 +107,7 @@ EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
 
-thread 'tests::ft_on_transfer_unknown_token_panics' (2867304) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests::ft_on_transfer_unknown_token_panics' (2867304) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "unknown token" })
 test tests::ft_on_transfer_unknown_token_panics - should panic ... ok
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"position_opened","data":[{"position_id":"0","borrower":"borrower.test","collateral":"NVDAx","units":"100000000","debt_usd_e6":"11250000000","premium_usd_e6":"121500000"}]}
@@ -122,7 +122,7 @@ test tests::events_are_nep297 ... ok
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"fees_claimed","data":[{"quote_id":"0","amount_usd_e6":"56700000"}]}
 test tests::claim_fees_pays_and_zeroes ... ok
 
-thread 'tests::complete_withdrawal_without_initiate' (2867299) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests::complete_withdrawal_without_initiate' (2867299) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "withdrawal not initiated" })
 test tests::complete_withdrawal_without_initiate - should panic ... ok
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"paused","data":[{}]}
@@ -259,7 +259,7 @@ EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"1000000000"}]}
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"liquidity_supplied","data":[{"account":"lender.test","amount_usd_e6":"50000000000"}]}
 
-thread 'tests::initiate_withdrawal_requires_one_yocto' (2867319) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/utils/mod.rs:85:5:
+thread 'tests::initiate_withdrawal_requires_one_yocto' (2867319) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/utils/mod.rs:85:5:
 Requires attached deposit of exactly 1 yoctoNEAR
 test tests::initiate_withdrawal_requires_one_yocto - should panic ... ok
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_exiting","data":[{"quote_id":"1","unlock_ns":"1700604800000000000"}]}
@@ -437,7 +437,7 @@ EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"oracle_updated","data
 refund: unknown position
 test tests::repay_partial_full_and_overpay ... ok
 
-thread 'tests::set_session_unknown_symbol' (2867351) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests::set_session_unknown_symbol' (2867351) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "unknown collateral" })
 test tests::set_session_unknown_symbol - should panic ... ok
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"quote_funded","data":[{"quote_id":"25","buyer":"buyer1.test","collateral":"NVDAx","amount_usd_e6":"100000000","max_discount_bps":250}]}
@@ -510,7 +510,7 @@ position healthy
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
 EVENT_JSON:{"standard":"nectar","version":"1.0.0","event":"settled_near","data":[{"position_id":"0","quote_id":"0","disc_bps":250,"repay_usd_e6":"11250000000","seize_units":"82417583","buyer":"buyer1.test"}]}
 
-thread 'tests::trigger_needs_gas_reserve' (2867359) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests::trigger_needs_gas_reserve' (2867359) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "gas reserve empty" })
 test tests::trigger_healthy_position - should panic ... ok
 test tests::trigger_needs_gas_reserve - should panic ... ok

@@ -705,7 +705,7 @@ EVENT_JSON:{"standard":"nep171","version":"1.0.0","event":"nft_mint","data":[{"o
 EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"reservation_deposit_refunded","data":[{"position_id":"0","account_id":"borrower.test","amount_yocto":"50000000000000000000000","reason":"confirmed"}]}
 EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"repaid","data":[{"position_id":"0","amount_usd_e6":"11250000000","remaining_debt_usd_e6":"0"}]}
 
-thread 'tests_p2::release_refuses_unknown_domain' (16777171) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests_p2::release_refuses_unknown_domain' (16777171) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "unknown remote chain" })
 note: panic did not contain expected string
       panic message: "called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: \"unknown remote chain\" })"
@@ -732,7 +732,7 @@ EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data
 EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"140000000"}]}
 EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"preliq_triggered","data":[{"position_id":"0","keeper":"keeper.test"}]}
 
-thread 'tests_p2::settle_remote_refuses_unknown_domain' (16777212) panicked at /Users/lemmalabs/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
+thread 'tests_p2::settle_remote_refuses_unknown_domain' (16777212) panicked at ~/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/near-sdk-5.30.1/src/environment/mock/mocked_blockchain.rs:311:37:
 called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: "no remote quote capacity" })
 note: panic did not contain expected string
       panic message: "called `Result::unwrap()` on an `Err` value: HostError(GuestPanic { panic_msg: \"no remote quote capacity\" })"

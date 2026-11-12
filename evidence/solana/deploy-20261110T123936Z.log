@@ -12,7 +12,7 @@ Signature: 2sX38VX5MZ71AMaqpu1fMKW745shvSEqvnw5CkhsV2cop2hNrucvaujEc5aat5jcfnseq
 mint=3Ve8GiDBtD7crfwUcKukpMigKQaU2aXtSCNgu661E8hT
 
 == program keypair (outside the repo) + keys sync ==
-Wrote new keypair to /Users/lemmalabs/.nectar/solana/nectar_vault-keypair.json
+Wrote new keypair to ~/.nectar/solana/nectar_vault-keypair.json
 info: uninstalling toolchain solana
 info: toolchain solana uninstalled
 Syncing program ids for the configured cluster (localnet)

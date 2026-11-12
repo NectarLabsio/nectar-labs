@@ -206,9 +206,9 @@ warning: profile package spec `anchor-cli` in profile `release` did not match an
    Compiling sigstore-tsa v0.11.0
    Compiling sigstore-bundle v0.11.0
    Compiling sigstore-verify v0.11.0
-   Compiling avm v1.2.2 (/Users/lemmalabs/.cargo/git/checkouts/anchor-3eeed4e738e6d335/33868ff/avm)
+   Compiling avm v1.2.2 (~/.cargo/git/checkouts/anchor-3eeed4e738e6d335/33868ff/avm)
     Finished `release` profile [optimized] target(s) in 2m 09s
-  Installing /Users/lemmalabs/.cargo/bin/avm
+  Installing ~/.cargo/bin/avm
    Installed package `avm v1.2.2 (https://github.com/solana-foundation/anchor#33868ffe)` (executable `avm`)
 The latest cargo build-sbf platform-tools (v1.58) is not installed. Run `cargo build-sbf --tools-version v1.58 --install-only` to install it.
 Anchor v0.32.1 does not have signed releases, skipping checks
@@ -216,7 +216,7 @@ Now using anchor version 0.32.1.
 Now using anchor version 0.32.1.
   ✨ 2.3.0 initialized
 Downloading https://github.com/anza-xyz/platform-tools/releases/download/v1.51.1/platform-tools-osx-aarch64.tar.bz2
-Extracting /Users/lemmalabs/.cache/solana/v1.51.1/platform-tools.partial/platform-tools-osx-aarch64.tar.bz2
-Installed platform-tools v1.51.1 to /Users/lemmalabs/.cache/solana/v1.51.1/platform-tools
+Extracting ~/.cache/solana/v1.51.1/platform-tools.partial/platform-tools-osx-aarch64.tar.bz2
+Installed platform-tools v1.51.1 to ~/.cache/solana/v1.51.1/platform-tools
 anchor-cli 0.32.1
 solana-cli 2.3.0 (src:a2e21dda; feat:3640012085, client:Agave)

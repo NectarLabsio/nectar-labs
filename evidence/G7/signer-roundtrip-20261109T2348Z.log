@@ -359,7 +359,7 @@ The "trigger_preliquidation" call to <nectar-core.nectar.testnet> on behalf of <
 
 
 Here is your console command if you need to script it or re-run:
-    [33mnear contract call-function as-transaction nectar-core.nectar.testnet trigger_preliquidation json-args '{"position_id":"6"}' prepaid-gas '300.0 Tgas' attached-deposit '0 NEAR' sign-as keeper.nectar.testnet network-config testnet sign-with-access-key-file /Users/lemmalabs/.nectar/keys/keeper.function-call.json send[39m
+    [33mnear contract call-function as-transaction nectar-core.nectar.testnet trigger_preliquidation json-args '{"position_id":"6"}' prepaid-gas '300.0 Tgas' attached-deposit '0 NEAR' sign-as keeper.nectar.testnet network-config testnet sign-with-access-key-file ~/.nectar/keys/keeper.function-call.json send[39m
 
 == quotes ==
 #1  remaining $2,555.00  max discount 400 bps  live
