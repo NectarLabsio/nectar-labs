@@ -24,6 +24,16 @@ capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept
   grant-function-call-access --allowance '1 NEAR' --contract-account-id nectar-core-v2.nectar.testnet --function-names update_owner_price
   use-manually-provided-public-key <pk> network-config testnet sign-with-keychain send → watch first refresh tx. Price stale ≈ 2026-11-13 15:10Z.
 - WO-62a merged c165332 (claims.spec 10/10, v7 28/28, LH landing 100/100). WO-62b, WO-64, WO-61, WO-62c running.
+- ~20:05Z WO-62b merged 787549d, WO-64 merged c66458f (verify:quick 0 each). Local prod build with the five host env vars exit 0, check-trace 0,
+  hosts.spec hosted 10/11 (the 1 = browser check, headless shell not installed here; G3b runs it) — evidence/WO-62b/.
+  Vercel env now set for the NEXT build: web DOCS_URL https://docs.nectarlabs.io, STATUS_URL, LEGACY_HOSTS (4 vercel.app hosts); docs DOCS_URL,
+  SITE_URL, STATUS_URL, APP_URL https://testnet.nectarlabs.io. Tarball c66458f uploaded (sha256 663dd8fe…).
+  **BLOCKED: the web production create_deployment was DENIED by the auto-mode classifier [Production Deploy]**; the docs one started and was CANCELLED
+  by me (dpl_7S1Rzo…) so docs and web stay consistent (the old APP /docs proxy would hit the new relative 308s). Production unchanged =
+  dpl_22L1aJ6… (release 3 code, custom-host env). Needs Kunal: explicit approval (or a permission rule) for Vercel production deploys; same for Railway.
+- D1: demo.nectar.testnet created (0.5 NEAR from nectar.testnet, tx 5NbjrugATtcyoqz5sjo9vGmAQz5EmMNkdafK5Em3bTC7); key + phrase in
+  ~/.nectar/keys/demo.nectar.testnet.json (0600), never printed. WO-65 docs dispatched (hosts everywhere, DEMO_SCRIPT ≤ 2 min, snapshot, handoffs).
+- Planned before recording: restart local x402 (:8791) with FEED_URL = hosted Feed (B5 (d)); Kunal told.
 Round 1 dispatched: WO-60 researcher · WO-61 contract (mock-ft faucet) · WO-62a web (B1–B4) · WO-63 keeper (refresher + B5/x402 answers).
 Round 2 (after facts): WO-62b web hosts/redirects/status host · WO-64 docs-site baseUrl "/" · WO-62c web Get-test-assets button.
 Orchestrator: mock-ft upgrade deploy + set_faucet; FC key + Railway refresher; demo account (~/.nectar, 0600); Feed CORS; vercel.app → 308 after release.
@@ -387,7 +397,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T19:35:04Z · commit 8cf4d3b
+Last activity: 2026-11-12T19:57:03Z · commit f4738d1
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
