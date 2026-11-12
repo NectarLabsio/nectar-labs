@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent accept (56.8s)
+  ✓  2 [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent decline (58.1s)
+  ✓  3 [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: light theme, consent accept (52.1s)
+  ✓  4 [inventory] › e2e/inventory.spec.ts:247:5 › data inventory (opt-in, network) › every route, both hosts: dark theme, consent decline (51.3s)
+  ✓  5 [inventory] › e2e/inventory.spec.ts:276:3 › data inventory (opt-in, network) › every wallet the selector lists, one by one (fresh profile each, no signing) (1.2m)
+  ✓  6 [inventory] › e2e/inventory.spec.ts:368:3 › data inventory (opt-in, network) › zero CSP violations across the inventory runs (2ms)
+
+  6 passed (4.9m)
