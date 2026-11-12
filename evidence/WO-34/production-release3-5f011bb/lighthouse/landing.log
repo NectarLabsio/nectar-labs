@@ -1,0 +1,7 @@
+
+| route | dark | light |
+| --- | --- | --- |
+| / | 100 | 100 |
+
+reports: /private/tmp/verify-wo34v3-20261112T1640Z/evidence/G3/lighthouse
+exit 0
