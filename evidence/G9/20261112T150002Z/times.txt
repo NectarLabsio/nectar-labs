@@ -1,0 +1,6 @@
+pnpm-i: 'pnpm i' exit 0 11 s (start 15:00:49 Z)
+demo-testnet: 'pnpm demo:testnet' exit 0 4 s (start 15:01:05 Z)
+verify: 'pnpm verify' exit 0 31 s (start 15:01:19 Z)
+docs-build: 'pnpm --filter docs-site build' exit 0 19 s (start 15:02:10 Z)
+gitleaks: 'gitleaks detect --source . --log-opts=--all' exit 0 3 s (start 15:03:00 Z)
+grep-users: 'git grep -l [/]Users[/]  (pattern written this way so the log itself does not match)' exit 0 0 s (start 15:03:12 Z)

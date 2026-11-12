@@ -1,0 +1,91 @@
+== WO-34v section ==
+### WO-34 production acceptance (WO-34v): FAIL, 2026-11-12T13:38Z–14:45Z, deployed commit ca3411115aed1d6c127e2d82ba9f31a163221496
+- Deployments: Vercel web dpl_6yqaQJPFBGYmM8e2Veofgr32BpRw and docs dpl_BtPA8juRKQKGfJbTkkYNEJzTwNNX; Railway project nectar-labs, service feed (/health reports commit fd06e11).
+- URLs: SITE https://nectarlabs.vercel.app · APP https://nectarlabs-app.vercel.app · DOCS https://nectarlabs-app.vercel.app/docs (docs origin https://nectar-labs-docs-kunals-projects-35d3a237.vercel.app) · FEED https://feed-production-2f2776c9.up.railway.app.
+- Scripts ran from a fresh clone of ca34111 at /tmp/verify-wo34v-20261112 and were not modified. Verifier probes were added in the clone and copied into evidence: wallet/wo34v-wallet-probe.mjs, host-check/wo34v-privacy-check.mjs, crawl/wo34v-load-probe.mjs. Everything was read-only. Nothing was signed.
+- WebFetch was not used: no explorer link is part of this gate. Lighthouse JSON reports (24 MB) were not kept; the score tables are in the logs.
+
+1. Crawl: PASS on the re-run, with 1 FAIL reason (the localhost link).
+== copy rules ==
+apps/web/components/landing/Landing.tsx:5:// Copy rules: never "insurance", never "without liquidations"; testnet and mock collateral disclosed.
+apps/web/components/Shields.tsx:3:// these components only read its views and build the exact msg the sign modal shows. Copy rule: never "insurance".
+(insurance/without-liq hits above, if any)
+(hackathon hits in product above, if any)
+apps/web/app/shield/page.tsx
+apps/web/app/changelog/page.tsx
+apps/web/app/security/page.tsx
+apps/web/app/quote/[id]/page.tsx
+apps/web/app/position/[id]/page.tsx
+apps/web/app/agents/page.tsx
+testnet in landing/index.html:       18
+== build-submission (dry) ==
+exit 0
+keys requestId,projectName,leadName,email,size,tracks,nearAddress,projectUrl,demoUrl,idea,consent
+tracks ["defi","security","agents"]
+website absent
+open leadName TODO-H10
+open email TODO-H10
+open size TODO-H10
+open nearAddress TODO-H14
+open projectUrl TODO-H2
+open demoUrl TODO-H3
+open consent TODO-H14
+== privacy-track framing ==
+README.md:131:Tracks for the submission (Kunal's H16 reply, 2026-11-11; D-028): `defi`, `security`, `agents`. `nfts` is not submitted (H16 closed 2026-11-12). `privacy` and `realworld` are not entered.
+docs/SUBMISSION.md:18:| `tracks` | `["defi","security","agents"]` | Kunal's H16 reply in session, 2026-11-11: "H16 defi security agents" (D-028). `privacy` dropped by Kunal; `nfts` not entered (H16 closed 2026-11-12, see
+docs/SUBMISSION.md:56:Entered: `defi`, `security`, `agents` (Kunal, in session: "H16 defi security agents (I'll decide nfts after item 3)"). `nfts`: not entered (H16 closed 2026-11-12, reason below). Not entered: `privac
+docs/SUBMISSION.md:61:- `privacy`: **not entered** (Kunal, 2026-11-11). The privacy-relevant facts and their limits (quoter inputs, RPC providers, analytics) stay as disclosures in README "Security" and SECURITY.md R2-02
+== R2 spot checks ==
+119:  add("request_matches_input", "Signed request is the one built from your notes", pass(sameRequest), sameRequest ? `request ${sha256Hex(expected.requestBody).slice(0, 16)}… rebuilt in your browser` : "the server returned an exchange for a different request");
+54:/** `content-type: application/json` (parameters such as `charset` allowed). Anything else is a 415. */
+86:/** Origin (403) → content type (415) → size (413) → JSON (400). Returns the parsed body. */
+88:  if (!isSameOrigin(req)) return reject(403, "forbidden", "Cross-origin requests are not accepted.");
+89:  if (!isJsonContentType(req)) return reject(415, "unsupported_media_type", "content-type must be application/json.");
+services/x402/src/borrow-guard.ts
+28:/** Commas are accepted only as thousands separators: "1,234.5" yes, "1,5" (decimal comma) no. */
+76:  accountExists = async (accountId: string): Promise<boolean> => {
+2:// Id segments refuse "." and ".." (R2-11): `new URL(base + "/api/note/..")` would resolve outside the allow-list.
+20:  if (segments.some((s) => s === "." || s === ".." || s.includes("/"))) return false;
+(privacy forbidden phrases above, if any)
+== SECURITY.md limitations + zod ==
+34:Decision D-027 (docs/DECISIONS.md) fixed every high and medium finding plus the cheap lows before submission. Interface: docs/work/interface-v7.md §E. Two independent reviewers then re-traced every finding at commit `6e51276`. Contract: 19 fixed, 3 partial, no theft or double execution found. Vau
+129:- **FACTS C-020 (kept by decision, D-029).** Sources define "implicit account" differently. The SDK takes the safe side: only 64-hex and `0x` ids count as implicit, and `0s` / `0u` receivers take the `view_account` path and fail closed (F-382). Kunal kept this behaviour on 2026-11-11; see "What 
+148:11. **FACTS C-020, kept by decision: no Note transfer from the web app to a `0s` / `0u` account that does not exist yet.** The web app's Note-transfer receiver check (R2-09: `isImplicitAccount` in packages/sdk/src/network.ts, `receiverNeedsLookup` in packages/sdk/src/notes.ts) treats only 64-hex
+149:12. **Remote Loan Notes do not carry the collateral release.** A Loan Note transfer (`nft_transfer` → `move_note`, contracts/nectar-core/src/notes.rs:332-349) sets `position.borrower` to the new owner, and repay is permissionless (`on_repay`, contracts/nectar-core/src/lib.rs:824). For collateral
+153:The report lists 14 candidates that verifiers rejected, each with the reason, in docs/work/security-review-v7.md "Rejected by verifiers". One of them is the transferable remote Loan Note: it carries no collateral claim, and release always goes to the vault depositor. That is documented behaviour
+115:Also from the report's notes (R2-13): the copilot server module imports `server-only`, so a client import fails the build; the E2E key adapter works on localhost only; the Feed's `zod` is now 4.6.7 (WO-44).
+123:- **Dependencies** (`pnpm audit --prod` in the report). The zod advisory GHSA-mrhx-c7xc-m3w5 / CVE-2023-54404 (high, CVSS 3.1 7.5, memory exhaustion on oversized arrays; zod < 4.6.6, no patched 3.x; F-383, F-384) still reaches `services/x402` through `@x402/core` 2.18.0 (zod 3.25.76). It is not reachable from untrusted input (F-385): the paying client's PAYMENT-SIGNATURE header is regex-checke
+234:| F-451 | 2026-11-12 | V (local command) + derived | zod: `pnpm why -r zod` → **2 versions**: **3.25.76** only via @x402/core 2.18.0 (← services/x402 direct, @x402/near 2.18.0, @x402/fetch 2.18.0, @fastnear/x402 2.5.0); **4.6.7** (≥ 4.6.6 = patched, F-383) via @modelcontextprotocol/sdk 1.32.2 (feed, x402), abitype/viem (keeper), chromium-bidi (lighthouse), and services/feed direct (`"zod": "4.
+340:| F-383 | 2026-11-11 | V | **GHSA-mrhx-c7xc-m3w5 = CVE-2023-54404**, severity **high**, CVSS 3.1 **7.5** `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H` (CVSS 4.0 8.2 `CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N`), CWE-770; published 2026-10-01T18:32:46Z, updated 2026-10-23T18:26:52Z, not withdrawn. npm `zod` vulnerable range "`< 4.6.6`", first patched **4.6.6**, so **no 3.x
+341:| F-384 | 2026-11-11 | V | Vulnerable construct (fix commit a0ebf970 = PR #6652 "fix(v4): check array, set and map size bounds before parsing elements", merged 2026-10-09T19:50:22Z, "Fixes #6643"): "`.max()`, `.length()` and `.size()` on arrays, sets and maps now reject an oversized input before any element is parsed. The bound used to run after the walk, so it bounded nothing" … "Unbounded co
+342:| F-385 | 2026-11-11 | V (derived) | **Verdict: not reachable from untrusted input in services/x402.** @x402/core 2.18.0 imports zod v3 API (`import { z } from "zod"`, dist/esm/chunk-N4QXZG2Z.mjs:2). (a) **Paid route**: server.ts:90 `processHTTPRequest` decodes the client's PAYMENT-SIGNATURE header with `decodePaymentSignatureHeader` (chunk-UCXEF6EL.mjs:1236-1240) = `Base64EncodedRegex.test` +
+232:| F-449 | 2026-11-12 | V (local command) | `pnpm audit --json` (repo @fa24448): 9 advisories (low 3, moderate 2, high 2, critical 2); 7 on the docs-site tree, one path each: **GHSA-5gmw-xhrv-c9v3** tinypool critical (≤2.1.0, fix ≥2.1.1) and **GHSA-85c8-ppgw-ccpr** tinypool critical (<2.1.2, fix 
+234:| F-451 | 2026-11-12 | V (local command) + derived | zod: `pnpm why -r zod` → **2 versions**: **3.25.76** only via @x402/core 2.18.0 (← services/x402 direct, @x402/near 2.18.0, @x402/fetch 2.18.0, @fastnear/x402 2.5.0); **4.6.7** (≥ 4.6.6 = patched, F-383) via @modelcontextprotocol/sdk 1.32.2 (f
+340:| F-383 | 2026-11-11 | V | **GHSA-mrhx-c7xc-m3w5 = CVE-2023-54404**, severity **high**, CVSS 3.1 **7.5** `CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H` (CVSS 4.0 8.2 `CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N`), CWE-770; published 2026-10-01T18:32:46Z, updated 2026-10-23T18
+341:| F-384 | 2026-11-11 | V | Vulnerable construct (fix commit a0ebf970 = PR #6652 "fix(v4): check array, set and map size bounds before parsing elements", merged 2026-10-09T19:50:22Z, "Fixes #6643"): "`.max()`, `.length()` and `.size()` on arrays, sets and maps now reject an oversized input before
+342:| F-385 | 2026-11-11 | V (derived) | **Verdict: not reachable from untrusted input in services/x402.** @x402/core 2.18.0 imports zod v3 API (`import { z } from "zod"`, dist/esm/chunk-N4QXZG2Z.mjs:2). (a) **Paid route**: server.ts:90 `processHTTPRequest` decodes the client's PAYMENT-SIGNATURE hea
+368:| C-021 | GHSA-mrhx-c7xc-m3w5 scope (F-383/F-384) | advisory summary: "Zod can exhaust memory while validating oversized constrained collections"; fix PR #6652: "Unbounded containers are unchanged" | advisory description: "submitting a large array to an application using an array schema without 
+== code for limitations ==
+332:    fn move_note(&mut self, token_id: &str, r: NoteRef, from: &AccountId, to: &AccountId) {
+10://!    `.then(on_deposit_verified)`: authority and committed depositor must match (SR-8), depositor recorded; then the
+14://!    the depositor so the collateral can be released.
+38:/// SR-8 (WO-34a): the depositor committed at reservation (raw key: code-only upgrade, no struct layout change).
+39:pub const COMMITTED_DEPOSITOR_PREFIX: &[u8] = b"__v7c_depositor:";
+87:/// Vault depositor of the position's chain. SR-8: a 32-byte on-curve Solana key (domain 1) or a non-zero 0x address
+89:pub fn valid_depositor(s: &str, domain_id: u32) -> bool {
+97:/// SR-8: a reported depositor equals the commitment (EVM addresses compare case-insensitively).
+98:pub fn depositor_matches(committed: &str, reported: &str, domain_id: u32) -> bool {
+packages/sdk/src/network.ts:4:/** NEAR implicit account: 64 lowercase hex chars (ed25519 key) or `0x` + 40 lowercase hex (ETH-style implicit). */
+packages/sdk/src/network.ts:12:/** A signer the app will hand to a wallet: a named `.testnet` account or an implicit account. `alice.near` is refused. */
+packages/sdk/src/notes.ts:295: * R2-09: what the page knows about the receiving account. `implicit` (64-hex or `0x` + 40-hex) needs no on-chain account yet;
+packages/sdk/src/notes.ts:298:export type ReceiverCheck = "exists" | "implicit" | "unknown" | "checking" | { error: string };
+packages/sdk/src/notes.ts:300:/** Whether a receiver needs a `view_account` lookup before a transfer can be enabled (implicit accounts do not). */
+== zod in code ==
+services/feed/package.json:21:    "zod": "4.6.7"
+== G14 / G1 2.2.1 rows ==
+39:| G14 x402 (re-run on HEAD; demo agent verifies the MCP borrow call before signing) | PASS — own x402 server from the clone on :8891: unpaid GET → 402 (near:testnet, usdc-mock, 10000, payTo nectar.testnet); demo exit 0: borrow_verified → borrow E2
+41:| G1 (2.2.1 gas rows) | PASS (re-check after WO-45; prior FAIL 13:53Z at 45ed1f3 kept in §G1) — 67 of 67 non-private change methods have a GAS row, 0 rows ≥ 100 Tgas (max tx-total 78.60, max receipt 67.61); remove_extra_remote_chain 2.64, update_o
+50:G14 on testnet, §G14 re-run (recorded in b8784c1): the borrow (position #13) and the delegated mock-USDC payment are verified on chain
+50:G14, 2026-11-11T13:54Z–13:55Z, fresh clone of 45ed1f3, recorded in 2e16f9b): unpaid GET → 402 with the route terms, borrow tx `7UFpexpd…` (position #14), relayed d
+50:G14 on HEAD with the guarded agent (§G14, 2026-11-11T15:02Z, fresh clone of 48b5c5a, recorded in a677689): `borrow_verified` logged before signing, borrow tx `E2su
+98:G14 re-run on HEAD (48b5c5a, recorded in a677689) used the R2-05 guarded agent; The web fixes passed G9 run 3 (§G9 run 3, fresh clone of 3107a1a, recorded in 837cd
