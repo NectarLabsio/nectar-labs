@@ -53,6 +53,57 @@ PROD: Sputnik DAO owner, 48 h timelock on `upsert_collateral` / `set_oracle_sour
 ## Backups
 All state on-chain; SQLite rebuilt with `pnpm --filter feed index:rebuild`. Keys: `near account export-account` once → encrypted offline file (HUMAN).
 
+## Deploy through the connectors (no CLI login) (WO-34m, 2026-11-12)
+Kunal chose the Vercel and Railway connectors over CLI logins (H-HOST). The connectors cannot take a local tree as an upload (WO-34m "Why a new
+path"), so a pinned source tarball moves through a private Railway bucket and its bytes never pass through a tool argument. Orchestrator-run only;
+only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret value or presigned URL is ever written to git, a log, EVIDENCE or chat.
+- **Artifact flow** (`scripts/deploy/artifact.sh`; set `ARTIFACT_URL` to the artifacts function origin below):
+  1. `artifact.sh make <commit>` → `~/.nectar/deploy/artifacts/src-<sha>.tar.gz` (0600); prints `<name> <sha256>`. Contents: `git archive` of the
+     exact commit without evidence/ contracts/ evm/ solana/ quoter/ landing/ .claude/ (every pnpm importer's package.json stays), plus
+     apps/web/lib/generated/changelog.json, made by the repo's own script in a worktree of that commit.
+  2. `artifact.sh upload <commit>` → presigned PUT (URL valid 900 s).
+  3. `artifact.sh verify <commit>` → downloads through a 5-minute GET and compares the sha256 with the local file: `verify ok …`, exit 4 on a mismatch.
+  4. `artifact.sh url <commit> <s>` → a presigned GET valid `<s>` seconds (the function caps it at 30 days). Stdout only: redirect it straight into
+     the deployment file or variable, never echo it.
+- **Token.** `~/.nectar/deploy/artifact-token`, 0600, on the operator's machine only. Railway stores only its sha256, as `ARTIFACT_TOKEN_SHA256` on the
+  function; Vercel holds no token. The bucket keys reach the function only as reference variables `${{artifacts-bucket.*}}`, so the bucket secret
+  never leaves Railway.
+  - Rotation: write a new token to the file first (random, 32 bytes, kept 0600), then set `ARTIFACT_TOKEN_SHA256` to the hex sha256 of the file's text
+    without the trailing newline (artifact.sh sends `$(cat <file>)`): `printf %s "$(cat ~/.nectar/deploy/artifact-token)" | shasum -a 256`.
+    Check: `POST /presign` without a token → 401, and `artifact.sh verify <commit>` → `verify ok`.
+  - Rotating the token does not revoke presigned URLs already issued: they are signed with the bucket keys (scripts/deploy/artifacts-function.ts)
+    and stay valid until they expire (Feed `SRC_URL`: 21 days).
+- **Vercel** (projects nectar-labs-web, rootDirectory apps/web; nectar-labs-docs, rootDirectory apps/docs-site; created once H-HOST is approved).
+  A deployment carries stub files only (root package.json, pnpm-workspace.yaml, the app's package.json, scripts/deploy/fetch-artifact.mjs) plus
+  `.nectar-artifact` (line 1 `src-<sha>.tar.gz <sha256>`, line 2 a 1 h presigned GET from `artifact.sh url <commit> 3600`).
+  - installCommand `node ../../scripts/deploy/fetch-artifact.mjs <filter>` (`web` or `docs-site`; it runs in rootDirectory, F-424): download, sha256
+    check, extract over the stubs, delete `.nectar-artifact`, then `pnpm@10.34.9 install --frozen-lockfile --filter <filter>...`. Node only, because
+    the build image does not document curl or sha256sum (F-425).
+  - buildCommand: web `npx -y pnpm@10.34.9 exec next build` (the changelog is pre-generated in the tarball; the build has no .git). Docs: `pnpm build`
+    per WO-34m; not deployed yet, so confirm it at the first docs deployment.
+  - Env: the WO-34 deploy env list in docs/STATE.md. Previews first (`VERCEL_ENV=preview`); `target: production` only after H-LEGAL and the G3b re-run.
+    After the first web deployment, set `FEED_CORS_ORIGINS` on the Feed to the web origins.
+- **Feed** (Railway service `feed`, project nectar-labs, environment production): image `node:22.22.2-bookworm`, volume at `/data`, start command =
+  the one line in scripts/deploy/railway-feed-start.cmd.
+  - First boot: download `SRC_URL`, check `SRC_SHA256` with sha256sum, extract into `/data/src/<SRC_SHA>`, run
+    `pnpm@10.34.9 install --frozen-lockfile --prod --ignore-scripts --filter feed`, mark the tree done. Later boots reuse the cached tree, so restarts
+    work after the URL expires. It then runs `node src/main.ts` in services/feed as the `node` user.
+  - Variables: the WO-34 Feed list plus `SRC_SHA` (40-hex commit), `SRC_SHA256` and `SRC_URL` (`artifact.sh url <commit> 1814400`, a 21-day link).
+  - Healthcheck `/health`, timeout 900 s (Railway default 300 s, no documented maximum, F-423).
+  - Old `/data/src/<sha>` trees stay on the volume (Free: 0.5 GB, H-HOST); remove stale ones before the volume fills.
+- **Hosts** (Railway domains):
+  - Feed: https://feed-production-2f2776c9.up.railway.app (`curl -s <host>/health`).
+  - artifacts function: https://artifacts-production-bf757206.up.railway.app. It serves only `GET /health` (`{"ok":true}`) and token-gated
+    `POST /presign`; any other route 404, a missing or wrong token 401, a key outside `src-<40 hex>.tar.gz` 400.
+- **Redeploy a new commit:** `make` → `upload` → `verify` for that commit, then
+  - Feed: set `SRC_SHA`, `SRC_SHA256` and a new 21-day `SRC_URL` together (the new sha gets its own `/data/src/<sha>` tree);
+  - Vercel: a new deployment per project, each with a fresh `.nectar-artifact` (1 h GET).
+  The verifier records the sha, sha256 and deployment ids in EVIDENCE.
+- **Teardown after the hosted-until date** (2026-11-25, `site.hosted_until` in packages/config/config.yaml): delete the artifacts function and the
+  bucket objects (`src-*.tar.gz`). The Feed follows WO-34 (docs/work/wo-34-deploy.md). Testnet accounts are never deleted.
+- **Fallback:** the CLI path, `scripts/deploy/deploy-vercel.sh` and `scripts/deploy/deploy-railway.sh`, stays in the repo. It needs the CLI logins that
+  H-HOST no longer asks for.
+
 ## Docs site under /docs (WO-34d, D-030)
 - **Local URLs changed.** Dev: `pnpm --filter docs-site start` → http://localhost:3000/docs/. Preview a build: `pnpm --filter docs-site build` then
   `pnpm --filter docs-site serve` → http://localhost:3000/docs/ (`docusaurus serve` honours baseUrl and redirects any other path to `/docs/`, F-393).

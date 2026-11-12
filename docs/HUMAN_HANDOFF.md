@@ -112,23 +112,26 @@ What Claude Code does then, on yes: creates the new function-call key on testnet
   On no: nothing leaves `~/.nectar/`.
 Default if silent: the keeper stays local (it runs when the operator runs it). The hosted app says when settlement runs.
 
-## H-HOST — Vercel and Railway CLI login, Railway plan   status: OPEN   needed by: 2026-11-13 06:00 UTC (WO-34 deploy, round 3)
-Why a human: a CLI login binds Kunal's accounts (Vercel team "kunal's projects", Hobby plan; Railway workspace "kunal drall's Projects"). The Railway
-  plan is not readable through the API. Agents never log in for him and never upgrade a plan.
-What Kunal does (5 min), in his own shell:
-  1. `npx -y vercel@65.14.0 login`
-  2. `npx -y @railway/cli@5.71.0 login`
-     (versions: F-394, npm latest on 2026-11-11; the subcommand grammar is still VERIFY there, so the orchestrator checks `--help` before scripting.)
-  3. Railway: Dashboard → Workspace settings → Plan. Reply `H-HOST done, railway plan <name>`. Do not upgrade.
-Railway plan facts (FACTS F-404, F-405, F-412, read 2026-11-12): Free $0 a month ("$1 of free credit per month"), Hobby $5, Pro $20. Free allows
-  1 volume per project (0.5 GB) and 1 replica with 0.5 GB RAM per service; Hobby 10 volumes (5 GB). Since x402 is not hosted (D-031), the Feed is the
-  only hosted service that needs a volume, so **Free is enough for the Feed**. A hosted keeper (H-KEYS yes) would need its own check. Log retention:
-  Free 3 days, Hobby 7, Pro 30 (the privacy page states this). Trial accounts revert to Free after up to 30 days; an unverified GitHub account gets a
-  Limited Trial with restricted outbound network (F-404), which the Feed's chain reads would hit.
-What Claude Code does then: creates new projects only (the pre-repo Vercel projects nectar-landing, nectar-frontend, docs-site-nectar and the five
-  pre-repo Railway projects stay untouched), sets env per RUNBOOK, deploys the code-final commit after the G3b re-run (scripts/deploy/*), and the
-  verifier records deployment ids, URLs and headers in EVIDENCE (wo-34v).
-Default if silent by 2026-11-13 06:00 UTC: no hosting. README keeps the local quick start; the submission continues.
+## H-HOST — approve the Vercel connector's team access   status: OPEN   needed by: 2026-11-13 06:00 UTC (WO-34 deploy, round 3)
+Decision (Kunal, 2026-11-12: "use mcp for vercel and railway"): deploy through the Vercel and Railway connectors, not the CLIs. **No CLI login is
+  needed.** Path: docs/work/wo-34m-mcp-deploy.md; operations: RUNBOOK "Deploy through the connectors (no CLI login)".
+Why a human: the Vercel connector has no write access to the team "kunal's projects" (create refused with 403). Only Kunal can grant it. Agents never
+  approve access for him and never upgrade a plan.
+What Kunal does (1 min): open the single-use authorize link the orchestrator sends (valid 10 min; ask for a new one if it expires) and approve the
+  connector's access to the team. Reply `H-HOST done`.
+What Claude Code does then: creates the new Vercel projects nectar-labs-web and nectar-labs-docs (the pre-repo projects nectar-landing,
+  nectar-frontend and docs-site-nectar stay untouched) and deploys previews of the G3b-passed commit; the verifier records deployment ids, URLs and
+  headers in EVIDENCE (wo-34v). Production still waits for H-LEGAL, then the G3b re-run, then a tarball of that commit.
+Railway (no step for Kunal): the plan is still not readable through the connector. The bucket, the artifacts function and the Feed already run on the
+  workspace (project nectar-labs; Feed health ok on 2026-11-12 per docs/STATE.md, verifier record pending). Agents never upgrade; a create refused for
+  plan reasons is recorded here. Plan facts (FACTS F-404, F-405, F-412, F-417, read 2026-11-12): Free $0 a month ("$1 of free credit per month"),
+  Hobby $5, Pro $20. Free allows 1 volume per project (0.5 GB) and 1 replica with 0.5 GB RAM per service, so Free is enough for the Feed (x402 is not
+  hosted, D-031); a hosted keeper (H-KEYS yes) would need its own check. Free buckets: "up to 10 GB-month", counted against the $1 credit, access
+  suspended when it is used up (files kept). Log retention: Free 3 days, Hobby 7, Pro 30 (the privacy page states this).
+Default if silent by 2026-11-13 06:00 UTC: no Vercel deploy. The Feed alone stays up on Railway, and the submission continues without the hosted app
+  (WO-34 limits). README keeps the local quick start.
+History: until 2026-11-12 this entry asked for two CLI logins (`vercel login`, `railway login`, versions F-394) and the Railway plan name. The
+  connector decision replaced both; the CLI scripts stay as the fallback (RUNBOOK).
 
 ## H7 — NEAR AI Cloud API key                         status: OPEN   needed by: P2 / G8 (live test only)
 Why a human: paid credential tied to Kunal's account ($10 credit).
