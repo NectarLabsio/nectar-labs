@@ -16,5 +16,8 @@ The pre-commit hook runs gitleaks: a test comment like `key -> 0x<40 hex>` next 
 
 Also refused (WO-29a): `python3 $S/apply.py ...` with a shell var; put the calls in a driver .sh and run it by abs path.
 
+Also refused (WO-61): any command that mixes `cd <path> && git ...` with other `;`-chained steps or a `for` loop; run
+`git` alone in its own Bash call (plain `cd <worktree> && git <cmd>`), and do the grep/ls work in a separate call.
+
 **How to apply:** for multi-block edits write a spec with Write and apply it with a small replacement script
 kept in the scratchpad (exact-match, fail if not found once); use Edit for single blocks; commit with plain `git`.
