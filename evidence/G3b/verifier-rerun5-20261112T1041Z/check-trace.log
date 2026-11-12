@@ -1,0 +1,7 @@
+ok   /api/health: packages/config/config.yaml traced (311 files)
+ok   /api/feed: packages/config/config.yaml traced (311 files)
+ok   /feed/[symbol]: packages/config/config.yaml traced (339 files)
+ok   /position/[id]: packages/config/config.yaml traced (342 files)
+ok   /note/[id]: packages/config/config.yaml traced (339 files)
+ok   /quote/[id]: packages/config/config.yaml traced (339 files)
+check-trace: 6/6 routes carry packages/config/config.yaml.

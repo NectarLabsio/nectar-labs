@@ -1,0 +1,15 @@
+[10:42:58Z] node v22.23.4 pnpm 10.34.9 commit ca3411115aed1d6c127e2d82ba9f31a163221496
+[10:43:12Z] install exit 0
+[10:43:27Z] build-local exit 0
+[10:43:27Z] check-trace exit 0
+[10:43:28Z] health {"ok":true,"deployed":true,"core":"nectar-core-v2.nectar.testnet","version":"2.2.1-v7","pool":{"available_usd_e6":"40771000000","utilised_usd_e6":"9229000000","treasury_usd_e6":"80662710","lenders_fees_usd_e6":"17652060"},"network":"testnet","rpc":["https://test.rpc.fastnear.com","https://rpc.testne
+[10:43:28Z] e2e start
+[10:54:22Z] e2e exit 0
+[10:54:22Z] lh start
+[10:59:06Z] lh exit 0
+[10:59:06Z] selector exit 1
+[10:59:06Z] phase1 done
+[11:00:00Z] selector (retry, script in clone) exit 0
+[11:00:00Z] e2e run 2 start
+[11:11:41Z] e2e run 2 exit 0
+[11:11:41Z] phase1b done
