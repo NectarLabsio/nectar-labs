@@ -1,6 +1,7 @@
 // Typed view of packages/config/config.yaml (orchestrator-owned). Values still waiting on a gate are "TODO-G<n>".
 import { parse } from "yaml";
 import { DEFAULT_ORIGINATION_FEE_BPS, DEFAULT_SESSION_STALE_S, parseFeatures, type Features } from "./v7";
+import { faucetPublicConfig, type FaucetPublicConfig } from "./faucet";
 
 export type Pending = `TODO-${string}`;
 export type MaybePending<T> = T | Pending;
@@ -83,6 +84,8 @@ export interface PublicConfig {
   v7: { origination_fee_bps: number; session_stale_s: number; reservation_expiry_s: number; remote_path_prefix: string };
   /** Solana devnet vault (config `solana.vault_program` / `solana.program_id`, `solana.mint`); null while TODO-G7. */
   solana: { cluster: "devnet"; vaultProgram: string | null; mint: string | null; decimals: number };
+  /** `faucet:` (WO-62c "Get test assets"): mock tokens with a public capped faucet and the official testnet NEAR faucet link. */
+  faucet: FaucetPublicConfig;
 }
 
 /** Token account → symbol/decimals (collaterals + USDC), for decoding `ft_transfer_call` amounts in the sign modal (R2-06). */
@@ -175,6 +178,7 @@ export function toPublicConfig(c: NectarConfigYaml): PublicConfig {
       remote_path_prefix: remotePrefix(c.v7?.remote_path_prefix),
     },
     solana: solanaConfig(c.solana),
+    faucet: faucetPublicConfig(c.faucet),
   };
 }
 

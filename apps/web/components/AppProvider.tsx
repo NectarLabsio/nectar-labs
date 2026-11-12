@@ -9,6 +9,7 @@ import { NearConnectAdapter } from "@/lib/wallet/near-connect";
 import { E2EKeyAdapter } from "@/lib/wallet/e2e-key";
 import { E2EMockAdapter } from "@/lib/wallet/e2e-mock";
 import { isLocalE2EHost, readLocalE2EMock, type E2EMock } from "@/lib/e2e-mock";
+import { BatchSignModal } from "./BatchSignModal";
 
 // ------------------------------------------------------------------ chain
 
@@ -73,6 +74,18 @@ type SignFn = (intent: TxIntent, opts: SignOptions) => Promise<TxOutcome | null>
 const SignCtx = createContext<SignFn>(async () => null);
 export const useSign = () => useContext(SignCtx);
 
+/** WO-62c: several transactions reviewed together and sent in ONE wallet request. */
+export interface BatchSignOptions {
+  /** Modal title after "Review: ", e.g. "Get test assets". */
+  title: string;
+  summary?: ReactNode;
+}
+/** cancelled: closed before the wallet opened. error: the wallet threw (rejected, no balance, ...); nothing was sent. sent: outcomes in order. */
+export type BatchResult = { status: "cancelled" } | { status: "error"; message: string } | { status: "sent"; outcomes: TxOutcome[] };
+type SignBatchFn = (intents: TxIntent[], opts: BatchSignOptions) => Promise<BatchResult>;
+const SignBatchCtx = createContext<SignBatchFn>(async () => ({ status: "cancelled" }));
+export const useSignBatch = () => useContext(SignBatchCtx);
+
 function SignHost({ adapter, accountId, tokens, children }: { adapter: WalletAdapter; accountId: string | null; tokens: Readonly<Record<string, TokenInfo>>; children: ReactNode }) {
   const toast = useToast();
   const [pending, setPending] = useState<{ intent: TxIntent; opts: SignOptions; resolve: (o: TxOutcome | null) => void } | null>(null);
@@ -129,9 +142,57 @@ function SignHost({ adapter, accountId, tokens, children }: { adapter: WalletAda
     }
   }, [adapter, accountId, pending, toast]);
 
+  const [batch, setBatch] = useState<{ intents: TxIntent[]; opts: BatchSignOptions; resolve: (r: BatchResult) => void } | null>(null);
+  const [batchBusy, setBatchBusy] = useState(false);
+  const [batchError, setBatchError] = useState<string | null>(null);
+  const signBatch = useCallback<SignBatchFn>(
+    (intents, opts) =>
+      new Promise((resolve) => {
+        setBatchError(null);
+        setBatch({ intents, opts, resolve });
+      }),
+    [],
+  );
+  const cancelBatch = useCallback(() => {
+    batch?.resolve({ status: "cancelled" });
+    setBatch(null);
+  }, [batch]);
+  const confirmBatch = useCallback(async () => {
+    if (!batch) return;
+    const refuse = testnetSignerBlock(accountId);
+    if (refuse) {
+      setBatchError(refuse);
+      return;
+    }
+    setBatchBusy(true);
+    setBatchError(null);
+    try {
+      const outcomes = await adapter.signAndSendMany(batch.intents);
+      batch.resolve({ status: "sent", outcomes });
+    } catch (e) {
+      batch.resolve({ status: "error", message: e instanceof Error ? e.message : String(e) });
+    } finally {
+      setBatchBusy(false);
+      setBatch(null);
+    }
+  }, [adapter, accountId, batch]);
+
   return (
     <SignCtx.Provider value={sign}>
-      {children}
+      <SignBatchCtx.Provider value={signBatch}>
+        {children}
+        <BatchSignModal
+          intents={batch?.intents ?? null}
+          title={batch?.opts.title ?? ""}
+          summary={batch?.opts.summary}
+          signer={accountId}
+          network="NEAR testnet"
+          busy={batchBusy}
+          error={batchError}
+          onConfirm={confirmBatch}
+          onCancel={cancelBatch}
+        />
+      </SignBatchCtx.Provider>
       <SignModal
         preview={pending?.intent ?? null}
         signer={accountId}

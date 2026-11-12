@@ -25,6 +25,7 @@ import type {
 import type { PendingRelease } from "./solana";
 import type { PendingSettlement } from "./remote";
 import { NOTE_PAGE, type NoteToken, type ReserveNoteView, type ReserveView } from "./notes";
+import { readFaucetConfig, readFaucetStatus } from "./faucet";
 
 /** interface-v7 §A6: v2 answers `contract_version()` with a "2." prefix ("2.0.0-v7"). Anything else (v1: "nectar-core 0.1.0 p2") is v1. */
 export function contractGeneration(version: string | null | undefined): ContractGeneration {
@@ -161,4 +162,7 @@ export class NectarViews {
   ftBalanceOf = (token: string, account_id: string) => this.t.call<U128>(token, "ft_balance_of", { account_id });
   /** mock-ft `multiplier()` (interface-v7 §A3); MethodNotFound until the code-only upgrade of the live mock accounts. */
   ftMultiplier = (token: string) => this.t.call<U128>(token, "multiplier", {});
+  /** mock-ft faucet views (WO-61); MethodNotFound until the code-only upgrade of the mock token accounts. */
+  faucetConfig = (token: string) => readFaucetConfig(this.t, token);
+  faucetStatus = (token: string, account_id: string) => readFaucetStatus(this.t, token, account_id);
 }
