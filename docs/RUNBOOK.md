@@ -84,7 +84,7 @@ only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret 
   - Env: the WO-34 deploy env list in docs/STATE.md. Previews first (`VERCEL_ENV=preview`); `target: production` only after H-LEGAL and the G3b re-run.
     After the first web deployment, set `FEED_CORS_ORIGINS` on the Feed to the web origins.
   - Docs deployment opened directly: read it at `<docs-host>/docs/` (apps/docs-site/vercel.json rewrites `/docs/*` to the flat build, WO-34s); its bare
-    root `<docs-host>/` is not a supported entry point. Through the APP it stays `<app-host>/docs/`.
+    root `<docs-host>/` redirects 307 to `/docs/` (WO-34w, F-437–F-439; confirm live: `/docs/` = 200, no loop). Through the APP it stays `<app-host>/docs/`.
 - **Feed** (Railway service `feed`, project nectar-labs, environment production): image `node:22.22.2-bookworm`, volume at `/data`, start command =
   the one line in scripts/deploy/railway-feed-start.cmd.
   - First boot: download `SRC_URL`, check `SRC_SHA256` with sha256sum, extract into `/data/src/<SRC_SHA>`, run
@@ -117,8 +117,8 @@ only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret 
   `APP_URL` sets the web-app links (default: the docs origin when hosted, `http://localhost:3100` locally). `REPO_URL` empty (default until H2) hides
   every GitHub link.
 - **Hosting.** The build output is flat, with no `/docs` folder (F-393). The APP rewrite therefore strips the prefix: `/docs/:path*` →
-  `<docs deployment>/:path*`. The docs deployment is reached only through APP `/docs`: opened directly, its pages load `/docs/assets/…` and break. Do not
-  add a `/` → `/docs/` redirect on the docs deployment (it would land on a path that does not exist there).
+  `<docs deployment>/:path*`. Opened directly, the docs deployment serves the same `/docs/*` URLs through its own rewrites (WO-34s) and redirects
+  its root `/` to `/docs/` (WO-34w); safe because the APP keeps the `/docs` prefix when proxying (WO-34t) and never requests the docs root `/`.
 - **VERIFY at the first deploy.** `trailingSlash: false` writes `<path>.html` files (F-392), so the docs host must answer `/start/quick-start` from
   `start/quick-start.html`. That host behaviour is not in FACTS yet. Check `curl -sI "$APP_URL/docs/start/quick-start"` = 200; if it is 404, record the
   host's clean-URL setting in FACTS before changing any config.

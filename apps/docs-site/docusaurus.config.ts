@@ -24,8 +24,13 @@ const plausibleDomain = process.env.DOCS_PLAUSIBLE_DOMAIN ?? ''; // TODO-H4/H5: 
 // the orchestrator ships it as an inline stub because Vercel reads it before install. Its two rewrites (WO-34s) let the docs deployment, opened
 // directly, serve the same /docs/* URLs the pages reference: `/docs/` -> `/` (the baseUrl home link; `/docs/:path*` does not match a trailing
 // slash, F-433), then `/docs/:path*` -> `/:path*` (assets and /docs/<slug>). The filesystem is checked first, so flat files are never shadowed (F-434);
-// how cleanUrls resolves a rewrite destination is confirmed live (F-435). Read it directly at <docs host>/docs/; its bare root is not an entry point.
-// No `/` -> `/docs/` redirect: the APP proxies `/docs` to the docs root `/`, so that redirect would loop.
+// how cleanUrls resolves a rewrite destination is confirmed live (F-435). Read it directly at <docs host>/docs/.
+// Root redirect (WO-34w): `/` -> `/docs/`, `permanent: false` = 307 (F-437); source `/` compiles to `^/$`, root only, query kept (F-439).
+// Safe only with WO-34t: the APP keeps the /docs prefix when proxying, so it never requests the docs origin `/` and cannot loop through the APP.
+// OPEN, check live (F-438): routing-utils source puts redirects before the filesystem, so `/` gets the 307 although index.html exists, but
+// that order and whether the `/docs/` -> `/` rewrite (check: true) re-enters the redirect are derived from source, not documented.
+// Expect `curl -sI <docs>/` = 307 `location: /docs/` and `curl -sI <docs>/docs/` = 200. If it loops, a `/docs/` -> `/index.html` rewrite does not
+// help: `/index.html` matches the cleanUrls 308 route (-> `/`) that also sits before the filesystem; remove the redirect instead.
 const originOf = (u: string | undefined): string | undefined => (u ? new URL(u).origin : undefined);
 const ORIGIN = originOf(process.env.DOCS_ORIGIN_URL) ?? originOf(process.env.DOCS_URL) ?? 'http://localhost:3000';
 // Web app links. Hosted: APP_URL (TODO-H-DOMAIN; *.vercel.app if H-DOMAIN is silent). Local: `pnpm --filter web dev`.
