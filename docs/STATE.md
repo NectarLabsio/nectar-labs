@@ -34,6 +34,14 @@ capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept
 - D1: demo.nectar.testnet created (0.5 NEAR from nectar.testnet, tx 5NbjrugATtcyoqz5sjo9vGmAQz5EmMNkdafK5Em3bTC7); key + phrase in
   ~/.nectar/keys/demo.nectar.testnet.json (0600), never printed. WO-65 docs dispatched (hosts everywhere, DEMO_SCRIPT ≤ 2 min, snapshot, handoffs).
 - Planned before recording: restart local x402 (:8791) with FEED_URL = hosted Feed (B5 (d)); Kunal told.
+- ~20:10Z C: WO-61 merged 7cddf2a (mock-ft 38 unit + sandbox upgrade test; wasm 171,771 B sha256 e3d4ded5…, rebuilt identical on main).
+  scripts/63 ran: top-ups 0.071/0.072 NEAR, code-only deploy to usdc-mock + nvdax-mock, state before == after, set_faucet from config
+  (NVDAx 5/15, USDC 500/1500, cooldown 3600 s) → evidence/rollout/mockft-faucet-20261112T200937Z.log. WO-62c merged 27c8b95 (conflict in
+  apps/web/package.json test script resolved: hosts + test-assets tests; web unit 43/44 + 1 skip; verify:quick 0). C4 real call: borrower1
+  faucet_mint on nvdax-mock tx 2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW, ft_mint 5 NVDAx (evidence/C/). C is green before the 12:00Z timebox
+  except deploy of the button (blocked with the rest of the production deploy).
+- Next: WO-65 (resumed) → merge → production deploy web+docs (needs Kunal approval) + Feed CORS (custom origins) → verifier WO-66 (production
+  acceptance on custom hosts, G3b, G11 delta mock-ft, G9) → submission-rc → FINAL_REPORT audit. Refresher waits on Kunal (Railway staged).
 Round 1 dispatched: WO-60 researcher · WO-61 contract (mock-ft faucet) · WO-62a web (B1–B4) · WO-63 keeper (refresher + B5/x402 answers).
 Round 2 (after facts): WO-62b web hosts/redirects/status host · WO-64 docs-site baseUrl "/" · WO-62c web Get-test-assets button.
 Orchestrator: mock-ft upgrade deploy + set_faucet; FC key + Railway refresher; demo account (~/.nectar, 0600); Feed CORS; vercel.app → 308 after release.
@@ -397,7 +405,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T19:57:03Z · commit f4738d1
+Last activity: 2026-11-12T20:08:24Z · commit 8498d92
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
