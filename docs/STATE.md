@@ -67,6 +67,17 @@
     no noindex; Chrome on APP /docs 0 failed requests, 0 console errors. APP `/docs/` → 308 `/docs` (Next trailing slash; renders fine).
     Extra auto hosts nectar-labs-web.vercel.app + the project domain serve the app in single-host mode (duplicate host; low; note for WO-34v).
     **Timebox 2026-11-13 18:00 UTC met** (pending the independent WO-34v acceptance). Next: WO-34v (verifier) ‖ WO-34y (docs) → G9 run 4 → submission-rc.
+  - WO-34y MERGED (1fda54d): README "Hosted demo" (vercel.app URLs), H-HOST/H-DOMAIN CLOSED, H-DNS N/A, H2 command fixed, DEMO_SCRIPT APP URL.
+- **Kunal ~13:40Z (two messages, pre-freeze):** H17 = fire-sales. H16 nfts only if the move_note tests assert new owner repays+closes and old owner cannot
+  → **not met** (repay is permissionless by design; tests assert residual collateral + self_settle follow the Note, old owner self_settle refused) →
+  tracks stay defi/security/agents. Domain: nectarlabs.io unregistered (F-395) → vercel.app URLs in README and X_POST; URLs fixed before the X post.
+  Footer email unchanged until Kunal confirms. Keep ~/.nectar paths; remove /Users/<name> paths. **Freeze target 2026-11-13 12:00 UTC**:
+  fixes → redeploy production + Feed → freeze → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit.
+  In flight: WO-34v (prod acceptance of ca34111), WO-35r (costs, neardata key, Docusaurus/zod, FACTS /Users), WO-35w (web claims: Reserve IS deployed so
+  Formula "0 until the Reserve ships" is the wrong line; Base local fork; example params; TEE wording; counters; event empty states; shell.spec allowlist),
+  WO-35k (RPC fallback keeper+Feed; views-mode chain_head). Next: WO-35d docs (X_POST URLs, docs claims, H16/H17/H-NEARDATA, SECURITY.md) after WO-35r;
+  evidence-log /Users redaction (verifier). Wasm fixtures keep embedded build paths (byte-identical to deployed code; on-chain anyway) — told Kunal.
+  Costs: Vercel Hobby $0 (F-402, non-commercial). Railway plan tier not readable via connector; usage 24 h tiny; $ estimate after WO-35r rates.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
     Docs project env: APP_URL (preview only) = the 46c35ea web preview, so navbar/footer app links stop pointing at localhost:3100.
     Share links: fetching a deployment through the connector can replace its share link; the earlier docs link stopped working. Hand out fresh ones.
@@ -278,7 +289,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T13:29:02Z · commit 4de94dc
+Last activity: 2026-11-12T13:36:56Z · commit bb25420
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
