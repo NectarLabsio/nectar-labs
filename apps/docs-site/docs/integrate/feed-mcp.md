@@ -34,7 +34,7 @@ pnpm -s --filter feed mcp   # stdio (-s keeps stdout pure JSON-RPC)
 pnpm --filter feed start    # REST on :8788 and MCP over HTTP at http://127.0.0.1:8789/mcp
 ```
 
-All variables are optional: `FEED_PORT` (REST, default 8788), `FEED_MCP_PORT` (MCP over HTTP, default 8789; `off` disables it), `FEED_HOST` (default 127.0.0.1), `FEED_DB_PATH` (default `~/.nectar/feed.sqlite`). If a port is already taken, `feed start` exits with `EADDRINUSE`. A raw HTTP client must send `accept: application/json, text/event-stream` (EVIDENCE §G9). The full list is in `services/feed/README.md`.
+All variables are optional: `FEED_PORT` (REST, default 8788), `FEED_MCP_PORT` (MCP over HTTP, default 8789; `off` disables it), `FEED_HOST` (default `127.0.0.1`), `FEED_DB_PATH` (default `~/.nectar/feed.sqlite`). If a port is already taken, `feed start` exits with `EADDRINUSE`. A raw HTTP client must send `accept: application/json, text/event-stream` (EVIDENCE §G9). The full list is in `services/feed/README.md`.
 
 ## Register in Claude Code (F-161)
 

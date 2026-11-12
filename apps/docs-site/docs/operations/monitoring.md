@@ -6,7 +6,7 @@ description: What is watched, where, and the alert thresholds.
 # Monitoring
 
 <p className="verified">Verified against: F-021 (2026-11-09) · spec docs/PRD.md §16.3, §17</p>
-<p className="status">Status: contract deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). The keeper (services/keeper) is built and run locally, not continuously; it serves `/healthz` and `/runs` on 127.0.0.1:8787. Feed is not built. There is no status page.</p>
+<p className="status">Status: contract deployed on NEAR testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). The keeper (services/keeper) is built and run locally, not continuously; it serves `/healthz` and `/runs` on `127.0.0.1:8787`. Feed is not built. There is no status page.</p>
 
 ## Signals
 

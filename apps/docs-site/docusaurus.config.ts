@@ -31,6 +31,10 @@ const plausibleDomain = process.env.DOCS_PLAUSIBLE_DOMAIN ?? ''; // TODO-H4/H5: 
 // that order and whether the `/docs/` -> `/` rewrite (check: true) re-enters the redirect are derived from source, not documented.
 // Expect `curl -sI <docs>/` = 307 `location: /docs/` and `curl -sI <docs>/docs/` = 200. If it loops, a `/docs/` -> `/index.html` rewrite does not
 // help: `/index.html` matches the cleanUrls 308 route (-> `/`) that also sits before the filesystem; remove the redirect instead.
+// Headers (WO-35g, F-452): source `/(.*)` sets X-Frame-Options DENY, `Content-Security-Policy: frame-ancestors 'none'`, X-Content-Type-Options
+// nosniff, Referrer-Policy strict-origin-when-cross-origin. No script/style CSP directives (Docusaurus inline scripts; the APP's own CSP covers
+// APP /docs). routing-utils puts headers after redirects and before the filesystem and rewrites, matching the incoming path, so clean URLs and
+// rewritten /docs/* get them (F-453, derived); the 307/308 redirect responses probably do not (runtime not tested; check `curl -sI` after deploy).
 const originOf = (u: string | undefined): string | undefined => (u ? new URL(u).origin : undefined);
 const ORIGIN = originOf(process.env.DOCS_ORIGIN_URL) ?? originOf(process.env.DOCS_URL) ?? 'http://localhost:3000';
 // Web app links. Hosted: APP_URL (TODO-H-DOMAIN; *.vercel.app if H-DOMAIN is silent). Local: `pnpm --filter web dev`.
