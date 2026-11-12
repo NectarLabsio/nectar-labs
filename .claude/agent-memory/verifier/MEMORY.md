@@ -11,5 +11,5 @@
 - [G3b v2 web recipe](reference_g3b_v2_web.md) — flags-off specs fail with v7 flags on; LH script lacks v7 routes; no tx hashes in module logs
 - [G7 v7 + G14 recipe](reference_g7_v7_g14.md) — RPC -429 → fastnear; Ed25519 ix decode; mock-ft no events
 - [G12/G13 Base fork recipe](reference_g12_g13_base_fork.md) — zsh split trap, U64 string ids, ecrecover precompile, ERC-8021 gap
-- [WO-34 prod acceptance](reference_wo34_prod_acceptance.md) — sitemap curl sweep, inventory vs prod, SSR-vs-hydrated landing claims trap
+- [WO-34 prod acceptance](reference_wo34_prod_acceptance.md) — sitemap curl sweep, inventory vs prod, SSR-vs-hydrated landing claims trap (JS-off vs hydrated probe)
 - [D-027 chain re-run](reference_chain_rerun_d027.md) — SDKROOT linker trap, bash 3.2 trap, keeper-log tx hashes, PDA history for withdraws

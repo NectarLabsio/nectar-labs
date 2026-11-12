@@ -1,0 +1,47 @@
+captured 2026-11-12T16:40:58Z
+== 3a x-robots-tag (count of header lines; 0 = indexable) ==
+https://nectarlabs.vercel.app/ -> CODE 200 x-robots-tag lines: 0 
+https://nectarlabs-app.vercel.app/feed -> CODE 200 x-robots-tag lines: 0 
+https://nectarlabs-app.vercel.app/docs -> CODE 200 x-robots-tag lines: 0 
+https://nectarlabs-app.vercel.app/docs/start/quick-start -> CODE 200 x-robots-tag lines: 0 
+https://nectarlabs-app.vercel.app/docs/integrate/feed-rest -> CODE 200 x-robots-tag lines: 0 
+https://nectarlabs-app.vercel.app/docs/operate/monitoring -> CODE 404 x-robots-tag lines: 0 
+https://nectarlabs-app.vercel.app/docs/integrate/feed-mcp -> CODE 200 x-robots-tag lines: 0 
+== 3b docs origin XFO + frame-ancestors ==
+-- https://nectarlabs-docs.vercel.app/
+HTTP/2 307 
+location: /docs/
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+   csp frame-ancestors: 
+-- https://nectarlabs-docs.vercel.app/docs/
+HTTP/2 200 
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-frame-options: DENY
+   csp frame-ancestors: frame-ancestors 'none'
+-- https://nectarlabs-docs.vercel.app/docs/start/quick-start
+HTTP/2 200 
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-frame-options: DENY
+   csp frame-ancestors: frame-ancestors 'none'
+-- https://nectarlabs-docs.vercel.app/docs/integrate/feed-rest
+HTTP/2 200 
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-frame-options: DENY
+   csp frame-ancestors: frame-ancestors 'none'
+== 3c Feed /health ==
+{'ok': True, 'source': 'views', 'history': 'unavailable', 'chain_head_source': 'view_block', 'chain_head': 277388985, 'last_indexed_block': 277388985}
+rpc: {"endpoints": ["test.rpc.fastnear.com", "rpc.testnet.fastnear.com", "near-testnet.drpc.org", "testnet-rpc.intea.rs"], "last_served": "test.rpc.fastnear.com", "failovers": 0, "cooling": []}
+== 3d CORS ==
+-- Origin https://nectarlabs.vercel.app GET /health ACAO: [access-control-allow-origin: https://nectarlabs.vercel.app]
+   preflight /mcp: 204 [access-control-allow-origin: https://nectarlabs.vercel.app]
+-- Origin https://nectarlabs-app.vercel.app GET /health ACAO: [access-control-allow-origin: https://nectarlabs-app.vercel.app]
+   preflight /mcp: 204 [access-control-allow-origin: https://nectarlabs-app.vercel.app]
+-- Origin https://evil.example.com GET /health ACAO: []
+   preflight /mcp: 403 []
+== release 3: Feed hrefs in hosted docs pages ==
+APP/docs/integrate/feed-rest -> 200; feed hrefs:    1 href="https://feed-production-2f2776c9.up.railway.app/health" 
+APP/docs/operate/monitoring -> 404; feed hrefs: 
+FEED /health -> 200; FEED / (control) -> 404
+done 2026-11-12T16:41:09Z
+-- correction: monitoring lives at /docs/operations/monitoring (my /docs/operate/monitoring guess 404s; not in sitemap)
+https://nectarlabs-app.vercel.app/docs/operations/monitoring -> CODE 200 x-robots-tag lines: 0; feed hrefs: 1 href="https://feed-production-2f2776c9.up.railway.app/health"

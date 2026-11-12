@@ -1,0 +1,80 @@
+{
+ "capturedUTC": "2026-11-12T16:42:27.713Z",
+ "status": 200,
+ "equal_innerText": true,
+ "equal_textContent": true,
+ "serverText": "NEAR holds the book. Solana holds the stock. A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself. NEAR testnet, the hub nectar-core Quotes, Reserve, loans and Notes Limits, weekend guard, multiplier Builds every message it asks the MPC to sign Ed25519 Solana devnet xStocks-style mock collateral, Ed25519 · devnet, round trip verified nectar_vault program Verifies the signature through the Instructions sysvar Each link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower. 01 Flag Health falls below 1 Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash. nectar-core on NEAR testnet 02 Price A TEE computes the discount, verifiably A pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product. OutLayer, attested 03 Sign Chain Signatures signs The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork). The keeper never holds a key. v1.signer-prod.testnet 04 Settle The vault verifies, then pays Solana checks the Ed25519 instruction before settle. On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home. nectar_vault, NectarVaultBase",
+ "hydratedText": "NEAR holds the book. Solana holds the stock. A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself. NEAR testnet, the hub nectar-core Quotes, Reserve, loans and Notes Limits, weekend guard, multiplier Builds every message it asks the MPC to sign Ed25519 Solana devnet xStocks-style mock collateral, Ed25519 · devnet, round trip verified nectar_vault program Verifies the signature through the Instructions sysvar Each link carries a message nectar-core built and NEAR Chain Signatures signed: a settlement to a buyer, or a release back to the borrower. 01 Flag Health falls below 1 Any keeper calls trigger_preliquidation(position_id) with a function-call key. No deposit, no price, no hash. nectar-core on NEAR testnet 02 Price A TEE computes the discount, verifiably A pinned, attested OutLayer program returns disc_bps, so the computation can be verified, and the contract clamps it to the quote's ceiling. In this testnet build it prices with operator-set demo parameters (published in the docs); each settlement's discount reveals their product. OutLayer, attested 03 Sign Chain Signatures signs The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork). The keeper never holds a key. v1.signer-prod.testnet 04 Settle The vault verifies, then pays Solana checks the Ed25519 instruction before settle. On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home. nectar_vault, NectarVaultBase",
+ "parts": {
+  "dataFeature": "solana_remote",
+  "h2": "NEAR holds the book. Solana holds the stock.",
+  "intro": "A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself.",
+  "steps34": [
+   "03 Sign Chain Signatures signs The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork). The keeper never holds a key. v1.signer-prod.testnet",
+   "04 Settle The vault verifies, then pays Solana checks the Ed25519 instruction before settle. On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover. Then the buyer is paid and the result is relayed home. nectar_vault, NectarVaultBase"
+  ],
+  "settleNodes": [
+   "hub",
+   "hublinks",
+   "hl1",
+   "hf1",
+   "ncore",
+   "hh-core",
+   "hh-rim",
+   "hh-sh",
+   "nsol",
+   "hs-core",
+   "hs-rim",
+   "hs-sh",
+   "settle"
+  ],
+  "bodyLocalFork": 3
+ },
+ "baseSentencesHydrated": [
+  {
+   "s": "The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself.",
+   "localFork": true
+  },
+  {
+   "s": "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork).",
+   "localFork": true
+  },
+  {
+   "s": "On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover.",
+   "localFork": true
+  }
+ ],
+ "baseSentencesServer": [
+  {
+   "s": "The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself.",
+   "localFork": true
+  },
+  {
+   "s": "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork).",
+   "localFork": true
+  },
+  {
+   "s": "On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover.",
+   "localFork": true
+  }
+ ],
+ "bodyBaseSentencesHydrated": [
+  {
+   "s": "The Base leg runs on a local fork of Base Sepolia, not on Base Sepolia itself.",
+   "localFork": true
+  },
+  {
+   "s": "The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (the Base Sepolia local fork).",
+   "localFork": true
+  },
+  {
+   "s": "On the Base Sepolia local fork, NectarVaultBase checks EIP-712 with ecrecover.",
+   "localFork": true
+  }
+ ],
+ "rawHtmlHasHeading": false,
+ "rawHtmlLocalForkCount": 3,
+ "consoleErrors": 0,
+ "consoleOurs": [],
+ "consoleThirdParty": 0
+}
