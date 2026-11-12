@@ -136,7 +136,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"viewer":{"editor":"enum","options":["read only","owner"],"default":"read only"},"$preview":{"width":1440,"height":1460}}'>
 class Component extends DCLogic {
-  constructor(props) { super(props); this.state = { hs: 400, hc: 1200, ltv: 8500, prem: 300, confirm: false, busy: false, toast: false, fc: false }; }
+  constructor(props) { super(props); this.state = { hs: 1000, hc: 2500, ltv: 7000, prem: 300, confirm: false, busy: false, toast: false, fc: false }; }
   componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._t2); }
   renderVals() {
     const st = this.state;
@@ -146,22 +146,22 @@ class Component extends DCLogic {
     const m2 = (n) => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const pct = (bps) => (bps / 100).toFixed(2) + '%';
     const sExit = (1 - st.hs / 10000) * 82000, cExit = (1 - st.hc / 10000) * 70000;
-    const sNow = 78720, cNow = 61600;
+    const sNow = 73800, cNow = 52500;
     const delta = (a, b) => Math.round(a - b) === 0 ? 'unchanged' : (a > b ? '+' : '−') + '$' + Math.abs(Math.round(a - b)).toLocaleString('en-US');
     const dcls = (a, b) => Math.round(a - b) === 0 ? 'dim' : a > b ? 'pos' : 'neg';
-    const changed = st.hs !== 400 || st.hc !== 1200 || st.ltv !== 8500 || st.prem !== 300;
+    const changed = st.hs !== 1000 || st.hc !== 2500 || st.ltv !== 7000 || st.prem !== 300;
     const tr = (v, min, max) => { const p = ((v - min) / (max - min) * 100).toFixed(1); return 'linear-gradient(90deg,var(--mint) 0 ' + p + '%,var(--raise) ' + p + '% 100%)'; };
     const mk = (id, label, key, min, max, step, cur, help) => ({ id, label, min: String(min), max: String(max), step: String(step), raw: String(st[key]), val: pct(st[key]), cur: pct(cur), help, track: tr(st[key], min, max), on: (e) => this.setState({ [key]: Number(e.target.value), confirm: false }) });
     const sliders = [
-      mk('hs', 'Haircut in session', 'hs', 0, 1500, 50, 400, 'Applied to quotes, Reserve and DEX depth while the market is open.'),
-      mk('hc', 'Haircut when closed', 'hc', 0, 2500, 50, 1200, 'Applied on weekends, holidays, stale prices and to every Shield.'),
-      mk('ltv', 'Max LTV per loan', 'ltv', 5000, 9000, 100, 8500, 'Caps each loan against its own collateral.'),
+      mk('hs', 'Haircut in session', 'hs', 0, 1500, 50, 1000, 'Applied to quotes, Reserve and DEX depth while the market is open.'),
+      mk('hc', 'Haircut when closed', 'hc', 0, 2500, 50, 2500, 'Applied on weekends, holidays, stale prices and to every Shield.'),
+      mk('ltv', 'Max LTV per loan', 'ltv', 5000, 9000, 100, 7000, 'Caps each loan against its own collateral.'),
       mk('prem', 'Limit premium above static', 'prem', 0, 1000, 25, 300, 'Charged on the part of a loan above 40% LTV. Funds buyer fees.')
     ];
     const changes = [];
-    if (st.hs !== 400) changes.push('base_haircut_bps     400 → ' + st.hs);
-    if (st.hc !== 1200) changes.push('weekend_haircut_bps  1200 → ' + st.hc);
-    if (st.ltv !== 8500) changes.push('max_nectar_ltv_bps   8500 → ' + st.ltv);
+    if (st.hs !== 1000) changes.push('base_haircut_bps     1000 → ' + st.hs);
+    if (st.hc !== 2500) changes.push('weekend_haircut_bps  2500 → ' + st.hc);
+    if (st.ltv !== 7000) changes.push('max_nectar_ltv_bps   7000 → ' + st.ltv);
     if (st.prem !== 300) changes.push('limit_premium_bps    300 → ' + st.prem);
     const start = () => {
       if (!st.confirm) { this.setState({ confirm: true }); return; }
@@ -172,7 +172,7 @@ class Component extends DCLogic {
       themeClass: theme === 'light' ? 'light' : '',
       readOnly: !owner, walletName: owner ? 'nectar.testnet' : 'buyer1.testnet', walletBal: owner ? 'owner' : '$120,000',
       walletAv: owner ? '' : 'background: conic-gradient(from 30deg,#ffd27a,#faaf2e,#ffd27a);',
-      sliders, reset: () => this.setState({ hs: 400, hc: 1200, ltv: 8500, prem: 300, confirm: false }),
+      sliders, reset: () => this.setState({ hs: 1000, hc: 2500, ltv: 7000, prem: 300, confirm: false }),
       changedTone: changed ? 'warn' : '', changedText: changed ? changes.length + ' change' + (changes.length > 1 ? 's' : '') : 'No changes',
       sExit: m0(sExit), cExit: m0(cExit), sDelta: delta(sExit, sNow), cDelta: delta(cExit, cNow), sDeltaCls: dcls(sExit, sNow), cDeltaCls: dcls(cExit, cNow),
       sFree: m0(sExit - 28000), cFree: m0(cExit - 28000), negFree: cExit - 28000 < 0,

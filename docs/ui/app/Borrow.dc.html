@@ -164,7 +164,7 @@ class Component extends DCLogic {
     const price = 185, units = Math.max(0, Number(st.units) || 0), V = units * price;
     const shield = st.prot === 'weekend';
     const wk = !open || shield;
-    const h = wk ? 0.12 : 0.04, D = wk ? 0 : 12000, drawn = 28000;
+    const h = wk ? 0.25 : 0.10, D = wk ? 0 : 12000, drawn = 28000;
     const ltvTerm = 0.85 * V, exitTerm = (1 - h) * (65000 + 5000 + D) - drawn;
     const limit = Math.max(0, Math.floor(Math.min(ltvTerm, exitTerm) / 100) * 100);
     const staticLim = 0.40 * V;

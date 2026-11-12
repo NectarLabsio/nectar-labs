@@ -98,7 +98,7 @@
                   <td><a class="asset" href="Market.dc.html"><img src="/_blob/e22dcedd1bf0724c8a88625cd14ecaae" alt=""><span class="stack" style="display: flex; gap: 2px;"><b>NVDAx</b><span><span class="chain near">N</span>NEAR testnet, mock</span></span></a></td>
                   <td><span class="stack" style="display: flex; gap: 8px; width: 170px;"><span class="v">{{exitVal}}</span><span class="meter" aria-hidden="true"><i class="c-used" style="flex-basis: {{usedW}};"></i><i class="c-q" style="flex-basis: {{freeW}};"></i></span></span></td>
                   <td class="r"><span class="v pos">{{freeVal}}</span></td>
-                  <td class="r"><span class="v">85%</span></td>
+                  <td class="r"><span class="v">70%</span></td>
                   <td><svg viewBox="0 0 120 36" width="120" height="36" aria-hidden="true"><path d="{{sparkArea}}" style="fill: var(--mint); opacity: .14;"></path><path d="{{sparkLine}}" fill="none" style="stroke: var(--mint);" stroke-width="1.5"></path></svg></td>
                   <td class="r"><span class="row" style="gap: 8px; justify-content: flex-end;"><a class="btn btn-quiet btn-sm" href="Market.dc.html">Details</a><a class="btn btn-primary btn-sm" href="Borrow.dc.html">Borrow</a></span></td>
                 </tr>
@@ -162,10 +162,10 @@ class Component extends DCLogic {
     const theme = this.props.theme ?? 'dark';
     const open = (this.props.session ?? 'in session') === 'in session';
     const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
-    const Q = 65000, R = 5000, D = open ? 12000 : 0, h = open ? 0.04 : 0.12;
+    const Q = 65000, R = 5000, D = open ? 12000 : 0, h = open ? 0.10 : 0.25;
     const back = Q + R + D, hair = back * h, exit = back - hair, drawn = 28000, free = exit - drawn;
     const pct = (v) => (v / back * 100).toFixed(2) + '%';
-    const OPEN = 78720, CLOSED = 61600;
+    const OPEN = 73800, CLOSED = 52500;
     const X = (hh) => 44 + hh / 168 * 548, Y = (v) => 180 - v / 90000 * 160;
     let line = 'M' + X(0).toFixed(1) + ' ' + Y(CLOSED).toFixed(1);
     for (let d = 0; d < 5; d++) {
@@ -186,7 +186,7 @@ class Component extends DCLogic {
       dotClass: open ? 'dot' : 'dot amber', sessionChip: open ? 'NYSE open, closes 16:00 ET' : 'Weekend parameters until Mon 09:30 ET',
       exitVal: money(exit), freeVal: money(free), usedPct: (drawn / exit * 100).toFixed(1) + '%',
       badgeClass: open ? 'badge pos' : 'badge warn', badgeText: open ? 'In session' : 'Market closed',
-      altText: open ? 'Drops to $61,600 when the market closes at 16:00 ET' : 'Returns to $78,720 when the market reopens Mon 09:30 ET',
+      altText: open ? 'Drops to $52,500 when the market closes at 16:00 ET' : 'Returns to $73,800 when the market reopens Mon 09:30 ET',
       qTxt: money(Q), rTxt: money(R), dTxt: money(D), hTxt: '−' + money(hair),
       qPct: pct(Q), rPct: pct(R), dPct: pct(D), hPct: pct(hair),
       openTxt: money(OPEN), closedTxt: money(CLOSED),
@@ -198,7 +198,7 @@ class Component extends DCLogic {
       pickAll: pick('all'), pickNear: pick('near'), pickSol: pick('sol'), pickBase: pick('base'),
       hideNear: !(c === 'all' || c === 'near'), hideSol: !(c === 'all' || c === 'sol'), hideBase: !(c === 'all' || c === 'base'),
       weekendTitle: open ? 'Weekend in 3 days 5 hours' : 'Weekend parameters are on',
-      weekendBody: open ? 'Your loan stays healthy at 1.59. Free capacity for new loans drops to $33,600 from Friday 16:00 ET.' : 'Your loan stays healthy at 1.59. New loans size at $33,600 of free capacity until Monday 09:30 ET.'
+      weekendBody: open ? 'Your loan stays healthy at 1.59. Free capacity for new loans drops to $24,500 from Friday 16:00 ET.' : 'Your loan stays healthy at 1.59. New loans size at $24,500 of free capacity until Monday 09:30 ET.'
     };
   }
 }

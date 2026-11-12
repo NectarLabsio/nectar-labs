@@ -44,7 +44,7 @@
         <div><span class="k">Exit capacity</span><span class="mid">{{exitVal}}</span></div>
         <div><span class="k">Borrowed</span><span class="mid">$28,000</span></div>
         <div><span class="k">Free to borrow</span><span class="mid pos">{{freeVal}}</span></div>
-        <div><span class="k">Max LTV per loan</span><span class="mid">85%</span></div>
+        <div><span class="k">Max LTV per loan</span><span class="mid">70%</span></div>
         <div><span class="k">Haircut now</span><span class="mid">{{hVal}}</span></div>
       </div>
     </section>
@@ -52,14 +52,14 @@
     <div class="split">
       <section class="panel pad stack" style="gap: 20px;" aria-label="Committed buyers">
         <div class="ph"><span class="h2">Who stands behind NVDAx</span><span class="k">ordered by discount, the order settlement uses</span></div>
-        <div class="row" style="gap: 14px; align-items: baseline; flex-wrap: wrap;"><span class="hero" style="font-size: 46px;">389.95</span><span class="stack"><span class="head" style="font-weight: 600;">NVDAx can be sold to committed buyers now</span><span class="k">at no more than 4.00% below the oracle price, about $70,000</span></span></div>
+        <div class="row" style="gap: 14px; align-items: baseline; flex-wrap: wrap;"><span class="hero" style="font-size: 46px;">390.55</span><span class="stack"><span class="head" style="font-weight: 600;">NVDAx can be sold to committed buyers now</span><span class="k">at no more than 6.00% below the oracle price, about $70,000</span></span></div>
         <div class="tbl-wrap">
           <table class="tbl">
             <thead><tr><th>Discount</th><th>Buys at or above</th><th style="width: 38%;">Committed</th><th class="r">Units</th><th class="r">Cumulative</th></tr></thead>
             <tbody>
               <tr><td><span class="v">2.50%</span></td><td><span class="v">$180.38</span><span class="k" style="display: block;">quote q-1, buyer1</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v">$40,000</span><span class="meter" aria-hidden="true"><i class="c-q" style="width: 100%;"></i></span></span></td><td class="r"><span class="v">221.76</span></td><td class="r"><span class="v">221.76</span></td></tr>
               <tr><td><span class="v">3.50%</span></td><td><span class="v">$178.53</span><span class="k" style="display: block;">quote q-2, buyer2</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v">$25,000</span><span class="meter" aria-hidden="true"><i class="c-q" style="width: 62.5%; opacity: .75;"></i></span></span></td><td class="r"><span class="v">140.04</span></td><td class="r"><span class="v">361.80</span></td></tr>
-              <tr><td><span class="v">4.00%</span></td><td><span class="v">$177.60</span><span class="k" style="display: block;">Nectar Reserve, pooled</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v">$5,000</span><span class="meter" aria-hidden="true"><i class="c-r" style="width: 12.5%;"></i></span></span></td><td class="r"><span class="v">28.15</span></td><td class="r"><span class="v pos">389.95</span></td></tr>
+              <tr><td><span class="v">6.00%</span></td><td><span class="v">$173.90</span><span class="k" style="display: block;">Nectar Reserve, pooled</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v">$5,000</span><span class="meter" aria-hidden="true"><i class="c-r" style="width: 12.5%;"></i></span></span></td><td class="r"><span class="v">28.75</span></td><td class="r"><span class="v pos">390.55</span></td></tr>
               <tr class="muted"><td><span class="v" style="color: var(--faint);">market</span></td><td><span class="k">DEX depth, verified</span></td><td><span class="stack" style="display: flex; gap: 6px;"><span class="v" style="color: var(--dim);">{{dVal}}</span><span class="meter" aria-hidden="true"><i class="c-d" style="width: {{dBar}}; opacity: .6;"></i></span></span></td><td class="r" colspan="2"><span class="k">{{dNote}}</span></td></tr>
             </tbody>
           </table>
@@ -90,7 +90,7 @@
         <div class="code" style="white-space: normal; line-height: 1.9;">
           <div><span class="c">backing</span> {{backVal}} × (1 − {{vH}}) = <b class="pos">{{vExit}}</b> exit capacity</div>
           <div><span class="c">minus</span> $28,000 borrowed = <b class="pos">{{vFree}}</b> free</div>
-          <div><span class="c">and each loan</span> ≤ 85% of its own collateral</div>
+          <div><span class="c">and each loan</span> ≤ 70% of its own collateral</div>
         </div>
       </section>
     </div>
@@ -103,7 +103,7 @@
         <div class="kvr"><span>Weekend Shield</span><b>15 bps flat</b></div>
         <div class="kvr"><span>Event Shield</span><b>25 bps, no window set</b></div>
         <div class="kvr"><span>Flag line, chosen at open</span><b>75% to 90% LTV</b></div>
-        <div class="kvr"><span>Reserve discount</span><b>4.00%</b></div>
+        <div class="kvr"><span>Reserve discount</span><b>6.00%</b></div>
         <div class="kvr"><span>Profit-Lock fills per day</span><b>$20,000</b></div>
       </section>
       <section class="panel pad" aria-label="Activity">
@@ -126,21 +126,21 @@ class Component extends DCLogic {
     const theme = this.props.theme ?? 'dark';
     const open = (this.props.session ?? 'in session') === 'in session';
     const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
-    const D = open ? 12000 : 0, h = open ? 0.04 : 0.12, exit = (1 - h) * (70000 + D);
+    const D = open ? 12000 : 0, h = open ? 0.10 : 0.25, exit = (1 - h) * (70000 + D);
     const view = this.state.view ?? (open ? 'open' : 'closed');
     const vo = view === 'open';
-    const vD = vo ? 12000 : 0, vh = vo ? 0.04 : 0.12, back = 70000 + vD, vExit = back * (1 - vh);
+    const vD = vo ? 12000 : 0, vh = vo ? 0.10 : 0.25, back = 70000 + vD, vExit = back * (1 - vh);
     const gap = 0.6;
     const q = 65000 / back * 100, r = 5000 / back * 100, d = vD / back * 100;
     const dash = (len) => Math.max(0, len - gap).toFixed(2) + ' ' + (100 - Math.max(0, len - gap)).toFixed(2);
     return {
       themeClass: theme === 'light' ? 'light' : '',
       dotClass: open ? 'dot' : 'dot amber', sessionChip: open ? 'NYSE open, closes 16:00 ET' : 'Weekend parameters until Mon 09:30 ET',
-      exitVal: money(exit), freeVal: money(exit - 28000), hVal: open ? '4%, 12% closed' : '12% while closed',
+      exitVal: money(exit), freeVal: money(exit - 28000), hVal: open ? '10%, 25% closed' : '25% while closed',
       dVal: money(D), dBar: open ? '30%' : '0%', dNote: open ? 'counted in limits; testnet settles with quotes' : 'counts as zero while the market is closed',
       vOpen: vo ? 'on' : '', vClosed: vo ? '' : 'on',
       showOpen: () => this.setState({ view: 'open' }), showClosed: () => this.setState({ view: 'closed' }),
-      backVal: money(back), vD: money(vD), vH: vo ? '4%' : '12%', vExit: money(vExit), vFree: money(vExit - 28000),
+      backVal: money(back), vD: money(vD), vH: vo ? '10%' : '25%', vExit: money(vExit), vFree: money(vExit - 28000),
       qDash: dash(q), rDash: dash(r), rOff: (-q).toFixed(2), dDash: dash(d), dOff: (-(q + r)).toFixed(2)
     };
   }

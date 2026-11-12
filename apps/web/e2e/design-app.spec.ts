@@ -15,7 +15,7 @@ const S = 1_000_000_000n;
 const NOW = BigInt(Date.now()) * 1_000_000n;
 const NEXT_OPEN = ((NOW + 3n * 3600n * S) / (60n * S)) * 60n * S;
 const CALENDAR = [[(NOW - 8n * 3600n * S).toString(), (NOW - 3600n * S).toString()], [NEXT_OPEN.toString(), (NEXT_OPEN + 23_400n * S).toString()]];
-const CAP = { ...(FIXTURE.get_exit_capacity as Record<string, unknown>), q_usd_e6: "65000000000", r_usd_e6: "5000000000", d_usd_e6: "12000000000", haircut_bps: 400, session_open: true, session_reason: "open", forced_closed: false, oracle_price_usd_e6: "185000000", capacity_usd_e6: "78720000000", total_debt_usd_e6: "28000000000", aggregate_capacity_usd_e6: "78720000000", aggregate_headroom_usd_e6: "50720000000", multiplier_e18: "1000000000000000000" };
+const CAP = { ...(FIXTURE.get_exit_capacity as Record<string, unknown>), q_usd_e6: "65000000000", r_usd_e6: "5000000000", d_usd_e6: "12000000000", haircut_bps: 1000, session_open: true, session_reason: "open", forced_closed: false, oracle_price_usd_e6: "185000000", capacity_usd_e6: "73800000000", total_debt_usd_e6: "28000000000", aggregate_capacity_usd_e6: "73800000000", aggregate_headroom_usd_e6: "45800000000", multiplier_e18: "1000000000000000000" };
 // Contract shape: the key is position_id, there is no id (interface-p0 Views).
 const POS = { position_id: "7", borrower: BORROWER, collateral: "NVDAx", units: "300000000", debt_usd_e6: "28000000000", pre_liq_ltv_bps: 8000, opened_ns: NOW.toString(), status: "Open", remote: null };
 const NOTES = JSON.parse(readFileSync(resolve(import.meta.dirname, "fixtures/notes.json"), "utf8")) as { nft_token_svg: Record<string, string> };
@@ -23,11 +23,11 @@ const OWNER = "nectar.testnet";
 // Contract shape: the key is quote_id (types.rs). The fixture must not carry `id`, or it hides the mapping (WO-33c item 0).
 const quote = (id: string, buyer: string, rem: string, bps: number) => ({ quote_id: id, buyer, collateral: "NVDAx", committed_usd_e6: rem, remaining_usd_e6: rem, max_discount_bps: bps, notice_period_ns: "604800000000000", unlock_ns: null, buyer_remote_recipient: null, secrets_profile: null, fee_debt_e18: "0", claimable_fees_usd_e6: "0", created_ns: NOW.toString(), accepts_voluntary_fills: false });
 const QUOTES = [quote("1", "buyer1.nectar.testnet", "40000000000", 250), quote("2", "buyer2.nectar.testnet", "25000000000", 350)];
-const RESERVE = { ...(FIXTURE.get_reserve as Record<string, unknown>), r_usd_e6: "5000000000", shares: "5000000000", usdc_e6: "5000000000", discount_bps: 400, fees_7d_usd_e6: "8700000", realised_apr_7d_bps: "907" };
+const RESERVE = { ...(FIXTURE.get_reserve as Record<string, unknown>), r_usd_e6: "5000000000", shares: "5000000000", usdc_e6: "5000000000", discount_bps: 600, fees_7d_usd_e6: "8700000", realised_apr_7d_bps: "907" };
 const RNOTE = { note: { note_id: "r-NVDAx-1", collateral: "NVDAx", owner: BORROWER, deposited_usd_e6: "50000000", shares: "50000000", unit_debt: "0", fee_debt: "0", claimable_units: "0", claimable_fees_usd_e6: "0", unlock_ns: null, exit_shares: "0", exit_usdc_e6: "0", exited: false, created_ns: (NOW + 1n).toString() }, value_usd_e6: "50000000", claimable_units: "0", claimable_fees_usd_e6: "90000", can_complete: false, transfer_locked: false };
 const TOKENS = [{ token_id: "p-7", owner_id: BORROWER }, { token_id: "r-NVDAx-1", owner_id: BORROWER }];
-// The Curator artboard's demo parameters.
-const DEMO_COLL = { ...(FIXTURE.get_collateral as Record<string, unknown>), base_haircut_bps: 400, weekend_haircut_bps: 1200, max_nectar_ltv_bps: 8500, limit_premium_bps: 300, verified_dex_depth_usd_e6: "12000000000", oracle_price_usd_e6: "185000000", forced_closed: false, multiplier_e18: "1000000000000000000", remote_chain: { chain_id: "solana-devnet", vault_program: "V1", mpc_domain_id: 1 }, shield: { weekend_fee_bps: 15, event_fee_bps: 25, event_window_end_ns: "0" }, max_voluntary_fill_usd_e6_per_day: "20000000000", reserve: { ...((FIXTURE.get_collateral as { reserve: Record<string, unknown> }).reserve), usdc_e6: "5000000000", shares: "5000000000", discount_bps: 400 } };
+// The deployed parameters (WO-62a B3; evidence/claims/deployed-params-20261112T192755Z.json); Q, R and D stay demo figures.
+const DEMO_COLL = { ...(FIXTURE.get_collateral as Record<string, unknown>), base_haircut_bps: 1000, weekend_haircut_bps: 2500, max_nectar_ltv_bps: 7000, limit_premium_bps: 300, verified_dex_depth_usd_e6: "12000000000", oracle_price_usd_e6: "185000000", forced_closed: false, multiplier_e18: "1000000000000000000", remote_chain: { chain_id: "solana-devnet", vault_program: "V1", mpc_domain_id: 1 }, shield: { weekend_fee_bps: 15, event_fee_bps: 25, event_window_end_ns: "0" }, max_voluntary_fill_usd_e6_per_day: "20000000000", reserve: { ...((FIXTURE.get_collateral as { reserve: Record<string, unknown> }).reserve), usdc_e6: "5000000000", shares: "5000000000", discount_bps: 600 } };
 const FEE_STACK = { limit_premium_bps: 300, shield_weekend_fee_bps: 15, shield_event_fee_bps: 25, origination_fee_bps: 30, referrer_share_bps: 5000, profit_lock_fee_bps: 50, keeper_fee_bps: 50, fee_split: { buyers_bps: 7000, lenders_bps: 2000, treasury_bps: 1000 } };
 // DI-1: the Profit-Lock fill (28,000 · 1.005 = 28,140) exceeds the 20,000 voluntary-fill cap left today.
 const PL_CAP = { ok: false, reason: "voluntary daily cap", debt_usd_e6: "28000000000", fee_usd_e6: "140000000", fill_usd_e6: "28140000000", units_repaid: "0", units_kept: "0", legs: [], remote: false, daily_cap_usd_e6: "20000000000", daily_used_usd_e6: "0" };
@@ -74,10 +74,10 @@ function views(method: string, args: Record<string, unknown>): unknown {
       const units = BigInt(String(args.units));
       const value = (units * 185n) / 1n;
       const staticLim = (value * 4000n) / 10_000n;
-      const bc = sh ? 33_600_000_000n : 50_720_000_000n;
+      const bc = sh ? 24_500_000_000n : 45_800_000_000n;
       const fee = sh ? (borrow * 15n + 9_999n) / 10_000n : borrow > staticLim ? ((borrow - staticLim) * 300n + 9_999n) / 10_000n : 0n;
       const orig = (borrow * 30n + 9_999n) / 10_000n;
-      return { ...(FIXTURE.preview_borrow as Record<string, unknown>), b_c_usd_e6: bc.toString(), static_limit_usd_e6: staticLim.toString(), premium_usd_e6: fee.toString(), ...(sh ? { shield_fee_usd_e6: fee.toString() } : {}), origination_fee_usd_e6: orig.toString(), total_fees_usd_e6: (fee + orig).toString(), net_proceeds_usd_e6: (borrow - fee - orig).toString(), ok: borrow <= bc, reason: borrow <= bc ? null : "exceeds B_c", aggregate_headroom_usd_e6: "50720000000" };
+      return { ...(FIXTURE.preview_borrow as Record<string, unknown>), b_c_usd_e6: bc.toString(), static_limit_usd_e6: staticLim.toString(), premium_usd_e6: fee.toString(), ...(sh ? { shield_fee_usd_e6: fee.toString() } : {}), origination_fee_usd_e6: orig.toString(), total_fees_usd_e6: (fee + orig).toString(), net_proceeds_usd_e6: (borrow - fee - orig).toString(), ok: borrow <= bc, reason: borrow <= bc ? null : "exceeds B_c", aggregate_headroom_usd_e6: "45800000000" };
     }
     default:
       return method in FIXTURE ? FIXTURE[method] : undefined;
@@ -108,7 +108,7 @@ async function axeClean(page: Page) {
 }
 
 const ROUTES = [
-  ["feed", "/feed", async (page: Page) => expect(page.getByTestId("hero-capacity")).toHaveText("$78,720", { timeout: 20_000 })],
+  ["feed", "/feed", async (page: Page) => expect(page.getByTestId("hero-capacity")).toHaveText("$73,800", { timeout: 20_000 })],
   ["borrow", "/borrow", async (page: Page) => {
     await page.getByLabel("You lock").fill("300");
     await page.getByLabel("You borrow").fill("20000");
@@ -131,7 +131,7 @@ const ROUTES = [
   }],
   ["console", "/console", async (page: Page) => expect(page.getByTestId("whatif-session-exit")).toBeVisible({ timeout: 20_000 })],
   ["agents", "/agents", async (page: Page) => expect(page.getByTestId("example-call")).toBeVisible({ timeout: 20_000 })],
-  ["market", "/feed/NVDAx", async (page: Page) => expect(page.getByTestId("market-exit")).toHaveText("$78,720", { timeout: 20_000 })],
+  ["market", "/feed/NVDAx", async (page: Page) => expect(page.getByTestId("market-exit")).toHaveText("$73,800", { timeout: 20_000 })],
 ] as const;
 
 for (const theme of ["dark", "light"] as const) {
@@ -156,7 +156,7 @@ test.describe("design v2 flows (mocked)", () => {
   test("markets: hero from views, schedule labelled as not history, chain filter, account dock", async ({ page }) => {
     await setup(page);
     await page.goto("/feed");
-    await expect(page.getByTestId("hero-capacity")).toHaveText("$78,720", { timeout: 20_000 });
+    await expect(page.getByTestId("hero-capacity")).toHaveText("$73,800", { timeout: 20_000 });
     await expect(page.getByTestId("week-chart-note")).toContainText("not recorded history");
     const t = page.getByTestId("markets-table");
     await page.getByRole("group", { name: "Filter by chain" }).getByRole("button", { name: "Base" }).click();
@@ -173,7 +173,7 @@ test.describe("design v2 flows (mocked)", () => {
     await page.getByLabel("You lock").fill("300");
     await page.getByLabel("You borrow").fill("20000");
     await page.getByTestId("protection-weekend").click();
-    await expect(page.getByTestId("borrow-limit")).toHaveText("$33,600", { timeout: 20_000 });
+    await expect(page.getByTestId("borrow-limit")).toHaveText("$24,500", { timeout: 20_000 });
     await expect(page.getByTestId("receive")).toHaveText("$19,910.00");
     await page.getByTestId("review-borrow").click();
     const drawer = page.getByRole("dialog");
@@ -328,8 +328,8 @@ test.describe("design v2 flows (mocked)", () => {
     await expect(page.getByTestId("fee-share")).toHaveText("26.31%");
     await expect(page.getByTestId("fee-week")).toHaveText("$32.05");
     await expect(page.getByTestId("units-max")).toHaveText("138.6 NVDAx");
-    // The slider stops below the Reserve's 4.00%.
-    await expect(page.getByRole("slider", { name: "Discount ceiling" })).toHaveAttribute("max", "375");
+    // The slider stops below the Reserve's 6.00%.
+    await expect(page.getByRole("slider", { name: "Discount ceiling" })).toHaveAttribute("max", "575");
     await page.getByRole("slider", { name: "Discount ceiling" }).fill("150");
     await expect(rows.nth(0)).toContainText("Your quote");
     await page.getByTestId("quote-submit").click();
@@ -350,7 +350,7 @@ test.describe("design v2 flows (mocked)", () => {
     await page.getByLabel("You deposit").fill("100");
     await expect(page.getByTestId("reserve-after")).toContainText("$5,100", { timeout: 20_000 });
     await expect(page.getByTestId("reserve-share")).toHaveText("1.96%");
-    await expect(page.getByText("2. The Reserve, at 4.00%")).toBeVisible();
+    await expect(page.getByText("2. The Reserve, at 6.00%")).toBeVisible();
     await expect(page.getByRole("img", { name: "70% buyers and Reserve, 20% lenders, 10% treasury" })).toBeVisible();
   });
 
@@ -367,19 +367,19 @@ test.describe("design v2 flows (mocked)", () => {
   test("curator: what-if impact before signing, full upsert in the sign modal, keeps remote_chain", async ({ page }) => {
     await setup(page, "dark", { get_collateral: DEMO_COLL }, OWNER);
     await page.goto("/console");
-    await expect(page.getByTestId("whatif-session-exit")).toHaveText("$78,720", { timeout: 20_000 });
-    await expect(page.getByTestId("whatif-closed-exit")).toHaveText("$61,600");
+    await expect(page.getByTestId("whatif-session-exit")).toHaveText("$73,800", { timeout: 20_000 });
+    await expect(page.getByTestId("whatif-closed-exit")).toHaveText("$52,500");
     await expect(page.getByTestId("whatif-primary")).toBeDisabled();
-    await page.getByRole("slider", { name: "Haircut in session" }).fill("500");
-    await expect(page.getByTestId("whatif-session-exit")).toHaveText("$77,900");
+    await page.getByRole("slider", { name: "Haircut in session" }).fill("1100");
+    await expect(page.getByTestId("whatif-session-exit")).toHaveText("$72,980");
     await expect(page.getByTestId("whatif-session-delta")).toHaveText("−$820");
     await expect(page.getByTestId("whatif-changes")).toHaveText("1 change");
     await page.getByTestId("whatif-primary").click();
-    await expect(page.getByTestId("whatif-diff")).toContainText("400 → 500");
+    await expect(page.getByTestId("whatif-diff")).toContainText("1000 → 1100");
     await expect(page.getByTestId("whatif-primary")).toHaveText("Sign as nectar.testnet");
     await page.getByTestId("whatif-primary").click();
     const modal = page.getByRole("dialog");
-    await expect(modal.getByTestId("sign-args")).toContainText('"base_haircut_bps": 500');
+    await expect(modal.getByTestId("sign-args")).toContainText('"base_haircut_bps": 1100');
     await expect(modal.getByTestId("sign-args")).toContainText('"chain_id": "solana-devnet"');
     await expect(modal.getByTestId("sign-gas")).toHaveText("30 TGas");
     await expect(modal.getByTestId("sign-deposit")).toHaveText("0 NEAR");
@@ -407,15 +407,15 @@ test.describe("design v2 flows (mocked)", () => {
   test("market: ladder and limit from views, session toggle, unknown symbol", async ({ page }) => {
     await setup(page, "dark", { get_collateral: DEMO_COLL });
     await page.goto("/feed/NVDAx");
-    await expect(page.getByTestId("market-exit")).toHaveText("$78,720", { timeout: 20_000 });
-    await expect(page.getByTestId("market-free")).toHaveText("$50,720");
-    // PRD §4.2 rounds 389.9498 to 389.95; units are truncated here, so the page never overstates what buyers can take.
-    await expect(page.getByTestId("market-units")).toHaveText("389.94");
+    await expect(page.getByTestId("market-exit")).toHaveText("$73,800", { timeout: 20_000 });
+    await expect(page.getByTestId("market-free")).toHaveText("$45,800");
+    // 221.7602 + 140.0364 + 28.7522 (Reserve at 600 bps) = 390.5488; units are truncated here, so the page never overstates what buyers can take.
+    await expect(page.getByTestId("market-units")).toHaveText("390.54");
     await expect(page.getByTestId("market-ladder").locator("tbody tr")).toHaveCount(4);
-    await expect(page.getByTestId("market-formula")).toContainText("$82,000 × (1 − 4.00%) = $78,720");
+    await expect(page.getByTestId("market-formula")).toContainText("$82,000 × (1 − 10.00%) = $73,800");
     await page.getByRole("group", { name: "Market state" }).getByRole("button", { name: "Closed or Shield" }).click();
-    await expect(page.getByTestId("market-formula")).toContainText("$70,000 × (1 − 12.00%) = $61,600");
-    await expect(page.getByTestId("market-formula")).toContainText("$33,600");
+    await expect(page.getByTestId("market-formula")).toContainText("$70,000 × (1 − 25.00%) = $52,500");
+    await expect(page.getByTestId("market-formula")).toContainText("$24,500");
     await expect(page.getByTestId("market-activity")).toContainText("Opened loan #7");
   });
 
