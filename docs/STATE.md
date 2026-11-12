@@ -129,6 +129,9 @@
     stays on 3974b5b: services/feed unchanged since) → WO-34v3 ‖ G9 run 5 → submission-rc → FINAL_REPORT re-audit.
     Console noise (third-party): FastNEAR replies without CORS headers when rate-limiting browser RPC calls (SDK falls back); previews also log
     vercel.live feedback.js blocked by our CSP.
+  - G3b re-run 7b (d) on release 3: PASS (crawl 0 failures; Feed links /health 200) — runs 7 + 7b cover release 3 (49d0b5a).
+    Release 3 docs preview dpl_BjAPZQm4rEwhGovwPtcFo9ygEmKu: 56 pages + assets, Feed links 200. ~16:35Z production deploy of release 3 started:
+    docs dpl_DQubre8taPieUo4EBshyyrRNVjcT, web dpl_BJNxqxnSZQWHtiouXYeWknkScxtY (tarball sha256 c1c17da2…ffaa9). Feed stays on 3974b5b (no feed change).
   - (superseded) Still before freeze: WO-35e (evidence /Users redaction, verifier) and WO-34v findings. Then freeze = tarball → production redeploy (web+docs) +
     Feed redeploy (SRC_* to the frozen commit) → G3b + G9 on the frozen commit → submission-rc → FINAL_REPORT re-audit. Target 2026-11-13 12:00 UTC.
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
@@ -342,7 +345,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T16:11:11Z · commit 053ede4
+Last activity: 2026-11-12T16:16:33Z · commit f50d9ed
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
