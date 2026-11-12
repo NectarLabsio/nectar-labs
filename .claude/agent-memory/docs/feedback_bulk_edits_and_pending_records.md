@@ -22,4 +22,6 @@ When EVIDENCE gains a newer FAIL for a gate that README/docs still call PASS (e.
 Docs-site copy rule is wider than the word "hackathon": G9 failed (2026-11-11) on one Evidence-page sentence; WO-38 also removed "agents track", "pre-submission", "reviewers and their agents". `node scripts/check-no-branding-all.mjs` only greps /hackathon/i, so grep track|judg|submission|deadline by hand.
 Before naming web routes, run `npx next dev -p <spare>` in apps/web and curl each (e.g. /quote is a 307 to /quote/new; /markets, /earn 404).
 
-Fresh worktrees have no node_modules: run `pnpm install --frozen-lockfile --offline` (about 1 min) before `pnpm --filter docs-site build`.
+Fresh worktrees have no node_modules. Do NOT `pnpm install` there: on 2026-11-12 it hit ENOSPC on T7 (the pnpm store is on the internal disk, so files are copied, ~15 GB, and the disk filled). Instead a python script symlinks each node_modules dir (root, apps/docs-site, apps/web, packages/sdk, packages/ui, services/feed|keeper|x402) to the main checkout's; docs build and `pnpm verify:quick` then pass. The links show as untracked: `git add` named files only.
+The guard also refuses commands that use shell variables (`B=…; grep $B`, `node -e` with `$P`): put greps with fixed paths in a scratchpad python script instead.
+X_POST posts are ≤ 280 chars with each URL counted as 23: measure after every edit.

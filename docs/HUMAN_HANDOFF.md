@@ -124,6 +124,16 @@ What Claude Code does then, on yes: creates the new function-call key on testnet
   On no: nothing leaves `~/.nectar/`.
 Default if silent: the keeper stays local (it runs when the operator runs it). The hosted app says when settlement runs.
 
+## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed   status: OPEN (optional)   needed by: event history on the hosted Feed
+Why a human: creating an account and an API key with a third party (FACTS F-448). The key goes from dashboard.fastnear.com; the exact click path is not
+  verified (the dashboard answers scripts with a Cloudflare challenge, F-448). Neardata takes it as `Authorization: Bearer <key>` (F-448).
+What Kunal does (5 min): create the key at dashboard.fastnear.com, then Railway → project nectar-labs → service feed → Variables → add
+  `FEED_NEARDATA_API_KEY` (sealed). Reply `H-NEARDATA done`. Never paste the key in chat or in the repo.
+What Claude Code does then: the orchestrator switches `FEED_INDEXER` from `views` to `neardata` and checks /health. Note: the Feed code today reads the
+  key from a file named by `FEED_NEARDATA_API_KEY_PATH` (services/feed/src/main.ts:51, F-448), not from `FEED_NEARDATA_API_KEY`; the switch therefore needs
+  the env-var read (keeper agent, services/feed) or a start step that writes the variable to a `0600` file, before /health can show neardata.
+Default if silent: views mode; the Feed shows event history as unavailable (honest empty states).
+
 ## H-HOST — approve the Vercel connector's team access   status: CLOSED 2026-11-12
 Closed (2026-11-12): the deploy went through the Vercel and Railway connectors instead of CLI logins. Kunal approved the Vercel connector's team
   access (~05:20Z, docs/STATE.md); the Railway connector already had access. Production was deployed from ca34111 at ~13:35Z (docs/STATE.md).
@@ -233,11 +243,13 @@ on a disclosed local fork of Base Sepolia (D-026).
 3. Send ≥ 0.05 Sepolia ETH to the deployer. 4. Reply `H15 done <tx hash>`.
 Then: funds keeper + borrower from the deployer, runs G12. Default if silent: P2b skipped and disclosed.
 
-## H16 — final track list                            status: DONE 2026-11-11 (Kunal: "H16 defi security agents (I'll decide nfts after item 3)"; D-028)   needed by: submission
-Applied (WO-52): docs/SUBMISSION.md `tracks` = `["defi","security","agents"]`; README "Tracks and why". `privacy` dropped by Kunal (overrides CLAUDE.md §1 "privacy always"). Still open: `nfts`. Reply `H16 nfts yes` or `H16 nfts no`; on yes the docs agent appends `"nfts"` to the `tracks` row. Default if silent: not entered.
+## H16 — final track list                            status: CLOSED 2026-11-12 (`nfts` NOT added; tracks stay `defi`, `security`, `agents`)   needed by: submission
+2026-11-11 (D-028): Kunal: "H16 defi security agents (I'll decide nfts after item 3)"; `privacy` dropped (overrides CLAUDE.md §1 "privacy always").
+2026-11-12: `nfts` not added. Kunal's condition for `nfts` (a `move_note` test asserting the new owner can repay and close and the old owner cannot) does not hold by design: repay is permissionless (contracts/nectar-core/src/tests_notes.rs `v7_notes_residual_collateral_goes_to_loan_note_owner`: a stranger repays, the residual collateral goes to the new owner); self-settle follows the Note (`v7_notes_self_settle_by_new_loan_owner`) and the old owner is refused (`v7_notes_self_settle_old_owner_refused`).
+Applied (WO-35d): docs/SUBMISSION.md `tracks` unchanged `["defi","security","agents"]`; README "Tracks and why" says `nfts` is not submitted, with the reason.
 
-## H17 — consumer line                               status: OPEN   needed by: landing copy (WO-20 uses the default)
-Reply `H17 fire-sales` or `H17 liquidations`. Default: "Borrow against stocks without fire-sales" (accurate; "without liquidations" is not).
+## H17 — consumer line                               status: CLOSED 2026-11-12 ("fire-sales")   needed by: landing copy
+Kunal chose "fire-sales". The landing already reads "Borrow against stocks without fire-sales"; nothing to change ("without liquidations" stays banned).
 
 ## H18 — thesis notebook                             status: OPEN
 Reply `H18 yes` or `H18 no`. Yes → WO-32 after P2a. Default: not attempted.
