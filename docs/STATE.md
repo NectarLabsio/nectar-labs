@@ -44,7 +44,12 @@
     **Docs preview of 4f7702b: dpl_rCb371fxU9G4fVWhKoHRA126BwQE PASS** (tarball sha256 e1d70b94…de70ae0):
     smoke-docs.sh 56 pages + 6 referenced assets, 0 failures (F-435 confirmed live: rewrite destinations resolve through cleanUrls);
     system Chrome: no baseUrl banner, hydrated, client navigation works, 0 failed requests, 0 console errors; app links → web preview.
-    Logs: evidence/WO-34/preview-{smoke,browser}-docs-20261112T07*.{log,png}. Open it at `<docs-host>/docs/` (the bare root is not an entry point).
+    Logs: evidence/WO-34/preview-{smoke,browser}-docs-20261112T07*.{log,png}.
+  - ~10:25Z: WO-34u (legal fill), WO-34t (+ e325d6a tests), WO-34r7 (F-437–F-439), WO-34w (root redirect) MERGED; verify:quick 0 after each.
+    Docs preview of 5807d01 dpl_FCugSX4pWVhN1dEYDCmMtXp9FVar PASS: `/` → 307 `/docs/` → 200, 1 redirect, **no loop** (F-438 settled live);
+    56 pages + 6 assets 0 failures; Chrome: bare root lands on the docs home, hydrated, 0 failed requests, 0 console errors;
+    legal pages show Nectar Labs / United States / India / contact, 0 TODO-H, no governing-law text. Logs evidence/WO-34/preview-*-docs-20261112T102*.
+  - scripts/deploy/smoke-web.sh (route list of the 46c35ea check) added. Next: previews of the code-final commit → G3b re-run 5 (verifier).
     New scripts/deploy/smoke-docs.sh checks every page AND every asset it references; G3b (h) gained the asset check.
     Docs project env: APP_URL (preview only) = the 46c35ea web preview, so navbar/footer app links stop pointing at localhost:3100.
     Share links: fetching a deployment through the connector can replace its share link; the earlier docs link stopped working. Hand out fresh ones.
@@ -256,7 +261,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T07:39:45Z · commit 3a2baf7
+Last activity: 2026-11-12T10:18:41Z · commit 329a682
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
