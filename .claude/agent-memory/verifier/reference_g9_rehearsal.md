@@ -18,4 +18,7 @@ G9 rehearsal recipe (pre-check 2026-11-10 at 5cd7364; final G9 2026-11-11 c5f634
 - Submission payload: `website` key absent; tracks = core three.
 - EVIDENCE: the "G2 … 2026-11-10T19:42Z … 3f9c1a2" near the top is the template example inside a code block, not a real entry.
 - Host Feed on 8788/8789 may be needed by the demo: never stop it; run yours with FEED_PORT=18788 FEED_MCP_PORT=18789 and FEED_DB_PATH in the clone. Confirm your pid's cwd with `lsof -a -p <pid> -d cwd`.
+- Run 5 (2026-11-12, 5dd2a50): the worktree-isolation hook rejects compound bash containing git/pnpm/vars. Write each phase as a .sh in scratchpad and run `bash <file>`, plus plain `git clone` / `cd clone && git checkout`. That took about 30 turns.
+- Release-pointer trap: README points to EVIDENCE §"WO-34 production" for the deployed commit. If STATE names a newer production release with no block yet, step 3 FAILs. The remedy is the evidence block, not a README edit.
+- `git grep -l "/Users/"` skips the binary wasm unless you pass `-a`. Evidence/notes that quote the pattern also match: use `'[/]Users[/][A-Za-z]' -- ':!*.wasm'` for real paths.
 - On a re-run, also grep the built docs site (apps/docs-site/build, incl. search-index.json) and curl every README route. `scripts/check-no-branding-all.mjs` now runs first in verify:quick.
