@@ -113,6 +113,9 @@
 - 18:36Z Kunal full brief: Part A = WO-89 (README/idea/X thread, docs only, by 20:30Z; running agent redirected); Part B = WO-90 repo cleanup 03:00–08:00Z
   (after takes; no history rewrite; product dirs untouched except junk); Part C = WO-91 link check + clean status + G9 + product diff vs c9fd56b, then tag.
   T7 A1 cleanup: 492 GiB free at 18:36Z (some worktrees "Directory not empty" → second pass after the takes).
+- 18:46Z WO-89 Part A merged af633f9 (README restructured per Kunal; idea 1828 chars; thread 278/280/197; 18 txs verified on RPC). Softened by the agent for
+  lack of evidence: post 1 "borrow all weekend" → "limit rests on committed buyers, weekend or not" (no closed-market borrow recorded yet — tonight's take A will
+  record one → Kunal may restore); "loan moves" → "loan's rights move"; move_note does not exist (nft_transfer cited). docs/process/ link resolves after WO-90.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -535,7 +538,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T18:27:54Z · commit d2af1ce
+Last activity: 2026-11-13T18:37:18Z · commit 5edbd89
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
