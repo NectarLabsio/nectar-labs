@@ -1,0 +1,42 @@
+{
+  "at": "2026-11-13T22:08:32.232Z",
+  "latest_final": {
+    "height": 277569406,
+    "ts": "2026-11-13T22:08:33.499Z"
+  },
+  "block_277568411": {
+    "ts": "2026-11-13T21:58:50.973Z"
+  },
+  "get_config_final": {
+    "block_height": 277569424,
+    "max_age_ns_session": "120000000000",
+    "max_age_ns_closed": "86400000000000",
+    "keys": [
+      "contract_version",
+      "owner",
+      "usdc_token",
+      "keeper",
+      "keeper_fee_bps",
+      "fee_split",
+      "paused",
+      "min_notice_period_ns",
+      "min_quote_usd_e6",
+      "max_age_ns_session",
+      "max_age_ns_closed",
+      "band_bps",
+      "gas_reserve_yocto",
+      "next_quote_id",
+      "next_position_id",
+      "max_quotes_per_asset",
+      "max_quotes_per_settlement",
+      "origination_fee_bps"
+    ]
+  },
+  "get_config_at_277568411": {
+    "max_age_ns_session": "120000000000",
+    "max_age_ns_closed": "86400000000000"
+  },
+  "get_health_22": {
+    "error": "wasm execution failed with error: HostError(GuestPanic { panic_msg: \"Failed to deserialize input from JSON. Error: `invalid type: integer `22`, expected a string at line 1 column 17`\" })"
+  }
+}

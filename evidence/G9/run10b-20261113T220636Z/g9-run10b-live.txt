@@ -1,0 +1,6 @@
+docs/SUBMISSION.md:58:after D-027) PASS: positions 8/9/10, authority == live `derived_public_key` (domain 1), confirms `source
+docs/SUBMISSION.md:62:npm --filter web test:copilot` 12 pass, 1 skipped live, 2026-11-11) |
+README.md:92:Pyth path is built and tested in the sandbox, not live |
+README.md:98:ot | built; tested on a recorded fixture only, no live NEAR AI answer verified |
+README.md:110:- A live copilot answer, or an LLM agent using the Feed's 
+README.md:239:eper and the x402 server need testnet keys, which live in the OS keychain or `0600` files under `~/.nect

@@ -1,0 +1,4 @@
+README.md emoji 1 ©
+docs/SUBMISSION.md emoji 0
+no hackathon branding in landing, web app or docs site
+branding rc=0

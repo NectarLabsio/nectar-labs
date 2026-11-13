@@ -1,0 +1,30 @@
+G9 run 10b (WO-99) — fresh local clone of 0c475f7 at /tmp/g9-run10b — 2026-11-13T22:06Z–22:20Z
+VERDICT: FAIL, 1 reason (step 2, one README timestamp; text only, no product claim affected).
+
+1. Link check (scripts/linkcheck.mjs; README.md + 246 git-tracked docs/**/*.md, fenced blocks and inline code skipped):
+   247 files, 76 relative links, 0 broken -> PASS (linkcheck.txt).
+   Checker validation: the same script on d55ba25 reports exactly the 2 run-10 breaks (EVIDENCE.md:520, FACTS.md:223) (linkcheck-d55ba25.txt).
+2. README lines changed since d55ba25 (g9-run10b-readme.diff, 0448e76 WO-98 + 0c475f7):
+   FAIL  README:19 "get_config at block 277568411, 2026-11-13T22:10Z": block 277568411 timestamp is 2026-11-13T21:58:50.973Z
+         (rpc.testnet.near.org `block`, rpc-reads.json). The README commit 0448e76 is 2026-11-13T22:03:18Z, before the stated time.
+         The values are right: max_age_ns_session 120000000000 and max_age_ns_closed 86400000000000 at block 277568411 and at final 277569424.
+   PASS  refresher tick 15 s, 60 s in session, 6 h outside, run_until 2026-11-18T23:59Z = packages/config/config.yaml:127-132.
+   PASS  SESSION_MAX_PRICE_AGE_NS = 900 s, contracts/nectar-core/src/lib.rs:75. Oracle table row (README:92) same sources.
+   PASS  health of loan #22 = 7250/1482 = 4.89 (get_health "22" at block 277569469, g9-run10b-health22.txt).
+   PASS  glossary pointer: Quote, Limit, Shield, Standard, Health, Feed, Keeper all have entries (README:195-208).
+   PASS  Standard = BorrowComposer.tsx:349 "Limit follows the market session"; Flag line bounds lib.rs:617; Profit-Lock 50 bps lib.rs:97;
+         Keeper services/keeper/README.md:3-4 (FC key, never prices, sends only position_id); Intear in NEAR Connect list EVIDENCE.md:327.
+   PASS  Feed DB: FEED_DB_PATH unset -> ~/.nectar/feed.sqlite (main.ts:42, mcp-stdio.ts:20), mkdirSync recursive (db.ts:106).
+   PASS  local / = Landing (apps/web/app/page.tsx); hosted APP / -> /feed 307 (apps/web/lib/hosts.ts:153).
+   PASS  demo:testnet = bash scripts/50-verify.sh -> demo-testnet.mjs (package.json:21); list_quotes/list_positions limit 16 from 0 (demo-testnet.mjs:51,55).
+   PASS  pnpm i prints "Ignored build scripts: core-js@3.51.0, secp256k1@5.0.1" (pnpm-install.log, 5.2 s, exit 0).
+   PASS  evidence pointer: README tx hashes not repeated in full in EVIDENCE are found under evidence/.
+   RUN   NEAR_RPC_URL=https://rpc.testnet.near.org pnpm demo:testnet -> exit 0 in 37 s (README says 39 s; range 4-40 s) (g9-run10b-demo.log).
+   NOTE (not counted) README:74 "with health for open ones": the demo prints get_health's ltv / pre-liq bps, not the health ratio.
+3. Banned words (wo-92 line 32) over README.md + docs/SUBMISSION.md: 0 hits. "live": 6 uses, all negations or on-chain values.
+   Emoji: 0 (the only Extended_Pictographic match is the (c) copyright sign in the license line). Branding guard exit 0.
+   gitleaks 8 detect over the clone: 635 commits, no leaks, exit 0. build-submission.mjs --dry-run: exit 0, `website` absent,
+   open TODO-H = 1 (demoUrl=TODO-H3). git status in the clone: clean (0 lines). git diff --stat 54bdd32 0c475f7 -- apps packages services contracts: empty.
+Not run: pnpm verify, web dev routes, docs build, smoke-prod (not in WO-99 scope).
+docs/process/gate-fail-g9-r10b.md not written: this verifier may write only docs/EVIDENCE.md and evidence/ (orchestrator rule); the FAIL text is in gate-fail-g9-r10b.md here.
+Fix: README:19 "2026-11-13T22:10Z" -> "2026-11-13T21:59Z" (or re-read get_config at a new block and cite that block's time).
