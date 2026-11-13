@@ -191,9 +191,9 @@ Default if silent: the keeper stays local (it runs when the operator runs it). T
 ## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed   status: DONE 2026-11-13 (Kunal supplied the key; FEED_INDEXER=neardata since 02:22Z)   needed by: event history on the hosted Feed
 Done: Kunal supplied the key on 2026-11-13. It sits on Railway service feed as `FEED_NEARDATA_API_KEY`, which the Feed reads
   (services/feed/src/hosted.ts:20). The orchestrator set `FEED_INDEXER=neardata` at 02:22Z; since 11:36Z the Feed uses start block 277503800,
-  `FEED_POLL_MS` 1000 and a fresh `FEED_DB_PATH` (docs/STATE.md). /health reports `source` `views+neardata`, `history` `indexed`, but
-  `events_indexed` stays 0: the Feed accepts event version 1.0.0 only and nectar-core-v2 emits 2.0.0 (docs/FINAL_REPORT.md). That is a Feed code
-  fix (H-FEED-EVENTS), not this key.
+  `FEED_POLL_MS` 1000 and a fresh `FEED_DB_PATH` (docs/STATE.md). /health reports `source` `views+neardata`, `history` `indexed`. `events_indexed`
+  stayed 0 until the H-FEED-EVENTS fix (the Feed then accepted event version 1.0.0 only); since the 12:10Z redeploy from 37dfec9 it indexes
+  nectar-core-v2 events from block 277503800 on (H-FEED-EVENTS below).
   Key: not sealed today. It was pasted in a chat session, so treat it as exposed. Kunal will add a NEW key, sealed, in the Railway dashboard when he
   rotates it at dashboard.fastnear.com after judging (after 2026-11-18). Original request kept below.
 Why a human: creating an account and an API key with a third party (FACTS F-448). The key goes from dashboard.fastnear.com; the exact click path is not
@@ -205,7 +205,16 @@ What Claude Code does then: the orchestrator switches `FEED_INDEXER` from `views
   the env-var read (keeper agent, services/feed) or a start step that writes the variable to a `0600` file, before /health can show neardata.
 Default if silent: views mode; the Feed shows event history as unavailable (honest empty states).
 
-## H-FEED-EVENTS — let the hosted Feed index nectar-core-v2 events   status: OPEN (Kunal decides)   needed by: event history during judging (16–18 Nov)
+## H-FEED-EVENTS — let the hosted Feed index nectar-core-v2 events   status: DONE 2026-11-13 (Kunal: "fix"; WO-71 merged 37dfec9, redeployed 12:10Z)   needed by: event history during judging (16–18 Nov)
+Done (2026-11-13): Kunal replied `fix`. WO-71 (merge 37dfec9): the Feed accepts nectar event versions 1.0.0 and 2.0.0 (v2 adds only fields the
+  Feed does not read; evidence/WO-71/fields.md), indexes `settled_reserve`, and /health adds `indexer_cursor` and `indexer_lag_blocks`. The hosted
+  Feed was redeployed from 37dfec9 at 12:10Z (Railway deploy d2861e5f) with a fresh database and `FEED_START_BLOCK` 277503800. At 12:11:32Z it
+  indexed blocks 277503800–277503899 with 1 event (the 11:28Z `oracle_updated`, block 277503817); indexer lag 4151 → 0 blocks by 12:27Z
+  (evidence/ops/feed-v2-reindex-20261113T121107Z.log). Events before block 277503800 are not in the hosted Feed. Paid CSV export through the
+  local x402 at 12:28Z: 402 → 200, 112 rows, tx 8bXCY34SVYv5b7vJ4GLfWkbJtQdqbSSBJsrzPCE75XRk (evidence/ops/x402-paid-download-20261113T122853Z.log).
+  Orchestrator runs, no verifier record. README Feed rows and DEMO_SCRIPT step 3 updated (WO-72).
+  Parallel block fetch (faster catch-up): after judging, unless the Feed falls behind during judging (Kunal, 2026-11-13).
+Original request (kept for the record):
 Why a human: it is a product code change after the freeze plus a Railway redeploy (approval). Today the Feed accepts only event version `1.0.0`
   (services/feed/src/events.ts:7, :34; services/feed/test/feed.test.ts:54 asserts that a `2.0.0` event is rejected) while nectar-core-v2 emits
   `2.0.0` (contracts/nectar-core/src/events.rs:8). The hosted Feed therefore indexes no event: `events_indexed` 0, `/api/settlements` empty

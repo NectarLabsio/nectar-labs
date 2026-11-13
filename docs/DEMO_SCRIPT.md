@@ -22,8 +22,10 @@ The 3-minute v4 script (Solana and Base remote lifecycle, keeper, copilot) is th
 3. **What production serves.** Release 4 (commit c95cd0c, deployed 2026-11-13 ~02:00Z) runs on the custom hosts; the verifier's acceptance there
    passed (docs/EVIDENCE.md §"WO-34 production (custom hosts)"). https://status.nectarlabs.io is the status page (nectarlabs.io/status redirects
    there), the docs answer at the root of https://docs.nectarlabs.io, and "Get test assets" is on testnet.nectarlabs.io/borrow. The hosted Feed
-   serves snapshots from contract views but NO event history: it accepts event version 1.0.0 and nectar-core-v2 emits 2.0.0 (README Feed row;
-   docs/FINAL_REPORT.md), so settlement links and event panels stay empty on camera. Do not show them as working.
+   serves snapshots from contract views and records contract events again, from block 277503800 on (redeployed from 37dfec9 at 2026-11-13
+   12:10Z, WO-71; README Feed row). Events before that block are not in it: at 12:27Z it held 1 event (an `oracle_updated`) and no earlier
+   settlement. Show an event panel or settlement link only after a settlement made after that block fills it, and check `/health`
+   (`indexer_lag_blocks` near 0) right before the take.
 4. **Wallet for demo.nectar.testnet (off camera). DONE 2026-11-13 (H-DEMO-WALLET):** the orchestrator imported it, under Kunal's conditions,
    into the Intear web wallet in the Chrome profile `~/.nectar/demo-chrome-profile` (scripts/demo/intear-setup.mjs; the phrase was never printed)
    and connected it to testnet.nectarlabs.io. Record from that profile. Only if a re-import is needed: the recovery phrase exists only in
