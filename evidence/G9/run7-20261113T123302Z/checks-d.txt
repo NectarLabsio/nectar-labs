@@ -1,0 +1,29 @@
+## web tests
+apps/web test: ℹ tests 44
+apps/web test: ℹ pass 43
+apps/web test: ℹ fail 0
+apps/web test: ℹ skipped 1
+## v2 fixture tests in verify.log
+services/feed test: # Subtest: real nectar-core-v2 (2.0.0) log lines
+services/feed test:     # Subtest: De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (nectar.testnet oracle refresh): oracle_updated stored at block 277503817
+services/feed test:     ok 2 - De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (nectar.testnet oracle refresh): oracle_updated stored at block 277503817
+services/feed test:     # Subtest: all fixtures together: 6 events, replay is a no-op, REST exposes them without account ids
+services/feed test:     ok 8 - all fixtures together: 6 events, replay is a no-op, REST exposes them without account ids
+services/feed test: ok 28 - real nectar-core-v2 (2.0.0) log lines
+## payload keys
+keys requestId,projectName,leadName,email,size,tracks,nearAddress,projectUrl,demoUrl,idea,consent
+website absent
+tracks ["defi","security","agents"]
+privacy mentions 0
+TODO fields leadName=TODO-H10 email=TODO-H10 size=TODO-H10 nearAddress=TODO-H14 projectUrl=TODO-H2 demoUrl=TODO-H3 consent=TODO-H14
+## hosted Feed CORS (12:38:07Z)
+https://nectarlabs.io GET /health ACAO=[https://nectarlabs.io] preflight /mcp=204
+https://testnet.nectarlabs.io GET /health ACAO=[https://testnet.nectarlabs.io] preflight /mcp=204
+https://status.nectarlabs.io GET /health ACAO=[https://status.nectarlabs.io] preflight /mcp=204
+https://docs.nectarlabs.io GET /health ACAO=[] preflight /mcp=403
+https://evil.example.com GET /health ACAO=[] preflight /mcp=403
+## receipt block of the oracle_updated event (De6aVqqN)
+receipt block_hash BUD1qKj3J15XurkE6zbtnUsbx97S9LuwiPpkRtVRJyg7
+"height":277503817
+## host Feed (not touched) still up
+56878 02-03:47:43

@@ -1,0 +1,13 @@
+# 2026-11-13T12:35:43Z $ gitleaks detect --log-opts=--all
+
+    ○
+    │╲
+    │ ○
+    ○ ░
+    ░    gitleaks
+
+[90m6:05PM[0m [32mINF[0m [1mUnknown SCM platform. Use --platform to include links in findings.[0m [36mhost=[0m
+[90m6:05PM[0m [32mINF[0m [1m543 commits scanned.[0m
+[90m6:05PM[0m [32mINF[0m [1mscanned ~34572479 bytes (34.57 MB) in 2.59s[0m
+[90m6:05PM[0m [32mINF[0m [1mno leaks found[0m
+# exit=0 seconds=3

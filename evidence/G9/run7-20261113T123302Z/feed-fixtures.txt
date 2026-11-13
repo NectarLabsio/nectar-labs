@@ -1,0 +1,59 @@
+## 2026-11-13T12:34:13Z feed v2 fixtures
+$ git ls-files services/feed/test
+services/feed/test/defaults.test.ts
+services/feed/test/feed.test.ts
+services/feed/test/fixtures/neardata-block-276971305.json
+services/feed/test/fixtures/nectar-core-v2-events.json
+services/feed/test/fixtures/oneclick-impact.json
+services/feed/test/fixtures/oneclick-quote-ref.json
+services/feed/test/fixtures/oneclick-tokens.json
+services/feed/test/fixtures/skill-views-v1.json
+services/feed/test/fixtures/skill-views-v2.json
+services/feed/test/hosted.test.ts
+services/feed/test/mcp.test.ts
+services/feed/test/neardata.test.ts
+services/feed/test/oneclick.test.ts
+services/feed/test/rpc-health.test.ts
+services/feed/test/skill.test.ts
+services/feed/test/v2-events.test.ts
+$ head of services/feed/test/v2-events.test.ts imports/fixture refs
+2:// Fixture: test/fixtures/nectar-core-v2-events.json (archival RPC `tx`, receipts of nectar-core-v2.nectar.testnet, verbatim logs).
+3:import assert from 'node:assert/strict';
+4:import { readFileSync } from 'node:fs';
+5:import { dirname, resolve } from 'node:path';
+6:import { describe, it } from 'node:test';
+7:import { fileURLToPath } from 'node:url';
+8:import { route } from '../src/api.ts';
+9:import { FeedDb, type LogBatch } from '../src/db.ts';
+11:const here = dirname(fileURLToPath(import.meta.url));
+15:const FIX = JSON.parse(readFileSync(resolve(here, 'fixtures/nectar-core-v2-events.json'), 'utf8')) as { txs: FixtureTx[] };
+19:  assert.ok(t, `fixture tx ${txHash}`);
+36:describe('real nectar-core-v2 (2.0.0) log lines', () => {
+37:  it('every fixture line is a final, successful nectar-core-v2 receipt with version 2.0.0', () => {
+48:  it('De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (nectar.testnet oracle refresh): oracle_updated stored at block 277503817', () => {
+57:  it('7XGiZJKggMWRDcfpqZU7kahvdXLBn4TcZc1PkwV2KVFf (buyer2 ft_transfer_call): quote_funded → quotes row; nep171 nft_mint ignored', () => {
+64:  it('EeZmHGNsmgqAEMUwjw3UV1Yy8H6mDhTbnZu5UCzsr44w (borrower1 borrow): position_opened → position 0 Open NVDAx', () => {
+70:  it('8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3 (keeper-v2 confirm_remote_deposit): remote position_opened → position 2 Open; remote_* ignored', () => {
+77:  it('54eukmJTtQ2PpvYvYxaGeU8Z4gZwg5dpamFFuqWZiMpA (borrower1 repay): repaid stored, position status left to views', () => {
+87:  it('HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u (keeper-v2 trigger_preliquidation): preliq_triggered → position 3 Settling; quoter_requested ignored', () => {
+94:  it('all fixtures together: 6 events, replay is a no-op, REST exposes them without account ids', () => {
+$ grep -c '"version"' fixture; versions:
+   3 \"version\":\"1.0.0\"
+   9 \"version\":\"2.0.0\"
+   3 "event\":\"nft_mint
+   1 "event\":\"oracle_updated
+   2 "event\":\"position_opened
+   1 "event\":\"preliq_triggered
+   1 "event\":\"quote_funded
+   1 "event\":\"quoter_requested
+   1 "event\":\"remote_deposit_confirmed
+   1 "event\":\"repaid
+   1 "event\":\"reservation_deposit_refunded
+"tx_hash": "De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG"
+"receipt_id": "HKym9cr1RX37xKdDyNLprsfTvamyCNBNrnmxTRSQe3vf"
+"block_height": 277503817
+"tx_hash": "7XGiZJKggMWRDcfpqZU7kahvdXLBn4TcZc1PkwV2KVFf"
+"receipt_id": "5LYCrtAwqshLsc1NkV6Uwp9jHEWKVG7RUc5VVCL8Z7q"
+"block_height": 277092389
+"tx_hash": "EeZmHGNsmgqAEMUwjw3UV1Yy8H6mDhTbnZu5UCzsr44w"
+"receipt_id": "7yKB4fqhGxR8Ztn1yTxSkU5PyWXkBSQFi9mbj1n2MXxJ"
