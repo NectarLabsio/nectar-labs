@@ -14,6 +14,9 @@
 - smoke-prod.sh rerun after the docs redeploy (READY 02:03Z): exit 0, 43 ok, 0 failures — APP 28 routes, docs 56 pages + 6 assets at the root,
   host split, status host, docs + legacy 308s (path + query), HSTS/CSP/no noindex on 4 hosts (evidence/WO-34/prod-smoke-custom-20261113T020321Z.log;
   the 020032Z log = first run: docs without vercel.json + legacy pairs passed without https://).
+- ~02:25Z Kunal: WO-35 demo video (docs/work/wo-35-demo-video.md), to run after WO-67 + freeze. Intake conflicts C1–C5 sent to Kunal (Feed events in
+  views mode, Agents page is a fixture, agent1 ≠ demo account, localhost in the x402 command, oracle freshness). Researcher dispatched: X limits +
+  web wallets (Meteor/Intear) → FACTS. Only NYSE session before the deadline: Fri 2026-11-13 14:30–21:00Z.
 - Next: WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -436,7 +439,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T01:52:58Z · commit be12be4
+Last activity: 2026-11-13T02:11:20Z · commit b7fa381
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
