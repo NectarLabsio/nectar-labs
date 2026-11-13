@@ -1,0 +1,2926 @@
+rustc 1.95.0 (59807616e 2026-04-14) | cargo-near-near 0.23.0 | HOME=/tmp/ci-check-20261113T213112Z/.ci-home-rust
+::step build-nectar-core :: bash -c cd contracts/nectar-core && cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling proc-macro2 v1.0.107
+ │    Compiling quote v1.0.47
+ │    Compiling zmij v1.0.23
+ │    Compiling serde_core v1.0.229
+ │    Compiling hybrid-array v0.4.15
+ │    Compiling indexmap v2.14.2
+ │    Compiling serde v1.0.229
+ │    Compiling toml_parser v1.1.5+spec-1.1.0
+ │    Compiling libc v0.2.191
+ │    Compiling serde_json v1.0.154
+ │    Compiling toml_edit v0.25.19+spec-1.1.0
+ │    Compiling cfg_aliases v0.2.2
+ │    Compiling foldhash v0.2.0
+ │    Compiling schemars v0.8.22
+ │    Compiling borsh v1.8.1
+ │    Compiling crypto-common v0.2.2
+ │    Compiling block-buffer v0.12.1
+ │    Compiling proc-macro-crate v3.5.0
+ │    Compiling once_cell v1.21.4
+ │    Compiling const-oid v0.10.2
+ │    Compiling version_check v0.9.5
+ │    Compiling dyn-clone v1.0.20
+ │    Compiling digest v0.11.3
+ │    Compiling strsim v0.11.1
+ │    Compiling generic-array v0.14.9
+ │    Compiling cfg-if v1.0.5
+ │    Compiling fnv v1.0.7
+ │    Compiling rustversion v1.0.23
+ │    Compiling hex v0.4.3
+ │    Compiling base64 v0.23.1
+ │    Compiling bs58 v0.5.1
+ │    Compiling base64 v0.22.1
+ │    Compiling syn v3.0.10
+ │    Compiling syn v2.0.119
+ │    Compiling cpufeatures v0.3.1
+ │    Compiling keccak v0.2.2
+ │    Compiling sha3 v0.11.0
+ │    Compiling heck v0.5.0
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-crypto-hash v0.2.0
+ │    Compiling near-digest v0.1.5
+ │    Compiling sha2 v0.11.1
+ │    Compiling digest-io v0.1.0
+ │    Compiling strum v0.26.3
+ │    Compiling Inflector v0.11.4
+ │    Compiling semver v1.0.28
+ │    Compiling serde_derive_internals v0.29.1
+ │    Compiling darling_core v0.24.1
+ │    Compiling darling_core v0.20.11
+ │    Compiling block-buffer v0.10.4
+ │    Compiling crypto-common v0.1.6
+ │    Compiling digest v0.10.7
+ │    Compiling ripemd v0.1.3
+ │    Compiling schemars_derive v0.8.22
+ │    Compiling serde_derive v1.0.229
+ │    Compiling borsh-derive v1.8.1
+ │    Compiling cfg_eval v0.1.2
+ │    Compiling strum_macros v0.26.4
+ │    Compiling near-sdk-env v0.1.9
+ │    Compiling darling_macro v0.24.1
+ │    Compiling hex-literal v1.1.0
+ │    Compiling near-sys v0.4.1
+ │    Compiling darling_macro v0.20.11
+ │    Compiling darling v0.24.1
+ │    Compiling darling v0.20.11
+ │    Compiling serde_with_macros v3.24.0
+ │    Compiling near-token v0.3.6
+ │    Compiling near-account-id v3.0.0
+ │    Compiling near-gas v0.3.7
+ │    Compiling serde_with v3.24.0
+ │    Compiling near-abi v0.4.5
+ │    Compiling near-sdk-core v4.4.2
+ │    Compiling near-global-contracts v0.3.3
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `dev` profile [unoptimized] target(s) in 21.13s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling proc-macro2 v1.0.107
+ │    Compiling unicode-ident v1.0.27
+ │    Compiling quote v1.0.47
+ │    Compiling ident_case v1.0.1
+ │    Compiling winnow v1.0.5
+ │    Compiling zmij v1.0.23
+ │    Compiling hashbrown v0.17.1
+ │    Compiling equivalent v1.0.3
+ │    Compiling serde_core v1.0.229
+ │    Compiling toml_datetime v1.1.3+spec-1.1.0
+ │    Compiling cfg_aliases v0.2.2
+ │    Compiling once_cell v1.21.4
+ │    Compiling serde v1.0.229
+ │    Compiling borsh v1.8.1
+ │    Compiling strsim v0.11.1
+ │    Compiling typenum v1.20.1
+ │    Compiling indexmap v2.14.2
+ │    Compiling toml_parser v1.1.5+spec-1.1.0
+ │    Compiling hybrid-array v0.4.15
+ │    Compiling serde_json v1.0.154
+ │    Compiling toml_edit v0.25.19+spec-1.1.0
+ │    Compiling rustversion v1.0.23
+ │    Compiling near-sys v0.4.1
+ │    Compiling itoa v1.0.19
+ │    Compiling memchr v2.8.3
+ │    Compiling fnv v1.0.7
+ │    Compiling foldhash v0.2.0
+ │    Compiling syn v3.0.10
+ │    Compiling syn v2.0.119
+ │    Compiling proc-macro-crate v3.5.0
+ │    Compiling proc-macro-error-attr3 v3.1.1
+ │    Compiling proc-macro-error3 v3.1.1
+ │    Compiling near-sdk-env v0.1.9
+ │    Compiling block-buffer v0.12.1
+ │    Compiling crypto-common v0.2.2
+ │    Compiling base64 v0.23.1
+ │    Compiling bs58 v0.5.1
+ │    Compiling hex v0.4.3
+ │    Compiling digest v0.11.3
+ │    Compiling darling_core v0.24.1
+ │    Compiling darling_core v0.20.11
+ │    Compiling serde_derive v1.0.229
+ │    Compiling borsh-derive v1.8.1
+ │    Compiling darling_macro v0.20.11
+ │    Compiling heck v0.5.0
+ │    Compiling wee_alloc v0.4.5
+ │    Compiling impl-tools-lib v0.12.0
+ │    Compiling base64 v0.22.1
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling darling_macro v0.24.1
+ │    Compiling near-crypto-hash v0.2.0
+ │    Compiling darling v0.24.1
+ │    Compiling darling v0.20.11
+ │    Compiling strum_macros v0.26.4
+ │    Compiling cfg_eval v0.1.2
+ │    Compiling impl-tools v0.12.0
+ │    Compiling Inflector v0.11.4
+ │    Compiling strum v0.26.3
+ │    Compiling cfg-if v0.1.10
+ │    Compiling memory_units v0.4.0
+ │    Compiling near-digest v0.1.5
+ │    Compiling hex-literal v1.1.0
+ │    Compiling serde_with_macros v3.24.0
+ │    Compiling serde_with v3.24.0
+ │    Compiling near-account-id v3.0.0
+ │    Compiling near-gas v0.3.7
+ │    Compiling near-token v0.3.6
+ │    Compiling near-sdk-core v4.4.2
+ │    Compiling near-global-contracts v0.3.3
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 21.76s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 1s 212ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 45s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+::ok build-nectar-core 45s
+::step build-mock-ft :: bash -c cd contracts/mock-ft && cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `dev` profile [unoptimized] target(s) in 0.56s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.59s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 227ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 4s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+::ok build-mock-ft 5s
+::step build-test-stubs :: bash -c cd contracts/test-stubs && cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │    Compiling zeroize v1.9.1
+ │    Compiling subtle v2.6.1
+ │    Compiling const-oid v0.9.6
+ │    Compiling generic-array v0.14.9
+ │    Compiling rand_core v0.6.4
+ │    Compiling rustc_version v0.4.1
+ │    Compiling base16ct v0.2.0
+ │    Compiling cpufeatures v0.2.17
+ │    Compiling der v0.7.10
+ │    Compiling ff v0.13.1
+ │    Compiling group v0.13.0
+ │    Compiling curve25519-dalek v4.1.3
+ │    Compiling crypto-common v0.1.6
+ │    Compiling block-buffer v0.10.4
+ │    Compiling crypto-bigint v0.5.5
+ │    Compiling sec1 v0.7.3
+ │    Compiling digest v0.10.7
+ │    Compiling signature v2.2.0
+ │    Compiling hmac v0.12.1
+ │    Compiling sha2 v0.10.9
+ │    Compiling ripemd v0.1.3
+ │    Compiling ed25519 v2.2.3
+ │    Compiling rfc6979 v0.4.0
+ │    Compiling near-sdk-env v0.1.9
+ │    Compiling elliptic-curve v0.13.8
+ │    Compiling near-sdk v5.30.1
+ │    Compiling ed25519-dalek v2.2.0
+ │    Compiling ecdsa v0.16.9
+ │    Compiling k256 v0.13.4
+ │    Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+ │     Finished `dev` profile [unoptimized] target(s) in 2.05s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling version_check v0.9.5
+ │    Compiling zeroize v1.9.1
+ │    Compiling subtle v2.6.1
+ │    Compiling const-oid v0.9.6
+ │    Compiling rand_core v0.6.4
+ │    Compiling semver v1.0.28
+ │    Compiling base16ct v0.2.0
+ │    Compiling cfg-if v1.0.5
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling der v0.7.10
+ │    Compiling ff v0.13.1
+ │    Compiling group v0.13.0
+ │    Compiling generic-array v0.14.9
+ │    Compiling rustc_version v0.4.1
+ │    Compiling curve25519-dalek v4.1.3
+ │    Compiling near-sdk v5.30.1
+ │    Compiling block-buffer v0.10.4
+ │    Compiling crypto-common v0.1.6
+ │    Compiling sec1 v0.7.3
+ │    Compiling crypto-bigint v0.5.5
+ │    Compiling digest v0.10.7
+ │    Compiling signature v2.2.0
+ │    Compiling hmac v0.12.1
+ │    Compiling sha2 v0.10.9
+ │    Compiling ed25519 v2.2.3
+ │    Compiling rfc6979 v0.4.0
+ │    Compiling elliptic-curve v0.13.8
+ │    Compiling ed25519-dalek v2.2.0
+ │    Compiling ecdsa v0.16.9
+ │    Compiling k256 v0.13.4
+ │    Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 3.04s
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 340ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 6s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+::ok build-test-stubs 6s
+::step test :: cargo test --workspace
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling libc v0.2.191
+   Compiling cfg-if v1.0.5
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+   Compiling itoa v1.0.19
+   Compiling once_cell v1.21.4
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.15
+   Compiling memchr v2.8.3
+   Compiling zmij v1.0.23
+   Compiling equivalent v1.0.3
+   Compiling typenum v1.20.1
+   Compiling subtle v2.6.1
+   Compiling version_check v0.9.5
+   Compiling const-oid v0.9.6
+   Compiling foldhash v0.2.0
+   Compiling generic-array v0.14.9
+   Compiling hashbrown v0.17.1
+   Compiling pin-project-lite v0.2.17
+   Compiling serde_json v1.0.154
+   Compiling bytes v1.12.1
+   Compiling indexmap v2.14.2
+   Compiling pkg-config v0.3.34
+   Compiling cfg_aliases v0.2.2
+   Compiling winnow v1.0.5
+   Compiling toml_datetime v1.1.3+spec-1.1.0
+   Compiling smallvec v1.16.5
+   Compiling parking_lot_core v0.9.12
+   Compiling fs_extra v1.3.0
+   Compiling scopeguard v1.2.0
+   Compiling autocfg v1.5.1
+   Compiling toml_parser v1.1.5+spec-1.1.0
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+   Compiling toml_edit v0.25.19+spec-1.1.0
+   Compiling strsim v0.11.1
+   Compiling ident_case v1.0.1
+   Compiling dunce v1.0.5
+   Compiling borsh v1.8.1
+   Compiling proc-macro-crate v3.5.0
+   Compiling tracing-core v0.1.36
+   Compiling thiserror v2.0.21
+   Compiling schemars v0.8.22
+   Compiling serde_derive_internals v0.29.1
+   Compiling jobserver v0.1.35
+   Compiling getrandom v0.2.17
+   Compiling cc v1.11.1
+   Compiling errno v0.3.14
+   Compiling rand_core v0.6.4
+   Compiling base64 v0.23.1
+   Compiling aws-lc-rs v1.19.0
+   Compiling zeroize_derive v1.5.0
+   Compiling serde_derive v1.0.229
+   Compiling borsh-derive v1.8.1
+   Compiling thiserror-impl v2.0.21
+   Compiling zeroize v1.9.1
+   Compiling cmake v0.1.58
+   Compiling schemars_derive v0.8.22
+   Compiling dyn-clone v1.0.20
+   Compiling aws-lc-sys v0.47.0
+   Compiling semver v1.0.28
+   Compiling fnv v1.0.7
+   Compiling cpufeatures v0.2.17
+   Compiling num-traits v0.2.19
+   Compiling bitflags v2.13.2
+   Compiling untrusted v0.7.1
+   Compiling tracing-attributes v0.1.31
+   Compiling syn v1.0.109
+   Compiling anyhow v1.0.104
+   Compiling core-foundation-sys v0.8.7
+   Compiling zerocopy v0.8.63
+   Compiling tracing v0.1.44
+   Compiling crypto-common v0.1.6
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling darling_core v0.24.1
+   Compiling unicode-segmentation v1.13.3
+   Compiling rustix v1.1.6
+   Compiling rustversion v1.0.23
+   Compiling darling_macro v0.24.1
+   Compiling lock_api v0.4.14
+   Compiling parking_lot v0.12.5
+   Compiling hex v0.4.3
+   Compiling convert_case v0.10.0
+   Compiling signature v2.2.0
+   Compiling synstructure v0.14.0
+   Compiling num-bigint v0.3.3
+   Compiling unicode-xid v0.2.6
+   Compiling crunchy v0.2.4
+   Compiling derive_more-impl v2.1.1
+   Compiling ppv-lite86 v0.2.21
+   Compiling near-account-id v3.0.0
+   Compiling darling v0.24.1
+   Compiling num-integer v0.1.47
+   Compiling rustc_version v0.4.1
+   Compiling ring v0.17.14
+   Compiling num-rational v0.3.2
+   Compiling near-schema-checker-macro v0.38.0
+   Compiling near-schema-checker-core v0.38.0
+   Compiling near-schema-checker-lib v0.38.0
+   Compiling derive_more v2.1.1
+   Compiling curve25519-dalek v4.1.3
+   Compiling rand_chacha v0.3.1
+   Compiling zerofrom-derive v0.1.8
+   Compiling near-token v0.3.6
+   Compiling secp256k1-sys v0.8.2
+   Compiling derive_arbitrary v1.5.0
+   Compiling enum-map-derive v0.17.0
+   Compiling signal-hook-registry v1.4.8
+   Compiling socket2 v0.6.5
+   Compiling mio v1.2.4
+   Compiling fastrand v2.5.0
+   Compiling static_assertions v1.1.0
+   Compiling ryu v1.0.23
+   Compiling getrandom v0.4.3
+   Compiling bs58 v0.5.1
+   Compiling bs58 v0.4.0
+   Compiling byteorder v1.5.0
+   Compiling rand_core v0.10.1
+   Compiling enum-map v2.7.3
+   Compiling arbitrary v1.5.0
+   Compiling serde_with_macros v3.24.0
+   Compiling zerofrom v0.1.8
+   Compiling serde_with v3.24.0
+   Compiling near-gas v0.3.7
+   Compiling rand v0.8.8
+   Compiling yoke-derive v0.8.4
+   Compiling darling_core v0.20.11
+   Compiling serde_repr v0.1.21
+   Compiling aho-corasick v1.1.5
+   Compiling regex-syntax v0.8.11
+   Compiling heck v0.4.1
+   Compiling base64 v0.21.7
+   Compiling stable_deref_trait v1.2.1
+   Compiling strum_macros v0.24.3
+   Compiling darling_macro v0.20.11
+   Compiling uint v0.9.5
+   Compiling fixed-hash v0.7.0
+   Compiling ed25519 v2.2.3
+   Compiling keccak v0.1.6
+   Compiling zstd-sys v2.1.2+zstd.1.5.7
+   Compiling log v0.4.35
+   Compiling regex-automata v0.4.18
+   Compiling unsafe-libyaml v0.2.11
+   Compiling untrusted v0.9.0
+   Compiling percent-encoding v2.3.2
+   Compiling yoke v0.8.4
+   Compiling json_comments v0.2.2
+   Compiling near-config-utils v0.38.0
+   Compiling serde_yaml v0.9.34+deprecated
+   Compiling sha3 v0.10.9
+   Compiling primitive-types v0.10.1
+   Compiling regex v1.13.1
+   Compiling near-primitives-core v0.38.0
+   Compiling darling v0.20.11
+   Compiling blake2 v0.10.6
+   Compiling ed25519-dalek v2.2.0
+   Compiling zerovec-derive v0.11.7
+   Compiling secp256k1 v0.27.0
+   Compiling hybrid-array v0.4.15
+   Compiling near-stdx v0.38.0
+   Compiling spin v0.9.9
+   Compiling lazy_static v1.5.1
+   Compiling der v0.7.10
+   Compiling tokio-macros v2.7.2
+   Compiling displaydoc v0.2.7
+   Compiling radium v0.7.0
+   Compiling strum v0.24.1
+   Compiling zstd-safe v7.4.0
+   Compiling zerovec v0.11.9
+   Compiling tokio v1.54.1
+   Compiling block-buffer v0.12.1
+   Compiling crypto-common v0.2.2
+   Compiling tempfile v3.27.0
+   Compiling deranged v0.5.9
+   Compiling http v1.5.0
+   Compiling time-core v0.1.9
+   Compiling const-oid v0.10.2
+   Compiling futures-core v0.3.34
+   Compiling derive_builder_core v0.20.2
+   Compiling tap v1.0.1
+   Compiling num-conv v0.2.2
+   Compiling powerfmt v0.2.1
+   Compiling wyz v0.5.1
+   Compiling digest v0.11.3
+   Compiling time v0.3.55
+   Compiling spki v0.7.3
+   Compiling bytesize v1.3.3
+   Compiling iana-time-zone v0.1.65
+   Compiling ff v0.13.1
+   Compiling cpufeatures v0.3.1
+   Compiling base16ct v0.2.0
+   Compiling httparse v1.10.1
+   Compiling either v1.19.0
+   Compiling near-parameters v0.38.0
+   Compiling derive_builder_macro v0.20.2
+   Compiling funty v2.0.0
+   Compiling derive_builder v0.20.2
+   Compiling itertools v0.14.0
+   Compiling near-time v0.38.0
+   Compiling tinystr v0.8.5
+   Compiling sec1 v0.7.3
+   Compiling bitvec v1.1.1
+   Compiling group v0.13.0
+   Compiling chrono v0.4.45
+   Compiling pkcs8 v0.10.2
+   Compiling Inflector v0.11.4
+   Compiling near-fmt v0.38.0
+   Compiling ordered-float v4.6.0
+   Compiling crypto-bigint v0.5.5
+   Compiling rustls-pki-types v1.15.1
+   Compiling smart-default v0.7.1
+   Compiling litemap v0.8.3
+   Compiling writeable v0.6.4
+   Compiling easy-ext v0.2.9
+   Compiling utf_types v1.0.0
+   Compiling potential_utf v0.1.6
+   Compiling utf8_iter v1.1.0
+   Compiling keccak v0.2.2
+   Compiling zerotrie v0.2.5
+   Compiling hmac v0.12.1
+   Compiling icu_properties_data v2.4.0
+   Compiling elliptic-curve v0.13.8
+   Compiling base64 v0.22.1
+   Compiling icu_normalizer_data v2.4.0
+   Compiling rfc6979 v0.4.0
+   Compiling icu_collections v2.4.0
+   Compiling sha3 v0.11.0
+   Compiling http-body v1.1.0
+   Compiling icu_locale_core v2.4.0
+   Compiling ripemd v0.1.3
+   Compiling futures-task v0.3.34
+   Compiling crossbeam-utils v0.8.23
+   Compiling slab v0.4.12
+   Compiling futures-util v0.3.34
+   Compiling ecdsa v0.16.9
+   Compiling sha2 v0.11.1
+   Compiling icu_provider v2.4.0
+   Compiling security-framework-sys v2.17.0
+   Compiling core-foundation v0.10.1
+   Compiling blst v0.3.17
+   Compiling num_cpus v1.17.0
+   Compiling rustls v0.23.46
+   Compiling try-lock v0.2.5
+   Compiling tower-service v0.3.3
+   Compiling near-sys v0.4.1
+   Compiling security-framework v3.7.0
+   Compiling near-sdk-env v0.1.9
+   Compiling want v0.3.2
+   Compiling threadpool v1.8.1
+   Compiling icu_properties v2.4.0
+   Compiling icu_normalizer v2.4.0
+   Compiling primeorder v0.13.6
+   Compiling atomic-waker v1.1.2
+   Compiling hashbrown v0.14.5
+   Compiling heck v0.5.0
+   Compiling rustc-hex v2.1.0
+   Compiling near-crypto-hash v0.2.0
+   Compiling near-sdk-macros v5.30.1
+   Compiling crc32fast v1.5.4
+   Compiling dashmap v6.2.1
+   Compiling idna_adapter v1.2.2
+   Compiling zeropool-bn v0.5.11
+   Compiling strum_macros v0.26.4
+   Compiling hyper v1.12.0
+   Compiling zstd v0.13.4
+   Compiling p256 v0.13.2
+   Compiling near-digest v0.1.5
+   Compiling digest-io v0.1.0
+   Compiling futures-channel v0.3.34
+   Compiling form_urlencoded v1.2.2
+   Compiling cfg_eval v0.1.2
+   Compiling lru v0.18.5
+   Compiling strum v0.26.3
+   Compiling ipnet v2.12.2
+   Compiling simd-adler32 v0.3.10
+   Compiling native-tls v0.2.18
+   Compiling utf8-zero v0.8.1
+   Compiling adler2 v2.0.1
+   Compiling miniz_oxide v0.9.1
+   Compiling hyper-util v0.1.21
+   Compiling rustls-webpki v0.103.16
+   Compiling idna v1.1.0
+   Compiling sync_wrapper v1.0.2
+   Compiling filetime v0.2.29
+   Compiling hex-literal v1.1.0
+   Compiling near-sandbox v0.4.0
+   Compiling tower-layer v0.3.3
+   Compiling tower v0.5.3
+   Compiling ureq-proto v0.7.1
+   Compiling tar v0.4.46
+   Compiling url v2.5.8
+   Compiling flate2 v1.1.11
+   Compiling webpki-roots v1.0.11
+   Compiling http-body-util v0.1.5
+   Compiling uriparse v0.6.4
+   Compiling fs4 v0.13.1
+   Compiling near_schemafy_core v0.7.0
+   Compiling jsonptr v0.7.1
+   Compiling tokio-native-tls v0.3.1
+   Compiling near_schemafy_lib v0.7.0
+   Compiling json-patch v4.2.0
+   Compiling tower-http v0.6.11
+   Compiling ureq v3.5.1
+   Compiling near-abi v0.4.5
+   Compiling thiserror v1.0.69
+   Compiling prettyplease v0.1.25
+   Compiling near-abi-client-impl v0.1.1
+   Compiling hyper-tls v0.6.0
+   Compiling serde_urlencoded v0.7.1
+   Compiling chacha20 v0.10.2
+   Compiling thiserror-impl v1.0.69
+   Compiling rand v0.10.3
+   Compiling near-abi-client-macros v0.1.1
+   Compiling reqwest v0.12.28
+   Compiling jsonptr v0.4.7
+   Compiling convert_case v0.5.0
+   Compiling tokio-retry v0.3.2
+   Compiling near-workspaces v0.24.0
+   Compiling async-trait v0.1.92
+   Compiling near-abi-client v0.1.1
+   Compiling fs2 v0.4.3
+   Compiling k256 v0.13.4
+   Compiling json-patch v2.0.0
+   Compiling near-crypto v0.38.0
+   Compiling near-primitives v0.38.0
+   Compiling near-sdk-core v4.4.2
+   Compiling near-vm-runner v0.38.0
+   Compiling near-global-contracts v0.3.3
+   Compiling tokio-rustls v0.26.6
+   Compiling rustls-platform-verifier v0.7.1
+   Compiling hyper-rustls v0.27.10
+   Compiling reqwest v0.13.5
+   Compiling near-sdk v5.30.1
+   Compiling near-indexer-primitives v0.38.0
+   Compiling near-chain-configs v0.38.0
+   Compiling near-jsonrpc-primitives v0.38.0
+   Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+   Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+   Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+   Compiling near-jsonrpc-client v0.23.0
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:105:5
+    |
+105 | /     owner_call(&e, "upsert_collateral", json!({ "symbol": "NVDAx", "config": {
+106 | |         "symbol": "NVDAx", "token": e.nvdax.id(), "decimals": 6, "price_feed_id": "TODO-G5",
+107 | |         "base_ltv_bps": 4000, "max_nectar_ltv_bps": 7000, "base_haircut_bps": 1000,
+108 | |         "weekend_haircut_bps": 2500, "limit_premium_bps": 300, "pre_liq_min_bps": 6500,
+109 | |         "pre_liq_max_bps": 8000, "verified_dex_depth_usd_e6": "0", "nectar_reserve_usd_e6": "0",
+110 | |         "remote_chain": null } }))
+111 | |     .await?;
+    | |___________^
+    |
+    = note: use `into_result()` to handle potential execution errors
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+    |
+105 |     let _ = owner_call(&e, "upsert_collateral", json!({ "symbol": "NVDAx", "config": {
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:250:5
+    |
+250 |     owner_call(&e, "set_dex_depth", json!({ "symbol": "NVDAx", "depth_usd_e6": "5000000000" })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+250 |     let _ = owner_call(&e, "set_dex_depth", json!({ "symbol": "NVDAx", "depth_usd_e6": "5000000000" })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:258:5
+    |
+258 |     owner_call(&e, "set_session_calendar", json!({ "windows": big })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+258 |     let _ = owner_call(&e, "set_session_calendar", json!({ "windows": big })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:264:5
+    |
+264 |     owner_call(&e, "set_session_calendar", w).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+264 |     let _ = owner_call(&e, "set_session_calendar", w).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:269:5
+    |
+269 |     owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": true })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+269 |     let _ = owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": true })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:271:5
+    |
+271 |     owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": false })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+271 |     let _ = owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": false })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:279:5
+    |
+279 |     owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": false })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+279 |     let _ = owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": false })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:286:5
+    |
+286 |     owner_call(&e, "set_session_calendar", json!({ "windows": [[(t + 86_400 * SEC).to_string(), (t + 90_000 * SEC).to_string()]] })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+286 |     let _ = owner_call(&e, "set_session_calendar", json!({ "windows": [[(t + 86_400 * SEC).to_string(), (t + 90_000 * SEC).to_string()]] })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:288:5
+    |
+288 |     owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": false })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+288 |     let _ = owner_call(&e, "force_session_closed", json!({ "symbol": "NVDAx", "closed": false })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:307:5
+    |
+307 |     owner_call(&e, "set_multiplier", json!({ "symbol": "NVDAx", "multiplier_e18": "1050000000000000000" })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+307 |     let _ = owner_call(&e, "set_multiplier", json!({ "symbol": "NVDAx", "multiplier_e18": "1050000000000000000" })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:388:5
+    |
+388 |     owner_call(&e, "register_referrer", json!({ "account_id": bob.id() })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+388 |     let _ = owner_call(&e, "register_referrer", json!({ "account_id": bob.id() })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:389:5
+    |
+389 |     owner_call(&e, "register_referrer", json!({ "account_id": referrer.id() })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+389 |     let _ = owner_call(&e, "register_referrer", json!({ "account_id": referrer.id() })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:411:5
+    |
+411 |     owner_call(&e, "unregister_referrer", json!({ "account_id": referrer.id() })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+411 |     let _ = owner_call(&e, "unregister_referrer", json!({ "account_id": referrer.id() })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_v7.rs:416:5
+    |
+416 |     owner_call(&e, "set_origination_fee_bps", json!({ "bps": 100 })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+416 |     let _ = owner_call(&e, "set_origination_fee_bps", json!({ "bps": 100 })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+  --> contracts/nectar-core/tests/v7/notes.rs:44:5
+   |
+44 |     owner_call(&e, "set_quote_params", json!({ "min_notice_period_ns": SEC.to_string(), "min_quote_usd_e6": "100000000" })).await?;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+   |
+44 |     let _ = owner_call(&e, "set_quote_params", json!({ "min_notice_period_ns": SEC.to_string(), "min_quote_usd_e6": "100000000" })).await?;
+   |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/v7/notes.rs:138:5
+    |
+138 |     owner_call(&e, "set_outlayer_account", json!({ "account_id": s.id() })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+138 |     let _ = owner_call(&e, "set_outlayer_account", json!({ "account_id": s.id() })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/v7/notes.rs:139:5
+    |
+139 | /     owner_call(&e, "set_quoter_config", json!({ "deposit_yocto": "1000", "gas_tgas": 100,
+140 | |         "max_instructions": "100000000", "max_memory_mb": 128, "max_execution_seconds": 30 })).await?;
+    | |_____________________________________________________________________________________________________^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+139 |     let _ = owner_call(&e, "set_quoter_config", json!({ "deposit_yocto": "1000", "gas_tgas": 100,
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/v7/notes.rs:141:5
+    |
+141 |     owner_call(&e, "set_quoter_pin", json!({ "project_id": "nectar.testnet/nectar-quoter", "version_key": "ab".repeat(32) })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+141 |     let _ = owner_call(&e, "set_quoter_pin", json!({ "project_id": "nectar.testnet/nectar-quoter", "version_key": "ab".repeat(32) })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/v7/notes.rs:142:5
+    |
+142 |     owner_call(&e, "set_vol_bps", json!({ "symbol": "NVDAx", "vol_bps": 420 })).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+142 |     let _ = owner_call(&e, "set_vol_bps", json!({ "symbol": "NVDAx", "vol_bps": 420 })).await?;
+    |     +++++++
+
+warning: unused `near_workspaces::result::ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/v7/notes.rs:204:5
+    |
+204 | /     owner_call(&e, "upsert_collateral", json!({ "symbol": "N<&>'", "config": {
+205 | |         "symbol": "N<&>'", "token": odd.id(), "decimals": 6, "price_feed_id": "TODO-G5",
+206 | |         "base_ltv_bps": 4000, "max_nectar_ltv_bps": 7000, "base_haircut_bps": 1000,
+207 | |         "weekend_haircut_bps": 2500, "limit_premium_bps": 300, "pre_liq_min_bps": 6500,
+208 | |         "pre_liq_max_bps": 8000, "verified_dex_depth_usd_e6": "0", "nectar_reserve_usd_e6": "0",
+209 | |         "remote_chain": null } }))
+210 | |     .await?;
+    | |___________^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+204 |     let _ = owner_call(&e, "upsert_collateral", json!({ "symbol": "N<&>'", "config": {
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:236:5
+    |
+236 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+    |
+236 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:239:5
+    |
+239 |     ft_call(&e.usdc, &b1, core.id(), 15_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+239 |     let _ = ft_call(&e.usdc, &b1, core.id(), 15_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:240:5
+    |
+240 |     ft_call(&e.usdc, &b2, core.id(), 15_000_000_000, &fund_msg(400, Some(ERCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+240 |     let _ = ft_call(&e.usdc, &b2, core.id(), 15_000_000_000, &fund_msg(400, Some(ERCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:421:5
+    |
+421 |     ft_call(&e.usdc, &borrower, core.id(), BORROW, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+421 |     let _ = ft_call(&e.usdc, &borrower, core.id(), BORROW, &format!(r#"{{"Repay":{{"position_id":"{id}"}}}}"#)).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:489:5
+    |
+489 |     ft_call(&e.nvdax, &alice, core.id(), UNITS, lock).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+489 |     let _ = ft_call(&e.nvdax, &alice, core.id(), UNITS, lock).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:566:5
+    |
+566 |     ft_call(&e.usdc, &b3, core.id(), 10_000_000_000, &fund_msg(450, Some(ERCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+566 |     let _ = ft_call(&e.usdc, &b3, core.id(), 10_000_000_000, &fund_msg(450, Some(ERCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:730:5
+    |
+730 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+730 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:732:5
+    |
+732 |     ft_call(&e.usdc, &b, core.id(), 20_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+732 |     let _ = ft_call(&e.usdc, &b, core.id(), 20_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:733:5
+    |
+733 |     ft_call(&e.usdc, &b, core.id(), 1_000_000_000, &fund_msg(300, Some(RCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+733 |     let _ = ft_call(&e.usdc, &b, core.id(), 1_000_000_000, &fund_msg(300, Some(RCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:756:5
+    |
+756 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+756 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:758:5
+    |
+758 |     ft_call(&e.usdc, &b, core.id(), 20_000 * USD, &fund_msg(250, None)).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+758 |     let _ = ft_call(&e.usdc, &b, core.id(), 20_000 * USD, &fund_msg(250, None)).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:759:5
+    |
+759 |     ft_call(&e.usdc, &b, core.id(), 2_000 * USD, &fund_msg(300, Some(RCPT))).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+759 |     let _ = ft_call(&e.usdc, &b, core.id(), 2_000 * USD, &fund_msg(300, Some(RCPT))).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:903:5
+    |
+903 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+903 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:906:9
+    |
+906 |         ft_call(&e.usdc, &b, core.id(), 12_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+906 |         let _ = ft_call(&e.usdc, &b, core.id(), 12_000_000_000, &fund_msg(250, Some(RCPT))).await?;
+    |         +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:939:9
+    |
+939 |         ft_call(&e.usdc, &b, core.id(), 1_000_000_000, &fund_msg(250, Some(bad))).await?;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+939 |         let _ = ft_call(&e.usdc, &b, core.id(), 1_000_000_000, &fund_msg(250, Some(bad))).await?;
+    |         +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:943:5
+    |
+943 |     ft_call(&e.usdc, &b, core.id(), 1_000_000_000, &fund_msg(250, None)).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+943 |     let _ = ft_call(&e.usdc, &b, core.id(), 1_000_000_000, &fund_msg(250, None)).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:964:5
+    |
+964 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+964 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:966:5
+    |
+966 |     ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+966 |     let _ = ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+   --> contracts/nectar-core/tests/sandbox_evm.rs:969:5
+    |
+969 |     ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+    |
+969 |     let _ = ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+    |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1088:5
+     |
+1088 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1088 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1090:5
+     |
+1090 |     ft_call(&e.usdc, &buyer, core.id(), 20_000_000_000, &fund_msg(0, None)).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1090 |     let _ = ft_call(&e.usdc, &buyer, core.id(), 20_000_000_000, &fund_msg(0, None)).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1095:5
+     |
+1095 |     ft_call(&e.nvdax, &alice, core.id(), units, &lock).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1095 |     let _ = ft_call(&e.nvdax, &alice, core.id(), units, &lock).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1130:5
+     |
+1130 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1130 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1132:5
+     |
+1132 |     ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1132 |     let _ = ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1135:5
+     |
+1135 |     ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1135 |     let _ = ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1201:5
+     |
+1201 |     ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1201 |     let _ = ft_call(&e.usdc, &lender, core.id(), 100_000_000_000, r#""SupplyLendingLiquidity""#).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1203:5
+     |
+1203 |     ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1203 |     let _ = ft_call(&e.usdc, &buyer, core.id(), 15_000_000_000, &fund_msg(250, None)).await?;
+     |     +++++++
+
+warning: unused `ExecutionFinalResult` that must be used
+    --> contracts/nectar-core/tests/sandbox_evm.rs:1206:5
+     |
+1206 |     ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: use `into_result()` to handle potential execution errors
+help: use `let _ = ...` to ignore the resulting value
+     |
+1206 |     let _ = ft_call(&e.nvdax, &alice, core.id(), UNITS, &lock).await?;
+     |     +++++++
+
+warning: `nectar-core` (test "sandbox_v7") generated 20 warnings
+warning: `nectar-core` (test "sandbox_evm") generated 28 warnings
+warning: variable does not need to be mutable
+   --> contracts/nectar-core/src/tests_v7c.rs:258:9
+    |
+258 |     let mut c = base(true);
+    |         ----^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: `nectar-core` (lib test) generated 1 warning (run `cargo fix --lib -p nectar-core --tests` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 59.67s
+     Running unittests src/lib.rs (target/debug/deps/mock_ft-a7bccf7806f37362)
+
+running 38 tests
+test tests::faucet_defaults_disabled ... ok
+test tests::faucet_switched_off_refused - should panic ... ok
+test tests::faucet_disabled_refused - should panic ... ok
+test tests::faucet_exact_attachment_no_refund ... ok
+test tests::faucet_registered_account_pays_claim_record_only ... ok
+test tests::faucet_existing_claimant_pays_nothing_and_cooldown_elapses ... ok
+test tests::faucet_cap_refused - should panic ... ok
+test tests::faucet_claim_counts_as_registration ... ok
+test tests::faucet_cooldown_refused - should panic ... ok
+test tests::faucet_happy_path_new_account_charges_measured_storage_and_refunds_rest ... ok
+test tests::faucet_underpaid_refused - should panic ... ok
+test tests::mint_owner_only ... ok
+test tests::ft_transfer_call_debits_sender ... ok
+test tests::ft_transfer_moves_balance ... ok
+test tests::new_and_metadata ... ok
+test tests::multiplier_default_and_update ... ok
+test tests::ft_transfer_requires_one_yocto - should panic ... ok
+test tests::ft_transfer_insufficient - should panic ... ok
+test tests::mint_rejects_non_owner - should panic ... ok
+test tests::set_faucet_rejects_amount_over_cap - should panic ... ok
+test tests::registration_required_panics_for_unknown - should panic ... ok
+test tests::set_faucet_rejects_huge_cooldown - should panic ... ok
+test tests::set_faucet_and_config_view ... ok
+test tests::set_faucet_owner_only - should panic ... ok
+test tests::resolve_keeps_all_when_used ... ok
+test tests::set_registration_required_owner_only - should panic ... ok
+test tests::registration_required_blocks_unregistered_receiver ... ok
+test tests::resolve_refunds_all_on_failure ... ok
+test tests::resolve_refunds_unused ... ok
+test tests::sr27_balance_of_is_none_until_registered ... ok
+test tests::update_multiplier_rejects_zero - should panic ... ok
+test tests::sr27_already_registered_gets_everything_back ... ok
+test tests::sr27_free_receipts_stop_at_the_cap ... ok
+test tests::sr27_free_registration_refused - should panic ... ok
+test tests::sr27_owner_registers_for_free ... ok
+test tests::storage_shims ... ok
+test tests::update_multiplier_owner_only - should panic ... ok
+test tests::sr27_registration_keeps_the_measured_cost_and_refunds_the_rest ... ok
+
+test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.28s
+
+     Running tests/sandbox_faucet.rs (target/debug/deps/sandbox_faucet-5796829c2503f230)
+
+running 1 test
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.10s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.72s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794605661, tv_nsec: 517269773 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 258ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test deployed_mock_ft_upgrades_code_only_and_faucet_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 18.32s
+
+     Running unittests src/lib.rs (target/debug/deps/nectar_core-f33f8918f72afdd8)
+
+running 608 tests
+test math::tests::limit_open_session_counts_depth ... ok
+test math::tests::limit_closed_session_ignores_depth_and_uses_weekend_haircut ... ok
+test math::tests::increase_bound_and_origination ... ok
+test math::tests::multiplier_split_keeps_value_and_seize ... ok
+test math::tests::ltv_and_trigger ... ok
+test math::tests::aggregate_headroom_limits_b_c ... ok
+test math::tests::premium_rounds_up_and_is_zero_below_static ... ok
+test math::tests::limit_zero_capacity_is_zero ... ok
+test math::tests::overflow_is_an_error_not_a_wrap ... ok
+test math::tests::seize_rounds_up_and_keeper_cut ... ok
+test math::tests::settle_leg_caps_on_units ... ok
+test math::tests::split_sends_buyer_share_to_treasury_without_quotes ... ok
+test math::tests::session_window_search ... ok
+test math::tests::fee_index_matches_reference_loop ... ok
+test math::tests::settle_leg_m_caps_on_raw_units ... ok
+test tests::contract_version_view ... ok
+test tests::apply_price_same_block_rejected - should panic ... ok
+test tests::apply_price_without_proposal - should panic ... ok
+test tests::claim_fees_nothing - should panic ... ok
+test tests::claim_fees_pays_and_zeroes ... ok
+test tests::force_session_closed_unknown_symbol - should panic ... ok
+test tests::events_are_nep297 ... ok
+test tests::complete_withdrawal_without_initiate - should panic ... ok
+test tests::complete_withdrawal_before_unlock - should panic ... ok
+test tests::ft_on_transfer_unknown_token_panics - should panic ... ok
+test tests::claim_fees_refused_when_paused - should panic ... ok
+test tests::fees_after_exit_stop_accruing ... ok
+test tests::complete_withdrawal_allowed_while_paused ... ok
+test tests::fund_gas_reserve_accumulates ... ok
+test tests::ft_on_transfer_invalid_msg_refunds ... ok
+test tests::fund_gas_reserve_requires_deposit - should panic ... ok
+test tests::ft_on_transfer_wrong_token_for_variant_refunds ... ok
+test tests::fund_quote_creates_quote_and_q ... ok
+test tests::get_pool_view ... ok
+test tests::get_owed_collateral_default_zero ... ok
+test tests::get_exit_capacity_view ... ok
+test tests::fund_quote_failures_refund_without_state_change ... ok
+test tests::get_health_view ... ok
+test tests::get_quote_and_list_quotes_views ... ok
+test tests::get_position_and_list_positions_views ... ok
+test tests::list_collaterals_paginates ... ok
+test tests::model_csv_vectors_match_contract_math ... ok
+test tests::initiate_withdrawal_buyer_only - should panic ... ok
+test tests::initiate_withdrawal_requires_one_yocto - should panic ... ok
+test tests::initiate_and_complete_withdrawal ... ok
+test tests::new_sets_defaults ... ok
+test tests::lock_and_borrow_at_limit ... ok
+test tests::initiate_withdrawal_twice - should panic ... ok
+test tests::lock_and_borrow_pool_insufficient_refunds ... ok
+test tests::lock_and_borrow_stale_oracle_refunds ... ok
+test tests::pause_owner_only - should panic ... ok
+test tests::on_payout_failed_borrow_proceeds_become_repayment ... ok
+test tests::lock_and_borrow_failures_refund ... ok
+test tests::pause_unpause_and_paused_refunds ... ok
+test tests::on_payout_failed_fees_restored ... ok
+test tests::preview_borrow_view ... ok
+test tests::on_payout_failed_collateral_recorded_as_owed ... ok
+test tests::on_payout_failed_withdrawal_restores_quote ... ok
+test tests::on_payout_success_is_noop ... ok
+test tests::propose_apply_bypasses_band ... ok
+test tests::set_dex_depth_and_reserve_owner_values ... ok
+test tests::set_fee_split_ok ... ok
+test tests::set_dex_depth_owner_only - should panic ... ok
+test tests::set_fee_split_must_sum - should panic ... ok
+test tests::set_keeper_owner_only - should panic ... ok
+test tests::set_keeper_rotates ... ok
+test tests::set_oracle_params_ok ... ok
+test tests::session_window_switches_haircut_and_depth ... ok
+test tests::set_quote_params_ok ... ok
+test tests::set_oracle_params_rejects_zero_age - should panic ... ok
+test tests::supply_lending_liquidity ... ok
+test tests::repay_partial_full_and_overpay ... ok
+test tests::top_up_quote ... ok
+test tests::top_up_settles_fees_first ... ok
+test tests::trigger_healthy_position - should panic ... ok
+test tests::trigger_needs_gas_reserve - should panic ... ok
+test tests::settlement_consumes_exiting_quote_during_notice ... ok
+test tests::trigger_keeper_only - should panic ... ok
+test tests::trigger_preliquidation_static_settle_matches_model ... ok
+test tests::trigger_paused - should panic ... ok
+test tests::update_owner_price_band ... ok
+test tests::update_owner_price_owner_only - should panic ... ok
+test tests::trigger_stale_oracle - should panic ... ok
+test tests::upsert_collateral_creates_and_updates ... ok
+test tests::upsert_collateral_owner_only - should panic ... ok
+test tests::upsert_collateral_rejects_usdc_token - should panic ... ok
+test tests::upsert_collateral_rejects_bad_bps - should panic ... ok
+test tests::upsert_collateral_symbol_mismatch - should panic ... ok
+test tests::trigger_twice_on_one_position - should panic ... ok
+test tests::trigger_without_quotes_reverts - should panic ... ok
+test tests_evm::base_authority_malformed_key_ends_reservation ... ok
+test tests_evm::base_confirm_needs_rpc_url - should panic ... ok
+test tests::settlement_order_and_cap_of_eight ... ok
+test tests_evm::base_confirm_sends_vault_read_with_vault_and_rpc_then_opens ... ok
+test tests_evm::base_keeper_attest_needs_evm_depositor - should panic ... ok
+test tests_evm::base_confirm_rejects_solana_depositor_and_foreign_authority ... ok
+test tests_evm::base_relay_release_refuses_solana_signature - should panic ... ok
+test tests_evm::base_relay_refuses_solana_signature - should panic ... ok
+test tests_evm::digest_builders_refuse_bad_inputs ... ok
+test tests_evm::ecdsa_response_parsing_and_high_s_normalisation ... ok
+test tests_evm::base_relay_takes_evm_tx_hash ... ok
+test tests_evm::eip712_digests_match_cast_vectors ... ok
+test tests_evm::evm_validators_and_scalars ... ok
+test tests_evm::eip712_matches_wo27_vault_vectors ... ok
+test tests_evm::base_reserve_selects_chain_and_stores_evm_authority ... ok
+test tests_evm::base_release_bad_answer_marks_sign_failed ... ok
+test tests_evm::base_release_signs_eip712_release_and_relays ... ok
+test tests_evm::extra_remote_chain_bad_chain - should panic ... ok
+test tests_evm::base_settle_ed25519_answer_rolls_back ... ok
+test tests_evm::base_settle_fills_only_0x_quote_and_signs_eip712_digest ... ok
+test tests::fund_quote_cap_64 ... ok
+test tests_evm::extra_remote_chain_bad_rpc - should panic ... ok
+test tests_evm::extra_remote_chain_bounded - should panic ... ok
+test tests_evm::base_settle_high_s_signature_is_normalised ... ok
+test tests_evm::base_settle_ignores_base58_quotes - should panic ... ok
+test tests_evm::extra_remote_chain_not_primary - should panic ... ok
+test tests_evm::extra_remote_chain_owner_only - should panic ... ok
+test tests_evm::extra_remote_chain_unknown_collateral - should panic ... ok
+test tests_evm::extra_remote_chain_set_view_replace_remove ... ok
+test tests_evm::evm_views_none_for_solana_positions ... ok
+test tests_notes::v7_notes_base64_rfc4648_vectors ... ok
+test tests_evm::quote_recipient_accepts_0x_and_base58 ... ok
+test tests_evm::remove_unknown_extra_chain - should panic ... ok
+test tests_evm::quote_recipient_refuses_bad_0x - should panic ... ok
+test tests_evm::remove_extra_remote_chain_owner_only - should panic ... ok
+test tests_notes::v7_notes_ids_parse_canonical_only ... ok
+test tests_evm::reserve_base_without_extra_chain - should panic ... ok
+test tests_evm::reserve_unknown_chain - should panic ... ok
+test tests_notes::v7_notes_claim_fees_follows_note ... ok
+test tests_notes::v7_notes_claim_fees_old_owner_refused - should panic ... ok
+test tests_notes::sr23_a_refused_note_goes_back_even_if_a_settlement_started_meanwhile ... ok
+test tests_notes::v7_notes_candidate_quote_transfer_refused_while_settling - should panic ... ok
+test tests_notes::v7_notes_metadata_and_token_media ... ok
+test tests_evm::solana_settle_ignores_0x_quotes - should panic ... ok
+test tests_notes::v7_notes_enumeration_pages_and_owner_lists_after_transfers ... ok
+test tests_notes::v7_notes_loan_transfer_refused_while_settling - should panic ... ok
+test tests_notes::v7_notes_old_quote_owner_refused - should panic ... ok
+test tests_notes::v7_notes_minted_on_funding_and_open_with_nep171_events ... ok
+test tests_notes::v7_notes_locked_while_quoter_settling_then_free_after_cancel ... ok
+test tests_evm::sr3_base_resign_signs_a_fresh_digest_of_the_same_leg ... ok
+test tests_notes::v7_notes_quote_authority_moves_with_transfer ... ok
+test tests_notes::v7_notes_residual_collateral_goes_to_loan_note_owner ... ok
+test tests_notes::v7_notes_set_recipient_owner_only - should panic ... ok
+test tests_notes::v7_notes_releasing_locks_loan ... ok
+test tests_notes::v7_notes_self_settle_old_owner_refused - should panic ... ok
+test tests_notes::v7_notes_self_settle_by_new_loan_owner ... ok
+test tests_notes::v7_notes_remote_sign_failure_unlocks ... ok
+test tests_notes::v7_notes_set_recipient_unknown_quote - should panic ... ok
+test tests_notes::v7_notes_template_is_small_and_has_every_placeholder ... ok
+test tests_notes::v7_notes_remote_leg_locks_quote_and_loan_until_relayed ... ok
+test tests_notes::v7_notes_set_recipient_validates_base58 - should panic ... ok
+test tests_notes::v7_notes_resolve_keeps_reverts_and_respects_moves ... ok
+test tests_notes::v7_notes_svg_loan_and_quote_metrics ... ok
+test tests_notes::v7_notes_svg_escapes_the_asset_symbol ... ok
+test tests_notes::v7_notes_svg_unknown_note - should panic ... ok
+test tests_notes::v7_notes_set_recipient_refused_while_locked - should panic ... ok
+test tests_notes::v7_notes_transfer_call_gas_floor - should panic ... ok
+test tests_notes::v7_notes_transfer_call_msg_bounded - should panic ... ok
+test tests_notes::v7_notes_svg_quote_unlock_states ... ok
+test tests_notes::v7_notes_transfer_call_needs_one_yocto - should panic ... ok
+test tests_notes::v7_notes_transfer_call_schedules_receiver_and_resolve ... ok
+test tests_notes::v7_notes_xml_escape_and_number_formats ... ok
+test tests_notes::v7_notes_transfer_locked_view_unknown - should panic ... ok
+test tests_notes::v7_notes_page_cap ... ok
+test tests_notes::v7_notes_transfer_clears_remote_recipient_and_new_owner_sets_one ... ok
+test tests_notes::v7_notes_transfer_memo_bounded - should panic ... ok
+test tests_notes::v7_notes_transfer_memo_in_event_and_approval_id_ignored ... ok
+test tests_notes::v7_notes_transfer_needs_one_yocto - should panic ... ok
+test tests_notes::v7_notes_transfer_owner_only - should panic ... ok
+test tests_notes::v7_notes_transfer_to_self_refused - should panic ... ok
+test tests_notes::v7_notes_transfer_unknown_note - should panic ... ok
+test tests_p1::default_quoter_gas_is_80_tgas ... ok
+test tests_p1::callback_aborts_when_paused ... ok
+test tests_p1::callback_ignores_non_settling_position ... ok
+test tests_p1::cancel_settlement_requires_settling - should panic ... ok
+test tests_p1::contract_version_says_v2 ... ok
+test tests_p1::cancel_settlement_owner_only - should panic ... ok
+test tests_p1::callback_aborts_when_price_recovered ... ok
+test tests_p1::cancel_settlement_returns_to_open ... ok
+test tests_p1::fallback_bad_hash ... ok
+test tests_p1::fallback_failed_receipt ... ok
+test tests_p1::new_writes_v2_layout_with_p1_defaults ... ok
+test tests_p1::parse_rejects_wrong_fields ... ok
+test tests_p1::pyth_acceptance_rules ... ok
+test tests_p1::fallback_null ... ok
+test tests_p1::fallback_guest_error ... ok
+test tests_p1::pyth_age_rounds_up_to_seconds ... ok
+test tests_p1::gas_reserve_view_tracks_quoter_deposit ... ok
+test tests_p1::fallback_too_long ... ok
+test tests_p1::pyth_expo_to_usd_e6 ... ok
+test tests_p1::pyth_id_and_profile_validation ... ok
+test tests_p1::max_conf_bound - should panic ... ok
+test tests_p1::fallback_unparseable ... ok
+test tests_p1::outlayer_account_owner_only - should panic ... ok
+test tests_p1::fallback_duplicate_fill ... ok
+test tests_p1::pyth_accepted_then_quoter ... ok
+test tests_p1::fallback_unknown_quote_id ... ok
+test tests_p1::pyth_accepted_then_static_settle ... ok
+test tests_p1::pyth_callback_aborts_when_paused ... ok
+test tests_p1::pyth_price_recovered_aborts_healthy ... ok
+test tests_p1::pyth_callback_ignores_cancelled ... ok
+test tests_p1::pyth_rejects_negative_price ... ok
+test tests_p1::pyth_rejects_failed_receipt ... ok
+test tests_p1::pyth_rejects_null ... ok
+test tests_p1::pyth_rejects_out_of_band ... ok
+test tests_p1::pyth_rejects_too_long ... ok
+test tests_p1::pyth_rejects_stale_in_session ... ok
+test tests_p1::pyth_source_bad_id - should panic ... ok
+test tests_p1::pyth_rejects_unparseable ... ok
+test tests_p1::pyth_source_owner_only - should panic ... ok
+test tests_p1::pyth_source_set_view_and_clear ... ok
+test tests_p1::pyth_trigger_closed_session_age ... ok
+test tests_p1::pyth_rejects_wide_conf ... ok
+test tests_p1::quoter_config_gas_bound - should panic ... ok
+test tests_p1::pyth_trigger_open_session_age ... ok
+test tests_p1::quoter_vectors_if_present ... ok
+test tests_p1::quoter_config_instr_bound - should panic ... ok
+test tests_p1::quoter_pin_half_set - should panic ... ok
+test tests_p1::quoter_pin_owner_only - should panic ... ok
+test tests_p1::quoter_result_clamps_9999_to_max ... ok
+test tests_p1::quoter_result_applies_discounts ... ok
+test tests_p1::quoter_result_missing_fill_uses_max ... ok
+test tests_p1::secrets_ref_in_request_args ... ok
+test tests_p1::secrets_ref_bad_profile - should panic ... ok
+test tests_p1::secrets_ref_owner_only - should panic ... ok
+test tests_p1::quoter_setters_and_views ... ok
+test tests_p1::sr6_trigger_short_reserve_settles_at_static_pricing ... ok
+test tests_p1::trigger_pyth_needs_gas - should panic ... ok
+test tests_p1::sr6_pyth_callback_short_reserve_settles_at_static_pricing ... ok
+test tests_p2::base58_and_authority_parsing ... ok
+test tests_p1::trigger_pyth_skips_stale_owner_price ... ok
+test tests_p1::trigger_pyth_requests_price_and_waits ... ok
+test tests_p1::trigger_quoter_needs_gas - should panic ... ok
+test tests_p2::allow_keeper_attestation_owner_only - should panic ... ok
+test tests_p1::trigger_with_pin_requests_execution ... ok
+test tests_p1::trigger_without_vol_falls_back_to_static ... ok
+test tests_p1::vol_unknown_symbol - should panic ... ok
+test tests_p1::vol_bound - should panic ... ok
+test tests_p2::confirm_before_authority - should panic ... ok
+test tests_p2::confirm_near_position - should panic ... ok
+test tests_p2::confirm_needs_gas - should panic ... ok
+test tests_p2::confirm_gas_reserve_empty - should panic ... ok
+test tests_p2::confirm_cooldown - should panic ... ok
+test tests_p2::cancel_unsigned_before_expiry_refused - should panic ... ok
+test tests_p2::cancel_unsigned_after_expiry_rolls_back_and_late_signature_is_ignored ... ok
+test tests_p2::bad_debt_remote_leg_seizes_all_units ... ok
+test tests_p2::cancel_signed_is_refused_keeps_signature_and_relay_still_records ... ok
+test tests_p2::confirm_requests_vault_read_from_gas_reserve ... ok
+test tests_p2::confirm_paused - should panic ... ok
+test tests_p2::confirm_open_position - should panic ... ok
+test tests_p2::confirm_without_vault_read - should panic ... ok
+test tests_p2::expire_near_position - should panic ... ok
+test tests_p2::confirm_twice_in_flight - should panic ... ok
+test tests_p2::deposit_forged_authority_refused ... ok
+test tests_p2::deposit_verified_with_pay_to_and_referrer ... ok
+test tests_p2::deposit_proven_but_limits_fail_records_depositor ... ok
+test tests_p2::deposit_verified_pays_loan_and_opens ... ok
+test tests_p2::expire_reservation_after_30_min ... ok
+test tests_p2::expire_open_position - should panic ... ok
+test tests_p2::expire_too_early - should panic ... ok
+test tests_p2::expire_while_confirming - should panic ... ok
+test tests_p2::emptied_quote_is_relisted_on_rollback ... ok
+test tests_p2::keeper_attestation_bad_depositor - should panic ... ok
+test tests_p2::keeper_attestation_bad_tx_ref - should panic ... ok
+test tests_p2::keeper_attestation_before_authority - should panic ... ok
+test tests_p2::expire_with_recorded_deposit - should panic ... ok
+test tests_p2::failed_borrow_payout_on_remote_does_not_record_owed_units ... ok
+test tests_p2::keeper_attestation_refused_while_flag_off - should panic ... ok
+test tests_p2::keeper_attestation_keeper_only - should panic ... ok
+test tests_p2::lock_and_borrow_refuses_remote_path ... ok
+test tests_p2::keeper_attestation_paused - should panic ... ok
+test tests_p2::keeper_attestation_when_enabled ... ok
+test tests_p2::preimage_golden_vectors_byte_for_byte ... ok
+test tests_p2::keeper_attestation_on_open - should panic ... ok
+test tests_p2::keeper_attestation_while_confirming - should panic ... ok
+test tests_p2::late_deposit_on_expired_reservation_is_releasable_without_loan ... ok
+test tests_p2::on_authority_stores_key_once ... ok
+test tests_p2::near_held_position_with_remote_quote_settles_on_near ... ok
+test tests_p2::malformed_signature_is_a_failure ... ok
+test tests_p2::partial_remote_quote_is_skipped - should panic ... ok
+test tests_p2::relay_release_bad_tx_sig - should panic ... ok
+test tests_p2::relay_release_without_request - should panic ... ok
+test tests_p2::relay_keeper_only - should panic ... ok
+test tests_p2::relay_rejects_bad_tx_sig - should panic ... ok
+test tests_p2::relay_release_keeper_only - should panic ... ok
+test tests_p2::relay_requires_signature - should panic ... ok
+test tests_p2::release_near_position_refused - should panic ... ok
+test tests_p2::relay_without_pending - should panic ... ok
+test tests_p2::release_after_relay_refused - should panic ... ok
+test tests_p2::release_before_full_repay_refused - should panic ... ok
+test tests_p2::release_needs_reserve - should panic ... ok
+test tests_p2::release_needs_gas - should panic ... ok
+test tests_p2::release_nonce_follows_settle_nonces ... ok
+test tests_p2::on_authority_failure_ends_reservation ... ok
+test tests_p2::release_paused - should panic ... ok
+test tests_p2::release_refuses_unknown_domain - should panic ... ok
+test tests_p2::remote_config_setters_and_view ... ok
+test tests_p2::release_without_deposit_refused - should panic ... ok
+test tests_p2::release_refused_while_signed_settlement_unrelayed - should panic ... ok
+test tests_p2::release_request_refused_while_awaiting_signature - should panic ... ok
+test tests_p2::release_while_confirming_refused - should panic ... ok
+test tests_p2::release_signs_exact_message_with_position_path ... ok
+test tests_p2::release_without_signer - should panic ... ok
+test tests_p2::deposit_rejections_keep_awaiting ... ok
+test tests_p2::release_sign_failure_then_rerequest_with_fresh_nonce ... ok
+test tests_p2::release_while_settling_refused - should panic ... ok
+test tests_p2::remote_position_needs_a_remote_quote - should panic ... ok
+test tests_p2::remote_pyth_callback_short_of_gas_aborts_unspent ... ok
+test tests_p2::remote_pyth_quoter_budget_carries_no_transfers ... ok
+test tests_p2::remote_pyth_quoter_budget_still_covers_quoter_and_sign - should panic ... ok
+test tests_p2::remote_pyth_callback_starts_quoter_within_budget ... ok
+test tests_p2::remote_pyth_static_budget_still_covers_sign - should panic ... ok
+test tests_p2::remote_quoter_budget_still_covers_quoter_and_sign - should panic ... ok
+test tests_p2::remote_pyth_static_budget_carries_no_transfers ... ok
+test tests_p2::remote_quoter_budget_carries_no_transfers ... ok
+test tests_p2::reserve_borrow_above_u64 - should panic ... ok
+test tests_p2::remote_quoter_one_yocto_short_falls_back_and_signs ... ok
+test tests_p2::reserve_needs_gas - should panic ... ok
+test tests_p2::reserve_memo_too_long - should panic ... ok
+test tests_p2::reserve_creates_awaiting_position_without_locking_funds ... ok
+test tests_p2::reserve_pre_liq_range - should panic ... ok
+test tests_p2::reserve_paused - should panic ... ok
+test tests_p2::repay_to_zero_keeps_collateral_in_vault ... ok
+test tests_p2::reserve_referrer_is_borrower - should panic ... ok
+test tests_p2::reserve_units_above_u64 - should panic ... ok
+test tests_p2::reserve_unknown_collateral - should panic ... ok
+test tests_p2::reserve_without_remote_chain - should panic ... ok
+test tests_p2::reserve_zero_borrow - should panic ... ok
+test tests_p2::reserve_without_signer - should panic ... ok
+test tests_p2::reserve_zero_units - should panic ... ok
+test tests_p2::set_remote_chain_and_clear ... ok
+test tests_p2::replayed_release_relay_refused - should panic ... ok
+test tests_p2::set_remote_chain_rejects_secp_domain - should panic ... ok
+test tests_p2::set_remote_chain_owner_only - should panic ... ok
+test tests_p2::replayed_release_request_refused_while_signed - should panic ... ok
+test tests_p2::remote_quoter_run_leaves_the_sign_yocto ... ok
+test tests_p2::signer_config_bad_path - should panic ... ok
+test tests_p2::signer_config_expiry - should panic ... ok
+test tests_p2::settle_remote_hooks_without_signer_and_in_flight ... ok
+test tests_p2::signer_config_min_gas - should panic ... ok
+test tests_p2::signer_config_and_views ... ok
+test tests_p2::settle_remote_refuses_unknown_domain - should panic ... ok
+test tests_p2::settle_remote_needs_reserve - should panic ... ok
+test tests_p2::v2_preimage_kinds_release_and_path ... ok
+test tests_p2::validators_and_signature_parse ... ok
+test tests_p2::settle_remote_needs_sign_gas - should panic ... ok
+test tests_p2::signer_config_owner_only - should panic ... ok
+test tests_p2::signed_release_rerequestable_only_after_expiry ... ok
+test tests_p2::vault_read_config_empty_pin - should panic ... ok
+test tests_p2::vault_read_parsing ... ok
+test tests_p2::signature_success_then_relay_closes_remote ... ok
+test tests_p2::vault_read_config_gas - should panic ... ok
+test tests_p2::vault_read_config_owner_only - should panic ... ok
+test tests_reserve::v7_reserve_apr_window_drops_old_days ... ok
+test tests_p2::sign_failure_rolls_back_remote_leg ... ok
+test tests_p2::vault_read_config_zero_deposit - should panic ... ok
+test tests_reserve::sr22_join_on_a_depleted_reserve_mints_one_to_one ... ok
+test tests_p2::settlement_cost_is_one_yocto_and_no_transfer_for_remote ... ok
+test tests_p2::trigger_refuses_awaiting_deposit - should panic ... ok
+test tests_reserve::v7_reserve_complete_not_initiated - should panic ... ok
+test tests_reserve::v7_reserve_complete_needs_one_yocto - should panic ... ok
+test tests_reserve::v7_reserve_complete_before_notice - should panic ... ok
+test tests_p2::trigger_signs_with_position_path_and_kind_preliq ... ok
+test tests_p2::stale_nonce_callback_ignored ... ok
+test tests_reserve::v7_reserve_complete_nothing_to_withdraw - should panic ... ok
+test tests_reserve::v7_reserve_complete_note_owner_only - should panic ... ok
+test tests_reserve::v7_reserve_get_reserve_unknown_symbol - should panic ... ok
+test tests_reserve::sr22_a_second_depletion_closes_a_second_epoch ... ok
+test tests_reserve::v7_reserve_complete_twice - should panic ... ok
+test tests_reserve::sr22_old_notes_keep_their_claims_and_get_nothing_from_the_new_epoch ... ok
+test tests_reserve::v7_reserve_enabled_but_empty_and_no_quotes_reverts - should panic ... ok
+test tests_reserve::v7_reserve_initiate_needs_one_yocto - should panic ... ok
+test tests_reserve::v7_reserve_initiate_note_owner_only - should panic ... ok
+test tests_reserve::v7_reserve_fills_only_after_every_quote ... ok
+test tests_reserve::v7_reserve_join_disabled_refunded ... ok
+test tests_reserve::v7_reserve_initiate_twice - should panic ... ok
+test tests_reserve::v7_reserve_join_below_ten_dollars_refunded ... ok
+test tests_reserve::v7_reserve_initiate_unknown_note - should panic ... ok
+test tests_reserve::v7_reserve_notice_param_below_min - should panic ... ok
+test tests_reserve::v7_reserve_join_first_deposit_mints_1to1_and_a_note ... ok
+test tests_reserve::v7_reserve_exit_after_notice_pays_exact_amounts ... ok
+test tests_reserve::v7_reserve_join_unknown_collateral_and_wrong_token_refunded ... ok
+test tests_reserve::v7_reserve_failed_exit_transfers_restore_the_claim ... ok
+test tests_reserve::v7_reserve_notice_param_bounds_and_effect ... ok
+test tests_reserve::v7_reserve_old_owner_loses_authority_after_transfer - should panic ... ok
+test tests_reserve::v7_reserve_set_params_must_exceed_quote_ceilings - should panic ... ok
+test tests_reserve::v7_reserve_quote_at_or_above_reserve_discount_refunded ... ok
+test tests_reserve::v7_reserve_set_params_ok_and_event ... ok
+test tests_reserve::v7_reserve_set_params_out_of_range - should panic ... ok
+test tests_reserve::v7_reserve_premium_split_q_to_r_and_realised_apr ... ok
+test tests_reserve::v7_reserve_late_depositor_gets_no_earlier_units_or_fees ... ok
+test tests_reserve::v7_reserve_set_params_owner_only - should panic ... ok
+test tests_reserve::v7_reserve_set_params_unknown_collateral - should panic ... ok
+test tests_reserve::v7_reserve_views_unknown_and_math_helpers ... ok
+test tests_reserve::v7_reserve_set_params_zero_refused - should panic ... ok
+test tests_reserve::v7_reserve_note_transfer_refused_while_reserve_settlement_pending - should panic ... ok
+test tests_reserve::v7_reserve_note_transfer_moves_the_claim ... ok
+test tests_v7::announce_owner_only - should panic ... ok
+test tests_v7::announce_under_one_hour_refused - should panic ... ok
+test tests_v7::announce_zero_refused - should panic ... ok
+test tests_v7::apply_without_announcement_refused - should panic ... ok
+test tests_v7::apply_before_effective_refused - should panic ... ok
+test tests_v7::calendar_empty_window_rejected - should panic ... ok
+test tests_v7::calendar_over_600_rejected - should panic ... ok
+test tests_v7::calendar_overlap_rejected - should panic ... ok
+test tests_v7::calendar_owner_only - should panic ... ok
+test tests_v7::calendar_set_and_paginate ... ok
+test tests_v7::calendar_unsorted_rejected - should panic ... ok
+test tests_v7::borrow_refused_while_ca_pending_repay_continues ... ok
+test tests_reserve::v7_reserve_shortfall_stays_settling_and_locks_reserve_notes ... ok
+test tests_v7::empty_calendar_means_closed ... ok
+test tests_v7::failed_borrow_proceeds_leave_the_aggregate ... ok
+test tests_v7::force_session_closed_owner_only - should panic ... ok
+test tests_v7::get_claimable_default_zero ... ok
+test tests_v7::outside_hours_is_closed ... ok
+test tests_v7::pay_to_memo_too_long_refunds ... ok
+test tests_v7::preview_with_registered_referrer_returns_fee_stack ... ok
+test tests_v7::pay_to_failure_credits_borrower_claimable_then_withdraw ... ok
+test tests_v7::price_kind_change_with_debt_refused - should panic ... ok
+test tests_v7::referrer_registry ... ok
+test tests_reserve::v7_reserve_waits_for_quotes_beyond_the_call ... ok
+test tests_v7::register_referrer_owner_only - should panic ... ok
+test tests_v7::forced_closed_and_false_cannot_open ... ok
+test tests_v7::referrer_equal_to_borrower_refused_with_full_refund ... ok
+test tests_v7::reserved_fields_present_and_zero ... ok
+test tests_v7::reason_precedence_outside_hours_before_stale_and_forced ... ok
+test tests_v7::registered_referrer_gets_half_the_origination_fee ... ok
+test tests_v7::set_multiplier_bounds ... ok
+test tests_v7::set_multiplier_above_5pct_refused - should panic ... ok
+test tests_v7::set_multiplier_decrease_refused - should panic ... ok
+test tests_v7::set_multiplier_owner_only - should panic ... ok
+test tests_v7::set_multiplier_refused_while_pending - should panic ... ok
+test tests_v7::set_origination_fee_bps_above_100_refused - should panic ... ok
+test tests_v7::price_older_than_900s_flips_to_weekend_parameters ... ok
+test tests_v7::token_includes_multiplier_ignores_m_and_keeps_price ... ok
+test tests_v7::set_origination_fee_bps_bounds ... ok
+test tests_v7::set_origination_fee_bps_owner_only - should panic ... ok
+test tests_v7::underlying_multiplier_values_per_unit_with_m ... ok
+test tests_v7::unregister_referrer_owner_only - should panic ... ok
+test tests_v7::split_voids_pending_price_proposal - should panic ... ok
+test tests_v7::two_borrowers_cannot_both_draw_full_capacity ... ok
+test tests_v7::unregistered_referrer_fee_goes_to_treasury ... ok
+test tests_v7::split_two_for_one_leaves_ltv_and_value_unchanged ... ok
+test tests_v7::withdraw_claimable_nothing - should panic ... ok
+test tests_v7::split_capacity_between_two_borrowers_then_repay_frees_headroom ... ok
+test tests_v7::settlement_after_split_seizes_model_units ... ok
+test tests_v7::withdraw_claimable_requires_one_yocto - should panic ... ok
+test tests_v7b::job_output_parsers ... ok
+test tests_v7::settlement_reduces_total_debt ... ok
+test tests_v7b::math_helpers ... ok
+test tests_v7b::fee_stack_view ... ok
+test tests_v7b::job_not_configured - should panic ... ok
+test tests_v7b::job_config_pin_and_fallback ... ok
+test tests_v7b::calendar_job_in_flight - should panic ... ok
+test tests_v7b::calendar_job_after_cooldown_and_stale_in_flight ... ok
+test tests_v7b::job_needs_gas_reserve - should panic ... ok
+test tests_v7b::calendar_job_cooldown - should panic ... ok
+test tests_v7b::job_refused_while_paused - should panic ... ok
+test tests_v7b::multiplier_job_needs_source - should panic ... ok
+test tests_v7b::opted_in_quote_event_and_flag ... ok
+test tests_v7b::calendar_job_can_close_but_never_open ... ok
+test tests_v7b::multiplier_job_refused_for_token_feed - should panic ... ok
+test tests_v7b::preview_self_settle_reasons ... ok
+test tests_v7b::reservation_deposit_refunded_on_confirm ... ok
+test tests_v7b::reserve_refused_below_deposit - should panic ... ok
+test tests_v7b::remote_self_settle_needs_a_remote_recipient_covering_the_fill ... ok
+test tests_v7b::multiplier_job_bounded ... ok
+test tests_v7b::reservation_deposit_refunded_on_expiry ... ok
+test tests_v7b::self_settle_borrower_only - should panic ... ok
+test tests_v7b::self_settle_above_daily_cap - should panic ... ok
+test tests_v7b::remote_self_settle_signs_kind_self_and_credits_on_signature ... ok
+test tests_v7b::remote_self_settle_sign_failure_rolls_back_fill ... ok
+test tests_v7b::reservation_deposit_refunded_on_authority_failure_and_refused_loan ... ok
+test tests_v7b::self_settle_happy_path_exact_units ... ok
+test tests_v7b::self_settle_daily_cap_resets_next_day ... ok
+test tests_v7b::self_settle_ca_pending - should panic ... ok
+test tests_v7b::self_settle_closed_position - should panic ... ok
+test tests_v7b::self_settle_oracle_stale - should panic ... ok
+test tests_v7b::self_settle_fills_opted_in_quotes_in_ascending_discount ... ok
+test tests_v7b::self_settle_needs_one_yocto - should panic ... ok
+test tests_v7b::self_settle_unknown_position - should panic ... ok
+test tests_v7b::self_settle_paused - should panic ... ok
+test tests_v7b::self_settle_health_below_one - should panic ... ok
+test tests_v7b::set_job_config_bad_pin - should panic ... ok
+test tests_v7b::set_job_config_gas_range - should panic ... ok
+test tests_v7b::set_max_voluntary_fill_owner_only - should panic ... ok
+test tests_v7b::set_job_config_owner_only - should panic ... ok
+test tests_v7b::set_job_config_zero_deposit - should panic ... ok
+test tests_v7b::set_multiplier_source_bad_rpc - should panic ... ok
+test tests_v7b::set_job_config_unknown_job - should panic ... ok
+test tests_v7b::self_settle_without_opted_in_capacity - should panic ... ok
+test tests_v7b::set_multiplier_source_bad_token - should panic ... ok
+test tests_v7b::set_shield_params_event_in_past - should panic ... ok
+test tests_v7b::set_shield_params_fee_bound - should panic ... ok
+test tests_v7b::vault_read_not_found_is_rejected ... ok
+test tests_v7c::sr10_a_partial_quote_still_does_not_close ... ok
+test tests_v7b::set_shield_params_owner_only - should panic ... ok
+test tests_v7c::sr10_underwater_rounding_seizes_every_unit ... ok
+test tests_v7b::set_shield_params_unknown_symbol - should panic ... ok
+test tests_v7b::shield_on_remote_reservation_validated - should panic ... ok
+test tests_v7b::shield_sized_at_weekend_params_in_session_and_fee_replaces_premium ... ok
+test tests_v7c::sr17_nothing_to_claim - should panic ... ok
+test tests_v7b::shield_on_remote_reservation_counts_and_prices_at_confirm ... ok
+test tests_v7b::shield_five_opens_per_day_then_refused_until_next_utc_day ... ok
+test tests_v7c::sr10_contract_settles_an_odd_unit_underwater_position ... ok
+test tests_v7c::sr17_claim_needs_one_yocto - should panic ... ok
+test tests_v7c::sr17_claim_refused_while_paused - should panic ... ok
+test tests_v7b::sr5_self_settle_reduces_remote_debt_and_sign_failure_restores_it ... ok
+test tests_v7b::shield_window_and_minimum_refusals ... ok
+test tests_v7b::sr3_self_leg_resign_keeps_kind_and_fee_without_a_second_credit ... ok
+test tests_v7c::sr18_short_deposit_cannot_be_retried_into_a_loan - should panic ... ok
+test tests_v7c::sr17_failed_claim_restores_the_balance ... ok
+test tests_v7c::sr18_short_deposit_is_recorded_refused_and_releasable ... ok
+test tests_v7c::sr17_owed_collateral_is_claimable ... ok
+test tests_v7c::sr3_cancel_never_rolls_back_a_signed_leg - should panic ... ok
+test tests_v7c::sr3_expired_signed_leg_still_blocks_release - should panic ... ok
+test tests_v7c::sr3_expired_signed_leg_resigns_identically_with_a_fresh_nonce ... ok
+test tests_v7c::sr3_malformed_resign_answer_is_a_failure ... ok
+test tests_v7c::sr18_zero_units_or_a_foreign_slot_are_not_recorded ... ok
+test tests_v7c::sr3_resign_needs_gas_reserve - should panic ... ok
+test tests_v7c::sr3_resign_refused_before_expiry - should panic ... ok
+test tests_v7c::sr3_resign_refused_after_relay - should panic ... ok
+test tests_v7c::sr3_resign_failure_rolls_nothing_back_and_can_retry_at_once ... ok
+test tests_v7c::sr3_resign_refused_for_a_never_signed_leg - should panic ... ok
+test tests_v7c::sr5_capacity_counts_fitting_non_exiting_quotes_only ... ok
+test tests_v7c::sr3_resign_without_a_leg - should panic ... ok
+test tests_v7c::sr5_live_seed_refuses_the_reservation - should panic ... ok
+test tests_v7c::sr5_aggregate_sizing_counts_fitting_quotes_only ... ok
+test tests_v7c::sr3_resign_refused_while_paused - should panic ... ok
+test tests_v7c::sr5_borrow_capped_at_the_largest_fitting_quote ... ok
+test tests_v7c::sr5_remote_debt_is_per_symbol_and_domain ... ok
+test tests_v7c::sr5_cancelled_leg_gives_the_debt_back ... ok
+test tests_v7c::sr5_failed_proceeds_transfer_reduces_remote_debt ... ok
+test tests_v7c::sr5_remote_limit_boundary ... ok
+test tests_v7c::sr5_remote_haircut_follows_the_session_and_the_shield ... ok
+test tests_v7c::sr3_stale_callbacks_are_ignored ... ok
+test tests_v7c::sr5_chains_of_one_domain_share_their_quotes ... ok
+test tests_v7c::sr5_remote_limit_uses_the_position_value_for_ltv ... ok
+test tests_v7c::sr5_near_held_debt_does_not_consume_remote_capacity ... ok
+test tests_v7c::sr5_sizing_excludes_reserve_and_depth ... ok
+test tests_v7c::sr5_near_loans_are_not_limited_by_remote_debt ... ok
+test tests_v7c::sr5_remote_loan_still_bounded_by_the_aggregate ... ok
+test tests_v7c::sr5_overpaying_repay_counts_only_the_applied_amount ... ok
+test tests_v7c::sr5_repaying_a_loan_from_before_the_counter_does_not_trap ... ok
+test tests_v7c::sr7_recipient_validity ... ok
+test tests_v7c::sr7_funding_refuses_a_recipient_no_vault_can_pay ... ok
+test tests_v7c::sr5_sign_failure_gives_the_debt_back ... ok
+test tests_v7c::sr8_depositor_validity_and_matching ... ok
+test tests_v7c::sr5_settlement_reduces_remote_debt ... ok
+test tests_v7c::sr7_set_recipient_refuses_and_accepts ... ok
+test tests_v7c::sr7_legacy_quote_with_a_bad_recipient_is_never_signed - should panic ... ok
+test tests_v7c::sr5_two_remote_loans_cannot_exceed_remote_capacity ... ok
+test tests_v7c::sr5_repay_frees_remote_headroom ... ok
+test tests_v7c::sr8_commitment_is_exposed_sent_to_vault_read_and_off_the_struct ... ok
+test tests_v7c::sr5_write_off_clears_remote_debt ... ok
+test tests_v7c::sr8_reserve_refuses_an_off_curve_depositor - should panic ... ok
+test tests_v7c::sr8_pre_upgrade_reservation_without_commitment_still_confirms ... ok
+test tests_v7c::sr8_keeper_attestation_must_name_the_commitment - should panic ... ok
+test tests_v7d::gap_withdraw_liquidity_returns_it_to_the_lender_and_restores_on_failure ... ok
+test tests_v7d::sr14_near_borrow_below_the_minimum_is_refunded ... ok
+test tests_v7d::gap_withdraw_lender_fees_pays_and_restores_on_failure ... ok
+test tests_v7d::sr13_an_outlayer_answer_closes_for_a_bounded_time ... ok
+test tests_v7d::gap_withdraw_treasury_pays_and_restores_on_failure ... ok
+test tests_v7c::sr8_squatted_slot_never_confirms_the_reservation ... ok
+test tests_v7d::gap_withdrawal_refusals ... ok
+test tests_v7d::sr14_remote_borrow_below_the_minimum_is_refused - should panic ... ok
+test tests_v7d::sr15_a_vault_serves_one_collateral ... ok
+test tests_v7d::sr15_extra_chains_too ... ok
+test tests_v7c::sr5_unfit_quotes_cannot_crowd_out_a_fitting_one ... ok
+test tests_v7d::sr19_a_claim_clears_the_owed_total ... ok
+test tests_v7d::sr14_the_record_storage_is_kept_from_the_deposit ... ok
+test tests_v7d::sr14_a_refused_retry_counts_as_one_end ... ok
+test tests_v7d::sr19_decimals_change_refused_with_live_quotes - should panic ... ok
+test tests_v7d::sr16_failed_withdrawal_restores_without_relisting_above_the_reserve ... ok
+test tests_v7c::sr7_on_curve_matches_ed25519_dalek ... ok
+test tests_v7d::sr16_top_up_cannot_relist_above_the_reserve_discount ... ok
+test tests_v7d::sr19_token_change_refused_with_owed_collateral - should panic ... ok
+test tests_v7d::sr14_open_reservations_are_capped_per_account ... ok
+test tests_v7d::sr20_a_top_up_cannot_relist_dust ... ok
+test tests_v7d::sr19_token_change_refused_with_open_debt - should panic ... ok
+test tests_v7d::sr21_recipient_change_needs_one_yocto - should panic ... ok
+test tests_v7d::sr20_dust_q_collects_no_premium_and_never_moves_the_index ... ok
+test tests_v7d::sr20_a_fill_delists_a_dust_remainder_and_credits_it ... ok
+test tests_v7d::sr19_idempotent_upsert_and_an_empty_book_are_fine ... ok
+test tests_v7d::sr25_withdraw_claimable_refused_while_paused - should panic ... ok
+test tests_v7d::sr16_sign_failure_leaves_a_too_expensive_quote_as_an_exit ... ok
+test tests_v7d::sr20_a_failed_signature_sweeps_nothing ... ok
+test tests_v7d::sr20_a_signed_leg_delists_a_dust_remainder ... ok
+test tests_v7d::sr6_borrower_confirm_spends_the_held_deposit_not_the_reserve ... ok
+test tests_v7d::sr26_anyone_may_release_after_expiry ... ok
+test tests_v7d::sr24_a_failed_signature_frees_the_quote ... ok
+test tests_v7d::sr26_borrower_may_give_up_the_retry ... ok
+test tests_v7d::sr6_expired_reservation_is_not_free_for_the_borrower - should panic ... ok
+test tests_v7d::sr26_stranger_cannot_kill_the_retry - should panic ... ok
+test tests_v7d::sr6_job_requests_are_keeper_or_owner_only ... ok
+test tests_v7d::sr24_a_signed_leg_locks_its_quote_until_relayed ... ok
+test tests_v7d::sr24_an_aborted_run_leaves_no_lock_on_its_quotes ... ok
+test tests_v7d::sr6_short_reserve_falls_back_to_p0_instead_of_blocking_the_rescue ... ok
+test tests_v7d::sr9_no_collateral_left_parks_for_the_owner ... ok
+test tests_v7d::sr9_a_settle_that_cannot_succeed_never_spends_the_deposit ... ok
+test tests_v7d::sr6_stranger_cannot_confirm - should panic ... ok
+test tests_v7d::sr6_non_liquidation_spends_keep_the_reserve_floor ... ok
+test tests_v7d::sr9_aborted_run_costs_one_deposit_then_uses_static_pricing_until_the_cooldown_ends ... ok
+test tests_v7d::sr9_trigger_refused_without_collateral - should panic ... ok
+test tests_v7d::sr9_quoter_runs_again_after_the_cooldown ... ok
+test tests_v7d::sr6_keeper_reads_are_budgeted_per_position_and_the_owner_is_not ... ok
+test tests_v7d::sr9_write_off_is_the_terminal_state ... ok
+test tests_v7d::sr9_write_off_refusals ... ok
+
+test result: ok. 608 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 22.66s
+
+     Running tests/sandbox.rs (target/debug/deps/sandbox-ee9de6e6b0c4ff8d)
+
+running 5 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.11s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 10.94s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794605713, tv_nsec: 441251707 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794605585, tv_nsec: 876347604 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 1s 496ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 13s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.11s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 3.03s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794605719, tv_nsec: 27807317 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 263ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 4s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test owner_setters_and_ft_gas ... ok
+test refunds_and_guards ... ok
+test topup_exit_and_repay ... ok
+test demo_flow_matches_model ... ok
+test preliq_eight_buyers_gas ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 41.47s
+
+     Running tests/sandbox_evm.rs (target/debug/deps/sandbox_evm-2c8c849de29e3ec8)
+
+running 20 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.10s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 17.55s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794605762, tv_nsec: 793093981 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794605585, tv_nsec: 876347604 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 1s 505ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 20s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.12s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 3.93s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794605769, tv_nsec: 350915008 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 295ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.10s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 2.25s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794605772, tv_nsec: 591748451 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794605596, tv_nsec: 562127259 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 465ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test sr27_mock_ft_charges_registration ... ok
+test sr16_sr19_sr20_dust_relist_and_token_guard ... ok
+test base_confirm_repay_release_signed_ecrecover ... ok
+test sr17_owed_collateral_claim_round_trip ... ok
+test base_reserve_attest_settle_signed_ecrecover_relay has been running for over 60 seconds
+test code_only_upgrade_over_live_v21_state has been running for over 60 seconds
+test code_only_upgrade_over_live_v2_state has been running for over 60 seconds
+test gap_pool_withdrawals_and_sr25_pause has been running for over 60 seconds
+test sr20_signed_leg_sweeps_dust has been running for over 60 seconds
+test sr3_leg_signed_on_v21_resigned_after_upgrade has been running for over 60 seconds
+test sr20_signed_leg_sweeps_dust ... ok
+test base_reserve_attest_settle_signed_ecrecover_relay ... ok
+test sr3_leg_signed_on_v21_resigned_after_upgrade ... ok
+test sr5_remote_debt_with_near_held_debt_beside_it ... ok
+test sr5_remote_loan_refused_without_fitting_capacity ... ok
+test code_only_upgrade_over_live_v2_state ... ok
+test code_only_upgrade_over_live_v21_state ... ok
+test sr7_bad_recipient_refunded_and_refused ... ok
+test sr5_refused_on_v22_funds_after_upgrade ... ok
+test wo45_remove_extra_remote_chain_and_oracle_band_reject ... ok
+test gap_pool_withdrawals_and_sr25_pause ... ok
+test sr5_settlement_reduces_remote_debt ... ok
+test sr9_bad_debt_parks_then_writes_off ... ok
+test sr6_sr14_sr15_sr26_remote_confirm_and_release_callers ... ok
+test sr8_sr18_committed_depositor_and_short_deposit ... ok
+test sr5_gas_with_64_fitting_quotes ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 92.56s
+
+     Running tests/sandbox_p1.rs (target/debug/deps/sandbox_p1-781b9e11f5fe0020)
+
+running 5 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.14s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 15.95s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794605855, tv_nsec: 7455162 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794605585, tv_nsec: 876347604 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 1s 353ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 18s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.11s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.14s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794605859, tv_nsec: 340327023 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 230ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.08s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 2.38s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794605862, tv_nsec: 540870060 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794605596, tv_nsec: 562127259 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 414ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test v2_code_over_v1_state_fails_closed ... ok
+test gas_trigger_quoter_eight_legs ... ok
+test gas_trigger_pyth_quoter_eight_legs ... ok
+test v2_seed_then_quoter_outcomes ... ok
+test v2_pyth_secrets_cancel has been running for over 60 seconds
+test v2_pyth_secrets_cancel ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 60.54s
+
+     Running tests/sandbox_p2.rs (target/debug/deps/sandbox_p2-a9bd61ce1af42d2e)
+
+running 6 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.08s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 8.70s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794605908, tv_nsec: 770414746 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794605585, tv_nsec: 876347604 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 1s 92ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 10s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.08s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 2.57s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794605913, tv_nsec: 312415260 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 312ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 3s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.13s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 5.94s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794605921, tv_nsec: 226008435 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794605596, tv_nsec: 562127259 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 1s 431ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 8s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test remote_repay_then_release_signed_and_replay_refused ... ok
+test remote_reserve_confirm_borrow_settle_signed_with_position_path ... ok
+test gas_trigger_remote_pyth_quoter_near_minimum ... ok
+test gas_trigger_remote_pyth_quoter_eight_buyers ... ok
+test remote_refusals_attestation_and_expiry has been running for over 60 seconds
+test remote_reservation_deposit_refunds_and_self_settle_kind_self has been running for over 60 seconds
+test remote_reservation_deposit_refunds_and_self_settle_kind_self ... ok
+test remote_refusals_attestation_and_expiry ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 105.81s
+
+     Running tests/sandbox_reserve.rs (target/debug/deps/sandbox_reserve-64d0aecba7b50d45)
+
+running 2 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.49s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 32.89s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794606041, tv_nsec: 858702103 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794605585, tv_nsec: 876347604 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 3s 502ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 38s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.22s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 3.34s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794606050, tv_nsec: 171269776 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 231ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 4s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test reserve_shortfall_stays_settling_and_locks_transfers has been running for over 60 seconds
+test reserve_waterfall_late_depositor_transfer_and_exit has been running for over 60 seconds
+test reserve_shortfall_stays_settling_and_locks_transfers ... ok
+test reserve_waterfall_late_depositor_transfer_and_exit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 67.15s
+
+     Running tests/sandbox_v7.rs (target/debug/deps/sandbox_v7-9fb508d584104dd1)
+
+running 9 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.30s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 20.56s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794606096, tv_nsec: 733728372 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794605585, tv_nsec: 876347604 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 3s 536ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 25s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.17s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 3.65s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794606104, tv_nsec: 980610748 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 731ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 5s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.26s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 4.61s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794606111, tv_nsec: 983414595 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794605596, tv_nsec: 562127259 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 1s 161ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 7s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test notes::notes_residual_collateral_to_loan_note_owner ... ok
+test notes::gas_rows_g11_owner_setters ... ok
+test notes::notes_svg_gas_and_xml_escaping ... ok
+test notes::notes_transfer_refused_while_settling ... ok
+test aggregate_debt_two_borrowers_repay_settle ... ok
+test multiplier_bounds_announce_and_split has been running for over 60 seconds
+test notes::notes_authority_follows_transfer has been running for over 60 seconds
+test pay_to_claimable_and_referrers has been running for over 60 seconds
+test weekend_guard_calendar_stale_and_forced has been running for over 60 seconds
+test pay_to_claimable_and_referrers ... ok
+test notes::notes_authority_follows_transfer ... ok
+test weekend_guard_calendar_stale_and_forced ... ok
+test multiplier_bounds_announce_and_split ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 172.76s
+
+     Running tests/sandbox_v7b.rs (target/debug/deps/sandbox_v7b-b915415a782b50b8)
+
+running 4 tests
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.11s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling nectar-core v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/nectar-core)
+ │     Finished `release` profile [optimized] target(s) in 8.70s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/nectar_core.wasm" = SystemTime { tv_sec: 1794606258, tv_nsec: 79039450 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm" = SystemTime { tv_sec: 1794605585, tv_nsec: 876347604 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 991ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core.wasm
+     -                  Size: 818.7 KB (818668 bytes)
+     - SHA-256 checksum hex : 2938ebf84c3d89cb66c39be98184befd8908a55543eaa1c2e60e7e27cb2df78d
+     - SHA-256 checksum bs58: 3mv4LRm6mNtyDLkR8fmaiTQmpHc12KGdfd2BLsjovFvk
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/nectar_core/nectar_core_abi.zst
+    Finished cargo near build in 10s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.07s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling mock-ft v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/mock-ft)
+ │     Finished `release` profile [optimized] target(s) in 1.94s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/mock_ft.wasm" = SystemTime { tv_sec: 1794606261, tv_nsec: 591801762 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm" = SystemTime { tv_sec: 1794605590, tv_nsec: 336267476 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 224ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft.wasm
+     -                  Size: 171.8 KB (171771 bytes)
+     - SHA-256 checksum hex : e3d4ded52c1a5e64d4e05750f793ca4f2a177076e13d53cf9d733a99c37c6d14
+     - SHA-256 checksum bs58: GLMp3W4JXjMqrr2sqTouA6rgWNp9aaUrmt9MPyVj1WgB
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/mock_ft/mock_ft_abi.zst
+    Finished cargo near build in 2s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+• Collecting cargo project metadata...
+• done
+
+• Checking rustc version...
+INFO: contract's near-sdk targets protocol version 85; rustc 1.95.0 accepted (bulk-memory opcodes supported by nearcore VM)
+• done
+
+• Checking the host environment...
+• done
+
+• Generating ABI
+ │     Finished `dev` profile [unoptimized] target(s) in 0.08s
+• Extracting ABI...
+• done
+
+• Compressing ABI to be embedded..
+• done
+
+• Building contract
+ │    Compiling near-sdk-macros v5.30.1
+ │    Compiling near-sdk v5.30.1
+ │    Compiling test-stubs v0.1.0 (/private/tmp/ci-check-20261113T213112Z/contracts/test-stubs)
+ │     Finished `release` profile [optimized] target(s) in 2.06s
+
+Modification timestamps of:
+ |    "/private/tmp/ci-check-20261113T213112Z/target/wasm32-unknown-unknown/release/test_stubs.wasm" = SystemTime { tv_sec: 1794606264, tv_nsec: 449697978 }
+ |    "/private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm" = SystemTime { tv_sec: 1794605596, tv_nsec: 562127259 }
+
+• Running an optimize for size post-step with wasm-opt --enable-nontrapping-float-to-int --enable-bulk-memory...
+    Finished wasm-opt -O in 350ms
+• done
+
+✓ Contract successfully built! (in CARGO_NEAR_BUILD_ENVIRONMENT=host)
+     -                Binary: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs.wasm
+     -                  Size: 283.8 KB (283841 bytes)
+     - SHA-256 checksum hex : d33dbf472f16b49a284f512659c1fa9a658c490a74f45623280ef062fead5cfe
+     - SHA-256 checksum bs58: FDbdkvZa4MsWRCN2hKJFzZ3WLPJUk5nGcBAFGhFchQ5j
+     -                   ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.json
+     -          Embedded ABI: /private/tmp/ci-check-20261113T213112Z/target/near/test_stubs/test_stubs_abi.zst
+    Finished cargo near build in 2s
+Here is the console command if you ever need to re-run it again:
+cargo near build non-reproducible-wasm
+test shield_and_job_setters_gas ... ok
+test self_settle_refusals_and_exact_units ... ok
+test shield_weekend_sizing_fee_and_daily_limit ... ok
+test outlayer_calendar_cannot_open_and_multiplier_bounded has been running for over 60 seconds
+test outlayer_calendar_cannot_open_and_multiplier_bounded ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 157.47s
+
+     Running unittests src/lib.rs (target/debug/deps/test_stubs-4734a4ecb6b4e76f)
+
+running 12 tests
+test tests::new_and_set_mode ... ok
+test signer::tests::mode_and_last_request ... ok
+test tests::echo_builds_fills ... ok
+test signer::tests::key_matches_vectors_and_signs_raw_bytes ... ok
+test tests::panic_mode - should panic ... ok
+test signer::tests::sign_rejects_short_ecdsa_payload - should panic ... ok
+test signer::tests::derived_key_per_position_path_and_b58 ... ok
+test signer::tests::sign_rejects_unknown_domain - should panic ... ok
+test signer::tests::derived_key_fail_mode - should panic ... ok
+test signer::tests::ecdsa_response_recovers_to_the_derived_key_low_and_high_s ... ok
+test tests::pyth_get_price_records_id ... ok
+test tests::pyth_panic_body - should panic ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+   Doc-tests mock_ft
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests nectar_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests test_stubs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+::ok test 810s
+::job rust PASS total 866s
