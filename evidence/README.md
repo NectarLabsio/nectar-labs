@@ -1,0 +1,43 @@
+# Evidence index
+
+Raw logs, JSON and screenshots behind [docs/EVIDENCE.md](../docs/EVIDENCE.md), which holds the verdicts. Each gate folder has one subfolder per verifier run, named by UTC time. README claims link here through the table "What we set out to prove, and the result" ([README](../README.md#what-we-set-out-to-prove-and-the-result)).
+
+## Gates
+
+| Folder | What it proves | README claim it supports |
+| --- | --- | --- |
+| [G0](G0/) | toolchain versions and exact CLI syntax | [Run locally](../README.md#run-locally) |
+| [G1](G1/) | contract unit and sandbox tests, gas per change method (`gas-sandbox.csv`), wasm builds | [How NEAR is used](../README.md#how-near-is-used-concretely), items 1–3 |
+| [G2](G2/) | first testnet deploy (`nectar-core`), keeper function-call key | [Deployed on testnet](../README.md#deployed-on-testnet) |
+| [G2b](G2b/) | `nectar-core-v2` deploy: rebuilt wasm equals the deployed code, quoter pinned, demo quotes seeded | [Deployed on testnet](../README.md#deployed-on-testnet); escrowed quotes raise the limit |
+| [G3](G3/), [G3b](G3b/) | web E2E on desktop and phone, accessibility, both themes, screenshots | [60-second path](../README.md#60-second-path) |
+| [G4](G4/) | OutLayer quoter runs, the cap fallback, attestation of request 15148 | the discount stays under the cap |
+| [G5](G5/) | oracle: owner fallback, staleness and confidence rejection in the sandbox | [What is real, what is mock](../README.md#what-is-real-what-is-mock) (oracle row) |
+| [G6](G6/) | 1Click dry quote, never deposited | [How NEAR is used](../README.md#how-near-is-used-concretely), item 8 |
+| [G7](G7/) | Solana devnet vault with Chain Signatures: deposit, release, settle; `rerun/` has loans 8, 9 and 10 after the security fixes | the limit holds; the committed buyer takes the collateral; remote collateral moves only with a NEAR signature |
+| [G8](G8/) | copilot verifier on a recorded fixture | [What is real, what is mock](../README.md#what-is-real-what-is-mock) (copilot row) |
+| [G9](G9/) | fresh-clone rehearsals of the README quick start | [Run locally](../README.md#run-locally) |
+| [G10](G10/) | v7 facts and toolchain check | — |
+| [G11](G11/) | v7 contract tests, including the re-run after the security fixes | [How NEAR is used](../README.md#how-near-is-used-concretely), item 3 (Notes tests) |
+| [G12](G12/), [G13](G13/) | EVM vault on a local fork of Base Sepolia: deploy, round trip, replay refused | [How NEAR is used](../README.md#how-near-is-used-concretely), item 9 (Base leg) |
+| [G14](G14/) | x402: an agent borrows, gets HTTP 402, pays 0.01 mock USDC with a signed delegate action, gets HTTP 200 | an agent can borrow and pay for data on its own |
+
+## Production and operations
+
+| Folder | What it holds |
+| --- | --- |
+| [WO-34](WO-34/) | production hosting: artifact builds and uploads, host checks |
+| [WO-62b](WO-62b/), [WO-67](WO-67/), [WO-67b](WO-67b/), [WO-74](WO-74/), [WO-78](WO-78/), [WO-83](WO-83/), [WO-87](WO-87/) | production acceptance runs: smoke tests, Lighthouse, hydration and claim probes, product diffs against the deployed commit |
+| [WO-71](WO-71/) | the Feed reading real `nectar-core-v2` events (version 2.0.0) |
+| [WO-35](WO-35/) | demo rehearsal measurements |
+| [ops](ops/) | operator runs: demo accounts, Feed re-index, owner price refresh, mock-token mints |
+| [rollout](rollout/) | contract upgrade to 2.2.1, keeper restart, faucet upgrade on the mock tokens |
+| [upgrades](upgrades/) | earlier contract upgrade runs |
+| [solana](solana/) | Solana devnet program deploys |
+| [v7-modules](v7-modules/) | testnet runs of Shields, Profit-Lock, the Reserve and capacity |
+| [claims](claims/) | a snapshot of the deployed parameters |
+| [C](C/) | a real faucet call |
+
+## Module builds
+
+[wo-10b](wo-10b/), [wo-10c](wo-10c/), [wo-12](wo-12/), [wo-15](wo-15/), [wo-21](wo-21/), [wo-29a](wo-29a/): build and test logs from individual modules while they were written.
