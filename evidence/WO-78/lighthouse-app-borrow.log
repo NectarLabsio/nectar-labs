@@ -1,0 +1,8 @@
+# 2026-11-13T14:24:26Z LH_BASE_URL=https://testnet.nectarlabs.io LH_ROUTES=/borrow node scripts/lighthouse.mjs
+
+| route | dark | light |
+| --- | --- | --- |
+| /borrow | 100 | 100 |
+
+reports: /private/tmp/verify-wo78-20261113T142142Z/nectar-labs/evidence/G3/lighthouse
+exit=0

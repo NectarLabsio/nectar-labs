@@ -1,0 +1,7 @@
+# 2026-11-13T14:23:58Z node wo78-probe.mjs /tmp/verify-wo78-20261113T142142Z/logs/probe
+https://testnet.nectarlabs.io/borrow @1440: status 200, console errors 0, page errors 0, hydration 0, failed requests 0, test-assets: "Get test assets: connect a wallet first. Mock assets, no value"
+https://testnet.nectarlabs.io/borrow @400: status 200, console errors 0, page errors 0, hydration 0, failed requests 0, test-assets: "Get test assets: connect a wallet first. Mock assets, no value"
+https://nectarlabs.io/ @1440: status 200, console errors 0, page errors 0, hydration 0, failed requests 0, h1: "Borrow against stocks without fire-sales."
+https://nectarlabs.io/ @400: status 200, console errors 0, page errors 0, hydration 0, failed requests 0, h1: "Borrow against stocks without fire-sales."
+total console+page+hydration errors: 0
+exit=0

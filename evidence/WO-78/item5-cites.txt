@@ -1,0 +1,27 @@
+## 2026-11-13T14:25:09Z item 5 cites (read, not re-run)
+$ grep G9 run 9 e2e-chrome log
+branding.log build-submission.log checks-d.txt checks-e.txt clone-status-after-b.txt clone-status-after.txt copy-grep.txt demo-testnet.log docs-build-hackathon.txt docs-build.log e2e-chrome.log e2e.log feed-health-local.txt feed-health-reprobe.txt feed-mcp-http.log feed-mcp-stdio.log feed-start-2.log feed-start.log gitleaks.log host-grep-nonhistory.txt host-grep.txt.gz hosted-claims.txt pnpm-i.log ports-after.txt ports-before.txt prod-release.txt prod-smoke.log public-repo.txt repo-shape.txt scripts summary.txt verify.log web-build.log web-dev-routes.txt web-dev.log 
+  28 passed (21.7s)
+packages/sdk test:  Test Files  13 passed (13)
+packages/sdk test:       Tests  218 passed (218)
+$ prod QA log (orchestrator, self-attested)
+      49 evidence/WO-74/prod-qa-check-20261113T140705Z.log
+4:> privkey
+5:privkey: typed into 1 text field
+11:> click Import Account
+13:> open https://testnet.nectarlabs.io/borrow
+30:  text [data-testid="amt-units"]: You lock Balance 0.00 NVDAx NVDAx Collateral value appears here
+43:  text [data-testid="amt-units"]: You lock Balance 5.00 NVDAx NVDAx Collateral value appears here 25% 50% Max
+47:  text [data-testid="amt-units"]: You lock Balance 5.00 NVDAx NVDAx $675.00 25% 50% Max
+48:> enabled ••• borrow
+49:  button "••• borrow": disabled
+$ deploy log
+4:  Production      https://nectar-labs-ik5taamgw-kunals-projects-35d3a237.vercel.app
+9:    "id": "dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K",
+13:    "readyState": "READY",
+16:    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K",
+28:  "message": "Deployment nectar-labs-ik5taamgw-kunals-projects-35d3a237.vercel.app ready. Production URL: https://nectarlabs.io",
+$ git log -1 1a95022
+1a95022 merge: WO-74 — composer balance refreshes after a faucet claim (web fix; Kunal approved deploy)
+$ git status --porcelain (clone)
+?? apps/web/wo78-probe.mjs

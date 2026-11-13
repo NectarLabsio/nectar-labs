@@ -1,0 +1,50 @@
+{
+  "at": "2026-11-13T14:23:58.827Z",
+  "chrome": "157.0.8103.78",
+  "loads": [
+    {
+      "url": "https://testnet.nectarlabs.io/borrow",
+      "width": 1440,
+      "status": 200,
+      "finalUrl": "https://testnet.nectarlabs.io/borrow",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "failedRequests": [],
+      "testAssetsText": "Get test assets: connect a wallet first. Mock assets, no value"
+    },
+    {
+      "url": "https://testnet.nectarlabs.io/borrow",
+      "width": 400,
+      "status": 200,
+      "finalUrl": "https://testnet.nectarlabs.io/borrow",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "failedRequests": [],
+      "testAssetsText": "Get test assets: connect a wallet first. Mock assets, no value"
+    },
+    {
+      "url": "https://nectarlabs.io/",
+      "width": 1440,
+      "status": 200,
+      "finalUrl": "https://nectarlabs.io/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "failedRequests": [],
+      "h1": "Borrow against stocks without fire-sales."
+    },
+    {
+      "url": "https://nectarlabs.io/",
+      "width": 400,
+      "status": 200,
+      "finalUrl": "https://nectarlabs.io/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "failedRequests": [],
+      "h1": "Borrow against stocks without fire-sales."
+    }
+  ]
+}
