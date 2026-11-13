@@ -36,6 +36,8 @@ Current (2026-11-12): Kunal chose option A on Railway. The orchestrator STAGED t
   12 h outside them, through 2026-11-18 (`ops.oracle_refresher` in packages/config/config.yaml), and generates its own key on the Railway volume.
 What Kunal does (2 min): Railway dashboard → project nectar-labs → environment production → review and apply (deploy) the staged changes. Reply
   `H-ORACLE applied`.
+  Before applying, Kunal picks the refresher cadence (A ~60 s in NYSE hours / B 10 min / C 12 h): a borrow in an open session needs the price
+  < 120 s (max_age_ns_session, get_config), docs/work/wo-35-demo-video.md C6.
 What Claude Code does then: reads the `key_generated` public key from the service logs, adds it to nectar.testnet as a function-call key for
   `nectar-core-v2.nectar.testnet` limited to `update_owner_price` with a 1 NEAR allowance, then watches for the first refresh tx and records it in
   evidence/ops/.
@@ -150,7 +152,10 @@ What Claude Code does then: the orchestrator fills `site:`; the legal pages (pri
   values; the production guard passes; the deploy is promoted to production.
 Default if silent by 2026-11-13 12:00 UTC: no production promotion (previews only, noindex). The submission continues without hosting.
 
-## H-DEPLOY — approve production deploys                status: OPEN   needed by: the release with WO-62b, WO-64, WO-62c (before recording)
+## H-DEPLOY — approve production deploys                status: DONE 2026-11-13 (Kunal typed approval; release 4 = c95cd0c deployed ~02:00Z)   needed by: the release with WO-62b, WO-64, WO-62c (before recording)
+Done: Kunal typed his approval on 2026-11-13. Release 4 (commit c95cd0c) is in production: Vercel web dpl_Bm1uwQcX…, docs dpl_DpqAmb6…. The
+  verifier's acceptance on the custom hosts passed 8 of 8 items (docs/EVIDENCE.md §"WO-34 production (custom hosts)", 2026-11-13T02:05Z–02:40Z).
+  A later production deploy needs Kunal's approval again. Original request kept below.
 Why a human: the web production deploy was denied by the auto-mode classifier on 2026-11-12, so production deploys need Kunal's approval in
   this session. Merged but not deployed: status host, docs at the root of docs.nectarlabs.io, platform-host 308s (WO-62b, WO-64), "Get test
   assets" button (WO-62c).
@@ -183,7 +188,13 @@ What Claude Code does then, on yes: creates the new function-call key on testnet
   On no: nothing leaves `~/.nectar/`.
 Default if silent: the keeper stays local (it runs when the operator runs it). The hosted app says when settlement runs.
 
-## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed   status: OPEN (optional)   needed by: event history on the hosted Feed
+## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed   status: DONE 2026-11-13 (Kunal supplied the key; FEED_INDEXER=neardata since 02:22Z)   needed by: event history on the hosted Feed
+Done: Kunal supplied the key on 2026-11-13. It sits on Railway service feed as `FEED_NEARDATA_API_KEY`, which the Feed reads
+  (services/feed/src/hosted.ts:20). The orchestrator set `FEED_INDEXER=neardata`, `FEED_START_BLOCK=head-50000` and a fresh `FEED_DB_PATH`
+  (cursor 277398512) at 02:22Z (docs/STATE.md); /health reports `source` `views+neardata`, `history` `indexed`. Events before block 277398512 are
+  not in the hosted Feed.
+  Recommended for Kunal: seal the variable in the Railway dashboard (project nectar-labs → service feed → Variables), and rotate the key at
+  dashboard.fastnear.com after judging (after 2026-11-18). It was pasted in a chat session, so treat it as exposed. Original request kept below.
 Why a human: creating an account and an API key with a third party (FACTS F-448). The key goes from dashboard.fastnear.com; the exact click path is not
   verified (the dashboard answers scripts with a Cloudflare challenge, F-448). Neardata takes it as `Authorization: Bearer <key>` (F-448).
 What Kunal does (5 min): create the key at dashboard.fastnear.com, then Railway → project nectar-labs → service feed → Variables → add
