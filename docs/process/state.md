@@ -1,4 +1,17 @@
-## NOW (2026-11-13 ~21:50Z) — WO-92 step 2 deployed (54bdd32); WO-95b (scripts + CI) still running; then step 3
+## NOW (2026-11-13 ~22:20Z) — WO-92 steps 1–3 done except the tag move; G9 run 10c PASS on da1100b; main 99245af
+- G9: run 10 (d55ba25) FAIL 2 quoted links → fixed 0c475f7; run 10b FAIL README read time (orchestrator's WO-98 said ~22:10Z; block 277568411 is
+  21:58:51Z) → fixed da1100b; run 10c PASS 5/5. Quick start < 3 min (default FastNear RPC 429s from this IP; README names the
+  NEAR_RPC_URL=https://rpc.testnet.near.org fallback); gitleaks 0 in 635 commits; dry run: website absent, 1 TODO (H3 demoUrl); product diff
+  54bdd32..da1100b empty; prod smoke 0 failures; links 0 broken.
+- Merged after the deploy: WO-95b (6 unreferenced scripts removed; ci.yml node + rust jobs, fresh-clone PASS, never run on GitHub yet), WO-98 (README
+  fixes from a README-only reader), .gitignore *.sqlite and the live keeper log. Worktrees all removed (branches kept).
+- README-only reader side effects: its `pnpm --filter feed start` wrote ~/.nectar/feed.sqlite (local Feed DB, already 88k blocks behind) for ~2 min;
+  its /tmp/readme-only-20261113T215123Z clone could not be deleted (rm refused) — harmless.
+- NEXT: 10:00Z — README line "Submitted version: tag submission-rc (<commit>)", move submission-rc (now 83ed763) to that commit; Kunal pushes main + tag.
+  On "H3 <url>": fill demoUrl, `node scripts/build-submission.mjs --dry-run`, show the payload with 0 TODO-H; Kunal sends (latest 20:00Z).
+  After the send: branch `next`; H-REFRESHER-EXTEND (run_until → 2026-11-25) before 2026-11-18 23:59Z; daily checks to 2026-11-25.
+
+## (2026-11-13 ~21:50Z) — WO-92 step 2 deployed (54bdd32); WO-95b (scripts + CI) still running; then step 3
 - PRODUCTION = 54bdd3221c0b… (artifact src-54bdd32….tar.gz sha256 3c919536…, verify ok): web dpl_C82s82HaQiU4KLGwvCfhv9Fe91dN (nectarlabs.io +
   aliases), docs dpl_DiUxyPb5KcfYaF2Ai8CaFpyfWogw (docs.nectarlabs.io). smoke-prod 4 hosts: web 28 routes, docs 56 pages + 6 assets, failures 0
   (evidence/WO-34/smoke-prod-wo92s2-*.log). Live checks: /borrow copilot shows "Recorded fixture" / "Live answers are off on this server", no
@@ -584,7 +597,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T21:59:59Z · commit ab538b3
+Last activity: 2026-11-13T22:14:21Z · commit da1100b
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
