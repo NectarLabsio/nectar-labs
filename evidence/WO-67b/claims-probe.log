@@ -1,0 +1,78 @@
+# WO-67b claims probe, start 2026-11-13T02:35:25Z, read-only curl
+== Feed /health 2026-11-13T02:35:25Z
+{"ok":true,"last_indexed_block":277449722,"chain_head":277449722,"chain_head_source":"neardata_final","lag_blocks":0,"last_poll_at":"2026-11-13T02:35:22.092Z","poll_age_s":4,"last_error":"","source":"views+neardata","start_block":"head-50000","events_indexed":0,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"3974b5bb2df4ff98772c758621a68932db30f653"}
+== CORS GET /health Origin https://nectarlabs.io
+HTTP/2 200 
+access-control-allow-origin: https://nectarlabs.io
+vary: Origin
+== CORS OPTIONS /mcp Origin https://nectarlabs.io
+HTTP/2 204 
+access-control-allow-origin: https://nectarlabs.io
+== CORS GET /health Origin https://testnet.nectarlabs.io
+HTTP/2 200 
+access-control-allow-origin: https://testnet.nectarlabs.io
+vary: Origin
+== CORS OPTIONS /mcp Origin https://testnet.nectarlabs.io
+HTTP/2 204 
+access-control-allow-origin: https://testnet.nectarlabs.io
+== CORS GET /health Origin https://status.nectarlabs.io
+HTTP/2 200 
+access-control-allow-origin: https://status.nectarlabs.io
+vary: Origin
+== CORS OPTIONS /mcp Origin https://status.nectarlabs.io
+HTTP/2 204 
+access-control-allow-origin: https://status.nectarlabs.io
+== CORS GET /health Origin https://evil.example.com
+HTTP/2 200 
+vary: Origin
+== CORS OPTIONS /mcp Origin https://evil.example.com
+HTTP/2 403 
+== CORS GET /health Origin https://docs.nectarlabs.io
+HTTP/2 200 
+vary: Origin
+== CORS OPTIONS /mcp Origin https://docs.nectarlabs.io
+HTTP/2 403 
+== STATUS / title + h1
+['Status · Nectar Labs'] ['Status']
+== redirects (code, location)
+https://nectarlabs.io/status -> 308 https://status.nectarlabs.io/
+https://testnet.nectarlabs.io/status -> 308 https://status.nectarlabs.io/
+https://nectarlabs.io/status?x=1 -> 308 https://status.nectarlabs.io/?x=1
+https://docs.nectarlabs.io/docs/start/quick-start?x=1 -> 308 https://docs.nectarlabs.io/start/quick-start?x=1
+https://docs.nectarlabs.io/docs/integrate/feed-rest -> 308 https://docs.nectarlabs.io/integrate/feed-rest
+https://nectarlabs.io/borrow -> 308 https://testnet.nectarlabs.io/borrow
+https://nectarlabs.io/quotes -> 308 https://testnet.nectarlabs.io/quotes
+https://nectarlabs.io/feed -> 308 https://testnet.nectarlabs.io/feed
+https://nectarlabs.io/notes -> 308 https://testnet.nectarlabs.io/notes
+https://nectarlabs.io/console -> 308 https://testnet.nectarlabs.io/console
+https://nectarlabs.io/no-such-path-wo67b -> 308 https://testnet.nectarlabs.io/no-such-path-wo67b
+https://nectarlabs.vercel.app/about?q=1 -> 308 https://nectarlabs.io/about?q=1
+https://nectarlabs-docs.vercel.app/start/quick-start?q=1 -> 308 https://docs.nectarlabs.io/start/quick-start?q=1
+== 200 checks
+https://nectarlabs.io/ -> 200
+https://nectarlabs.io/about -> 200
+https://nectarlabs.io/security -> 200
+https://nectarlabs.io/changelog -> 200
+https://nectarlabs.io/legal/privacy -> 200
+https://testnet.nectarlabs.io/borrow -> 200
+https://testnet.nectarlabs.io/quotes -> 404
+https://testnet.nectarlabs.io/feed -> 200
+https://testnet.nectarlabs.io/notes -> 200
+https://testnet.nectarlabs.io/console -> 200
+https://docs.nectarlabs.io/ -> 200
+https://docs.nectarlabs.io/start/quick-start -> 200
+https://status.nectarlabs.io/ -> 200
+== docs sitemap at root
+locs 56 with /docs/ prefix 0
+['https://docs.nectarlabs.io/changelog', 'https://docs.nectarlabs.io/changelog/archive', 'https://docs.nectarlabs.io/changelog/docs-and-spec']
+== test-assets markers (raw HTML)
+https://testnet.nectarlabs.io/borrow testid=test-assets: 0 test-assets-connect: 0 Mock assets, no value: 0 Get test assets: 0
+https://nectarlabs.io/ testid=test-assets: 0 test-assets-connect: 0 Mock assets, no value: 0 Get test assets: 0
+https://nectarlabs.io/about testid=test-assets: 0 test-assets-connect: 0 Mock assets, no value: 0 Get test assets: 0
+https://nectarlabs.io/security testid=test-assets: 0 test-assets-connect: 0 Mock assets, no value: 0 Get test assets: 0
+https://nectarlabs.io/legal/privacy testid=test-assets: 0 test-assets-connect: 0 Mock assets, no value: 0 Get test assets: 0
+https://status.nectarlabs.io/ testid=test-assets: 0 test-assets-connect: 0 Mock assets, no value: 0 Get test assets: 0
+== DNS (F-458)
+ns1.vercel-dns.com.
+ns2.vercel-dns.com.
+# end 2026-11-13T02:35:40Z

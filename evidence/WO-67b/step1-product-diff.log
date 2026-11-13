@@ -1,0 +1,105 @@
+# WO-67b step 1, 2026-11-13T02:37:38Z, clone /tmp/verify-G9-20261113T023332Z/repo at 8a54b4c0528f4eb2778d9aee69f99d3c65fa1e59
+$ git diff --stat c95cd0c 8a54b4c -- apps packages services contracts
+# exit 0 ; lines 0
+$ git diff --stat b7fa381 8a54b4c (all paths)
+ README.md                                          |   33 +-
+ docs/DEMO_SCRIPT.md                                |   17 +-
+ docs/EVIDENCE.md                                   |   88 +
+ docs/FACTS.md                                      |    6 +
+ docs/GATE_FAIL_WO67.md                             |   27 +
+ docs/HUMAN_HANDOFF.md                              |   15 +-
+ docs/STATE.md                                      |   15 +-
+ docs/work/wo-35-demo-video.md                      |   66 +
+ docs/work/wo-67b-verifier-g9-step3.md              |    9 +
+ docs/work/wo-68-docs-readme-release4.md            |   17 +
+ evidence/WO-67/A/a2-commit-20261113T020743Z.log    |   28 +
+ .../A/a2-docs-equivalence-20261113T021046Z.log     |   50 +
+ ...2-docs-equivalence-prodenv-20261113T021123Z.log |   61 +
+ evidence/WO-67/A/a7-feed-20261113T020939Z.log      |   22 +
+ evidence/WO-67/A/a8-oracle-20261113T020948Z.log    |    8 +
+ evidence/WO-67/A/crawl/crawl.json                  | 2729 +++++++++
+ evidence/WO-67/A/crawl/crawl.log                   |    4 +
+ evidence/WO-67/A/crawl/crawl.md                    |  211 +
+ evidence/WO-67/A/lighthouse/nectarlabs-io.log      |    8 +
+ .../WO-67/A/lighthouse/testnet-nectarlabs-io.log   |    8 +
+ evidence/WO-67/A/probe/probe.json                  |  125 +
+ evidence/WO-67/A/probe/probe.log                   |   16 +
+ evidence/WO-67/A/probe/site-landing-hydrated.png   |  Bin 0 -> 493309 bytes
+ evidence/WO-67/A/probe/wo67-probe.mjs              |   71 +
+ evidence/WO-67/A/prod-smoke-20261113T020556Z.log   |    4 +
+ evidence/WO-67/A/prod-smoke-20261113T020657Z.log   |   86 +
+ evidence/WO-67/A/wallets/data-inventory.json       |  477 ++
+ evidence/WO-67/A/wallets/data-inventory.md         |   59 +
+ evidence/WO-67/A/wallets/inventory-wallets.log     |   42 +
+ evidence/WO-67/B/branding.log                      |    5 +
+ evidence/WO-67/B/build-submission.log              |    2 +
+ evidence/WO-67/B/clone-status-after.txt            |    0
+ evidence/WO-67/B/commit-count.txt                  |    1 +
+ evidence/WO-67/B/copy-grep.txt                     |    3 +
+ evidence/WO-67/B/demo-testnet.log                  |   46 +
+ evidence/WO-67/B/docs-build-hackathon.txt          |    0
+ evidence/WO-67/B/docs-build-prodenv.log            |    7 +
+ evidence/WO-67/B/docs-build.log                    |   13 +
+ evidence/WO-67/B/feed-health-local.txt             |    1 +
+ evidence/WO-67/B/feed-mcp-http.log                 |   19 +
+ evidence/WO-67/B/feed-mcp-stdio.log                |   19 +
+ evidence/WO-67/B/feed-start.log                    |    8 +
+ evidence/WO-67/B/gitleaks.log                      |   13 +
+ evidence/WO-67/B/home-path-grep.txt                |    0
+ evidence/WO-67/B/host-grep-nonhistory.txt          |    3 +
+ evidence/WO-67/B/host-grep.txt                     | 6163 ++++++++++++++++++++
+ evidence/WO-67/B/pnpm-i.log                        |   31 +
+ evidence/WO-67/B/ports-after.txt                   |    0
+ evidence/WO-67/B/ports-before.txt                  |    0
+ evidence/WO-67/B/summary.txt                       |    6 +
+ evidence/WO-67/B/verify.log                        | 3412 +++++++++++
+ evidence/WO-67/B/web-dev-routes.txt                |   25 +
+ evidence/WO-67/B/web-dev.log                       |   41 +
+ evidence/WO-67/B/wo67-mcp-client.mjs               |   34 +
+ evidence/WO-67/scripts/a1.sh                       |   24 +
+ evidence/WO-67/scripts/a2.sh                       |   16 +
+ evidence/WO-67/scripts/a2docs.sh                   |   21 +
+ evidence/WO-67/scripts/a2docs2.sh                  |   21 +
+ evidence/WO-67/scripts/a78.sh                      |   31 +
+ evidence/WO-67/scripts/b-cmds.sh                   |   23 +
+ evidence/WO-67/scripts/b2.sh                       |   35 +
+ evidence/WO-67/scripts/browser.sh                  |   19 +
+ evidence/WO-67/scripts/crawl.sh                    |   14 +
+ scripts/00-accounts.sh                             |    0
+ scripts/01-toolchain.sh                            |    0
+ scripts/05-solana.sh                               |    0
+ scripts/06-base.sh                                 |    0
+ scripts/10-build.sh                                |    0
+ scripts/20-deploy-testnet.sh                       |    0
+ scripts/21-deploy-v2.sh                            |    0
+ scripts/25-upgrade-testnet.sh                      |    0
+ scripts/26-deploy-base.sh                          |    0
+ scripts/26-upgrade-code.sh                         |    0
+ scripts/27-base-fork.sh                            |    0
+ scripts/28-upgrade-v2-code.sh                      |    0
+ scripts/29-security-upgrade.sh                     |    0
+ scripts/30-quoter-publish.sh                       |    0
+ scripts/40-seed-demo.sh                            |    0
+ scripts/41-seed-v2-fixup.sh                        |    0
+ scripts/42-mint-usdc.sh                            |    0
+ scripts/45-g4-run.sh                               |    0
+ scripts/50-verify.sh                               |    0
+ scripts/55-g7-signer-roundtrip.sh                  |    0
+ scripts/56-solana-deploy.sh                        |    0
+ scripts/58-g7-v2.sh                                |    0
+ scripts/60-x402-accounts.sh                        |    0
+ scripts/61-v7-modules-testnet.sh                   |    0
+ scripts/62-g13-base.sh                             |    0
+ scripts/63-mockft-faucet-upgrade.sh                |    0
+ scripts/_lib.sh                                    |    0
+ scripts/deploy/artifact.sh                         |    0
+ scripts/deploy/deploy-railway.sh                   |    0
+ scripts/deploy/deploy-vercel.sh                    |    0
+ scripts/deploy/smoke-docs.sh                       |    0
+ scripts/deploy/smoke-prod.sh                       |    0
+ scripts/deploy/smoke-web.sh                        |    0
+ scripts/ops/refresh-owner-price.sh                 |    0
+ scripts/submit.sh                                  |    0
+ scripts/test-guard-v7.sh                           |    0
+ scripts/test-guard.sh                              |    0
+ 100 files changed, 14333 insertions(+), 25 deletions(-)

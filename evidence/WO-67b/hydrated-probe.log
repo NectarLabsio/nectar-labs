@@ -1,0 +1,43 @@
+[
+ {
+  "url": "https://testnet.nectarlabs.io/borrow",
+  "status": 200,
+  "testAssets": 1,
+  "connect": 1,
+  "text": "Get test assets: connect a wallet first. Mock assets, no value",
+  "mockAssetsNoValue": 1,
+  "consoleErrors": 0,
+  "errors": []
+ },
+ {
+  "url": "https://nectarlabs.io/",
+  "status": 200,
+  "testAssets": 0,
+  "connect": 0,
+  "text": "",
+  "mockAssetsNoValue": 0,
+  "consoleErrors": 0,
+  "errors": []
+ },
+ {
+  "url": "https://nectarlabs.io/about",
+  "status": 200,
+  "testAssets": 0,
+  "connect": 0,
+  "text": "",
+  "mockAssetsNoValue": 0,
+  "consoleErrors": 0,
+  "errors": []
+ },
+ {
+  "url": "https://status.nectarlabs.io/",
+  "status": 200,
+  "testAssets": 0,
+  "connect": 0,
+  "text": "",
+  "mockAssetsNoValue": 0,
+  "consoleErrors": 0,
+  "errors": []
+ }
+]
+exit 0

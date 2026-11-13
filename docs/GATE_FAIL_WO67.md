@@ -25,3 +25,5 @@ Re-check: G9 step 3 only (claims vs production) on the docs commit.
 - `scripts/deploy/smoke-prod.sh` exits 126 "Permission denied" in a fresh clone: all 67 `*.sh` files are git mode 100644. /Volumes/T7 is exFAT, where every file shows +x. The fix is `git update-index --chmod=+x` on the scripts that are run by path.
 - `apps/web/scripts/crawl-hosts.mjs:87` expects 301 for www → apex. Production sends 308, which matches FACTS F-456 and smoke-prod.sh. The crawler also string-compares relative `location` headers (APP / → /feed, STATUS /status → /) against absolute URLs.
 - Web /api/health exposes no commit or build id. The deployed commit was shown by content and by docs bundle bytes instead.
+
+**Resolved 2026-11-13T02:40Z (verifier, WO-67b):** G9 run 6b, step 3 re-check on 8a54b4c (product = c95cd0c), PASS. README, DEMO_SCRIPT step 3, H-DEPLOY and H-NEARDATA match EVIDENCE and the live hosts, and smoke-prod.sh runs from a fresh clone with exit 0 (docs/EVIDENCE.md §G9 run 6b; evidence/WO-67b/).
