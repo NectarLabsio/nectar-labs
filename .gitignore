@@ -40,3 +40,7 @@ nectar-demo-media/
 
 # live log of the running keeper daemon (appended continuously; snapshot lives in EVIDENCE)
 evidence/rollout/keeper-20261112T140825Z.log
+# local Feed databases (README: FEED_DB_PATH=./feed.sqlite)
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
