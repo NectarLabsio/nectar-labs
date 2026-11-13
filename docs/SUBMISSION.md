@@ -13,7 +13,7 @@ Format the builder relies on: one row per API field, column 1 = API field name i
 | `requestId` | `GENERATE-ONCE` | UUID made once by the builder at the first `--send` (`node -e 'console.log(crypto.randomUUID())'`), stored in `~/.nectar/submission-request-id` (0600, outside the repo), reused on every retry |
 | `projectName` | `Nectar Labs` | README title; 2-80 chars |
 | `leadName` | `Kunal` | Kunal's H10 reply, 2026-11-13: `lead: Kunal`, and "Use "Kunal" with no surname everywhere"; 2-80 chars |
-| `email` | `kunal@nectarnetwork.fun` | Kunal's H10 reply, 2026-11-13: `email: kunal@nectarnetwork.fun` (≤ 160 chars, ≤ 2 submissions per email, Q-015) |
+| `email` | `kunal@nectarnetwork.fun` | Kunal's H10 reply, 2026-11-13: `email: kunal@nectarnetwork.fun` (≤ 160 chars, ≤ 2 submissions per email, Q-015; used once: Nectar Labs is the only project) |
 | `size` | `1` | Kunal's H10 reply, 2026-11-13: `size: 1`; one of `1`, `2 - 4`, `4 - 6`, `6 - 8`, `8+`, exactly as written |
 | `tracks` | `["defi","security","agents"]` | Kunal's H16 reply in session, 2026-11-11: "H16 defi security agents" (D-028). `privacy` dropped by Kunal; `nfts` not entered (H16 closed 2026-11-12, see "Tracks" below) |
 | `nearAddress` | `kunal-drall.near` | Kunal's H14 reply, 2026-11-13: account `kunal-drall.near`, consent yes. **Mainnet** payout account in Kunal's own wallet, not created by an agent; matches the regex in HACKATHON.md (line 155) |
@@ -65,8 +65,8 @@ Entered: `defi`, `security`, `agents` (Kunal, in session: "H16 defi security age
 README "Prior work" text, Kunal's edited wording, verbatim: "Before the hackathon, Kunal researched exit-liquidity gaps for tokenized stocks under Nectar Network (an October 2026 product brief and
 Stellar Community Fund #42 material). That research and the Nectar brand assets (logo, colour tokens) are the baseline. Nectar Network's separate Stellar testnet
 product shares no code with this repository. All code, contracts, programs, services and sites here were written during the hackathon window, starting 2026-11-09."
-Q-015: Kunal's H10 reply says `projects: 1`, recorded as written (H10 format: other projects, 0 or 1). Q-015 (HACKATHON.md) allows at most 2
-projects per person and asks that each README names the other project; the reply does not name it, so README does not name it yet.
+Q-015: Nectar Labs is Kunal's only project in this hackathon (Kunal, 2026-11-13: "this is the only project, no other project"; his H10
+`projects: 1` meant one project in total). Q-015 satisfied: 1 project per person (limit 2); email used once. README names no other project.
 
 ## What the submit script must read (orchestrator wires it; agents: `--dry-run` only)
 1. This file only, table "Payload fields": column 1 (API field) → column 2 (value). Ignore every other table.
