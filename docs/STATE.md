@@ -45,6 +45,10 @@
   fetches up to 100 blocks sequentially per poll (≈0.6–0.8 s per block measured from the Mac) + FEED_POLL_MS 10 s → ≈1.25 blocks/s < testnet ≈1.6 → the
   cursor fell further behind since 02:22Z (still in pre-event blocks). Workaround (config only, 11:36Z): fresh FEED_DB_PATH /data/feed-neardata-20261113b.sqlite,
   FEED_START_BLOCK 277503800 (refresh receipt in block 277503817), FEED_POLL_MS 1000. Product fix (concurrent block fetch) = Kunal decides.
+- 11:41Z final audit re-run on submission-rc 7f51c0b (merge 9f5b2d1, docs/FINAL_REPORT.md): VERIFIED 31, FAILED 2 — ROOT CAUSE of the empty Feed:
+  services/feed/src/events.ts accepts only event version 1.0.0; nectar-core-v2 emits 2.0.0 → the hosted Feed indexes no v2 event (product bug → Kunal).
+  The "sequential fetch too slow" diagnosis above was wrong: with FEED_POLL_MS 1000 poll_age stays 0–2 s, health 12/12 200 at 11:45Z.
+  x402 paid download 11:44Z: 402 → 200, 168 rows, tx 7dfoTwqXVav4rCT18PPb5C76Xc13E3325C6ZUvnUYsYt. WO-70 docs dispatched (README Feed rows, handoffs).
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -467,7 +471,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T03:11:11Z · commit 27f0a68
+Last activity: 2026-11-13T11:34:53Z · commit 7f51c0b
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

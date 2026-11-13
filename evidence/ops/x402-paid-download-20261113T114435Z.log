@@ -1,0 +1,2 @@
+{"ts":"2026-11-13T11:44:53.224Z","service":"x402","msg":"challenge","status":402,"network":"near:testnet","asset":"usdc-mock.nectar.testnet","amount":"10000","pay_to":"nectar.testnet"}
+{"ts":"2026-11-13T11:44:53.227Z","service":"x402","msg":"paid_fetch","status":200,"rows":168,"transaction":"7dfoTwqXVav4rCT18PPb5C76Xc13E3325C6ZUvnUYsYt"}
