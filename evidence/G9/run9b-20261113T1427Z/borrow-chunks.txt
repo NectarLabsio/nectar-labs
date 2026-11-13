@@ -1,0 +1,14 @@
+/_next/static/immutable/chunks/019ga8bd7s9jq.js
+/_next/static/immutable/chunks/0c0hxoamwjsbw.js
+/_next/static/immutable/chunks/1f3yx_lyhmcdr.js
+/_next/static/immutable/chunks/1nfi6cne7290_.js
+/_next/static/immutable/chunks/1ny0znfjmy0k1.js
+/_next/static/immutable/chunks/1ojvl7cmay4v0.js
+/_next/static/immutable/chunks/2pxb1x7svbvst.js
+/_next/static/immutable/chunks/30ihevk9ceu7g.js
+/_next/static/immutable/chunks/35fsabht5mgce.js
+/_next/static/immutable/chunks/3b_c2qwt-gdbz.js
+/_next/static/immutable/chunks/3fjurl8eq16of.js
+/_next/static/immutable/chunks/3htcm-0feao4j.js
+/_next/static/immutable/chunks/3mds-9lamq3sd.js
+/_next/static/immutable/chunks/turbopack-3xd-7z66s-4wg.js

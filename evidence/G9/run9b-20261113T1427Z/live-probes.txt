@@ -1,0 +1,42 @@
+# live host probes (public GET/HEAD/OPTIONS only)
+== APP /borrow 14:29:12Z
+status=200 redirects=0 final=https://testnet.nectarlabs.io/borrow
+age: 2219
+etag: "d3e1527c2df7e646647a43dc8a22ceeb"
+x-vercel-cache: HIT
+x-vercel-id: bom1::8bsgx-1794580152263-5478dd6030fb
+chunks:       14
+onClaimed in /_next/static/immutable/chunks/3htcm-0feao4j.js:
+function T({onClaimed:e}={})
+{onClaimed:eT.reload}
+test-assets-connect count in chunk: 1
+chunks with onClaimed: 1
+== DOCS / 14:29:15Z
+age: 44752
+etag: "6ba60869be4d0270e50e620b55124059"
+last-modified: Fri, 13 Nov 2026 02:03:23 GMT
+x-vercel-cache: HIT
+== DOCS old path
+308 -> https://docs.nectarlabs.io/start/quick-start?x=1
+== Status host
+https://status.nectarlabs.io/ 200 -> 
+https://nectarlabs.io/status 308 -> https://status.nectarlabs.io/
+https://testnet.nectarlabs.io/status 308 -> https://status.nectarlabs.io/
+== SITE /borrow (test assets not on SITE)
+308 -> https://testnet.nectarlabs.io/borrow
+== legacy hosts
+nectarlabs.vercel.app 308 -> https://nectarlabs.io/feed?y=2
+nectarlabs-app.vercel.app 308 -> https://testnet.nectarlabs.io/feed?y=2
+nectar-labs-web.vercel.app 308 -> https://testnet.nectarlabs.io/feed?y=2
+nectarlabs-docs.vercel.app 308 -> https://docs.nectarlabs.io/feed?y=2
+nectar-labs-docs.vercel.app 308 -> https://docs.nectarlabs.io/feed?y=2
+== Feed /health x3
+14:29:18Z {"ok":true,"last_indexed_block":277522344,"chain_head":277522344,"chain_head_source":"neardata_final","lag_blocks":0,"indexer_cursor":277522344,"indexer_lag_blocks":0,"last_poll_at":"2026-11-13T14:29:18.070Z","poll_age_s":1,"last_error":"","source":"views+neardata","start_block":"277503800","events_indexed":2,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"rpc.testnet.fastnear.com","failovers":1806,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"37dfec96262febd76ae407af6612f0b1c27facd0"}
+14:29:22Z {"ok":true,"last_indexed_block":277522352,"chain_head":277522352,"chain_head_source":"view_block","lag_blocks":0,"indexer_cursor":277522350,"indexer_lag_blocks":-2,"last_poll_at":"2026-11-13T14:29:20.368Z","poll_age_s":2,"last_error":"","source":"views+neardata","start_block":"277503800","events_indexed":2,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"rpc.testnet.fastnear.com","failovers":1808,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"37dfec96262febd76ae407af6612f0b1c27facd0"}
+14:29:25Z {"ok":true,"last_indexed_block":277522356,"chain_head":277522356,"chain_head_source":"neardata_final","lag_blocks":0,"indexer_cursor":277522356,"indexer_lag_blocks":0,"last_poll_at":"2026-11-13T14:29:24.922Z","poll_age_s":1,"last_error":"","source":"views+neardata","start_block":"277503800","events_indexed":2,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"rpc.testnet.fastnear.com","failovers":1811,"cooling":["test.rpc.fastnear.com"]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"37dfec96262febd76ae407af6612f0b1c27facd0"}
+== Feed CORS
+https://nectarlabs.io GET-ACAO=[access-control-allow-origin: https://nectarlabs.io] preflight-mcp=204
+https://testnet.nectarlabs.io GET-ACAO=[access-control-allow-origin: https://testnet.nectarlabs.io] preflight-mcp=204
+https://status.nectarlabs.io GET-ACAO=[access-control-allow-origin: https://status.nectarlabs.io] preflight-mcp=204
+https://docs.nectarlabs.io GET-ACAO=[] preflight-mcp=403
+https://evil.example.com GET-ACAO=[] preflight-mcp=403
