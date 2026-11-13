@@ -64,3 +64,15 @@ Limits: nothing posted, uploaded or sent. Videos > 50 MB out of git; tell Kunal 
   Takes: one-shot owner refresh < 60 s before sections 1 and 3. Refresher cadence → Kunal decides (recommendation in the 02:25Z report).
 - X limits (F-465/F-466, C-027): developer docs cap 1280x1024 and non-Premium playback is 720p; master stays 1920×1080 as briefed, plus a 1280×720
   copy for X. Kunal checks help.x.com in a browser.
+
+## Kunal's decisions (2026-11-13 ~11:55Z)
+- Weekend Shield = A: record the takes AFTER the 21:00 UTC close (Weekend Shield available; window ends Monday 09:30 New York), with a caption that weekend
+  limits apply (section 3 caption: "Market closed: weekend limits apply."). Retakes any time Saturday. Rehearse BEFORE the close with Standard protection
+  (Weekend Shield is disabled in Friday's session: next open 72 h > 65.5 h cap, packages/sdk/src/shields.ts).
+- H-DEMO-WALLET: done by the orchestrator (Intear, dedicated profile). Kunal approves signing testnet txs with demo.nectar.testnet and, for section 5,
+  agent1.nectar.testnet, during rehearsal and takes only. Orchestrator records every take, incl. the Intear steps. Send contact sheet + master to Kunal first.
+- Voice-over choice left blank → vo-script.md delivered per the original brief.
+- ffmpeg: Kunal installs it at ~/.nectar/tools (FFMPEG env → libx264 CRF 18 path); AVFoundation fallback stays (WO-35b).
+- Feed: WO-71 fixes the v2 event version (services/feed only); paid-download row count after re-index.
+- Faucet: 1 claim/h, 3 per account → rehearsal + take 1 + take 2 for demo.nectar.testnet. After the close the price may be up to 6 h old (closed threshold):
+  one-shot owner refresh right before each take so no stale badge shows.
