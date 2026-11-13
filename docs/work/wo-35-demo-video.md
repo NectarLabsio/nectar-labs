@@ -76,3 +76,4 @@ Limits: nothing posted, uploaded or sent. Videos > 50 MB out of git; tell Kunal 
 - Feed: WO-71 fixes the v2 event version (services/feed only); paid-download row count after re-index.
 - Faucet: 1 claim/h, 3 per account → rehearsal + take 1 + take 2 for demo.nectar.testnet. After the close the price may be up to 6 h old (closed threshold):
   one-shot owner refresh right before each take so no stale badge shows.
+- Kunal 2026-11-13 ~15:20Z: "accept transitions" (window/panel opening and explorer-tab loads, 166–267 ms, no motion on screen; post-drawn cursor stays smooth).
