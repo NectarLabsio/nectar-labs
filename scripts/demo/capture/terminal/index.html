@@ -1,0 +1,73 @@
+<!doctype html>
+<!-- WO-35a on-camera terminal. Colours from packages/ui/tokens.css (dark): --bg #0d0f12, --heading #e6e9ef, --dim #8f96a3, --accent #16f3a9,
+     --danger #ff8a80. DM Mono from packages/ui/fonts. Prompt is "$ " only: no user, host or path. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terminal</title>
+<style>
+  @font-face { font-family: "DM Mono"; font-weight: 400; src: url("/fonts/dm-mono-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "DM Mono"; font-weight: 500; src: url("/fonts/dm-mono-latin-500-normal.woff2") format("woff2"); }
+  :root { color-scheme: dark; --bg: #0d0f12; --text: #e6e9ef; --dim: #8f96a3; --accent: #16f3a9; --danger: #ff8a80; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); scrollbar-width: none; }
+  body { font: 400 22px/1.55 "DM Mono", "SFMono-Regular", Menlo, Consolas, monospace; -webkit-font-smoothing: antialiased; }
+  body.loading { visibility: hidden; }
+  #term { box-sizing: border-box; min-height: 100vh; padding: 56px 64px 72px; white-space: pre-wrap; overflow-wrap: anywhere; tab-size: 4; cursor: text; }
+  .line { min-height: 1.55em; }
+  .ps { color: var(--accent); font-weight: 500; }
+  .out.err { color: var(--text); }
+  .refused { color: var(--danger); }
+  .caret { display: inline-block; width: 0.6em; height: 1.2em; margin-left: 1px; vertical-align: -0.2em; background: var(--accent);
+    animation: blink 1.06s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  #in { position: fixed; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; border: 0; padding: 0; outline: none; caret-color: transparent; }
+</style>
+</head>
+<body class="loading">
+<div id="term" aria-live="polite"></div>
+<input id="in" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="command">
+<script>
+  const term = document.getElementById('term');
+  const input = document.getElementById('in');
+  let typed = null, caret = null, busy = false;
+  const el = (cls, text) => { const d = document.createElement(cls === 'ps' || cls === 'typed' || cls === 'caret' ? 'span' : 'div'); d.className = cls; if (text) d.textContent = text; return d; };
+  const bottom = () => { document.scrollingElement.scrollTop = document.scrollingElement.scrollHeight; };
+  function prompt() {
+    const line = el('line');
+    typed = el('typed'); caret = el('caret');
+    line.append(el('ps', '$ '), typed, caret);
+    term.append(line);
+    input.value = '';
+    bottom();
+  }
+  function print(text, cls) { const d = el('line out' + (cls ? ' ' + cls : '')); d.textContent = text; term.append(d); bottom(); }
+  async function submit() {
+    if (busy) return;
+    const line = input.value;
+    caret.remove();
+    input.value = '';
+    if (!line.trim()) { prompt(); return; }
+    busy = true;
+    try {
+      const r = await fetch('/run', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ line }) });
+      if (!r.ok) { const j = await r.json().catch(() => ({})); print(j.error || 'refused', 'refused'); busy = false; prompt(); }
+    } catch (e) { print('terminal server unreachable', 'refused'); busy = false; prompt(); }
+  }
+  input.addEventListener('input', () => { if (!busy) typed.textContent = input.value; });
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
+  input.addEventListener('blur', () => setTimeout(() => input.focus(), 0));
+  document.addEventListener('mousedown', () => setTimeout(() => input.focus(), 0));
+  const es = new EventSource('/events');
+  es.onmessage = (m) => {
+    const msg = JSON.parse(m.data);
+    if (msg.type === 'line') print(msg.text, msg.stream === 'err' ? 'err' : '');
+    else if (msg.type === 'exit') { busy = false; prompt(); }
+  };
+  prompt();
+  input.focus();
+  const show = () => document.body.classList.remove('loading');
+  Promise.all(['400', '500'].map((w) => document.fonts.load(w + ' 22px "DM Mono"'))).then(show, show);
+</script>
+</body>
+</html>
