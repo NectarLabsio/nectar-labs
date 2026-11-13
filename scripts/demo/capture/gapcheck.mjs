@@ -21,7 +21,12 @@ function activeIntervals(events, end) {
   return out;
 }
 
-export function gapcheck(dir, { page = null, limit = 100 } = {}) {
+/** Still windows = `hold` events [t, t + ms] (Kunal 2026-11-13: 100 ms on frames with motion; up to 120 ms on still holds). */
+function holdWindows(events) {
+  return events.filter((e) => e.type === 'hold' && Number.isFinite(e.ms)).map((e) => ({ a: e.t, b: e.t + e.ms }));
+}
+
+export function gapcheck(dir, { page = null, limit = 100, stillLimit = 120 } = {}) {
   const take = resolve(dir);
   const frames = readJsonl(join(take, 'frames.jsonl'));
   const events = existsSync(join(take, 'events.jsonl')) ? readJsonl(join(take, 'events.jsonl')) : [];
@@ -33,8 +38,15 @@ export function gapcheck(dir, { page = null, limit = 100 } = {}) {
 
   const pages = {};
   const gaps = [];
-  for (const iv of activeIntervals(events, end)) {
-    if (page && iv.page !== page) continue;
+  const holds = holdWindows(events);
+  const still = (from, to) => holds.some((h) => from >= h.a && to <= h.b);
+  // Only the part the edit uses: from the `section` event to `section_end` (or the end of the take).
+  const secStart = events.find((e) => e.type === 'section')?.t ?? 0;
+  const secEnd = events.find((e) => e.type === 'section_end')?.t ?? end;
+  for (const raw of activeIntervals(events, end)) {
+    if (page && raw.page !== page) continue;
+    const iv = { page: raw.page, a: Math.max(raw.a, secStart), b: Math.min(raw.b, secEnd) };
+    if (iv.b <= iv.a) continue;
     const ts = byPage.get(iv.page) ?? [];
     const pts = [iv.a, ...ts.filter((t) => t > iv.a && t < iv.b), iv.b];
     const s = (pages[iv.page] ??= { frames: ts.length, activeMs: 0, framesWhileActive: 0, maxGap: 0, sizes: new Set() });
@@ -42,7 +54,7 @@ export function gapcheck(dir, { page = null, limit = 100 } = {}) {
     s.framesWhileActive += pts.length - 2;
     for (let i = 1; i < pts.length; i++) {
       const g = pts[i] - pts[i - 1];
-      gaps.push({ page: iv.page, from: pts[i - 1], to: pts[i], ms: g });
+      gaps.push({ page: iv.page, from: pts[i - 1], to: pts[i], ms: g, still: still(pts[i - 1], pts[i]) });
       if (g > s.maxGap) s.maxGap = g;
     }
   }
@@ -50,7 +62,12 @@ export function gapcheck(dir, { page = null, limit = 100 } = {}) {
   for (const s of Object.values(pages)) { s.fps = s.activeMs ? Math.round((s.framesWhileActive / s.activeMs) * 10000) / 10 : 0; s.sizes = [...s.sizes]; }
   gaps.sort((a, b) => b.ms - a.ms);
   const worst = gaps.slice(0, 5);
-  return { take, end, limit, pages, worst, maxGap: worst[0]?.ms ?? 0, pass: !gaps.some((g) => g.ms > limit) && gaps.length > 0 };
+  const motion = gaps.filter((g) => !g.still);
+  const holdGaps = gaps.filter((g) => g.still);
+  const maxMotion = motion[0]?.ms ?? 0;
+  const maxStill = holdGaps[0]?.ms ?? 0;
+  const pass = gaps.length > 0 && !motion.some((g) => g.ms > limit) && !holdGaps.some((g) => g.ms > stillLimit);
+  return { take, end, limit, stillLimit, pages, worst, maxGap: worst[0]?.ms ?? 0, maxMotion, maxStill, pass };
 }
 
 export function printReport(r) {
@@ -58,8 +75,9 @@ export function printReport(r) {
   for (const [id, s] of Object.entries(r.pages)) {
     console.log(`  ${id}: ${s.frames} frames · active ${(s.activeMs / 1000).toFixed(1)} s · ${s.fps} fps while active · max gap ${s.maxGap} ms · ${s.sizes.join(', ')}`);
   }
-  console.log(`  worst: ${r.worst.map((g) => `${g.page} ${g.ms} ms @ ${g.from}–${g.to}`).join(' | ') || 'none'}`);
-  console.log(r.pass ? `PASS max gap ${r.maxGap} ms` : `FAIL max gap ${r.maxGap} ms (> ${r.limit} ms or no frames)`);
+  console.log(`  worst: ${r.worst.map((g) => `${g.page} ${g.ms} ms @ ${g.from}–${g.to}${g.still ? ' (hold)' : ''}`).join(' | ') || 'none'}`);
+  const v = `motion max ${r.maxMotion} ms (≤ ${r.limit}) · holds max ${r.maxStill} ms (≤ ${r.stillLimit})`;
+  console.log(r.pass ? `PASS ${v}` : `FAIL ${v}`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
