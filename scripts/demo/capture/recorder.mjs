@@ -19,7 +19,8 @@ export const tilde = (s) => String(s).split(HOME).join('~');
 export const CAPTURE_LAUNCH = Object.freeze({
   // CAPTURE_HEADED=1 (orchestrator, 2026-11-13): headed Chrome composites on the GPU; compare gapcheck against headless before the takes.
   channel: 'chrome', headless: process.env.CAPTURE_HEADED !== '1', viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 2, colorScheme: 'dark',
-  args: ['--force-device-scale-factor=2'],
+  // Headed takes: keep covered/background windows (app behind the wallet popup, and vice versa) rendering at full rate.
+  args: ['--force-device-scale-factor=2', '--disable-backgrounding-occluded-windows', '--disable-renderer-backgrounding', '--disable-background-timer-throttling'],
 });
 /** Default raw-take location: internal disk, outside git (T7 is nearly full). */
 export const defaultTakeDir = (name) => join(HOME, '.nectar', 'demo-capture', name);

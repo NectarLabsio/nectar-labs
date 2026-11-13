@@ -20,7 +20,7 @@ try {
   await page.goto(url, { waitUntil: 'load' });
   await page.getByRole('button', { name: 'Decline' }).click({ timeout: 5000 }).catch(() => {});
   await page.waitForTimeout(2500);
-  await startTake(ctx, dir, {});
+  await startTake(ctx, dir, { quality: Number(process.env.CAPTURE_QUALITY ?? 92), ...(process.env.CAPTURE_MAX ? { maxWidth: Number(process.env.CAPTURE_MAX.split("x")[0]), maxHeight: Number(process.env.CAPTURE_MAX.split("x")[1]) } : {}) });
   human.section(1, 'Market', '');
   const exit = page.locator('[data-testid="market-exit"]').first();
   await human.moveTo(page, exit);
