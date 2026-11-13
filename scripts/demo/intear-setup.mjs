@@ -17,8 +17,9 @@ const req = createRequire('/Volumes/T7/nectar-labs/apps/web/package.json');
 const { chromium } = req('@playwright/test');
 
 const HOME = homedir();
-const PROFILE = join(HOME, '.nectar', 'demo-chrome-profile');
-const KEY = JSON.parse(readFileSync(join(HOME, '.nectar', 'keys', 'demo.nectar.testnet.json'), 'utf8'));
+// INTEAR_PROFILE / INTEAR_KEY_FILE (orchestrator, WO-74 check): a throwaway account in a throwaway profile; defaults = the demo account and profile.
+const PROFILE = process.env.INTEAR_PROFILE || join(HOME, '.nectar', 'demo-chrome-profile');
+const KEY = JSON.parse(readFileSync(process.env.INTEAR_KEY_FILE || join(HOME, '.nectar', 'keys', 'demo.nectar.testnet.json'), 'utf8'));
 const WORDS = String(KEY.seed_phrase).trim().split(/\s+/);
 if (WORDS.length !== 12 && WORDS.length !== 24) throw new Error(`unexpected phrase length ${WORDS.length}`);
 const PW_FILE = join(HOME, '.nectar', 'keys', 'demo-intear-password');
