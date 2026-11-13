@@ -1,0 +1,4 @@
+# WO-67 A6 crawl --polite over 4 hosts, start 2026-11-13T02:06:57Z, clone b7fa381, PW_CHANNEL=chrome
+# cmd: node apps/web/scripts/crawl.mjs --site https://nectarlabs.io --app https://testnet.nectarlabs.io --docs https://docs.nectarlabs.io --status https://status.nectarlabs.io --legacy <5 hosts> --out <evidence>/crawl --polite
+crawl: 84 internal (rendered: site 15, app 10, status 1, docs 56), 41 external, 4 failures, 0 our console errors, 0 page loads with third-party network failures → /Volumes/T7/nectar-labs/.claude/worktrees/agent-a120e7a0baaef2f5d/evidence/WO-67/A/crawl
+exit=1 end 2026-11-13T02:23:41Z

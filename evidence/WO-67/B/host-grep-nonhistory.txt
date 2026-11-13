@@ -1,0 +1,3 @@
+apps/web/.env.example:17:# Example: old-site.example.dev=site,old-app.example.dev=app (the real *.vercel.app list lives in the Vercel env only).
+apps/web/lib/hosts.ts:38: * The real list (the `*.vercel.app` names) lives in the Vercel env only. A project-domain redirect for a vercel.app host is not
+apps/web/lib/test-assets.test.ts:28:  assert.equal(testAssetsAllowed(HOSTED, "nectar-git-branch.vercel.app", "/borrow"), true);

@@ -1,0 +1,25 @@
+web dev ready after 5 s
+200 /
+200 /borrow
+200 /feed
+200 /feed/NVDAx
+200 /quote/new
+200 /console
+200 /notes
+200 /reserve
+200 /shield
+200 /agents
+200 /keepers
+200 /security
+200 /talk
+200 /docs
+200 /legal/privacy
+200 /legal/cookies
+200 /legal/terms
+200 /legal/disclaimers
+200 /position/0
+200 /quote/0
+200 /note/q-0
+200 /status
+404 /markets
+404 /earn

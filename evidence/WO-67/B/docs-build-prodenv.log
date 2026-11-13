@@ -1,0 +1,7 @@
+[INFO] [en] Creating an optimized production build...
+[webpackbar] ℹ Compiling Client
+[webpackbar] ℹ Compiling Server
+[webpackbar] ✔ Server: Compiled successfully in 1.03s
+[webpackbar] ✔ Client: Compiled successfully in 3.56s
+[SUCCESS] Generated static files in "../../../../../../tmp/verify-wo67-20261113T0205Z/docs-prod".
+[INFO] Use `npm run serve` command to test your build locally.

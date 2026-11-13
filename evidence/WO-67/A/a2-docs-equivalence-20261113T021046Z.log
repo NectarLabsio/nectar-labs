@@ -1,0 +1,50 @@
+# 2026-11-13T02:10:46Z. docs.nectarlabs.io vs local build (default env, from README: pnpm --filter docs-site build)
+17:// Hosting (WO-64). The docs are served at the root of their own host, DOCS_URL (https://docs.nectarlabs.io, config.yaml
+18:// site.production_hosts; DNS live F-458). `baseUrl: '/'` with docs `routeBasePath: '/'` gives /<slug>, home `/` (F-459, from F-391);
+19:// `url` is the origin only, no path (F-391), so the sitemap <loc> and the canonical are DOCS_URL + route (F-392). DOCS_URL unset (local):
+26:// kept next to a `/docs/` -> `/` redirect they would loop (F-459). Old links on the app and landing hosts are 308ed to DOCS_URL by apps/web.
+28:// both to DOCS_URL with the path kept (`/` and `/docs/<path>` in one hop). Listed first, so they win over the `/docs` rules.
+33:const hosted = Boolean(process.env.DOCS_URL);
+34:const DOCS = originOf(process.env.DOCS_URL) ?? 'http://localhost:3000';
+36:// Local (DOCS_URL unset): `pnpm --filter web dev` on http://localhost:3100 serves landing, app and /status on one host.
+== /  remote assets: 3  local assets: 3  identical: no
+2,3c2,3
+< /assets/js/main.d34b8a10.js
+< /assets/js/runtime~main.c967a54e.js
+---
+> /assets/js/main.9b642e30.js
+> /assets/js/runtime~main.afb5c6ce.js
+   remote html sha256 491a18c3b3130842  local 378394a3cdbfdd86
+grep: build/start/quick-start/index.html: No such file or directory
+== /start/quick-start  remote assets: 3  local assets: 1  identical: no
+1,3c1
+< /assets/css/styles.159040d2.css
+< /assets/js/main.d34b8a10.js
+< /assets/js/runtime~main.c967a54e.js
+---
+> 
+<scratchpad>/a2docs.sh: line 15: build/start/quick-start/index.html: No such file or directory
+   remote html sha256 c041d16a6307ef7d  local 
+grep: build/operations/monitoring/index.html: No such file or directory
+== /operations/monitoring  remote assets: 3  local assets: 1  identical: no
+1,3c1
+< /assets/css/styles.159040d2.css
+< /assets/js/main.d34b8a10.js
+< /assets/js/runtime~main.c967a54e.js
+---
+> 
+<scratchpad>/a2docs.sh: line 15: build/operations/monitoring/index.html: No such file or directory
+   remote html sha256 da6be63d3fbfb9e9  local 
+grep: build/integrate/feed-rest/index.html: No such file or directory
+== /integrate/feed-rest  remote assets: 3  local assets: 1  identical: no
+1,3c1
+< /assets/css/styles.159040d2.css
+< /assets/js/main.d34b8a10.js
+< /assets/js/runtime~main.c967a54e.js
+---
+> 
+<scratchpad>/a2docs.sh: line 15: build/integrate/feed-rest/index.html: No such file or directory
+   remote html sha256 6d9004b13e1179aa  local 
+== main bundle bytes
+main: /assets/js/main.9b642e30.js
+   remote 533a38a823c7ce51  local e9868f7d818e71c9

@@ -1,0 +1,42 @@
+# 2026-11-13T02:15:27Z E2E_INVENTORY=1 INV_SITE=https://nectarlabs.io INV_APP=https://testnet.nectarlabs.io E2E_BASE_URL=https://testnet.nectarlabs.io PW_CHANNEL=chrome npx playwright test --project=inventory --grep 'every wallet|zero CSP' --reporter=list
+
+Running 2 tests using 1 worker
+
+  ✓  1 [inventory] › e2e/inventory.spec.ts:277:3 › data inventory (opt-in, network) › every wallet the selector lists, one by one (fresh profile each, no signing) (1.2m)
+  ✘  2 [inventory] › e2e/inventory.spec.ts:369:3 › data inventory (opt-in, network) › zero CSP violations across the inventory runs (2ms)
+
+
+  1) [inventory] › e2e/inventory.spec.ts:369:3 › data inventory (opt-in, network) › zero CSP violations across the inventory runs 
+
+    Error: inventory runs recorded pages
+
+    expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+      368 |
+      369 |   test("zero CSP violations across the inventory runs", () => {
+    > 370 |     expect(pages.length, "inventory runs recorded pages").toBeGreaterThan(0);
+          |                                                           ^
+      371 |     test.skip(BYPASS, "discovery mode: CSP bypassed");
+      372 |     expect(violations).toEqual([]);
+      373 |   });
+        at /private/tmp/verify-wo67-20261113T0205Z/repo/apps/web/e2e/inventory.spec.ts:370:59
+
+    Error Context: test-results/inventory-data-inventory-o-ac703-s-across-the-inventory-runs-inventory/error-context.md
+
+    Error Context: test-results/inventory-data-inventory-o-ac703-s-across-the-inventory-runs-inventory/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/inventory-data-inventory-o-ac703-s-across-the-inventory-runs-inventory/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/inventory-data-inventory-o-ac703-s-across-the-inventory-runs-inventory/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [inventory] › e2e/inventory.spec.ts:369:3 › data inventory (opt-in, network) › zero CSP violations across the inventory runs 
+  1 passed (1.2m)
+exit=1

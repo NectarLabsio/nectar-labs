@@ -1,0 +1,86 @@
+# WO-67 A1 verifier re-run, 2026-11-13T02:06:57Z, clone b7fa381
+# exact cmd scripts/deploy/smoke-prod.sh in the fresh clone: exit 126 Permission denied (git mode 100644; see prod-smoke-20261113T020556Z.log)
+# this run: byte-identical copy with +x: 536e32422faea60b90a12fd83d3af31c7e3c70887c630daf30e82c0774e55304  smoke-prod.sh 34d1582d936f4b9b7e4c4c8406d4d01fd2b3d3e768d86804ce6738ab9ae89cc1  smoke-web.sh 02fe7136012fbdb2ce8833743d8974febab72c14d93df8a8d9e6cab1ea8290b5  smoke-docs.sh 
+# cmd: <copy>/smoke-prod.sh https://nectarlabs.io https://testnet.nectarlabs.io https://docs.nectarlabs.io https://status.nectarlabs.io <5 legacy pairs as full origins>
+== APP routes
+307 /
+200 /feed
+200 /borrow
+307 /quote
+200 /notes
+200 /reserve
+200 /shield
+200 /console
+308 /about
+308 /status
+308 /security
+308 /changelog
+308 /brand
+308 /talk
+308 /legal/privacy
+308 /legal/terms
+308 /legal/cookies
+308 /legal/disclaimers
+308 /docs
+200 /robots.txt
+200 /sitemap.xml
+200 /api/health
+200 /api/feed
+200 /api/indexer/health
+200 /feed/NVDAX
+200 /position/1
+200 /note/1
+200 /quote/1
+/api/health ok:true
+web smoke https://testnet.nectarlabs.io: routes 28, failures 0
+== docs at the root of https://docs.nectarlabs.io
+docs smoke https://docs.nectarlabs.io: pages 56, assets 6, failures 0
+== host split
+ok   SITE / answers (200)
+ok   SITE /about answers (200)
+ok   SITE /borrow → APP status (308)
+ok   SITE /borrow → APP location (https://testnet.nectarlabs.io/borrow)
+ok   APP / → /feed status (307)
+ok   APP / → /feed location (https://testnet.nectarlabs.io/feed)
+ok   APP /about → SITE status (308)
+ok   APP /about → SITE location (https://nectarlabs.io/about)
+ok   www → apex status (308)
+ok   www → apex location (https://nectarlabs.io/)
+== status host
+ok   STATUS / answers (200)
+ok   SITE /status → STATUS status (308)
+ok   SITE /status → STATUS location (https://status.nectarlabs.io/)
+ok   APP /status → STATUS status (308)
+ok   APP /status → STATUS location (https://status.nectarlabs.io/)
+== docs redirects
+ok   APP /docs → DOCS root status (308)
+ok   APP /docs → DOCS root location (https://docs.nectarlabs.io/)
+ok   APP /docs/start/quick-start → DOCS status (308)
+ok   APP /docs/start/quick-start → DOCS location (https://docs.nectarlabs.io/start/quick-start?x=1)
+ok   DOCS /docs/start/quick-start → root path status (308)
+ok   DOCS /docs/start/quick-start → root path location (https://docs.nectarlabs.io/start/quick-start)
+ok   legacy https://nectarlabs.vercel.app/feed?y=2 status (308)
+ok   legacy https://nectarlabs.vercel.app/feed?y=2 location (https://nectarlabs.io/feed?y=2)
+ok   legacy https://nectarlabs-app.vercel.app/feed?y=2 status (308)
+ok   legacy https://nectarlabs-app.vercel.app/feed?y=2 location (https://testnet.nectarlabs.io/feed?y=2)
+ok   legacy https://nectar-labs-web.vercel.app/feed?y=2 status (308)
+ok   legacy https://nectar-labs-web.vercel.app/feed?y=2 location (https://testnet.nectarlabs.io/feed?y=2)
+ok   legacy https://nectarlabs-docs.vercel.app/feed?y=2 status (308)
+ok   legacy https://nectarlabs-docs.vercel.app/feed?y=2 location (https://docs.nectarlabs.io/feed?y=2)
+ok   legacy https://nectar-labs-docs.vercel.app/feed?y=2 status (308)
+ok   legacy https://nectar-labs-docs.vercel.app/feed?y=2 location (https://docs.nectarlabs.io/feed?y=2)
+== headers
+ok   HSTS https://testnet.nectarlabs.io/feed
+ok   CSP https://testnet.nectarlabs.io/feed
+ok   no noindex https://testnet.nectarlabs.io/feed
+ok   HSTS https://nectarlabs.io/
+ok   CSP https://nectarlabs.io/
+ok   no noindex https://nectarlabs.io/
+ok   HSTS https://status.nectarlabs.io/
+ok   CSP https://status.nectarlabs.io/
+ok   no noindex https://status.nectarlabs.io/
+ok   HSTS https://docs.nectarlabs.io/
+ok   CSP https://docs.nectarlabs.io/
+ok   no noindex https://docs.nectarlabs.io/
+production smoke: failures 0
+exit=0
