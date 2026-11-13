@@ -1,0 +1,81 @@
+## README tx ids -> occurrences in docs/EVIDENCE.md
+9uwAk6Vy 2
+475VLHwE 1
+9ykovXkm 0
+E2suM2LC 3
+GcHF75nW 1
+De6aVqqN 5
+6karZo8L 0
+4vW2tPF5 5
+BHopF1cu 0
+HrpQsuMW 2
+6TKH53Xp 0
+9s8HDeaq 0
+DTtVhTnS 0
+3cdcQru2 2
+15148 5
+16453 1
+## gitleaks
+[90m3:23AM[0m [32mINF[0m [1mscanned ~48288625 bytes (48.29 MB) in 1.36s[0m
+[90m3:23AM[0m [32mINF[0m [1mno leaks found[0m
+# exit=0 seconds=2
+commits --all: 846
+## verify-2 counts
+packages/ui test: # tests 7
+packages/ui test: # pass 7
+packages/ui test: # fail 0
+services/feed test: # tests 89
+services/feed test: # pass 89
+services/feed test: # fail 0
+services/keeper test: # tests 327
+services/keeper test: # pass 327
+services/keeper test: # fail 0
+services/x402 test: # tests 41
+services/x402 test: # pass 41
+services/x402 test: # fail 0
+apps/web test: ℹ tests 44
+apps/web test: ℹ pass 43
+apps/web test: ℹ fail 0
+## HUMAN_HANDOFF headings
+37
+14:## H-TOOLCHAIN — pinned P0 toolchain                status: DONE 2026-11-10   (Kunal asked; installed by Claude Code)
+17:## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1   status: DONE 2026-11-10 (Kunal asked; installed by Claude Code: anchor-cli 0.32.1 vi
+24:## H-EXPLORER — open the three testnet explorer links once   status: OPEN   needed by: G9 (non-blocking for G2/G3)
+32:## H-ORACLE — keep the owner price fresh                status: DONE 2026-11-13 (schedule A running on Railway; first refresh 11:28Z)   n
+62:## H13 — Pyth API key (for a live NVDA price, G5)        status: OPEN   needed by: P1 / G5 (2026-11-13 12:00 UTC)
+72:## H-NEAR-FAUCET — top up nectar.testnet with testnet NEAR     status: DONE 2026-11-10 (Kunal replied `H-NEAR-FAUCET done`; nectar-core-v
+87:## H4 — analytics vendor                             status: OPEN   needed by: WO-4 (any time before Nov 14)
+94:## H5 — domains and hosting                          status: SUPERSEDED 2026-11-12 by H-HOST + H-DOMAIN (+ H-DNS), D-030; history below  
+100:## H-DOMAIN — a domain for the hosted demo             status: CLOSED 2026-11-12 (nectarlabs.io)
+124:## H-DNS — DNS records for the chosen domain           status: CLOSED 2026-11-12 (Vercel DNS; no records needed)   needed by: production
+134:## H-LEGAL — operator, country, contact, X handle     status: CLOSED 2026-11-12
+150:## H-DEPLOY — approve production deploys                status: DONE 2026-11-13 (Kunal typed approval; release 4 = c95cd0c deployed ~02:
+178:## H-DEMO-WALLET — import demo.nectar.testnet into a wallet   status: DONE 2026-11-13 (orchestrator, under Kunal's conditions)   needed 
+192:## H-KEYS — keeper testnet signing key as a Railway secret   status: OPEN (treated as not confirmed)   needed by: hosted keeper only
+206:## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed   status: DONE 2026-11-13 (Kunal supplied the key; FEED_INDEXER=neardata
+223:## H-FEED-EVENTS — let the hosted Feed index nectar-core-v2 events   status: DONE 2026-11-13 (Kunal: "fix"; WO-71 merged 37dfec9, redepl
+243:## H-HOST — approve the Vercel connector's team access   status: CLOSED 2026-11-12
+267:## H7 — NEAR AI Cloud API key                         status: OPEN   needed by: P2 / G8 (live test only)
+281:## H8 — 1Click API key (optional)                     status: OPEN   needed by: WO-11 (optional)
+286:## H9 — legal identity and contact                    status: CLOSED 2026-11-12
+295:## H10 — team and second-project check               status: DONE 2026-11-13   needed by: SUBMISSION.md
+304:## H11 — demo video voice-over                         status: OPEN   needed by: Nov 14
+309:## H12 — prior-work disclosure wording               status: DONE 2026-11-13 (Kunal's edited text; docs wording ok)   needed by: README 
+316:## H2 — repo public, push, final tag                 status: PUSH DONE, tags pending   needed by: Nov 14   NEVER by an agent
+326:## H1 — send the submission                            status: OPEN   needed by: Nov 14 23:59 UTC   NEVER by an agent
+330:## H3 — X post                                         status: OPEN   needed by: before H1   NEVER by an agent
+335:## H14 — payout account, contact consent                status: DONE 2026-11-13   needed by: H1   NEVER by an agent
+343:## H6 — mainnet (post-hackathon)                       status: not in scope
+349:## H-GUARD-V7 — install the v7 guard rules + evm agent        status: OPEN (Kunal-only; no product claim depends on it: Base runs on the
+356:## H15 — Base Sepolia ETH for the deployer          status: OPEN (optional since D-026)   needed by: real-Base-Sepolia G12/G13 only
+364:## H16 — final track list                            status: CLOSED 2026-11-12 (`nfts` NOT added; tracks stay `defi`, `security`, `agent
+369:## H17 — consumer line                               status: CLOSED 2026-11-12 ("fire-sales")   needed by: landing copy
+372:## H18 — thesis notebook                             status: OPEN
+375:## H19 — Base builder code (addendum H13)            status: OPEN   needed by: G13 (optional)
+379:## H20 — market.near.ai task (addendum H14, optional) status: OPEN
+383:## H-NEAR-FAUCET — v7 update (2026-11-10 11:30Z)     status: DONE 2026-11-10 (see the entry above; v2 deployed)
+388:## H-SOL-AIRDROP — devnet SOL for the vault deploy          status: DONE 2026-11-10 ~18:10Z (deployer showed 5 SOL at the end of the CLI
+## TODO-H in README / payload
+0
+   1 TODO-H3
+clone status lines:        0

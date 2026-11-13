@@ -1,0 +1,7 @@
+no hackathon branding in landing, web app or docs site
+exit=0
+copy-rule hits apps+packages:        3
+banned-word hits README/SUBMISSION/x-post:        1
+built docs files with 'hackathon':        0
+local /borrow html hackathon count: 0
+host-grep lines:     6444, outside evidence/EVIDENCE/FACTS/docs/process:        3, ac.nectarlabs.io there: 0

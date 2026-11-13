@@ -1,0 +1,15 @@
+## 2026-11-13T22:01:15Z production dpl ids (expected web dpl_C82s82HaQiU4KLGwvCfhv9Fe91dN, docs dpl_DiUxyPb5KcfYaF2Ai8CaFpyfWogw)
+APP /borrow: 
+SITE /: 
+DOCS /:  headers: age: 856 etag: "7234cd2a5e20114914210066b2fc6563" x-vercel-id: bom1::wzm66-1794607276586-628744209d2e 
+## /borrow copilot notice (system Chrome headless via CAPTURE_LAUNCH)
+launch {"channel":"chrome","headless":true,"viewport":{"width":1920,"height":1080}}
+browser 157.0.8103.78
+status 200 url https://testnet.nectarlabs.io/borrow at 2026-11-13T22:01:17.878Z
+copilot card count 1
+notice text: "i Recorded fixture Live answers are off on this server. The verifier runs on a recorded fixture."
+"Key missing" present: 0
+fixture button: 1
+screenshot /Volumes/T7/nectar-labs/.claude/worktrees/agent-ae919febae059425d/evidence/G9/run10-20261113T215226Z/borrow-copilot.png
+RESULT notice visible
+exit=0

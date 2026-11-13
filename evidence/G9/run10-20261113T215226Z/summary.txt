@@ -1,0 +1,11 @@
+# G9 run 10 commands, local clone d55ba25707a61ab008ef3e766b78b1162f9a784b, start 2026-11-13T21:52:58Z
+pnpm-i exit=0 seconds=5
+demo-testnet exit=1 seconds=2
+verify exit=1 seconds=17
+docs-build exit=0 seconds=9
+gitleaks exit=0 seconds=2
+# end 2026-11-13T21:53:33Z
+# part A2 start 2026-11-13T21:54:21Z: re-run with NEAR_RPC_URL=https://rpc.testnet.near.org (README: override with NEAR_RPC_URL)
+demo-testnet-2 exit=0 seconds=37
+verify-2 exit=0 seconds=46
+# end A2 2026-11-13T21:55:47Z

@@ -1,0 +1,24 @@
+## 2026-11-13T22:01:18Z live re-reads (https://rpc.testnet.near.org, spaced 2.5 s)
+-- contract_version
+block 277568662 "2.2.1-v7"
+-- get_exit_capacity NVDAx (README 20:13Z: Q 16,119.22, capacity 14,516.30 open; screenshot closed 12,096)
+block 277568672 {"q_usd_e6":"16119220000","r_usd_e6":"10000000","d_usd_e6":"0","haircut_bps":2500,"session_open":false,"oracle_price_usd_e6":"135000000","oracle_age_s":"3357","oracle_fresh":true,"b_c_usd_per_unit_e6":"94500000","limit_bps_effective":7000,"capacity_usd_e6":"12096915000","oracle_source":"Owner","session_reason":"outside_hours","total_debt_usd_e6":"9799000000","aggregate_capacity_usd_e6":"12096915000","aggregate_headroom_usd_e6":"2297915000","multiplier_e18":"1000000000000000000","price_kind":"Underlying","ca_pending":false,"ca_effective_ns":"0","forced_closed":false}
+-- nft_total_supply (README: 27 Notes at 20:14Z)
+block 277568682 "33"
+-- get_position 22 (README: Open, 00, Weekend Shield to 2026-11-16 14:30 UTC)
+ERR "wasm execution failed with error: HostError(GuestPanic { panic_msg: \"Failed to deserialize input from JSON. Error: `invalid type: integer `22`, expected a string at line 1 column 17`\" })"
+-- view_access_key_list nectar.testnet: update_owner_price key
+FunctionCall nectar-core-v2.nectar.testnet ["update_owner_price"] allowance 4913220653560156000000000
+-- EXPERIMENTAL_tx_status 9uwAk6Vyun9s2bi2wu1a7H5er3pRLpuVN3HYgYvsEfni (demo.nectar.testnet) via archival
+status {"SuccessValue":"IjUwMDAwMDAi"} signer demo.nectar.testnet receiver nvdax-mock.nectar.testnet
+  log EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"shield_opened","data":[{"position_id":"22","borrower":"demo.nectar.testnet","collateral":"NVDAx","kind":"Weekend","window_end_ns":"1794839400000000000","fee_bps"
+  log EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"position_opened","data":[{"position_id":"22","borrower":"demo.nectar.testnet","collateral":"NVDAx","units":"5000000","debt_usd_e6":"100000000","premium_usd_e6":"
+-- EXPERIMENTAL_tx_status 475VLHwE9Nvkgq2kc15NWVQJLDyLmvcyD2Y2fNAURF1W (demo.nectar.testnet) via archival
+status {"SuccessValue":"IjUwMDAwMDAi"} signer demo.nectar.testnet receiver nvdax-mock.nectar.testnet
+  log EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"shield_opened","data":[{"position_id":"24","borrower":"demo.nectar.testnet","collateral":"NVDAx","kind":"Weekend","window_end_ns":"1794839400000000000","fee_bps"
+  log EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"position_opened","data":[{"position_id":"24","borrower":"demo.nectar.testnet","collateral":"NVDAx","units":"5000000","debt_usd_e6":"100000000","premium_usd_e6":"
+-- EXPERIMENTAL_tx_status 6karZo8LKP4UbkDP9hx34459egCTcbEcRoZbNTph6sk5 (x402-relayer.nectar.testnet) via archival
+status {"SuccessValue":""} signer x402-relayer.nectar.testnet receiver agent1.nectar.testnet
+-- hosted Feed /health (22:02:07Z)
+{"ok":true,"last_indexed_block":277568738,"chain_head":277568738,"chain_head_source":"view_block","lag_blocks":0,"indexer_cursor":277568734,"indexer_lag_blocks":0,"last_poll_at":"2026-11-13T22:02:06.616Z","poll_age_s":2,"last_error":"","source":"views+neardata","start_block":"277503800","events_indexed":323,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com",
+
