@@ -31,6 +31,20 @@
   Kunal applies in the dashboard → orchestrator: key_generated pk → add-key FC nectar-core-v2 update_owner_price allowance 5 NEAR → show view_access_key.
 - Feed DB is on volume b9c5e39b at /data (FEED_DB_PATH /data/feed-neardata-20261113.sqlite): index persists. Sealing FEED_NEARDATA_API_KEY = dashboard
   only (Railway docs: 3-dot menu → Seal; no API) → Kunal.
+- 03:13Z Kunal applied the refresher (deploy 67d55980; boots on src 7833aa3, tick 15 s / session 60 s / closed 21600 s). It waited for its key until 11:27Z.
+- 11:27Z orchestrator added FC key ed25519:3qurjD6A…zBLZG (full key: evidence/ops/refresher-add-key-*.log) to nectar.testnet (tx BHopF1cuKAMDFoCnKyNZPPKR3qVPgs5dYiKxx6jwWpao):
+  view_access_key = FunctionCall receiver nectar-core-v2.nectar.testnet, method_names ["update_owner_price"], allowance 5 NEAR (evidence/ops/refresher-*).
+  First refresh 11:28:05Z tx De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (age 73003 s, outside_hours, price 135000000).
+- H-DEMO-WALLET done by orchestrator (Kunal's conditions): scripts/demo/intear-setup.mjs imported demo.nectar.testnet into Intear (web) in
+  ~/.nectar/demo-chrome-profile (terms boxes ticked per Kunal; no password asked), app: cookies Declined, theme dark, connected via Intear "Web".
+  demo.nectar.testnet still has 1 FullAccess key (Intear app key is off-chain). Phrase never printed.
+- WO-35 blockers: ffmpeg absent (download blocked by auto-mode classifier → Kunal installs, else Swift/AVFoundation encoder, disclosed).
+  Weekend Shield is disabled during Friday's session (window to Monday open 72 h > 65.5 h cap, packages/sdk/src/shields.ts) → Kunal decides.
+  Faucet: 1 claim/h, 3 per account → rehearsal + 2 takes max for demo.nectar.testnet. WO-35a/b tooling agents dispatched 11:30Z.
+- 11:28–11:33Z Feed event test: STUCK (no oracle_updated within 5 min; evidence/ops/refresher-key-and-feed-test-*.log). Cause: services/feed/src/neardata.ts
+  fetches up to 100 blocks sequentially per poll (≈0.6–0.8 s per block measured from the Mac) + FEED_POLL_MS 10 s → ≈1.25 blocks/s < testnet ≈1.6 → the
+  cursor fell further behind since 02:22Z (still in pre-event blocks). Workaround (config only, 11:36Z): fresh FEED_DB_PATH /data/feed-neardata-20261113b.sqlite,
+  FEED_START_BLOCK 277503800 (refresh receipt in block 277503817), FEED_POLL_MS 1000. Product fix (concurrent block fetch) = Kunal decides.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -453,7 +467,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T02:41:51Z · commit f34260a
+Last activity: 2026-11-13T03:11:11Z · commit 27f0a68
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

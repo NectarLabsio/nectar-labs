@@ -1,0 +1,36 @@
+== on-chain access key record (view_access_key, final) 2026-11-13T11:27:58Z
+{
+ "account": "nectar.testnet",
+ "public_key": "ed25519:3qurjD6A1zSe1FqNVJjH5XPhzggtvW5FKB8u64KzBLZG",
+ "receiver_id": "nectar-core-v2.nectar.testnet",
+ "method_names": [
+  "update_owner_price"
+ ],
+ "allowance_yocto": "5000000000000000000000000",
+ "allowance_near": 5.000000000000001,
+ "nonce": 277503790000000,
+ "block_height": 277503809
+}
+== feed before
+events_indexed 0
+11:28:20 events_indexed=0
+11:28:35 events_indexed=0
+11:28:51 events_indexed=0
+11:29:06 events_indexed=0
+11:29:22 events_indexed=0
+11:29:38 events_indexed=0
+11:29:54 events_indexed=0
+11:30:09 events_indexed=0
+11:30:25 events_indexed=0
+11:30:42 events_indexed=0
+11:30:59 events_indexed=0
+11:31:14 events_indexed=0
+11:31:30 events_indexed=0
+11:31:45 events_indexed=0
+11:32:01 events_indexed=0
+11:32:17 events_indexed=0
+11:32:32 events_indexed=0
+11:32:48 events_indexed=0
+11:33:04 events_indexed=0
+11:33:19 events_indexed=0
+STUCK: no event by 11:33:05Z
