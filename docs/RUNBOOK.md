@@ -24,7 +24,7 @@ KEEPER=keeper.nectar.testnet   # function-call key only (D-012); keeper not runn
 
 ## Health checks
 - Keeper: `curl -s localhost:8787/healthz` → `{ok, last_block_seen, last_tick_at, consecutive_errors, allowance, open_positions, pending_settlements, triggers_sent}`; HTTP 503 when the last tick is older than 3 poll intervals, ≥ 3 consecutive errors, or the key is full-access (services/keeper/src/server.ts).
-- Contract: `near contract call-function as-read-only $CORE get_config json-args '{}' network-config testnet now` (P0 interface has no `get_status`; see docs/work/interface-p0.md) plus `get_exit_capacity '{"symbol":"NVDAx"}'` for oracle age.
+- Contract: `near contract call-function as-read-only $CORE get_config json-args '{}' network-config testnet now` (P0 interface has no `get_status`; see docs/process/work/interface-p0.md) plus `get_exit_capacity '{"symbol":"NVDAx"}'` for oracle age.
 - Feed API: `curl -s $FEED_URL/api/feed | jq '.assets[0]'`.
 
 ## Incidents
@@ -84,7 +84,7 @@ only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret 
     the build image does not document curl or sha256sum (F-425).
   - buildCommand: web `npx -y pnpm@10.34.9 exec next build` (the changelog is pre-generated in the tarball; the build has no .git). Docs: `pnpm build`
     per WO-34m; not deployed yet, so confirm it at the first docs deployment.
-  - Env: the WO-34 deploy env list in docs/STATE.md. Previews first (`VERCEL_ENV=preview`); `target: production` only after H-LEGAL and the G3b re-run.
+  - Env: the WO-34 deploy env list in docs/process/state.md. Previews first (`VERCEL_ENV=preview`); `target: production` only after H-LEGAL and the G3b re-run.
     After the first web deployment, set `FEED_CORS_ORIGINS` on the Feed to the web origins.
   - Docs: its own project and host, https://docs.nectarlabs.io, pages at the root (WO-64; section "Hosts and docs" below).
 - **Feed** (Railway service `feed`, project nectar-labs, environment production): image `node:22.22.2-bookworm`, volume at `/data`, start command =
@@ -104,7 +104,7 @@ only from a G3b-passed commit, and the sha and sha256 go to EVIDENCE. No secret 
   - Vercel: a new deployment per project, each with a fresh `.nectar-artifact` (1 h GET).
   The verifier records the sha, sha256 and deployment ids in EVIDENCE.
 - **Teardown after the hosted-until date** (2026-11-25, `site.hosted_until` in packages/config/config.yaml): delete the artifacts function and the
-  bucket objects (`src-*.tar.gz`). The Feed follows WO-34 (docs/work/wo-34-deploy.md). Testnet accounts are never deleted.
+  bucket objects (`src-*.tar.gz`). The Feed follows WO-34 (docs/process/work/wo-34-deploy.md). Testnet accounts are never deleted.
 - **Fallback:** the CLI path, `scripts/deploy/deploy-vercel.sh` and `scripts/deploy/deploy-railway.sh`, stays in the repo. It needs the CLI logins that
   H-HOST no longer asks for.
 

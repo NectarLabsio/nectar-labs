@@ -5,7 +5,7 @@ description: From keeper trigger to collateral delivery, per phase.
 ---
 # Settlement flow
 
-<p className="verified">Verified against: F-013 (2026-11-09), F-021 (2026-11-09), F-031 (2026-11-09), F-033 (2026-11-09), F-035 (2026-11-09), F-040 (2026-11-09), F-080 (2026-11-09) · spec docs/PRD.md §5, §6.5, §9 · D-003, D-004 (2026-11-09) · docs/EVIDENCE.md §G7 v7 (2026-11-10T16:52Z, 91db9ea), §G7 re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
+<p className="verified">Verified against: F-013 (2026-11-09), F-021 (2026-11-09), F-031 (2026-11-09), F-033 (2026-11-09), F-035 (2026-11-09), F-040 (2026-11-09), F-080 (2026-11-09) · spec docs/process/prd.md §5, §6.5, §9 · D-003, D-004 (2026-11-09) · docs/EVIDENCE.md §G7 v7 (2026-11-10T16:52Z, 91db9ea), §G7 re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
 <p className="status">Status: P0 path is the specification that WO-2 implements (deployed on testnet 2026-11-09, G2 PASS 2026-11-09T20:55Z, commit 5f27f44). P1 is live (G4 PASS 2026-11-09T22:10Z). P2 is live end to end on nectar-core-v2 and Solana devnet (G7 v7 PASS 2026-11-10T16:52Z, commit 91db9ea): signer response on NEAR, Ed25519 verify + settle on devnet (tx 3cdcQru2…), relay reported back. The first run on v1 (G7 PARTIAL 2026-11-09T23:57Z) verified the NEAR side only.</p>
 
 ## P0 (static pricing, NEAR collateral)

@@ -1,6 +1,12 @@
 {
   "name": "nectar-labs",
+  "description": "Escrowed market-maker quotes raise borrowing limits on thin-exit collateral. NEAR testnet hub with Solana devnet and Base Sepolia spokes; mock collateral, testnet only.",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NectarLabsio/nectar-labs"
+  },
   "packageManager": "pnpm@10.34.9",
   "engines": {
     "node": ">=22.22.2"

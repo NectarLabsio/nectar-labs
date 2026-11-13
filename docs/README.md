@@ -23,23 +23,27 @@ Component docs: [services/feed](../services/feed/README.md), [services/keeper](.
 
 | File | What it is |
 | --- | --- |
-| [HACKATHON.md](HACKATHON.md) | the hackathon rules as read on 2026-11-09 |
 | [SUBMISSION.md](SUBMISSION.md) | the submission payload draft; only Kunal sends it |
-| [X_POST.md](X_POST.md) | the demo thread draft; only Kunal posts it |
+| [process/hackathon.md](process/hackathon.md) | the hackathon rules as read on 2026-11-09 |
+| [process/x-post.md](process/x-post.md) | the demo thread draft; only Kunal posts it |
 
-## How this was built (process record)
+## How this was built (process record, `docs/process/`)
 
 Kept for transparency. None of it is needed to run or judge the product.
 
 | File | What it is |
 | --- | --- |
-| [PRD.md](PRD.md), [PRD-v6.md](PRD-v6.md) | the product specification (v7, and the earlier v6) |
-| [BUILD_PROMPT.md](BUILD_PROMPT.md), [BUILD_PROMPT_V7.md](BUILD_PROMPT_V7.md) | the build plan and its v7 addendum |
-| [DECISIONS.md](DECISIONS.md) | scope-shaping decisions, ADR style |
-| [STATE.md](STATE.md) | the build log, newest first |
-| [HUMAN_HANDOFF.md](HUMAN_HANDOFF.md) | steps that needed a human, and their outcome |
-| [FINAL_REPORT.md](FINAL_REPORT.md) | the final status audit |
-| GATE_FAIL_*.md: [G0](GATE_FAIL_G0.md), [G1](GATE_FAIL_G1.md), [G1 2.2.1](GATE_FAIL_G1_221.md), [G11](GATE_FAIL_G11.md), [G2b](GATE_FAIL_G2b.md), [G3](GATE_FAIL_G3.md), [G3b](GATE_FAIL_G3b.md), [G3b r2](GATE_FAIL_G3B_R2.md), [G3b r3](GATE_FAIL_G3B_R3.md), [G6](GATE_FAIL_G6.md), [G8](GATE_FAIL_G8.md), [G9](GATE_FAIL_G9.md), [WO67](GATE_FAIL_WO67.md) | each failed gate run, what failed and how it was fixed |
-| [MARKET_TASK.md](MARKET_TASK.md) | an optional task text drafted for market.near.ai, never posted |
-| [work/](work/) | work orders, one per agent dispatch |
-| [../BUNDLE_README.md](../BUNDLE_README.md) | how to use the support bundle |
+| [prd.md](process/prd.md), [prd-v6.md](process/prd-v6.md) | the product specification (v7, and the earlier v6) |
+| [build-prompt.md](process/build-prompt.md), [build-prompt-v7.md](process/build-prompt-v7.md) | the build plan and its v7 addendum |
+| [decisions.md](process/decisions.md) | scope-shaping decisions, ADR style |
+| [state.md](process/state.md) | the build log, newest first |
+| [human-handoff.md](process/human-handoff.md) | steps that needed a human, and their outcome |
+| [final-report.md](process/final-report.md) | the final status audit |
+| gate-fail-*.md: [G0](process/gate-fail-g0.md), [G1](process/gate-fail-g1.md), [G1 2.2.1](process/gate-fail-g1-221.md), [G11](process/gate-fail-g11.md), [G2b](process/gate-fail-g2b.md), [G3](process/gate-fail-g3.md), [G3b](process/gate-fail-g3b.md), [G3b r2](process/gate-fail-g3b-r2.md), [G3b r3](process/gate-fail-g3b-r3.md), [G6](process/gate-fail-g6.md), [G8](process/gate-fail-g8.md), [G9](process/gate-fail-g9.md), [WO67](process/gate-fail-wo67.md) | each failed gate run, what failed and how it was fixed |
+| [market-task.md](process/market-task.md) | an optional task text drafted for market.near.ai, never posted |
+| [work/](process/work/) | work orders, one per agent dispatch |
+| [bundle-readme.md](process/bundle-readme.md) | how the seed bundle of 2026-11-09 was used (paths as they were in the bundle) |
+| [readme-template.md](process/readme-template.md) | the README skeleton from the seed bundle, superseded by the README |
+
+The process files were moved here from `docs/` and the repo root on 2026-11-13 (UTC) and renamed to kebab case; git history keeps the old names
+(`git log --follow`). `CLAUDE.md` still names the old paths and is left unchanged on purpose.

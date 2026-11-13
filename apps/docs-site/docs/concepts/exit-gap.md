@@ -5,7 +5,7 @@ description: Collateral at stake minus what can actually absorb it.
 ---
 # Exit gap
 
-<p className="verified">Verified against: F-063 (2026-11-09) · spec docs/PRD.md §1, §17 · D-009 (2026-11-10)</p>
+<p className="verified">Verified against: F-063 (2026-11-09) · spec docs/process/prd.md §1, §17 · D-009 (2026-11-10)</p>
 <p className="status">Status: definition. The Feed displays it; it is built and runs locally (`pnpm --filter feed start`), with no public host.</p>
 
 ```text

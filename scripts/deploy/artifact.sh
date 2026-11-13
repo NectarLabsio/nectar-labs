@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# WO-34m: the source tarball for the connector deploy path (docs/work/wo-34m-mcp-deploy.md). Orchestrator-run only; agents never run it.
+# WO-34m: the source tarball for the connector deploy path (docs/process/work/wo-34m-mcp-deploy.md). Orchestrator-run only; agents never run it.
 # The tarball moves local → private Railway bucket through presigned URLs issued by the artifacts function. Its bytes never pass through a tool argument.
 #
 # Usage:

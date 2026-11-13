@@ -11,6 +11,6 @@ grep -q 'TODO-H' <<<"$PAYLOAD" && { echo "payload still has TODO-H placeholders 
 [ $DRY = 1 ] && { echo "(dry run — nothing sent)"; exit 0; }
 [ "${HUMAN_CONFIRMED:-0}" = "1" ] || { echo "HUMAN_CONFIRMED=1 required (Kunal only)" >&2; exit 3; }
 read -r -p "Send to the NEAR Hackathon submission API now? type yes: " a; [ "$a" = "yes" ] || exit 1
-ENDPOINT=$(grep -m1 -Eo 'https://[^ ]*nearhackathon[^ ]*/api[^ )]*' "$ROOT/docs/HACKATHON.md" || true)
-[ -n "$ENDPOINT" ] || { echo "submission endpoint not found in docs/HACKATHON.md — re-read rules (F-001)" >&2; exit 2; }
+ENDPOINT=$(grep -m1 -Eo 'https://[^ ]*nearhackathon[^ ]*/api[^ )]*' "$ROOT/docs/process/hackathon.md" || true)
+[ -n "$ENDPOINT" ] || { echo "submission endpoint not found in docs/process/hackathon.md — re-read rules (F-001)" >&2; exit 2; }
 curl -sS -X POST "$ENDPOINT" -H 'content-type: application/json' --data "$PAYLOAD" | tee "$ROOT/evidence/submission-response.json"

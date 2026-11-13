@@ -1,6 +1,6 @@
 import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 
-// IA per docs/BUILD_PROMPT.md §11.1. The "Project" category carries no event branding (CLAUDE.md §1).
+// IA per docs/process/build-prompt.md §11.1. The "Project" category carries no event branding (CLAUDE.md §1).
 const sidebars: SidebarsConfig = {
   docs: [
     { type: 'category', label: 'Start here', collapsed: false, items: ['start/what-is-nectar-labs', 'start/quick-start', 'start/live-on-testnet'] },

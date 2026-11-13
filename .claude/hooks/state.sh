@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Stop hook: refresh the "last activity" line in docs/STATE.md so a returning human sees when the
+# Stop hook: refresh the "last activity" line in docs/process/state.md so a returning human sees when the
 # session last worked and on which commit. Never fails the stop.
 set -u
 root="${CLAUDE_PROJECT_DIR:-.}"
-f="$root/docs/STATE.md"
+f="$root/docs/process/state.md"
 [ -f "$f" ] || exit 0
 now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 sha="$(git -C "$root" rev-parse --short HEAD 2>/dev/null || echo none)"

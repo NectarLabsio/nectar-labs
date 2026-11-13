@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // `pnpm demo:testnet` / G2: read-only views of nectar-core over public testnet RPC (no keys, no near CLI).
-// ABI: docs/work/interface-p0.md. Ids: packages/config/config.yaml. Exit 2 if not deployed yet (TODO-G2).
+// ABI: docs/process/work/interface-p0.md. Ids: packages/config/config.yaml. Exit 2 if not deployed yet (TODO-G2).
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -15,7 +15,7 @@ const EXPLORER = 'https://testnet.nearblocks.io';
 
 if (!CORE || String(CORE).startsWith('TODO')) {
   console.error('nectar-core is not deployed yet (accounts.core is TODO-G2 in packages/config/config.yaml).');
-  console.error('See README "Live on testnet" and docs/STATE.md.');
+  console.error('See README "Live on testnet" and docs/process/state.md.');
   process.exit(2);
 }
 

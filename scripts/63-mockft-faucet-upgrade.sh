@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # WO-61 rollout: code-only upgrade of the two mock tokens to the faucet build, then set_faucet from config.yaml `faucet`.
-# Kunal approved 2026-11-12 (docs/STATE.md): account ids unchanged, balances and state kept, nectar-core untouched. Orchestrator-run only.
+# Kunal approved 2026-11-12 (docs/process/state.md): account ids unchanged, balances and state kept, nectar-core untouched. Orchestrator-run only.
 # Steps: 1 wasm size vs each token account's free storage (top up from the owner if short) · 2 views before · 3 code-only deploy (scripts/29 syntax)
 #        4 views after = before · 5 set_faucet per token · 6 faucet_config views. Log: evidence/rollout/mockft-faucet-<ts>.log
 set -euo pipefail

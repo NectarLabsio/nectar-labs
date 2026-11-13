@@ -5,7 +5,7 @@ description: What existed before the build window, and what did not.
 ---
 # Prior work disclosure
 
-<p className="verified">Verified against: F-005 (2026-11-09) · git history of this repository (first commit 2026-11-09) · docs/HUMAN_HANDOFF.md H12 (wording approved by Kunal, 2026-11-13)</p>
+<p className="verified">Verified against: F-005 (2026-11-09) · git history of this repository (first commit 2026-11-09) · docs/process/human-handoff.md H12 (wording approved by Kunal, 2026-11-13)</p>
 
 **Baseline before 2026-11-09.** Before the build window, Kunal researched exit-liquidity gaps for tokenized stocks under Nectar Network (an October 2026 product brief and Stellar Community Fund #42 material). That research and the Nectar brand assets (logo, colour tokens) are the baseline. Nectar Network's separate Stellar testnet product shares no code with this repository.
 

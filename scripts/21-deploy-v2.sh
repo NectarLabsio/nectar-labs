@@ -28,7 +28,7 @@ log "1: funds"
 NEED=$(echo "$CORE2_NEAR + $KEEPER2_NEAR + $GAS_RESERVE_NEAR + 0.5" | bc)
 HAVE=$(near_bal "$OWNER"); echo "owner $OWNER has $HAVE NEAR; needs ~$NEED (skips already-created accounts)"
 if ! exists "$CORE2" && [ "$(echo "$HAVE < $NEED" | bc)" = 1 ]; then
-  echo "insufficient testnet NEAR → H-NEAR-FAUCET (docs/HUMAN_HANDOFF.md). Nothing was changed." >&2; exit 2; fi
+  echo "insufficient testnet NEAR → H-NEAR-FAUCET (docs/process/human-handoff.md). Nothing was changed." >&2; exit 2; fi
 
 log "2: accounts"
 create() { exists "$1" && { echo "skip $1 (exists)"; return; }

@@ -17,7 +17,7 @@ The 3-minute v4 script (Solana and Base remote lifecycle, keeper, copilot) is th
    If the refresher has stopped (or its 5 NEAR allowance ran out), send the RUNBOOK one-shot `update_owner_price` with the CURRENT price
    (`oracle_price_usd_e6` from `get_exit_capacity`, never the RUNBOOK example value).
    A borrow in an open session needs more: the price under 120 s old (`max_age_ns_session` in `get_config`; default 120 s at
-   contracts/nectar-core/src/lib.rs:133, applied at :381; docs/work/wo-35-demo-video.md C6). Check the oracle age right before the borrow beat;
+   contracts/nectar-core/src/lib.rs:133, applied at :381; docs/process/work/wo-35-demo-video.md C6). Check the oracle age right before the borrow beat;
    a delayed refresh (RPC failover) can push it past 120 s, so if it is over 60 s, send the one-shot refresh less than 60 s before the beat.
 3. **What production serves.** Release 4 (commit c95cd0c, deployed 2026-11-13 ~02:00Z) runs on the custom hosts; the verifier's acceptance there
    passed (docs/EVIDENCE.md §"WO-34 production (custom hosts)"). https://status.nectarlabs.io is the status page (nectarlabs.io/status redirects

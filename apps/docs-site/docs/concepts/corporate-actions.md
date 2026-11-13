@@ -5,7 +5,7 @@ description: Collateral is stored in raw units and valued through a per-asset mu
 ---
 # Corporate-action multiplier
 
-<p className="verified">Verified against: F-345 (2026-11-10, B20 `multiplier()` / `scaledBalanceOf`), F-350 (2026-11-10, Chainlink tokenized-equity feeds include M), F-352 (2026-11-10, xStocks mechanism not verified) · spec docs/PRD.md §4.6 · docs/work/interface-v7.md §A3 · D-021 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (wasm deployed, 2026-11-10T16:52Z); config `features.multiplier: false`</p>
+<p className="verified">Verified against: F-345 (2026-11-10, B20 `multiplier()` / `scaledBalanceOf`), F-350 (2026-11-10, Chainlink tokenized-equity feeds include M), F-352 (2026-11-10, xStocks mechanism not verified) · spec docs/process/prd.md §4.6 · docs/process/work/interface-v7.md §A3 · D-021 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (wasm deployed, 2026-11-10T16:52Z); config `features.multiplier: false`</p>
 <p className="status">Status: built and tested in the sandbox; no testnet run. The code is in the `nectar-core-v2.nectar.testnet` wasm (G2b), but the product flag `features.multiplier` is off and no multiplier call has run on testnet. The OutLayer job that reads `multiplier()` has no recorded testnet execution, and no Base Sepolia token exists. The collateral is still **mock NVDAx**.</p>
 
 ## Valuation

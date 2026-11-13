@@ -1,6 +1,6 @@
 # SUBMISSION.md — payload draft, never sent by an agent
 
-Status: **DRAFT until Kunal sends, 2026-11-13** (`idea` re-checked for WO-92 against the final README; every claim backed by docs/EVIDENCE.md or a tx checked on testnet RPC, last on 2026-11-13T20:12Z, see the table under the idea). Fields follow "Submission API" in docs/HACKATHON.md (verified 2026-11-09; re-read the published
+Status: **DRAFT until Kunal sends, 2026-11-13** (`idea` re-checked for WO-92 against the final README; every claim backed by docs/EVIDENCE.md or a tx checked on testnet RPC, last on 2026-11-13T20:12Z, see the table under the idea). Fields follow "Submission API" in docs/process/hackathon.md (verified 2026-11-09; re-read the published
 https://nearhackathon.com/HACKATHON.md on Nov 14 before sending, F-001). Only Kunal sends it (H1). Agents run the submit
 script with `--dry-run` only. The JSON payload holds personal data (name, email, payout account), so it is printed, never committed.
 
@@ -60,7 +60,7 @@ Claim → evidence (docs/EVIDENCE.md gate table as of a677689, quoted exactly; "
 | x402 | G14 x402 (re-run after D-027) PASS for the chain claims: borrow `HvFX6…` (position #13), relay `BemztvL…`. The HTTP 402 → 200 leg was then verifier-run (2026-11-11T13:54Z–13:55Z, clone 45ed1f3, recorded in 2e16f9b): unpaid GET → 402 (near:testnet, usdc-mock, 10000, payTo nectar.testnet), borrow `7UFpexpd…` (position #14), relay `EskZKj9s…`, paid → 200 CSV 110 rows. G14 re-run on HEAD with the guarded demo agent (WO-44) PASS (2026-11-11T15:02Z, clone 48b5c5a, recorded in a677689): `borrow_verified` before signing, borrow `E2suM2LC…` (position #15), relay `4vW2tPF5…`, 200 + 123 CSV rows |
 | NEP-171 Notes | G2b PASS (2026-11-10T16:52Z) `nft_tokens` · G14 PASS (16:52Z) `nft_mint p-4` · G14 re-run `nft_mint` for position #13 |
 | copilot | G8 PASS (fixture) (2026-11-09T23:56Z). Binding to the question typed and the announced model came after G8: test "R2-03: an exchange signed for other notes or another model is not verified, even with an accepted DCAP verdict" (apps/web/lib/copilot/verify.test.ts; `pnpm --filter web test:copilot` 12 pass, 1 skipped live, 2026-11-11) |
-| pre-submission review, SECURITY.md | not a gate: D-027, SECURITY.md, docs/work/security-review-v7.md. Fix tests recorded in 5083d30 (G11 re-run after D-027): every SR-1…SR-33 has a named test, 124 contract sr* tests, Solana 10 cargo + 55 TS, forge 105 pass / 3 skip |
+| pre-submission review, SECURITY.md | not a gate: D-027, SECURITY.md, docs/process/work/security-review-v7.md. Fix tests recorded in 5083d30 (G11 re-run after D-027): every SR-1…SR-33 has a named test, 124 contract sr* tests, Solana 10 cargo + 55 TS, forge 105 pass / 3 skip |
 | runs repeated on the fixed contract | G7, G13 (local fork) and G14 re-run after D-027 rows above |
 | web | G3b web E2E (re-run after D-027 + design port) PASS (2026-11-11T08:24Z, recorded in 5083d30; mocked remote and Notes E2E passed, screenshot capture not run). G3b re-run 2 after the review 2 web fixes and WO-49 (clone fd6592d, recorded in 5770fa7) PASS: e2e 404 / 0 / 88 skipped, screens.spec 76/76, LH 28/28 = 100, headers present, `pnpm verify` green; re-run 1 (3107a1a) had failed on screenshot tests only, fixed in WO-49; not claimed in `idea` |
 
@@ -87,10 +87,10 @@ Q-015: Nectar Labs is Kunal's only project in this hackathon (Kunal, 2026-11-13:
 4. `requestId`: generate once, store in `~/.nectar/submission-request-id` (0600), reuse on retry; never write it into the repo.
 5. `consent`: send boolean `true` only when column 2 is literally `true`; `size`: exact string from the allowed set.
 6. Refuse (exit 2) if any value still contains `TODO-H`, if a `website` key appears, or if the body exceeds 12000 bytes.
-7. Endpoint from docs/HACKATHON.md (`POST https://nearhackathon.com/api/applications`), as now.
+7. Endpoint from docs/process/hackathon.md (`POST https://nearhackathon.com/api/applications`), as now.
 Wired: `scripts/submit.sh` (dry run by default) calls `scripts/build-submission.mjs`, which reads this file's "Payload fields" table and the
 `### idea` block. It exits 2 on a missing field, a `website` key, a body over 12,000 B, an `idea` outside 20–2000 characters or, in send
-mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3). The send flag is `--send` (H1 in docs/HUMAN_HANDOFF.md).
+mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3). The send flag is `--send` (H1 in docs/process/human-handoff.md).
 
 ## Order of human steps (HACKATHON.md: send only once the repo is public and the post is up)
 H10 + H14 (identity, payout account, consent; done 2026-11-13) → H12 (prior work; approved 2026-11-13) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →

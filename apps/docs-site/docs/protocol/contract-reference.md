@@ -5,7 +5,7 @@ description: nectar-core P0 methods, messages, views and events.
 ---
 # Contract reference (`nectar-core`, P0)
 
-<p className="verified">Verified against: F-010 (2026-11-10), F-013 (2026-11-09), F-018 (2026-11-10), F-021 (2026-11-09), F-028 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · D-009, D-010 (2026-11-10) · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1) · exports re-read 2026-11-13: `#[near]` pub fns in contracts/nectar-core/src/*.rs and `[features]` in contracts/nectar-core/Cargo.toml; `set_session` removed in commit c7fa925</p>
+<p className="verified">Verified against: F-010 (2026-11-10), F-013 (2026-11-09), F-018 (2026-11-10), F-021 (2026-11-09), F-028 (2026-11-10) · docs/process/work/interface-p0.md (2026-11-10) · D-009, D-010 (2026-11-10) · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1) · exports re-read 2026-11-13: `#[near]` pub fns in contracts/nectar-core/src/*.rs and `[features]` in contracts/nectar-core/Cargo.toml; `set_session` removed in commit c7fa925</p>
 <p className="status">Status: interface specification that WO-2 implements. Deployed on testnet as `nectar-core.nectar.testnet` on 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). If the built ABI differs, the ABI wins and this page is corrected.</p>
 
 Built with `near-sdk` 5.30.1 (F-010) and `cargo near build` (F-011). The contract account is [`nectar-core.nectar.testnet`](https://testnet.nearblocks.io/address/nectar-core.nectar.testnet).

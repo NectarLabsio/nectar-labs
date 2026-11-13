@@ -5,7 +5,7 @@ description: First action and follow-up per incident type.
 ---
 # Incident response
 
-<p className="verified">Verified against: F-015 (2026-11-09), F-019 (2026-11-10), F-052 (2026-11-09) · spec docs/PRD.md §16.4 · docs/work/interface-p0.md</p>
+<p className="verified">Verified against: F-015 (2026-11-09), F-019 (2026-11-10), F-052 (2026-11-09) · spec docs/process/prd.md §16.4 · docs/process/work/interface-p0.md</p>
 <p className="status">Status: playbooks for the P0 testnet deployment of 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). The phase is noted where a step needs P1 or P2 methods.</p>
 
 | Incident | First action (owner) | Then |

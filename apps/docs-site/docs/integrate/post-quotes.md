@@ -5,7 +5,7 @@ description: Fund a Pappus quote with one ft_transfer_call.
 ---
 # Post quotes programmatically
 
-<p className="verified">Verified against: F-013 (2026-11-09), F-018 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · D-009 (2026-11-10)</p>
+<p className="verified">Verified against: F-013 (2026-11-09), F-018 (2026-11-10) · docs/process/work/interface-p0.md (2026-11-10) · D-009 (2026-11-10)</p>
 <p className="status">Status: deployed on testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Core `nectar-core.nectar.testnet`, mock USDC `usdc-mock.nectar.testnet`. Whether the mock token needs storage registration first is confirmed at G2.</p>
 
 A quote is funded by sending mock USDC to `nectar-core` with `ft_transfer_call` and a `FundPappusQuote` message. NEP-141 requires exactly 1 yoctoNEAR attached (F-013).

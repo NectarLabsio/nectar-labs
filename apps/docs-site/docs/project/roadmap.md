@@ -5,7 +5,7 @@ description: P0 to PROD, with the gate each phase must pass.
 ---
 # Roadmap
 
-<p className="verified">Verified against: F-001 (2026-11-09), F-002 (2026-11-09), F-003 (2026-11-09) · spec docs/PRD.md §18 · D-001, D-004 (2026-11-09) · D-018, D-024 (2026-11-10) · docs/EVIDENCE.md §G2b, §G7 v7, §G14 (2026-11-10T16:52Z) · §v7 module runs (2026-11-10T17:20Z, 2bf99e1) · re-runs after D-027 (2026-11-11, recorded in b8784c1 and 5083d30)</p>
+<p className="verified">Verified against: F-001 (2026-11-09), F-002 (2026-11-09), F-003 (2026-11-09) · spec docs/process/prd.md §18 · D-001, D-004 (2026-11-09) · D-018, D-024 (2026-11-10) · docs/EVIDENCE.md §G2b, §G7 v7, §G14 (2026-11-10T16:52Z) · §v7 module runs (2026-11-10T17:20Z, 2bf99e1) · re-runs after D-027 (2026-11-11, recorded in b8784c1 and 5083d30)</p>
 <p className="status">Status on 2026-11-10: gate results are on [Evidence](/project/evidence); what runs where is on [Live on testnet](/start/live-on-testnet).</p>
 
 | Phase | Ships | Gates |

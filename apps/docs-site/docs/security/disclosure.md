@@ -5,7 +5,7 @@ description: Coordinated disclosure contact and policy.
 ---
 # Bug disclosure
 
-<p className="verified">Verified against: spec docs/PRD.md §15 (disclosure policy)</p>
+<p className="verified">Verified against: spec docs/process/prd.md §15 (disclosure policy)</p>
 
 - **Contact:** kunal@nectarnetwork.fun, subject line `SECURITY: nectar-labs`.
 - **Coordinated disclosure:** we ask for 90 days before public disclosure. We acknowledge within 5 working days.

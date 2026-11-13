@@ -5,7 +5,7 @@ description: Threats, controls and the test that proves each control.
 ---
 # Threat table
 
-<p className="verified">Verified against: F-013 (2026-11-09), F-015 (2026-11-09), F-031 (2026-11-09), F-052 (2026-11-09), F-080 (2026-11-09) · spec docs/PRD.md §15 · D-003, D-005, D-010</p>
+<p className="verified">Verified against: F-013 (2026-11-09), F-015 (2026-11-09), F-031 (2026-11-09), F-052 (2026-11-09), F-080 (2026-11-09) · spec docs/process/prd.md §15 · D-003, D-005, D-010</p>
 <p className="status">Status: controls are specified. The "Test" column names the planned test. Each becomes a real test name from contracts/nectar-core/tests after G1, or from the Anchor suite after G7. Nothing here is claimed as passing yet.</p>
 
 | Threat | Control | Test (planned) |

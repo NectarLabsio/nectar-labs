@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// WO-34m: Vercel installCommand for the connector deploy path (docs/work/wo-34m-mcp-deploy.md). Node only: the Vercel build image documents tar but
+// WO-34m: Vercel installCommand for the connector deploy path (docs/process/work/wo-34m-mcp-deploy.md). Node only: the Vercel build image documents tar but
 // not curl or sha256sum (F-425). Install and build commands run in rootDirectory (F-424); this script resolves the repo root from its own path.
 // The deployment carries only stub files (root package.json, pnpm-workspace.yaml, the app's package.json, this script) and `.nectar-artifact`:
 //   line 1: src-<40-hex sha>.tar.gz <sha256>

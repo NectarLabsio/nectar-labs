@@ -22,7 +22,7 @@ if ! exists "$PARENT"; then
   log "parent $PARENT via faucet (F-016)"
   retry near account create-account sponsor-by-faucet-service "$PARENT" \
     autogenerate-new-keypair --signature-scheme ed25519 save-to-keychain network-config testnet create </dev/null \
-    || { echo "FAUCET FAILED ×${RETRIES:-5} → H-NEAR-FAUCET in docs/HUMAN_HANDOFF.md" >&2; exit 2; }
+    || { echo "FAUCET FAILED ×${RETRIES:-5} → H-NEAR-FAUCET in docs/process/human-handoff.md" >&2; exit 2; }
 fi
 
 create_subs() {

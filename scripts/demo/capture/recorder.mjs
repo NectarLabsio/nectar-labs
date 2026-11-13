@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // WO-35a: raw take recorder. CDP Page.startScreencast per page (JPEG q92, every frame, ≤ 3840×2160), one monotonic take clock, popups
-// attached automatically. Writes the shared take format (docs/work/wo-35a-demo-capture-tooling.md, CAPTURE.md):
+// attached automatically. Writes the shared take format (docs/process/work/wo-35a-demo-capture-tooling.md, CAPTURE.md):
 //   <take>/frames/<page>/<seq:06d>.jpg · <take>/frames.jsonl · <take>/events.jsonl · <take>/take.json
 // Library: startTake(context, dir, opts) → Take · event(type, data) · pageId(page) · setActive(page) · stopTake().
 // CLI:     node scripts/demo/capture/recorder.mjs selftest [takeDir] [--nth N] [--max WxH]   (throwaway profile, ~20 s, then gapcheck)

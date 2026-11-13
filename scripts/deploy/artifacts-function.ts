@@ -1,4 +1,4 @@
-// Nectar Labs deploy artifacts: a Railway Function, Bun, one file (WO-34m, docs/work/wo-34m-mcp-deploy.md). Orchestrator-deployed only.
+// Nectar Labs deploy artifacts: a Railway Function, Bun, one file (WO-34m, docs/process/work/wo-34m-mcp-deploy.md). Orchestrator-deployed only.
 // It issues short-lived presigned URLs for one private bucket, so a source tarball can move local → bucket → Vercel build / Railway Feed without
 // its bytes passing through a tool argument. It never handles a chain key of any kind.
 //

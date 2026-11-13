@@ -5,7 +5,7 @@ description: Every role, every key, where it lives.
 ---
 # Keys and roles
 
-<p className="verified">Verified against: F-015 (2026-11-09), F-016 (2026-11-10), F-019 (2026-11-10), F-020 (2026-11-10), F-030 (2026-11-09), F-040 (2026-11-09) · spec docs/PRD.md §6.1, §16.1 · D-007, D-010</p>
+<p className="verified">Verified against: F-015 (2026-11-09), F-016 (2026-11-10), F-019 (2026-11-10), F-020 (2026-11-10), F-030 (2026-11-09), F-040 (2026-11-09) · spec docs/process/prd.md §6.1, §16.1 · D-007, D-010</p>
 <p className="status">Status: accounts created on testnet 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). Ids from packages/config/config.yaml.</p>
 
 ## Roles in `nectar-core`

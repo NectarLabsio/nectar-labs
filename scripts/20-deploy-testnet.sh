@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # WO-6 deploy: contract accounts → mocks → core (init) → collateral params → owner price. Grammar F-017/F-018.
-# ABI: docs/work/interface-p0.md (merged WO-2). Budget: parent got 10 NEAR from the faucet; wasm storage is
+# ABI: docs/process/work/interface-p0.md (merged WO-2). Budget: parent got 10 NEAR from the faucet; wasm storage is
 # nectar_core 324,833 B ≈ 3.25 NEAR, mock_ft 152,268 B ≈ 1.52 NEAR (F-014), so accounts get 3.6 / 1.7 / 1.7 NEAR.
 # P0 needs no gas reserve (no MPC/OutLayer deposits): fund_gas_reserve is skipped until P1.
 source "$(dirname "$0")/_lib.sh"; guard_mainnet
