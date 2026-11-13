@@ -147,10 +147,15 @@ What Claude Code does then: the orchestrator fills `site:`; the legal pages (pri
   values; the production guard passes; the deploy is promoted to production.
 Default if silent by 2026-11-13 12:00 UTC: no production promotion (previews only, noindex). The submission continues without hosting.
 
-## H-DEPLOY — approve production deploys                status: DONE 2026-11-13 (Kunal typed approval; release 4 = c95cd0c deployed ~02:00Z)   needed by: the release with WO-62b, WO-64, WO-62c (before recording)
-Done: Kunal typed his approval on 2026-11-13. Release 4 (commit c95cd0c) is in production: Vercel web dpl_Bm1uwQcX…, docs dpl_DpqAmb6…. The
+## H-DEPLOY — approve production deploys                status: DONE 2026-11-13 (Kunal typed approval; release 4 = c95cd0c deployed ~02:00Z; web 1a95022 = WO-74 deployed 13:51Z, approved for that fix only)   needed by: the release with WO-62b, WO-64, WO-62c (before recording)
+Done: Kunal typed his approval on 2026-11-13. Release 4 (commit c95cd0c) went to production at ~02:00Z: Vercel web dpl_Bm1uwQcX… (replaced at
+  13:51Z, below), docs dpl_DpqAmb6… (still serving). The
   verifier's acceptance on the custom hosts passed 8 of 8 items (docs/EVIDENCE.md §"WO-34 production (custom hosts)", 2026-11-13T02:05Z–02:40Z).
-  A later production deploy needs Kunal's approval again. Original request kept below.
+  Web redeploy 2026-11-13 13:51Z: Kunal approved deploying the WO-74 fix only (the borrow composer refreshes its balance after "Get test
+  assets"). Commit 1a95022 went to the web project as Vercel dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K with the Vercel CLI, because the claude.ai
+  connectors were down (evidence/WO-34/deploy-web-cli-20261113T135102Z.log). Docs were not redeployed (dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE, c95cd0c).
+  Verifier check: docs/EVIDENCE.md §"WO-34 production (web 1a95022, WO-74)" (WO-78).
+  Any further production deploy needs Kunal's approval again. Original request kept below.
 Why a human: the web production deploy was denied by the auto-mode classifier on 2026-11-12, so production deploys need Kunal's approval in
   this session. Merged but not deployed: status host, docs at the root of docs.nectarlabs.io, platform-host 308s (WO-62b, WO-64), "Get test
   assets" button (WO-62c).
