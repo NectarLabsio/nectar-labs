@@ -1,0 +1,10 @@
+start 2026-11-13T15:48:46Z root /tmp/verify-wo83-20261113T154846Z
+clone HEAD 5ce3c27b0e320cfda80ce36fee5fcbc64ce5c8d4
+963ab62 ancestor: yes
+diff 963ab62..HEAD apps/docs-site: 
+smoke-prod exit=0 (49 s), ok lines 43, last:
+ok   HSTS https://docs.nectarlabs.io/
+ok   CSP https://docs.nectarlabs.io/
+ok   no noindex https://docs.nectarlabs.io/
+production smoke: failures 0
+end 2026-11-13T15:49:54Z

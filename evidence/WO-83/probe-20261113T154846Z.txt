@@ -1,0 +1,31 @@
+== DOCS root headers 2026-11-13T15:49:38Z
+HTTP/2 200 
+age: 217
+content-security-policy: frame-ancestors 'none'
+etag: "0785968cc07258243299f26d9ec262d0"
+last-modified: Fri, 13 Nov 2026 15:46:00 GMT
+strict-transport-security: max-age=63072000
+x-vercel-cache: HIT
+x-vercel-id: bom1::gwrl6-1794584978536-ad95086ea9d9
+== /project/team: HTTP/2 200 , Kunal=4, drall(i)=0, hackathon(i)=0
+content-security-policy: frame-ancestors 'none'
+strict-transport-security: max-age=63072000
+   ctx: Team Verified against: docs/HUMAN_HANDOFF.md H10 (done 2026-11-13, Kunal's reply) Team of one, confirmed by Kunal on 2026-11-13 (handoff H10
+   ctx: F.md H10 (done 2026-11-13, Kunal's reply) Team of one, confirmed by Kunal on 2026-11-13 (handoff H10). Name Role Contact Kunal fou
+   ctx: d by Kunal on 2026-11-13 (handoff H10). Name Role Contact Kunal founder, Nectar Network; product and mechanism design kunal@nectar
+   ctx: t Kunal founder, Nectar Network; product and mechanism design kunal@nectarnetwork.fun Implementation was carried out with AI coding
+   ctx: .fun Implementation was carried out with AI coding agents under Kunal's direction. Every human-only decision, including credentials, publis
+   ctx: ts Evidence Company About Talk to us Team kunal@nectarnetwork.fun Legal Privacy Cookies Terms Di
+== /project/prior-work: HTTP/2 200 , Kunal=2, drall(i)=0, hackathon(i)=0
+content-security-policy: frame-ancestors 'none'
+strict-transport-security: max-age=63072000
+   ctx: t commit 2026-11-09) · docs/HUMAN_HANDOFF.md H12 (wording approved by Kunal, 2026-11-13) Baseline before 2026-11-09. Before the build window,
+   ctx:  2026-11-13) Baseline before 2026-11-09. Before the build window, Kunal researched exit-liquidity gaps for tokenized stocks under Nectar Netw
+   ctx: ts Evidence Company About Talk to us Team kunal@nectarnetwork.fun Legal Privacy Cookies Terms Di
+== /docs/<path> redirects
+/docs/project/team -> 308 https://docs.nectarlabs.io/project/team
+/docs/project/prior-work -> 308 https://docs.nectarlabs.io/project/prior-work
+/docs/quick-start -> 308 https://docs.nectarlabs.io/quick-start
+/docs/operations/monitoring -> 308 https://docs.nectarlabs.io/operations/monitoring
+== sitemap branding sweep
+sitemap pages 56, non-200 0, total hackathon(i) 0 (first loc: <loc>https://docs.nectarlabs.io/changelog</loc>)

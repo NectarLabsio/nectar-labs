@@ -2492,6 +2492,40 @@ Notes: clone tree clean after all runs (no files written by tests). Full log 103
 
 ## WO-34 production
 
+### WO-34 production (docs 963ab62, WO-82)
+WO-83 A verifier: **PASS** (5/5 items, 1 part SELF-ATTESTED, marked below). Run 2026-11-13T15:48:46Z–15:49:54Z. Clone commit 5ce3c27b0e320cfda80ce36fee5fcbc64ce5c8d4. 963ab62 is an ancestor of the clone commit, and `git diff --stat 963ab62 HEAD -- apps/docs-site` is empty (run.txt).
+- Deployment: Vercel docs dpl_AjmdN8xuNAJJEzXMb41N3uTTBb1r. evidence/WO-34/deploy-docs-cli-20261113T154455Z.log shows `"readyState": "READY"`, `"target": "production"` and "Production URL: https://docs.nectarlabs.io". DOCS / returns last-modified 15:46:00Z and age 217 s at 15:49:38Z, which fits a 15:45Z deploy. **SELF-ATTESTED:** the source commit 963ab62 and the tarball sha256 75ba6d26… come from the work order, not from the deploy log. I checked the content directly instead (items 2 and 5): the WO-82 text is live, and the old surname appears nowhere. Web is unchanged (dpl_4ExxeLH…, 1a95022; see §"WO-34 production (web 1a95022, WO-74)").
+- Method: `git clone /Volumes/T7/nectar-labs` into /tmp/verify-wo83-20261113T154846Z/nectar-labs. No `pnpm i` was needed: the smoke scripts use only curl and bash. No secrets were used. I touched no wallet, faucet or host service. Every probe was a public GET or HEAD. The clone ended with no untracked files. Script: evidence/WO-83/scripts/wo83.sh.
+- Explorer links opened: none (no tx is cited).
+  ```
+  $ scripts/deploy/smoke-prod.sh https://nectarlabs.io https://testnet.nectarlabs.io https://docs.nectarlabs.io https://status.nectarlabs.io \
+      https://nectarlabs.vercel.app=https://nectarlabs.io https://nectarlabs-app.vercel.app=https://testnet.nectarlabs.io \
+      https://nectar-labs-web.vercel.app=https://testnet.nectarlabs.io https://nectarlabs-docs.vercel.app=https://docs.nectarlabs.io \
+      https://nectar-labs-docs.vercel.app=https://docs.nectarlabs.io
+  web smoke https://testnet.nectarlabs.io: routes 28, failures 0
+  docs smoke https://docs.nectarlabs.io: pages 56, assets 6, failures 0
+  ok   HSTS https://docs.nectarlabs.io/ · ok   CSP https://docs.nectarlabs.io/ · ok   no noindex https://docs.nectarlabs.io/
+  production smoke: failures 0          → exit=0 (49 s), 43 ok lines
+  $ curl -sSI https://docs.nectarlabs.io/   (15:49:38Z)
+  HTTP/2 200 · content-security-policy: frame-ancestors 'none' · strict-transport-security: max-age=63072000
+  last-modified: Fri, 13 Nov 2026 15:46:00 GMT · age: 217 · x-vercel-cache: HIT
+  /project/team:       200, "Kunal" ×4, "drall" (case-insensitive) ×0, "hackathon" ×0, CSP + HSTS as above
+    text: "Team of one, confirmed by Kunal on 2026-11-13 (handoff H10). Name Role Contact Kunal founder, Nectar Network; …"
+  /project/prior-work: 200, "Kunal" ×2, "drall" ×0, "hackathon" ×0, CSP + HSTS as above
+    text: "Baseline before 2026-11-09. Before the build window, Kunal researched exit-liquidity gaps for tokenized stocks …"
+  /docs/project/team -> 308 https://docs.nectarlabs.io/project/team
+  /docs/project/prior-work -> 308 https://docs.nectarlabs.io/project/prior-work
+  /docs/quick-start -> 308 https://docs.nectarlabs.io/quick-start
+  /docs/operations/monitoring -> 308 https://docs.nectarlabs.io/operations/monitoring
+  DOCS/sitemap.xml: 56 pages, non-200 0, "hackathon" (case-insensitive) total 0
+  ```
+1. smoke-prod.sh with SITE APP DOCS STATUS and the 5 legacy pairs (full origins): **PASS**. It exited 0 with 0 failures. I ran it by path from the clone with no chmod: git mode is 100755 (evidence/WO-83/prod-smoke-20261113T154846Z.log).
+2. DOCS /project/team and /project/prior-work contain "Kunal" and no surname: **PASS**. Both pages return 200. "Kunal" appears 4 times on team and 2 times on prior-work. "Drall" (the surname WO-82 removed; see the 5402df0 diff) appears 0 times on either page, case-insensitive. That includes the handle form "kunal-drall". The prior-work page uses "build window", the WO-82 wording (body_project_*.html, probe-20261113T154846Z.txt).
+3. DOCS /docs/<path> 308 → /<path>: **PASS**. Four sitemap paths each return 308 to the same path without the /docs prefix, on the same host (probe-20261113T154846Z.txt).
+4. CSP + HSTS on DOCS: **PASS**. DOCS /, /project/team and /project/prior-work all send `content-security-policy: frame-ancestors 'none'` and `strict-transport-security: max-age=63072000`, and smoke-docs reports ok for both (hdr_project_*.txt). Note: the CSP holds only `frame-ancestors`, the same policy the earlier smoke runs accepted.
+5. Branding, no "hackathon" on DOCS pages: **PASS**. I fetched all 56 locations in DOCS/sitemap.xml: all returned 200 and none contains "hackathon", case-insensitive. I checked the server HTML only. The docs site is statically rendered and has no feature flags, so the SSR-vs-hydrated gap seen on the web app does not apply (sitemap.xml, probe-20261113T154846Z.txt).
+- Secrets: `gitleaks dir evidence/WO-83` finds no leaks, and there are 0 home paths in evidence/WO-83. No screenshot was taken: every assertion is header- or text-level.
+
 ### WO-34 production (web 1a95022, WO-74)
 WO-78 verifier, **PASS** (5/5 items; 2 parts are SELF-ATTESTED, marked below), 2026-11-13T14:21:42Z–14:25:09Z. Clone commit 2cd7a6e3f20d32c0058fe7bbe9e9001794cf9b47. The product is 1a95022: `git diff --stat 1a95022 HEAD -- apps packages` is empty.
 - Deployments: Vercel web dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K. evidence/WO-34/deploy-web-cli-20261113T135102Z.log shows `"readyState": "READY"` and "Production URL: https://nectarlabs.io". Docs are unchanged at dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE (c95cd0c): DOCS / has last-modified 02:03:23Z and age 44408 s at 14:23Z. **SELF-ATTESTED:** the source commit 1a95022 and the tarball sha256 74626b00… appear only in STATE:70/:76 (orchestrator), not in the deploy log. The public pages show no commit or dpl id (0 `dpl_` strings in the /borrow HTML). What I verified directly: production /borrow ships the WO-74 code, and c95cd0c does not have it. `git diff --stat c95cd0c 1a95022 -- apps` lists only TestAssets.tsx (+3/−1), BorrowComposer.tsx (+1/−1) and e2e/test-assets.spec.ts (clone.txt).
