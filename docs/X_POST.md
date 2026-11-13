@@ -4,19 +4,22 @@ Rules (docs/HACKATHON.md "2. The demo post"): lead with the user problem; say it
 attach the video or screenshots; explain NEAR's role concretely; link the demo and the repo and ask a real question. Each post ≤ 280 characters
 (X counts every link as 23). Started from Kunal's 3-post draft (WO-89, 2026-11-13); every claim checked against docs/EVIDENCE.md or testnet RPC
 (source in brackets after each post; delete the brackets before posting). The URL of post 1 becomes `demoUrl` in docs/SUBMISSION.md: `TODO-H3`.
-Media (WO-35): post 1 = the demo video, captioned, 1280×720; post 2 = screenshot 3 (borrow preview: limit $472, fees, health 4.89; Standard protection,
-taken in session on 2026-11-13, Weekend Shield shown as unavailable), post 3 = screenshot 6 (agent terminal, 402 → 200, 168 rows, 2026-11-13T19:41Z),
-both as 1600×900 JPG copies of docs/media/screens/03-borrow-preview.png and 06-agent-402-200.png. Re-checked against the final README for WO-92.
+Media (WO-35): post 1 = the demo video, captioned, 1280×720; post 2 = screenshot 3 (borrow preview just after the close on 2026-11-13: Weekend Shield selected at 15 bps, limit $472, fees $0.45,
+health 4.89; the borrow that opened loan #22), post 3 = screenshot 6 (agent terminal, 402 → 200, 168 rows, 2026-11-13T19:41Z),
+both as 1600×900 JPG copies of docs/media/screens/03-borrow-weekend.png and 06-agent-402-200.png. Re-checked against the final README for WO-92 and WO-94.
+Reply to post 1: the after-close video (1:28, take A, recorded 2026-11-13 21:00–21:04Z with the market closed), which shows the Weekend Shield borrow of loan #22.
 
 ## Thread (3 posts)
 1/
 Stock market closed for the weekend? Lenders lose their price, so they cut your limit or sell your shares.
-Nectar: market makers escrow buy quotes on-chain, so your limit rests on committed buyers, weekend or not.
+Nectar: market makers escrow buy quotes on-chain, so you can borrow against tokenized stocks all weekend.
 Built at NEAR HACKATHON on testnet. @NEARProtocol #NEARHackathon
 
-[video. Changed from the draft: "so you can borrow against tokenized stocks all weekend" became "your limit rests on committed buyers, weekend or
-not". No borrow during a closed market is recorded on testnet; the closed-market rule is sandbox-tested only. Quotes stay escrowed over a
-weekend because withdrawal needs 7 days' notice (`min_notice_period_ns` 604800000000000 in `get_config`, read 2026-11-13). "On testnet": README first screen]
+[video; reply: the after-close video (1:28, take A). "so you can borrow against tokenized stocks all weekend" is Kunal's draft wording, restored
+because the take-A borrow landed with the market closed: tx 9uwAk6Vyun9s2bi2wu1a7H5er3pRLpuVN3HYgYvsEfni (2026-11-13T21:02Z, after the New York close;
+`shield_opened` Weekend 15 bps for loan #22, window to 2026-11-16 14:30 UTC; `position_opened` 5 NVDAx, $100 debt, $99.55 net), and 475VLHwE… (#24,
+21:06Z); both SuccessValue on archival RPC, re-checked 2026-11-13T21:26Z. Quotes stay escrowed over a weekend because withdrawal needs 7 days'
+notice (`min_notice_period_ns` 604800000000000 in `get_config`, read 2026-11-13). "On testnet": README first screen]
 
 2/
 What NEAR does here:

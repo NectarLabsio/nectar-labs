@@ -5,7 +5,7 @@ description: Storage staking, bounded iteration and gas budgets.
 ---
 # Storage and gas
 
-<p className="verified">Verified against: F-014 (2026-11-09), F-015 (2026-11-09), F-034 (2026-11-09), F-041 (2026-11-09), F-042 (2026-11-09) · spec docs/PRD.md §6.6, §6.9 · config.yaml limits · evidence/G1/gas-sandbox.csv (G1 PASS 2026-11-09T20:43Z, commit b721641)</p>
+<p className="verified">Verified against: F-014 (2026-11-09), F-015 (2026-11-09), F-034 (2026-11-09), F-041 (2026-11-09), F-042 (2026-11-09) · spec docs/PRD.md §6.6, §6.9 · config.yaml limits · evidence/G1/gas-sandbox.csv (G1 PASS 2026-11-09T20:43Z, commit b721641) · `set_session` removed in commit c7fa925 (exports re-read 2026-11-13)</p>
 <p className="status">Status: P0 gas measured in the near-workspaces sandbox at G1 (evidence/G1/gas-sandbox.csv, G1 PASS commit b721641). Testnet gas may differ slightly; P1/P2 budgets are not measured yet.</p>
 
 ## Storage
@@ -49,7 +49,7 @@ Measured P0 values, copied from evidence/G1/gas-sandbox.csv (total gas burnt per
 | `set_oracle_params` | 1,817,307,324,212 | 1.82 |
 | `set_quote_params` | 1,817,303,650,097 | 1.82 |
 | `set_reserve` (v1 only; removed in v2, D-024) | 2,041,323,627,883 | 2.04 |
-| `set_session` | 2,037,962,774,353 | 2.04 |
+| `set_session` (v1 only; v2 uses `set_session_calendar` and `force_session_closed`) | 2,037,962,774,353 | 2.04 |
 | `trigger_preliquidation(2 legs)` | 19,979,096,630,723 | 19.98 |
 | `trigger_preliquidation(8 legs)` | 46,970,045,935,847 | 46.97 |
 | `unpause` | 1,841,759,818,559 | 1.84 |
