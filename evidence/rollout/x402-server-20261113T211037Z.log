@@ -1,0 +1,8 @@
+{"ts":"2026-11-13T21:10:37.892Z","service":"x402","msg":"x402_started","port":8791,"network":"near:testnet","asset":"usdc-mock.nectar.testnet","amount":"10000","pay_to":"nectar.testnet","facilitator":"in-process (relayer x402-relayer.nectar.testnet, key file)","feed":"https://feed-production-2f2776c9.up.railway.app","facilitator_http":"off","cors":"off"}
+{"ts":"2026-11-13T21:10:39.652Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T21:10:58.089Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T21:10:58.091Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T21:11:03.449Z","service":"x402","msg":"settle_failed","reason":"invalid_exact_near_storage_check_failed"}
+{"ts":"2026-11-13T21:15:14.861Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T21:15:14.863Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T21:15:20.957Z","service":"x402","msg":"settle_failed","reason":"settlement_failed"}

@@ -1,4 +1,19 @@
-## NOW (2026-11-13 ~20:25Z) — quick-take video delivered; WO-92 step 1 merged; after-close takes next (21:00Z)
+## NOW (2026-11-13 ~21:40Z) — after-close takes DONE; Weekend Shield video sent to Kunal; WO-92 step 2 dispatched
+- Take A 21:00:50–21:03:59Z, market closed (outside_hours, block 277562411): all sections gapcheck PASS. Weekend borrow 9uwAk6Vy… (#22,
+  shield_opened Weekend 15 bps) SuccessValue; agent 8QrZ9cSX… + x402 AJ1Tf7f3… → 200. Hashes: nectar-demo-media/raw/take-a/txs.json.
+- Take B: owner mint 4PL3GhLt… + owner refresh 4ZpoqRuD… off camera; S2 skipped (faucet cap 15 reached); S3 weekend borrow 475VLHwE… (#24);
+  S5 failed 3× after the agent borrow (FastNear 429 / storage check / settlement_failed; relayer submitted nothing) → edit uses take A S5.
+  agent1 has 1 NVDAx left. raw/take-b/txs.json.
+- Video: nectar-demo-media/demo/weekend/ (88.2 s; captions-720p, master, srt, contact sheet, shotlist.md, vo-script.md); edit-final.json in
+  raw/take-a (no intro, S2 start_ms 4720 hides the copilot notice). Sent to Kunal ~21:25Z. Stills 01–05 committed f790b8c (stills-takes.mjs).
+- Intear toast: the two weekend borrows DID show the tx hash; README "no hash with Intear" gets softened (WO-94). No drawer change.
+- Kunal's 3 open questions are answered by the WO-92 brief: FACTS-nectar-labs.md removed from tree only (§2h, no history rewrite);
+  LICENSE MIT © 2026 Nectar Labs (§2a); drawer copy not in allowed product changes (§3).
+- GitHub CI: both runs failed with 0 jobs (ci.yml never started) → WO-95b fixes or removes it.
+- Running (worktrees): WO-93 web copilot copy · WO-94 docs content (stills, Intear, post 1, docs-site names) · WO-96 verifier frame review +
+  EVIDENCE · WO-95b scripts audit + CI. Next: WO-95a repo cleanup (after WO-94/95b merge) → one web + one docs deploy → step 3.
+
+## (2026-11-13 ~20:25Z) — quick-take video delivered; WO-92 step 1 merged; after-close takes next (21:00Z)
 - Production unchanged: web + docs c9fd56b (web dpl_F8NmBUE5…, docs dpl_2gj8GAFN…), Feed 37dfec9 (Railway d2861e5f), refresher 7833aa3.
 - Quick take (market hours, Standard): /Volumes/T7/nectar-demo-media/demo/quick/ — 111.634 s; captions-720p (X) + 1080p master sent to Kunal
   20:10Z; edit source edit-final.json (take runs overwrite edit.json). Retake 3 removed the copilot "Key missing" notice; still 03 re-cut (971cd60).
@@ -553,7 +568,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T20:23:17Z · commit 3513c7c
+Last activity: 2026-11-13T21:20:12Z · commit d4fe858
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
