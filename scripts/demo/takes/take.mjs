@@ -283,7 +283,15 @@ async function explorerTab(opener, hash) {
   await h.wait('explorer loads', tab.waitForLoadState('load').catch(() => {}));
   await h.settle(tab, 'explorer painted', { timeout: 3000 });
   if (state.explorer !== 'nearblocks') {
-    const card = await seen('explorer tx summary', tab.locator('div.rounded-lg', { has: tab.locator('dl') }).filter({ hasText: hash }), 20_000);
+    // Near Rocks can sit on "Loading transaction…" for a while (quick take 2026-11-13): wait up to 60 s (logged as a wait → sped up in the
+    // edit), reloading once at 25 s, and only then hold on the card.
+    const cardLoc = tab.locator('div.rounded-lg', { has: tab.locator('dl') }).filter({ hasText: hash });
+    const appeared = await h.wait('explorer tx loads', (async () => {
+      if (await cardLoc.first().waitFor({ state: 'visible', timeout: 25_000 }).then(() => true).catch(() => false)) return true;
+      await tab.reload({ waitUntil: 'load' }).catch(() => {});
+      return cardLoc.first().waitFor({ state: 'visible', timeout: 35_000 }).then(() => true).catch(() => false);
+    })());
+    const card = appeared === false ? null : await seen('explorer tx summary', cardLoc, 2000);
     if (card) { await boxHold(tab, 'tx on explorer', card, 2000); note('Near Rocks shows no "Success" label; the summary card (hash, signer, receiver, block) is held 2 s'); }
   } else {
     const ok = await seen('nearblocks status', tab.getByText(/^Success$/), 20_000);
@@ -440,6 +448,13 @@ async function s3() {
     if (await refuse.isVisible().catch(() => false)) note(`preview refuses: ${(await refuse.locator('..').innerText()).replace(/\s+/g, ' ').slice(0, 160)}`);
     h.zoomOut();
     const review = await seen('[data-testid=review-borrow]', page.locator('[data-testid="review-borrow"]'));
+    // Kunal 2026-11-13 "retake 3": scroll only until the Review button sits just above the bottom edge, so the Risk Copilot panel below
+    // (amber "Key missing" notice) stays out of frame; moveTo's scrollIntoViewIfNeeded would centre the button and show the panel.
+    {
+      const rb = await review.boundingBox().catch(() => null);
+      const vh = page.viewportSize()?.height ?? 1080;
+      if (rb && rb.y + rb.height > vh - 16) await h.scroll(page, Math.ceil(rb.y + rb.height - vh + 28));
+    }
     await h.moveTo(page, review);
     if (await review.isDisabled()) {
       const why = (await page.locator('[data-testid="amt-units"], [data-testid="amt-borrow"]').allInnerTexts()).join(' ').replace(/\s+/g, ' ');
@@ -474,17 +489,30 @@ async function s3() {
       await h.settle(page, 'drawer closed');
       return;
     }
-    const toast = page.locator('.toasts .toast').filter({ hasText: TX_RE });
-    await h.wait('tx confirms', toast.first().waitFor({ state: 'visible', timeout: 120_000 }).catch(() => {}));
+    // 2026-11-13 quick take: with Intear the single-tx borrow returns no hash, so the app's success toast has no "tx <hash>" line
+    // (AppProvider.tsx:124–131). Wait for the success toast itself (role=status) or an error toast; take the hash from the toast if present,
+    // else from the account's latest ft_transfer_call on the testnet explorer API (off camera).
+    const toast = page.locator('.toasts .toast[role=status]');
     const bad = page.locator('.toasts .toast[role=alert]');
+    await h.wait('tx confirms', Promise.race([toast.first().waitFor({ state: 'visible', timeout: 120_000 }), bad.first().waitFor({ state: 'visible', timeout: 120_000 })]).catch(() => {}));
     if (await bad.isVisible().catch(() => false)) throw new Error(`borrow failed: ${(await bad.innerText()).replace(/\s+/g, ' ').slice(0, 200)}`);
-    const m = TX_RE.exec(await toast.first().innerText().catch(() => ''));
-    if (!m) throw new Error('no tx hash in the success toast');
+    let m = TX_RE.exec(await toast.first().innerText().catch(() => ''));
+    if (!m) {
+      const since = Date.now() / 1000 - 600;
+      for (let i = 0; i < 10 && !m; i++) {
+        const j = await (await fetch(`https://api-testnet.nearblocks.io/v1/account/${ACCOUNT}/txns?per_page=10`)).json().catch(() => ({}));
+        const t = (j.txns ?? []).find((x) => x.receiver_account_id === NVDAX && x.actions?.[0]?.method === 'ft_transfer_call' && Number(String(x.block_timestamp).slice(0, 10)) > since);
+        if (t) m = [null, t.transaction_hash];
+        else await new Promise((ok) => setTimeout(ok, 3000));
+      }
+      cur.notes.push('success toast has no tx hash (Intear single-tx); borrow tx taken from the explorer API');
+    }
+    if (!m) throw new Error('borrow tx not found (no hash in the toast, none on the explorer API)');
     state.borrowTx = m[1];
     report('borrow_tx', m[1]);
     report('toast_title', (await toast.first().locator('.t-title').innerText().catch(() => '')).trim());
     const hash = toast.first().locator('.mono').first();
-    await boxHold(page, 'tx hash', (await hash.isVisible().catch(() => false)) ? hash : toast.first(), 1500);
+    await boxHold(page, 'success toast', (await hash.isVisible().catch(() => false)) ? hash : toast.first(), 1500);
     txMark(m[1], 'borrow');
     h.zoomOut();
     const loanLink = page.locator('[data-testid="view-loan"]');

@@ -12,3 +12,10 @@ Rules: no history rewrite. No content changes under apps/, packages/, services/,
 7. Report: the final top-level tree, files moved and removed, links updated.
 Orchestrator note: CLAUDE.md, STATE and work orders move — update CLAUDE.md's own path references (docs/STATE.md, docs/work/*.md) accordingly; scripts/hooks that
 read docs/work or STATE paths must follow. Do it in one docs/scripts agent round + one verifier check.
+## Additions (Kunal 2026-11-13 ~20:00Z) — after the takes, in the SAME deploy as Part B
+- Product copy (apps/web, explicitly requested, one web deploy): replace the Risk Copilot's amber "Key missing" notice on /borrow ("The NEAR AI key is not
+  configured on this server, so live answers are off. You can still run the verifier on the recorded fixture.") with NEUTRAL copy that says what the code actually
+  does when live mode is off (read CopilotPanel + lib/copilot to state it exactly; no warning tone, no amber). Judges see it on /borrow. Tests + claims.spec green.
+- README 60-second path matches real behaviour: with Intear, the borrow's success toast shows no tx hash (seen in the 2026-11-13 quick take: borrow txs
+  4oRVJZmK…, Gatpru4m…, AauPLji7…; AppProvider.tsx:124–131 shows the hash only when the wallet returns one). Point to where the tx link DOES appear (position page /
+  account history / explorer) and list the toast gap under "What this does not prove"/limitations.

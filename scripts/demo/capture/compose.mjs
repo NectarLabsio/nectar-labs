@@ -260,7 +260,9 @@ async function takeSegment(item, baseDir, opts, chrome, isFirst) {
 
   const sec = events.find((e) => e.type === 'section' && Number(e.id) === Number(item.section));
   if (!sec) throw new Error(`section ${item.section} not in ${tilde(dir)}/events.jsonl`);
-  const a = sec.t;
+  // Optional `start_ms` on the edit item (orchestrator 2026-11-13): start the section later, e.g. after an off-topic scroll-back — choosing the
+  // section start, not a cut inside it.
+  const a = Number.isFinite(item.start_ms) ? sec.t + item.start_ms : sec.t;
   const endEv = events.find((e) => e.type === 'section_end' && Number(e.id) === Number(item.section) && e.t > a);
   const nextSec = events.find((e) => e.type === 'section' && e.t > a);
   const b = endEv ? endEv.t : nextSec ? nextSec.t : lastFrameT;
