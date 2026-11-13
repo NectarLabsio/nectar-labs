@@ -22,7 +22,10 @@
   poll 10 s × 100 blocks → caught up ≈ 04:05Z. Then: x402 :8791 restart with FEED_URL (after WO-67), paid download row count → Kunal.
 - C6: borrow in an open session needs price < 120 s (max_age_ns_session); 10-min refresher → borrows fail most of NYSE hours. Kunal decides cadence.
   nectar.testnet 1.145 NEAR (02:24Z).
-- Next: WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
+- 03ec6fed merged WO-67 (bd64f39): production (custom hosts) PASS 8/8; G9 run 6 FAIL step 3 only (README hosted-demo text pre-release; docs/GATE_FAIL_WO67.md).
+  verify:quick 0. f5a3152: scripts/*.sh +x in git (G9 tooling note). WO-68 docs (README/DEMO_SCRIPT/HUMAN_HANDOFF) dispatched → then verifier G9 step 3 re-check.
+- x402 :8791 restarted (planned) with FEED_URL = hosted Feed (bqqk6anqo; evidence/rollout/x402-server-*.log); unpaid export.csv → 402.
+- Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
 Decisions typed this session: hosts nectarlabs.io (site) · docs. · status. · testnet. (app) · www → apex, replacing ac.nectarlabs.io; H-ORACLE option A
@@ -444,7 +447,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T02:19:30Z · commit 8c5301d
+Last activity: 2026-11-13T02:27:15Z · commit f5a3152
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
