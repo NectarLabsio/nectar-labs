@@ -1,0 +1,3 @@
+# 2026-11-13T17:04:55Z $ node scripts/check-no-branding-all.mjs (at c9fd56b)
+no hackathon branding in landing, web app or docs site
+exit=0

@@ -1,0 +1,1 @@
+# snapshot copied 2026-11-13T17:07:14Z; probe + e2e were still running (stopped by coordinator)

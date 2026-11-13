@@ -1,0 +1,15 @@
+# 2026-11-13T17:04:10Z served HTML check (curl -sL, raw bytes)
+url                                             http  bytes labsProd   copyLabs   netProduct   2026Net      NectarNetwork  headers
+https://nectarlabs.io/                           200  66376 1          1          0            0            0              age: 304 etag: "dfc2d807d21b58163f357594af463b3c" x-vercel-cache: HIT 
+    copyright: </nav><div class="fbar"><span>© 2026 Nectar Labs · MIT License · Unaudited testnet software</span><span clas
+https://testnet.nectarlabs.io/borrow             200  20339 1          1          0            0            0              age: 303 etag: "12e454f65fa436ade0c0e9134e7ef6ac" x-vercel-cache: HIT 
+    copyright: </nav><div class="fbar"><span>© 2026 Nectar Labs · MIT License · Unaudited testnet software</span><span clas
+https://testnet.nectarlabs.io/feed               200  20978 1          1          0            0            0              age: 299 etag: "4836a0b5ba3cb4af872e47233360ceee" x-vercel-cache: HIT 
+    copyright: </nav><div class="fbar"><span>© 2026 Nectar Labs · MIT License · Unaudited testnet software</span><span clas
+https://status.nectarlabs.io/                    200  59259 1          1          0            0            0              age: 303 etag: "f7e3a7fc01199fe1997dd4fab0b41fa9" x-vercel-cache: HIT 
+    copyright: </nav><div class="fbar"><span>© 2026 Nectar Labs · MIT License · Unaudited testnet software</span><span clas
+https://docs.nectarlabs.io/                      200  27723 0          1          0            0            0              age: 302 etag: "42149a2f56adc4cf29fba1a7a3a29150" last-modified: Fri, 13 Nov 2026 16:59:10 GMT x-vercel-cache: HIT 
+    copyright: ty, verifiable settlement.<br>© 2026 Nectar Labs · MIT License · testnet software · mock collateral</div></d
+https://docs.nectarlabs.io/project/team          200  22307 0          1          0            0            1              age: 302 etag: "aee85c3719b56e29b7fa8a1d76a73812" last-modified: Fri, 13 Nov 2026 16:59:11 GMT x-vercel-cache: HIT 
+    other "Nectar Network": tact</th></tr></thead><tbody><tr><td>Kunal</td><td>founder, Nectar Network; product and mechanism design</td><td><
+    copyright: ty, verifiable settlement.<br>© 2026 Nectar Labs · MIT License · testnet software · mock collateral</div></d
