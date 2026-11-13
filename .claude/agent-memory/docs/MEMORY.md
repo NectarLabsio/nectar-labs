@@ -2,4 +2,5 @@
 - [Write early](feedback_write_early.md) — coordinator stopped WO-92 at 71 calls with 0 edits: draft the file first, verify in one batched script
 - [README: no internal ids](feedback_readme_no_gate_ids.md) — no G#/WO-/H-/F-/§ in README; tx-link/test evidence; banned words; RPC-check txs
 - [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python edits; plain git only; cite EVIDENCE "recorded in <commit>"; grep e2e.log per test before saying "skipped"
+- [UTC dates + media refs](feedback_utc_dates_and_media_refs.md) — env "today" is IST, stamp with date -u; grep X_POST/scripts before calling a PNG unreferenced
 - [Legal pages dual render](project_legal_pages_dual_render.md) — legal md renders in docs-site and apps/web; /docs/<slug> links, no JSX, only TODO-H-LEGAL, YAML comments

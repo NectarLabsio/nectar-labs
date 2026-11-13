@@ -5,7 +5,7 @@ description: nectar-core P0 methods, messages, views and events.
 ---
 # Contract reference (`nectar-core`, P0)
 
-<p className="verified">Verified against: F-010 (2026-11-10), F-013 (2026-11-09), F-018 (2026-11-10), F-021 (2026-11-09), F-028 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · D-009, D-010 (2026-11-10) · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
+<p className="verified">Verified against: F-010 (2026-11-10), F-013 (2026-11-09), F-018 (2026-11-10), F-021 (2026-11-09), F-028 (2026-11-10) · docs/work/interface-p0.md (2026-11-10) · D-009, D-010 (2026-11-10) · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1) · exports re-read 2026-11-13: `#[near]` pub fns in contracts/nectar-core/src/*.rs and `[features]` in contracts/nectar-core/Cargo.toml; `set_session` removed in commit c7fa925</p>
 <p className="status">Status: interface specification that WO-2 implements. Deployed on testnet as `nectar-core.nectar.testnet` on 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). If the built ABI differs, the ABI wins and this page is corrected.</p>
 
 Built with `near-sdk` 5.30.1 (F-010) and `cargo near build` (F-011). The contract account is [`nectar-core.nectar.testnet`](https://testnet.nearblocks.io/address/nectar-core.nectar.testnet).
@@ -41,7 +41,7 @@ A token that is neither USDC nor a configured collateral makes `ft_on_transfer` 
 | --- | --- | --- | --- |
 | `new(owner, usdc_token, keeper)` | init | — | |
 | `upsert_collateral(symbol, config)` | owner | 0 | fields as `config.yaml` `collateral.nvdax` |
-| `set_keeper`, `set_fee_split`, `set_session`, `set_dex_depth`, `set_reserve`, `set_quote_params`, `set_oracle_params` | owner | 0 | each emits an event or is visible in `get_config`. `set_reserve` exists only on the live v1 contract; v2 removes it because `R_c` is the [Reserve pool](/concepts/nectar-reserve) (D-024) |
+| `set_keeper`, `set_fee_split`, `set_session`, `set_dex_depth`, `set_reserve`, `set_quote_params`, `set_oracle_params` | owner | 0 | each emits an event or is visible in `get_config`. `set_session` and `set_reserve` exist only on the live v1 contract. v2 replaces `set_session` with `set_session_calendar(windows)` and `force_session_closed(symbol, closed)` ([Weekend Oracle Guard](/concepts/weekend-oracle-guard)) and removes `set_reserve` because `R_c` is the [Reserve pool](/concepts/nectar-reserve) (D-024) |
 | `update_owner_price(symbol, price_usd_e6)` | owner | 0 | P0 owner oracle. Rejected with `oracle_rejected` if more than `band_bps` from the last accepted price |
 | `propose_price(symbol, price_usd_e6)` then `apply_price(symbol)` | owner | 0 | two-step override that bypasses the band |
 | `pause()` / `unpause()` | owner | 0 | paused: money paths refuse. Views and completion of an elapsed withdrawal still work |
@@ -50,7 +50,10 @@ A token that is neither USDC nor a configured collateral makes `ft_on_transfer` 
 | `complete_quote_withdrawal(quote_id)` | buyer | 1 yocto | after `unlock_ns` |
 | `claim_fees(quote_id)` | buyer | 1 yocto | |
 | `trigger_preliquidation(position_id)` | keeper | 0 (not payable) | fresh oracle, LTV above `pre_liq_ltv_bps`; P0 static settle, at most 8 quotes |
-| `relay_settlement_result`, `on_quoter_result`, `on_signature` | — | — | feature-gated stubs (`p1`, `p2`), not in the default build |
+| `relay_settlement_result(position_id, solana_tx_sig)` | keeper | 0 (not payable) | records the remote transaction of a signed settlement leg (a Solana signature, or an EVM tx hash in the same argument) |
+| `on_quoter_result`, `on_signature` | the contract itself (`#[private]`) | — | callbacks for the OutLayer quoter and the Chain Signatures signer |
+
+On the v1 contract these three were stubs behind the `p1` and `p2` features, which its build left off (`default = []` at tag `p0-green`). Since P1 the default build enables both (`default = ["p1", "p2"]` in contracts/nectar-core/Cargo.toml), so `nectar-core-v2` exports them.
 
 ## Views
 
