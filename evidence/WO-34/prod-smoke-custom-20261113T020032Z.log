@@ -1,0 +1,136 @@
+== APP routes
+307 /
+200 /feed
+200 /borrow
+307 /quote
+200 /notes
+200 /reserve
+200 /shield
+200 /console
+308 /about
+308 /status
+308 /security
+308 /changelog
+308 /brand
+308 /talk
+308 /legal/privacy
+308 /legal/terms
+308 /legal/cookies
+308 /legal/disclaimers
+308 /docs
+200 /robots.txt
+200 /sitemap.xml
+200 /api/health
+200 /api/feed
+200 /api/indexer/health
+200 /feed/NVDAX
+200 /position/1
+200 /note/1
+200 /quote/1
+/api/health ok:true
+web smoke https://testnet.nectarlabs.io: routes 28, failures 0
+== docs at the root of https://docs.nectarlabs.io
+FAIL page /changelog → 404
+FAIL page /changelog/archive → 404
+FAIL page /changelog/docs-and-spec → 404
+FAIL page /concepts/aggregate-limit → 404
+FAIL page /concepts/corporate-actions → 404
+FAIL page /concepts/cramer-limits → 404
+FAIL page /concepts/exit-gap → 404
+FAIL page /concepts/fee-stack → 404
+FAIL page /concepts/nectar-reserve → 404
+FAIL page /concepts/notice-periods → 404
+FAIL page /concepts/pappus-quotes → 404
+FAIL page /concepts/position-notes → 404
+FAIL page /concepts/pre-liquidation → 404
+FAIL page /concepts/premium-and-fee-index → 404
+FAIL page /concepts/profit-lock → 404
+FAIL page /concepts/shields → 404
+FAIL page /concepts/weekend-oracle-guard → 404
+FAIL page /concepts/whitepaper → 404
+FAIL page /integrate/agent-skill-x402 → 404
+FAIL page /integrate/feed-mcp → 404
+FAIL page /integrate/feed-rest → 404
+FAIL page /integrate/oneclick-depth → 404
+FAIL page /integrate/post-quotes → 404
+FAIL page /integrate/remote-collateral-solana → 404
+FAIL page /integrate/run-a-keeper → 404
+FAIL page /integrate/sdk → 404
+FAIL page /legal/cookies → 404
+FAIL page /legal/disclaimers → 404
+FAIL page /legal/privacy → 404
+FAIL page /legal/terms → 404
+FAIL page /operations/incidents → 404
+FAIL page /operations/monitoring → 404
+FAIL page /operations/runbook → 404
+FAIL page /operations/upgrades → 404
+FAIL page /project/brand → 404
+FAIL page /project/evidence → 404
+FAIL page /project/prior-work → 404
+FAIL page /project/roadmap → 404
+FAIL page /project/team → 404
+FAIL page /protocol/chain-signatures → 404
+FAIL page /protocol/contract-reference → 404
+FAIL page /protocol/oracle-policy → 404
+FAIL page /protocol/preimage-format → 404
+FAIL page /protocol/quoter-tee → 404
+FAIL page /protocol/settlement-flow → 404
+FAIL page /protocol/solana-vault → 404
+FAIL page /protocol/storage-and-gas → 404
+FAIL page /search → 404
+FAIL page /security/audits → 404
+FAIL page /security/disclosure → 404
+FAIL page /security/keys-and-roles → 404
+FAIL page /security/threats → 404
+FAIL page /security/trust-model → 404
+FAIL page /start/live-on-testnet → 404
+FAIL page /start/quick-start → 404
+docs smoke https://docs.nectarlabs.io: pages 56, assets 6, failures 55
+== host split
+ok   SITE / answers (200)
+ok   SITE /about answers (200)
+ok   SITE /borrow → APP status (308)
+ok   SITE /borrow → APP location (https://testnet.nectarlabs.io/borrow)
+ok   APP / → /feed status (307)
+ok   APP / → /feed location (https://testnet.nectarlabs.io/feed)
+ok   APP /about → SITE status (308)
+ok   APP /about → SITE location (https://nectarlabs.io/about)
+ok   www → apex status (308)
+ok   www → apex location (https://nectarlabs.io/)
+== status host
+ok   STATUS / answers (200)
+ok   SITE /status → STATUS status (308)
+ok   SITE /status → STATUS location (https://status.nectarlabs.io/)
+ok   APP /status → STATUS status (308)
+ok   APP /status → STATUS location (https://status.nectarlabs.io/)
+== docs redirects
+ok   APP /docs → DOCS root status (308)
+ok   APP /docs → DOCS root location (https://docs.nectarlabs.io/)
+ok   APP /docs/start/quick-start → DOCS status (308)
+ok   APP /docs/start/quick-start → DOCS location (https://docs.nectarlabs.io/start/quick-start?x=1)
+FAIL DOCS /docs/start/quick-start → root path status: expected 308, got 404
+FAIL DOCS /docs/start/quick-start → root path location: expected https://docs.nectarlabs.io/start/quick-start, got 
+ok   legacy nectarlabs.vercel.app/feed?y=2 status (308)
+FAIL legacy nectarlabs.vercel.app/feed?y=2 location: expected https://nectarlabs.io/feed?y=2, got https://nectarlabs.vercel.app/feed?y=2
+ok   legacy nectarlabs-app.vercel.app/feed?y=2 status (308)
+FAIL legacy nectarlabs-app.vercel.app/feed?y=2 location: expected https://testnet.nectarlabs.io/feed?y=2, got https://nectarlabs-app.vercel.app/feed?y=2
+ok   legacy nectar-labs-web.vercel.app/feed?y=2 status (308)
+FAIL legacy nectar-labs-web.vercel.app/feed?y=2 location: expected https://testnet.nectarlabs.io/feed?y=2, got https://nectar-labs-web.vercel.app/feed?y=2
+ok   legacy nectarlabs-docs.vercel.app/feed?y=2 status (308)
+FAIL legacy nectarlabs-docs.vercel.app/feed?y=2 location: expected https://docs.nectarlabs.io/feed?y=2, got https://nectarlabs-docs.vercel.app/feed?y=2
+ok   legacy nectar-labs-docs.vercel.app/feed?y=2 status (308)
+FAIL legacy nectar-labs-docs.vercel.app/feed?y=2 location: expected https://docs.nectarlabs.io/feed?y=2, got https://nectar-labs-docs.vercel.app/feed?y=2
+== headers
+ok   HSTS https://testnet.nectarlabs.io/feed
+ok   CSP https://testnet.nectarlabs.io/feed
+ok   no noindex https://testnet.nectarlabs.io/feed
+ok   HSTS https://nectarlabs.io/
+ok   CSP https://nectarlabs.io/
+ok   no noindex https://nectarlabs.io/
+ok   HSTS https://status.nectarlabs.io/
+ok   CSP https://status.nectarlabs.io/
+ok   no noindex https://status.nectarlabs.io/
+ok   HSTS https://docs.nectarlabs.io/
+FAIL CSP missing https://docs.nectarlabs.io/
+ok   no noindex https://docs.nectarlabs.io/
+production smoke: failures 9

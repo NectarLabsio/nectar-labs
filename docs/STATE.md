@@ -1,4 +1,22 @@
-## NOW (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
+## NOW (2026-11-13 ~02:05Z) — release 4 (c95cd0c) in production; oracle refresher still staged
+- Kunal typed "approved: deploy c95cd0c web and docs to Vercel production" and "approved: Railway accept-deploy for oracle-refresher and Feed CORS".
+- Vercel production from c95cd0cf9d3f… (tarball sha256 0a8aa20f…, `artifact.sh verify` ok): web dpl_Bm1uwQcXjHaUHWqizUzUiyq79vWm READY ~01:58Z on
+  nectarlabs.io, www., status., testnet. + 4 vercel.app aliases. Docs dpl_BmZ2YgyDESeZQSQaZMaGUYNwe7du READY but served WITHOUT apps/docs-site/vercel.json
+  (DOCS /docs/* 404, docs vercel.app hosts 404, no CSP): vercel.json reached the build only via the tarball at install, after Vercel read config.
+  Fix = docs redeploy dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE carrying the same c95cd0c vercel.json as an inline upload file. RULE for every later docs
+  deploy: include apps/docs-site/vercel.json in the inline files (web has no vercel.json).
+- Quick checks on web (evidence/WO-34/prod-quick-*.log): status. 200 "Status · Nectar Labs"; SITE /status 308 → status.; SITE/APP /docs/* 308 →
+  docs. (query kept); 3 web vercel.app hosts 308 → custom (path + query); www 308 → apex; landing says "local fork of Base Sepolia".
+- Feed FEED_CORS_ORIGINS = https://nectarlabs.io,https://testnet.nectarlabs.io,https://status.nectarlabs.io (set-variables auto-deployed 8acfc7a5,
+  SUCCESS 01:59Z); CORS echoes the 3, refuses evil.example.com; /health ok.
+- Oracle refresher: accept-deploy refused at the tool twice more (once with an extra field, once schema-exact) → NOT retried. Kunal applies patch
+  1d6ac914… in the Railway dashboard. SRC_URL valid until ~2026-11-13 19:55Z. Price stale ≈ 15:10Z.
+- smoke-prod.sh rerun after the docs redeploy (READY 02:03Z): exit 0, 43 ok, 0 failures — APP 28 routes, docs 56 pages + 6 assets at the root,
+  host split, status host, docs + legacy 308s (path + query), HSTS/CSP/no noindex on 4 hosts (evidence/WO-34/prod-smoke-custom-20261113T020321Z.log;
+  the 020032Z log = first run: docs without vercel.json + legacy pairs passed without https://).
+- Next: WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
+
+## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
 Decisions typed this session: hosts nectarlabs.io (site) · docs. · status. · testnet. (app) · www → apex, replacing ac.nectarlabs.io; H-ORACLE option A
 on Railway, FC key limited to update_owner_price, every 10 min in NYSE windows / 12 h outside, through 2026-11-18; mock-ft code-only upgrade for a
 capped public `faucet_mint` APPROVED (account ids unchanged); contact email kept. Repo URL for H2: https://github.com/NectarLabsio/nectar-labs.
@@ -418,7 +436,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-12T21:31:20Z · commit 0d9a402
+Last activity: 2026-11-13T01:52:58Z · commit be12be4
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).

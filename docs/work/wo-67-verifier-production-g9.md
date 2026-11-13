@@ -2,6 +2,13 @@
 Runs only after the orchestrator has deployed the G3b-passed commit (web + docs on Vercel, Feed CORS on Railway). Write only docs/EVIDENCE.md and evidence/.
 Hosts: SITE https://nectarlabs.io · APP https://testnet.nectarlabs.io · DOCS https://docs.nectarlabs.io · STATUS https://status.nectarlabs.io ·
 legacy: nectarlabs.vercel.app→SITE, nectarlabs-app.vercel.app→APP, nectar-labs-web.vercel.app→APP, nectarlabs-docs.vercel.app→DOCS, nectar-labs-docs.vercel.app→DOCS.
+Pass legacy pairs as full origins on BOTH sides (`https://nectarlabs.vercel.app=https://nectarlabs.io`); a bare host makes curl use http:// and see Vercel's own
+http→https 308 on the same host.
+Deployed (orchestrator, 2026-11-13 ~02:00Z, Kunal approved): commit c95cd0cf9d3f56f570ba3847a9c8aed370e688e0, tarball sha256 0a8aa20f…5a6763d8215bf…;
+web dpl_Bm1uwQcXjHaUHWqizUzUiyq79vWm; docs dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE (redeploy carrying apps/docs-site/vercel.json at upload; the first docs
+deployment dpl_BmZ2YgyDESeZQSQaZMaGUYNwe7du served without its redirects/headers because vercel.json arrived only with the tarball at install).
+Feed FEED_CORS_ORIGINS = SITE,APP,STATUS (Railway deploy 8acfc7a5, 01:59Z). Oracle refresher: still staged (accept-deploy refused at the tool; Kunal applies
+in the dashboard) — item A8 records whichever state holds when you run.
 A. Production acceptance (new block "WO-34 production (custom hosts)"):
   1. `scripts/deploy/smoke-prod.sh SITE APP DOCS STATUS <5 legacy pairs>` exit 0 (28 app routes, 56 docs pages + assets at the root, host split,
      status host, docs 308s with query kept, legacy 308s with path + query kept, www → apex, HSTS/CSP, no noindex).
