@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { prime } from "./helpers";
 
-// WO-17 copilot. Without NEAR_AI_API_KEY (H7) the panel says "Key missing"; the recorded fixture runs the full
+// WO-17 copilot. Without NEAR_AI_API_KEY (H7) the panel shows a neutral "Recorded fixture" notice (WO-93); the recorded fixture runs the full
 // verifier and must stay hidden (its Intel quote is a public sample with patched report_data, so DCAP fails).
 test.describe("copilot verifier", () => {
   for (const path of ["/console", "/borrow"]) {
@@ -12,15 +12,14 @@ test.describe("copilot verifier", () => {
       await expect(panel).toBeVisible();
       const ask = panel.getByRole("button", { name: "Ask copilot", exact: true });
       if (!process.env.NEAR_AI_API_KEY) {
-        const banner = panel.locator(".banner").filter({ has: page.locator(".b-title", { hasText: /^Key missing$/ }) });
+        const banner = panel.locator(".banner").filter({ has: page.locator(".b-title", { hasText: /^Recorded fixture$/ }) });
         await expect(banner).toBeVisible({ timeout: 15_000 });
-        await expect(banner.locator(".b-title")).toHaveText("Key missing");
-        await expect(banner).toContainText(
-          "The NEAR AI key is not configured on this server, so live answers are off. You can still run the verifier on the recorded fixture.",
-        );
+        await expect(banner.locator(".b-title")).toHaveText("Recorded fixture");
+        await expect(banner).toHaveClass(/\binfo\b/);
+        await expect(banner).toContainText("Live answers are off on this server. The verifier runs on a recorded fixture.");
         await expect(ask).toBeDisabled();
       } else {
-        await expect(panel.locator(".b-title", { hasText: /^Key missing$/ })).toHaveCount(0, { timeout: 15_000 });
+        await expect(panel.locator(".b-title", { hasText: /^Recorded fixture$/ })).toHaveCount(0, { timeout: 15_000 });
         await expect(ask).toBeVisible();
       }
       await expect(panel).toContainText("In your browser: EIP-191 signature recovery");

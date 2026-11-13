@@ -47,7 +47,7 @@ export function CopilotPanel() {
     try {
       const r = await fetch("/api/copilot", { method: "POST", headers: { "content-type": "application/json" }, body: payload });
       const j = (await r.json()) as { status: string; error?: string; nonce?: string; bundle?: CopilotBundle; provenance?: { why: string } };
-      if (j.status === "key_missing") throw new Error("NEAR AI key missing on this server (NEAR_AI_API_KEY not set).");
+      if (j.status === "key_missing") throw new Error("Live answers are off on this server. Run the verifier on the recorded fixture instead.");
       if (!r.ok || !j.bundle) throw new Error(j.error ?? `HTTP ${r.status}`);
       // Live: the nonce we generated. Fixture: the recorded nonce the fixture quote was built with (labelled below).
       const useNonce = fixture ? (j.nonce ?? "") : nonce;
@@ -72,7 +72,7 @@ export function CopilotPanel() {
         {status === null ? <p className="small dim" role="status">Checking copilot configuration…</p> : null}
         {status && "error" in status ? <Banner tone="danger" title="Copilot unavailable">{status.error}</Banner> : null}
         {status && "configured" in status && !status.configured ? (
-          <Banner tone="warn" title="Key missing">The NEAR AI key is not configured on this server, so live answers are off. You can still run the verifier on the recorded fixture.</Banner>
+          <Banner tone="info" title="Recorded fixture">Live answers are off on this server. The verifier runs on a recorded fixture.</Banner>
         ) : null}
         <label className="stack-sm">
           <span className="label">Notes</span>
