@@ -1156,6 +1156,37 @@ Result: PASS with open items F-351 (ERC-8021 format, G12/G13 scope), F-352 (xSto
 
 ## G9
 
+### G9 run 6b — step 3 (claims) re-check after WO-68, plus smoke-prod.sh from the clone (WO-67b) — PASS — 2026-11-13T02:33Z–02:40Z — commit 8a54b4c (product = c95cd0c)
+Scope: run 6 failed only on step 3 (docs/GATE_FAIL_WO67.md). Fresh clone: `git clone /Volumes/T7/nectar-labs` into /tmp/verify-G9-20261113T023332Z/repo (APFS, not exFAT), checkout 8a54b4c0528f4eb2778d9aee69f99d3c65fa1e59. Nothing was installed, signed or restarted. Host services were not touched. Every probe was a read-only curl or headless Chrome. WebFetch was not used because this step has no explorer link. Logs: evidence/WO-67b/.
+```
+$ git diff --stat c95cd0c 8a54b4c -- apps packages services contracts   → (empty, exit 0)
+$ git diff --stat b7fa381 8a54b4c   → README, DEMO_SCRIPT, HUMAN_HANDOFF, EVIDENCE, FACTS, STATE, GATE_FAIL_WO67, docs/work, evidence/WO-67, 67 scripts mode 100644→100755
+$ scripts/deploy/smoke-prod.sh https://nectarlabs.io https://testnet.nectarlabs.io https://docs.nectarlabs.io https://status.nectarlabs.io \
+    https://nectarlabs.vercel.app=https://nectarlabs.io https://nectarlabs-app.vercel.app=https://testnet.nectarlabs.io \
+    https://nectar-labs-web.vercel.app=https://testnet.nectarlabs.io https://nectarlabs-docs.vercel.app=https://docs.nectarlabs.io \
+    https://nectar-labs-docs.vercel.app=https://docs.nectarlabs.io
+  web smoke https://testnet.nectarlabs.io: routes 28, failures 0
+  docs smoke https://docs.nectarlabs.io: pages 56, assets 6, failures 0
+  43 ok (host split, status host, docs 308s, 5 legacy 308s with path + query, HSTS/CSP/no noindex on 4 hosts)
+  production smoke: failures 0          → exit 0, 02:35:25Z
+$ Feed /health 02:35:25Z → ok true, source views+neardata, history indexed, start_block head-50000, last_indexed_block = chain_head 277449722,
+    lag_blocks 0, events_indexed 0, commit 3974b5b
+```
+1. Product unchanged: **PASS**. The diff above is empty, so run 6 items 1, 2 and 4–7 carry over (§G9 run 6).
+2. Step 3, claims vs EVIDENCE and the live hosts: **PASS** (claims-probe.log, hydrated-probe.log). Each line GATE_FAIL_WO67 named:
+   - README:11–13, release 4 = c95cd0c, deployed ~02:00Z with Kunal's approval, dpl_Bm1uwQcX…/dpl_DpqAmb6…, acceptance PASS 8 of 8 at 02:05Z–02:40Z: matches §"WO-34 production (custom hosts)" and H-DEPLOY (DONE). README:3 says the same. `hosted_until` "2026-11-25" and `production_hosts` match config.yaml. `dig NS nectarlabs.io` → ns1/ns2.vercel-dns.com (F-458).
+   - README:15–19 and the Status row (README:25): STATUS / is 200 with title "Status · Nectar Labs" and h1 "Status". SITE /status and APP /status 308 → STATUS/, and SITE /status?x=1 keeps the query.
+   - Docs row (README:24): DOCS/sitemap.xml has 56 locs, 0 with a /docs/ prefix. DOCS /docs/start/quick-start?x=1 308 → /start/quick-start?x=1.
+   - Legacy: all 5 vercel.app hosts 308 with path + query kept (smoke), and also /about?q=1 and /start/quick-start?q=1.
+   - Site row (README:22): /, /about, /security, /changelog, /legal/privacy 200. /borrow, /quotes, /feed, /notes, /console and an unknown path 308 → APP. App row (README:23): /borrow, /feed, /notes, /console 200. "quotes" is the /quote/<id> pages (/quote 307 → /quote/new, /quote/1 200); APP /quotes is 404, but the row names features, not paths.
+   - Faucet line (README:36–38) and "Get test assets": hydrated Chrome (1440 px, networkidle + 4 s, no wallet). APP /borrow: 1 `test-assets` + 1 `test-assets-connect`, text "Get test assets: connect a wallet first. Mock assets, no value", 0 console errors. SITE /, /about and STATUS /: 0 and 0. Raw HTML has 0 on every host, so the button renders on the client. Faucet numbers match config.yaml `faucet` (5/500 per claim, 3600 s, caps 15/1500 = 3 claims). evidence/rollout/mockft-faucet-20261112T200937Z.log exists. Screenshot: evidence/WO-67b/app-borrow-test-assets.png.
+   - Feed rows (README:26 and :61): the neardata switch at 02:22Z, the fresh DB and cursor 277398512 are in STATE:20–21, and H-NEARDATA is DONE. Live /health (above) shows the same values README quotes for 02:29Z. CORS: SITE, APP and STATUS each get exact-origin ACAO + `vary: Origin` and a 204 /mcp preflight. evil.example.com and docs.nectarlabs.io get no ACAO and a 403 preflight. "No verifier run on the indexed history" still holds, because this run read /health only.
+   - DEMO_SCRIPT step 3 (lines 20–24) matches the above. HUMAN_HANDOFF H-DEPLOY and H-NEARDATA are DONE with the same release, dpl ids and Feed settings. services/feed/src/hosted.ts:20 reads `FEED_NEARDATA_API_KEY`, as H-NEARDATA says. HUMAN_HANDOFF:160 "Merged but not deployed" is inside the kept original request, so it is not counted.
+   - A grep for the run 6 phrases ("next production release", "not deployed", "origins only", "until then", "no verifier run on these hosts") finds 0 hits in README and DEMO_SCRIPT.
+3. `scripts/deploy/smoke-prod.sh` run by path from the fresh clone: **PASS**, exit 0, 0 failures (prod-smoke-20261113T023525Z.log). Git and filesystem modes are 100755 / -rwxr-xr-x for smoke-prod/web/docs.sh. No copy or chmod was needed (f5a3152).
+Notes, not counted: "about 8.5 h before the switch" is an estimate. 50,000 blocks at the observed ~0.6–0.65 s per block is 8.3–9 h. STATE:21 forecast catch-up at ≈ 04:05Z, but /health shows lag 0 by 02:35Z.
+Verdict: **PASS** for step 3 on 8a54b4c. Together with run 6 (every other step PASS on the same product), G9 is PASS for c95cd0c.
+
 ### G9 run 6 — fresh-clone rehearsal on the deployed commit (WO-67 B) — FAIL (1 reason, step 3: the README hosted-demo section describes the pre-release state; docs only) — 2026-11-13T02:05Z–02:40Z — commit b7fa381 (product = c95cd0c)
 - Clone: the same fresh clone as §WO-34 production (custom hosts), `git clone /Volumes/T7/nectar-labs` into /tmp/verify-wo67-20261113T0205Z/repo, checkout b7fa381. `git diff --stat c95cd0c b7fa381 -- apps packages services contracts` printed nothing, so G9 covers the deployed product. No secrets were used. Host services were not touched (own Feed ports 18788/18789, own DB in /tmp; :3100 was free before and after). Full logs: evidence/WO-67/B/. Scripts: evidence/WO-67/scripts/.
 - Commands (README "Quick start" + "Optional", gates.md G9):
