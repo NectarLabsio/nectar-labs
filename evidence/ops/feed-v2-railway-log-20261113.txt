@@ -1,0 +1,8 @@
+# Railway feed service logs (get-logs via the Railway connector, read by the orchestrator 2026-11-13 ~12:28Z), deployment d2861e5f-8d98-4f4d-8941-046759f88928
+# (status SUCCESS, created 2026-11-13T12:10:59Z, image node:22.22.2-bookworm, SRC_SHA 37dfec96262febd76ae407af6612f0b1c27facd0)
+2026-11-13T12:11:17.230Z feed_started port=8080 single_port=true core=nectar-core-v2.nectar.testnet start_block="277503800" sources="views+neardata" poll_ms=1000 cors="3 origin(s)"
+2026-11-13T12:11:18.117Z neardata_cursor_init height=277503800
+2026-11-13T12:11:32.231Z neardata_events from=277503800 to=277503899 events=1
+# The one event = oracle_updated, receipt in block 277503817, tx De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (evidence/ops/refresher-first-refresh-tx-*.log).
+# /health after: commit 37dfec9, events_indexed 1, indexer_cursor 277504100 → 277509980, indexer_lag_blocks 4151 (12:12:02Z) → 0 (12:27Z, 12:29Z)
+# (evidence/ops/feed-v2-reindex-20261113T121107Z.log; x402-paid-download-20261113T122853Z.log).
