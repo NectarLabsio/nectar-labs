@@ -86,7 +86,8 @@ against 100 NVDAx".
 
 With a nectar-core id (env or config.yaml), the feed always polls views for snapshots, and takes NEP-297 events from
 Neardata (F-122): `GET /v0/last_block/final` (302 → height) then `GET /v0/block/<h>` for each new final block,
-keeping receipts executed by nectar-core (failed receipts skipped). The cursor `neardata_height` is stored in
+keeping receipts executed by nectar-core (failed receipts skipped). Accepted NEP-297 versions: `"2.0.0"` (nectar-core-v2) and
+`"1.0.0"` (v1); the fields the Feed reads are identical in both (evidence/WO-71/fields.md). The cursor `neardata_height` is stored in
 SQLite meta, so restarts resume; event inserts are idempotent. Env: `FEED_INDEXER=neardata|views` (default
 `neardata`; `views` = fallback, view polling + keeper tx-status logs), `FEED_NEARDATA_URL` (default
 `https://testnet.neardata.xyz`), `FEED_NEARDATA_START_HEIGHT` (first run only; default = current final block;
@@ -114,7 +115,8 @@ Railway specifics (PORT injection, Dockerfile path, volumes) are not yet in docs
 | `NECTAR_GIT_SHA` | unset | optional | commit reported by `/health` |
 
 `GET /health` (and `/healthz`, unchanged): `last_indexed_block`, `chain_head`, `chain_head_source`, `lag_blocks`, `poll_age_s`,
-`source`, `events_indexed`, `history`, `rpc`, contract ids, version; 503 until the first poll succeeds. **`history`** (WO-35k, also on
+`source`, `events_indexed`, `history`, `rpc`, contract ids, version, `indexer_cursor` (the Neardata cursor `neardata_height`) and
+`indexer_lag_blocks` (Neardata final − cursor), both `null` in views mode (WO-71); 503 until the first poll succeeds. **`history`** (WO-35k, also on
 `/healthz` and `/api/settlements`): `"indexed"` = a Neardata block tail feeds the event tables; `"unavailable"` = views mode
 (`FEED_INDEXER=views`), no event history, so `/api/settlements` answers `items: []` (never rows synthesized from view status changes).
 `chain_head` in views mode is the block height of the latest final view (`chain_head_source: "view_block"`, `lag_blocks: 0`); with

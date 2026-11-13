@@ -130,6 +130,27 @@ describe('/health', () => {
     assert.deepEqual(b.contracts, { core: 'nectar-core-v2.nectar.testnet' });
     assert.equal(b.version, '0.1.0');
   });
+
+  it('indexer_cursor / indexer_lag_blocks: Neardata cursor and final − cursor; null in views-only mode (WO-71)', () => {
+    const db = new FeedDb(':memory:');
+    db.seeBlock(990);
+    db.setMeta('last_poll_at', '1000');
+    const at = (o: Partial<ApiOptions>): Record<string, unknown> => route(db, 'GET', '/health', opts({ now: () => 2000, ...o })).body as Record<string, unknown>;
+    let b = at({ source: 'views+neardata' });
+    assert.equal(b.indexer_cursor, null, 'no cursor yet');
+    assert.equal(b.indexer_lag_blocks, null);
+    db.setMeta('neardata_height', '990');
+    db.setMeta('neardata_final', '1003');
+    b = at({ source: 'views+neardata' });
+    assert.equal(b.indexer_cursor, 990);
+    assert.equal(b.indexer_lag_blocks, 13);
+    assert.equal(b.lag_blocks, 13, 'existing fields unchanged');
+    b = at({ source: 'views', history: 'unavailable' });
+    assert.equal(b.indexer_cursor, null, 'views-only mode');
+    assert.equal(b.indexer_lag_blocks, null);
+    const hz = route(db, 'GET', '/healthz', opts({ now: () => 2000 })).body as Record<string, unknown>;
+    assert.equal('indexer_cursor' in hz, false, '/healthz unchanged');
+  });
 });
 
 describe('FEED_START_BLOCK', () => {

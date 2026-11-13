@@ -208,6 +208,8 @@ components:
               chain_head: { type: [integer, 'null'], description: 'Neardata tail final height, never below last_indexed_block; views mode: block height of the latest final view' }
               chain_head_source: { type: [string, 'null'], enum: [neardata_final, view_block, null] }
               lag_blocks: { type: [integer, 'null'], description: 'chain_head - last_indexed_block (0 in views mode)' }
+              indexer_cursor: { type: [integer, 'null'], description: 'Neardata block cursor (SQLite meta neardata_height, last block fully ingested); null in views mode' }
+              indexer_lag_blocks: { type: [integer, 'null'], description: 'Neardata final height - indexer_cursor; null in views mode or before the first Neardata poll' }
               last_poll_at: { type: [string, 'null'], format: date-time }
               poll_age_s: { type: [integer, 'null'] }
               last_error: { type: [string, 'null'] }

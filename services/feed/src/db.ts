@@ -266,6 +266,18 @@ export class FeedDb {
           .run(pid, qid, num(d, 'disc_bps'), str(d, 'repay_usd_e6'), str(d, 'seize_units'), b.blockHeight, b.txHash, `ev:${b.receiptId}:${logIndex}`, now);
         return;
       }
+      case 'settled_reserve': {
+        // Reserve leg (v2 lib.rs:1060): {position_id, collateral, disc_bps, repay_usd_e6, seize_units}. The Reserve is not a
+        // quote, so quote_id is NULL (evidence/WO-71/fields.md §C).
+        const pid = str(d, 'position_id');
+        if (pid === null) return;
+        this.db
+          .prepare(
+            "INSERT OR IGNORE INTO settlements (position_id, quote_id, disc_bps, repay_usd_e6, seize_units, status, block_height, tx_hash, source, dedupe_key, observed_at) VALUES (?, NULL, ?, ?, ?, NULL, ?, ?, 'event', ?, ?)",
+          )
+          .run(pid, num(d, 'disc_bps'), str(d, 'repay_usd_e6'), str(d, 'seize_units'), b.blockHeight, b.txHash, `ev:${b.receiptId}:${logIndex}`, now);
+        return;
+      }
       default:
         return;
     }

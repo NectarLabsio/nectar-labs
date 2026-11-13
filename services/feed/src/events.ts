@@ -1,14 +1,17 @@
 // NEP-297 event parsing (F-021): a log line `EVENT_JSON:{"standard","version","event","data"}`.
-// nectar-core emits `standard:"nectar"`, `version:"1.0.0"`, `data` = array of one object
-// (docs/work/interface-p0.md). Anything else is ignored, never guessed at.
+// nectar-core emits `standard:"nectar"`, `data` = array of one object (docs/work/interface-p0.md).
+// Versions: "2.0.0" = nectar-core-v2 (contracts/nectar-core/src/events.rs:8), "1.0.0" = v1. Both are accepted because every
+// field the Feed reads has the same name and JSON type in both (evidence/WO-71/fields.md). Anything else is ignored, never guessed at.
 
 export const EVENT_PREFIX = 'EVENT_JSON:';
 export const NECTAR_STANDARD = 'nectar';
-export const NECTAR_VERSION = '1.0.0';
+/** Current contract event version (nectar-core-v2). */
+export const NECTAR_VERSION = '2.0.0';
+export const NECTAR_VERSIONS: readonly string[] = ['1.0.0', NECTAR_VERSION];
 
 export const NECTAR_EVENTS = [
   'quote_funded', 'quote_topped_up', 'quote_exiting', 'quote_withdrawn', 'fees_claimed',
-  'liquidity_supplied', 'position_opened', 'repaid', 'preliq_triggered', 'settled_near',
+  'liquidity_supplied', 'position_opened', 'repaid', 'preliq_triggered', 'settled_near', 'settled_reserve',
   'oracle_updated', 'oracle_rejected', 'collateral_upserted', 'paused', 'unpaused',
 ] as const;
 export type NectarEventName = (typeof NECTAR_EVENTS)[number];
@@ -31,7 +34,7 @@ export function parseEventLog(line: string): ParseResult {
   if (typeof o !== 'object' || o === null) return { ok: false, reason: 'bad_json' };
   const e = o as Record<string, unknown>;
   if (e.standard !== NECTAR_STANDARD) return { ok: false, reason: 'foreign_standard' };
-  if (e.version !== NECTAR_VERSION) return { ok: false, reason: 'bad_version' };
+  if (typeof e.version !== 'string' || !NECTAR_VERSIONS.includes(e.version)) return { ok: false, reason: 'bad_version' };
   if (typeof e.event !== 'string' || !(NECTAR_EVENTS as readonly string[]).includes(e.event)) return { ok: false, reason: 'unknown_event' };
   if (!Array.isArray(e.data) || e.data.length !== 1 || typeof e.data[0] !== 'object' || e.data[0] === null) return { ok: false, reason: 'bad_data' };
   return { ok: true, value: { event: e.event as NectarEventName, data: e.data[0] as Record<string, unknown> } };

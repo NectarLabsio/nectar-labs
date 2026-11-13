@@ -13,7 +13,7 @@ import { TxStatusSource, ViewPollingSource, type TxOutcomeFetcher, type ViewRead
 
 const here = dirname(fileURLToPath(import.meta.url));
 const quiet = createLogger('feed', () => {});
-const ev = (event: string, data: Record<string, unknown>): string => `EVENT_JSON:${JSON.stringify({ standard: 'nectar', version: '1.0.0', event, data: [data] })}`;
+const ev = (event: string, data: Record<string, unknown>, version = '2.0.0'): string => `EVENT_JSON:${JSON.stringify({ standard: 'nectar', version, event, data: [data] })}`;
 
 const CAP: ExitCapacity = {
   q_usd_e6: '50000000000', r_usd_e6: '0', d_usd_e6: '0', haircut_bps: 2500, session_open: false,
@@ -46,22 +46,25 @@ class FakeViews implements ViewReader {
 describe('NEP-297 parsing', () => {
   it('accepts nectar events and rejects everything else with a reason', () => {
     const ok = parseEventLog(ev('quote_funded', { quote_id: '0' }));
-    assert.ok(ok.ok && ok.value.event === 'quote_funded');
+    assert.ok(ok.ok && ok.value.event === 'quote_funded', 'nectar-core-v2 (2.0.0) accepted');
+    const v1 = parseEventLog(ev('quote_funded', { quote_id: '0' }, '1.0.0'));
+    assert.ok(v1.ok && v1.value.event === 'quote_funded', 'v1 (1.0.0) still accepted: read fields identical (evidence/WO-71/fields.md)');
     assert.deepEqual(
       [
         'plain log',
         'EVENT_JSON:{bad',
         'EVENT_JSON:' + JSON.stringify({ standard: 'nep141', version: '1.0.0', event: 'ft_transfer', data: [{}] }),
-        'EVENT_JSON:' + JSON.stringify({ standard: 'nectar', version: '2.0.0', event: 'paused', data: [{}] }),
+        'EVENT_JSON:' + JSON.stringify({ standard: 'nectar', version: '3.0.0', event: 'paused', data: [{}] }),
         ev('drain_all', {}),
-        'EVENT_JSON:' + JSON.stringify({ standard: 'nectar', version: '1.0.0', event: 'paused', data: [] }),
+        'EVENT_JSON:' + JSON.stringify({ standard: 'nectar', version: '2.0.0', event: 'paused', data: [] }),
       ].map((l) => {
         const r = parseEventLog(l);
         return r.ok ? 'ok' : r.reason;
       }),
       ['not_event', 'bad_json', 'foreign_standard', 'bad_version', 'unknown_event', 'bad_data'],
     );
-    assert.equal(NECTAR_EVENTS.length, 15);
+    assert.equal(NECTAR_EVENTS.length, 16);
+    assert.equal(parseEventLog(ev('settlement_sign_requested', { position_id: '3' })).ok, false, 'remote legs stay ignored (fields.md §C)');
   });
 });
 
@@ -91,6 +94,29 @@ describe('indexer store', () => {
     assert.equal(s.length, 1);
     assert.equal(s[0]?.source, 'event');
     assert.equal(db.meta('last_block'), '2000');
+  });
+
+  it('v2 settled_near (with dust_usd_e6) and settled_reserve (quote_id NULL) become event settlement rows', () => {
+    // Shapes from contracts/nectar-core/src/lib.rs:1048 and :1060 (no real v2 testnet line exists for either, fields.md §A/§C).
+    const db = new FeedDb(':memory:');
+    const n = db.ingestLogs(
+      {
+        receiptId: 'r-v2',
+        txHash: 'tx-v2',
+        blockHeight: 4000,
+        logs: [
+          ev('settled_near', { position_id: '7', quote_id: '1', disc_bps: 159, repay_usd_e6: '170000000', seize_units: '1542382', buyer: 'buyer2.nectar.testnet', dust_usd_e6: '0' }),
+          ev('settled_reserve', { position_id: '7', collateral: 'NVDAx', disc_bps: 800, repay_usd_e6: '20000000', seize_units: '190000' }),
+        ],
+      },
+      5,
+    );
+    assert.equal(n, 2);
+    const rows = db.settlements(10, '7').map((r) => [r.quote_id, r.disc_bps, r.repay_usd_e6, r.seize_units, r.status, r.block_height, r.tx_hash, r.source]);
+    assert.deepEqual(rows, [
+      [null, 800, '20000000', '190000', null, 4000, 'tx-v2', 'event'],
+      ['1', 159, '170000000', '1542382', null, 4000, 'tx-v2', 'event'],
+    ]);
   });
 
   it('view polling writes snapshots, quotes and Open→Settling transitions', async () => {

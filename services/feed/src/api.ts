@@ -5,6 +5,7 @@ import { createServer, type IncomingMessage, type Server, type ServerResponse } 
 import { corsHeaders, handlePreflight, type CorsPolicy } from './cors.ts';
 import type { AssetSnapshot, FeedDb, SettlementRow } from './db.ts';
 import type { RpcStatus } from './near-rpc.ts';
+import { CURSOR_KEY } from './neardata.ts';
 
 export const ROUTES = ['/api/feed', '/api/feed/export.csv', '/api/asset/{id}', '/api/settlements', '/api/oneclick', '/healthz', '/health'] as const;
 /** Columns of /api/feed/export.csv (the x402-paid export, services/x402). No account ids. */
@@ -135,6 +136,9 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
       const nd = ndRaw === null ? null : Number(ndRaw);
       const head = nd === null ? asOf.as_of_block : asOf.as_of_block === null ? nd : Math.max(nd, asOf.as_of_block);
       const headSource = head === null ? null : nd !== null && head === nd ? 'neardata_final' : 'view_block';
+      // WO-71: the Neardata block cursor itself and its distance to the Neardata final height; null in views-only mode.
+      const curRaw = history === 'indexed' ? db.meta(CURSOR_KEY) : null;
+      const cursor = curRaw !== null && /^\d+$/.test(curRaw) ? Number(curRaw) : null;
       return {
         status: fresh ? 200 : 503,
         body: {
@@ -143,6 +147,8 @@ export function route(db: FeedDb, method: string, rawUrl: string, opts: ApiOptio
           chain_head: head,
           chain_head_source: headSource,
           lag_blocks: head === null || asOf.as_of_block === null ? null : head - asOf.as_of_block,
+          indexer_cursor: cursor,
+          indexer_lag_blocks: cursor === null || nd === null ? null : nd - cursor,
           last_poll_at: lastPoll === null ? null : new Date(Number(lastPoll)).toISOString(),
           poll_age_s: lastPoll === null ? null : Math.max(0, Math.round((now - Number(lastPoll)) / 1000)),
           last_error: db.meta('last_error'),
