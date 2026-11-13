@@ -17,7 +17,8 @@ export const tilde = (s) => String(s).split(HOME).join('~');
 /** Launch options for a take: 1920×1080 viewport, real 2× frames. Headless needs --force-device-scale-factor=2: Playwright's
  *  deviceScaleFactor alone only emulates DPR, and the screencast then stays 1×. Spread into chromium.launchPersistentContext(dir, …). */
 export const CAPTURE_LAUNCH = Object.freeze({
-  channel: 'chrome', headless: true, viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 2, colorScheme: 'dark',
+  // CAPTURE_HEADED=1 (orchestrator, 2026-11-13): headed Chrome composites on the GPU; compare gapcheck against headless before the takes.
+  channel: 'chrome', headless: process.env.CAPTURE_HEADED !== '1', viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 2, colorScheme: 'dark',
   args: ['--force-device-scale-factor=2'],
 });
 /** Default raw-take location: internal disk, outside git (T7 is nearly full). */
