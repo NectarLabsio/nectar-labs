@@ -1,0 +1,18 @@
+{
+ "tx": "De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG",
+ "signer": "nectar.testnet",
+ "public_key": "ed25519:3qurjD6A1zSe1FqNVJjH5XPhzggtvW5FKB8u64KzBLZG",
+ "receiver": "nectar-core-v2.nectar.testnet",
+ "actions": [
+  {
+   "method": "update_owner_price",
+   "deposit": "0"
+  }
+ ],
+ "status": [
+  "SuccessValue"
+ ],
+ "logs": [
+  "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"oracle_updated\",\"data\":[{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"135000000\"}]}"
+ ]
+}
