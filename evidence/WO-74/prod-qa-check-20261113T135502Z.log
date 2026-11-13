@@ -1,0 +1,19 @@
+> open https://wallet.intear.tech
+> click I already have a NEAR wallet
+> click Seed Phrase
+> seed
+seed: typed 12 words into 12 text fields
+> checkbox 0
+> checkbox 1
+> checkbox 2
+> wait 25000
+> role button=qa-faucet-1113b.nectar.testnet
+STOP: locator.click: Timeout 10000ms exceeded.
+— url: https://wallet.intear.tech/
+  title: Intear Wallet — Swap, Stake and Send tokens on NEAR
+  headings: Welcome Back! | Log in with Existing Account
+  buttons: Click here | Report Error | ? | Forgot Password? | Unlock (disabled) | ? | ? | ? | Seed Phrase | Private Key | Ledger | Import Account (disabled) | Terms of Service | Privacy Policy | License | Create New Account
+  inputs: input[password] ph="Enter your password" aria="" filled=false | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[text] ph="" aria="" filled=true | input[checkbox] ph="" aria="" filled=true | input[checkbox] ph="" aria="" filled=true | input[checkbox] ph="" aria="" filled=true
+  checks: I accept the Terms of Service checked=true | I accept the Privacy Policy checked=true | I accept the License checked=true
+  texts: Not loading? | Loading… | Enter your password to log in | Password | Seed Phrase | Please accept Terms of Service, Privacy Policy, and License to continue. | I accept the Terms of Service | I accept the Privacy Policy | I accept the License
+  near_error: Not loading? Click here Report Error

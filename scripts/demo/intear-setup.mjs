@@ -104,10 +104,13 @@ try {
     else if (cmd === 'checkbox') { await page.locator('input[type=checkbox]:visible').nth(Number(arg)).check({ timeout: 10_000 }); await settle(page, 300); }
     else if (cmd === 'password') { await fillPassword(page); await settle(page, 500); }
     else if (cmd === 'press') { await page.keyboard.press(arg); await settle(page); }
-    else if (cmd === 'wait') { await page.waitForTimeout(Number(arg)); }
+    else if (cmd === 'wait') { if (page.isClosed()) { page = ctx.pages()[0]; out('[popup closed] back to page 0'); } await page.waitForTimeout(Number(arg)).catch(async () => { page = ctx.pages()[0]; out('[popup closed] back to page 0'); await page.waitForTimeout(Number(arg)); }); }
     else if (cmd === 'page') { const ps = ctx.pages(); page = arg === 'last' ? ps[ps.length - 1] : ps[Number(arg)]; await page.bringToFront(); await settle(page, 800); }
     else if (cmd === 'pages') { ctx.pages().forEach((p, i) => out(`  page ${i}: ${p.url()}`)); }
     else if (cmd === 'probe') { await probe(page); }
+    else if (cmd === 'seltext') { out(`  text ${arg}: ${(await page.locator(arg).first().innerText({ timeout: 10_000 })).replace(/\s+/g, ' ').slice(0, 160)}`); }
+    else if (cmd === 'fillsel') { const [sel, val] = arg.split('|'); await page.locator(sel).first().fill(val, { timeout: 10_000 }); await settle(page, 800); }
+    else if (cmd === 'enabled') { const b = page.getByRole('button', { name: arg }).first(); out(`  button "${arg}": ${(await b.isEnabled({ timeout: 10_000 })) ? 'enabled' : 'disabled'}`); }
     else if (cmd === 'frames') {
       for (const f of page.frames()) {
         if (f === page.mainFrame()) continue;

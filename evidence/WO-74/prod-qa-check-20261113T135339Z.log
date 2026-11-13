@@ -1,0 +1,21 @@
+> open https://testnet.nectarlabs.io/borrow
+> wait 5000
+> seltext [data-testid="amt-units"]
+  text [data-testid="amt-units"]: You lock Balance 0.00 NVDAx NVDAx Collateral value appears here
+> click Get test assets
+> wait 3000
+> click Open wallet to sign
+[new page] https://wallet.intear.tech/send-transactions
+> wait 6000
+> page last
+> probe
+— url: https://wallet.intear.tech/send-transactions
+  title: Intear Wallet
+  headings: Welcome Back! | Approve Transactions
+  buttons: ? | Forgot Password? | Unlock (disabled) | ? (disabled) | qa-faucet-1113.nectar.testnet | ? | ? | ? | Q TEST qa-fauce….testnet | Add | Show args | Show args | Approve | Cancel
+  links: Settings
+  inputs: input[password] ph="Enter your password" aria="" filled=false
+  texts: Loading… | Enter your password to log in | Password | Request from | https://testnet.nectarlabs.io | Simulating the transaction… | Transaction to nvdax-mock.nectar.testnet | Transaction to usdc-mock.nectar.testnet
+> click Approve
+> wait 15000
+STOP: page.waitForTimeout: Target page, context or browser has been closed
