@@ -18,10 +18,10 @@ const SHARP_FALLBACK = `${MAIN_CHECKOUT}/node_modules/.pnpm/sharp@0.35.5_@types+
 
 export const isMain = (metaUrl) => process.argv[1] && metaUrl === pathToFileURL(path.resolve(process.argv[1])).href;
 
-/** Replace the home directory with ~ (no home paths in logs or committed output). */
+/** Replace the home directory with ~ everywhere in a string (no home paths in logs or committed output). */
 export function tilde(p) {
   const h = os.homedir();
-  return typeof p === 'string' && h && p.startsWith(h) ? '~' + p.slice(h.length) : p;
+  return typeof p === 'string' && h ? p.split(h).join('~') : p;
 }
 export const expandHome = (p) => (typeof p === 'string' && p.startsWith('~/') ? path.join(os.homedir(), p.slice(2)) : p);
 export const log = (...a) => console.log(...a.map((x) => (typeof x === 'string' ? tilde(x) : x)));

@@ -20,6 +20,12 @@ CSS px; frames are 2× that) · `popup_close {page}` · `box {label,page,x,y,w,h
 `wait_start/wait_end {label}` (`ok:false` on error) · `hold {ms,label}` · `mark {label,data}`. Marks written by the tooling:
 `click {page,x,y,what?}`, `type {page,chars,what?}` (length only, never the text), `take_end` (last line).
 
+WO-35d events (human.mjs): `cursor_mode {post}` (after each `section`) · `cursor {page,x,y,m?}` one per mouse step, CSS px of that
+page; `m` = the motion it belongs to (moveTo steps carry their planned time, so a stalled CDP input does not bend the path) ·
+`click {page,x,y}` at the press · `motion_start {kind,page,m}` / `motion_end {kind,m}` with kind `move|scroll|drag|type`. A `cursor`
+sample is also logged at section start for every page of the take, and on the opener when a popup closes (the cursor keeps its place
+on screen: a popup's first move starts from the opener's point mapped through compose's popup placement).
+
 Pages: the take's existing pages are `p0`, `p1`, … in order; any page opened later (a wallet popup) gets the next id. `active p0` is
 logged at t=0. A popup's `popup_open` + `active` are logged at its **first frame** (so a reader always has a frame for the active page).
 On close: `popup_close` and `active` for the page that was in front before it. Use `take.setActive(page)` if you switch tabs yourself.
@@ -67,21 +73,42 @@ headed window that is covered stops producing frames.
   (Playwright otherwise gives every page the context viewport). Override with `popupSize`.
 
 ### human.mjs
-- `installCursor(context)`: an arrow cursor (SVG, crisp at 2×, white outline, soft shadow) plus an accent click ring on mousedown. It is
-  built with DOM APIs (CSP and Trusted Types safe), sits in the top layer as a manual popover (above `<dialog>` and popovers opened later;
-  z-index max as the fallback), follows real `mousemove`, and is also placed explicitly on every step (mousemove over an iframe never
-  reaches the top document). Re-injected on every `domcontentloaded`. Position survives same-origin navigation.
+- `CURSOR_POST=1` (WO-35d; take.mjs sets it by default): no DOM cursor is injected; compose.mjs draws the same arrow and ring from the
+  `cursor`/`click` events at output frame times, so the cursor moves at 30 fps even while the page stalls (window creation, preview
+  recompute). `CURSOR_POST=0` or unset (selftest, apptest) keeps the DOM cursor below.
+- `installCursor(context)`: tracks every page (popups included). DOM mode: an arrow cursor (SVG, crisp at 2×, white outline, soft shadow)
+  plus an accent click ring on mousedown. It is built with DOM APIs (CSP and Trusted Types safe), sits in the top layer as a manual popover
+  (above `<dialog>` and popovers opened later; z-index max as the fallback), follows real `mousemove`, and is also placed explicitly on
+  every step (mousemove over an iframe never reaches the top document). Re-injected on every `domcontentloaded`. Position survives
+  same-origin navigation.
 - `moveTo(page, locator | {x,y}, {ms?})`: cubic in-out on a slightly curved quadratic path, 300–800 ms by distance, ~60 Hz steps.
-  Locators: a point near the centre (small jitter); off-screen elements are first brought in with an eased wheel `scroll`.
+  Locators: a point near the centre (small jitter); off-screen elements are first brought in with an eased wheel `scroll` (partly visible:
+  only as far as needed plus a margin; never past the end of the element's scroller, so no elastic overscroll). Motion `move`.
 - `click(page, target, {label?, timeout?})`: moveTo, 150–300 ms pause, ring, click. With a locator Playwright's actionability checks
-  still apply, at the same point. Logs `mark click`.
-- `type(page, text)`: 50–120 ms per key, varied (slower after spaces and punctuation); never fill or paste. `press(page, key)`.
+  still apply, at the same point. Logs `click` (at the press) and `mark click`.
+- `drag(page, from, to, {steps 14, ms 1200})`: moveTo `from`, press, sine-eased even steps, a rendered frame (double rAF) awaited after
+  each step, release. Motion `drag`.
+- `type(page, text)`: 50–120 ms per key, varied (slower after spaces and punctuation); never fill or paste. Motion `type`. `press(page, key)`.
+- `settle(page, label, {selector?, quietMs, frames 6, maxFrameMs 40, timeout 4000})`: a take `wait` ("settle …") until the page paints
+  smoothly again (n consecutive rAF intervals ≤ 40 ms) and, with `selector`, nothing in it changed for `quietMs` (stable preview text).
+  For after a click that opens a window/panel and after typing into a field that drives a preview. `frame(page)`: one rendered frame.
 - `hold(ms, label)` · `box(page, label, locator | {x,y,w,h})` · `wait(label, promise | fn)` · `section(id, title, caption)` ·
-  `sectionEnd(id)` · `zoomOut()` · `mark(label, data)` · `scroll(page, dy)`.
+  `sectionEnd(id)` · `zoomOut()` · `mark(label, data)` · `scroll(page, dy)` (motion `scroll`, incl. the 160 ms smooth-scroll tail).
 
 ### gapcheck.mjs
-`node scripts/demo/capture/gapcheck.mjs <take> [page] [--limit 100]`: per page, only while it is active, the longest time without a
-new frame (measured from the moment it became active to the moment it stopped). Prints fps and the worst 5. Exit 1 if any gap > limit.
+`node scripts/demo/capture/gapcheck.mjs <take> [page] [--limit 100] [--still 120]`: per page, only while it is active and inside the
+section window, every interval between frames, classified by Kunal's rule (2026-11-13):
+
+| class | what | limit |
+| --- | --- | --- |
+| motion | overlaps a `scroll`/`drag`/`type` interval (and `move` when the take used the DOM cursor) | 100 ms |
+| hold | entirely inside a `hold` | 120 ms |
+| transition | everything else: clicks waiting for a window or panel, page loads | reported (max, worst 5), not pass/fail |
+| unchanged | a motion gap over 100 ms whose two frames are identical (mean abs diff < 0.05 on a 480 px grey copy): nothing moved on screen, typically the app stalling just after a scroll came to rest, inside the scroll's 160 ms tail | reported, not pass/fail |
+
+Exit 1 if a motion or hold gap is over its limit. The visual check (`gapcheckVisual`, sharp) runs in the CLI and in take.mjs;
+`--no-visual` or the sync `gapcheck()` skip it. Takes from before WO-35d (no motion events) are checked the old way: every non-hold
+gap is motion.
 
 ### terminal/
 `node scripts/demo/capture/terminal/server.mjs --port 7681 [--cwd dir] [--env-file f] [--replace FROM=TO]… --cmd "<command>"`
@@ -110,6 +137,14 @@ encode) tops out at about 26–31 fps on detailed pages (1440p and 1080p reach 6
 parallel screencast sessions do not help. The remaining 230–300 ms gaps fall at the same moment in every run, including 1440p at 55 fps:
 hovering a nav link on the production landing page, so they look page-side (a render stall), not recorder-side. The terminal and
 popup segments pass at every setting.
+
+WO-35d measure-2 (2026-11-13, headed, rehearsal, all sections, post cursor, quiet machine; `~/.nectar/demo-capture/measure-2`),
+motion / hold / transition max in ms: s1 0 / 52 / 73 PASS · s2 286 / 68 / 256 FAIL · s3 68 / 67 / 267 PASS · s4 52 / 117 / 190 PASS ·
+s5 34 / 84 / 166 PASS (measure-1: only s1 passed). Typing and the paced `#sim` drag now stay ≤ 68 ms. The one motion failure is the
+Intear popup stalling ~300–400 ms into the short scroll that brings its Cancel button into view (3 runs, 250–286 ms, frames differ:
+visible). The 250/267 ms "unchanged" gaps sit in the scroll tail after the page came to rest (identical frames). Transitions: the
+wallet Cancel closing the popup (s2 256), "Confirm in wallet" opening the sign modal (s3 267), the explorer tab loading (s4/s5).
+Compose (captions): 2745 frames / 91.5 s in 145 s; cursor 358 moving frames, 0 frozen.
 
 For takes: record on a quiet machine (no builds or encodes running), run gapcheck on each take, and keep the take if it passes. If 4K
 q92 fails on app pages, the measured fallbacks are `everyNthFrame: 3` (steady 20 fps at 4K, 50 ms gaps on flat pages) or

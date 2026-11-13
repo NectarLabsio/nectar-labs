@@ -40,6 +40,6 @@ try {
   await stopTake();
   await ctx.close();
 }
-const r = await gapcheck(dir, { limitMs: 100 });
+const r = gapcheck(dir, { limit: 100 });
 printReport(r);
-process.exitCode = r.ok ? 0 : 1;
+process.exitCode = r.pass ? 0 : 1;

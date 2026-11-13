@@ -17,7 +17,7 @@ import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CAPTURE_LAUNCH, defaultTakeDir, startTake, stopTake, tilde } from '../capture/recorder.mjs';
 import * as h from '../capture/human.mjs';
-import { gapcheck } from '../capture/gapcheck.mjs';
+import { gapcheckVisual } from '../capture/gapcheck.mjs';
 
 const { chromium } = createRequire('/Volumes/T7/nectar-labs/apps/web/package.json')('@playwright/test');
 const HERE = fileURLToPath(new URL('.', import.meta.url));
@@ -61,6 +61,8 @@ const OUT = resolve(opt('--out') ?? defaultTakeDir(`wo35c-${MODE}-${stamp}`));
 const PROFILE_ARG = opt('--profile');
 const S5_CMD = SIGN ? AGENT_CMD : opt('--cmd', DRY_CMD);
 if (!SIGN && /demo:testnet|x402/.test(S5_CMD)) { console.error('take: the agent command signs as agent1; it runs only with --sign'); process.exit(2); }
+// WO-35d: takes default to the post-drawn cursor (compose.mjs draws it from the logged samples; no DOM cursor in the frames).
+process.env.CURSOR_POST ??= '1';
 
 const log = (...a) => console.log(tilde(a.join(' ')));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -97,10 +99,16 @@ async function seen(name, loc, ms = 10_000) {
   return ok ? loc.first() : null;
 }
 
+/** Settle (the page paints smoothly again, so the hold holds a still page), then box + hold. */
 async function boxHold(p, label, loc, ms) {
+  await h.settle(p, label, { frames: 4 });
   await h.box(p, label, loc);
   await h.hold(ms, label);
 }
+
+const PREVIEW = '[data-testid="borrow-outcome"]'; // re-renders from preview_borrow on every typed key
+/** After typing into a field that drives the preview: wait until the outcome panel has not changed for 500 ms and frames are smooth. */
+const settlePreview = (label) => h.settle(page, label, { selector: PREVIEW, quietMs: 500, timeout: 5000 });
 
 /** Scroll the page to the top with an eased wheel (visible, like a hand), only if it is scrolled. */
 async function toTop(p) {
@@ -210,6 +218,7 @@ async function walletStep(label, openWallet) {
   const buttons = popup.getByRole('button', { name: /^(Approve|Cancel)$/ });
   await h.wait('wallet loads', buttons.first().waitFor({ state: 'visible', timeout: 25_000 }).catch(() => {}));
   await popup.waitForTimeout(800).catch(() => {}); // the wallet's unlock overlay fades out once the stored session loads
+  await h.settle(popup, 'wallet painted'); // window creation stalls both windows for a few hundred ms: hold until it paints smoothly
   const probe = await probePopup(popup);
   // Read-only: is the wallet's Approve enabled (i.e. would --sign work)? Never clicked here without --sign.
   probe.approve = await popup.getByRole('button', { name: 'Approve', exact: true }).first().evaluate((b) => (b.disabled ? 'disabled' : 'enabled')).catch(() => 'absent');
@@ -222,6 +231,7 @@ async function walletStep(label, openWallet) {
     const closed = closes(60_000);
     await approve(popup);
     await h.wait('wallet closes', closed);
+    await h.settle(page, 'wallet closed');
     return true;
   }
   await h.hold(1200, 'read wallet request');
@@ -243,6 +253,7 @@ async function walletStep(label, openWallet) {
   }
   await closed;
   if (!popup.isClosed()) { note(`${label}: popup stayed open after Cancel; closed the window (no approval)`); await popup.close().catch(() => {}); }
+  await h.settle(page, 'wallet closed');
   return false;
 }
 
@@ -269,6 +280,7 @@ async function explorerTab(opener, hash) {
   await opener.evaluate((u) => { window.open(u, '_blank'); }, url);
   const tab = await tabP;
   await h.wait('explorer loads', tab.waitForLoadState('load').catch(() => {}));
+  await h.settle(tab, 'explorer painted', { timeout: 3000 });
   if (state.explorer !== 'nearblocks') {
     const card = await seen('explorer tx summary', tab.locator('div.rounded-lg', { has: tab.locator('dl') }).filter({ hasText: hash }), 20_000);
     if (card) { await boxHold(tab, 'tx on explorer', card, 2000); note('Near Rocks shows no "Success" label; the summary card (hash, signer, receiver, block) is held 2 s'); }
@@ -302,6 +314,7 @@ async function s1() {
     await h.click(page, nv, { label: 'NVDAx market' });
     await h.wait('market loads', settleNav(page, '/feed/NVDAx'));
     const exit = await seen('[data-testid=market-exit]', page.locator('[data-testid="market-exit"]'), 15_000);
+    await h.settle(page, 'market painted');
     await h.hold(1000, 'market page');
     if (exit) { await h.moveTo(page, exit); await boxHold(page, 'exit capacity', exit, 1400); }
     const rows = page.locator('[data-testid="market-ladder"] tbody tr');
@@ -328,6 +341,7 @@ async function s2() {
     await page.locator('[data-testid="test-assets"]').first().waitFor({ timeout: 15_000 }).catch(() => {});
     await sleep(700);
     const y = await settleScroll(page);
+    await h.settle(page, 'borrow painted');
     if (y > 4) { note(`/borrow scrolls itself to y=${y} after the nav click; the take scrolls back to the top (eased)`); await h.hold(500, 'look'); await toTop(page); }
     const wallet = await seen('[data-testid=wallet-button]', page.locator('[data-testid="wallet-button"]'), 15_000);
     const who = wallet ? (await wallet.innerText()).trim() : '';
@@ -346,6 +360,7 @@ async function s2() {
       page.locator('[data-testid="test-assets-result"], [data-testid="test-assets-error"]').first().waitFor({ state: 'visible', timeout: 20_000 }).then(() => 'result', () => null),
     ]);
     found('sign modal "Review: Get test assets"', open === 'modal');
+    await h.settle(page, 'modal painted');
     if (open !== 'modal') {
       const t = (await page.locator('[data-testid="test-assets-result"], [data-testid="test-assets-error"]').first().innerText().catch(() => '')).replace(/\s+/g, ' ');
       note(`no sign modal: ${t.slice(0, 160)}`);
@@ -390,12 +405,14 @@ async function s3() {
     const units = await seen('[data-testid=amt-units] input', page.locator('[data-testid="amt-units"] input:not([type=range])'));
     await h.click(page, units, { label: 'units field' });
     await h.type(page, LOCK_UNITS, { label: 'lock units' });
+    await settlePreview('collateral value');
     await h.hold(1000, 'collateral value');
     const borrow = await seen('[data-testid=amt-borrow] input', page.locator('[data-testid="amt-borrow"] input:not([type=range])'));
     await h.click(page, borrow, { label: 'borrow field' });
     await h.type(page, BORROW_USD, { label: 'borrow amount' });
     const limit = page.locator('[data-testid="borrow-limit"]');
     await h.wait('limit from contract', limit.filter({ hasText: /\$/ }).waitFor({ timeout: 20_000 }).catch(() => {}));
+    await settlePreview('borrow preview');
     if (await seen('[data-testid=borrow-limit]', limit)) await boxHold(page, 'limit', limit, 1300);
     h.zoomOut();
     const prot = await seen(`[data-testid=protection-${want}]`, page.locator(`[data-testid="protection-${want}"]`));
@@ -404,6 +421,7 @@ async function s3() {
     await h.click(page, prot, { label: `protection ${want}` });
     const fees = page.locator('[data-testid="preview-fees"]');
     await h.wait('live preview', fees.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => {}));
+    await settlePreview('protection preview');
     found('[data-testid=preview-fees]', await fees.isVisible().catch(() => false));
     const outcome = await seen('[data-testid=borrow-outcome]', page.locator('[data-testid="borrow-outcome"]'));
     if (outcome) await boxHold(page, 'live preview', outcome, 1500);
@@ -423,6 +441,7 @@ async function s3() {
     await h.click(page, review, { label: 'Review borrow' });
     const drawer = page.getByRole('dialog', { name: 'Review borrow' });
     await seen('drawer "Review borrow"', drawer);
+    await h.settle(page, 'drawer painted');
     const show = await seen('[data-testid=show-wallet-payload]', page.locator('[data-testid="show-wallet-payload"]'));
     await h.click(page, show, { label: 'Show what your wallet signs' });
     const payload = await seen('[data-testid=wallet-payload]', page.locator('[data-testid="wallet-payload"]'));
@@ -433,6 +452,7 @@ async function s3() {
     const modal = page.getByRole('dialog', { name: /^Review: / }).filter({ has: page.getByRole('button', { name: /Open wallet to sign|Waiting for wallet/ }) });
     await seen('sign modal "Review: …"', modal);
     note('the app adds its own sign modal ("Open wallet to sign") between "Confirm in wallet" and the wallet');
+    await h.settle(page, 'sign modal painted');
     await h.hold(1000, 'sign modal');
     const approved = await walletStep('borrow', () => h.click(page, modal.getByRole('button', { name: 'Open wallet to sign' }), { label: 'Open wallet to sign' }));
     if (!approved) {
@@ -442,6 +462,7 @@ async function s3() {
       if (err) report('borrow_after_cancel', err.slice(0, 160));
       if (await modal.isVisible().catch(() => false)) await h.click(page, modal.getByRole('button', { name: 'Cancel', exact: true }), { label: 'modal cancel' });
       if (await drawer.isVisible().catch(() => false)) await h.click(page, drawer.getByRole('button', { name: 'Close', exact: true }), { label: 'drawer close' });
+      await h.settle(page, 'drawer closed');
       return;
     }
     const toast = page.locator('.toasts .toast').filter({ hasText: TX_RE });
@@ -483,6 +504,7 @@ async function s4() {
       await h.wait('position loads', settleNav(page, '/position/'));
     }
     const ring = await seen('ring "Health at the simulated price"', page.getByRole('img', { name: /^Health at the simulated price/ }), 20_000);
+    await h.settle(page, 'position painted');
     if (ring) { await h.moveTo(page, ring); await boxHold(page, 'health', ring, 1300); }
     const sim = await seen('#sim', page.locator('#sim'));
     if (sim) {
@@ -493,11 +515,8 @@ async function s4() {
       const thumb = 9; // half the thumb: the browser maps value → x inside [x + thumb, x + w - thumb]
       const x0 = b.x + thumb + frac * (b.width - 2 * thumb), yy = b.y + b.height / 2;
       const x1 = Math.max(b.x + thumb + 4, x0 - (b.width - 2 * thumb) * 0.35);
-      await h.moveTo(page, { x: x0, y: yy });
-      await sleep(220);
-      await page.mouse.down();
-      await h.moveTo(page, { x: x1, y: yy }, { ms: 900 });
-      await page.mouse.up();
+      // WO-35d: 14 even steps over ~1.2 s, each waiting for a rendered frame (one eased 54-step move piled up re-renders: 450 ms stall).
+      await h.drag(page, { x: x0, y: yy }, { x: x1, y: yy }, { steps: 14, ms: 1200 });
       h.mark('drag', { what: 'price simulator', from: Math.round(x0), to: Math.round(x1) });
       report('sim', await sim.getAttribute('aria-valuetext'));
       if (ring) await boxHold(page, 'health at the simulated price', ring, 1300);
@@ -617,10 +636,13 @@ async function runSection(n) {
   }
   // Off camera: close any extra tab (explorer) so the next take starts with p0 only.
   for (const p of ctx.pages()) if (p !== page) await p.close().catch(() => {});
-  const g = gapcheck(dir, { limit: 100 });
-  cur.gapcheck = { pass: g.pass, max_gap_ms: g.maxGap, pages: Object.fromEntries(Object.entries(g.pages).map(([id, s]) => [id, { fps: s.fps, max_gap_ms: s.maxGap }])) };
+  const g = await gapcheckVisual(dir, { limit: 100, stillLimit: 120 });
+  const at = (l) => l.map((x) => `${x.page} ${x.ms} ms @ ${x.from}${x.kind ? ` ${x.kind}` : ''}`);
+  cur.gapcheck = { pass: g.pass, post_cursor: g.post, motion_max_ms: g.maxMotion, hold_max_ms: g.maxStill, transition_max_ms: g.maxTransition,
+    unchanged_max_ms: g.maxUnchanged, max_gap_ms: g.maxGap, worst_motion: at(g.worstMotion.slice(0, 3)), worst_transition: at(g.worstTransition.slice(0, 3)),
+    pages: Object.fromEntries(Object.entries(g.pages).map(([id, s]) => [id, { fps: s.fps, max_gap_ms: s.maxGap }])) };
   if (failed) { cur.error = failed; log(`  STOP s${n}: ${failed}`); }
-  log(`  s${n}: ${cur.duration_s} s · gapcheck ${g.pass ? 'PASS' : 'FAIL'} max ${g.maxGap} ms ${JSON.stringify(cur.gapcheck.pages)}`);
+  log(`  s${n}: ${cur.duration_s} s · gapcheck ${g.pass ? 'PASS' : 'FAIL'} motion ${g.maxMotion} / hold ${g.maxStill} / transition ${g.maxTransition} ms ${JSON.stringify(cur.gapcheck.pages)}`);
   if (failed && MODE === 'take') throw new Error(`section ${n} failed: ${failed}`);
 }
 
@@ -656,7 +678,7 @@ try {
   }
   for (const r of state.results) {
     const miss = Object.entries(r.selectors).filter(([, v]) => !v).map(([k]) => k);
-    log(`s${r.section} ${r.title}: ${r.skipped ?? `${r.duration_s ?? '?'} s · gapcheck ${r.gapcheck ? `${r.gapcheck.pass ? 'PASS' : 'FAIL'} ${r.gapcheck.max_gap_ms} ms` : 'n/a'} · selectors ${Object.keys(r.selectors).length - miss.length}/${Object.keys(r.selectors).length}${miss.length ? ` (missing: ${miss.join(', ')})` : ''}${r.error ? ` · ERROR ${r.error}` : ''}`}`);
+    log(`s${r.section} ${r.title}: ${r.skipped ?? `${r.duration_s ?? '?'} s · gapcheck ${r.gapcheck ? `${r.gapcheck.pass ? 'PASS' : 'FAIL'} motion ${r.gapcheck.motion_max_ms} / hold ${r.gapcheck.hold_max_ms} / transition ${r.gapcheck.transition_max_ms} ms` : 'n/a'} · selectors ${Object.keys(r.selectors).length - miss.length}/${Object.keys(r.selectors).length}${miss.length ? ` (missing: ${miss.join(', ')})` : ''}${r.error ? ` · ERROR ${r.error}` : ''}`}`);
   }
   process.exitCode = exit;
 }
