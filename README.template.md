@@ -46,10 +46,10 @@ the TEE; copilot answers are TEE-signed and verified in the browser) · `agents`
 ## Evidence
 See [docs/EVIDENCE.md](docs/EVIDENCE.md): every gate with commands, outputs and explorer links.
 
-## Prior work (disclosure, Q-002 / Q-005) — draft, approve: TODO-H12
-Nectar Network (Kunal Drall) published research on exit-liquidity gaps for tokenized stocks before the
-hackathon (Oct 2026 product brief; SCF #42 material). That research is the baseline. All code,
-contracts, programs, services and sites in this repository were written during the hackathon window.
+## Prior work (disclosure, Q-002 / Q-005)
+Before the hackathon, Kunal researched exit-liquidity gaps for tokenized stocks under Nectar Network (an October 2026 product brief and
+Stellar Community Fund #42 material). That research and the Nectar brand assets (logo, colour tokens) are the baseline. Nectar Network's separate Stellar testnet
+product shares no code with this repository. All code, contracts, programs, services and sites here were written during the hackathon window, starting 2026-11-09.
 
 ## What is deliberately not here
 Mainnet, a token, governance UI, other chains, real tokenized equities (no route on testnet).

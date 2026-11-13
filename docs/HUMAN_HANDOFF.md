@@ -282,7 +282,11 @@ What Kunal does (2 min): reply `H9 <entity name> | <contact email> | <form provi
 What Claude Code does then: replaces `TODO-H9` in `apps/docs-site/docs/legal/*.md` and the web footer; rebuilds docs.
 Default if silent: "Nectar Labs (unincorporated project)", `kunal@nectarnetwork.fun`, mailto form.
 
-## H10 — team and second-project check               status: OPEN   needed by: SUBMISSION.md
+## H10 — team and second-project check               status: DONE 2026-11-13   needed by: SUBMISSION.md
+Done: Kunal replied `team: Kunal | projects: 1 | lead: Kunal | email: kunal@nectarnetwork.fun | size: 1` and "Use "Kunal" with no surname
+  everywhere: SUBMISSION leadName, README Team, the docs team page and Prior work." WO-82 filled SUBMISSION `leadName` `Kunal`, `email`, `size` `1`,
+  README Team, the docs team page and both Prior work texts. `projects: 1` is recorded as written in SUBMISSION.md; Q-015 asks each README to
+  name the other project, and the reply does not name it.
 What Kunal does: reply `H10 team: <names/handles> | projects: <0 or 1 other> | lead: <name> | email: <address> | size: <1 or "2 - 4" …>` (SUBMISSION.md `leadName`, `email`, `size`).
 Default if silent: Kunal only; Q-015 noted as unconfirmed in SUBMISSION.md (blocks H1).
 
@@ -291,7 +295,9 @@ Why a human: voice. Agents produce `evidence/demo.webm` (captioned, silent) with
 What Kunal does (15 min): record voice over `docs/DEMO_SCRIPT.md`, or accept the captioned version; upload to the host the submission form expects; reply `H11 <url>`.
 Default if silent: captioned silent video path given in SUBMISSION.md; URL field `TODO-H11`.
 
-## H12 — prior-work disclosure wording               status: OPEN   needed by: README before H2
+## H12 — prior-work disclosure wording               status: DONE 2026-11-13 (Kunal's edited text)   needed by: README before H2
+Done: Kunal sent an edited text (2026-11-13), used verbatim in README "Prior work", README.template.md and SUBMISSION.md (WO-82). The docs
+  site page uses the same sentences with "the hackathon" / "the hackathon window" written as "the build window" (no hackathon wording on the docs site).
 What Kunal does: read README "Prior work", edit if needed, reply `H12 approved`.
 Default if silent: drafted text stands with the note "draft — approve" removed only after H12.
 
@@ -314,7 +320,9 @@ HACKATHON.md: send the submission only once the repo is public and the demo post
 What Kunal does: after H2 and H11, post from `docs/X_POST.md` himself (video on post 1); reply `H3 <post url>`.
 What Claude Code does then: puts the URL in SUBMISSION.md `demoUrl`.
 
-## H14 — payout account, contact consent                status: OPEN   needed by: H1   NEVER by an agent
+## H14 — payout account, contact consent                status: DONE 2026-11-13   needed by: H1   NEVER by an agent
+Done: Kunal replied `kunal-drall.near | consent yes`. SUBMISSION `nearAddress` = `kunal-drall.near` (matches the HACKATHON.md regex),
+  `consent` = `true` (WO-82).
 Why a human: the mainnet payout account is Kunal's own wallet; consent must be his agreement to the verbatim notice.
 What Kunal does: create or pick a mainnet NEAR account in his wallet; read "I agree that the organizers may use these details to
 review our submission and contact us about this hackathon."; reply `H14 <account.near> | consent yes`.

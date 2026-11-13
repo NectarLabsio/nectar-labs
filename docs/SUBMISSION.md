@@ -12,15 +12,15 @@ Format the builder relies on: one row per API field, column 1 = API field name i
 | --- | --- | --- |
 | `requestId` | `GENERATE-ONCE` | UUID made once by the builder at the first `--send` (`node -e 'console.log(crypto.randomUUID())'`), stored in `~/.nectar/submission-request-id` (0600, outside the repo), reused on every retry |
 | `projectName` | `Nectar Labs` | README title; 2-80 chars |
-| `leadName` | `TODO-H10` | README "Team" names Kunal Drall, but HACKATHON.md says never guess this field: Kunal confirms in H10 |
-| `email` | `TODO-H10` | the earlier draft had `kunal@nectarnetwork.fun`; Kunal confirms it in H10 (≤ 160 chars, ≤ 2 submissions per email, Q-015) |
-| `size` | `TODO-H10` | one of `1`, `2 - 4`, `4 - 6`, `6 - 8`, `8+`, exactly as written; `1` if H10 says "Kunal only" |
+| `leadName` | `Kunal` | Kunal's H10 reply, 2026-11-13: `lead: Kunal`, and "Use "Kunal" with no surname everywhere"; 2-80 chars |
+| `email` | `kunal@nectarnetwork.fun` | Kunal's H10 reply, 2026-11-13: `email: kunal@nectarnetwork.fun` (≤ 160 chars, ≤ 2 submissions per email, Q-015) |
+| `size` | `1` | Kunal's H10 reply, 2026-11-13: `size: 1`; one of `1`, `2 - 4`, `4 - 6`, `6 - 8`, `8+`, exactly as written |
 | `tracks` | `["defi","security","agents"]` | Kunal's H16 reply in session, 2026-11-11: "H16 defi security agents" (D-028). `privacy` dropped by Kunal; `nfts` not entered (H16 closed 2026-11-12, see "Tracks" below) |
-| `nearAddress` | `TODO-H14` | **mainnet** payout account, made by Kunal in his own wallet; never created or invented by an agent; must match the regex in HACKATHON.md |
+| `nearAddress` | `kunal-drall.near` | Kunal's H14 reply, 2026-11-13: account `kunal-drall.near`, consent yes. **Mainnet** payout account in Kunal's own wallet, not created by an agent; matches the regex in HACKATHON.md (line 155) |
 | `projectUrl` | `https://github.com/NectarLabsio/nectar-labs` | public repo; Kunal pushed main 2026-11-13 (H2); ≤ 300 chars; each repo is submitted once |
 | `demoUrl` | `TODO-H3` | URL of the **public X demo post** (H3) carrying the video (H11). HACKATHON.md: send only once the repo is public and the post is up |
 | `idea` | (block below) | 20-2000 chars |
-| `consent` | `TODO-H14` | becomes `true` only after Kunal reads and agrees to: "I agree that the organizers may use these details to review our submission and contact us about this hackathon." |
+| `consent` | `true` | Kunal's H14 reply, 2026-11-13: `consent yes`, his agreement to: "I agree that the organizers may use these details to review our submission and contact us about this hackathon." |
 
 Never sent: `website`. It is a spam trap: any non-empty value rejects the submission (F-007). The builder must not emit that key,
 and must not add any key outside the 11 above. Demo video `TODO-H11` is not an API field: it is attached to the X post (H3).
@@ -61,11 +61,12 @@ Entered: `defi`, `security`, `agents` (Kunal, in session: "H16 defi security age
 - `privacy`: **not entered** (Kunal, 2026-11-11). The privacy-relevant facts and their limits (quoter inputs, RPC providers, analytics) stay as disclosures in README "Security" and SECURITY.md R2-02, not as a pitch.
 - `realworld`: **not entered.** The real-world payout path (`pay_to`) is built and sandbox-tested but has no testnet run, and the collateral is a mock.
 
-## Baseline disclosure (Q-002 / Q-005): not an API field; lives in README. DRAFT until H12
-README "Prior work" text, unchanged: "Nectar Network (Kunal Drall) published research on exit-liquidity gaps for tokenized stocks
-before the hackathon (Oct 2026 product brief; SCF #42 material). That research is the baseline. All code, contracts, programs,
-services and sites in this repository were written during the hackathon window (from 2026-11-09)."
-Q-015: if Kunal enters a second project, README must name it (H10).
+## Baseline disclosure (Q-002 / Q-005): not an API field; lives in README. Approved by Kunal (H12, 2026-11-13)
+README "Prior work" text, Kunal's edited wording, verbatim: "Before the hackathon, Kunal researched exit-liquidity gaps for tokenized stocks under Nectar Network (an October 2026 product brief and
+Stellar Community Fund #42 material). That research and the Nectar brand assets (logo, colour tokens) are the baseline. Nectar Network's separate Stellar testnet
+product shares no code with this repository. All code, contracts, programs, services and sites here were written during the hackathon window, starting 2026-11-09."
+Q-015: Kunal's H10 reply says `projects: 1`, recorded as written (H10 format: other projects, 0 or 1). Q-015 (HACKATHON.md) allows at most 2
+projects per person and asks that each README names the other project; the reply does not name it, so README does not name it yet.
 
 ## What the submit script must read (orchestrator wires it; agents: `--dry-run` only)
 1. This file only, table "Payload fields": column 1 (API field) → column 2 (value). Ignore every other table.
@@ -80,7 +81,7 @@ Wired: `scripts/submit.sh` (dry run by default) calls `scripts/build-submission.
 mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3). The send flag is `--send` (H1 in docs/HUMAN_HANDOFF.md).
 
 ## Order of human steps (HACKATHON.md: send only once the repo is public and the post is up)
-H10 + H14 (identity, payout account, consent) → H12 (prior work) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →
+H10 + H14 (identity, payout account, consent; done 2026-11-13) → H12 (prior work; approved 2026-11-13) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →
 G9 PASS from the public URL → H1 (Kunal sends).
 G9 today: PASS on release 3 (5f011bb) from a local fresh clone (docs/EVIDENCE.md §G9 runs 5 + 5b: run 5, 2026-11-12T16:40Z–16:47Z on 5dd2a50, every step except 3, recorded in 87be719;
 run 5b, 17:02Z–17:05Z on 88b99b3, step 3, recorded in b945f42; product code equals 5f011bb in both; the repo was not public yet, so the verifier used the local path).
