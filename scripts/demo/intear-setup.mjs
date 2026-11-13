@@ -78,7 +78,8 @@ async function typeSeed(p) {
   const fields = p.locator('input[type=text]:visible');
   const n = await fields.count();
   if (n !== WORDS.length) throw new Error(`seed: expected ${WORDS.length} text fields, found ${n}; not typing`);
-  for (let i = 0; i < WORDS.length; i++) { await fields.nth(i).click(); await p.keyboard.type(WORDS[i], { delay: 25 }); }
+  // Slow enough that Intear's per-field autocomplete never drops or replaces a keystroke ("Invalid seed phrase" at 25 ms on one phrase).
+  for (let i = 0; i < WORDS.length; i++) { await fields.nth(i).click(); await fields.nth(i).fill(''); await p.keyboard.type(WORDS[i], { delay: 70 }); await p.waitForTimeout(200); }
   out(`seed: typed ${WORDS.length} words into ${n} text fields`);
 }
 
@@ -99,8 +100,15 @@ try {
     out(`> ${cmd}${arg ? ' ' + arg : ''}`);
     if (cmd === 'open') { await page.goto(arg, { waitUntil: 'domcontentloaded' }); await settle(page, 2500); }
     else if (cmd === 'click') { await page.getByRole('button', { name: arg }).or(page.getByRole('link', { name: arg })).or(page.getByText(arg, { exact: true })).first().click({ timeout: 10_000 }); await settle(page); }
+    else if (cmd === 'waitbtn') { const [name, ms] = arg.split('|'); await page.getByRole('button', { name }).first().waitFor({ timeout: Number(ms || 60000) }); await page.getByRole('button', { name }).first().click(); await settle(page); }
     else if (cmd === 'role') { const [role, name] = arg.split('='); await page.getByRole(role, { name }).first().click({ timeout: 10_000 }); await settle(page); }
     else if (cmd === 'seed') { await typeSeed(page); await settle(page, 800); }
+    else if (cmd === 'privkey') {
+      // Intear "Private Key" import: the one plain text field (never the unlock password box). The key is redacted from all output.
+      const f = page.locator('input[type=text]:visible');
+      if ((await f.count()) !== 1) throw new Error(`privkey: expected 1 text field, found ${await f.count()}`);
+      await f.first().click(); await page.keyboard.type(String(KEY.private_key), { delay: 15 }); out('privkey: typed into 1 text field'); await settle(page, 800);
+    }
     else if (cmd === 'checkbox') { await page.locator('input[type=checkbox]:visible').nth(Number(arg)).check({ timeout: 10_000 }); await settle(page, 300); }
     else if (cmd === 'password') { await fillPassword(page); await settle(page, 500); }
     else if (cmd === 'press') { await page.keyboard.press(arg); await settle(page); }

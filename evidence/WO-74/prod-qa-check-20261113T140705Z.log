@@ -1,0 +1,49 @@
+> open https://wallet.intear.tech
+> click I already have a NEAR wallet
+> click Private Key
+> privkey
+privkey: typed into 1 text field
+> checkbox 0
+> checkbox 1
+> checkbox 2
+> waitbtn qa-faucet-1113b.nectar.testnet|90000
+> wait 1500
+> click Import Account
+> wait 4000
+> open https://testnet.nectarlabs.io/borrow
+> wait 2000
+> click Decline
+> click Connect wallet
+> wait 2500
+> click Intear Wallet
+> wait 5000
+> fclick intear.tech|🌐 Web
+[new page] https://wallet.intear.tech/connect
+> wait 6000
+> page last
+> click Connect
+[popup closed] back to page 0
+> wait 5000
+> page 0
+> wait 4000
+> seltext [data-testid="amt-units"]
+  text [data-testid="amt-units"]: You lock Balance 0.00 NVDAx NVDAx Collateral value appears here
+> click Get test assets
+> wait 3000
+> click Open wallet to sign
+[new page] https://wallet.intear.tech/send-transactions
+> wait 6000
+> page last
+> click Approve
+> wait 15000
+[popup closed] back to page 0
+> page 0
+> wait 2000
+> seltext [data-testid="amt-units"]
+  text [data-testid="amt-units"]: You lock Balance 5.00 NVDAx NVDAx Collateral value appears here 25% 50% Max
+> fillsel [data-testid="amt-units"] input:not([type=range])|5
+> wait 1500
+> seltext [data-testid="amt-units"]
+  text [data-testid="amt-units"]: You lock Balance 5.00 NVDAx NVDAx $675.00 25% 50% Max
+> enabled ••• borrow
+  button "••• borrow": disabled
