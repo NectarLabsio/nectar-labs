@@ -1,0 +1,274 @@
+## 2026-11-13T13:46:52Z public-repo shape (before pnpm i)
+$ git remote -v
+origin	https://github.com/NectarLabsio/nectar-labs.git (fetch)
+origin	https://github.com/NectarLabsio/nectar-labs.git (push)
+$ git rev-parse HEAD
+b6d6f411a1bf4e7dec0cdaa9fe3b15eebab84a94
+$ git rev-list --count HEAD
+747
+$ git count-objects -vH
+count: 0
+size: 0 bytes
+in-pack: 7723
+packs: 1
+size-pack: 63.26 MiB
+prune-packable: 0
+garbage: 0
+size-garbage: 0 bytes
+$ find . -path ./.git -prune -o -type f -size +50M -print   (working tree files > 50 MB)
+$ largest 5 tracked files
+2027836 evidence/G3/design/home-400-dark.png
+2102338 evidence/G3/design/home-400-light.png
+2791405 evidence/G9/run7-20261113T123302Z/host-grep.txt
+3415741 evidence/G3/design/home-1440-dark.png
+3483927 evidence/G3/design/home-1440-light.png
+$ history blobs > 50 MB (all refs)
+$ largest 3 history blobs
+blob 67d150e176657e41fe5d61ed7f9b89b3a0d4f228 2791405 evidence/G9/run7-20261113T123302Z/host-grep.txt
+blob 8ef6cb4dcabca92dfac23fd3347249df09ff03d4 3415741 evidence/G3/design/home-1440-dark.png
+blob 86003fac343ae423ff2822c8d86d5872ce171cb2 3483927 evidence/G3/design/home-1440-light.png
+$ tracked .env* files
+.env.example
+apps/web/.env.example
+$ .env* files ever added in history
+.env.example
+apps/web/.env.example
+$ non-comment, non-empty lines in tracked .env* files
+.env.example:4:NEAR_NETWORK=testnet
+.env.example:5:NEAR_RPC_URL=https://test.rpc.fastnear.com
+.env.example:8:OWNER_ACCOUNT_ID=TODO-G2
+.env.example:9:CORE_ACCOUNT_ID=TODO-G2
+.env.example:10:USDC_MOCK_ID=TODO-G2
+.env.example:11:NVDAX_MOCK_ID=TODO-G2
+.env.example:12:KEEPER_ACCOUNT_ID=TODO-G2
+.env.example:13:KEEPER_KEY_PATH=~/.nectar/keys/keeper.function-call.json      # function-call key only
+.env.example:14:DEMO_BORROWER_ID=TODO-G2
+.env.example:15:DEMO_BORROWER_KEY_PATH=~/.nectar/keys/borrower1.json           # E2E write flow only
+.env.example:18:OUTLAYER_ACCOUNT_ID=outlayer.testnet
+.env.example:19:OUTLAYER_PROJECT_ID=TODO-G4
+.env.example:20:OUTLAYER_VERSION_KEY=TODO-G4
+.env.example:21:QUOTER_WASM_SHA256=TODO-G4
+.env.example:22:ORACLE_SOURCE=owner                 # owner (live, disclosed) | pyth-oracle.testnet (built; needs H13 key, D-013). price-oracle.testnet does not serve NVDA (C-012)
+.env.example:23:NVDA_PRICE_ID=b1073854ed24cbc755dc527418f52b7d271f6cc967bbf8d8129112b18860a593   # F-053 Equity.US.NVDA/USD
+.env.example:24:HERMES_URL=https://hermes-beta.pyth.network
+.env.example:25:ONE_CLICK_BASE_URL=https://1click.chaindefuser.com
+.env.example:26:ONE_CLICK_API_KEY=                  # HUMAN H8 (optional)
+.env.example:29:SOLANA_CLUSTER=devnet
+.env.example:30:SOLANA_RPC_URL=https://api.devnet.solana.com
+.env.example:31:KEEPER_SOLANA_KEYPAIR=~/.nectar/solana/keeper-fee-payer.json
+.env.example:32:NECTAR_VAULT_PROGRAM_ID=             # default solana.vault_program in config.yaml
+.env.example:33:NECTAR_VAULT_AUTHORITY=TODO-G7      # MPC-derived Ed25519 pubkey
+.env.example:34:SIGNER_ACCOUNT_ID=v1.signer-prod.testnet
+.env.example:35:SIGNER_PATH=solana-v1
+.env.example:36:NEAR_AI_BASE_URL=https://cloud-api.near.ai/v1
+.env.example:37:NEAR_AI_API_KEY=                    # HUMAN H7
+.env.example:38:NEAR_AI_MODEL=
+.env.example:41:BASE_RPC_URL=                       # http://127.0.0.1:8545 (local fork) or https://sepolia.base.org
+.env.example:42:BASE_KEYSTORE_DIR=~/.foundry/keystores
+.env.example:43:BASE_ACCOUNT=nectar-keeper          # keystore file name (cast wallet new <dir> <name>)
+.env.example:44:BASE_PASSWORD_FILE=~/.nectar/base/keeper.password   # 0600
+.env.example:45:BASE_VAULT_ADDRESS=                 # optional cross-check of the pinned 0x vault
+.env.example:46:BASE_KEEPER_ATTEST=0                # 1 = local fork: keeper_attest_deposit instead of confirm_remote_deposit
+.env.example:49:NEXT_PUBLIC_FEED_URL=http://localhost:8787
+.env.example:50:NEXT_PUBLIC_ANALYTICS=off           # off | ga4 | plausible  (HUMAN H4)
+.env.example:51:NEXT_PUBLIC_GA4_ID=
+.env.example:52:NEXT_PUBLIC_PLAUSIBLE_DOMAIN=
+.env.example:58:X402_FACILITATOR_URL=               # empty = in-process facilitator with the relayer below
+.env.example:59:X402_RELAYER_ACCOUNT_ID=            # default v7.x402_relayer in config.yaml (x402-relayer.nectar.testnet)
+.env.example:60:X402_RELAYER_KEY_PATH=              # e.g. ~/.nectar/keys/x402-relayer.json (0600)
+.env.example:61:AGENT1_ACCOUNT_ID=                  # default v7.agent1 (agent1.nectar.testnet)
+.env.example:62:AGENT1_KEY_PATH=                    # e.g. ~/.nectar/keys/agent1.json (0600)
+.env.example:63:X402_FACILITATOR_PORT=               # set to expose the facilitator over HTTP (needs the secret path below)
+.env.example:64:X402_FACILITATOR_HOST=               # default 127.0.0.1
+.env.example:65:X402_FACILITATOR_SECRET_PATH=        # 0600 file with the bearer token, e.g. ~/.nectar/keys/x402-facilitator.secret
+apps/web/.env.example:7:SITE_URL=
+apps/web/.env.example:9:APP_URL=
+apps/web/.env.example:12:DOCS_URL=
+apps/web/.env.example:15:STATUS_URL=
+apps/web/.env.example:18:LEGACY_HOSTS=
+apps/web/.env.example:21:FEED_URL=
+apps/web/.env.example:23:REPO_URL=
+$ tracked files under a .nectar dir
+$ expanded home paths ([/]Users[/][A-Za-z] or [/]home[/]x[/], excl. wasm): file count + list
+       0
+$ '~/.nectar' mentions: files / lines
+      85
+     194
+$ '~/.nectar' mentions outside docs/, evidence/, *.md
+.dockerignore:2:# Nothing else reaches a build context: no .env*, evidence/, keys, ~/.nectar copies, node_modules, .git, .claude.
+.env.example:2:# Keys are PATHS to 0600 files under ~/.nectar/, never key material.
+.env.example:13:KEEPER_KEY_PATH=~/.nectar/keys/keeper.function-call.json      # function-call key only
+.env.example:15:DEMO_BORROWER_KEY_PATH=~/.nectar/keys/borrower1.json           # E2E write flow only
+.env.example:31:KEEPER_SOLANA_KEYPAIR=~/.nectar/solana/keeper-fee-payer.json
+.env.example:44:BASE_PASSWORD_FILE=~/.nectar/base/keeper.password   # 0600
+.env.example:60:X402_RELAYER_KEY_PATH=              # e.g. ~/.nectar/keys/x402-relayer.json (0600)
+.env.example:62:AGENT1_KEY_PATH=                    # e.g. ~/.nectar/keys/agent1.json (0600)
+.env.example:65:X402_FACILITATOR_SECRET_PATH=        # 0600 file with the bearer token, e.g. ~/.nectar/keys/x402-facilitator.secret
+.gitignore:10:~/.nectar
+.railwayignore:2:# Only what the Feed / x402 Dockerfiles need. Never .env*, evidence/, keys, ~/.nectar copies, node_modules, .git, .claude.
+apps/web/app/keepers/page.tsx:13:cp .env.example .env            # KEEPER_ACCOUNT_ID, KEEPER_KEY_PATH (0600 file under ~/.nectar/)
+evm/script/Base.s.sol:8:///      (`--account <name>` from ~/.nectar/evm) and `--sender`; no script reads a private key or a
+scripts/00-accounts.sh:57:mkdir -p ~/.nectar/keys && chmod 700 ~/.nectar ~/.nectar/keys
+scripts/05-solana.sh:5:mkdir -p ~/.nectar/solana && chmod 700 ~/.nectar/solana
+scripts/05-solana.sh:8:[ -f ~/.nectar/solana/deployer.json ] || solana-keygen new --no-bip39-passphrase --outfile ~/.nectar/solana/deployer.json
+scripts/05-solana.sh:9:[ -f ~/.nectar/solana/keeper-fee-payer.json ] || solana-keygen new --no-bip39-passphrase --outfile ~/.nectar/solana/keeper-fee-payer.json
+scripts/05-solana.sh:10:chmod 600 ~/.nectar/solana/*.json
+scripts/05-solana.sh:11:solana config set --url https://api.devnet.solana.com --keypair ~/.nectar/solana/deployer.json
+scripts/05-solana.sh:13:DEP=$(solana-keygen pubkey ~/.nectar/solana/deployer.json)
+scripts/05-solana.sh:17:DELAY=30 retry solana airdrop 1 "$(solana-keygen pubkey ~/.nectar/solana/keeper-fee-payer.json)" || echo "AIRDROP FAILED → H-SOL-AIRDROP" >&2
+scripts/05-solana.sh:18:if [ ! -f ~/.nectar/solana/mint.txt ]; then log "mock NVDAx mint (6 dp)"; "$SPL_TOKEN" create-token --decimals 6 --url devnet --fee-payer ~/.nectar/solana/deployer.json | tee -
+scripts/05-solana.sh:19:echo "mint: $(cat ~/.nectar/solana/mint.txt)"
+scripts/06-base.sh:2:# P2b (addendum §9, D-026): Foundry keystores for the Base spoke — deployer, keeper, borrower1, buyer1 — under ~/.nectar/evm (0700), one random
+scripts/21-deploy-v2.sh:4:#   3. keeper-v2 function-call key generated locally into ~/.nectar/keys/keeper-v2.function-call.json (0600; only the public key is
+scripts/29-security-upgrade.sh:13:PROG=$(cfg .solana.vault_program); URL=https://api.devnet.solana.com; K=~/.nectar/solana; RPC="${NEAR_RPC_URL:-https://test.rpc.fastnear.com}"
+scripts/56-solana-deploy.sh:7:K=~/.nectar/solana; DEP=$K/deployer.json; URL=https://api.devnet.solana.com
+scripts/58-g7-v2.sh:13:# Devnet + testnet only. Keys: OS keychain (NEAR), ~/.nectar/solana/*.json (0600). Nothing is printed but public keys.
+scripts/58-g7-v2.sh:18:PROG=$(cfg .solana.vault_program); MINT=$(cfg .solana.mint); K=~/.nectar/solana; URL=https://api.devnet.solana.com
+scripts/60-x402-accounts.sh:3:# Both need FULL-ACCESS keys (F-328: the facilitator rejects function-call keys). Keys are generated locally into ~/.nectar/keys/<name>.json (0600);
+scripts/60-x402-accounts.sh:21:  genkey "$F" "$A"; PUB=$(jq -r .public_key "$F"); echo "$A pk ${PUB:0:14}… (file under ~/.nectar/keys, 0600)"
+scripts/60-x402-accounts.sh:29:echo "done: $RELAYER, $AGENT (2 mock NVDAx). Run G14 with X402_RELAYER_KEY_PATH=~/.nectar/keys/x402-relayer.json AGENT1_KEY_PATH=~/.nectar/keys/agent1.json"
+scripts/build-submission.mjs:4:// and stores it in ~/.nectar/submission-request-id (0600, outside the repo). Exit 2 on: missing field, `website` key, body > 12,000 B,
+scripts/demo/intear-setup.mjs:4:// - The phrase is read here from ~/.nectar/keys/demo.nectar.testnet.json and typed into the page; it is never printed.
+scripts/demo/intear-setup.mjs:7:// - An Intear password (if asked) is generated once and stored at ~/.nectar/keys/demo-intear-password (0600); never printed.
+scripts/demo/intear-setup.mjs:86:  if (!existsSync(PW_FILE)) { writeFileSync(PW_FILE, randomBytes(18).toString('base64url') + '\n', { mode: 0o600 }); chmodSync(PW_FILE, 0o600); out('password: generate
+scripts/demo/takes/take.mjs:9:// - The dedicated profile (~/.nectar/demo-chrome-profile) holds the connected Intear wallet: it is only browsed (no settings, no disconnect, no
+scripts/demo/takes/take.mjs:40:  'AGENT1_KEY_PATH=~/.nectar/keys/agent1.json',
+scripts/demo/takes/take.mjs:516:  log('env: wrote ~/.nectar/demo-x402.env (0600; paths and ids only)');
+scripts/deploy/artifact.sh:6:#   scripts/deploy/artifact.sh make    <commit>              build ~/.nectar/deploy/artifacts/src-<sha>.tar.gz, print "<name> <sha256>"
+scripts/deploy/artifact.sh:10:# Env: ARTIFACT_URL = the function's public origin. The token is read from ~/.nectar/deploy/artifact-token (0600) and sent from a 0600 header file.
+scripts/deploy/artifacts-function.ts:7://   ARTIFACT_TOKEN_SHA256 is the hex sha256 of the bearer token. The token itself stays in ~/.nectar/deploy/artifact-token (0600) on the operator's machine.
+scripts/ops/create-demo-account.mjs:4:// {account_id, public_key, private_key, seed_phrase, hd_path} to ~/.nectar/keys/<account>.json with mode 0600 (dir 0700).
+scripts/submit.sh:6:# reads docs/SUBMISSION.md ("Payload fields" table + "### idea" block); --send-mode makes requestId once (~/.nectar, 0600)
+services/feed/Dockerfile.dockerignore:1:# Allowlist: only what services/feed/Dockerfile copies. Everything else (.env*, evidence/, keys, ~/.nectar copies,
+services/feed/src/main.ts:42:  const db = new FeedDb(home(unset(env.FEED_DB_PATH) ? '~/.nectar/feed.sqlite' : (env.FEED_DB_PATH as string)));
+services/feed/src/mcp-stdio.ts:20:const db = new FeedDb(home(unset(env.FEED_DB_PATH) ? '~/.nectar/feed.sqlite' : (env.FEED_DB_PATH as string)));
+services/keeper/src/config.ts:126:    dbPath: expandHome(env.KEEPER_DB_PATH && env.KEEPER_DB_PATH !== '' ? env.KEEPER_DB_PATH : '~/.nectar/keeper.sqlite'),
+services/keeper/test/keyfile.test.ts:56:    const c = loadConfig({ CORE_ACCOUNT_ID: 'core.t', KEEPER_ACCOUNT_ID: 'k.t', KEEPER_KEY_PATH: '~/.nectar/keys/k.json', KEEPER_POLL_MS: '5000' });
+services/keeper/test/keyfile.test.ts:58:    assert.equal(c.keyPath, expandHome('~/.nectar/keys/k.json'));
+services/x402/Dockerfile.dockerignore:1:# Allowlist: only what services/x402/Dockerfile copies. .env*, evidence/, keys and ~/.nectar copies never reach
+$ key-material grep (ed25519 secret >=80 b58, PEM private, secret_key/private_key with a value) excl. lockfile + forge-std
+evidence/C/faucet-real-call-20261112T201153Z.log:14:│    Signature:  ed25519:5rUj6sAus3GPuTJbZvBiooMtU2E7M1iYgXq5jXVY6mGm8AChcbvMCPUJ3mzkZ7xvrVc3Rw21YD1PVcmYdmkM2e7k
+evidence/G13/upgrade-v2-20261110T175433Z.log:13:│    Signature:  ed25519:2L3afANXzH5Uxs1uW1URsFkmi2kz5c56J31GjAtwQreZRtnGMPE8bFzzA41UrWQdgg8SLjuhyy4Dv3PhFVwyHd1s
+evidence/G14/accounts-20261110T164621Z.log:15:│    Signature:  ed25519:4pzrapGEbchDCguxyQjvgzpyy9Mr58YkdT9ZSriqZ8AiBa34xeJSEahfsw7K2SCSSnMWDb6vQ2eBv37Jraq7Ats1
+evidence/G14/accounts-20261110T164621Z.log:50:│    Signature:  ed25519:5dAQHLAKZcYp3Ac6j7UzpkRRsegqmQ5o4kj4KQYw9QKy5JSDLMrDni9beqLuC6Wuf9dxS8x8qP1k5524oQ6pofau
+evidence/G14/accounts-20261110T164621Z.log:85:│    Signature:  ed25519:kjJS6dy8BJ2wepnBePh8QngWUZdE419harVd77Bs74GGR9f3kGVP1ctW77fLETmSo4Fbny5TZikt37VSc2Tgxjq
+evidence/G14/accounts-20261110T164621Z.log:128:│    Signature:  ed25519:4tT3jXqSBzTRJgZ1GCbqBJhtxiKtMMKhBgTe1mvBHmLMc696eYJdKy7n14KYUW2Cw6cUTmPkRGWwyqqoMfUaUcGC
+evidence/G14/accounts-20261110T164621Z.log:171:│    Signature:  ed25519:jJcWTYPJ5N5DdChmJBKGz3hLBqrfPmUHtGio7hsUe6V9BFdjU4VGwy7bNfiLgJ1hzvYLRGwkLPwMUwmDDNKQxBu
+evidence/G14/accounts-20261110T164621Z.log:214:│    Signature:  ed25519:4BPv4UWcD9GrAwdkuwkDA16ixuqFNXfa3MyhAk9ud3t2MEtjW9ECUGpsLdoXo2RA8aoZj9RUbX9ELb25ig9qBMib
+evidence/G14/accounts-20261110T164621Z.log:258:│    Signature:  ed25519:5wyBW3bZPpXaoXGndvCh9QZCVZHNMjvvcpXMtbfJn7bFyucxZjde1NYcAU2NAxCBtYDG8j4JRu9ZczyrQ8tVUT2L
+evidence/G14/rerun/accounts-topup-20261111T134946Z.log:19:│    Signature:  ed25519:3e4MUjoKQEYLddrBw9reHZfz65qNZSBoMhHU29sF9p931JaXy6XiZ6ucL5zSCahDYPuVDdkxHyeETysmxQMAEPMF
+evidence/G14/rerun/accounts-topup-20261111T134946Z.log:62:│    Signature:  ed25519:4bQuLztV5giu3AgmTYCj7ZcMzbLVbQHPSfnFeEhoAAaUgPTcUgGzCWeTbqnTZDBbp16tWzJjKo2nkvjf635wzzUd
+evidence/G14/rerun/accounts-topup-20261111T134946Z.log:105:│    Signature:  ed25519:4rN5WLfNkBUPLPBFc6tugfUjBVq9dMEB8uDCm5inzbP7Q9hhR4rbTmhPsZ1jH2XEiaZbtaiB7UNS4eQPMcjn7mAA
+evidence/G14/rerun/accounts-topup-20261111T134946Z.log:148:│    Signature:  ed25519:4bLj3tq1rPWi96Tks9WY224Lv7haVRQ6xjfZftoCYcuoKZZMEpUs2wNrNtj8FGKJJ23gSb9HvQUVmgwtCuZ58sPk
+evidence/G14/rerun/accounts-topup-20261111T134946Z.log:192:│    Signature:  ed25519:6HjxZYcw2iNadVHzcRppyEjvyNeMoLoq6AkK2mHjbzTmUnzywF7RQC8mGc1t3Xgr3CndtsLE3TLzwCZWcK9CNBS
+evidence/G14/rerun/accounts-topup-20261111T152615Z.log:19:│    Signature:  ed25519:3KQ4tYP1MFWt85dea8vCrakgtMqFetWQnRqu35ibqFjwScr4jA9CYiDKnVmivaY89NX2FKzTnEpR7zk3obbZMYHe
+evidence/G14/rerun/accounts-topup-20261111T152615Z.log:62:│    Signature:  ed25519:5tkUXdoT4h4VDpjwXjzNLuc9nrwgFGJttLDnvjgeG7WqP9QAuSa6Bgfuy7vqQirKS86iST8p4msZ271pMg4CzgUo
+evidence/G14/rerun/accounts-topup-20261111T152615Z.log:105:│    Signature:  ed25519:4Yevtex9ete2cc5DJY9YpYBkkvfSahYBWkzqxKnbUWLZkSUc5bvh2enYYDcVB4rBgZaMTzScfHCQC5SxtFkAFiWL
+evidence/G14/rerun/accounts-topup-20261111T152615Z.log:148:│    Signature:  ed25519:8mm5BUFLCnpZh7XzLfkdnWYg8E3J92hatWcvXi9K3UkyrRGnoVktViFXiYLopoeenWPV2SKmDeQKW3upxkNKL1a
+evidence/G14/rerun/accounts-topup-20261111T152615Z.log:192:│    Signature:  ed25519:3PK9jg8nEsFzpcAoPuX9QKEvPWX7BHZFEuHRCX93HqqETF8Jv7KYu94Xe27meDhqM38x6b4PkWeF4eHwkKrGkqv4
+evidence/G14/rerun/agent1-mint-20261111T181022Z.log:16:│    Signature:  ed25519:3ffjqFT6f6VYTeekM7VM3a3uRPKEjAh8iGo5mZxYqhs6pYTFYT1pPAjBDgCtPLb1dNxGPk5bU9csr9DptVP9SeEs
+evidence/G2b/deploy-v2-20261110T162301Z.log:19:│    Signature:  ed25519:8HDQzGf8rkwt21x25Qh6HKi4dAQKKTtjRaqExv953ZdGzr2WJD3f8j296DucEQrThB1SeAihfJr9MNgQ6aSSyUz
+evidence/G2b/deploy-v2-20261110T162301Z.log:53:│    Signature:  ed25519:V2W5dvCfjc83E7dSDeSbmyChgJ5EuuQy3oJBpEvCWjVxzFQ9aRbTwuaiAg1QguiDCuPtMwpHjTWfWBiHqmLphnh
+evidence/G2b/deploy-v2-20261110T162301Z.log:88:│    Signature:  ed25519:4LyDDwAdiVxsKDs3QEvAgqwrGEDipomk6NEABWwjea6qn77BqggKbrVbXfLf1cxg4BoTC8FeiVRZ34V97MCswVMc
+evidence/G2b/deploy-v2-20261110T162301Z.log:116:│    Signature:  ed25519:wAVyNjz2nX7X1aEX4szo42rEKBk18mRziW2LGeJ93HZjLtDhD78An87v5hG3fhbYye4YwPZ3M7J2DwsnGkcFs36
+evidence/G2b/deploy-v2-20261110T162301Z.log:145:│    Signature:  ed25519:3NX9BC1jWNiNvx1fD6MZGBr8Q4CCAMCVkTvXHRetFDvpHnb5Du4RZuzg3fcnmXSTpyUQwUJBtaXLyVrriHBYPJaG
+evidence/G2b/deploy-v2-20261110T162301Z.log:180:│    Signature:  ed25519:64me5AHmJf565ebuBMFC7NKKy9xjc7jB7vta6tr26eAajnf5dQgvrFGraBPU27QBaNc3k8znkwVB37oXnnTZqBPc
+evidence/G2b/deploy-v2-20261110T162301Z.log:226:│    Signature:  ed25519:5VQYxuzmHFosusp1n2m4KCWG3AEmLW8CDnkv8JvxYYmqK3o8tZcnMzrrpVEMCR2iVqiGaKXdz6i4riyz5645sy9n
+evidence/G2b/deploy-v2-20261110T162301Z.log:295:│    Signature:  ed25519:2iQgnxXnduZsBi2zPwWKGNHfWwodQ6aYSNTwVVziGw9zUqsgR35SiHv19m2ZcehgRT63iN7K48ixHE7QWPivex3X
+evidence/G2b/deploy-v2-20261110T162301Z.log:337:│    Signature:  ed25519:kV26NsRyqBCunyz5RFM5iQhBrz6JQVNgct1fVZcZdrXUWnYd1RM9qF5t2nSxHWne6p7otiRXjUMebT2ccAfP3gs
+evidence/G2b/deploy-v2-20261110T162301Z.log:1528:│    Signature:  ed25519:4GkzDjPJRGQc44gHM3SpcCvi34Db8ALY7JsycTWnaE1RjveNEPFSRbz7uASTY2iXQHuXiLm5yhy1TBmAR4y9kYfK
+evidence/G2b/deploy-v2-20261110T162301Z.log:1572:│    Signature:  ed25519:5ByDcztvGQ5tyFDUvXCm69D8fAYZdcjRjN4d1K2TgyEw8UL1VNbae2uxRJduyVau3E2acRMb7pN9ZFYipj7R5otZ
+evidence/G2b/deploy-v2-20261110T162301Z.log:1618:│    Signature:  ed25519:4HpdR9YFgm2qcE3Jn67g9gwW3u7VRtEjmP3qXgsYQ5zFw3RNTeqtyQ2HkcGe2u8GrseVXHZ2Bob2oseM9xL27wN7
+evidence/G2b/deploy-v2-20261110T162301Z.log:1659:│    Signature:  ed25519:4XrmyPhJ3nCqfa4tXJgHCo5NnxDgPiiwN9MtdKhaw1qsoGT6fM3AHnxobacrcKAh2hpuEJVNpNioks2UqYjkY8Vd
+evidence/G2b/deploy-v2-20261110T162301Z.log:1702:│    Signature:  ed25519:5cmw6bzXgmv6SUH7bAJyChLzhZxxabwXo3t6cf2L94YbJtb1DrLCKQWA4Sj6SfaPVDMUAWhHVQKYqmPfHRJp3xLb
+evidence/G2b/deploy-v2-20261110T162301Z.log:1744:│    Signature:  ed25519:4Wr9QDE7d1kGSJnwxdk4TrCihtgjt4r24YNV1dfDqopU4VgwrMsWY5JvPTdaTRU4ojFW8QFGD6M58GwvvLuyVC4u
+evidence/G2b/deploy-v2-20261110T162301Z.log:1783:│    Signature:  ed25519:3hPcH6JsmTSoS6Mcx7H1WfDKuwpUjWPKBVjQW1epPur2jKUJP6CzHTEfBHBKD8ofwKiVpXAfG3ycfDoyMcS26vQi
+evidence/G2b/quoter-pin-20261110T162820Z.log:22:│    Signature:  ed25519:2uqzzYDUHLKNG1AHWKRyZsToKSqq9HB1QP6Kqj1X5xXFU8bRtk76p27HqL9z2jeUc3Jk362rSCL5jxtJXm3oDFcX
+evidence/G2b/quoter-pin-20261110T162820Z.log:64:│    Signature:  ed25519:4tNLCS7qNzVC8hqBgdtSKD8iQrX9W6ARBPNfKA9SeVcf2adD9PhaaXoSrbs4fH8z1Hff9HqN561ie52PZJqV9Rib
+evidence/G2b/quoter-pin-20261110T162820Z.log:106:│    Signature:  ed25519:ijqU13FQqc7DpspAP9QFzU1a7PjxcyAJfFfhnWkKv8pRrQkWR1LXzRb4N7tzAye5GFfib1mdEpUyEDk843dJfZ3
+evidence/G2b/quoter-pin-20261110T162820Z.log:152:│    Signature:  ed25519:npfQdSSaYNVm1D5pNKuyfeCTvDbS2UCeKkBTeyp3CNkHq2iEAZY5fUE4UyKhcyHJ4QabmvT6whs3boHGeWkQpQH
+evidence/G2b/quoter-pin-20261110T162820Z.log:197:│    Signature:  ed25519:42ffvnQ9jjrGYftiAKoNCFkCPpyMVq6YWMYYVHoG47CEUT5zZzJtNKry7RCAdTXTVQ2e5RHhof9WY4tpV6sLCo69
+evidence/G2b/quoter-pin-20261110T162820Z.log:242:│    Signature:  ed25519:5kqRBC3TMyhWAR7tebstgpCJgFgJ4uEUrWFbJmsXJQG6UnbyQc2RHcDpfCafws4nz9UXYwetgKmR9ffCyYmtS5r8
+evidence/G2b/quoter-pin-20261110T162820Z.log:283:│    Signature:  ed25519:bLZrhTiLVdc1J6Au5RB3Yq33PC8hGTu2oXTJfe5J5SgfW1g5to3MauDvSunNNfffCELEnf7ETj2SpbqTmFNRePE
+evidence/G2b/quoter-publish-20261110T162644Z.log:37:│    Signature:  ed25519:3PYa9pgsz6q8W7Sj939Vaw7P6c7zaZQ7NQQuJGhQgqCLt9EMEMx4QWBASxDotJqqxaWvUke3qJrbP3dh5VPmnAUP
+evidence/G2b/quoter-secrets-20261110T162740Z.log:53:│    Signature:  ed25519:5j69ZZ5ex411DZwuqyV1VN5amYTZ6bTsuLoy73mEkPUdEUfqBhjcjpzEq7to73oHJKuG5Yhf8nUr6thNaaGba6T3
+evidence/G2b/quoter-secrets-or-20261110T162803Z.log:90:│    Signature:  ed25519:218JN16F6GxiCQMPP7MgAZTixnzjVc9j5xMEzGr68f4PyqoZfCmHFrDxLmpuT9qRW9vC6CU8MCXMgE9JUdFgH3M2
+evidence/G2b/seed-v2-20261110T162959Z.log:17:│    Signature:  ed25519:3MKz6eN4ie9dWPjD2m1aBiSCUENW5RAaSuaagopLDGnzpYAKprNWJk1PF5GcudK9o5FVsUbdjnzggigcD7MzuhSD
+evidence/G2b/seed-v2-20261110T162959Z.log:60:│    Signature:  ed25519:3Yuiva3y4PWaYKrBHao143BRxmxGD1EkGvRW6qRAzs7yvmo9C1tXKiZ5XhDFexUNiybiWFTJerZjZsJuVHqQRQoo
+evidence/G2b/seed-v2-20261110T162959Z.log:103:│    Signature:  ed25519:5krmevwGLDC7JkRdeByQGJzLsqNphhnTfdZc5UJUpTnWCeceojvYy9xeX1VZQCCHdrQ5Y6hWMmPQVuy19HNjhRxw
+evidence/G2b/seed-v2-20261110T162959Z.log:146:│    Signature:  ed25519:38dAFL8q456aErUYJksjdgxCC4WiztCoi7YBg1wXK1eDbTUBUGnPL6UWwrFXUCsnmx88pu6hUrH21xpXzed3eMA1
+evidence/G2b/seed-v2-20261110T162959Z.log:189:│    Signature:  ed25519:vTcZ6UQfafKwSUNZjvVC74orCUVpnAJLixmujMdxvCPYj2cQJ22e64bYvJy9m8MpSKBUvqRaqvQNXFiM1p8RTbZ
+evidence/G2b/seed-v2-20261110T162959Z.log:232:│    Signature:  ed25519:65Q2zXhS2KWDG8WrLB5Ni69iGLEPCe5MCCWgAqiYgvjUyyn54dsjp3LVAK3hLYkguXobrWzCkozRLANoSgxq4Fc7
+evidence/G2b/seed-v2-20261110T162959Z.log:275:│    Signature:  ed25519:CUPtJfPUCrk9jcuS9PLHiYeuPCNP8NFxX9ML8ArpyWokhmztVfbGDAqbvdhFhxLGtD38m8DG8k2wkx5KLS1dw7Q
+evidence/G2b/seed-v2-20261110T162959Z.log:318:│    Signature:  ed25519:4rt3rkhYP83FP3ccvr87godwMYWyrjrDotC4PHvp25dBS1JBYgg64exc2kueRyBxAdSPJpax2Lxpmvf4ANHDgvmC
+evidence/G2b/seed-v2-20261110T162959Z.log:361:│    Signature:  ed25519:4bjf1iY53hQiREf4gQRnd3H1bnp9gtQKxxHnUzdUs1RWMJa6RnM9aMWnFWcxDH7sdyt6qtsR8eCuQ9bWmAaNMmVs
+evidence/G2b/seed-v2-20261110T162959Z.log:404:│    Signature:  ed25519:4mc3A6F8TcvU11S5FLEyGaNxgGvwy3tvxqPMFp6eRhcnxwqufciMyw9g7eLTtRX3Hcb1szH1KbKaKgU8FoevP4dE
+evidence/G2b/seed-v2-20261110T162959Z.log:450:│    Signature:  ed25519:2Q1pFyJ8bgycKuDWUCW9pvopKfyx1BRHHQLm6BfzBons1FfCXsq94hdKzMCKTzpsf3w1qvxmDbC96ny3FYY39MHT
+evidence/G2b/seed-v2-20261110T162959Z.log:491:│    Signature:  ed25519:y648SVWRCWjcLT8WqYtHKCSFzgCw9Migea9gKGNyykVDxrCDxYuu7GDNxuw8vvW7jvSYF1WqJ8Rc6LUUbgUufir
+evidence/G2b/seed-v2-20261110T162959Z.log:532:│    Signature:  ed25519:xbbZhy3Fi2UYhJWLVRxEs6xwTk1rpVg6Rkti38q3cGCgU1hFM81JX7Z85Gbgp9zQDP2ZyS9taw4gbTBQ4T6u2gX
+evidence/G2b/seed-v2-20261110T162959Z.log:573:│    Signature:  ed25519:2h3eBZ5rBs2MdpHA3Gk9XbQFjf5gfXZWHvQ4P4FCt6n1x81k9bV6y1fcXLS82CP8fjnQyrgWkLpAEb4wBnuazpCw
+evidence/G2b/seed-v2-20261110T162959Z.log:614:│    Signature:  ed25519:2pFHBpuJvHyUtXBzqtviZJ3b5nxYMrHFXXgDW2Hj4t4o3QiqbBekVs9VTCNcyWGkhvCNML3rCXfE6ALjv65bNixd
+evidence/G2b/seed-v2-20261110T162959Z.log:658:│    Signature:  ed25519:4qBk31eNvCvWa4DzVjcbh2jLL93JsctxBCTRUDGGPiessxAQE34EYQbRCo7N6HHkN28Yamkz7DmanauWracxx9FM
+evidence/G2b/seed-v2-20261110T162959Z.log:705:│    Signature:  ed25519:ikdxFUh7JN2P9516ftubfL2YTZ4VYd84AtFxWMG3nS8AsWvyz6VnyHZ72thMchPD4SZJHFtrQXZXWTRtEjhjsNv
+evidence/G2b/seed-v2-20261110T162959Z.log:752:│    Signature:  ed25519:44g8zaZpLEuCaaHpERfYiiFeX55ziZ3npANQQvEEFAsHLhzryw8S49PbgwydZktERSqQsLvkugZ7Q4iqp1rff2Lg
+evidence/G2b/seed-v2-20261110T162959Z.log:799:│    Signature:  ed25519:2cWJLZhRCh8JznCm3Js7mYyMMoKdQvUF3HzVCwvvvfQUrFysaqtb9DHxrZEDX3zi4feHieT2ySCVcp7oWYjuC3dS
+evidence/G2b/seed-v2-20261110T162959Z.log:843:│    Signature:  ed25519:3iEaKMVRhPEjc9EKcChjFBbu6jwUZULJzkBYHpGaCJJTEgQiyXJNFoPbRF4ab3VWGhGmqHcjMMk4itL1cMhJwcPR
+evidence/G2b/seed-v2-fixup-20261110T163247Z.log:17:│    Signature:  ed25519:3Qz3DTzoySV6dmcsBV3jFaGgATVZ6zVhKurCshXFqSbhVfqPngcqXGB99VvcfXR9Zn61nZQ7odP2xxbdrjBbV266
+evidence/G2b/seed-v2-fixup-20261110T163247Z.log:64:│    Signature:  ed25519:3KjWN3n2XN2JtT7WwodVnYBEAhdwzg6pWWbtkn1b3c38RoBWXuQaeRwHB9wViyJudgvyHPazHNa5H1ShD5sa63Cm
+evidence/G2b/seed-v2-fixup-20261110T163247Z.log:105:│    Signature:  ed25519:5a1oquc3KB27AB3ZaHSc7Ut4C9XH5Rzd4T3ztTriqq9xtupbSZasVKokr5Vt19QusdZGj38ECzh8ZwCbe7NNosiF
+evidence/G2b/seed-v2-fixup-20261110T163247Z.log:149:│    Signature:  ed25519:5uNJiAuJyMYSoMFa7mnwCVYBJu1zPVzbqUhg5Aj31xjCMVZTW3sxuSBBmJUdr4aGQp2A6Zmcps11zELWxacheZaj
+evidence/G3b/verifier-rerun6-20261112T1413Z/rpc-final.json:1:{"jsonrpc":"2.0","result":{"author":"node2","chunks":[{"balance_burnt":"0","bandwidth_requests":{"V1":{"requests":[]}},"chunk_hash":"9gJr7s
+evidence/G3b/verifier-rerun7-20261112T1530Z/rpc-final.json:1:{"jsonrpc":"2.0","result":{"author":"node0","chunks":[{"balance_burnt":"0","bandwidth_requests":{"V1":{"requests":[]}},"chunk_hash":"AUQEq1
+evidence/G3b/verifier-rerun8-20261112T2019Z/rpc-final.json:1:{"jsonrpc":"2.0","result":{"author":"validator6.testnet","chunks":[{"balance_burnt":"0","bandwidth_requests":{"V1":{"requests":[]}},"chunk_
+evidence/G4/verifier-20261109T2210Z/tx-5TSasAEy2QedbkV7SEjzFpSdZb8eqJtjHABexAYvwShC.json:1:{"jsonrpc":"2.0","result":{"final_execution_status":"FINAL","receipts":[{"predecessor_id":"keeper.nectar.test
+evidence/G4/verifier-20261109T2210Z/tx-6ywM8Qm53Ppf36T64biUPFNbMEwAREXQ3XvZYYnEztwr.json:1:{"jsonrpc":"2.0","result":{"final_execution_status":"FINAL","receipts":[{"predecessor_id":"keeper.nectar.test
+evidence/G4/verifier-addendum-20261109T2249Z/tx-D1-store_secrets.json:471:   "signature": "ed25519:2YL1zLxxbZQ1LBUFDuLNvTzRD1PxF2MRKE1nWVjHYoMNk3b7ifLwAZiekKUHnu3cZDZPcPRRRAm4mEXjWyyDoHV6",
+evidence/G4/verifier-addendum-20261109T2249Z/tx-run-C.json:1:{"jsonrpc":"2.0","result":{"final_execution_status":"FINAL","receipts":[{"predecessor_id":"keeper.nectar.testnet","priority":0,"receipt":{"
+evidence/G4/verifier-addendum-20261109T2249Z/tx-run-D.json:1:{"jsonrpc":"2.0","result":{"final_execution_status":"FINAL","receipts":[{"predecessor_id":"keeper.nectar.testnet","priority":0,"receipt":{"
+evidence/G7/rerun/release-8.log:16:│    Signature:  ed25519:dET4E5A6izTDxobwqB34LxKvDvayQTjZrju7x2qHHNWRULceWhh8s8xp3FQTsVCP2WBi9ouDfvKpVbgoy68TYEK
+evidence/G7/rerun/release-9.log:16:│    Signature:  ed25519:nGGV13WERQbEYbUevfZtghxnsiEeap3bXgqewPEZaLbiLoZWupBdDEi5CAoAnwGt2DQPgLof4DphVd1E1dND9tq
+evidence/G7/rerun/repay-9.log:18:│    Signature:  ed25519:aHzvSTC4q86dDYrm2Tcu5wo8WkKpBxci7wmB8VVx2iMuMDhumvj7VtqQDZjxHEMBb6Ddme4n3zAKnzXEpyRJNoz
+evidence/G7/rerun/reserve-A.log:17:│    Signature:  ed25519:4jBzDn5Dy72KQcZs6Nd7KPdu7mhCcCD6inRYG2uoGaUx44pR1yC26czN4i4aDT211stmAQeH9ovu8tr1GjDKes7z
+evidence/G7/rerun/reserve-A.log:62:│    Signature:  ed25519:3x63E2LYzrN2h6p4FatYXMrLQF6qmRtxLpxr2P11L5M9FfvFdrwwqZYA55bsKyFSyEo85MDmP6t5gDpQVZRUZsZF
+evidence/G7/rerun/reserve-A2.log:17:│    Signature:  ed25519:2kAzQ4QwEfGkMD4rXmhqAueEiSpkxYhzyXvfAMGWrxW5XBXcsfo1jAStfQLDCwUYXyTzRKJk3PknQQ1GaAikzFAC
+evidence/G7/rerun/reserve-A2.log:62:│    Signature:  ed25519:2mTnBNVpq6qvA2umx5cPsfSvbzsHcAThqnd8zGecsiEtWU8cUHLJv78W1Wnmdke4YRMjEhUoA6K27r3jeGBBCSHK
+evidence/G7/rerun/reserve-B2.log:17:│    Signature:  ed25519:2WFY9gy5UAtAo8w4oaUh3NqijorCeB9EChm1zWreLmhdyhakz8BuCyhQdANX4cDqyV5Q1o4oy6p4s1LBcwZCsjH7
+evidence/G7/rerun/reserve-B2.log:62:│    Signature:  ed25519:4FkkdwMT4KmgutvP2DZ2VHKHY1MY68DPNF9HahqxSPEpqorGrajVpdsKidhbh7PcR2iWBEZFz8rfZZ3AK3GMVWRC
+evidence/G7/v2-prep-20261110T163629Z.log:33:│    Signature:  ed25519:3cjif6oVtja9utuatgL6gzkrfKZkKjKPiJ8ocMHdvoE2NbEG6dzqmfgWbknMouE71R1GKGqvNh87LzKXumwJihhd
+evidence/G7/v2-prep-20261110T163629Z.log:75:│    Signature:  ed25519:1wtxrKXR9gGzP5H59aMHFq65FXCDEfMnnpaVfM6m9vdJCff72JVvLaTQzwDUJUgZ2FiakpwJR7kh4SAU14nCQ4v
+evidence/G7/v2-price-drop-20261110T164111Z.log:17:│    Signature:  ed25519:3DDHFUSp41MoLmtBfdujXWxhfuzjg6qmFcsKGs9zTzTi7tuX5W9pbfED2X8BjcKxyFqYuwfZv5eK3Xugvvr3AiLG
+evidence/G7/v2-price-drop-20261110T164111Z.log:59:│    Signature:  ed25519:2Jij1FMyrSewaJY3ywjeWtNdSn7avTM39JgU5PCKZnj8WuiS77QCP6BMnW27aaFNp9ynNine4aGqJkqpiDTYGf3o
+evidence/G7/v2-release-2-20261110T163837Z.log:18:│    Signature:  ed25519:3mxDoXbYezNRaCcLWWoXEwVmELo3oNDGRqQkTMbX1Noigc1hiYW9uSjtSmvG7NMjSMLso82iBbj7MHebUiaSkgbj
+evidence/G7/v2-release-2-20261110T163837Z.log:63:│    Signature:  ed25519:3Z9zacJfVFw2eawMqeAeX79LX8pHZWD3Aq9XgSS1gCBnzNfXzvQzRenfwXF1f7fxTHWwtT53JpTeNR6kA3haN46g
+evidence/G7/v2-reserve-A-20261110T163708Z.log:17:│    Signature:  ed25519:2NRJpQXKAGSAeopWoTka5UaSKALEom2DXZsYN97C7ytek9kUjUnFNwVVe4AmJPF89Hbi73MtJN3VdLCteY59pN3
+evidence/G7/v2-reserve-A-20261110T163708Z.log:61:│    Signature:  ed25519:2KywbP5Pq2ayB2b3Sc8beiWZwEYq1KZ48sFRgqqCW1QEfBcyJeWgVMQGnTdxxiWpaM7gvQkWcsWWZj4RCkRkVwcn
+evidence/G7/v2-reserve-B-20261110T163917Z.log:17:│    Signature:  ed25519:2WfHLTriWgUc3e3dgNAvb5MQpSm5MVuFUh7J4ZkxJbaszQnExp5bXPcWGkyckgcYJirXFTfVqQQYFBUmx32Z8kFJ
+evidence/G7/v2-reserve-B-20261110T163917Z.log:61:│    Signature:  ed25519:2HKm6183R18VGJGxUfpHe2hz4z8TXUrzHzr44XQtjRSHW3h1FtgjQdjAr5aZwBJee4AFmmSreRoY8nuqGdUuSfKN
+evidence/G7/verifier-20261109T2357Z/tx_status_FCtApD2.json:2826:   "signature": "ed25519:22TtwZdkXo4iaKCtrKtrQUnvNuFhWbcZamHHifgYu76wbGn6mxofv4pmdpmYYLfV5YGMKSnuXM3jkNJomtCcehHq",
+evidence/ops/demo-account-20261112T200317Z.log:14:│    Signature:  ed25519:5RLriPscoxHpUfFppyG7jt1EtcJ1xFqXKvabLkD1pieVz5ghQQTfrBamyEoXRyiZYEoQh2vJR6ZY2aMFhpPE6MEg
+evidence/ops/owner-price-refresh-20261112T151114Z.log:17:│    Signature:  ed25519:4FjVzoVJkdx7RwG4J6v9D6s6vR2VjvBcRuXemEHcpksHMiNLjMUeghTcJ6X6sMfgAC1aba6UPbvtNkNj3L2a9rir
+evidence/ops/qa-account-create-20261113T131254Z.log:14:│    Signature:  ed25519:3d6CHUUtmzTf3XiA3hv6ALnujKikWCxZ7sqhLfXbaL8wpFFHKXcd4rhR84JKFV4uByBErS4FPfAJWLbkMBV1uzuP
+evidence/ops/refresher-add-key-20261113T112742Z.log:12:│    Signature:  ed25519:2zsTCvCbkf38efQWmkr5JmZgdENetmMjSfgN6e1fHuZhbHEpYPStbnAtV3cXLsPnFYYqpagGmAP85gdKW1MkHqPc
+evidence/rollout/security-upgrade-20261111T070338Z.log:114:│    Signature:  ed25519:38goNQjNiAKPeBGeFYv8shTVceQjvaYzkEpUv4GdYjBqj5phCSY33TN1Snj8M2Yoqofc2guHdQEgnzN3udeGfBtD
+evidence/rollout/upgrade-221-20261111T075031Z.log:13:│    Signature:  ed25519:4k1GL1cK3sjrUw8n98gy1WUqZCoGH38P1XBnTdx7NZACZjJARrQ6KAmFXm1PVj8fpn9jniHVUsGdd2XBjjoYfqF1
+evidence/v7-modules/profitlock-20261110T165340Z.log:16:│    Signature:  ed25519:3PkEgccmXM8cgy5NNCFWpgkwQ196izyfb6vVzHEniFreubXuwNZdVhKVWw5JMXA33nJMxSZk5ZQk6E7rQQsUbKEN
+evidence/v7-modules/reserve-20261110T165346Z.log:16:│    Signature:  ed25519:5sAScsYxaPTaQDoTBHCgmFQ1M1sjJS7jnbNnGH94UE3cretd8NUnXRz5BCgKmqT2cR5eVLbJYdy55AGq9txjpB3D
+evidence/v7-modules/shield-20261110T165335Z.log:16:│    Signature:  ed25519:3LTapbkZeXbQaUbN9ovGCiRdKUYJMvXvPmk28E6HUAxC9NisThRofzU5njQeBECzVE67VJRgpyMxqxCpAuUAKzhw
+services/feed/test/fixtures/neardata-block-276971305.json:1:{"block":{"author":"node1","chunks":[{"balance_burnt":"0","bandwidth_requests":{"V1":{"requests":[]}},"chunk_hash":"4yXAGxDasg1MKq3Y5nrSEDdq
+services/feed/test/fixtures/oneclick-impact.json:44:      "signature": "ed25519:3KUjdTdhxZehJf7cyvjyu1xxb5i7WCLSkZrJaZDaDW1VLYH5Z46ScyKnaeX9CKwGKT9r1iJUG4a658aFmjDc4zwc",
+services/feed/test/fixtures/oneclick-impact.json:86:      "signature": "ed25519:35NjTisYfLtNvk4eENpREQgZDZfztCPAJjsFX38RFWTDemjC1HNBNyCt6FBEXjLHFXYWndv3nHKbWPqKQ9PwPq6J",
+services/feed/test/fixtures/oneclick-impact.json:128:      "signature": "ed25519:5nnT1wSonRLH9BESozQC1MMRDMq6V5x13vJRPw9reiZEguGciJRkDdMmw4KarAW3p1m61N8jkBXcGUy1QtX8of5a",
+services/feed/test/fixtures/oneclick-quote-ref.json:39:  "signature": "ed25519:3jjKbGoJSgLiXqXceUWGKtbgh73TSjauxNwLDoNCaTzs1k7rU8Phe6gKWUtTfGEBW68TrWSEe6BDvakDYySms12P",
+$ files with 0x + 64 hex outside lockfile/evidence/docs (hashes or public anvil test keys; classify)
+apps/web/lib/copilot/fixtures/synthetic.json:1
+contracts/nectar-core/src/tests_evm.rs:1
+contracts/nectar-core/tests/eip712_vectors.json:11
+contracts/nectar-core/tests/fixtures/evm_eip712_vectors.json:39
+contracts/nectar-core/tests/sandbox_evm.rs:1
+evm/src/NectarVaultBase.sol:2
+evm/test/SecurityV7.t.sol:1
+evm/test/VaultFixture.sol:1
+evm/test/eip712_vectors.json:39
+evm/test/legacy/NectarVaultBaseV1.sol:2
+quoter/tests/jobs_vectors.json:7
+services/keeper/test/fixtures/base_calldata.json:4

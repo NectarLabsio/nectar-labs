@@ -1,0 +1,25 @@
+## 2026-11-13T13:49:42Z anonymous access
+$ curl -s https://api.github.com/repos/NectarLabsio/nectar-labs (no token)
+  "full_name": "NectarLabsio/nectar-labs",
+  "private": false,
+  "pushed_at": "2026-11-13T13:38:36Z",
+  "size": 0,
+  "visibility": "public",
+  "default_branch": "main",
+$ GIT_TERMINAL_PROMPT=0 git -c credential.helper= ls-remote https://github.com/NectarLabsio/nectar-labs.git
+b6d6f411a1bf4e7dec0cdaa9fe3b15eebab84a94	HEAD
+b6d6f411a1bf4e7dec0cdaa9fe3b15eebab84a94	refs/heads/main
+(exit 0)
+$ git diff --stat d92a199 HEAD -- apps packages services contracts
+ apps/web/components/TestAssets.tsx            |  4 +++-
+ apps/web/components/borrow/BorrowComposer.tsx |  2 +-
+ apps/web/e2e/test-assets.spec.ts              | 25 +++++++++++++++++++++++--
+ 3 files changed, 27 insertions(+), 4 deletions(-)
+$ git diff --stat c95cd0c HEAD -- apps contracts | tail -1
+ 3 files changed, 27 insertions(+), 4 deletions(-)
+$ git diff --stat 37dfec9 HEAD -- services/feed
+(exit 0)
+$ git tag -l; git branch -a
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main

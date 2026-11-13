@@ -1,0 +1,16 @@
+## payload keys
+keys requestId,projectName,leadName,email,size,tracks,nearAddress,projectUrl,demoUrl,idea,consent
+website absent
+tracks ["defi","security","agents"]
+projectUrl "TODO-H2"
+TODO fields leadName=TODO-H10 email=TODO-H10 size=TODO-H10 nearAddress=TODO-H14 projectUrl=TODO-H2 demoUrl=TODO-H3 consent=TODO-H14
+## web tests
+apps/web test: ℹ tests 44
+apps/web test: ℹ pass 43
+apps/web test: ℹ fail 0
+apps/web test: ℹ skipped 1
+## verify per-package pass/fail lines
+apps/web test: ℹ pass 43
+apps/web test: ℹ fail 0
+## host Feed (not touched) still up
+56878 02-05:00:24

@@ -1,0 +1,19 @@
+{"ts":"2026-11-13T13:49:03.541Z","level":"info","service":"feed-mcp","msg":"mcp_stdio_ready","live_views":true}
+initialize: {"name":"nectar-feed","version":"0.3.0"}
+tools/list: 8 get_exit_capacity,preview_borrow,list_quotes,explain_limit,open_protected_stock_loan,quote_capacity,get_note,build_self_settle
+get_exit_capacity: {
+  "symbol": "NVDAx",
+  "source": "view",
+  "block_height": 277518216,
+  "q_usd_e6": "16119220000",
+  "r_usd_e6": "10000000",
+  "d_usd_e6": "0",
+  "haircut_bps": 2500,
+  "session_open": false,
+  "oracle_price_usd_e6": "135000000",
+  "oracle_age_s": "8457",
+  "oracle_fresh": true,
+  "b_c_usd_per_unit_e6": "94500000",
+  "limit_bps_effective": 7000,
+  "capacity_usd_e6": "12096915000",
+  "oracle_sour

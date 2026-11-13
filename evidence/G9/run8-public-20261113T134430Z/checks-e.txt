@@ -1,0 +1,34 @@
+## verify per-package counts
+packages/ui test: # tests 7
+packages/ui test: # pass 7
+packages/ui test: # fail 0
+packages/ui test: # skipped 0
+services/feed test: # tests 89
+services/feed test: # pass 89
+services/feed test: # fail 0
+services/feed test: # skipped 0
+services/keeper test: # tests 327
+services/keeper test: # pass 327
+services/keeper test: # fail 0
+services/keeper test: # skipped 0
+services/x402 test: # tests 41
+services/x402 test: # pass 41
+services/x402 test: # fail 0
+services/x402 test: # skipped 0
+apps/web test: ℹ tests 44
+apps/web test: ℹ pass 43
+apps/web test: ℹ fail 0
+apps/web test: ℹ skipped 1
+> node scripts/check-no-branding-all.mjs && pnpm lint && pnpm typecheck && pnpm test
+apps/web lint$ node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs
+services/feed test: ok 28 - real nectar-core-v2 (2.0.0) log lines
+## hosted Feed commit
+"events_indexed":2
+"commit":"37dfec96262febd76ae407af6612f0b1c27facd0"
+## commits: all / non-merge (gitleaks scanned 553)
+747
+553
+## clone status after all parts
+(end)
+## demo-testnet open positions
+#1  Open  debt $9,000.00  ltv 6667 bps / pre-liq 7500 bps #4  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps #5  Open  debt $189.00  ltv 7000 bps / pre-liq 7500 bps #13  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps #14  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps #15  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps 
