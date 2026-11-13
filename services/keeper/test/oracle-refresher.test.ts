@@ -135,7 +135,7 @@ describe('oracle refresher config', () => {
     const c = loadRefresherConfig({ NECTAR_CONFIG_PATH: REPO_CONFIG, ORACLE_REFRESHER_KEY_PATH: '/x.json' });
     assert.equal(c.ownerAccountId, 'nectar.testnet');
     assert.equal(c.coreAccountId, 'nectar-core-v2.nectar.testnet');
-    assert.deepEqual([c.tickMs, c.sessionMaxAgeS, c.closedMaxAgeS], [60_000, 600, 43_200]);
+    assert.deepEqual([c.tickMs, c.sessionMaxAgeS, c.closedMaxAgeS], [15_000, 60, 21_600]);
   });
   it('refuses a missing key path, bad GENERATE, a zoneless run_until or a session threshold ≥ 900 s', () => {
     assert.throws(() => loadRefresherConfig({ NECTAR_CONFIG_PATH: CONFIG }), /ORACLE_REFRESHER_KEY_PATH is unset/);
