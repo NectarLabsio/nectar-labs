@@ -1,0 +1,68 @@
+<!doctype html>
+<!-- End card (WO-35b). Served by compose.mjs on a routed origin: /endcard-base.png and /fonts/* come from the brand folder and
+     packages/ui/fonts. window.setup({headline, lines, seconds, fps}) then window.setT(t) draws any moment; Playwright shoots at DSF 2. -->
+<meta charset="utf-8">
+<title>Nectar end card</title>
+<style>
+@font-face{font-family:"Syne";font-weight:600;src:url(/fonts/syne-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-weight:400;src:url(/fonts/dm-sans-latin-400-normal.woff2) format("woff2")}
+html,body{margin:0;background:#0d0f12}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:#0d0f12 url(/endcard-base.png) 0 0/1920px 1080px no-repeat}
+#headline{position:absolute;left:0;right:0;top:604px;text-align:center;font:600 58px/1.1 "Syne",sans-serif;letter-spacing:-.012em;color:#e6e9ef;white-space:nowrap}
+#urls{position:absolute;left:0;right:0;top:700px;text-align:center;font:400 26px/1.6 "DM Sans",sans-serif;color:#8f96a3;white-space:nowrap}
+#headline span,#urls div{display:inline-block;will-change:transform,opacity;opacity:0}
+#urls div{display:block}
+#urls i{font-style:normal;padding:0 .55em;opacity:.7}
+#fade{position:absolute;inset:0;background:#0d0f12;opacity:0}
+</style>
+<div id="stage"><div id="headline"></div><div id="urls"></div><div id="fade"></div></div>
+<script>
+const eOut = (p) => 1 - Math.pow(1 - p, 3);
+const eInOut = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const seg = (t, a, b) => Math.min(1, Math.max(0, (t - a) / (b - a)));
+let words = [], lines = [], S = 5, FPS = 30;
+const RISE = 22, DUR = .6;
+
+window.setup = async (cfg) => {
+  S = cfg.seconds || 5; FPS = cfg.fps || 30;
+  const h = document.getElementById('headline'), u = document.getElementById('urls');
+  h.textContent = ''; u.textContent = '';
+  words = cfg.headline.split(' ').map((w, i, a) => {
+    const s = document.createElement('span');
+    s.textContent = w + (i < a.length - 1 ? ' ' : '');
+    h.appendChild(s);
+    return s;
+  });
+  lines = cfg.lines.map((parts) => {
+    const d = document.createElement('div');
+    parts.forEach((p, i) => {
+      if (i) { const sep = document.createElement('i'); sep.textContent = '·'; d.appendChild(sep); }
+      d.appendChild(document.createTextNode(p));
+    });
+    u.appendChild(d);
+    return d;
+  });
+  await document.fonts.load('600 58px "Syne"');
+  await document.fonts.load('400 26px "DM Sans"');
+  const img = new Image(); img.src = '/endcard-base.png'; await img.decode();
+  const loaded = [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family.replace(/"/g, ''));
+  if (!loaded.includes('Syne') || !loaded.includes('DM Sans')) throw new Error('brand fonts did not load: ' + loaded.join(','));
+  window.setT(0);
+  return true;
+};
+
+window.setT = (t) => {
+  // Headline: word by word, ease-out 0.6 s, rising 22 px with opacity (README "Look to match").
+  words.forEach((s, i) => {
+    const p = eOut(seg(t, .25 + i * .09, .25 + i * .09 + DUR));
+    s.style.opacity = p; s.style.transform = `translateY(${(1 - p) * RISE}px)`;
+  });
+  const after = .25 + words.length * .09 + .2;
+  lines.forEach((d, i) => {
+    const p = eOut(seg(t, after + i * .12, after + i * .12 + .55));
+    d.style.opacity = p; d.style.transform = `translateY(${(1 - p) * RISE}px)`;
+  });
+  // Fade to #0d0f12 over the last 0.5 s; the last frame (t = S - 1/fps) is fully dark.
+  document.getElementById('fade').style.opacity = eInOut(seg(t + 1 / FPS, S - .5, S));
+};
+</script>
