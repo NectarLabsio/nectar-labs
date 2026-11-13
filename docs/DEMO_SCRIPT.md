@@ -14,22 +14,27 @@ The 3-minute v4 script (Solana and Base remote lifecycle, keeper, copilot) is th
    STAGED, not running, until Kunal applies it. If it is not running, send the RUNBOOK one-shot `update_owner_price` with the CURRENT price
    (`oracle_price_usd_e6` from `get_exit_capacity`, never the RUNBOOK example value) within 15 min before the take. Check with
    `pnpm demo:testnet`: "session open" and an oracle age under 900 s. Otherwise the screen shows the closed-session limit (disclosed, correct).
-3. **What production serves.** The release recorded in docs/EVIDENCE.md §"WO-34 production" runs on the custom hosts. The status host, docs at the
-   root of docs.nectarlabs.io and the "Get test assets" button come with the next production release (WO-62b, WO-64, WO-62c merged, not deployed;
-   HUMAN_HANDOFF H-DEPLOY). Before that release: status is at https://nectarlabs.io/status and docs.nectarlabs.io redirects to its `/docs/` path.
+   A borrow in an open session needs more: the price under 120 s old (`max_age_ns_session` in `get_config`; default 120 s at
+   contracts/nectar-core/src/lib.rs:133, applied at :381; docs/work/wo-35-demo-video.md C6). Send the one-shot refresh less than 60 s before the
+   borrow beat; a 10-min refresher leaves borrows failing "oracle stale" most of each NYSE hour.
+3. **What production serves.** Release 4 (commit c95cd0c, deployed 2026-11-13 ~02:00Z) runs on the custom hosts; the verifier's acceptance there
+   passed (docs/EVIDENCE.md §"WO-34 production (custom hosts)"). https://status.nectarlabs.io is the status page (nectarlabs.io/status redirects
+   there), the docs answer at the root of https://docs.nectarlabs.io, and "Get test assets" is on testnet.nectarlabs.io/borrow. The hosted Feed
+   indexes events again since 2026-11-13 02:22Z (neardata with a FastNear key, start block 277398512; HUMAN_HANDOFF H-NEARDATA); events before
+   block 277398512 are not in it.
 4. **Wallet import of demo.nectar.testnet (off camera).** The recovery phrase exists only in `~/.nectar/keys/demo.nectar.testnet.json` (0600).
    Kunal shows it in his own terminal, never on screen and never in a file in the repo:
    `node -e 'console.log(require(process.env.HOME + "/.nectar/keys/demo.nectar.testnet.json").seed_phrase)'`
    He imports it into a testnet wallet from the near-connect selector (import by phrase is not tested in this repo; rehearse it), then clears the
    terminal (`clear`, and close the window). Agents never print, copy or log the phrase or the key.
 5. **Test assets for the demo account**, one of:
-   - **A. Button** (only if the release with WO-62c is deployed before the take; the button was timeboxed to 2026-11-13 12:00 UTC): on
+   - **A. Button** (deployed in release 4; the verifier checked it only without a wallet, so rehearse the signed claim): on
      testnet.nectarlabs.io connect the wallet and use "Get test assets" (label "Mock assets, no value") on camera. It signs one wallet request
      with `faucet_mint` on nvdax-mock and usdc-mock. The faucet itself is deployed on both mocks (code-only upgrade 2026-11-12 ~20:10Z, state
      unchanged; evidence/rollout/mockft-faucet-20261112T200937Z.log): 5 NVDAx and 500 USDC per claim, one claim per hour, 3 claims per account
      (`faucet` in packages/config/config.yaml). One real call is recorded: borrower1, tx
      [2A4jN155…](https://testnet.nearblocks.io/txns/2A4jN155i6AEbZv35qj8c7XZLV7TjWZejr3mnJmneQrW) (`ft_mint` 5 NVDAx).
-   - **B. Orchestrator mint** (button not deployed or cut): before the take the orchestrator registers the account on both mocks and mints
+   - **B. Orchestrator mint** (if the button fails in rehearsal): before the take the orchestrator registers the account on both mocks and mints
      5 mock NVDAx, signed by the owner from the keychain. On camera, the borrow form's "Balance 5 NVDAx" stands in for the button; caption
      "Test assets minted before recording (mock, no value)".
      ```bash
@@ -68,7 +73,7 @@ The 3-minute v4 script (Solana and Base remote lifecycle, keeper, copilot) is th
 | 0:22–0:52 | /borrow composer | You lock 5 NVDAx; read the static limit vs the Nectar limit; pick **Weekend Shield** (limit fixed until the window end, flat fee); You borrow a round amount under the limit (e.g. 100 USDC); **Review borrow** → **Show what your wallet signs** (receiver `nvdax-mock.nectar.testnet`, `ft_transfer_call`, 1 yoctoNEAR) → **Confirm in wallet** → approve. | "Committed buyers raise the limit. Weekend Shield: the limit cannot be cut halfway through the weekend." |
 | 0:52–1:12 | /position/`<id>` → nearblocks | "View loan #`<id>`": collateral, debt, Note `p-<id>`. Open the tx: the toast's "View transaction" link when the deploy sets `NEXT_PUBLIC_EXPLORER_TX`, otherwise the hash from the toast in the nearblocks tab: `ft_transfer_call` on nvdax-mock, `position_opened` in the nectar-core receipt. | "On-chain on NEAR testnet." |
 | 1:12–1:40 | terminal | Run the x402 camera command (step 6): `challenge` 402 → signed delegate → `paid_fetch` 200 with the CSV rows and the relay tx. | "An agent pays 0.01 mock USDC per call with x402 on NEAR testnet." |
-| 1:40–2:00 | end card | Four URLs: https://nectarlabs.io · https://testnet.nectarlabs.io · https://docs.nectarlabs.io · https://status.nectarlabs.io (before the next release, show https://nectarlabs.io/status instead). | "Testnet, mock collateral, owner oracle. Not audited." |
+| 1:40–2:00 | end card | Four URLs: https://nectarlabs.io · https://testnet.nectarlabs.io · https://docs.nectarlabs.io · https://status.nectarlabs.io. | "Testnet, mock collateral, owner oracle. Not audited." |
 
 Not in this take (on testnet, see EVIDENCE): quotes and the Feed screens, the Solana and Base remote lifecycle (G7, G13 on a local fork), Profit-Lock
 and Reserve, the copilot (fixture only, G8). Never in any take: a live NEAR AI answer, a live Pyth price, real Base Sepolia.
