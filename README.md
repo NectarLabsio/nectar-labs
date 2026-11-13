@@ -125,7 +125,7 @@ Hosts (each answered HTTP 200 on 2026-11-13T20:13Z; hosted until at least 2026-1
 | An agent can borrow and pay for data on its own | $10 loan (#20) with a $0.03 fee, then 0.01 mock USDC paid: HTTP 402, then 200 with 168 CSV rows (2026-11-13T19:41Z) | [DTtVhTnS…](https://testnet.nearblocks.io/txns/DTtVhTnSDVRU163gFTAfgZZwuc35p1zRNFLu3c12w5TD), [6karZo8L…](https://testnet.nearblocks.io/txns/6karZo8LKP4UbkDP9hx34459egCTcbEcRoZbNTph6sk5), screenshot above |
 | The price bot can do one thing only | its key may call `update_owner_price` on `nectar-core-v2` and nothing else | [BHopF1cu…](https://testnet.nearblocks.io/txns/BHopF1cuKAMDFoCnKyNZPPKR3qVPgs5dYiKxx6jwWpao) |
 
-Every check, with commands, outputs and links: [docs/EVIDENCE.md](docs/EVIDENCE.md). What each evidence folder holds: [evidence/README.md](evidence/README.md).
+Every check, with commands, outputs and links: [docs/EVIDENCE.md](docs/EVIDENCE.md). Raw logs, including some transactions cited above that EVIDENCE does not repeat, are under evidence/; what each folder holds: [evidence/README.md](evidence/README.md).
 
 ## Next
 

@@ -518,7 +518,7 @@ Real selector (g3b-selector-probe.mjs, real Chrome, fresh context, mock undefine
 - 12 measured hosts = 12 committed, all in backticks in privacy.md (inv-compare.log). The clone's content/ was restored.
 (d) **FAIL.** `PW_CHANNEL=chrome node apps/web/scripts/crawl.mjs --polite --site http://site.localhost:3973 --app http://app.localhost:3973` (15:52–16:07Z) → exit 1: 89 internal, 45 external, **1 failure**, 0 of our console errors, 25 page loads with third-party network failures.
 - The failure is external https://feed-production-2f2776c9.up.railway.app/ → status 404, linked from http://app.localhost:3973/docs/integrate/feed-rest.
-- The source is apps/docs-site/docs/integrate/feed-rest.md:9, which reads "Hosted, read-only, at [https://feed-production-2f2776c9.up.railway.app](…)". It was added in 1419028 ("fix(docs-site): security headers; no localhost link"), after 3126773.
+- The source is apps/docs-site/docs/integrate/feed-rest.md:9, which reads `Hosted, read-only, at [https://feed-production-2f2776c9.up.railway.app](…)` (link target elided in this quote). It was added in 1419028 ("fix(docs-site): security headers; no localhost link"), after 3126773.
 - Re-probed 16:08:51Z: / → 404, /health → 200 (feed-root-probe.txt).
 - The third-party failures are FastNEAR CORS refusals on 429 replies. They are listed, not counted.
 (f) `NECTAR_PRODUCTION=1 SITE_URL=… APP_URL=… pnpm build` → exit 0, and check-trace after it → exit 0.
