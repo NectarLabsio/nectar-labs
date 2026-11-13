@@ -1,0 +1,25 @@
+## 2026-11-13T14:11:34Z public URL (README:82) vs the local commit
+$ curl -s https://api.github.com/repos/NectarLabsio/nectar-labs (no token)
+  "full_name": "NectarLabsio/nectar-labs",
+  "private": false,
+  "pushed_at": "2026-11-13T13:38:36Z",
+  "visibility": "public",
+  "default_branch": "main",
+$ GIT_TERMINAL_PROMPT=0 git -c credential.helper= ls-remote https://github.com/NectarLabsio/nectar-labs.git
+b6d6f411a1bf4e7dec0cdaa9fe3b15eebab84a94	HEAD
+b6d6f411a1bf4e7dec0cdaa9fe3b15eebab84a94	refs/heads/main
+(exit 0)
+$ git diff --stat b6d6f41 HEAD -- apps packages services contracts scripts/deploy
+(exit 0)
+$ git diff --stat c95cd0c HEAD -- apps/web | tail -4
+ apps/web/components/TestAssets.tsx            |  4 +++-
+ apps/web/components/borrow/BorrowComposer.tsx |  2 +-
+ apps/web/e2e/test-assets.spec.ts              | 25 +++++++++++++++++++++++--
+ 3 files changed, 27 insertions(+), 4 deletions(-)
+$ git diff --stat c95cd0c HEAD -- apps/docs-site | tail -1
+(exit 0)
+$ git diff --stat 37dfec9 HEAD -- services/feed
+(exit 0)
+$ git log --oneline 1a95022 -1; merge-base check 1a95022 ancestor of HEAD
+1a95022 merge: WO-74 — composer balance refreshes after a faucet claim (web fix; Kunal approved deploy)
+1a95022 is an ancestor of HEAD

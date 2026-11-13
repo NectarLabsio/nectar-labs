@@ -1,0 +1,66 @@
+## 2026-11-13T14:11:06Z repo shape (before pnpm i)
+$ git remote -v
+origin	/Volumes/T7/nectar-labs (fetch)
+origin	/Volumes/T7/nectar-labs (push)
+$ git rev-parse HEAD
+d863f55801cc9c5600fe899450812cfe41c94ec0
+$ git rev-list --count HEAD
+754
+$ find . -path ./.git -prune -o -type f -size +50M -print
+$ tracked .env* files
+.env.example
+apps/web/.env.example
+$ expanded home paths ([/]Users[/][A-Za-z] or [/]home[/]x[/], excl. wasm): file count + list
+       1
+docs/EVIDENCE.md
+$ key-material grep excl. lockfile + forge-std
+$ files added since b6d6f41
+A	docs/work/wo-75-docs-repo-url.md
+A	docs/work/wo-76-verifier-g9-public.md
+A	docs/work/wo-77-verifier-g9-run9.md
+A	evidence/G9/run8-public-20261113T134430Z/b-out.txt
+A	evidence/G9/run8-public-20261113T134430Z/branding.log
+A	evidence/G9/run8-public-20261113T134430Z/build-submission.log
+A	evidence/G9/run8-public-20261113T134430Z/c-out.txt
+A	evidence/G9/run8-public-20261113T134430Z/checks-c.txt
+A	evidence/G9/run8-public-20261113T134430Z/checks-d.txt
+A	evidence/G9/run8-public-20261113T134430Z/checks-e.txt
+A	evidence/G9/run8-public-20261113T134430Z/clone-status-after-b.txt
+A	evidence/G9/run8-public-20261113T134430Z/clone-status-after.txt
+A	evidence/G9/run8-public-20261113T134430Z/copy-grep.txt
+A	evidence/G9/run8-public-20261113T134430Z/demo-testnet.log
+A	evidence/G9/run8-public-20261113T134430Z/docs-build-hackathon.txt
+A	evidence/G9/run8-public-20261113T134430Z/docs-build.log
+A	evidence/G9/run8-public-20261113T134430Z/feed-health-local.txt
+A	evidence/G9/run8-public-20261113T134430Z/feed-mcp-http.log
+A	evidence/G9/run8-public-20261113T134430Z/feed-mcp-stdio.log
+A	evidence/G9/run8-public-20261113T134430Z/feed-start.log
+A	evidence/G9/run8-public-20261113T134430Z/gitleaks.log
+A	evidence/G9/run8-public-20261113T134430Z/host-grep-nonhistory.txt
+A	evidence/G9/run8-public-20261113T134430Z/host-grep.txt.gz
+A	evidence/G9/run8-public-20261113T134430Z/hosted-claims.txt
+A	evidence/G9/run8-public-20261113T134430Z/pnpm-i.log
+A	evidence/G9/run8-public-20261113T134430Z/ports-after.txt
+A	evidence/G9/run8-public-20261113T134430Z/ports-before.txt
+A	evidence/G9/run8-public-20261113T134430Z/prod-release.txt
+A	evidence/G9/run8-public-20261113T134430Z/prod-smoke.log
+A	evidence/G9/run8-public-20261113T134430Z/public-repo.txt
+A	evidence/G9/run8-public-20261113T134430Z/repo-shape.txt
+A	evidence/G9/run8-public-20261113T134430Z/scripts/a.sh
+A	evidence/G9/run8-public-20261113T134430Z/scripts/b.sh
+A	evidence/G9/run8-public-20261113T134430Z/scripts/c.sh
+A	evidence/G9/run8-public-20261113T134430Z/scripts/d.sh
+A	evidence/G9/run8-public-20261113T134430Z/scripts/e.sh
+A	evidence/G9/run8-public-20261113T134430Z/summary.txt
+A	evidence/G9/run8-public-20261113T134430Z/verify.log
+A	evidence/G9/run8-public-20261113T134430Z/web-dev-routes.txt
+A	evidence/G9/run8-public-20261113T134430Z/web-dev.log
+A	evidence/WO-34/deploy-web-cli-20261113T135102Z.log
+A	evidence/WO-34/prod-smoke-custom-20261113T135213Z.log
+A	evidence/WO-74/prod-qa-check-20261113T135339Z.log
+A	evidence/WO-74/prod-qa-check-20261113T135502Z.log
+A	evidence/WO-74/prod-qa-check-20261113T135617Z.log
+A	evidence/WO-74/prod-qa-check-20261113T140152Z.log
+A	evidence/WO-74/prod-qa-check-20261113T140612Z.log
+A	evidence/WO-74/prod-qa-check-20261113T140705Z.log
+A	evidence/ops/qa-account-create-20261113T135439Z.log

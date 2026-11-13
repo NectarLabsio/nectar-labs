@@ -1,0 +1,3 @@
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    56878 lemmalabs   21u  IPv4 0xcf6b43b3ccedfd29      0t0  TCP localhost:8788 (LISTEN)
+node    56878 lemmalabs   22u  IPv4 0x7122103aeb4624dc      0t0  TCP localhost:8789 (LISTEN)
