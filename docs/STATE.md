@@ -84,6 +84,9 @@
 - 14:50Z take-conditions measurement 1 (headed, local Feed + x402 STOPPED with Kunal approval, load 2.4, no signing): S1 PASS 83 ms; S2–S5 motion gaps
   123–450 ms = app pauses (window/panel opening, preview recompute while typing, #sim drag). WO-35d dispatched: post-drawn cursor, paced input, motion-interval
   gapcheck, then measurement 2. x402 :8791 to be restarted before S5 of the takes (FEED_URL hosted). Local Feed :8788 stays stopped (production does not use it).
+- 15:15Z WO-35d merged c56b0ca (post-drawn cursor, paced input, motion gapcheck): measure-2 S1 S3 S4 S5 PASS, S2 fails only on the Cancel-path scroll (takes
+  approve instead). Transitions (window/panel open, explorer load 166–267 ms) reported for Kunal. Takes runbook: docs/work/wo-35e-takes-runbook.md; take.mjs
+  --section 1,2,3,4 (15ca7de). Wake-up set for 20:50Z.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -506,7 +509,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T14:36:00Z · commit 540ab1e
+Last activity: 2026-11-13T15:02:45Z · commit 79c799f
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
