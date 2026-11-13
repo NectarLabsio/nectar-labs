@@ -49,3 +49,18 @@ Limits: nothing posted, uploaded or sent. Videos > 50 MB out of git; tell Kunal 
 - C4 localhost: the on-camera command must not show X402_URL=http://127.0.0.1:8791 (x402 is local by design, D-031). demo-agent.ts logs no URL
   (lines 59/70/76/77), so env is set off camera and the take types only `pnpm --filter x402 demo:testnet`.
 - C5 Oracle: < 15 min needs the Railway refresher (H-ORACLE, staged) or a one-shot owner refresh right before each take.
+
+## Kunal's decisions (2026-11-13 ~02:20Z)
+- C1: key added (Kunal pasted it; orchestrator set FEED_NEARDATA_API_KEY on Railway feed, plus FEED_INDEXER=neardata, FEED_START_BLOCK=head-50000,
+  FEED_DB_PATH=/data/feed-neardata-20261113.sqlite — fresh DB so the start block applies). Confirm events recording; before rehearsal run the agent's
+  paid download (DEMO_SKIP_BORROW=1, local x402 :8791 restarted with FEED_URL = hosted Feed) and report the CSV row count.
+- C2: section 5 ends on the agent's tx in the testnet explorer. The Agents page stays out of the video.
+- C3: ok. Section 5 caption exactly: "A separate agent account borrows on its own: agent1.nectar.testnet."
+- Oracle: Kunal applies the Railway refresher after seeing the FC key permissions (contract, method names, allowance).
+- Wallet: send Meteor + Intear steps; Kunal picks the one with fewer steps (F-468 Intear verified from source; F-469 Meteor not verified).
+- Fallback: if Friday's takes fail, record Saturday 2026-11-14 with the market closed and a caption saying weekend limits apply.
+- C6 (found 02:24Z): during an OPEN session a borrow needs the price < max_age_ns_session = 120 s (deployed get_config; lib.rs:381, 1590), while the
+  session itself stays open up to 900 s (lib.rs:75, 348). A 10-min refresher leaves borrows failing "oracle stale" ~8 of every 10 min in NYSE hours.
+  Takes: one-shot owner refresh < 60 s before sections 1 and 3. Refresher cadence → Kunal decides (recommendation in the 02:25Z report).
+- X limits (F-465/F-466, C-027): developer docs cap 1280x1024 and non-Premium playback is 720p; master stays 1920×1080 as briefed, plus a 1280×720
+  copy for X. Kunal checks help.x.com in a browser.

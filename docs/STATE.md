@@ -17,6 +17,11 @@
 - ~02:25Z Kunal: WO-35 demo video (docs/work/wo-35-demo-video.md), to run after WO-67 + freeze. Intake conflicts C1–C5 sent to Kunal (Feed events in
   views mode, Agents page is a fixture, agent1 ≠ demo account, localhost in the x402 command, oracle freshness). Researcher dispatched: X limits +
   web wallets (Meteor/Intear) → FACTS. Only NYSE session before the deadline: Fri 2026-11-13 14:30–21:00Z.
+- 02:22Z Feed: Kunal supplied the FastNear key; orchestrator set FEED_NEARDATA_API_KEY + FEED_INDEXER=neardata + FEED_START_BLOCK=head-50000 +
+  FEED_DB_PATH=/data/feed-neardata-20261113.sqlite (fresh DB; old /data DB kept). /health: views+neardata, history indexed; cursor init 277398512;
+  poll 10 s × 100 blocks → caught up ≈ 04:05Z. Then: x402 :8791 restart with FEED_URL (after WO-67), paid download row count → Kunal.
+- C6: borrow in an open session needs price < 120 s (max_age_ns_session); 10-min refresher → borrows fail most of NYSE hours. Kunal decides cadence.
+  nectar.testnet 1.145 NEAR (02:24Z).
 - Next: WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -439,7 +444,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T02:11:20Z · commit b7fa381
+Last activity: 2026-11-13T02:19:30Z · commit 8c5301d
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
