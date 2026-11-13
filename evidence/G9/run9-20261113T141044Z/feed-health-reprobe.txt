@@ -1,0 +1,13 @@
+run 8 local /health: {"ok":true,"last_indexed_block":277518209,"chain_head":27751 source="source":"views+neardata"
+14:16:48Z "ok":true "indexer_cursor":277521032 "last_error":"" "source":"views+neardata" "events_indexed":0 
+14:16:58Z "ok":true "indexer_cursor":277521043 "last_error":"" "source":"views+neardata" "events_indexed":0 
+14:17:08Z "ok":true "indexer_cursor":277521054 "last_error":"" "source":"views+neardata" "events_indexed":0 
+14:17:18Z "ok":true "indexer_cursor":277521063 "last_error":"" "source":"views+neardata" "events_indexed":0 
+14:17:28Z "ok":true "indexer_cursor":277521082 "last_error":"neardata: neardata block 277521083 HTTP 429" "source":"views+neardata" "events_indexed":0 
+14:17:38Z "ok":false "indexer_cursor":277521082 "last_error":"neardata: neardata block 277521083 HTTP 429" "source":"views+neardata" "events_indexed":0 
+1
+services/feed/src/api.ts:34:   * (FEED_INDEXER=views), no block tail, so event lists answer empty with this marker. Default: from `source` (contains
+services/feed/src/hosted.ts:2:// them; local defaults (REST 127.0.0.1:8788, MCP :8789, start at the Neardata head) are unchanged when unset.
+services/feed/src/hosted.ts:15:export function neardataApiKey(env: NodeJS.ProcessEnv, read: (path: string) => string = (p) => readFileSync(p, 'utf8'), home: (p: string) => string = (p) => p): string |
+services/feed/src/hosted.ts:16:  if (!blank(env.FEED_NEARDATA_API_KEY_PATH)) {
+services/feed/src/hosted.ts:17:    const k = read(home((env.FEED_NEARDATA_API_KEY_PATH as string).trim())).trim();

@@ -1,0 +1,7 @@
+# G9 run 9 commands, local clone d863f55801cc9c5600fe899450812cfe41c94ec0, start 2026-11-13T14:11:07Z
+pnpm-i exit=0 seconds=11
+demo-testnet exit=0 seconds=5
+verify exit=0 seconds=28
+docs-build exit=0 seconds=18
+gitleaks exit=0 seconds=2
+# end 2026-11-13T14:12:11Z

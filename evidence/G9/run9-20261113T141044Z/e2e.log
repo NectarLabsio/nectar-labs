@@ -1,0 +1,1324 @@
+playwright: Version 1.65.0
+
+Running 28 tests using 1 worker
+
+  ✘   1 [desktop] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork (1ms)
+  ✘   2 [desktop] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork (retry #1) (1ms)
+  ✘   3 [desktop] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia (1ms)
+  ✘   4 [desktop] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia (retry #1) (1ms)
+  ✘   5 [desktop] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% (1ms)
+  ✘   6 [desktop] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% (retry #1) (1ms)
+  ✘   7 [desktop] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 (1ms)
+  ✘   8 [desktop] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 (retry #1) (1ms)
+  ✘   9 [desktop] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable (1ms)
+  ✘  10 [desktop] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable (retry #1) (1ms)
+  ✘  11 [desktop] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx (1ms)
+  ✘  12 [desktop] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx (retry #1) (1ms)
+  ✘  13 [desktop] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) (1ms)
+  ✘  14 [desktop] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) (retry #1) (1ms)
+  ✘  15 [desktop] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other (1ms)
+  ✘  16 [desktop] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other (retry #1) (1ms)
+  ✘  17 [desktop] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated (1ms)
+  ✘  18 [desktop] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated (retry #1) (1ms)
+  ✘  19 [desktop] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed (1ms)
+  ✘  20 [desktop] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed (retry #1) (1ms)
+  ✘  21 [desktop] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent (1ms)
+  ✘  22 [desktop] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent (retry #1) (1ms)
+  ✘  23 [desktop] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens (1ms)
+  ✘  24 [desktop] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens (retry #1) (1ms)
+  ✘  25 [desktop] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' (1ms)
+  ✘  26 [desktop] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' (retry #1) (1ms)
+  ✘  27 [desktop] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected (1ms)
+  ✘  28 [desktop] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected (retry #1) (1ms)
+  ✘  29 [phone] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork (2ms)
+  ✘  30 [phone] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork (retry #1) (1ms)
+  ✘  31 [phone] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia (1ms)
+  ✘  32 [phone] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia (retry #1) (1ms)
+  ✘  33 [phone] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% (1ms)
+  ✘  34 [phone] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% (retry #1) (1ms)
+  ✘  35 [phone] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 (1ms)
+  ✘  36 [phone] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 (retry #1) (1ms)
+  ✘  37 [phone] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable (1ms)
+  ✘  38 [phone] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable (retry #1) (1ms)
+  ✘  39 [phone] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx (1ms)
+  ✘  40 [phone] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx (retry #1) (1ms)
+  ✘  41 [phone] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) (1ms)
+  ✘  42 [phone] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) (retry #1) (1ms)
+  ✘  43 [phone] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other (1ms)
+  ✘  44 [phone] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other (retry #1) (1ms)
+  ✘  45 [phone] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated (1ms)
+  ✘  46 [phone] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated (retry #1) (1ms)
+  ✘  47 [phone] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed (1ms)
+  ✘  48 [phone] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed (retry #1) (1ms)
+  ✘  49 [phone] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent (1ms)
+  ✘  50 [phone] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent (retry #1) (1ms)
+  ✘  51 [phone] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens (1ms)
+  ✘  52 [phone] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens (retry #1) (1ms)
+  ✘  53 [phone] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' (1ms)
+  ✘  54 [phone] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' (retry #1) (1ms)
+  ✘  55 [phone] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected (1ms)
+  ✘  56 [phone] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected (retry #1) (1ms)
+
+
+  1) [desktop] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [desktop] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [desktop] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [desktop] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [desktop] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [desktop] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [desktop] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [desktop] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [desktop] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [desktop] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [desktop] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-desktop-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-desktop-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-desktop-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [phone] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-62cfd-the-same-and-say-local-fork-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [phone] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B1-Base-sett-5824b--local-fork-of-Base-Sepolia-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [phone] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B2-B3-deploy-79dec--the-deployed-values-no-85--phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [phone] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--0c247-no-reel-nodes-no-0123456789-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [phone] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/claims-WO-62a-B4-counters--035a8-er-the-value-stays-readable-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [phone] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-61df4-request-amounts-and-both-tx-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [phone] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-dfc46-ew-borrow-can-enable-WO-74--phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [phone] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e0c0a-s-when-signs-only-the-other-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [phone] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-92f53-t-request-the-cap-is-stated-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [phone] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-0e918-said-plainly-nothing-signed-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [phone] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-096c3-s-honest-error-nothing-sent-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [phone] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-e8c14-cet-link-wallet-never-opens-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [phone] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-8001f-ton-connect-a-wallet-first--phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [phone] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected 
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-phone/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-phone/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-phone/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at ~/Library/Caches/ms-playwright/chromium_headless_shell-1254/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright was just installed or updated.       ║
+    ║ Please run the following command to download new browsers: ║
+    ║                                                            ║
+    ║     npx playwright install                                 ║
+    ║                                                            ║
+    ║ <3 Playwright Team                                         ║
+    ╚════════════════════════════════════════════════════════════╝
+
+    Error Context: test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-phone-retry1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-phone-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/test-assets-Get-test-asset-c4495-ven-with-a-wallet-connected-phone-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28 failed
+    [desktop] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork 
+    [desktop] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia 
+    [desktop] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% 
+    [desktop] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 
+    [desktop] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable 
+    [desktop] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx 
+    [desktop] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) 
+    [desktop] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other 
+    [desktop] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated 
+    [desktop] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed 
+    [desktop] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent 
+    [desktop] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens 
+    [desktop] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' 
+    [desktop] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected 
+    [phone] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork 
+    [phone] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia 
+    [phone] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% 
+    [phone] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 
+    [phone] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable 
+    [phone] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx 
+    [phone] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) 
+    [phone] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other 
+    [phone] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated 
+    [phone] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed 
+    [phone] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent 
+    [phone] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens 
+    [phone] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' 
+    [phone] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected 
+# exit=1 seconds=27

@@ -1,0 +1,18 @@
+## 2026-11-13T14:11:43Z hosted Feed
+$ curl -s https://feed-production-2f2776c9.up.railway.app/health (14:11:43Z)
+{"ok":true,"last_indexed_block":277520541,"chain_head":277520541,"chain_head_source":"view_block","lag_blocks":0,"indexer_cursor":277520537,"indexer_lag_blocks":0,"last_poll_at":"2026-11-13T14:11:42.007Z","poll_age_s":2,"last_error":"","source":"views+neardata","start_block":"277503800","events_indexed":2,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"near-testnet.drpc.org","failovers":1610,"cooling":["test.rpc.fastnear.com","rpc.testnet.fastnear.com"]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"37dfec96262febd76ae407af6612f0b1c27facd0"}
+$ curl -s https://feed-production-2f2776c9.up.railway.app/health (14:11:48Z)
+{"ok":true,"last_indexed_block":277520549,"chain_head":277520549,"chain_head_source":"view_block","lag_blocks":0,"indexer_cursor":277520545,"indexer_lag_blocks":0,"last_poll_at":"2026-11-13T14:11:47.093Z","poll_age_s":2,"last_error":"","source":"views+neardata","start_block":"277503800","events_indexed":2,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"near-testnet.drpc.org","failovers":1611,"cooling":["rpc.testnet.fastnear.com"]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"37dfec96262febd76ae407af6612f0b1c27facd0"}
+$ curl -s https://feed-production-2f2776c9.up.railway.app/health (14:11:52Z)
+{"ok":true,"last_indexed_block":277520556,"chain_head":277520556,"chain_head_source":"view_block","lag_blocks":0,"indexer_cursor":277520553,"indexer_lag_blocks":0,"last_poll_at":"2026-11-13T14:11:51.697Z","poll_age_s":2,"last_error":"","source":"views+neardata","start_block":"277503800","events_indexed":2,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"near-testnet.drpc.org","failovers":1613,"cooling":["rpc.testnet.fastnear.com"]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"37dfec96262febd76ae407af6612f0b1c27facd0"}
+## CORS (14:11:57Z)
+https://nectarlabs.io GET /health ACAO=[https://nectarlabs.io] preflight /mcp=204
+https://testnet.nectarlabs.io GET /health ACAO=[https://testnet.nectarlabs.io] preflight /mcp=204
+https://status.nectarlabs.io GET /health ACAO=[https://status.nectarlabs.io] preflight /mcp=204
+https://docs.nectarlabs.io GET /health ACAO=[] preflight /mcp=403
+https://evil.example.com GET /health ACAO=[] preflight /mcp=403
+$ RPC tx 8bXCY34SVYv5b7vJ4GLfWkbJtQdqbSSBJsrzPCE75XRk sender x402-relayer.nectar.testnet
+status {"SuccessValue":""} signer x402-relayer.nectar.testnet receiver agent1.nectar.testnet
+$ RPC tx De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG sender nectar.testnet
+status {"SuccessValue":"dHJ1ZQ=="} signer nectar.testnet receiver nectar-core-v2.nectar.testnet
+  log nectar-core-v2.nectar.testnet EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"135000000"}]}

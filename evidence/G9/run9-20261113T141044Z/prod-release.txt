@@ -1,0 +1,23 @@
+## 2026-11-13T14:11:35Z production release check: does APP /borrow ship the WO-74 'onClaimed' path?
+chunks referenced by https://testnet.nectarlabs.io/borrow:       22
+dpl ids in /borrow HTML: 
+onClaimed in /_next/static/immutable/chunks/3htcm-0feao4j.js: i(28120),R=e.i(76913),E=e.i(21423),B=e.i(77375);function T({onClaimed:e}={}){let{config:a,views:l}=(0,b.useChain)(),{accountId:i,network:r}=(0,b.useW t:!0,action:"borrow",blockOnPause:!0,children:[(0,t.jsx)(T,{onClaimed:eT.reload}),eR.data&&V?(0,t.jsx)(f.U,{cap:eR.data,symbol:V.symbol}):null,"solan 
+test-assets-connect marker in /_next/static/immutable/chunks/3htcm-0feao4j.js
+onClaimed in /_next/static/immutable/chunks/3htcm-0feao4j.js\: i(28120),R=e.i(76913),E=e.i(21423),B=e.i(77375);function T({onClaimed:e}={}){let{config:a,views:l}=(0,b.useChain)(),{accountId:i,network:r}=(0,b.useW t:!0,action:"borrow",blockOnPause:!0,children:[(0,t.jsx)(T,{onClaimed:eT.reload}),eR.data&&V?(0,t.jsx)(f.U,{cap:eR.data,symbol:V.symbol}):null,"solan 
+test-assets-connect marker in /_next/static/immutable/chunks/3htcm-0feao4j.js\
+chunks with onClaimed: 2
+$ curl -sI https://testnet.nectarlabs.io/borrow
+age: 1169
+date: Fri, 13 Nov 2026 14:11:42 GMT
+etag: "d3e1527c2df7e646647a43dc8a22ceeb"
+x-matched-path: /borrow
+x-vercel-cache: HIT
+x-vercel-id: bom1::ddgpt-1794579102601-befc9418c0e4
+$ docs host headers (docs unchanged since release 4?)
+age: 43699
+date: Fri, 13 Nov 2026 14:11:43 GMT
+etag: "6ba60869be4d0270e50e620b55124059"
+last-modified: Fri, 13 Nov 2026 02:03:23 GMT
+x-vercel-cache: HIT
+$ landing (SITE) dpl ids
+

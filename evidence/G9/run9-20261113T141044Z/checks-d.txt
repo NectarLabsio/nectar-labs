@@ -1,0 +1,190 @@
+## verify per-package counts
+packages/ui test: # tests 7
+packages/ui test: # pass 7
+packages/ui test: # fail 0
+packages/ui test: # skipped 0
+services/feed test: # tests 89
+services/feed test: # pass 89
+services/feed test: # fail 0
+services/feed test: # skipped 0
+services/keeper test: # tests 327
+services/keeper test: # pass 327
+services/keeper test: # fail 0
+services/keeper test: # skipped 0
+services/x402 test: # tests 41
+services/x402 test: # pass 41
+services/x402 test: # fail 0
+services/x402 test: # skipped 0
+apps/web test: ℹ tests 44
+apps/web test: ℹ pass 43
+apps/web test: ℹ fail 0
+apps/web test: ℹ skipped 1
+> node scripts/check-no-branding-all.mjs && pnpm lint && pnpm typecheck && pnpm test
+apps/web lint$ node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs
+services/feed test: ok 28 - real nectar-core-v2 (2.0.0) log lines
+## demo-testnet
+oracle $135.00 (age 9793s, fresh)  effective limit 7000 bps
+== pool ==
+#1  Open  debt $9,000.00  ltv 6667 bps / pre-liq 7500 bps
+#4  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps
+#5  Open  debt $189.00  ltv 7000 bps / pre-liq 7500 bps
+#13  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps
+#14  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps
+#15  Open  debt $10.00  ltv 741 bps / pre-liq 8000 bps
+## gitleaks
+[90m7:42PM[0m [32mINF[0m [1m559 commits scanned.[0m
+[90m7:42PM[0m [32mINF[0m [1mscanned ~37984284 bytes (37.98 MB) in 1.88s[0m
+[90m7:42PM[0m [32mINF[0m [1mno leaks found[0m
+# exit=0 seconds=2
+commits all / non-merge: 755 / 559
+## docs build
+[SUCCESS] Generated static files in "build".
+## home-path hit lines (pattern from repo-shape)
+docs/EVIDENCE.md:1188:   - ~/.nectar: no tracked file lives under a `.nectar` dir, and there are 0 expanded home paths (`[/]Users[/]x` or `/home/x/`, excluding wasm). `~/.nectar` appears in 194 lines across 85 files. Out
+## docs changed since b6d6f41 (README / HUMAN_HANDOFF / SUBMISSION / DEMO_SCRIPT / STATE)
+ README.md             | 4 ++--
+ docs/HUMAN_HANDOFF.md | 4 +++-
+ docs/SUBMISSION.md    | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
+## README production-release lines
+3:> **Testnet software for the NEAR Hackathon (development closes 2026-11-14 23:59 UTC). The collateral is a mock token (`nvdax-mock`) standing in for tokenized equities (xStocks / Opening Bell). No mainnet, no real funds. Gates (docs/EVIDENCE.md): G1, G2, G3 
+11:Production runs release 4, commit c95cd0c, deployed 2026-11-13 ~02:00Z with Kunal's approval (HUMAN_HANDOFF H-DEPLOY; Vercel web
+12:dpl_Bm1uwQcX…, docs dpl_DpqAmb6…). The verifier's acceptance on the custom hosts: PASS, 8 of 8 items (docs/EVIDENCE.md §"WO-34 production
+13:(custom hosts)", 2026-11-13T02:05Z–02:40Z). If production is redeployed later, that release and its result get their own block in §"WO-34 production".
+26:| Feed REST | https://feed-production-2f2776c9.up.railway.app (e.g. `/health`) | Railway | read-only, no keys. Snapshots come from nectar-core-v2 views. **Contract events from block 277503800 on only.** Since WO-71 (merge 37dfec9) the Feed accepts nectar ev
+34:hosts, release 4 on the custom hosts (§"WO-34 production (custom hosts)"). No wallet has signed a borrow on the
+55:| Base spoke (EVM vault) | vault `0xC64b733424C8d25fB574F275007ED8756e261226`, MockB20 `0x634F88DAEf0a1f77645c523C3FA351Fe37aaf81d` on **a local fork of Base Sepolia** (anvil, chain id 84532), NEAR-derived secp256k1 key per position (domain 0) | EVM contrac
+61:| Feed REST / MCP + agent skill tools | REST hosted at https://feed-production-2f2776c9.up.railway.app (Railway); local: `pnpm --filter feed start` | read-only, no keys | REST hosted since 2026-11-12. Snapshots come from contract views. Contract events: sin
+150:[docs/EVIDENCE.md](docs/EVIDENCE.md) records every gate with its commands, outputs and explorer links. Status on 2026-11-12: G0–G4 and G6 PASS, G8 PASS (fixture), G5 FALLBACK (disclosed; live Pyth waits on H13), G1 (v7) PASS, G10 PASS with open items, G12 
+## README WO-74 / onClaimed / balance refresh mentions
+README.md:58:| oracle | owner oracle on nectar-core-v2 (`update_owner_price`) | **owner oracle (disclosed)**, badge in UI | in use for NVDAx. The Pyth path is built and sandbox-tested (staleness, confidence and band chec
+docs/DEMO_SCRIPT.md:13:   contracts/nectar-core/src/lib.rs:75). The Railway refresher (H-ORACLE, schedule A) RUNS since 2026-11-13 11:27Z: it re-asserts the current
+docs/DEMO_SCRIPT.md:15:   2026-11-18 (`ops.oracle_refresher` in packages/config/config.yaml; first refresh tx De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG). Check with
+docs/DEMO_SCRIPT.md:17:   If the refresher has stopped (or its 5 NEAR allowance ran out), send the RUNBOOK one-shot `update_owner_price` with the CURRENT price
+docs/DEMO_SCRIPT.md:21:   a delayed refresh (RPC failover) can push it past 120 s, so if it is over 60 s, send the one-shot refresh less than 60 s before the beat.
+## STATE lines on WO-74 / deploy
+70:- WO-74 merged 1a95022 (TestAssets onClaimed then composer bal.reload; e2e 28/28; web 43/0). Tarball src-1a95022 sha256 74626b00 (verify ok).
+## HUMAN_HANDOFF lines on WO-74 deploy
+## EVIDENCE §WO-34 production blocks
+2413:### WO-34 production (custom hosts) (WO-67 A): PASS (8/8 items; tooling notes in items 1, 2 and 5), 2026-11-13T02:05Z–02:40Z, deployed commit c95cd0cf9d3f56f570ba3847a9c8aed370e688e0
+2465:### WO-34 production (release 3) (WO-34v3): PASS (4/4 items; crawl script exit 1 on 2 redirect assertions outside the criterion, disclosed), 2026-11-12T16:40Z–17:01Z, release 3 5f011bb7f2ddc1df18
+2497:### WO-34 production (release 3974b5b) (WO-34v2): FAIL (1 reason), 2026-11-12T15:00Z–15:18Z, release 3974b5bb2df4ff98772c758621a68932db30f653
+2526:### WO-34 production acceptance (WO-34v): FAIL, 2026-11-12T13:38Z–14:45Z, deployed commit ca3411115aed1d6c127e2d82ba9f31a163221496
+## WO-74 evidence logs + qa-account-create: key material? (ed25519 >=80, PEM, 64-hex, seed words)
+evidence/WO-74/prod-qa-check-20261113T135339Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=0
+evidence/WO-74/prod-qa-check-20261113T135502Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=6
+evidence/WO-74/prod-qa-check-20261113T135617Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=6
+evidence/WO-74/prod-qa-check-20261113T140152Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=6
+evidence/WO-74/prod-qa-check-20261113T140612Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=6
+evidence/WO-74/prod-qa-check-20261113T140705Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=3
+evidence/ops/qa-account-create-20261113T135439Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=0
+evidence/WO-34/deploy-web-cli-20261113T135102Z.log: long-ed25519-not-signature=0  PEM=0  privkey-lines=0
+   4   buttons: Click here | Report Error | ? | Forgot Password? | Unlock (disabled) | ? | ? | ? | Seed Phrase | Private Key | Ledger | Import Account (disabled) | Terms of Service | Privacy Policy | 
+   4   checks: I accept the Terms of Service checked=true | I accept the Privacy Policy checked=true | I accept the License checked=true
+   1   texts: Not loading? | Loading… | Enter your password to log in | Password | Private Key | No accounts found for this private key | I accept the Terms of Service | I accept the Privacy Policy | 
+   2   texts: Not loading? | Loading… | Enter your password to log in | Password | Seed Phrase | Invalid seed phrase | I accept the Terms of Service | I accept the Privacy Policy | I accept the Licens
+   1   texts: Not loading? | Loading… | Enter your password to log in | Password | Seed Phrase | Please accept Terms of Service, Privacy Policy, and License to continue. | I accept the Terms of Servic
+   2 > click Private Key
+   3 > click Seed Phrase
+   2 > privkey
+   3 > seed
+   2 privkey: typed into 1 text field
+   3 seed: typed 12 words into 12 text fields
+[90m7:43PM[0m [32mINF[0m [1mno leaks found[0m
+[90m7:43PM[0m [32mINF[0m [1mno leaks found[0m
+## intear-setup.mjs delta since b6d6f41 + console calls
+--- a/scripts/demo/intear-setup.mjs
++++ b/scripts/demo/intear-setup.mjs
+-  for (let i = 0; i < WORDS.length; i++) { await fields.nth(i).click(); await p.keyboard.type(WORDS[i], { delay: 25 }); }
++  // Slow enough that Intear's per-field autocomplete never drops or replaces a keystroke ("Invalid seed phrase" at 25 ms on one phrase).
++  for (let i = 0; i < WORDS.length; i++) { await fields.nth(i).click(); await fields.nth(i).fill(''); await p.keyboard.type(WORDS[i], { delay: 70 }); await p.waitForTimeout(200); }
++    else if (cmd === 'waitbtn') { const [name, ms] = arg.split('|'); await page.getByRole('button', { name }).first().waitFor({ timeout: Number(ms || 60000) }); await page.getByRole('button', { name 
++    else if (cmd === 'privkey') {
++      // Intear "Private Key" import: the one plain text field (never the unlock password box). The key is redacted from all output.
++      const f = page.locator('input[type=text]:visible');
++      if ((await f.count()) !== 1) throw new Error(`privkey: expected 1 text field, found ${await f.count()}`);
++      await f.first().click(); await page.keyboard.type(String(KEY.private_key), { delay: 15 }); out('privkey: typed into 1 text field'); await settle(page, 800);
++    }
+-    else if (cmd === 'wait') { await page.waitForTimeout(Number(arg)); }
++    else if (cmd === 'wait') { if (page.isClosed()) { page = ctx.pages()[0]; out('[popup closed] back to page 0'); } await page.waitForTimeout(Number(arg)).catch(async () => { page = ctx.pages()[0]; 
++    else if (cmd === 'seltext') { out(`  text ${arg}: ${(await page.locator(arg).first().innerText({ timeout: 10_000 })).replace(/\s+/g, ' ').slice(0, 160)}`); }
++    else if (cmd === 'fillsel') { const [sel, val] = arg.split('|'); await page.locator(sel).first().fill(val, { timeout: 10_000 }); await settle(page, 800); }
++    else if (cmd === 'enabled') { const b = page.getByRole('button', { name: arg }).first(); out(`  button "${arg}": ${(await b.isEnabled({ timeout: 10_000 })) ? 'enabled' : 'disabled'}`); }
+35:const out = (...a) => console.log(redact(a.join(' ')));
+## qa-account-create log (public data only?)
+├  Unsigned transaction:
+│    signer_id:    nectar.testnet
+│    receiver_id:  qa-faucet-1113b.nectar.testnet
+│    actions:
+│       -- create account:      qa-faucet-1113b.nectar.testnet
+│       -- transfer deposit:    0.2 NEAR
+│       -- add access key:     
+│                       public key:   ed25519:9xRr82JTydCAmZybpEQLqhqxDroT6XV61zsCmtTucwfq
+│                       nonce:        0
+│                       permission:   FullAccess
+│     [0m
+├  Your transaction was signed successfully.
+│    Public key: ed25519:2dSBVZTdHEAFKGqvyZFphkSrSX2gKsWCGMNukVBzJnR4
+│    Signature:  ed25519:5osoiTKWRixZELkTRvFdTjGA7wvdFvPJbALYE3HBh5ZqShBLrELwrv1traQiJRyroV5uPJKFK3nbrdzzsTM131WX
+│     [0m
+├  Transaction Execution Info:
+│    Gas used: 8.6 Tgas
+│    Transaction fee: 0.0071149895375 NEAR
+│    Transaction ID: 4qkNZjs1MqVraDnC9ffGgU9VsrzFATVZrdFamGSuKP98
+│    To see the transaction in the transaction explorer, please open this url in your browser:
+│    https://explorer.testnet.near.org/transactions/4qkNZjs1MqVraDnC9ffGgU9VsrzFATVZrdFamGSuKP98
+│     [0m
+
+
+New account <qa-faucet-1113b.nectar.testnet> has been successfully created.
+<nectar.testnet> has transferred 0.2 NEAR to <qa-faucet-1113b.nectar.testnet> successfully.
+Added access key = ed25519:9xRr82JTydCAmZybpEQLqhqxDroT6XV61zsCmtTucwfq to qa-faucet-1113b.nectar.testnet.
+
+
+
+
+Here is your console command if you need to script it or re-run:
+    [33mnear account create-account fund-myself qa-faucet-1113b.nectar.testnet '0.2 NEAR' use-manually-provided-public-key ed25519:9xRr82JTydCAmZybpEQLqhqxDroT6XV61zsCmtTucwfq sign-as nectar.testnet 
+
+## HUMAN_HANDOFF entries + status column
+37
+14:## H-TOOLCHAIN — pinned P0 toolchain status: DONE 2026-11-10 (Kunal asked; installed by Claude Code)
+17:## H-TOOLCHAIN-SOLANA — Solana CLI + Anchor 0.32.1 status: DONE 2026-11-10 (Kunal asked; installed by Claude Code: anchor-cli 0.32.1 via avm, activ
+24:## H-EXPLORER — open the three testnet explorer links once status: OPEN needed by: G9 (non-blocking for G2/G3)
+32:## H-ORACLE — keep the owner price fresh status: DONE 2026-11-13 (schedule A running on Railway; first refresh 11:28Z) needed by: judging 16–18 Nov
+62:## H13 — Pyth API key (for a live NVDA price, G5) status: OPEN needed by: P1 / G5 (2026-11-13 12:00 UTC)
+72:## H-NEAR-FAUCET — top up nectar.testnet with testnet NEAR status: DONE 2026-11-10 (Kunal replied `H-NEAR-FAUCET done`; nectar-core-v2 deployed aft
+87:## H4 — analytics vendor status: OPEN needed by: WO-4 (any time before Nov 14)
+94:## H5 — domains and hosting status: SUPERSEDED 2026-11-12 by H-HOST + H-DOMAIN (+ H-DNS), D-030; history below needed by: G3 (previews fine without
+100:## H-DOMAIN — a domain for the hosted demo status: CLOSED 2026-11-12 (nectarlabs.io)
+124:## H-DNS — DNS records for the chosen domain status: CLOSED 2026-11-12 (Vercel DNS; no records needed) needed by: production on a custom domain
+134:## H-LEGAL — operator, country, contact, X handle status: CLOSED 2026-11-12
+150:## H-DEPLOY — approve production deploys status: DONE 2026-11-13 (Kunal typed approval; release 4 = c95cd0c deployed ~02:00Z) needed by: the relea
+163:## H-DEMO-WALLET — import demo.nectar.testnet into a wallet status: DONE 2026-11-13 (orchestrator, under Kunal's conditions) needed by: the demo r
+177:## H-KEYS — keeper testnet signing key as a Railway secret status: OPEN (treated as not confirmed) needed by: hosted keeper only
+191:## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed status: DONE 2026-11-13 (Kunal supplied the key; FEED_INDEXER=neardata since 02:22
+208:## H-FEED-EVENTS — let the hosted Feed index nectar-core-v2 events status: DONE 2026-11-13 (Kunal: "fix"; WO-71 merged 37dfec9, redeployed 12:10Z)
+228:## H-HOST — approve the Vercel connector's team access status: CLOSED 2026-11-12
+252:## H7 — NEAR AI Cloud API key status: OPEN needed by: P2 / G8 (live test only)
+266:## H8 — 1Click API key (optional) status: OPEN needed by: WO-11 (optional)
+271:## H9 — legal identity and contact status: CLOSED 2026-11-12
+280:## H10 — team and second-project check status: OPEN needed by: SUBMISSION.md
+284:## H11 — demo video voice-over status: OPEN needed by: Nov 14
+289:## H12 — prior-work disclosure wording status: OPEN needed by: README before H2
+293:## H2 — repo public, push, final tag status: PUSH DONE, tags pending needed by: Nov 14 NEVER by an agent
+303:## H1 — send the submission status: OPEN needed by: Nov 14 23:59 UTC NEVER by an agent
+307:## H3 — X post status: OPEN needed by: before H1 NEVER by an agent
+312:## H14 — payout account, contact consent status: OPEN needed by: H1 NEVER by an agent
+318:## H6 — mainnet (post-hackathon) status: not in scope
+324:## H-GUARD-V7 — install the v7 guard rules + evm agent status: OPEN (Kunal-only; no product claim depends on it: Base runs on the local fork, D-02
+331:## H15 — Base Sepolia ETH for the deployer status: OPEN (optional since D-026) needed by: real-Base-Sepolia G12/G13 only
+339:## H16 — final track list status: CLOSED 2026-11-12 (`nfts` NOT added; tracks stay `defi`, `security`, `agents`) needed by: submission
+344:## H17 — consumer line status: CLOSED 2026-11-12 ("fire-sales") needed by: landing copy
+347:## H18 — thesis notebook status: OPEN
+350:## H19 — Base builder code (addendum H13) status: OPEN needed by: G13 (optional)
+354:## H20 — market.near.ai task (addendum H14, optional) status: OPEN
+358:## H-NEAR-FAUCET — v7 update (2026-11-10 11:30Z) status: DONE 2026-11-10 (see the entry above; v2 deployed)
+363:## H-SOL-AIRDROP — devnet SOL for the vault deploy status: DONE 2026-11-10 ~18:10Z (deployer showed 5 SOL at the end of the CLI retry loop; source
+## README TODO-H
+158:## Prior work (disclosure, Q-002 / Q-005): draft, approve TODO-H12
+169:Kunal Drall (Nectar Network). Team list pending confirmation (TODO-H10).
