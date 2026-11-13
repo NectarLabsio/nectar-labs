@@ -59,6 +59,9 @@
   Hosted Feed redeployed 12:10Z (d2861e5f, src 37dfec9, fresh DB c, start 277503800): neardata_events 277503800–277503899 = 1 (the 11:28Z oracle_updated)
   at 12:11:32Z; indexer lag 4151 → 0 by 12:27Z. Paid download 12:28Z: 402 → 200, 112 rows, tx 8bXCY34S…. WO-72 docs merged d92a199. G9 run 7
   (WO-73) dispatched on d92a199 → then submission-rc. WO-35c take script running.
+- 12:41Z FROZEN: G9 run 7 PASS on d92a199 (45579cd; merge e2d9ee4), verify:quick 0; submission-rc (local) → e2d9ee4. WO-35c take script merged 7ada907
+  (dry-run, nothing signed; explorer = testnet.near.rocks because nearblocks shows automated Chrome a Cloudflare wall). Next: rehearsal headed,
+  rehearsal mode (Standard), --sign (Kunal approved signing in rehearsal): faucet claim 1/3, one Standard loan, one agent run.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -481,7 +484,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T12:29:59Z · commit 029c305
+Last activity: 2026-11-13T12:40:08Z · commit 7ada907
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
