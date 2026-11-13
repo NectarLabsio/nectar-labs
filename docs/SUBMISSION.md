@@ -1,6 +1,6 @@
 # SUBMISSION.md — payload draft, never sent by an agent
 
-Status: **DRAFT until Kunal sends, 2026-11-12** (prose matches docs/EVIDENCE.md at tag `submission-rc`; check EVIDENCE for later runs). Fields follow "Submission API" in docs/HACKATHON.md (verified 2026-11-09; re-read the published
+Status: **DRAFT until Kunal sends, 2026-11-13** (`idea` rewritten for WO-89 to match the README; every claim backed by docs/EVIDENCE.md or a tx checked on testnet RPC on 2026-11-13 ~18:30Z, see the table under the idea). Fields follow "Submission API" in docs/HACKATHON.md (verified 2026-11-09; re-read the published
 https://nearhackathon.com/HACKATHON.md on Nov 14 before sending, F-001). Only Kunal sends it (H1). Agents run the submit
 script with `--dry-run` only. The JSON payload holds personal data (name, email, payout account), so it is printed, never committed.
 
@@ -27,16 +27,27 @@ and must not add any key outside the 11 above. Demo video `TODO-H11` is not an A
 
 ### idea
 ```text
-Problem: lenders cap the LTV of tokenized stocks because DEX exit liquidity is revocable. Nectar Labs makes exit liquidity committed. Market makers escrow time-locked USDC quotes (Pappus) in a NEAR contract with 7-day notice. Borrowers get a higher limit (Cramér), B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)), and pay a limit premium that funds the buyers' commitment fees. Pre-liquidation sells collateral to the committed buyer at a bounded discount, not on a DEX.
+Problem: lenders cap loans against tokenized stocks because the DEX liquidity they would sell into can disappear, most of all when the stock market is closed. Without a buyer they can count on, they set a low limit or sell early.
 
-How NEAR fits: nectar-core-v2 (Rust, near-sdk 5.30.1, 2.2.1-v7) on NEAR testnet holds quotes, positions, the pool and an O(1) fee index. A hash-pinned OutLayer TEE program prices the settlement discount verifiably (attested; operator-set demo inputs, fills reveal their product); the contract clamps it to the quote's cap and settles at the cap if the call fails. The keeper holds a function-call key only. 1Click dry quotes add signed reference depth, never deposited. Chain Signatures: the contract builds each settlement or release message, v1.signer-prod.testnet signs it with a key derived per position, and a Solana devnet vault checks the Ed25519 signature before it pays the buyer or releases to the borrower; an OutLayer read of the vault confirms each deposit. The same flow, with secp256k1 keys, signs EIP-712 messages for an EVM vault on a local fork of Base Sepolia, not Base Sepolia. Agents pay for data with x402 on NEAR, and every quote and loan is an NEP-171 Note. The copilot shows only answers an attested NEAR AI TEE signed for the question typed (provenance, not advice; fixture-tested, no live answer yet).
+What Nectar Labs does: market makers escrow time-locked USDC buy quotes in a NEAR contract. Borrowers get a limit backed by those quotes, B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)), and pay a premium that goes to the buyers. If a loan turns unhealthy, its collateral goes to the committed buyer at a capped discount instead of a DEX.
 
-Disclosed: collateral and USDC are mock tokens; the price comes from an owner oracle (Pyth path built and tested, no live NVDA price); testnet only, no token, no mainnet. Not audited: a pre-submission review found 33 issues (5 high); highs and mediums are fixed or listed as partial or open in SECURITY.md; Solana, Base-fork and x402 runs were repeated after the fixes. Evidence: docs/EVIDENCE.md.
+NEAR's role: (1) nectar-core-v2 (Rust, near-sdk 5.30.1) escrows the quotes, takes deposits through NEP-141 ft_transfer_call and enforces each loan's limit and a shared capacity per asset. (2) Every quote and loan is an NEP-171 Note; transferring it moves the loan's rights. (3) Agents pay for data over x402 with NEP-366 signed delegate actions, and our price bot's key can call only update_owner_price. (4) A keeper with a function-call key triggers pre-liquidation; a hash-pinned OutLayer TEE program prices the discount under the quote's cap, and Chain Signatures signs each release or settlement for collateral in a Solana devnet vault, which checks the Ed25519 signature before it pays.
+
+Real vs mock: NEAR testnet and Solana devnet only. The collateral (NVDAx) and USDC are mock tokens, the market makers are our demo accounts, the price is an owner oracle, the Base leg ran on a local fork of Base Sepolia, and 1Click quotes are read-only. No token, no mainnet, not audited (SECURITY.md lists what is open).
+
+Try it: https://testnet.nectarlabs.io ("Get test assets" on /borrow). From a clone, pnpm i && pnpm demo:testnet reads the testnet contract over public RPC. Every claim links a testnet tx or a test in the README; gate logs are in docs/EVIDENCE.md.
 ```
 
 Claim → evidence (docs/EVIDENCE.md gate table as of a677689, quoted exactly; "re-run after D-027" rows are 2026-11-11T08:02Z–08:25Z, clone 3ab3026; the G14 402 → 200 and first G1 2.2.1 gas-row rows are 2026-11-11T13:52Z–14:18Z, clone 45ed1f3; the G14-on-HEAD and G1 re-check rows are 15:01Z–15:25Z, clone 48b5c5a):
 | Claim in `idea` | Gate / test |
 | --- | --- |
+| escrowed quotes back the limit; shared capacity per asset | live view `get_exit_capacity {"symbol":"NVDAx"}` at block 277547845 (2026-11-13 ~18:40Z): q $16,119.22, r $10, d 0, haircut 1000 bps, capacity $14,516.298; refusal tx 9ykovXkm… (`remote_loan_refused {reason: aggregate_limit}`, G7 re-run chain.log; RPC SuccessValue 2026-11-13) |
+| NEP-141 deposits | E2suM2LC… agent1 → nvdax-mock `ft_transfer_call` → position #15 (G14 re-run on HEAD; RPC SuccessValue 2026-11-13; `get_position 15` Open, 1 NVDAx, $10) |
+| NEP-171 Note; transfer moves the loan's rights | GcHF75nW… emits `nep171 nft_mint p-4` (RPC 2026-11-13); tests `v7_notes_self_settle_by_new_loan_owner`, `v7_notes_self_settle_old_owner_refused`, `v7_notes_residual_collateral_goes_to_loan_note_owner` (contracts/nectar-core/src/tests_notes.rs); remote release goes to the depositor (SECURITY.md "What remains" item 12) |
+| x402 with NEP-366 signed delegate actions | 8bXCY34S… (2026-11-13T12:28Z, action `Delegate`, signer x402-relayer, receiver agent1; RPC SuccessValue; orchestrator run, RPC-checked in G9 run 9) · verifier-run 4vW2tPF5… (G14) |
+| price bot's key can call only update_owner_price | AddKey tx BHopF1cu… (RPC SuccessValue 2026-11-13); `view_access_key_list nectar.testnet` 2026-11-13: FunctionCall, method_names [update_owner_price], receiver nectar-core-v2; first refresh De6aVqqN… (G9 run 9) |
+| market makers are our demo accounts | README "What is real, what is mock"; quoter inputs operator-set (G4, G7; docs-site Quoter (TEE), Honest limits) |
+| how to try | https://testnet.nectarlabs.io answered 200 on 2026-11-13 ~18:31Z; production acceptance PASS 5/5 on c9fd56b (EVIDENCE §"WO-34 production (web + docs c9fd56b, WO-85/86 brand)"); `pnpm demo:testnet` 4 s in G9 run 8 (public URL) |
 | nectar-core-v2 at 2.2.1-v7 on testnet | G2b testnet deploy v2 (after D-027) PASS: `contract_version` 2.2.1-v7, rebuilt wasm byte-identical to `view_code`, code_hash `3mv4LRm6…` (open item: the rebuild needed an SDKROOT override on the verifier's host) |
 | quotes, positions, pool, fee index | G1 PASS (2026-11-09T20:43Z) · G2 PASS (20:55Z) · G1 (v7 additions) PASS (2026-11-10T14:05Z) · G11 v7 contract (re-run after D-027) PASS (2026-11-11T08:20Z), recorded in 5083d30: 608 unit + 50 sandbox, wasm hash = deployed 2.2.1-v7 · G1 (2.2.1 gas rows) PASS (re-check 2026-11-11T15:25Z, clone 48b5c5a, recorded in a677689): 67 of 67 change methods have a GAS row, max tx-total 78.60 Tgas, wasm = deployed 3mv4LRm6…; first run FAIL (14:16Z, 2e16f9b) on `remove_extra_remote_chain`, fixed by the WO-45 test (no contract change) |
 | TEE discount, cap fallback | G4 PASS (2026-11-09T22:10Z) + G4 addendum PASS (22:51Z): runs A/C fallback, run D request 15148 = 159 bps vs 400 cap. On 2.2.1-v7: G7 re-run `quoter_result` fills quote 2 at 300 bps |
@@ -83,8 +94,6 @@ mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3).
 ## Order of human steps (HACKATHON.md: send only once the repo is public and the post is up)
 H10 + H14 (identity, payout account, consent; done 2026-11-13) → H12 (prior work; approved 2026-11-13) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →
 G9 PASS from the public URL → H1 (Kunal sends).
-G9 today: PASS on release 3 (5f011bb) from a local fresh clone (docs/EVIDENCE.md §G9 runs 5 + 5b: run 5, 2026-11-12T16:40Z–16:47Z on 5dd2a50, every step except 3, recorded in 87be719;
-run 5b, 17:02Z–17:05Z on 88b99b3, step 3, recorded in b945f42; product code equals 5f011bb in both; the repo was not public yet, so the verifier used the local path).
-Earlier: PASS on 3107a1a (run 3, 837cd12) and on 0af5cdd (89f83ee); the first run's FAIL (c5f6349) is superseded. A re-run from the public URL follows H2.
-Pre-send checklist: G9 PASS (local clone: done, runs 5 + 5b recorded in 87be719 + b945f42; public URL: after H2) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
+G9 today: run 9b PASS (2026-11-13T14:27Z–14:33Z, 0904aec; step-4 re-check that resolves run 9) and run 8 PASS from the public GitHub URL (2026-11-13T13:44Z–13:52Z, b6d6f41); docs/EVIDENCE.md §G9. The README was restructured after those runs (WO-89), so the next G9 run re-checks its claims.
+Pre-send checklist: G9 PASS on the current README (runs 8 + 9b passed on the earlier text; re-run after WO-89) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "What we set out to prove" table matches EVIDENCE and RPC · tracks re-checked against the G9 MCP result.
 matches EVIDENCE · tracks re-checked against the G9 MCP result.

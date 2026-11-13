@@ -1,25 +1,41 @@
 # X_POST.md — draft only; Kunal posts it himself (H3). Never posted by an agent.
 
-Rules (docs/HACKATHON.md "2. The demo post"): says built at NEAR HACKATHON, tags @NEARProtocol and #NEARHackathon, video (H11)
-attached to post 1. Every number below appears in docs/EVIDENCE.md (source in brackets after each post; delete the brackets before posting).
-Links: repo `TODO-H2`; production URLs SITE https://nectarlabs.io, APP https://testnet.nectarlabs.io, DOCS https://docs.nectarlabs.io, STATUS https://status.nectarlabs.io (`site.production_hosts` in packages/config/config.yaml; Vercel DNS, F-458). They must not change after the post. Post 1 URL becomes `demoUrl` in docs/SUBMISSION.md. Each post ≤ 280 characters (links count as 23).
+Rules (docs/HACKATHON.md "2. The demo post"): lead with the user problem; say it was built at NEAR HACKATHON; tag @NEARProtocol and #NEARHackathon;
+attach the video or screenshots; explain NEAR's role concretely; link the demo and the repo and ask a real question. Each post ≤ 280 characters
+(X counts every link as 23). Started from Kunal's 3-post draft (WO-89, 2026-11-13); every claim checked against docs/EVIDENCE.md or testnet RPC
+(source in brackets after each post; delete the brackets before posting). The URL of post 1 becomes `demoUrl` in docs/SUBMISSION.md: `TODO-H3`.
+Media (WO-35): post 1 = the demo video, captioned, 1280×720; post 2 = screenshot 3 (borrow with the Weekend Shield preview), post 3 = screenshot 6
+(agent terminal, 402 → 200), both as 1600×900 JPG from docs/media/screens/.
 
-## Thread (5 posts)
-1/ Lenders cap loans against tokenized stocks because DEX exit can vanish. Nectar Labs, built at NEAR HACKATHON: market makers escrow committed buy quotes on NEAR; borrowers get higher limits and pay the buyers a premium. Testnet, mock collateral. @NEARProtocol #NEARHackathon
-[video H11; README first screen]
+## Thread (3 posts)
+1/
+Stock market closed for the weekend? Lenders lose their price, so they cut your limit or sell your shares.
+Nectar: market makers escrow buy quotes on-chain, so your limit rests on committed buyers, weekend or not.
+Built at NEAR HACKATHON on testnet. @NEARProtocol #NEARHackathon
 
-2/ How it works: quotes are escrowed USDC with a notice period. If a loan gets unhealthy, a keeper with only a function-call key triggers pre-liquidation and the collateral goes to the committed buyer at a capped discount, not to a DEX.
-[G1, G2 PASS; G2b keeper-v2 one function-call key; D-010, D-012, D-019]
+[video. Changed from the draft: "so you can borrow against tokenized stocks all weekend" became "your limit rests on committed buyers, weekend or
+not". No borrow during a closed market is recorded on testnet; the closed-market rule is sandbox-tested only. Quotes stay escrowed over a
+weekend because withdrawal needs 7 days' notice (`min_notice_period_ns` 604800000000000 in `get_config`, read 2026-11-13). "On testnet": README first screen]
 
-3/ A hash-pinned OutLayer TEE program prices the discount, so the computation is verifiable. The contract accepts only that program and clamps the result. Testnet request 15148: 159 bps vs a 400 bps cap. If the call fails, it settles at the cap. Inputs: operator-set demo values.
-[G4 PASS + addendum]
+2/
+What NEAR does here:
+- one Rust contract escrows the quotes and enforces each loan's limit
+- each loan is an NFT (NEP-171): transfer it and the loan's rights move with it
+- agents pay for data over x402 with NEP-366 meta-transactions
+- our price bot's key can call one method only
 
-4/ Cross-chain: the contract builds each settlement or release message and NEAR Chain Signatures signs it with a key derived per position. A Solana devnet vault checks the Ed25519 signature before it pays the buyer or releases collateral. Price: owner oracle for now (disclosed).
-[G7 PASS, re-run after D-027; G5 FALLBACK]
+[screenshot 3. Contract: README "How NEAR is used" item 1, refusal tx 9ykovXkm… (`aggregate_limit`). NFT: tx GcHF75nW… `nft_mint p-4`; tests
+`v7_notes_self_settle_by_new_loan_owner`, `v7_notes_residual_collateral_goes_to_loan_note_owner`; "rights" rather than "the loan moves", because
+repay is permissionless and remote collateral is released to the depositor (SECURITY.md "What remains" item 12). x402: tx 8bXCY34S… action
+`Delegate` (2026-11-13), verifier run 4vW2tPF5… (EVIDENCE §G14). Key: AddKey tx BHopF1cu…; `view_access_key_list nectar.testnet` on 2026-11-13
+shows method_names [update_owner_price], receiver nectar-core-v2. All txs SuccessValue on testnet RPC, 2026-11-13 ~18:30Z]
 
-5/ Try it: https://testnet.nectarlabs.io · docs: https://docs.nectarlabs.io · code and every gate log with explorer links: TODO-H2. Feedback we want: would you lend against tokenized equities if the exit buyer were committed on-chain? What would you need to see first? @NearBuilders
-[docs/EVIDENCE.md; README "Hosted demo"]
+3/
+Try it (testnet, mock assets, no value): https://testnet.nectarlabs.io
+Code: https://github.com/NectarLabsio/nectar-labs
+Market makers: what notice period would you commit to on a weekend quote? @NEARProtocol #NEARHackathon
 
-## Standalone post
-Tokenized-stock loans are capped: exit liquidity can vanish. Nectar Labs, built at NEAR HACKATHON: committed market-maker quotes raise limits; a TEE prices settlement verifiably (159 vs 400 bps cap). Testnet, mock collateral. https://testnet.nectarlabs.io @NEARProtocol #NEARHackathon
-[G4 addendum]
+[screenshot 6. App: 200 on 2026-11-13 ~18:31Z, production acceptance PASS 5/5 (EVIDENCE §"WO-34 production (web + docs c9fd56b, WO-85/86 brand)").
+Repo: public, fresh clone from this URL PASS (EVIDENCE §G9 run 8). Mock assets: README "What is real, what is mock"]
+
+Lengths as X counts them (links = 23), 2026-11-13: post 1 = 278, post 2 = 280, post 3 = 197. Recount after any edit.
