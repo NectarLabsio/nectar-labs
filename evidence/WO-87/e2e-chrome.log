@@ -1,0 +1,7 @@
+# 2026-11-13T17:05:11Z (apps/web) PORT=3387 PW_CHANNEL=chrome npx playwright test e2e/test-assets.spec.ts e2e/claims.spec.ts
+port 3387 listeners before: 0
+chrome: Google Chrome 157.0.8103.78 
+Error: Timed out waiting 120000ms from config.webServer.
+
+# exit=1 seconds=121
+port 3387 listeners after: 0

@@ -1,0 +1,10 @@
+# 2026-11-13T17:04:10Z clone of /Volumes/T7/nectar-labs; main HEAD 345445a; checked out c9fd56b0870197dce6e3d1af85116cda6f3ca2a8
+$ git diff --stat 963ab62 c9fd56b -- apps packages
+ apps/docs-site/docusaurus.config.ts | 2 +-
+ packages/ui/src/Nav.tsx             | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+$ git diff --stat c9fd56b 345445a -- apps packages scripts
+(empty above = same product)
+$ git ls-files -s scripts/deploy/smoke-prod.sh
+100755 4fadc74b41c2a41468875465d6aa6995d975a582 0	scripts/deploy/smoke-prod.sh
+$ git status --porcelain

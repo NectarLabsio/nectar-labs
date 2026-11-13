@@ -1,0 +1,38 @@
+# 2026-11-13T17:09:30Z (apps/web @ c9fd56b) PW_CHANNEL=chrome npx playwright test e2e/claims.spec.ts e2e/test-assets.spec.ts
+3100 listeners before: 0
+chrome: Google Chrome 157.0.8103.78 
+
+Running 28 tests using 1 worker
+
+  ✓   1 [desktop] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork (581ms)
+  ✓   2 [desktop] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia (291ms)
+  ✓   3 [desktop] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% (303ms)
+  ✓   4 [desktop] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 (198ms)
+  ✓   5 [desktop] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable (318ms)
+  ✓   6 [desktop] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx (599ms)
+  ✓   7 [desktop] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) (404ms)
+  ✓   8 [desktop] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other (322ms)
+  ✓   9 [desktop] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated (331ms)
+  ✓  10 [desktop] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed (306ms)
+  ✓  11 [desktop] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent (337ms)
+  ✓  12 [desktop] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens (294ms)
+  ✓  13 [desktop] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' (1.5s)
+  ✓  14 [desktop] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected (344ms)
+  ✓  15 [phone] › e2e/claims.spec.ts:45:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › config flags: server HTML (JS off) and hydrated text say the same, and say local fork (537ms)
+  ✓  16 [phone] › e2e/claims.spec.ts:64:3 › WO-62a B1: Base settlement ran on a local fork of Base Sepolia › base flag on: heading, steps 03/04, card, chip and FAQ all say local fork of Base Sepolia (290ms)
+  ✓  17 [phone] › e2e/claims.spec.ts:78:3 › WO-62a B2/B3: deployed parameters and the Reserve as read › config = deployed fixture; chamber, code and Reserve card show the deployed values; no 85% (309ms)
+  ✓  18 [phone] › e2e/claims.spec.ts:107:3 › WO-62a B4: counters are plain text until hydration › JS off: final values as plain text, no reel nodes, no 0123456789 (194ms)
+  ✓  19 [phone] › e2e/claims.spec.ts:125:3 › WO-62a B4: counters are plain text until hydration › hydrated: reels sit in an aria-hidden wrapper; the value stays readable (296ms)
+  ✓  20 [phone] › e2e/test-assets.spec.ts:49:3 › Get test assets (mocked RPC + mock wallet) › happy path: one review with both faucet_mint calls, one wallet request, amounts and both tx (578ms)
+  ✓  21 [phone] › e2e/test-assets.spec.ts:83:3 › Get test assets (mocked RPC + mock wallet) › after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74) (418ms)
+  ✓  22 [phone] › e2e/test-assets.spec.ts:104:3 › Get test assets (mocked RPC + mock wallet) › cooldown on one token: skips it, says when, signs only the other (339ms)
+  ✓  23 [phone] › e2e/test-assets.spec.ts:118:3 › Get test assets (mocked RPC + mock wallet) › cap reached on both: no wallet request, the cap is stated (307ms)
+  ✓  24 [phone] › e2e/test-assets.spec.ts:130:3 › Get test assets (mocked RPC + mock wallet) › faucet disabled: said plainly, nothing signed (305ms)
+  ✓  25 [phone] › e2e/test-assets.spec.ts:139:3 › Get test assets (mocked RPC + mock wallet) › wallet rejects: honest error, nothing sent (340ms)
+  ✓  26 [phone] › e2e/test-assets.spec.ts:149:3 › Get test assets (mocked RPC + mock wallet) › not enough NEAR for storage and gas: gas faucet link, wallet never opens (308ms)
+  ✓  27 [phone] › e2e/test-assets.spec.ts:160:3 › Get test assets (mocked RPC + mock wallet) › no wallet: no button, 'connect a wallet first' (1.5s)
+  ✓  28 [phone] › e2e/test-assets.spec.ts:167:3 › Get test assets (mocked RPC + mock wallet) › absent on SITE routes (landing pages), even with a wallet connected (339ms)
+
+  28 passed (13.8s)
+# exit=0 seconds=14
+3100 listeners after: 0

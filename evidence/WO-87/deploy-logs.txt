@@ -1,0 +1,16 @@
+# 2026-11-13T17:06:06Z deploy logs from 345445a (git show), read only
+== evidence/WO-34/deploy-web-cli-20261113T165654Z.log (43 lines)
+9:    "id": "dpl_F8NmBUE5PzpsdYRw94QWsRX85hgH",
+13:    "readyState": "READY",
+14:    "target": "production",
+16:    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_F8NmBUE5PzpsdYRw94QWsRX85hgH",
+28:  "message": "Deployment nectar-labs-d0lnvxsrl-kunals-projects-35d3a237.vercel.app ready. Production URL: https://nectarlabs.io",
+== evidence/WO-34/deploy-docs-cli-20261113T165742Z.log (43 lines)
+9:    "id": "dpl_2gj8GAFNtCHUDHTtWYwmS55Yu2ks",
+13:    "readyState": "READY",
+14:    "target": "production",
+16:    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_2gj8GAFNtCHUDHTtWYwmS55Yu2ks",
+28:  "message": "Deployment nectar-labs-docs-9gftjmr07-kunals-projects-35d3a237.vercel.app ready. Production URL: https://docs.nectarlabs.io",
+== evidence/WO-34/prod-smoke-custom-20261113T165911Z.log (orchestrator)
+ok   no noindex https://docs.nectarlabs.io/
+production smoke: failures 0
