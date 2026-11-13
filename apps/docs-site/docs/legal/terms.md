@@ -62,4 +62,4 @@ Changes to these terms are dated at the top of this page and recorded in the [Ch
 - Operator: **Nectar Labs**, operated from the United States / India
 - Contact: [kunal@nectarnetwork.fun](mailto:kunal@nectarnetwork.fun)
 
-_Sources: SECURITY.md "What remains" and review 2 R2-10, R2-12 (2026-11-11) · README "Live on testnet" table · docs/DECISIONS.md D-026, D-030, D-031 · `packages/config/config.yaml` `site.hosted_until` · FACTS F-328._
+_Sources: SECURITY.md "What remains" and review 2 R2-10, R2-12 (2026-11-11) · README "Live on testnet" table · docs/process/decisions.md D-026, D-030, D-031 · `packages/config/config.yaml` `site.hosted_until` · FACTS F-328._

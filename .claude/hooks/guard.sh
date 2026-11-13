@@ -7,7 +7,7 @@ input="$(cat)"
 cmd="$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null || true)"
 [ -z "$cmd" ] && exit 0
 
-block() { echo "BLOCKED by .claude/hooks/guard.sh: $1. This needs Kunal (see docs/HUMAN_HANDOFF.md). Write the handoff and move on." >&2; exit 2; }
+block() { echo "BLOCKED by .claude/hooks/guard.sh: $1. This needs Kunal (see docs/process/human-handoff.md). Write the handoff and move on." >&2; exit 2; }
 
 if [ "${HUMAN_CONFIRMED:-0}" != "1" ]; then
   echo "$cmd" | grep -Eq '(^|[;&| ])git push'                               && block "git push"

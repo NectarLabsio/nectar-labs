@@ -5,7 +5,7 @@ description: One pooled committed buyer per asset that fills after every Pappus 
 ---
 # Nectar Reserve (`R_c`)
 
-<p className="verified">Verified against: spec docs/PRD.md §4.8, §6.11 · contracts/nectar-core/src/reserve.rs (WO-23b, merged 2026-11-10) · scripts/21-deploy-v2.sh (testnet parameters) · D-023, D-024 (2026-11-10) · tests listed below · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:34Z first run, `get_reserve`), §v7 module runs (2026-11-10T17:20Z, 2bf99e1) · remote settlement path re-read 2026-11-13: contracts/nectar-core/src/lib.rs:937-946, remote.rs:395, p2.rs:533</p>
+<p className="verified">Verified against: spec docs/process/prd.md §4.8, §6.11 · contracts/nectar-core/src/reserve.rs (WO-23b, merged 2026-11-10) · scripts/21-deploy-v2.sh (testnet parameters) · D-023, D-024 (2026-11-10) · tests listed below · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:34Z first run, `get_reserve`), §v7 module runs (2026-11-10T17:20Z, 2bf99e1) · remote settlement path re-read 2026-11-13: contracts/nectar-core/src/lib.rs:937-946, remote.rs:395, p2.rs:533</p>
 <p className="status">Status: deployed in `nectar-core-v2.nectar.testnet` (EVIDENCE §G2b: `get_reserve NVDAx` answers, discount 600 bps). A $10 deposit ran on testnet on 2026-11-10 and minted Reserve Note `r-NVDAx-0` (EVIDENCE §v7 module runs: `get_reserve` returns `r_usd_e6` 10000000; `r-NVDAx-0` is owned by buyer2). No settlement has reached the Reserve on testnet; the waterfall and shortfall paths are tested in the sandbox. The earlier v1 contract has no Reserve pool; its `R_c` is 0.</p>
 
 ## What it is

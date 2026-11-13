@@ -1,6 +1,6 @@
 # Demo takes (WO-35c)
 
-`take.mjs` records the five sections of the demo (docs/work/wo-35-demo-video.md, docs/DEMO_SCRIPT.md) as one continuous take each, with
+`take.mjs` records the five sections of the demo (docs/process/work/wo-35-demo-video.md, docs/DEMO_SCRIPT.md) as one continuous take each, with
 the WO-35a capture tooling (`../capture/recorder.mjs`, `human.mjs`, `gapcheck.mjs`, `terminal/server.mjs`), then writes `edit.json` for
 `../capture/compose.mjs` (WO-35b, `../capture/EDIT.md`).
 

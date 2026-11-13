@@ -2,7 +2,7 @@
 # H-GUARD-V7 (addendum v7 §2). Kunal runs this in his own shell from the repo root (the auto-mode classifier refuses to let
 # an agent edit its own guard/settings, correctly):   python3 scripts/v7-install-claude-config.py && bash scripts/test-guard-v7.sh
 # Adds the v7 guard rules (Base mainnet 8453 but not 84532, --private-key in any mode, POSTs to market.near.ai), allows
-# forge/cast/anvil/avm, sets BASE_CHAIN_ID=84532, and installs .claude/agents/evm.md from docs/work/agent-evm.md. Idempotent.
+# forge/cast/anvil/avm, sets BASE_CHAIN_ID=84532, and installs .claude/agents/evm.md from docs/process/work/agent-evm.md. Idempotent.
 # New agent files load at the next Claude Code session start.
 import json, os, shutil
 
@@ -38,5 +38,5 @@ with open(p, 'w') as f:
 print('settings.json: forge/cast/anvil/avm allowed, BASE_CHAIN_ID=84532')
 
 os.makedirs('.claude/agents', exist_ok=True)
-shutil.copy('docs/work/agent-evm.md', '.claude/agents/evm.md')
+shutil.copy('docs/process/work/agent-evm.md', '.claude/agents/evm.md')
 print('.claude/agents/evm.md installed (loads at next session start)')

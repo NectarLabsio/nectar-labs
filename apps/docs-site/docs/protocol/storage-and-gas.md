@@ -5,7 +5,7 @@ description: Storage staking, bounded iteration and gas budgets.
 ---
 # Storage and gas
 
-<p className="verified">Verified against: F-014 (2026-11-09), F-015 (2026-11-09), F-034 (2026-11-09), F-041 (2026-11-09), F-042 (2026-11-09) · spec docs/PRD.md §6.6, §6.9 · config.yaml limits · evidence/G1/gas-sandbox.csv (G1 PASS 2026-11-09T20:43Z, commit b721641) · `set_session` removed in commit c7fa925 (exports re-read 2026-11-13)</p>
+<p className="verified">Verified against: F-014 (2026-11-09), F-015 (2026-11-09), F-034 (2026-11-09), F-041 (2026-11-09), F-042 (2026-11-09) · spec docs/process/prd.md §6.6, §6.9 · config.yaml limits · evidence/G1/gas-sandbox.csv (G1 PASS 2026-11-09T20:43Z, commit b721641) · `set_session` removed in commit c7fa925 (exports re-read 2026-11-13)</p>
 <p className="status">Status: P0 gas measured in the near-workspaces sandbox at G1 (evidence/G1/gas-sandbox.csv, G1 PASS commit b721641). Testnet gas may differ slightly; P1/P2 budgets are not measured yet.</p>
 
 ## Storage

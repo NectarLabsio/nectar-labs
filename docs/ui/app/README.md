@@ -5,7 +5,7 @@ review). The `.dc.html` files are canvas artboards, not app code: port the marku
 `packages/ui`, move `nectar-app.css` into `packages/ui` as component styles, and wire every number to a view call.
 
 How to build from these files (reading the `.dc.html` format, the `/_blob/…` → repo asset map, token mapping,
-acceptance): `docs/work/wo-33-web-design-port.md`. Files here are the canvas as last saved on 2026-11-10.
+acceptance): `docs/process/work/wo-33-web-design-port.md`. Files here are the canvas as last saved on 2026-11-10.
 
 ## What changed from v1, and why
 - Type: DM Sans for UI text, DM Mono only for numbers and addresses, Syne for titles and hero numbers (v1 set

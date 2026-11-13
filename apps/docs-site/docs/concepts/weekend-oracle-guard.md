@@ -5,7 +5,7 @@ description: The contract decides on its own whether the market is in session, a
 ---
 # Weekend Oracle Guard
 
-<p className="verified">Verified against: F-342 (2026-11-10, NYSE 2026–2027 calendar), F-350 (2026-11-10) · spec docs/PRD.md §4.7 · docs/work/interface-v7.md §A2 · D-018 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:52Z, 91db9ea)</p>
+<p className="verified">Verified against: F-342 (2026-11-10, NYSE 2026–2027 calendar), F-350 (2026-11-10) · spec docs/process/prd.md §4.7 · docs/process/work/interface-v7.md §A2 · D-018 (2026-11-10) · tests listed below (evidence/wo-21/cargo-test.log, 2026-11-10) · testnet: docs/EVIDENCE.md §G2b (2026-11-10T16:52Z, 91db9ea)</p>
 <p className="status">Status: live on testnet (EVIDENCE §G2b, 2026-11-10T16:52Z). `nectar-core-v2.nectar.testnet` holds 287 NYSE session windows and answers the session check (`get_exit_capacity` returns `session_open` and a reason). A closed-window refusal is tested in the sandbox only. The OutLayer calendar job has no recorded testnet execution. The earlier v1 contract still uses the owner flag `market_session_open`.</p>
 
 ## The rule

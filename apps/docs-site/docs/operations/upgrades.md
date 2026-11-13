@@ -5,7 +5,7 @@ description: How the contract changes, now and in production.
 ---
 # Upgrades
 
-<p className="verified">Verified against: F-011 (2026-11-10), F-014 / F-176 (2026-11-09), F-017 (2026-11-10), F-027 (2026-11-10) · spec docs/PRD.md §16.5 · docs/EVIDENCE.md G4 addendum (2026-11-09T22:51Z, fea52b7) · evidence/G4/upgrade-20261109T2157Z.log, evidence/upgrades/run-20261109T2238Z.log · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
+<p className="verified">Verified against: F-011 (2026-11-10), F-014 / F-176 (2026-11-09), F-017 (2026-11-10), F-027 (2026-11-10) · spec docs/process/prd.md §16.5 · docs/EVIDENCE.md G4 addendum (2026-11-09T22:51Z, fea52b7) · evidence/G4/upgrade-20261109T2157Z.log, evidence/upgrades/run-20261109T2238Z.log · docs/EVIDENCE.md §G2b re-run after D-027 (2026-11-11, recorded in b8784c1)</p>
 <p className="status">Status on 2026-11-10: nectar-core upgraded twice in place on testnet. Current code_hash `HqZaadxyZpywceMBKnjfagdn8NAMdAC5Ucn1K1MG4THX`. PROD governance is design only.</p>
 
 ## Upgrade history (testnet)

@@ -5,7 +5,7 @@ description: Owner commands for pause, price override and keeper rotation.
 ---
 # Runbook
 
-<p className="verified">Verified against: F-018 (2026-11-10), F-019 (2026-11-10) · F-154 (2026-11-09) · docs/work/interface-p0.md (2026-11-10) · config.yaml oracle max ages · evidence/G2/keeper-key-20261109T2050Z.log · mirrors docs/RUNBOOK.md</p>
+<p className="verified">Verified against: F-018 (2026-11-10), F-019 (2026-11-10) · F-154 (2026-11-09) · docs/process/work/interface-p0.md (2026-11-10) · config.yaml oracle max ages · evidence/G2/keeper-key-20261109T2050Z.log · mirrors docs/RUNBOOK.md</p>
 <p className="status">Status: commands target the P0 interface deployed on testnet on 2026-11-09 (G2 PASS 2026-11-09T20:55Z, commit 5f27f44). P1 and P2 commands are marked as such and do not exist in the P0 build.</p>
 
 Ids from `packages/config/config.yaml`:

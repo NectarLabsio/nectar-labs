@@ -49,4 +49,4 @@ The full list is SECURITY.md "What remains (known, not fixed)", summarised on [A
 - **Shields.** A Shield sizes a limit as if the market were closed and keeps committed buyers behind it for a window. It does not prevent a settlement and is not a guarantee of any kind.
 - **Figures.** Market figures carry a date and a source. Illustrative calculations are labelled and are not projections.
 
-_Sources: SECURITY.md "What remains" items 1, 3, 4, 6, 7, 8, 10, 11, 12 (2026-11-11) · README "Live on testnet" table · docs/EVIDENCE.md §G2b, §G5 (FALLBACK), §G6, §G7, §G8 (fixture), §G13 (local fork) · docs/DECISIONS.md D-026, D-029, D-031 · FACTS C-007, C-012, C-020, F-063, F-328._
+_Sources: SECURITY.md "What remains" items 1, 3, 4, 6, 7, 8, 10, 11, 12 (2026-11-11) · README "Live on testnet" table · docs/EVIDENCE.md §G2b, §G5 (FALLBACK), §G6, §G7, §G8 (fixture), §G13 (local fork) · docs/process/decisions.md D-026, D-029, D-031 · FACTS C-007, C-012, C-020, F-063, F-328._

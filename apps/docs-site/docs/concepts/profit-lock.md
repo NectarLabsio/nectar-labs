@@ -5,7 +5,7 @@ description: Self-settlement. A healthy borrower sells just enough collateral to
 ---
 # Profit-Lock (self-settlement)
 
-<p className="verified">Verified against: spec docs/PRD.md §4.10, §4.11 · contracts/nectar-core/src/shields.rs (WO-23a, merged 2026-11-10) and src/notes.rs (WO-22) · D-016, D-023 (2026-11-10) · tests listed below · testnet: evidence/v7-modules/summary.md, evidence/v7-modules/profitlock-20261110T165420Z.log (2026-11-10)</p>
+<p className="verified">Verified against: spec docs/process/prd.md §4.10, §4.11 · contracts/nectar-core/src/shields.rs (WO-23a, merged 2026-11-10) and src/notes.rs (WO-22) · D-016, D-023 (2026-11-10) · tests listed below · testnet: evidence/v7-modules/summary.md, evidence/v7-modules/profitlock-20261110T165420Z.log (2026-11-10)</p>
 <p className="status">Status: ran on testnet on 2026-11-10 in `nectar-core-v2.nectar.testnet` (scripts/61-v7-modules-testnet.sh, evidence/v7-modules/summary.md): `self_settle` on position #0 repaid $4,500 from buyer1's opted-in quote at 250 bps, fee 50 bps, and the borrower kept the remaining units. Not yet recorded by the verifier in docs/EVIDENCE.md. It is off for an asset until the owner sets a daily cap (`max_voluntary_fill_usd_e6_per_day` is 0 by default; the run set $5,000).</p>
 
 ## What it does

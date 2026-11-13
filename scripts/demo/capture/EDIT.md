@@ -1,6 +1,6 @@
 # Demo edit + encode (WO-35b)
 
-Turns raw takes (shared take format, see `docs/work/wo-35a-demo-capture-tooling.md` and `CAPTURE.md`) into the master,
+Turns raw takes (shared take format, see `docs/process/work/wo-35a-demo-capture-tooling.md` and `CAPTURE.md`) into the master,
 the captioned master, the X copy, the SRT and the contact sheet. Node ESM, no new dependencies: sharp and Playwright
 resolve from the repo (or the main checkout when a worktree has no `node_modules`), Chrome is the system Google Chrome.
 

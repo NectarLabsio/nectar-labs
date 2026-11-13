@@ -1,8 +1,0 @@
-- [Host toolchain quirks](host_toolchain_quirks.md) — SDKROOT=MacOSX26.5.sdk needed for host linking; exFAT incremental; plain cargo check fails by design
-- [NEAR gas budgeting](near_gas_budgeting.md) — receipt exec fees charged to creator (~5 Tgas/transfer pair); weight-1 callback; 300 Tgas cap
-- [Worktree shell guard](worktree_shell_guard.md) — no heredocs/inline python/git -C in worktrees; Write a script, run it by abs path; gitleaks hook
-- [Turn budget](feedback_turn_budget.md) — orchestrator caps tool calls per WO; batch, single-Write test files, WIP-commit early
-- [Stub secp gas](stub_secp_gas.md) — k256 stub Ecdsa sign ~10 Tgas in wasm; sandbox signer gas_tgas 50 for domain-0 tests
-- [G1 gas-row labels](g1_gas_row_labels.md) — every non-private change method needs a sandbox GAS row; label = name or name( / name+
-- [Store cache](near_sdk_store_cache.md) — store maps write on Drop: flush before measuring storage_usage; mock raw keys outlive Nectar::new in a test
-- [Mock-ft test tricks](mock_ft_test_tricks.md) — json! preserve_order; 102-byte receiver wasm; storage_byte_cost const; token accounts ~10 KB headroom

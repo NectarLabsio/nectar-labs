@@ -41,3 +41,19 @@ Raw logs, JSON and screenshots behind [docs/EVIDENCE.md](../docs/EVIDENCE.md), w
 ## Module builds
 
 [wo-10b](wo-10b/), [wo-10c](wo-10c/), [wo-12](wo-12/), [wo-15](wo-15/), [wo-21](wo-21/), [wo-29a](wo-29a/): build and test logs from individual modules while they were written.
+
+## Large files (over 1 MB)
+
+No file under `evidence/` is over 5 MB. These are over 1 MB and are kept on purpose:
+
+| File | Size | Why it stays |
+| --- | --- | --- |
+| `G1/verifier-221-20261111T135216Z/cargo-test-nectar-core.log`, `G1/verifier-221b-20261111T145956Z/cargo-test-nectar-core.log`, `G11/verifier-rerun-d027-20261111T0802Z/cargo-test-nectar-core.log` | 1.8 MB each | full gate logs: every contract test name and result behind the G1 and G11 verdicts in docs/EVIDENCE.md |
+| `G3/design/home-1440-dark.png`, `G3/design/home-1440-light.png`, `G3/design/home-400-dark.png`, `G3/design/home-400-light.png`, `G3/design/console-1440-dark.png` | 1.1–3.5 MB | full-page design screenshots (both themes, desktop and phone) for the G3 design check |
+| `G3/screens/home-phone-dark.png`, `G3/screens/home-phone-light.png` | 1.9 MB each | G3 phone screenshots in both themes |
+
+Outside `evidence/`, `packages/ui/logo/source.png` (1.8 MB) is the logo master the web app and docs logos are cut from (docs/DESIGN_SYSTEM.md).
+
+Removed from the tree on 2026-11-13 (UTC), still in git history: the raw host-grep dumps `G9/run7-20261113T123302Z/host-grep.txt` (2.8 MB) and
+`WO-67/B/host-grep.txt` (1.3 MB). No README or docs/EVIDENCE.md claim links them; the filtered `host-grep-nonhistory.txt` next to each stays,
+and the full dump is re-created by the command quoted in docs/EVIDENCE.md.
