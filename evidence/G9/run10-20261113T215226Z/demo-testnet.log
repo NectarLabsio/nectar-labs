@@ -1,0 +1,27 @@
+# 2026-11-13T21:53:03Z $ pnpm demo:testnet
+
+> nectar-labs@ demo:testnet /private/tmp/g9-run10-20261113T215226Z
+> bash scripts/50-verify.sh
+
+
+== contract ==
+account  nectar-core-v2.nectar.testnet   version 2.2.1-v7
+
+== exit capacity NVDAx ==
+Q_c $16,119.22  R_c $10.00  D_c $0.00  haircut 2500 bps  session closed
+oracle $135.00 (age 2854s, fresh)  effective limit 7000 bps
+
+== pool ==
+available $40,201.00  utilised $9,799.00  treasury $82.40
+
+== quotes ==
+#0  remaining $5,000.00  max discount 400 bps  live
+#1  remaining $5,477.50  max discount 250 bps  live
+#2  remaining $259.12  max discount 300 bps  live
+#3  remaining $5,000.00  max discount 450 bps  live
+#4  remaining $382.60  max discount 300 bps  live
+
+== positions ==
+RPC read failed: list_positions: {"code":-429,"message":"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com"}
+ ELIFECYCLE  Command failed with exit code 1.
+# exit=1 seconds=2

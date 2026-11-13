@@ -1,0 +1,75 @@
+## 2026-11-13T21:52:57Z repo shape (before pnpm i)
+$ git rev-parse HEAD
+d55ba25707a61ab008ef3e766b78b1162f9a784b
+$ git status --porcelain | wc -l
+       0
+$ git rev-list --count HEAD
+843
+$ product diff: git diff --stat 54bdd32 d55ba25 -- apps packages services contracts
+(exit 0; empty above = no product change)
+$ git cat-file -t 54bdd32
+commit
+$ tracked files > 5 MB (git ls-files -z | xargs stat)
+(end >5MB list)
+$ tracked files > 1 MB
+3483927 evidence/G3/design/home-1440-light.png
+3415741 evidence/G3/design/home-1440-dark.png
+2102338 evidence/G3/design/home-400-light.png
+2027836 evidence/G3/design/home-400-dark.png
+1949482 evidence/G3/screens/home-phone-light.png
+1917078 evidence/G3/screens/home-phone-dark.png
+1808581 packages/ui/logo/source.png
+1776222 evidence/G1/verifier-221b-20261111T145956Z/cargo-test-nectar-core.log
+1775616 evidence/G1/verifier-221-20261111T135216Z/cargo-test-nectar-core.log
+1775333 evidence/G11/verifier-rerun-d027-20261111T0802Z/cargo-test-nectar-core.log
+$ git grep -l -a -E '[/]Users[/][A-Za-z]' (all tracked, incl. wasm) | wc -l
+       0
+$ git grep -l -a -E '[/]home[/][a-z]+[/]' | wc -l
+       2
+docs/EVIDENCE.md:1289:5. Copy rules, branding, hosts, secrets: **PASS** (branding.log, repo-shape.txt, checks-d.txt). `check-no-branding-all.mjs` exits 0. There are 3 copy-rule hits, all copy-rule com
+docs/EVIDENCE.md:1326:   - ~/.nectar: no tracked file lives under a `.nectar` dir, and there are 0 expanded home paths (`[/]Users[/]x` or `/home/x/`, excluding wasm). `~/.nectar` appears in 194 lines 
+evidence/G9/run9-20261113T141044Z/checks-d.txt:43:docs/EVIDENCE.md:1188:   - ~/.nectar: no tracked file lives under a `.nectar` dir, and there are 0 expanded home paths (`[/]Users[/]x` or `/home/x/`, 
+$ top-level tree: git ls-tree --name-only HEAD
+tree .claude
+blob .dockerignore
+blob .env.example
+tree .githooks
+tree .github
+blob .gitignore
+blob .gitleaks.toml
+blob .railwayignore
+blob CLAUDE.md
+blob Cargo.lock
+blob Cargo.toml
+blob LICENSE
+blob README.md
+blob SECURITY.md
+tree apps
+tree contracts
+tree docs
+tree evidence
+tree evm
+tree landing
+blob package.json
+tree packages
+blob pnpm-lock.yaml
+blob pnpm-workspace.yaml
+tree quoter
+tree scripts
+tree services
+tree solana
+$ .claude tracked files
+.claude/hooks/guard.sh
+.claude/hooks/state.sh
+.claude/settings.json
+$ tracked .env* files
+.env.example
+apps/web/.env.example
+$ tracked ._* / .DS_Store
+(end)
+$ LICENSE first 3 lines
+MIT License
+
+Copyright (c) 2026 Nectar Labs
+$ key-material grep excl. lockfile + forge-std
+(end)

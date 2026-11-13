@@ -1,0 +1,39 @@
+
+> web@0.1.0 dev /private/tmp/g9-run10-20261113T215226Z/apps/web
+> next dev -p 3100
+
+▲ Next.js 16.4.5 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://192.168.1.7:3100
+✓ Ready in 239ms
+✓ Running next.config.ts took 87ms
+- Experiments (use with caution):
+  ⨯ turbopackFileSystemCacheForBuild
+  ⨯ turbopackFileSystemCacheForDev
+
+✓ Generated AGENTS.md for AI agents. Set `agentRules: false` in next.config to disable.
+⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3100". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET / 200 in 1259ms (next.js: 1051ms, proxy.ts: 30ms, application-code: 178ms)
+ GET / 200 in 37ms (next.js: 6ms, proxy.ts: 2ms, application-code: 28ms)
+ GET /feed 200 in 159ms (next.js: 133ms, proxy.ts: 1.3ms, application-code: 25ms)
+ GET /feed/NVDAx 200 in 335ms (next.js: 312ms, proxy.ts: 1.9ms, application-code: 21ms)
+ GET /borrow 200 in 181ms (next.js: 145ms, proxy.ts: 1.9ms, application-code: 34ms)
+ GET /quote/new 200 in 136ms (next.js: 114ms, proxy.ts: 1.1ms, application-code: 20ms)
+ GET /console 200 in 142ms (next.js: 118ms, proxy.ts: 0.9ms, application-code: 23ms)
+ GET /notes 200 in 123ms (next.js: 104ms, proxy.ts: 1.3ms, application-code: 18ms)
+ GET /reserve 200 in 111ms (next.js: 91ms, proxy.ts: 1.6ms, application-code: 19ms)
+ GET /shield 200 in 134ms (next.js: 113ms, proxy.ts: 1.1ms, application-code: 20ms)
+ GET /agents 200 in 116ms (next.js: 97ms, proxy.ts: 1.0ms, application-code: 18ms)
+ GET /keepers 200 in 108ms (next.js: 93ms, proxy.ts: 0.8ms, application-code: 14ms)
+ GET /security 200 in 141ms (next.js: 101ms, proxy.ts: 1.0ms, application-code: 39ms)
+ GET /talk 200 in 106ms (next.js: 91ms, proxy.ts: 0.9ms, application-code: 14ms)
+ GET /docs 200 in 105ms (next.js: 89ms, proxy.ts: 0.9ms, application-code: 15ms)
+ GET /legal/privacy 200 in 335ms (next.js: 107ms, proxy.ts: 0.8ms, generate-params: 206ms, application-code: 21ms)
+ GET /legal/cookies 200 in 27ms (next.js: 9ms, proxy.ts: 2.0ms, generate-params: 1.3ms, application-code: 16ms)
+ GET /legal/terms 200 in 23ms (next.js: 1.7ms, proxy.ts: 0.9ms, generate-params: 0.0ms, application-code: 20ms)
+ GET /legal/disclaimers 200 in 18ms (next.js: 1.7ms, proxy.ts: 1.0ms, generate-params: 0.0ms, application-code: 15ms)
+ GET /position/22 200 in 345ms (next.js: 323ms, proxy.ts: 0.9ms, application-code: 21ms)
+ GET /quote/0 200 in 305ms (next.js: 289ms, proxy.ts: 1.0ms, application-code: 15ms)
+ GET /note/q-0 200 in 315ms (next.js: 296ms, proxy.ts: 0.9ms, application-code: 18ms)
+ GET /borrow 200 in 30ms (next.js: 8ms, proxy.ts: 8ms, application-code: 14ms)
+[?25h

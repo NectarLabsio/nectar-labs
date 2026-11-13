@@ -1,0 +1,8 @@
+files scanned: 245
+relative link targets checked: 78
+broken relative links: 2
+  BROKEN docs/EVIDENCE.md:520 …
+  BROKEN docs/FACTS.md:223 /docs/domains/working-with-domains/add-a-domain
+anchor fragments not found (informational): 1
+  ANCHOR docs/FACTS.md:251 #external-faucet
+exit=1
