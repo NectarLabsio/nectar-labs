@@ -1,4 +1,4 @@
-# WO-95a — repo cleanup: top level, docs/process, removals, LICENSE (docs agent; WO-92 step 2 §2a–d, §2f, §2h). Base: main after WO-94 + WO-95b.
+# WO-95a — repo cleanup: top level, docs/process, removals, LICENSE (docs agent; WO-92 step 2 §2a–d, §2f, §2h). Base: main (WO-94 merged). WO-95b (scripts/, .github/) runs in parallel: in scripts/ change only path references to files you move; if a script you would edit is gone on main at merge time, the deletion wins.
 
 Write early: list every move/removal first (git ls-files), apply with `git mv` / `git rm` in a few batched commands, then fix links in one pass.
 No history rewrite. Nothing pushed. Never pnpm install. scripts/ and .github/ are done by WO-95b — do not touch them except to update a path
