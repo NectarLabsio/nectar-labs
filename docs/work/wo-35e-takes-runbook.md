@@ -11,7 +11,7 @@ and agent1.nectar.testnet during takes only. Owner mints to demo.nectar.testnet 
    still run from an owner mint (off camera) but S2 needs the real claim.
 5. Local Feed :8788 and x402 :8791 STOPPED for S1–S4 (Kunal). Machine quiet: no agents running, `uptime` load < 3.
 ## Take A (≥ 21:00Z), out ~/.nectar/demo-capture/take-a
-  CAPTURE_HEADED=1 node scripts/demo/takes/take.mjs --mode take --section 1,2,3,4 --sign --out ~/.nectar/demo-capture/take-a
+  CAPTURE_HEADED=1 node scripts/demo/takes/take.mjs --mode take --section 0,1,2,3,4 --sign --out ~/.nectar/demo-capture/take-a   (s0 = landing still)
   then restart x402 (background): X402_PORT=8791 FEED_URL=https://feed-production-2f2776c9.up.railway.app X402_RELAYER_KEY_PATH=~/.nectar/keys/x402-relayer.json pnpm -s --filter x402 start
   check unpaid export.csv → 402; then
   CAPTURE_HEADED=1 node scripts/demo/takes/take.mjs --mode take --section 5 --sign --out ~/.nectar/demo-capture/take-a

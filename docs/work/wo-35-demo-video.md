@@ -77,3 +77,12 @@ Limits: nothing posted, uploaded or sent. Videos > 50 MB out of git; tell Kunal 
 - Faucet: 1 claim/h, 3 per account → rehearsal + take 1 + take 2 for demo.nectar.testnet. After the close the price may be up to 6 h old (closed threshold):
   one-shot owner refresh right before each take so no stale badge shows.
 - Kunal 2026-11-13 ~15:20Z: "accept transitions" (window/panel opening and explorer-tab loads, 166–267 ms, no motion on screen; post-drawn cursor stays smooth).
+
+## Screenshots (Kunal 2026-11-13 ~17:00Z) — from take A's raw 2× capture, no separate capture
+Six stills, 1920×1080 PNG (lanczos from the 3840×2160 raw frame), each ≤ 400 KB, in docs/media/screens/: 1 landing hero (take A pre-roll s0, not in the edit),
+2 market (exit capacity + buy-side ladder), 3 borrow with the Weekend Shield preview (limit, fees, health), 4 position (health gauge + simulator), 5 explorer with the
+confirmed tx, 6 agent terminal 402 → 200. 1600×900 JPG copies of 3 and 6 for X thread posts 2 and 3. No cursor (raw frames have none: CURSOR_POST), no cookie banner,
+no personal data, nothing edited. Alt text for each; timestamps (take, section, ms) in shotlist.md. README after the takes: shot 3 under the one-line summary; shots 2,
+4, 6 in the 60-second path table (covered by Saturday's G9 step 3). Video for X: the captioned 1280×720 copy; the 1080p master for the repo and docs.
+take.mjs (orchestrator 17:05Z): `--section 0,1,2,3,4` records s0; S2 is skipped only when faucet_status.can_claim is false (the old ≥ 5 NVDAx rule would have
+skipped S2 because demo.nectar.testnet holds 5 NVDAx from rehearsal 1).

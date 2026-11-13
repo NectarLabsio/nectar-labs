@@ -52,7 +52,7 @@ const MODE = opt('--mode');
 const SIGN = flag('--sign');
 const SECTION = opt('--section', 'all');
 // Comma lists (orchestrator, 2026-11-13): `--section 1,2,3,4` runs S1–S4 in one browser (local x402 stays stopped), then `--section 5` after its restart.
-if (!['rehearsal', 'take'].includes(MODE) || !(SECTION === 'all' || /^[1-5](,[1-5])*$/.test(SECTION))) {
+if (!['rehearsal', 'take'].includes(MODE) || !(SECTION === 'all' || /^[0-5](,[0-5])*$/.test(SECTION))) {
   console.error('usage: node scripts/demo/takes/take.mjs --mode rehearsal|take [--section 1..5|1,2,3,4|all] [--sign] [--out dir]');
   process.exit(2);
 }
@@ -301,7 +301,15 @@ const CAPTIONS = {
   4: 'On-chain on NEAR testnet.',
   5: 'A separate agent account borrows on its own: agent1.nectar.testnet.',
 };
-const TITLES = { 1: 'Market', 2: 'Test assets', 3: 'Borrow', 4: 'Position', 5: 'Agent' };
+const TITLES = { 0: 'Landing (still only)', 1: 'Market', 2: 'Test assets', 3: 'Borrow', 4: 'Position', 5: 'Agent' };
+CAPTIONS[0] = ''; // s0 = landing pre-roll for screenshot 1 (Kunal 2026-11-13); writeEdit() only takes s1–s5, so it never enters the video.
+
+/** s0: the landing hero at https://nectarlabs.io, held still for a clean raw frame (no cursor: CURSOR_POST draws it only in the edit). */
+async function s0() {
+  const hero = page.locator('h1').first();
+  await ensureAt('https://nectarlabs.io/', hero);
+  return async () => { await h.settle(page, 'landing painted'); await h.hold(2500, 'landing hero (screenshot 1)'); };
+}
 
 async function s1() {
   const link = page.locator('a[href$="/feed/NVDAx"]');
@@ -607,15 +615,17 @@ function writeEdit() {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------- main
-const RUN = { 1: s1, 2: s2, 3: s3, 4: s4, 5: s5 };
+const RUN = { 0: s0, 1: s1, 2: s2, 3: s3, 4: s4, 5: s5 };
 
 async function runSection(n) {
   cur = { section: n, title: TITLES[n], selectors: {}, notes: [] };
   state.results.push(cur);
   log(`— s${n} ${TITLES[n]}`);
   if (n === 2 && SIGN) {
-    const bal = BigInt(await view(NVDAX, 'ft_balance_of', { account_id: ACCOUNT }));
-    if (bal >= 5_000_000n) { cur.skipped = `already funded (${bal / 1_000_000n} mock NVDAx): section 2 skipped (WO-35)`; log(`  ${cur.skipped}`); return; }
+    // The faucet button exists, so S2 is skipped only when the faucet genuinely cannot claim (cooldown / cap), not because the account holds NVDAx
+    // (orchestrator 2026-11-13: demo.nectar.testnet keeps 5 NVDAx from rehearsal 1, and the old balance rule would have dropped S2 from take A).
+    const st = await view(NVDAX, 'faucet_status', { account_id: ACCOUNT });
+    if (st && st.can_claim === false) { cur.skipped = `faucet cannot claim now (next ${st.next_claim_at_ns}): section 2 skipped (WO-35)`; log(`  ${cur.skipped}`); return; }
   }
   const body = await RUN[n](); // off-camera preparation; returns the on-camera part
   const dir = join(OUT, `s${n}`);
