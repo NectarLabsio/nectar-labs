@@ -110,6 +110,9 @@
 - ~17:55Z T7 survey (exFAT, 128 KiB clusters; 3.1 M ._ files = 381 GiB; 112 worktrees = 767 GiB). Kunal approved A1 + A2: A2 done (main target, solana/target,
   quoter/target, apps/web/.next deleted, 52 GiB free); A1 running in background (git worktree remove -f -f, branches kept, cutoff 20:25Z, resume after the takes
   if unfinished; nothing deletes during capture). A3 (._ files) skipped; Kunal empties T7 Trash himself. Until after judging: no worktree gets its own node_modules.
+- 18:36Z Kunal full brief: Part A = WO-89 (README/idea/X thread, docs only, by 20:30Z; running agent redirected); Part B = WO-90 repo cleanup 03:00–08:00Z
+  (after takes; no history rewrite; product dirs untouched except junk); Part C = WO-91 link check + clean status + G9 + product diff vs c9fd56b, then tag.
+  T7 A1 cleanup: 492 GiB free at 18:36Z (some worktrees "Directory not empty" → second pass after the takes).
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -532,7 +535,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T17:48:13Z · commit 63090fb
+Last activity: 2026-11-13T18:27:54Z · commit d2af1ce
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
