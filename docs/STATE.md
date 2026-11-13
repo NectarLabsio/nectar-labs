@@ -1,4 +1,19 @@
-## NOW (2026-11-13 ~02:05Z) — release 4 (c95cd0c) in production; oracle refresher still staged
+## NOW (2026-11-13 ~20:25Z) — quick-take video delivered; WO-92 step 1 merged; after-close takes next (21:00Z)
+- Production unchanged: web + docs c9fd56b (web dpl_F8NmBUE5…, docs dpl_2gj8GAFN…), Feed 37dfec9 (Railway d2861e5f), refresher 7833aa3.
+- Quick take (market hours, Standard): /Volumes/T7/nectar-demo-media/demo/quick/ — 111.634 s; captions-720p (X) + 1080p master sent to Kunal
+  20:10Z; edit source edit-final.json (take runs overwrite edit.json). Retake 3 removed the copilot "Key missing" notice; still 03 re-cut (971cd60).
+  Open for Kunal: transition frame ~1:13–1:18 shows the footer + "Position opened" toast (trim = re-export only).
+- WO-92 step 1 merged 3513c7c (d2f4e71 + 3bf4b40): README a–k, docs/README.md, evidence/README.md, idea 1933/2000, X posts 278/280/197.
+  Premium split verified: get_config fee_split 7000/2000/1000 (block 277558471, 20:21Z) + lib.rs:807-817 (buyers' share Q_c:R_c with Reserve).
+  verify:quick exit 0 (evidence/merges/wo92s1-*.log).
+- Asked Kunal (step 2 decisions): (1) docs/FACTS-nectar-labs.md is committed and holds DefiLlama economics/thesis text — remove from tree,
+  or from history (force-push = Kunal only); (2) add MIT LICENSE file (README already says MIT © 2026 Nectar Labs); (3) borrow drawer copy
+  "The explorer link is in the notification" is false with Intear — fix in the Part B web deploy only if Kunal says yes.
+- Next: 20:50Z preflight per docs/work/wo-35e-takes-runbook.md; no builds/tests/deploys/deletes from 20:50Z until the takes finish.
+  Step 2 (cleanup, copilot neutral copy, docs-site method names, one web + one docs deploy) after the takes; step 3 before the 10:00Z tag move.
+  Leftover worktrees (incl. agent-a826538a…) removed after the takes with `git worktree remove -f -f`.
+
+## (2026-11-13 ~02:05Z) — release 4 (c95cd0c) in production; oracle refresher still staged
 - Kunal typed "approved: deploy c95cd0c web and docs to Vercel production" and "approved: Railway accept-deploy for oracle-refresher and Feed CORS".
 - Vercel production from c95cd0cf9d3f… (tarball sha256 0a8aa20f…, `artifact.sh verify` ok): web dpl_Bm1uwQcXjHaUHWqizUzUiyq79vWm READY ~01:58Z on
   nectarlabs.io, www., status., testnet. + 4 vercel.app aliases. Docs dpl_BmZ2YgyDESeZQSQaZMaGUYNwe7du READY but served WITHOUT apps/docs-site/vercel.json
@@ -538,7 +553,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T18:37:18Z · commit 5edbd89
+Last activity: 2026-11-13T20:23:17Z · commit 3513c7c
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
