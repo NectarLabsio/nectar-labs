@@ -1,4 +1,4 @@
-- [SUBMISSION idea budget](project_submission_idea_budget.md) — idea block 1843/2000 chars after WO-92 (2026-11-13); measure after every edit
+- [SUBMISSION idea budget](project_submission_idea_budget.md) — idea block 1933/2000 chars after WO-92 follow-up (2026-11-13); measure after every edit
 - [Write early](feedback_write_early.md) — coordinator stopped WO-92 at 71 calls with 0 edits: draft the file first, verify in one batched script
 - [README: no internal ids](feedback_readme_no_gate_ids.md) — no G#/WO-/H-/F-/§ in README; tx-link/test evidence; banned words; RPC-check txs
 - [Bulk edits + pending records](feedback_bulk_edits_and_pending_records.md) — scratchpad python edits; plain git only; cite EVIDENCE "recorded in <commit>"; grep e2e.log per test before saying "skipped"
