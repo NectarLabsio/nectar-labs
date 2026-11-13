@@ -1,0 +1,9 @@
+# 2026-11-13T17:08:09Z (apps/web) LH_BASE_URL=https://docs.nectarlabs.io LH_ROUTES=/,/?docusaurus-theme=light node scripts/lighthouse.mjs
+
+| route | dark | light |
+| --- | --- | --- |
+| / | 100 | 100 |
+| /?docusaurus-theme=light | 97 | 97 |
+
+reports: /private/tmp/verify-wo87-20261113T170125Z/repo/evidence/G3/lighthouse
+exit=0

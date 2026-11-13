@@ -1,0 +1,8 @@
+site https://nectarlabs.io/                               home-dark.json                       a11y 100 failing-binary [] screenshot-brightness n/a at 2026-11-13T17:07:31.712Z
+site https://nectarlabs.io/                               home-light.json                      a11y 100 failing-binary [] screenshot-brightness n/a at 2026-11-13T17:07:39.360Z
+app  https://testnet.nectarlabs.io/borrow                 borrow-dark.json                     a11y 100 failing-binary [] screenshot-brightness n/a at 2026-11-13T17:07:50.964Z
+app  https://testnet.nectarlabs.io/borrow                 borrow-light.json                    a11y 100 failing-binary [] screenshot-brightness n/a at 2026-11-13T17:07:59.045Z
+docs https://docs.nectarlabs.io/?docusaurus-theme=light   ?docusaurus-theme=light-dark.json    a11y 97 failing-binary [color-contrast] screenshot-brightness n/a at 2026-11-13T17:08:17.228Z
+docs https://docs.nectarlabs.io/?docusaurus-theme=light   ?docusaurus-theme=light-light.json   a11y 97 failing-binary [color-contrast] screenshot-brightness n/a at 2026-11-13T17:08:28.650Z
+docs https://docs.nectarlabs.io/                          home-dark.json                       a11y 100 failing-binary [] screenshot-brightness n/a at 2026-11-13T17:08:11.201Z
+docs https://docs.nectarlabs.io/                          home-light.json                      a11y 100 failing-binary [] screenshot-brightness n/a at 2026-11-13T17:08:23.129Z

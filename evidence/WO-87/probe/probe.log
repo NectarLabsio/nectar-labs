@@ -16,3 +16,6 @@ theme: https://nectarlabs.io/ prefers=light → data-theme null, body bg rgb(249
 theme: https://testnet.nectarlabs.io/borrow prefers=dark → data-theme null, body bg rgb(13, 15, 18)
 theme: https://testnet.nectarlabs.io/borrow prefers=light → data-theme null, body bg rgb(249, 250, 251)
 theme: https://docs.nectarlabs.io/ prefers=light → data-theme dark, body bg rgba(0, 0, 0, 0)
+theme: https://docs.nectarlabs.io/?docusaurus-theme=light prefers=dark → data-theme light, body bg rgba(0, 0, 0, 0)
+pages failing a criterion (footer / old brand / errors on the 4 error pages): 0
+exit=0

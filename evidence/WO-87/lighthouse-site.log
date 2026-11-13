@@ -1,0 +1,8 @@
+# 2026-11-13T17:07:29Z (apps/web) LH_BASE_URL=https://nectarlabs.io LH_ROUTES=/ node scripts/lighthouse.mjs
+
+| route | dark | light |
+| --- | --- | --- |
+| / | 100 | 100 |
+
+reports: /private/tmp/verify-wo87-20261113T170125Z/repo/evidence/G3/lighthouse
+exit=0
