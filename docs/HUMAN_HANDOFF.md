@@ -29,20 +29,15 @@ What Kunal does (1 min): open in a browser and confirm each shows a contract wit
 What Claude Code does then: marks the links human-verified in EVIDENCE §G2.
 Default if silent: RPC evidence (view_account code_hash = G1 wasm) stands; README links stay; G9 notes "explorer pages not machine-verified".
 
-## H-ORACLE — keep the owner price fresh                status: WAITING (option A on Railway chosen 2026-11-12; staged, Kunal applies)   needed by: judging 16–18 Nov (next stale ≈ 2026-11-13 15:10Z)
-Current (2026-11-12): Kunal chose option A on Railway. The orchestrator STAGED the service `oracle-refresher` in Railway project nectar-labs
-  (environment production: volume `oracle-data` at /data, start command scripts/deploy/railway-oracle-start.cmd; docs/STATE.md). The tool approval
-  for accept-deploy was declined twice, so it is NOT running. It re-asserts the current price every 10 min inside NYSE session windows and every
-  12 h outside them, through 2026-11-18 (`ops.oracle_refresher` in packages/config/config.yaml), and generates its own key on the Railway volume.
-What Kunal does (2 min): Railway dashboard → project nectar-labs → environment production → review and apply (deploy) the staged changes. Reply
-  `H-ORACLE applied`.
-  Before applying, Kunal picks the refresher cadence (A ~60 s in NYSE hours / B 10 min / C 12 h): a borrow in an open session needs the price
-  < 120 s (max_age_ns_session, get_config), docs/work/wo-35-demo-video.md C6.
-What Claude Code does then: reads the `key_generated` public key from the service logs, adds it to nectar.testnet as a function-call key for
-  `nectar-core-v2.nectar.testnet` limited to `update_owner_price` with a 1 NEAR allowance, then watches for the first refresh tx and records it in
-  evidence/ops/.
-Default if silent: no refresher; the orchestrator sends the one-shot RUNBOOK `update_owner_price` (current price) before recording and in each
-  session (option B below). The history below is kept.
+## H-ORACLE — keep the owner price fresh                status: DONE 2026-11-13 (schedule A running on Railway; first refresh 11:28Z)   needed by: judging 16–18 Nov
+Done (2026-11-13): Kunal chose schedule A: re-assert the current price every ≥ 60 s in NYSE session windows and every ≥ 6 h outside them, through
+  2026-11-18 (`ops.oracle_refresher` in packages/config/config.yaml, commit f34260a; tick 15 s). He applied the Railway service `oracle-refresher`
+  in the dashboard (deploy 67d55980, 03:13Z); it generated its own key on the volume. At 11:27Z the orchestrator added that key to nectar.testnet as
+  a function-call key: receiver `nectar-core-v2.nectar.testnet`, method `update_owner_price` only, allowance 5 NEAR (tx
+  BHopF1cuKAMDFoCnKyNZPPKR3qVPgs5dYiKxx6jwWpao; evidence/ops/refresher-add-key-20261113T112742Z.log). First refresh 11:28:05Z, tx
+  De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (same price 135000000; docs/STATE.md).
+What Claude Code does now: checks `oracle_age_s` with `pnpm demo:testnet` each session. If the refresher stops or the allowance runs out, it sends
+  the RUNBOOK one-shot `update_owner_price` with the current price and records the tx in evidence/ops/. The history below is kept.
 Why a human: the owner (fallback) oracle goes stale 86,400 s after each refresh (`max_age_s_closed` in packages/config/config.yaml); then borrows
   and `trigger_preliquidation` fail with `oracle stale` (RUNBOOK standing duty 1). On 2026-11-12 it was about 31 h stale (age 112,379 s) and was
   refreshed at ~15:12Z with the same price 135000000 (tx 3E92xm8KDQcVC2FZh4MRn4dkBvZ1uS3H7eCvCubXM8rH, evidence/ops/owner-price-refresh-20261112T151114Z.log).
@@ -165,7 +160,12 @@ What Claude Code does then: deploys the G3b-passed commit to both Vercel project
   `DOCS_URL` and `LEGACY_HOSTS` in the web env, and asks the verifier for the production check on the custom hosts (EVIDENCE §"WO-34 production").
 Default if silent: production keeps the release recorded in EVIDENCE §"WO-34 production" on the custom hosts; README says what it lacks.
 
-## H-DEMO-WALLET — import demo.nectar.testnet into a wallet   status: OPEN   needed by: the demo recording (H11)
+## H-DEMO-WALLET — import demo.nectar.testnet into a wallet   status: DONE 2026-11-13 (orchestrator, under Kunal's conditions)   needed by: the demo recording (H11)
+Done (2026-11-13): under Kunal's conditions the orchestrator imported demo.nectar.testnet into the Intear web wallet in the Chrome profile
+  `~/.nectar/demo-chrome-profile` (scripts/demo/intear-setup.mjs; terms boxes ticked per Kunal, no password asked). The phrase was never printed.
+  The app at testnet.nectarlabs.io is connected through Intear "Web". On chain the account still has one full-access key (the Intear app key is
+  off-chain). Still open: test assets; the account held 0 mock NVDAx at block 277504628 (docs/FINAL_REPORT.md; DEMO_SCRIPT step 5).
+  Original request kept below.
 Why a human: the account's recovery phrase must never reach an agent, a log, the screen or the repo. It is only in
   `~/.nectar/keys/demo.nectar.testnet.json` (0600; account created 2026-11-12, tx 5NbjrugATtcyoqz5sjo9vGmAQz5EmMNkdafK5Em3bTC7).
 What Kunal does (3 min, off camera, in his own terminal):
@@ -190,11 +190,12 @@ Default if silent: the keeper stays local (it runs when the operator runs it). T
 
 ## H-NEARDATA — Neardata (FastNear) API key for the hosted Feed   status: DONE 2026-11-13 (Kunal supplied the key; FEED_INDEXER=neardata since 02:22Z)   needed by: event history on the hosted Feed
 Done: Kunal supplied the key on 2026-11-13. It sits on Railway service feed as `FEED_NEARDATA_API_KEY`, which the Feed reads
-  (services/feed/src/hosted.ts:20). The orchestrator set `FEED_INDEXER=neardata`, `FEED_START_BLOCK=head-50000` and a fresh `FEED_DB_PATH`
-  (cursor 277398512) at 02:22Z (docs/STATE.md); /health reports `source` `views+neardata`, `history` `indexed`. Events before block 277398512 are
-  not in the hosted Feed.
-  Recommended for Kunal: seal the variable in the Railway dashboard (project nectar-labs → service feed → Variables), and rotate the key at
-  dashboard.fastnear.com after judging (after 2026-11-18). It was pasted in a chat session, so treat it as exposed. Original request kept below.
+  (services/feed/src/hosted.ts:20). The orchestrator set `FEED_INDEXER=neardata` at 02:22Z; since 11:36Z the Feed uses start block 277503800,
+  `FEED_POLL_MS` 1000 and a fresh `FEED_DB_PATH` (docs/STATE.md). /health reports `source` `views+neardata`, `history` `indexed`, but
+  `events_indexed` stays 0: the Feed accepts event version 1.0.0 only and nectar-core-v2 emits 2.0.0 (docs/FINAL_REPORT.md). That is a Feed code
+  fix (H-FEED-EVENTS), not this key.
+  Key: not sealed today. It was pasted in a chat session, so treat it as exposed. Kunal will add a NEW key, sealed, in the Railway dashboard when he
+  rotates it at dashboard.fastnear.com after judging (after 2026-11-18). Original request kept below.
 Why a human: creating an account and an API key with a third party (FACTS F-448). The key goes from dashboard.fastnear.com; the exact click path is not
   verified (the dashboard answers scripts with a Cloudflare challenge, F-448). Neardata takes it as `Authorization: Bearer <key>` (F-448).
 What Kunal does (5 min): create the key at dashboard.fastnear.com, then Railway → project nectar-labs → service feed → Variables → add
@@ -203,6 +204,17 @@ What Claude Code does then: the orchestrator switches `FEED_INDEXER` from `views
   key from a file named by `FEED_NEARDATA_API_KEY_PATH` (services/feed/src/main.ts:51, F-448), not from `FEED_NEARDATA_API_KEY`; the switch therefore needs
   the env-var read (keeper agent, services/feed) or a start step that writes the variable to a `0600` file, before /health can show neardata.
 Default if silent: views mode; the Feed shows event history as unavailable (honest empty states).
+
+## H-FEED-EVENTS — let the hosted Feed index nectar-core-v2 events   status: OPEN (Kunal decides)   needed by: event history during judging (16–18 Nov)
+Why a human: it is a product code change after the freeze plus a Railway redeploy (approval). Today the Feed accepts only event version `1.0.0`
+  (services/feed/src/events.ts:7, :34; services/feed/test/feed.test.ts:54 asserts that a `2.0.0` event is rejected) while nectar-core-v2 emits
+  `2.0.0` (contracts/nectar-core/src/events.rs:8). The hosted Feed therefore indexes no event: `events_indexed` 0, `/api/settlements` empty
+  (docs/FINAL_REPORT.md, "Failed or open").
+What Kunal does (1 min): reply `H-FEED-EVENTS fix` (the keeper agent makes the Feed accept 2.0.0, checks that NECTAR_EVENTS covers the v7 events,
+  updates the test; then a Railway redeploy and an event test) or `H-FEED-EVENTS views` (keep snapshots only).
+What Claude Code does then: on fix, work order to the keeper agent (services/feed), verify, redeploy with approval, re-run the event test, and the
+  docs agent updates the README Feed rows. On views, nothing; the README and DEMO_SCRIPT already say there is no event history.
+Default if silent: snapshots only, no event history (disclosed in the README Feed rows).
 
 ## H-HOST — approve the Vercel connector's team access   status: CLOSED 2026-11-12
 Closed (2026-11-12): the deploy went through the Vercel and Railway connectors instead of CLI logins. Kunal approved the Vercel connector's team

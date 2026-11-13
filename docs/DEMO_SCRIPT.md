@@ -10,20 +10,24 @@ The 3-minute v4 script (Solana and Base remote lifecycle, keeper, copilot) is th
 ## Before recording
 1. **Time.** Record in NYSE hours, 14:30–21:00 UTC on a session day. Outside them the session is closed (`outside_hours`) whatever the price.
 2. **Fresh oracle price.** The session counts as open only while the owner price is under 15 min old (`SESSION_MAX_PRICE_AGE_NS` = 900 s,
-   contracts/nectar-core/src/lib.rs:75). The Railway refresher (H-ORACLE option A) re-asserts the price every 10 min in session, but it is
-   STAGED, not running, until Kunal applies it. If it is not running, send the RUNBOOK one-shot `update_owner_price` with the CURRENT price
-   (`oracle_price_usd_e6` from `get_exit_capacity`, never the RUNBOOK example value) within 15 min before the take. Check with
+   contracts/nectar-core/src/lib.rs:75). The Railway refresher (H-ORACLE, schedule A) RUNS since 2026-11-13 11:27Z: it re-asserts the current
+   price every ≥ 60 s in NYSE session windows (15 s tick, so the price stays about 75 s old at most) and every ≥ 6 h outside them, through
+   2026-11-18 (`ops.oracle_refresher` in packages/config/config.yaml; first refresh tx De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG). Check with
    `pnpm demo:testnet`: "session open" and an oracle age under 900 s. Otherwise the screen shows the closed-session limit (disclosed, correct).
+   If the refresher has stopped (or its 5 NEAR allowance ran out), send the RUNBOOK one-shot `update_owner_price` with the CURRENT price
+   (`oracle_price_usd_e6` from `get_exit_capacity`, never the RUNBOOK example value).
    A borrow in an open session needs more: the price under 120 s old (`max_age_ns_session` in `get_config`; default 120 s at
-   contracts/nectar-core/src/lib.rs:133, applied at :381; docs/work/wo-35-demo-video.md C6). Send the one-shot refresh less than 60 s before the
-   borrow beat; a 10-min refresher leaves borrows failing "oracle stale" most of each NYSE hour.
+   contracts/nectar-core/src/lib.rs:133, applied at :381; docs/work/wo-35-demo-video.md C6). Check the oracle age right before the borrow beat;
+   a delayed refresh (RPC failover) can push it past 120 s, so if it is over 60 s, send the one-shot refresh less than 60 s before the beat.
 3. **What production serves.** Release 4 (commit c95cd0c, deployed 2026-11-13 ~02:00Z) runs on the custom hosts; the verifier's acceptance there
    passed (docs/EVIDENCE.md §"WO-34 production (custom hosts)"). https://status.nectarlabs.io is the status page (nectarlabs.io/status redirects
    there), the docs answer at the root of https://docs.nectarlabs.io, and "Get test assets" is on testnet.nectarlabs.io/borrow. The hosted Feed
-   indexes events again since 2026-11-13 02:22Z (neardata with a FastNear key, start block 277398512; HUMAN_HANDOFF H-NEARDATA); events before
-   block 277398512 are not in it.
-4. **Wallet import of demo.nectar.testnet (off camera).** The recovery phrase exists only in `~/.nectar/keys/demo.nectar.testnet.json` (0600).
-   Kunal shows it in his own terminal, never on screen and never in a file in the repo:
+   serves snapshots from contract views but NO event history: it accepts event version 1.0.0 and nectar-core-v2 emits 2.0.0 (README Feed row;
+   docs/FINAL_REPORT.md), so settlement links and event panels stay empty on camera. Do not show them as working.
+4. **Wallet for demo.nectar.testnet (off camera). DONE 2026-11-13 (H-DEMO-WALLET):** the orchestrator imported it, under Kunal's conditions,
+   into the Intear web wallet in the Chrome profile `~/.nectar/demo-chrome-profile` (scripts/demo/intear-setup.mjs; the phrase was never printed)
+   and connected it to testnet.nectarlabs.io. Record from that profile. Only if a re-import is needed: the recovery phrase exists only in
+   `~/.nectar/keys/demo.nectar.testnet.json` (0600). Kunal shows it in his own terminal, never on screen and never in a file in the repo:
    `node -e 'console.log(require(process.env.HOME + "/.nectar/keys/demo.nectar.testnet.json").seed_phrase)'`
    He imports it into a testnet wallet from the near-connect selector (import by phrase is not tested in this repo; rehearse it), then clears the
    terminal (`clear`, and close the window). Agents never print, copy or log the phrase or the key.
