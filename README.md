@@ -79,7 +79,7 @@ current value: run `pnpm demo:testnet`. In G9 run 3 (EVIDENCE §G9, 2026-11-11T1
 
 ## Quick start (5 commands, no keys needed)
 ```
-git clone <repo-url> nectar-labs && cd nectar-labs   # repo URL TODO-H2 (private until published)
+git clone https://github.com/NectarLabsio/nectar-labs.git && cd nectar-labs
 pnpm i                       # 13 s in G9 run 3; a cold pnpm store takes longer
 pnpm demo:testnet            # read-only nectar-core views over public testnet RPC
 pnpm verify                  # lint + typecheck + unit tests, then the testnet views again
@@ -93,7 +93,7 @@ pnpm --filter feed start        # Feed REST on :8788, MCP over HTTP at http://12
 pnpm -s --filter feed mcp          # Feed MCP over stdio (read-only tools; see services/feed/README.md)
 ```
 What works today: the latest G9 run, with commit and result, is in [docs/EVIDENCE.md](docs/EVIDENCE.md) §G9. In G9 run 3 (2026-11-11, fresh clone of 3107a1a, recorded in 837cd12) commands 1–4 and the docs build exit 0
-(the repo URL in the first one is TODO-H2, so the verifier cloned the local path). Timings: `pnpm i` 13 s, `pnpm demo:testnet` 5 s, `pnpm verify` 36 s,
+(the repo was not public yet, so the verifier cloned the local path; a re-run from the public URL follows). Timings: `pnpm i` 13 s, `pnpm demo:testnet` 5 s, `pnpm verify` 36 s,
 `pnpm --filter docs-site build` 25 s; quick start about 2.3 min. Command 5 was not run in that clone (port 3100 was busy with a parallel G3b run); the web app was
 checked with `next build && next start` instead. The earlier PASS re-run (0af5cdd, recorded in 89f83ee) answered on all 21 README routes in under 2 min; the first G9 run
 (c5f6349) was FAIL for one docs-site wording issue, not for any of these commands.
