@@ -149,7 +149,7 @@ export function Footer({ columns, Link = A, brandBase = "/brand", email, giant }
           ))}
         </nav>
         <div className="fbar">
-          <span>© 2026 Nectar Network · MIT License · Unaudited testnet software</span>
+          <span>© 2026 Nectar Labs · MIT License · Unaudited testnet software</span>
           <span className="r">
             <button type="button" className="ghost" onClick={openConsent}>
               Cookie settings
