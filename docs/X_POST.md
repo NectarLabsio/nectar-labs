@@ -4,8 +4,9 @@ Rules (docs/HACKATHON.md "2. The demo post"): lead with the user problem; say it
 attach the video or screenshots; explain NEAR's role concretely; link the demo and the repo and ask a real question. Each post ≤ 280 characters
 (X counts every link as 23). Started from Kunal's 3-post draft (WO-89, 2026-11-13); every claim checked against docs/EVIDENCE.md or testnet RPC
 (source in brackets after each post; delete the brackets before posting). The URL of post 1 becomes `demoUrl` in docs/SUBMISSION.md: `TODO-H3`.
-Media (WO-35): post 1 = the demo video, captioned, 1280×720; post 2 = screenshot 3 (borrow with the Weekend Shield preview), post 3 = screenshot 6
-(agent terminal, 402 → 200), both as 1600×900 JPG from docs/media/screens/.
+Media (WO-35): post 1 = the demo video, captioned, 1280×720; post 2 = screenshot 3 (borrow preview: limit $472, fees, health 4.89; Standard protection,
+taken in session on 2026-11-13, Weekend Shield shown as unavailable), post 3 = screenshot 6 (agent terminal, 402 → 200, 168 rows, 2026-11-13T19:41Z),
+both as 1600×900 JPG copies of docs/media/screens/03-borrow-preview.png and 06-agent-402-200.png. Re-checked against the final README for WO-92.
 
 ## Thread (3 posts)
 1/
@@ -26,16 +27,16 @@ What NEAR does here:
 
 [screenshot 3. Contract: README "How NEAR is used" item 1, refusal tx 9ykovXkm… (`aggregate_limit`). NFT: tx GcHF75nW… `nft_mint p-4`; tests
 `v7_notes_self_settle_by_new_loan_owner`, `v7_notes_residual_collateral_goes_to_loan_note_owner`; "rights" rather than "the loan moves", because
-repay is permissionless and remote collateral is released to the depositor (SECURITY.md "What remains" item 12). x402: tx 8bXCY34S… action
-`Delegate` (2026-11-13), verifier run 4vW2tPF5… (EVIDENCE §G14). Key: AddKey tx BHopF1cu…; `view_access_key_list nectar.testnet` on 2026-11-13
-shows method_names [update_owner_price], receiver nectar-core-v2. All txs SuccessValue on testnet RPC, 2026-11-13 ~18:30Z]
+repay is permissionless and remote collateral is released to the depositor (SECURITY.md "What remains" item 12). x402: tx 6karZo8L… action
+`Delegate` (2026-11-13T19:41Z) and 8bXCY34S… (12:28Z), verifier run 4vW2tPF5… (EVIDENCE §G14). Key: AddKey tx BHopF1cu…; `view_access_key_list nectar.testnet` on 2026-11-13
+shows method_names [update_owner_price], receiver nectar-core-v2. All txs SuccessValue on testnet RPC, re-checked 2026-11-13T20:12Z]
 
 3/
 Try it (testnet, mock assets, no value): https://testnet.nectarlabs.io
 Code: https://github.com/NectarLabsio/nectar-labs
 Market makers: what notice period would you commit to on a weekend quote? @NEARProtocol #NEARHackathon
 
-[screenshot 6. App: 200 on 2026-11-13 ~18:31Z, production acceptance PASS 5/5 (EVIDENCE §"WO-34 production (web + docs c9fd56b, WO-85/86 brand)").
+[screenshot 6. App: 200 on 2026-11-13 ~18:31Z and 20:13Z, production acceptance PASS 5/5 (EVIDENCE §"WO-34 production (web + docs c9fd56b, WO-85/86 brand)").
 Repo: public, fresh clone from this URL PASS (EVIDENCE §G9 run 8). Mock assets: README "What is real, what is mock"]
 
 Lengths as X counts them (links = 23), 2026-11-13: post 1 = 278, post 2 = 280, post 3 = 197. Recount after any edit.
