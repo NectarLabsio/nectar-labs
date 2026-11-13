@@ -1,0 +1,4 @@
+# WO-67 A1 verifier re-run, 2026-11-13T02:05:56Z, clone b7fa381
+# cmd: scripts/deploy/smoke-prod.sh https://nectarlabs.io https://testnet.nectarlabs.io https://docs.nectarlabs.io https://status.nectarlabs.io <5 legacy pairs as full origins>
+<scratchpad>/a1.sh: line 7: scripts/deploy/smoke-prod.sh: Permission denied
+exit=126

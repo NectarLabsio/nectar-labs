@@ -1,0 +1,477 @@
+{
+  "generated": "2026-11-13T02:16:41.545Z",
+  "how": "apps/web/e2e/inventory.spec.ts (real Chrome, fresh profile per combo, hosted mode, docs via the /docs → DOCS_URL redirect)",
+  "site": "https://nectarlabs.io",
+  "app": "https://testnet.nectarlabs.io",
+  "combos": [
+    "dark/accept",
+    "light/decline",
+    "light/accept",
+    "dark/decline"
+  ],
+  "walletOpened": "NEAR CLI",
+  "cspBypassed": false,
+  "selectorHosts": [
+    "evm-on-near.dev",
+    "raw.githubusercontent.com",
+    "storage.herewallet.app",
+    "test.rpc.fastnear.com",
+    "testnet.nectarlabs.io"
+  ],
+  "wallets": [
+    {
+      "name": "Meteor Wallet",
+      "reached": "sandboxed frame loaded (1)",
+      "hosts": {
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage meteor-wallet:<random id>",
+        "localStorage meteor-wallet:met_bridge_partner::<per-session ids>",
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Intear Wallet",
+      "reached": "sandboxed frame loaded (1); shows: \"CONNECT INTEAR WALLET Choose your preferred wallet connection method 🌐 Web 📱💻 App 🧪 Web (Beta) 🔧 Self-Hosted Close\"",
+      "hosts": {
+        "wallet.intear.tech": [
+          "document@iframe",
+          "fetch"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Ledger",
+      "reached": "sandboxed frame loaded (1); shows: \"Connect Ledger Before continuing, please ensure the NEAR app is installed on your Ledger device. You may install it via Ledger Live. USB Wir\"",
+      "hosts": {},
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Nightly Wallet",
+      "reached": "sandboxed frame loaded (1); shows: \"Nightly Wallet Download Nightly Download\"",
+      "hosts": {
+        "storage.herewallet.app": [
+          "image@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "Ethereum Wallets",
+      "reached": "sandboxed frame loaded (1); opened 1 window(s); shows: \":root { --background-color: rgb(40, 40, 40); --text-color: rgb(255, 255, 255); --border-color: rgb(209, 209, 209); } * { font-family: system\"",
+      "hosts": {
+        "evm-on-near.dev": [
+          "document",
+          "fetch"
+        ]
+      },
+      "windows": [
+        {
+          "url": "https://evm-on-near.dev/",
+          "hosts": [
+            "evm-on-near.dev"
+          ]
+        }
+      ],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    },
+    {
+      "name": "NEAR CLI",
+      "reached": "sandboxed frame loaded (1); shows: \"STEP 1 OF 2 Connect with NEAR CLI Enter your NEAR account ID Next\"",
+      "hosts": {
+        "rsms.me": [
+          "font@iframe",
+          "stylesheet@iframe"
+        ]
+      },
+      "windows": [],
+      "storage": [
+        "localStorage nectar-consent",
+        "localStorage selected-wallet"
+      ],
+      "violations": []
+    }
+  ],
+  "hosts": [
+    {
+      "host": "evm-on-near.dev",
+      "types": [
+        "document",
+        "fetch"
+      ],
+      "pages": [
+        "testnet.nectarlabs.io/borrow (wallet selector + Ethereum Wallets)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet icons named in the wallet list",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "connect-src",
+        "frame-src"
+      ]
+    },
+    {
+      "host": "fonts.cdnfonts.com",
+      "types": [
+        "stylesheet@iframe"
+      ],
+      "pages": [
+        "testnet.nectarlabs.io/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's web fonts (stylesheet + font files)",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "style-src"
+      ]
+    },
+    {
+      "host": "mc.meteorwallet.app",
+      "types": [
+        "fetch@iframe"
+      ],
+      "pages": [
+        "testnet.nectarlabs.io/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's own API",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "meteorwallet.app",
+      "types": [
+        "image@iframe"
+      ],
+      "pages": [
+        "testnet.nectarlabs.io/borrow (wallet selector + Meteor Wallet)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet images",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "img-src"
+      ]
+    },
+    {
+      "host": "near-testnet.drpc.org",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369)",
+      "when": "App pages that read the contracts, only while both FastNEAR hosts refuse or fail",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "rpc.testnet.fastnear.com",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "NEAR testnet RPC fallback (@nectar/sdk TESTNET_RPC_FALLBACKS)",
+      "when": "App pages that read the contracts",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "rsms.me",
+      "types": [
+        "stylesheet@iframe",
+        "font@iframe"
+      ],
+      "pages": [
+        "testnet.nectarlabs.io/borrow (wallet selector + Meteor Wallet)",
+        "testnet.nectarlabs.io/borrow (wallet selector + NEAR CLI)"
+      ],
+      "who": "Meteor Wallet (sandboxed frame)",
+      "purpose": "Meteor Wallet's web fonts (stylesheet + font files)",
+      "when": "Only after you open Meteor Wallet in the selector",
+      "directives": [
+        "font-src",
+        "style-src"
+      ]
+    },
+    {
+      "host": "storage.herewallet.app",
+      "types": [
+        "image@iframe"
+      ],
+      "pages": [
+        "testnet.nectarlabs.io/borrow (wallet selector + Nightly Wallet)"
+      ],
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Wallet icons named in the wallet list",
+      "when": "After you press Connect wallet",
+      "directives": [
+        "img-src"
+      ]
+    },
+    {
+      "host": "test.rpc.fastnear.com",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "NEAR testnet RPC: contract views, transaction status",
+      "when": "App pages that read the contracts; wallet selector",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "testnet-rpc.intea.rs",
+      "types": [
+        "fetch"
+      ],
+      "pages": [
+        "(declared: not reached in this run, FastNEAR answered)"
+      ],
+      "who": "our code",
+      "purpose": "RPC fallback (contacted only when FastNEAR refuses): NEAR testnet contract views (@nectar/sdk TESTNET_RPC_FALLBACKS, F-369)",
+      "when": "App pages that read the contracts, only while both FastNEAR hosts refuse or fail",
+      "directives": [
+        "connect-src"
+      ]
+    },
+    {
+      "host": "wallet.intear.tech",
+      "types": [
+        "document@iframe",
+        "fetch"
+      ],
+      "pages": [
+        "testnet.nectarlabs.io/borrow (wallet selector + Intear Wallet)"
+      ],
+      "who": "Intear Wallet (sandboxed frame, through near-connect)",
+      "purpose": "Code, styles, fonts, images or API of Intear Wallet",
+      "when": "Only after you open Intear Wallet in the selector",
+      "directives": [
+        "connect-src",
+        "frame-src"
+      ]
+    }
+  ],
+  "cookies": [],
+  "storage": [
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ethereum-wallets:0.1.4",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/intear-wallet:1.0.0",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/ledger:1.0.0",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/meteor-wallet:1.1.1",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/near-cli:1.0.0",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "indexedDB",
+      "name": "hot-connector/wallets/nightly-wallet:1.0.0",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Cache of the sandboxed wallet's code, keyed <wallet id>:<manifest version>",
+      "lifetime": "Until you clear site data (replaced on a new wallet version)",
+      "source": "@hot-labs/near-connect build/helpers/indexdb.js, SandboxedWallet/executor.js"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:<random id>",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "the wallet you opened (through near-connect)",
+      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
+      "lifetime": "Until disconnect or you clear site data",
+      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
+    },
+    {
+      "kind": "localStorage",
+      "name": "meteor-wallet:met_bridge_partner::<per-session ids>",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "the wallet you opened (through near-connect)",
+      "purpose": "Wallet's own storage, proxied from its sandboxed frame and prefixed with its wallet id",
+      "lifetime": "Until disconnect or you clear site data",
+      "source": "@hot-labs/near-connect build/SandboxedWallet/executor.js (storageSpace = manifest.id)"
+    },
+    {
+      "kind": "localStorage",
+      "name": "nectar-consent",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "our code",
+      "purpose": "Your cookie/analytics choice ({v, analytics, at})",
+      "lifetime": "Until you clear site data",
+      "source": "packages/ui/src/ConsentBanner.tsx"
+    },
+    {
+      "kind": "localStorage",
+      "name": "selected-wallet",
+      "origin": "https://testnet.nectarlabs.io",
+      "who": "near-connect 0.12.0 (wallet selector library)",
+      "purpose": "Id of the wallet you picked",
+      "lifetime": "Set on connect, removed on disconnect",
+      "source": "@hot-labs/near-connect build/NearConnector.js"
+    }
+  ],
+  "cspViolations": [],
+  "pages": [
+    {
+      "url": "https://testnet.nectarlabs.io/borrow (wallet selector + Meteor Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "meteorwallet.app": [
+          "image@iframe"
+        ],
+        "rsms.me": [
+          "stylesheet@iframe"
+        ],
+        "fonts.cdnfonts.com": [
+          "stylesheet@iframe"
+        ],
+        "mc.meteorwallet.app": [
+          "fetch@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://testnet.nectarlabs.io/borrow (wallet selector + Intear Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "wallet.intear.tech": [
+          "document@iframe",
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://testnet.nectarlabs.io/borrow (wallet selector + Ledger)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {}
+    },
+    {
+      "url": "https://testnet.nectarlabs.io/borrow (wallet selector + Nightly Wallet)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "storage.herewallet.app": [
+          "image@iframe"
+        ]
+      }
+    },
+    {
+      "url": "https://testnet.nectarlabs.io/borrow (wallet selector + Ethereum Wallets)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "evm-on-near.dev": [
+          "document",
+          "fetch"
+        ]
+      }
+    },
+    {
+      "url": "https://testnet.nectarlabs.io/borrow (wallet selector + NEAR CLI)",
+      "status": 200,
+      "combo": "dark/decline",
+      "hosts": {
+        "rsms.me": [
+          "font@iframe",
+          "stylesheet@iframe"
+        ]
+      }
+    }
+  ]
+}

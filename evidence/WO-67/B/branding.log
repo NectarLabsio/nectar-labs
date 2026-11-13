@@ -1,0 +1,5 @@
+no hackathon branding in landing, web app or docs site
+exit=0
+copy-rule hits:        3
+built docs files with 'hackathon':        0
+home-path files (excl. wasm):        0

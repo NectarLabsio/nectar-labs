@@ -1,0 +1,16 @@
+# 2026-11-13T02:13:25Z node wo67-probe.mjs (PW channel chrome)
+A3 loads 4, console+page+hydration errors total 0
+ https://nectarlabs.io/ @1440: status 200 final https://nectarlabs.io/ console 0 page 0 hydration 0 | Base sentences 3, without "local fork" 0
+ https://nectarlabs.io/ @400: status 200 final https://nectarlabs.io/ console 0 page 0 hydration 0 | Base sentences 3, without "local fork" 0
+ https://status.nectarlabs.io/ @1440: status 200 final https://status.nectarlabs.io/ console 0 page 0 hydration 0 | h1 "Status" title "Status · Nectar Labs"
+ https://status.nectarlabs.io/ @400: status 200 final https://status.nectarlabs.io/ console 0 page 0 hydration 0 | h1 "Status" title "Status · Nectar Labs"
+#chains present true, server == hydrated true
+A4 APP /borrow: test-assets 1, connect prompt 1, text "Get test assets: connect a wallet first. Mock assets, no value"
+ https://nectarlabs.io/ → https://nectarlabs.io/: test-assets 0, "Get test assets" false, "Mock assets, no value" false
+ https://nectarlabs.io/about → https://nectarlabs.io/about: test-assets 0, "Get test assets" false, "Mock assets, no value" false
+ https://nectarlabs.io/security → https://nectarlabs.io/security: test-assets 0, "Get test assets" false, "Mock assets, no value" false
+ https://nectarlabs.io/changelog → https://nectarlabs.io/changelog: test-assets 0, "Get test assets" true, "Mock assets, no value" false
+ https://nectarlabs.io/talk → https://nectarlabs.io/talk: test-assets 0, "Get test assets" false, "Mock assets, no value" false
+ https://nectarlabs.io/legal/privacy → https://nectarlabs.io/legal/privacy: test-assets 0, "Get test assets" false, "Mock assets, no value" false
+ https://status.nectarlabs.io/ → https://status.nectarlabs.io/: test-assets 0, "Get test assets" false, "Mock assets, no value" false
+exit=0

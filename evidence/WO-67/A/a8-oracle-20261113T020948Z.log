@@ -1,0 +1,8 @@
+# WO-67 A8 oracle, 2026-11-13T02:09:48Z, RPC https://rpc.testnet.fastnear.com (final)
+== get_exit_capacity {"symbol":"NVDAx"}
+{"q_usd_e6":"16119220000","r_usd_e6":"10000000","d_usd_e6":"0","haircut_bps":2500,"session_open":false,"oracle_price_usd_e6":"135000000","oracle_age_s":"39508","oracle_fresh":true,"b_c_usd_per_unit_e6":"94500000","limit_bps_effective":7000,"capacity_usd_e6":"12096915000","oracle_source":"Owner","session_reason":"outside_hours","total_debt_usd_e6":"9229000000","aggregate_capacity_usd_e6":"12096915000","aggregate_headroom_usd_e6":"2867915000","multiplier_e18":"1000000000000000000","price_kind":"Underlying","ca_pending":false,"ca_effective_ns":"0","forced_closed":false}
+== block time (final)
+277447185 1794535786965299952
+== nectar.testnet access keys
+keys: 1
+ed25519:2dSBVZTdHEAF… "FullAccess"

@@ -1,0 +1,125 @@
+{
+  "at": "2026-11-13T02:13:25.705Z",
+  "a3": [
+    {
+      "url": "https://nectarlabs.io/",
+      "width": 1440,
+      "status": 200,
+      "finalUrl": "https://nectarlabs.io/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "baseSentences": [
+        "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+        "OutLayer, attested 03 Sign Chain Signatures signs The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+        "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+      ],
+      "baseWithoutLocalFork": []
+    },
+    {
+      "url": "https://nectarlabs.io/",
+      "width": 400,
+      "status": 200,
+      "finalUrl": "https://nectarlabs.io/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "baseSentences": [
+        "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia.",
+        "OutLayer, attested 03 Sign Chain Signatures signs The contract builds the settlement message and asks the MPC signer for Ed25519 (Solana) or secp256k1 (Base, on a local fork of Base Sepolia, not on Base Sepolia).",
+        "Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia: there NectarVaultBase checks EIP-712 with ecrecover."
+      ],
+      "baseWithoutLocalFork": []
+    },
+    {
+      "url": "https://status.nectarlabs.io/",
+      "width": 1440,
+      "status": 200,
+      "finalUrl": "https://status.nectarlabs.io/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "h1": "Status",
+      "title": "Status · Nectar Labs"
+    },
+    {
+      "url": "https://status.nectarlabs.io/",
+      "width": 400,
+      "status": 200,
+      "finalUrl": "https://status.nectarlabs.io/",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "hydration": [],
+      "h1": "Status",
+      "title": "Status · Nectar Labs"
+    }
+  ],
+  "a4": {
+    "app": {
+      "url": "https://testnet.nectarlabs.io/borrow",
+      "status": 200,
+      "count": 1,
+      "text": "Get test assets: connect a wallet first.\nMock assets, no value",
+      "connectPrompt": 1,
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    "siteAndStatus": [
+      {
+        "url": "https://nectarlabs.io/",
+        "finalUrl": "https://nectarlabs.io/",
+        "testAssets": 0,
+        "getTestAssetsText": false,
+        "mockNoValueText": false
+      },
+      {
+        "url": "https://nectarlabs.io/about",
+        "finalUrl": "https://nectarlabs.io/about",
+        "testAssets": 0,
+        "getTestAssetsText": false,
+        "mockNoValueText": false
+      },
+      {
+        "url": "https://nectarlabs.io/security",
+        "finalUrl": "https://nectarlabs.io/security",
+        "testAssets": 0,
+        "getTestAssetsText": false,
+        "mockNoValueText": false
+      },
+      {
+        "url": "https://nectarlabs.io/changelog",
+        "finalUrl": "https://nectarlabs.io/changelog",
+        "testAssets": 0,
+        "getTestAssetsText": true,
+        "mockNoValueText": false
+      },
+      {
+        "url": "https://nectarlabs.io/talk",
+        "finalUrl": "https://nectarlabs.io/talk",
+        "testAssets": 0,
+        "getTestAssetsText": false,
+        "mockNoValueText": false
+      },
+      {
+        "url": "https://nectarlabs.io/legal/privacy",
+        "finalUrl": "https://nectarlabs.io/legal/privacy",
+        "testAssets": 0,
+        "getTestAssetsText": false,
+        "mockNoValueText": false
+      },
+      {
+        "url": "https://status.nectarlabs.io/",
+        "finalUrl": "https://status.nectarlabs.io/",
+        "testAssets": 0,
+        "getTestAssetsText": false,
+        "mockNoValueText": false
+      }
+    ]
+  },
+  "chains": {
+    "serverText": "NEAR holds the book. Solana holds the stock. A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hub nectar-core Quotes, Reserve, loans and Notes Limits, weekend guard, multiplier Builds every message it asks the MPC to sig",
+    "hydratedText": "NEAR holds the book. Solana holds the stock. A remote loan pays out only after an attested read proves the collateral sits in the vault under the key NEAR derives for that position. Base settlement ran on a local fork of Base Sepolia, not on Base Sepolia. NEAR testnet, the hub nectar-core Quotes, Reserve, loans and Notes Limits, weekend guard, multiplier Builds every message it asks the MPC to sig",
+    "equal": true,
+    "present": true
+  }
+}

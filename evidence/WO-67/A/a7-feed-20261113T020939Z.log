@@ -1,0 +1,22 @@
+# WO-67 A7 Feed, 2026-11-13T02:09:39Z
+== GET /health
+{"ok":true,"last_indexed_block":277447155,"chain_head":277447155,"chain_head_source":"view_block","lag_blocks":0,"last_poll_at":"2026-11-13T02:09:31.087Z","poll_age_s":9,"last_error":"","source":"views","start_block":"head","events_indexed":0,"history":"unavailable","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet"},"version":"0.1.0","commit":"3974b5bb2df4ff98772c758621a68932db30f653"}
+HTTP 200
+== Origin https://nectarlabs.io
+GET /health: HTTP/2 200  access-control-allow-origin: https://nectarlabs.io vary: Origin 
+OPTIONS /mcp: HTTP/2 204  access-control-allow-methods: POST, OPTIONS access-control-allow-origin: https://nectarlabs.io 
+== Origin https://testnet.nectarlabs.io
+GET /health: HTTP/2 200  access-control-allow-origin: https://testnet.nectarlabs.io vary: Origin 
+OPTIONS /mcp: HTTP/2 204  access-control-allow-methods: POST, OPTIONS access-control-allow-origin: https://testnet.nectarlabs.io 
+== Origin https://status.nectarlabs.io
+GET /health: HTTP/2 200  access-control-allow-origin: https://status.nectarlabs.io vary: Origin 
+OPTIONS /mcp: HTTP/2 204  access-control-allow-methods: POST, OPTIONS access-control-allow-origin: https://status.nectarlabs.io 
+== Origin https://docs.nectarlabs.io
+GET /health: HTTP/2 200  vary: Origin 
+OPTIONS /mcp: HTTP/2 403  
+== Origin https://evil.example.com
+GET /health: HTTP/2 200  vary: Origin 
+OPTIONS /mcp: HTTP/2 403  
+== Origin https://nectarlabs.vercel.app
+GET /health: HTTP/2 200  vary: Origin 
+OPTIONS /mcp: HTTP/2 403  

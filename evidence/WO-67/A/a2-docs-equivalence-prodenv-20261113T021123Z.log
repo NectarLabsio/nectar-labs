@@ -1,0 +1,61 @@
+# 2026-11-13T02:11:23Z. DOCS_URL=https://docs.nectarlabs.io npx docusaurus build --out-dir /tmp/verify-wo67-20261113T0205Z/docs-prod
+build exit=0
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/changelog/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/changelog/archive/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/changelog/docs-and-spec/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/search/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/aggregate-limit/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/corporate-actions/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/cramer-limits/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/exit-gap/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/fee-stack/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/nectar-reserve/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/notice-periods/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/pappus-quotes/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/position-notes/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/pre-liquidation/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/premium-and-fee-index/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/profit-lock/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/shields/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/weekend-oracle-guard/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/concepts/whitepaper/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/agent-skill-x402/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/feed-mcp/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/feed-rest/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/oneclick-depth/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/post-quotes/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/remote-collateral-solana/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/run-a-keeper/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/integrate/sdk/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/legal/cookies/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/legal/disclaimers/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/legal/privacy/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/legal/terms/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/operations/incidents/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/operations/monitoring/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/operations/runbook/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/operations/upgrades/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/project/brand/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/project/evidence/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/project/prior-work/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/project/roadmap/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/project/team/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/chain-signatures/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/contract-reference/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/oracle-policy/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/preimage-format/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/quoter-tee/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/settlement-flow/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/solana-vault/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/protocol/storage-and-gas/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/security/audits/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/security/disclosure/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/security/keys-and-roles/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/security/threats/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/security/trust-model/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/start/live-on-testnet/index.html: No such file or directory
+<scratchpad>/a2docs2.sh: line 14: /tmp/verify-wo67-20261113T0205Z/docs-prod/start/quick-start/index.html: No such file or directory
+sitemap pages: 56  byte-identical html: 0  differing: /changelog /changelog/archive /changelog/docs-and-spec /search /concepts/aggregate-limit /concepts/corporate-actions /concepts/cramer-limits /concepts/exit-gap /concepts/fee-stack /concepts/nectar-reserve /concepts/notice-periods /concepts/pappus-quotes /concepts/position-notes /concepts/pre-liquidation /concepts/premium-and-fee-index /concepts/profit-lock /concepts/shields /concepts/weekend-oracle-guard /concepts/whitepaper /integrate/agent-skill-x402 /integrate/feed-mcp /integrate/feed-rest /integrate/oneclick-depth /integrate/post-quotes /integrate/remote-collateral-solana /integrate/run-a-keeper /integrate/sdk /legal/cookies /legal/disclaimers /legal/privacy /legal/terms /operations/incidents /operations/monitoring /operations/runbook /operations/upgrades /project/brand /project/evidence /project/prior-work /project/roadmap /project/team /protocol/chain-signatures /protocol/contract-reference /protocol/oracle-policy /protocol/preimage-format /protocol/quoter-tee /protocol/settlement-flow /protocol/solana-vault /protocol/storage-and-gas /security/audits /security/disclosure /security/keys-and-roles /security/threats /security/trust-model /start/live-on-testnet /start/quick-start /
+asset /assets/js/main.d34b8a10.js remote 3c673dfdcffd6a90 local 3c673dfdcffd6a90
+asset /assets/js/runtime~main.afb5c6ce.js remote 533a38a823c7ce51 local 9393181562fb56d7
+asset /assets/css/styles.159040d2.css remote 5cd0ed9acf53be90 local 5cd0ed9acf53be90
