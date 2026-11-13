@@ -1,0 +1,13 @@
+G9 run 10c (WO-99, narrow re-check of the run 10b reason): main da1100b, local clone /tmp/g9-run10b, 2026-11-13T22:13Z–22:16Z
+VERDICT: PASS (5/5). This resolves the G9 run 10b FAIL.
+
+1. PASS: README:45 now reads "get_config at block 277568411, 2026-11-13T21:59Z". RPC `block` 277568411 (rpc.testnet.near.org, single call, read 22:14:53Z):
+   timestamp_nanosec 1794607130973588127 = 2026-11-13T21:58:50.973Z, which rounds to 21:59Z (block-277568411.txt). The values were re-read in 10b (120 s / 86,400 s).
+2. PASS: README:227 says the demo prints "LTV and pre-liquidation LTV in bps for open ones, from `get_health`". scripts/demo-testnet.mjs:57-58 calls get_health
+   only for status 'Open' and prints `ltv ${ltv_bps} bps / pre-liq ${pre_liq_ltv_bps} bps`. The run 10b demo log shows the same format.
+3. PASS: `git diff --stat 0c475f7 da1100b` touches README.md (4 lines: 2 changed in each direction), docs/EVIDENCE.md and evidence/G9/run10b-20261113T220636Z/ (from the 10b merge), plus orchestrator process docs from
+   eb7e9b9 (WO-99 work order) and da19a5b (H-REFRESHER-EXTEND: docs/process/human-handoff.md, state.md). Nothing else.
+   `git diff --stat 0c36e1f da1100b`: README.md only. Word diff: "22:10Z" -> "21:59Z"; "health" -> "LTV and pre-liquidation LTV in bps"; "ones)" -> "ones, from `get_health`)".
+4. PASS: link check (evidence/G9/run10b-20261113T220636Z/scripts/linkcheck.mjs) on da1100b: 248 files, 76 relative links, 0 broken (linkcheck.txt).
+5. PASS: `git diff --stat 54bdd32 da1100b -- apps packages services contracts`: empty (0 lines).
+Clone `git status --short` at da1100b: 0 lines. Not re-run: the other 10b items, which the README-only diff cannot affect.
