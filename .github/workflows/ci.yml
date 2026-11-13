@@ -1,31 +1,51 @@
 name: ci
+# Runs without secrets. Both jobs were reproduced in a fresh clone before this file was committed (evidence/WO-95/ci-check.md).
+# Secret scanning stays local (the .githooks/pre-commit gitleaks hook); gitleaks-action needs a license secret for org repos.
 on: [push, pull_request]
+permissions:
+  contents: read
+defaults:
+  run:
+    # An explicit `bash` shell runs as `bash --noprofile --norc -eo pipefail {0}`, so a failing command fails its step.
+    shell: bash
 jobs:
-  secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: gitleaks/gitleaks-action@v2
-        env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }
-  rust:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@1.95.0
-        with: { targets: wasm32-unknown-unknown,wasm32-wasip2 }
-      - run: cargo install cargo-near --version 0.23.0 --locked
-      - run: cargo test --workspace 2>&1 | tail -n 80
-      - run: for c in contracts/nectar-core contracts/mock-ft; do (cd $c && cargo near build non-reproducible-wasm 2>&1 | tail -n 20); done
   node:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        # version read from package.json packageManager (pnpm@10.34.9)
-      - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: pnpm }
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: '0' # apps/web/scripts/build-changelog.mjs reads the git history
+      - uses: pnpm/action-setup@v5 # pnpm version comes from package.json "packageManager"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'pnpm'
       - run: pnpm i --frozen-lockfile
-      - run: pnpm lint && pnpm typecheck && pnpm test
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
       - run: pnpm --filter web build
       - run: pnpm --filter docs-site build
+  rust:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          targets: 'wasm32-unknown-unknown'
+      - name: cargo-near 0.23.0 (release binary, sha256 pinned)
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/cargo-near.tgz" \
+            https://github.com/near/cargo-near/releases/download/cargo-near-v0.23.0/cargo-near-x86_64-unknown-linux-gnu.tar.gz
+          echo "94008b827a457750257eced4b571c33736062cc3bd1ffda3e7af70e2bc9a4073  $RUNNER_TEMP/cargo-near.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/cargo-near.tgz" -C "$RUNNER_TEMP"
+          install -m 0755 "$RUNNER_TEMP/cargo-near-x86_64-unknown-linux-gnu/cargo-near" "$HOME/.cargo/bin/cargo-near"
+          cargo near --version
+      - name: Build contract wasm (the sandbox tests load target/near/*/*.wasm)
+        run: |
+          for c in nectar-core mock-ft test-stubs; do
+            (cd "contracts/$c" && cargo near build non-reproducible-wasm) || exit 1
+          done
+      - run: cargo test --workspace
