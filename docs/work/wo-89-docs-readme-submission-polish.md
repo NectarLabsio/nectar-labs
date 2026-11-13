@@ -1,25 +1,49 @@
-# WO-89 — docs — README + submission polish (Kunal 2026-11-13 ~18:30Z; built from his headings — the full brief never arrived) (finish by 20:30Z)
-Docs only. Write only README.md, docs/SUBMISSION.md, docs/X_POST.md. No product, no apps/, no deploys. Every number, status and tx hash must come from docs/EVIDENCE.md
-(cite the section) or be checked now on testnet RPC (`tx` status SuccessValue) — never invent. Copy rules: never "insurance", never "without liquidations", "live"
-only where EVIDENCE shows it; testnet + mock collateral stated plainly; no hype words ("revolutionary", "seamless", "unlock"); no "Introducing". README stays
-truthful and keeps Kunal's H12 Prior work text and "Kunal" (no surname). Don't touch the "Hosted demo" production facts except to link to them.
-README (keep the first 40 lines sharp: one-line summary, what it is, the 60-second path, how NEAR is used — Kunal reviews lines 1–40 in the morning):
-1. **60-second path** table for judges: step · URL (https://nectarlabs.io, https://testnet.nectarlabs.io/feed, /feed/NVDAx, /borrow + "Get test assets", a position
-   page, https://docs.nectarlabs.io, https://status.nectarlabs.io) · what you see · ~seconds. Leave image slots `<!-- screen-2 -->`, `<!-- screen-4 -->`,
-   `<!-- screen-6 -->` in the rows for market, position and agent (screenshots land after tonight's takes, WO-35), and `<!-- screen-3 -->` right under the one-line summary.
-2. **How NEAR is used, concretely**: bullet list, each with one real testnet tx link (https://testnet.nearblocks.io/txns/<hash>): contract calls on nectar-core-v2
-   (position open / quote / repay from EVIDENCE), the owner-oracle refresh by a function-call key limited to update_owner_price (De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG;
-   key-add BHopF1cuKAMDFoCnKyNZPPKR3qVPgs5dYiKxx6jwWpao), mock-ft faucet mints (FpZ1RLFDLeYFARbAX2xcvux79mDt2DRHfdEKaY42ubkF, 2Dkw3rd2Bz475W87fuhKx9r7hw61d6DcjFPCQ73HETv6),
-   x402 paid call settled on NEAR (8bXCY34SVYv5b7vJ4GLfWkbJtQdqbSSBJsrzPCE75XRk), chain signatures / Solana leg and Base local fork only as EVIDENCE states them.
-   Verify each hash on RPC before citing.
-3. **Real vs mock** table: component · real on testnet / mock / local fork / fallback · evidence link (collateral = mock NVDAx; USDC = mock; oracle = owner oracle +
-   refresher; Base = local fork of Base Sepolia; Solana = devnet; quoter/OutLayer, 1Click dry quotes, Feed, keeper, x402 — exactly as EVIDENCE says).
-4. **What this does not prove**: short honest list (no mainnet, mock collateral, not audited, owner oracle not a market price feed, committed liquidity from test
-   accounts, local-fork Base, anything EVIDENCE marks FALLBACK/SELF-ATTESTED).
-5. **Results** table: gates G0–G14 + G3b/G9 latest status from EVIDENCE's summary table (status · last run · commit).
-6. **Next**: 3–5 bullets, plain, no dates promised beyond what Kunal stated (main frozen until 2026-11-18T23:59Z; hosted until ≥ 2026-11-25).
-SUBMISSION.md: the `idea` block (20–2000 chars; HACKATHON.md:51 "the problem, the product, and how NEAR fits in") rewritten to match the README sections above; count
-chars. X_POST.md: the thread draft — post 1 with the video (captioned 1280×720), posts 2 and 3 with screenshots 3 and 6 (1600×900 JPG, WO-35), repo + app links;
-check every post against HACKATHON.md §"2. The demo post" (built at NEAR HACKATHON, @NEARProtocol, #NEARHackathon, length rules); keep TODO-H3 only where the post URL goes.
-Checks: `pnpm verify:quick` 0; branding check 0; markdown links resolve (curl -sI the URLs you add). Symlink node_modules; never pnpm install. NO Co-Authored-By.
-Report ≤ 10 lines: README line count of the first section, idea char count, thread post lengths, tx hashes verified.
+# WO-89 — Part A of Kunal's full brief (2026-11-13 ~18:35Z): README, idea, X thread. Docs only; done by 20:30Z. Replaces the headings-only version.
+Write only README.md, docs/SUBMISSION.md, docs/X_POST.md (+ docs/media/screens/ placeholders are NOT created now — screenshots land after the takes).
+Goal: a judge or the Claude Code/Codex screener understands the product, tries it and sees exactly what NEAR does, in under 2 minutes. No marketing.
+README, first screen first:
+1. One line: what Nectar is, who it's for. Screenshot 3 below it (slot `<!-- screen-3 -->`). Then the problem in 3 plain sentences.
+2. "60-second path": a table "Do this | You should see" on https://testnet.nectarlabs.io: Get test assets → borrow with Weekend Shield → limit and health → explorer link.
+   Then the agent: one command → 402 → pays 0.01 mock USDC → 200 with N rows (N from EVIDENCE/the latest recorded run). Screenshots 2, 4 and 6 in the table
+   (slots `<!-- screen-2 -->`, `<!-- screen-4 -->`, `<!-- screen-6 -->`).
+3. "How NEAR is used, concretely": numbered; each item names the exact contract, method or standard and links a testnet tx checked on chain, or names the test:
+   - nectar-core-v2 escrows quotes and enforces each loan's limit;
+   - NEP-141 ft_transfer_call deposits;
+   - NEP-171 Position Notes, where move_note moves the loan's rights;
+   - NEP-297 events read by the Feed;
+   - x402 with NEP-366 SignedDelegate;
+   - the function-call key limited to update_owner_price, with its on-chain record;
+   - the OutLayer TEE quoter, only if EVIDENCE verifies it;
+   - 1Click quotes as read-only reference (no Intents testnet, Q-007);
+   - the Base leg, on a local fork.
+4. "What is real, what is mock": contract, wallet, faucet, Feed, oracle (owner, refreshed by a scoped key), market makers = our demo accounts, collateral = mock NVDAx,
+   Base = local fork.
+5. "What this does not prove": short and honest.
+6. "What we set out to prove, and the result": claim | result | evidence, in product language (e.g. "An escrowed quote raises the borrow limit | $X → $Y | tx").
+   No gate IDs (G#, WO-, H-, F-, §) anywhere in the README.
+7. "Next": 3 concrete steps from PRD/STATE (e.g. real market makers on testnet, replacing the owner oracle, audit before mainnet). Nothing invented.
+8. Then: commands table, run locally, architecture, Prior work (H12 text), libraries (Q-005), "Our other project" if H10 lists one (Q-015: H10 says Nectar Labs is the
+   only project → omit), license. The README links docs/process/ once (the folder is created in Part B; link it now as docs/process/).
+Writing rules, all files:
+- Every factual sentence has evidence (EVIDENCE.md or a tx checked on chain), or it goes.
+- Deployed numbers only. "Testnet" and "mock collateral" stated wherever a reader could assume otherwise.
+- Never "insurance", "without liquidations", "live" without evidence, "powered by NEAR".
+- Banned words: seamless, revolutionary, game-changing, unlock, empower, leverage (as a verb), robust, cutting-edge, next-generation, innovative, effortless,
+  supercharge, harness, delve. No emoji. No sentence another project could paste unchanged.
+- Name: "Kunal", no surname.
+SUBMISSION idea (20–2000 chars): problem (2 sentences) → what Nectar does (3) → NEAR's role (4 concrete points) → real vs mock → how to try (URL + one command).
+It must match the README.
+X_POST.md: start from this draft, verify every claim, keep post 1 ≤ 280 chars, video in post 1, screenshot 3 in post 2, screenshot 6 in post 3:
+  1/ Stock market closed for the weekend? Lenders lose their price, so they cut your limit or sell your shares.
+  Nectar: market makers escrow buy quotes on-chain, so you can borrow against tokenized stocks all weekend.
+  Built at NEAR HACKATHON on testnet. @NEARProtocol #NEARHackathon
+  2/ What NEAR does here:
+  - one Rust contract escrows the quotes and enforces each loan's limit
+  - each loan is an NFT (NEP-171): transfer it and the loan moves with it
+  - agents pay for data over x402 with NEP-366 meta-transactions
+  - our price bot's key can call one method only
+  3/ Try it (testnet, mock assets, no value): https://testnet.nectarlabs.io
+  Code: <repo URL>   (= https://github.com/NectarLabsio/nectar-labs)
+  Market makers: what notice period would you commit to on a weekend quote?
+Checks: `pnpm verify:quick` 0; branding check 0; every URL you add answers (curl -sI); every tx hash verified on testnet RPC. Never pnpm install; no node_modules
+directory in the worktree (symlink only). NO Co-Authored-By. Report ≤ 10 lines (first-screen line count, idea chars, post lengths, tx hashes verified, claims dropped).
