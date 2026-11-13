@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// compose.mjs <edit.json> <outdir> [--captions|--no-captions] [--jobs N] [--work <dir>]      (WO-35b)
+// compose.mjs <edit.json> <outdir> [--captions|--no-captions] [--no-cursor] [--jobs N] [--work <dir>]      (WO-35b, WO-35d)
 // compose.mjs --synth <take dir>   writes a synthetic take in the shared format (self-test fixture)
 // Builds the master as 1920x1080 PNG frames at 30 fps CFR (<outdir>/frames/000000.png …) + <outdir>/edit-timeline.json.
 // Take sections: latest raw frame <= t of the active page; wallet popups drawn centred over the dimmed app with a soft
@@ -111,6 +111,45 @@ function blend(dst, ov, x0, y0, alpha) {
       dst[d + 2] = (dst[d + 2] + (data[s + 2] - dst[d + 2]) * a + 0.5) | 0;
     }
   }
+}
+
+// ---------- post-drawn cursor (WO-35d) ----------
+// The arrow and click ring of human.mjs's DOM cursor (same path, outline, shadow and ring), rasterised by librsvg at the output scale with
+// the sub-pixel offset baked in (quarter-pixel steps), so a slow cursor glides instead of stepping whole pixels.
+const CURSOR_PATH = 'M3 2 L3 26.5 L8.9 20.9 L12.9 30.2 L16.9 28.5 L13 19.4 L21 19.4 Z';
+const RING_MS = 460;
+/** CSS cubic-bezier(x1,y1,x2,y2) as a function of progress (Newton on x, bisection fallback). */
+function cubicBezier(x1, y1, x2, y2) {
+  const bx = (u) => 3 * x1 * u * (1 - u) ** 2 + 3 * x2 * u * u * (1 - u) + u ** 3;
+  const by = (u) => 3 * y1 * u * (1 - u) ** 2 + 3 * y2 * u * u * (1 - u) + u ** 3;
+  return (p) => {
+    if (p <= 0) return 0;
+    if (p >= 1) return 1;
+    let lo = 0, hi = 1, u = p;
+    for (let k = 0; k < 30; k++) { const x = bx(u); if (Math.abs(x - p) < 1e-5) break; if (x < p) lo = u; else hi = u; u = (lo + hi) / 2; }
+    return by(u);
+  };
+}
+const ringEase = cubicBezier(0.2, 0.7, 0, 1);
+const spriteCache = new Map();
+/** RGBA sprite: hotspot at (pad + fx, pad + fy); c = output px per CSS px; ring = null (the arrow) | {scale, opacity} (a click ring only). */
+async function cursorSprite(c, fx, fy, ring) {
+  const key = `${c}|${fx}|${fy}|${ring ? `${ring.scale.toFixed(3)}|${ring.opacity.toFixed(3)}` : 'arrow'}`;
+  if (spriteCache.has(key)) return spriteCache.get(key);
+  const pad = Math.ceil(22 * c) + 2;
+  const w = pad + Math.ceil(26 * c) + 2, h = pad + Math.ceil(36 * c) + 2;
+  const vb = [-(pad + fx) / c, -(pad + fy) / c, w / c, h / c].map((v) => v.toFixed(4)).join(' ');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${vb}">` +
+    '<defs><filter id="s" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="1.5" stdDeviation="1" flood-color="#000" flood-opacity=".5"/></filter></defs>' +
+    (ring ? `<g transform="scale(${ring.scale.toFixed(4)})" opacity="${ring.opacity.toFixed(4)}"><circle r="17" fill="#16f3a9" fill-opacity=".14"/>` +
+      '<circle r="16" fill="none" stroke="#16f3a9" stroke-opacity=".9" stroke-width="2"/></g>'
+      : `<path d="${CURSOR_PATH}" transform="translate(-3,-2)" fill="#0b0d10" stroke="#ffffff" stroke-width="1.7" stroke-linejoin="round" filter="url(#s)"/>`) +
+    '</svg>';
+  const p = sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer({ resolveWithObject: true })
+    .then(({ data, info }) => ({ data, w: info.width, h: info.height, pad }));
+  if (spriteCache.size > 3000) spriteCache.clear();
+  spriteCache.set(key, p);
+  return p;
 }
 
 function mix(a, b, p) {
@@ -316,6 +355,79 @@ async function takeSegment(item, baseDir, opts, chrome, isFirst) {
     return { left: clamp(Math.round(r.x), 0, W4 - w), top: clamp(Math.round(r.y), 0, H4 - h), width: w, height: h };
   };
 
+  // Post-drawn cursor (WO-35d): only for takes logged with cursor_mode post (no DOM cursor in their frames). Samples are CSS px of their page;
+  // within one motion (`m`) they are interpolated (finite-difference cubic Hermite), between motions the cursor holds, then moves on.
+  const post = opts.cursor && item.cursor !== false && events.some((e) => e.type === 'cursor_mode' && e.post === true);
+  const track = new Map(), clicks = [];
+  if (post) {
+    for (const e of events) {
+      if (e.type === 'cursor' && Number.isFinite(e.x) && Number.isFinite(e.y)) {
+        if (!track.has(e.page)) track.set(e.page, []);
+        track.get(e.page).push({ t: e.t, x: e.x, y: e.y, m: e.m || 0 });
+      } else if (e.type === 'click') clicks.push(e);
+    }
+  }
+  const cursorPos = (page, t, strict) => {
+    const l = track.get(page);
+    if (!l || !l.length) return null;
+    if (t < l[0].t) return strict ? null : l[0];
+    let lo = 0, hi = l.length - 1;
+    while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (l[mid].t <= t) lo = mid; else hi = mid - 1; }
+    const s = l[lo], n = l[lo + 1];
+    if (!n || !s.m || n.m !== s.m || !(n.t > s.t)) return s;
+    const p = l[lo - 1]?.m === s.m && l[lo - 1].t < s.t ? l[lo - 1] : s, q = l[lo + 2]?.m === s.m && l[lo + 2].t > n.t ? l[lo + 2] : n;
+    const dt = n.t - s.t, u = (t - s.t) / dt, u2 = u * u, u3 = u2 * u;
+    const h00 = 2 * u3 - 3 * u2 + 1, h10 = u3 - 2 * u2 + u, h01 = -2 * u3 + 3 * u2, h11 = u3 - u2;
+    const tan = (a, b, k) => (b.t > a.t ? (b[k] - a[k]) / (b.t - a.t) : 0) * dt;
+    return { x: h00 * s.x + h10 * tan(p, n, 'x') + h01 * n.x + h11 * tan(s, q, 'x'), y: h00 * s.y + h10 * tan(p, n, 'y') + h01 * n.y + h11 * tan(s, q, 'y') };
+  };
+  /** Cursor in 4K scene px for the page in front ({X, Y, sc: scene px per CSS px}), or null. A popup without a sample yet shows the cursor
+   *  where it is on the base page (human.mjs starts the popup's first move from that screen point). */
+  // pl = the popup's placement when a popup is in front (its samples are offset to where it is drawn), else null.
+  const toScene = (c, pl) => (pl
+    ? { X: pl.x + c.x * opts.dsf * pl.s, Y: pl.y + c.y * opts.dsf * pl.s, sc: opts.dsf * pl.s }
+    : { X: c.x * opts.dsf, Y: c.y * opts.dsf, sc: opts.dsf });
+  const cursorAt = (t, st, pl) => {
+    const front = pl ? st.popup : st.base;
+    let c = cursorPos(front, t, true);
+    if (c) return toScene(c, pl);
+    if (pl && (c = cursorPos(st.base, t, false))) return toScene(c, null);
+    return (c = cursorPos(front, t, false)) ? toScene(c, pl) : null;
+  };
+  const ringsAt = (t, st, pl) => {
+    const front = pl ? st.popup : st.base, out = [];
+    for (const k of clicks) {
+      if (k.page !== front || t < k.t || t >= k.t + RING_MS) continue;
+      const e = ringEase((t - k.t) / RING_MS);
+      out.push({ ...toScene(k, pl), ring: { scale: 0.3 + 0.9 * e, opacity: 0.95 * (1 - e) } });
+    }
+    return out;
+  };
+  /** Cursor hotspot in output px ({x, y, c: output px per CSS px}) for a frame, or null; r = the camera crop (4K px). */
+  const cursorOut = (t, st, pl, r) => {
+    const s = cursorAt(t, st, pl);
+    if (!s) return null;
+    const k = W / r.width;
+    return { x: (s.X - r.left) * k, y: (s.Y - r.top) * k, c: s.sc * k };
+  };
+  /** Blend the click ring(s) and the arrow into the 1080p frame. Returns the hotspot in output px. */
+  const drawCursor = async (out, t, st, pl, r) => {
+    const cur = cursorOut(t, st, pl, r);
+    if (!cur) return null;
+    const k = W / r.width;
+    const put = async (ox, oy, sc, ring) => {
+      const c = Math.round(sc * 100) / 100;
+      let ix = Math.floor(ox), iy = Math.floor(oy), fx = Math.round((ox - ix) * 4) / 4, fy = Math.round((oy - iy) * 4) / 4;
+      if (fx === 1) { ix++; fx = 0; }
+      if (fy === 1) { iy++; fy = 0; }
+      const sp = await cursorSprite(c, fx, fy, ring);
+      blend(out, sp, ix - sp.pad, iy - sp.pad, 1);
+    };
+    for (const g of ringsAt(t, st, pl)) await put((g.X - r.left) * k, (g.Y - r.top) * k, g.sc * k, g.ring);
+    await put(cur.x, cur.y, cur.c, null);
+    return cur;
+  };
+
   // Speed tags and caption window in local frames.
   const speedups = tm.segs.filter((s) => s.f > 1).map((s) => ({
     from: Math.floor((s.o * fps) / 1000), to: Math.ceil((s.oe * fps) / 1000), factor: s.f, label: s.label, src_ms: Math.round(s.e - s.s),
@@ -349,13 +461,18 @@ async function takeSegment(item, baseDir, opts, chrome, isFirst) {
     return sharp(buf, { raw: { width: W4, height: H4, channels: 3 } });
   };
 
-  const render = async (i) => {
+  /** What is in front at local frame i: source time, page state, popup placement (when a popup frame is drawn), camera crop. */
+  const frameState = (i) => {
     const tau = i * frameMs, t = tm.toSrc(tau);
     const st = stateAt(t);
-    let img = await loadBase(frameAt(st.base, t, false));
     const popF = st.popup ? frameAt(st.popup, t, true) : null;
+    return { tau, t, st, popF, pl: popF ? placePopup(st.popup, t) : null, r: intRect(camAt(tau)) };
+  };
+
+  const render = async (i) => {
+    const { t, st, popF, pl, r } = frameState(i);
+    let img = await loadBase(frameAt(st.base, t, false));
     if (popF) {
-      const pl = placePopup(st.popup, t);
       const d = await popupDeco(pl.w, pl.h);
       let pop = sharp(popF.file);
       if (pl.s !== 1 || popF.w !== pl.w || popF.h !== pl.h) pop = pop.resize(pl.w, pl.h, { kernel: 'lanczos3', fit: 'fill' });
@@ -368,9 +485,9 @@ async function takeSegment(item, baseDir, opts, chrome, isFirst) {
       ]).removeAlpha().raw().toBuffer();
       img = sharp(comp, { raw: { width: W4, height: H4, channels: 3 } });
     }
-    const r = intRect(camAt(tau));
     if (r.width !== W4) img = img.extract(r);
     const out = await img.resize(W, H, { kernel: 'lanczos3', fit: 'fill' }).removeAlpha().raw().toBuffer();
+    if (post) await drawCursor(out, t, st, pl, r);
     const sp = speedups.find((s) => i >= s.from && i < s.to);
     if (sp) { const tg = tagCache.get(sp.factor); blend(out, tg, W - 48 - tg.w, 48, 1); }
     if (capImg && i >= capFrom && i < capTo) {
@@ -380,10 +497,42 @@ async function takeSegment(item, baseDir, opts, chrome, isFirst) {
     return out;
   };
 
+  // Cursor track per output frame (no pixels): smoothness stats for the timeline, and cursor-track.json for review crops.
+  let cursor = { post };
+  const cursorFrames = [];
+  if (post) {
+    const inMotion = (pg, t) => { // between two samples of one motion that differ: the drawn cursor must advance every frame here
+      const l = track.get(pg) ?? [];
+      if (!l.length || t < l[0].t) return false;
+      let lo = 0, hi = l.length - 1;
+      while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (l[mid].t <= t) lo = mid; else hi = mid - 1; }
+      const s = l[lo], n = l[lo + 1];
+      return Boolean(s.m && n && n.m === s.m && n.t > s.t && Math.hypot(n.x - s.x, n.y - s.y) > 0.5);
+    };
+    let prev = null, maxStep = 0, freezes = 0, moving = 0, drawn = 0;
+    for (let i = 0; i < nFrames; i++) {
+      const { t, st, pl, r } = frameState(i);
+      const front = pl ? st.popup : st.base;
+      const c = cursorOut(t, st, pl, r);
+      cursorFrames.push(c ? { i, x: Math.round(c.x * 100) / 100, y: Math.round(c.y * 100) / 100, page: front } : { i, x: null, y: null });
+      if (c) drawn++;
+      if (c && prev && prev.page === front) {
+        const step = Math.hypot(c.x - prev.x, c.y - prev.y);
+        if (inMotion(front, t)) { moving++; if (step < 0.05) freezes++; }
+        maxStep = Math.max(maxStep, step);
+      }
+      prev = c ? { ...c, page: front } : null;
+    }
+    cursor = { post, samples: [...track.values()].reduce((s, l) => s + l.length, 0), clicks: clicks.filter((k) => k.t >= a && k.t <= b).length,
+      frames_drawn: drawn, frames_in_motion: moving, freeze_frames: freezes, max_step_px: Math.round(maxStep * 10) / 10 };
+  }
+
   for (const w of warnings) log(`warn: section ${item.section}: ${w}`);
   log(`take ${dir} section ${item.section} "${sec.title || ''}": src ${(a / 1000).toFixed(2)}–${(b / 1000).toFixed(2)} s → ${nFrames} frames ` +
-    `(${(nFrames / fps).toFixed(2)} s), ${keys.length} camera keys, ${speedups.length} speed-up(s)${speedups.map((s) => ` ${s.factor}x`).join('')}`);
+    `(${(nFrames / fps).toFixed(2)} s), ${keys.length} camera keys, ${speedups.length} speed-up(s)${speedups.map((s) => ` ${s.factor}x`).join('')}` +
+    (post ? `, post cursor ${cursor.frames_in_motion} moving frames (${cursor.freeze_frames} frozen), ${cursor.clicks} click ring(s)` : ''));
   return {
+    cursor, cursorFrames,
     kind: 'take', take: tilde(dir), section: Number(item.section), title: sec.title || '', caption, frames: nFrames, render,
     src_start_ms: a, src_end_ms: b, capFrom, capTo: caption ? capTo : capFrom, warnings,
     speedups, marks: inSec.filter((e) => e.type === 'mark').map((e) => ({ local_ms: tm.toOut(e.t), label: e.label, data: e.data })),
@@ -412,6 +561,7 @@ async function compose(editPath, outdir, args) {
   const opts = {
     fps, captions: args.captions ?? Boolean(edit.captions), dissolve: Number(edit.dissolve_frames ?? 10), dsf: Number(edit.dsf || 2),
     cameraMs: clamp(Number(edit.camera_ms || 600), 500, 700), maxZoom: Math.min(1.5, Number(edit.max_zoom || 1.5)),
+    cursor: args.cursor ?? edit.cursor !== false,
     jobs: Number(args.jobs || edit.jobs || clamp(os.cpus().length - 2, 2, 6)),
   };
   const out = path.resolve(expandHome(outdir));
@@ -466,10 +616,13 @@ async function compose(editPath, outdir, args) {
         src_start_ms: s.src_start_ms, src_end_ms: s.src_end_ms,
         speedups: s.speedups.map((p) => ({ start_s: s2(s.start + p.from), end_s: s2(s.start + p.to), factor: p.factor, label: p.label, src_ms: p.src_ms })),
         marks: s.marks.map((m) => ({ t_s: Math.round((s.start / fps + m.local_ms / 1000) * 1000) / 1000, label: m.label, data: m.data })),
-        warnings: s.warnings };
+        cursor: s.cursor, warnings: s.warnings };
     }),
   };
   fs.writeFileSync(path.join(out, 'edit-timeline.json'), JSON.stringify(timeline, null, 2) + '\n');
+  // Drawn cursor per master frame (output px), for review crops: {frame, section, x, y, page}.
+  const ct = segs.flatMap((s) => (s.cursorFrames ?? []).filter((c) => c.x !== null).map((c) => ({ frame: s.start + c.i, section: s.section, x: c.x, y: c.y, page: c.page })));
+  if (ct.length) fs.writeFileSync(path.join(out, 'cursor-track.json'), JSON.stringify(ct) + '\n');
   log(`wrote ${total} PNG frames to ${framesDir} and edit-timeline.json in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
@@ -531,6 +684,21 @@ async function synthTake(dir) {
     { t: 22000, type: 'zoom_out' },
     { t: 23000, type: 'section_end', id: 2 },
   ];
+  // WO-35d: post-drawn cursor — a move + click on p0, a move + click on the popup, the cursor back on p0 when it closes.
+  const moveEv = (page, m, t0, ms, [x0, y0], [x1, y1]) => {
+    const out = [{ t: t0, type: 'motion_start', kind: 'move', page, m }];
+    for (let k = 0, n = Math.round(ms / 16); k <= n; k++) {
+      const u = easeInOutCubic(k / n);
+      out.push({ t: Math.round(t0 + (k * ms) / n), type: 'cursor', page, x: x0 + (x1 - x0) * u, y: y0 + (y1 - y0) * u, m });
+    }
+    return [...out, { t: t0 + ms, type: 'motion_end', kind: 'move', m }];
+  };
+  ev.push({ t: 0, type: 'cursor_mode', post: true }, { t: 0, type: 'cursor', page: 'p0', x: 1000, y: 600 },
+    ...moveEv('p0', 1, 600, 600, [1000, 600], [1250, 560]), { t: 1450, type: 'click', page: 'p0', x: 1250, y: 560 },
+    { t: 8500, type: 'cursor_mode', post: true },
+    ...moveEv('p1', 2, 17000, 500, [200, 300], [180, 516]), { t: 17700, type: 'click', page: 'p1', x: 180, y: 516 },
+    { t: 19000, type: 'cursor', page: 'p0', x: 940, y: 756 });
+  ev.sort((x, y) => x.t - y.t);
   fs.writeFileSync(path.join(dir, 'events.jsonl'), ev.map((e) => JSON.stringify(e)).join('\n') + '\n');
   log(`synthetic take: ${recs.length} frames (${recs.filter((r) => r.page === 'p1').length} popup), ${ev.length} events in ${dir}`);
 }
@@ -541,6 +709,7 @@ async function main() {
     const a = argv[i];
     if (a === '--captions') args.captions = true;
     else if (a === '--no-captions') args.captions = false;
+    else if (a === '--no-cursor') args.cursor = false;
     else if (a === '--jobs') args.jobs = argv[++i];
     else if (a === '--work') args.work = argv[++i];
     else if (a === '--synth') args.synth = argv[++i];
@@ -548,7 +717,7 @@ async function main() {
   }
   if (args.synth) return synthTake(path.resolve(expandHome(args.synth)));
   if (args._.length < 2) {
-    console.error('usage: node compose.mjs <edit.json> <outdir> [--captions|--no-captions] [--jobs N] [--work dir]\n       node compose.mjs --synth <take dir>');
+    console.error('usage: node compose.mjs <edit.json> <outdir> [--captions|--no-captions] [--no-cursor] [--jobs N] [--work dir]\n       node compose.mjs --synth <take dir>');
     process.exit(2);
   }
   await compose(args._[0], args._[1], args);

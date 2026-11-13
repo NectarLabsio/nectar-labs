@@ -8,7 +8,7 @@ resolve from the repo (or the main checkout when a worktree has no `node_modules
 
 ```sh
 cd scripts/demo/capture
-node compose.mjs edit.json /path/out-plain --no-captions --work /path/work   # PNG frames + edit-timeline.json
+node compose.mjs edit.json /path/out-plain --no-captions --work /path/work   # PNG frames + edit-timeline.json (+ cursor-track.json)
 node compose.mjs edit.json /path/out-caps  --captions    --work /path/work
 node encode.mjs  /path/out-plain/frames /path/nectar-demo.mp4                # also writes nectar-demo-720p.mp4
 node encode.mjs  /path/out-caps/frames  /path/nectar-demo-captions.mp4
@@ -58,6 +58,14 @@ Relative paths resolve from the edit.json folder; `~/` expands. Optional keys: `
   at least 1; a `zoom` field on the box overrides it (still <= 1.5). `zoom_out` returns to the full frame. Moves are
   eased (cubic in-out) over `camera_ms`, in output time, interpolating the crop rectangle. Box coordinates are CSS px
   of their page (x `dsf`; popup boxes are offset to where the popup is drawn). Every section starts at full frame.
+- **Cursor (WO-35d).** For takes logged with `cursor_mode {post:true}` (take.mjs default, no DOM cursor in the frames) compose
+  draws the arrow (human.mjs's path, white outline, drop shadow) and the click ring (34 px, 460 ms, scale .3 → 1.2, fade) on
+  each output frame at the source time: `cursor` samples of one motion (`m`) are interpolated with a finite-difference cubic
+  Hermite, between motions the cursor holds. Samples are CSS px of their page, mapped through the camera (x `dsf`, popups
+  offset and scaled to where the popup is drawn); only the page in front shows a cursor, and a popup with no sample yet shows
+  it where it is on the base page. The sprite is rasterised by librsvg at the output scale (1 CSS px = 1 px at zoom 1, more
+  when zoomed) with the sub-pixel offset baked in (quarter px), and blended on the 1080p frame. `"cursor": false` (edit.json
+  or a take item) or `--no-cursor` turns it off; older takes are untouched.
 - **Resampling.** The scene is composed at 3840x2160; the camera crop is reduced to 1920x1080 with one sharp
   lanczos3 resize (a zoomed crop is not first upscaled back to 4K). Captions and tags are rendered by Chrome at DSF 2
   in DM Sans and lanczos-reduced, then blended on the 1080p frame so they do not move with the camera.
@@ -68,7 +76,10 @@ Relative paths resolve from the edit.json folder; `~/` expands. Optional keys: `
   transition shortens the master by 10 frames.
 - **edit-timeline.json** (next to `frames/`): per section `start_s` (dissolve begins), `full_s`, `end_s`, frames,
   caption and its window, source range, speed-ups (output window, factor, source length) and `mark` events mapped to
-  master time (tx hashes for shotlist.md). Paths are written with `~`.
+  master time (tx hashes for shotlist.md), and `cursor` (post, samples, clicks, frames drawn, frames in motion,
+  `freeze_frames` = frames inside a motion where the drawn cursor did not advance, `max_step_px`). Paths are written with `~`.
+- **cursor-track.json** (post cursor only): the drawn hotspot per master frame `{frame, section, x, y, page}` in output px,
+  for review crops.
 
 ## Encode
 
@@ -91,7 +102,9 @@ same PNGs; `--no-720` skips it), then verifies each file (size, fps, frame count
 
 `compose.mjs --synth` writes a 23 s take: p0 frames at 3840x2160 with 22-40 ms jitter, a popup page p1 (800x1200 px)
 for 3 s, two sections with captions, a box + hold + zoom_out in section 1, a 6 s wait (played at 3x = 2 s), a box on
-the popup, a mark and a final box in section 2. Edit: intro + section 1 + section 2 + end card.
+the popup, a mark and a final box in section 2; since WO-35d also post-cursor events (a move + click on p0, a move +
+click on the popup). Edit: intro + section 1 + section 2 + end card. WO-35d run (sections only, no captions): 542
+frames in 11.5 s; cursor 15 + 14 moving frames, 0 frozen; ring and arrow checked in crops.
 
 Result (AVFoundation path, no ffmpeg): 855 raw frames (97 MB) → 852 master frames = 28.400 s (180 + 237 + 315 + 150
 minus 3 dissolves of 10); compose about 45 s per pass (captions on and off), PNGs about 195 MB per pass. Encode checks

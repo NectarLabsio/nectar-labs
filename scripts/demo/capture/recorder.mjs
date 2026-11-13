@@ -286,9 +286,14 @@ export async function startTake(context, dir, opts = {}) {
   current = take;
   return take;
 }
-/** Log an event on the running take (no-op without one, so a rehearsal can run the same script unrecorded). */
-export const event = (type, data = {}) => current?.event(type, data) ?? null;
+/** Log an event on the running take (no-op without one, so a rehearsal can run the same script unrecorded). `at` (take ms) backdates it,
+ *  never below the last event's t. */
+export const event = (type, data = {}, at) => current?.event(type, data, at) ?? null;
+/** The running take's clock (ms since startTake), or null without a take. */
+export const now = () => current?.now() ?? null;
 export const pageId = (page) => current?.pageId(page) ?? 'p0';
+/** Page id in the running take, or null if the page is not part of it (no 'p0' fallback). */
+export const takePageId = (page) => current?.pageId(page) ?? null;
 export const setActive = (page) => current?.setActive(page);
 export const currentTake = () => current;
 export async function stopTake() {
