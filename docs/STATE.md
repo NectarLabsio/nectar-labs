@@ -87,6 +87,10 @@
 - 15:15Z WO-35d merged c56b0ca (post-drawn cursor, paced input, motion gapcheck): measure-2 S1 S3 S4 S5 PASS, S2 fails only on the Cancel-path scroll (takes
   approve instead). Transitions (window/panel open, explorer load 166–267 ms) reported for Kunal. Takes runbook: docs/work/wo-35e-takes-runbook.md; take.mjs
   --section 1,2,3,4 (15ca7de). Wake-up set for 20:50Z.
+- 15:20Z Kunal: accept transitions; H10 (Kunal, no surname everywhere; size 1; projects 1 → other project must be named in README, Q-015, ASKED);
+  H12 edited text; H14 kunal-drall.near consent yes. WO-82 merged 963ab62 (dry run: only TODO-H3 left; docs-site prior-work says "build window" instead of
+  "hackathon" for the branding rule, ASKED Kunal). Docs CLI deploy 15:45Z dpl_AjmdN8xuNAJJEzXMb41N3uTTBb1r (Kunal "approve docs deploy"), smoke 0; WO-83 A
+  (evidence 5/5) + B (README/H-DEPLOY) merged 34e77c0. GitHub main = b6d6f41, no tag pushed; submission-rc local 5dba753 moves Saturday 10:00 per WO-81.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -509,7 +513,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T15:02:45Z · commit 79c799f
+Last activity: 2026-11-13T15:49:39Z · commit 5ce3c27
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
