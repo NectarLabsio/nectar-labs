@@ -15,7 +15,7 @@ const STORAGE = "1250000000000000000000";
 const NOW_NS = () => BigInt(Date.now()) * 1_000_000n;
 
 type Status = { claimed: string; next_claim_at_ns: string; can_claim: boolean; storage_cost_yocto: string };
-interface Opts { enabled?: boolean; nvdax?: Partial<Status>; usdc?: Partial<Status>; nearYocto?: string; reject?: string }
+interface Opts { enabled?: boolean; nvdax?: Partial<Status>; usdc?: Partial<Status>; nearYocto?: string; reject?: string; ftBalance?: (token: string) => string }
 
 async function setup(page: Page, o: Opts = {}) {
   await prime(page, "dark");
@@ -35,7 +35,7 @@ async function setup(page: Page, o: Opts = {}) {
     let v: unknown;
     if (p.method_name === "faucet_config") v = cfg(p.account_id!);
     else if (p.method_name === "faucet_status") v = st(p.account_id!);
-    else if (p.method_name === "ft_balance_of") v = "0";
+    else if (p.method_name === "ft_balance_of") v = o.ftBalance?.(p.account_id!) ?? "0";
     else if (p.account_id === CORE && p.method_name in FIXTURE) v = FIXTURE[p.method_name];
     if (v === undefined) return route.continue();
     return ok({ result: Array.from(Buffer.from(JSON.stringify(v))), logs: [], block_height: 1, block_hash: "11111111111111111111111111111111" });
@@ -78,6 +78,27 @@ test.describe("Get test assets (mocked RPC + mock wallet)", () => {
     expect(await noHorizontalScroll(page)).toBeLessThanOrEqual(0);
     const axe = await new AxeBuilder({ page }).include("[data-testid=test-assets]").withTags(["wcag2a", "wcag2aa"]).analyze();
     expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  });
+
+  test("after a claim the composer balance refreshes without a reload and Review borrow can enable (WO-74)", async ({ page }) => {
+    const minted = { nvdax: "0" };
+    await setup(page, { ftBalance: (token) => (token === NVDAX ? minted.nvdax : "0") });
+    await page.goto("/borrow");
+    await expect(button(page)).toBeVisible({ timeout: 20_000 });
+    const units = page.getByTestId("amt-units");
+    await expect(units).toContainText("Balance 0.00 NVDAx", { timeout: 20_000 });
+    await page.getByLabel("You lock").fill("5");
+    await page.getByLabel("You borrow").fill("10");
+    await expect(units).toContainText("More than your balance");
+    await expect(page.getByTestId("review-borrow")).toBeDisabled();
+    await button(page).click();
+    // The faucet_mint lands with the batch; nothing on the page polls, so only the claim callback can re-read the balance.
+    minted.nvdax = "5000000";
+    await page.getByRole("dialog").getByTestId("batch-confirm").click();
+    await expect(page.getByTestId("test-assets-NVDAx")).toContainText("Received 5 NVDAx.");
+    await expect(units).toContainText("Balance 5.00 NVDAx");
+    await expect(units).not.toContainText("More than your balance");
+    await expect(page.getByTestId("review-borrow")).toBeEnabled({ timeout: 20_000 });
   });
 
   test("cooldown on one token: skips it, says when, signs only the other", async ({ page }) => {
