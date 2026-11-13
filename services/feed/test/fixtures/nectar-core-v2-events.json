@@ -1,0 +1,119 @@
+{
+  "_source": "NEAR testnet RPC `tx` (wait_until FINAL) on https://archival-rpc.testnet.fastnear.com, fetched 2026-11-13T12:02:49.195Z; nectar-core-v2.nectar.testnet receipts only, fields verbatim (logs, receipt id, block hash); block_height from RPC `block` by block_hash. Selected receipts per tx (WO-71).",
+  "txs": [
+    {
+      "tx_hash": "De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG",
+      "signer_id": "nectar.testnet",
+      "receiver_id": "nectar-core-v2.nectar.testnet",
+      "final_status": "SuccessValue",
+      "receipts": [
+        {
+          "receipt_id": "HKym9cr1RX37xKdDyNLprsfTvamyCNBNrnmxTRSQe3vf",
+          "block_hash": "BUD1qKj3J15XurkE6zbtnUsbx97S9LuwiPpkRtVRJyg7",
+          "block_height": 277503817,
+          "executor_id": "nectar-core-v2.nectar.testnet",
+          "status": "SuccessValue",
+          "logs": [
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"oracle_updated\",\"data\":[{\"symbol\":\"NVDAx\",\"price_usd_e6\":\"135000000\"}]}"
+          ]
+        }
+      ]
+    },
+    {
+      "tx_hash": "7XGiZJKggMWRDcfpqZU7kahvdXLBn4TcZc1PkwV2KVFf",
+      "signer_id": "buyer2.nectar.testnet",
+      "receiver_id": "usdc-mock.nectar.testnet",
+      "final_status": "SuccessValue",
+      "receipts": [
+        {
+          "receipt_id": "5LYCrtAwqshLsc1NkV6Uwp9jHEWKVG7RUc5VVCL8Z7q",
+          "block_hash": "ANLpo6oa4u1uGkbxSsCmXAoZDiGDqXtoRPbgtxZRHv2c",
+          "block_height": 277092389,
+          "executor_id": "nectar-core-v2.nectar.testnet",
+          "status": "SuccessValue",
+          "logs": [
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"quote_funded\",\"data\":[{\"quote_id\":\"0\",\"buyer\":\"buyer2.nectar.testnet\",\"collateral\":\"NVDAx\",\"amount_usd_e6\":\"5000000000\",\"max_discount_bps\":400,\"accepts_voluntary_fills\":false}]}",
+            "EVENT_JSON:{\"standard\":\"nep171\",\"version\":\"1.0.0\",\"event\":\"nft_mint\",\"data\":[{\"owner_id\":\"buyer2.nectar.testnet\",\"token_ids\":[\"q-0\"]}]}"
+          ]
+        }
+      ]
+    },
+    {
+      "tx_hash": "EeZmHGNsmgqAEMUwjw3UV1Yy8H6mDhTbnZu5UCzsr44w",
+      "signer_id": "borrower1.nectar.testnet",
+      "receiver_id": "nvdax-mock.nectar.testnet",
+      "final_status": "SuccessValue",
+      "receipts": [
+        {
+          "receipt_id": "7yKB4fqhGxR8Ztn1yTxSkU5PyWXkBSQFi9mbj1n2MXxJ",
+          "block_hash": "87bihUMmrf765pPcjahu1E4YiFyujcqwwkhKnZAWJLi6",
+          "block_height": 277092410,
+          "executor_id": "nectar-core-v2.nectar.testnet",
+          "status": "SuccessValue",
+          "logs": [
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"position_opened\",\"data\":[{\"position_id\":\"0\",\"borrower\":\"borrower1.nectar.testnet\",\"collateral\":\"NVDAx\",\"units\":\"100000000\",\"debt_usd_e6\":\"4500000000\",\"premium_usd_e6\":\"0\",\"origination_fee_usd_e6\":\"13500000\",\"net_proceeds_usd_e6\":\"4486500000\",\"pay_to\":null,\"referrer\":null,\"remote\":false}]}",
+            "EVENT_JSON:{\"standard\":\"nep171\",\"version\":\"1.0.0\",\"event\":\"nft_mint\",\"data\":[{\"owner_id\":\"borrower1.nectar.testnet\",\"token_ids\":[\"p-0\"]}]}"
+          ]
+        }
+      ]
+    },
+    {
+      "tx_hash": "54eukmJTtQ2PpvYvYxaGeU8Z4gZwg5dpamFFuqWZiMpA",
+      "signer_id": "borrower1.nectar.testnet",
+      "receiver_id": "usdc-mock.nectar.testnet",
+      "final_status": "SuccessValue",
+      "receipts": [
+        {
+          "receipt_id": "6eKh6ZLgNEKREiiysaPVxumCxomu6RZ9UScPwSLftM33",
+          "block_hash": "1DRpc8QNTd5e1Duj5TMgA5KUGg9qVHzUC9wgcskxEr7",
+          "block_height": 277093079,
+          "executor_id": "nectar-core-v2.nectar.testnet",
+          "status": "SuccessValue",
+          "logs": [
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"repaid\",\"data\":[{\"position_id\":\"2\",\"amount_usd_e6\":\"370440000\",\"remaining_debt_usd_e6\":\"0\"}]}"
+          ]
+        }
+      ]
+    },
+    {
+      "tx_hash": "HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u",
+      "signer_id": "keeper-v2.nectar.testnet",
+      "receiver_id": "nectar-core-v2.nectar.testnet",
+      "final_status": "SuccessValue",
+      "receipts": [
+        {
+          "receipt_id": "HbqX5HkfvwL5g7zuDua8uSXgpnYKvi84o5sTvNAybLz8",
+          "block_hash": "AXUz7ZgT1TwDxbnXqGar1vTaXa6TySQyrF8JZhSwBtYg",
+          "block_height": 277093356,
+          "executor_id": "nectar-core-v2.nectar.testnet",
+          "status": "SuccessValue",
+          "logs": [
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"preliq_triggered\",\"data\":[{\"position_id\":\"3\",\"keeper\":\"keeper-v2.nectar.testnet\"}]}",
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"quoter_requested\",\"data\":[{\"position_id\":\"3\",\"input_sha256\":\"b3de2e0dc664a40b37525ba3133089d7e0dfbc84a0772a62354c077b42ac7f79\",\"deposit_yocto\":\"10000000000000000000000\",\"quotes\":3}]}"
+          ]
+        }
+      ]
+    },
+    {
+      "tx_hash": "8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3",
+      "signer_id": "keeper-v2.nectar.testnet",
+      "receiver_id": "nectar-core-v2.nectar.testnet",
+      "final_status": "SuccessValue",
+      "receipts": [
+        {
+          "receipt_id": "B93tVxcm2rwrAE5sCX4REPzVFuwHLT66iEc23f5Razis",
+          "block_hash": "9BWHeAyusuAGGHYf4g4ptQSQ5r2cD2qaeMqBTy8dDodT",
+          "block_height": 277093006,
+          "executor_id": "nectar-core-v2.nectar.testnet",
+          "status": "SuccessValue",
+          "logs": [
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"remote_deposit_confirmed\",\"data\":[{\"position_id\":\"2\",\"units\":\"3000000\",\"depositor\":\"2s7mnWvgC9tqo7FToKWPNcTyJ6faXWWCJ7dzRdxKTzKS\",\"source\":\"outlayer\",\"deposit_ref\":\"520805167\",\"funded\":true}]}",
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"position_opened\",\"data\":[{\"position_id\":\"2\",\"borrower\":\"borrower1.nectar.testnet\",\"collateral\":\"NVDAx\",\"units\":\"3000000\",\"debt_usd_e6\":\"370440000\",\"premium_usd_e6\":\"4633200\",\"origination_fee_usd_e6\":\"1111320\",\"net_proceeds_usd_e6\":\"364695480\",\"pay_to\":null,\"referrer\":null,\"remote\":true}]}",
+            "EVENT_JSON:{\"standard\":\"nep171\",\"version\":\"1.0.0\",\"event\":\"nft_mint\",\"data\":[{\"owner_id\":\"borrower1.nectar.testnet\",\"token_ids\":[\"p-2\"]}]}",
+            "EVENT_JSON:{\"standard\":\"nectar\",\"version\":\"2.0.0\",\"event\":\"reservation_deposit_refunded\",\"data\":[{\"position_id\":\"2\",\"account_id\":\"borrower1.nectar.testnet\",\"amount_yocto\":\"50000000000000000000000\",\"reason\":\"confirmed\"}]}"
+          ]
+        }
+      ]
+    }
+  ]
+}
