@@ -145,7 +145,7 @@ const config: Config = {
           { label: 'Terms', to: '/legal/terms' }, { label: 'Disclaimers', to: '/legal/disclaimers' },
           { label: 'Cookie settings', to: '/legal/cookies#cookie-settings' } ] },
       ],
-      copyright: 'Committed liquidity, verifiable settlement.<br/>© 2026 Nectar Network · MIT License · testnet software · mock collateral',
+      copyright: 'Committed liquidity, verifiable settlement.<br/>© 2026 Nectar Labs · MIT License · testnet software · mock collateral',
     },
     prism: { additionalLanguages: ['rust', 'bash', 'json', 'toml', 'yaml'] },
   } satisfies Preset.ThemeConfig,
