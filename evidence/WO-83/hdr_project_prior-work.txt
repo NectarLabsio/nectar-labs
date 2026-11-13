@@ -1,0 +1,20 @@
+HTTP/2 200 
+accept-ranges: bytes
+access-control-allow-origin: *
+age: 221
+cache-control: public, max-age=0, must-revalidate
+content-disposition: inline; filename="prior-work"
+content-security-policy: frame-ancestors 'none'
+content-type: text/html; charset=utf-8
+date: Fri, 13 Nov 2026 15:49:39 GMT
+etag: "ab2b4731216e40fec2dc2a0cf38bebc0"
+last-modified: Fri, 13 Nov 2026 15:45:57 GMT
+referrer-policy: strict-origin-when-cross-origin
+server: Vercel
+strict-transport-security: max-age=63072000
+x-content-type-options: nosniff
+x-frame-options: DENY
+x-vercel-cache: HIT
+x-vercel-id: bom1::khtgw-1794584979083-5d1cd0d45c6b
+content-length: 22960
+
