@@ -1,0 +1,88 @@
+diff --git a/README.md b/README.md
+index 4f94dbd..2a2a39a 100644
+--- a/README.md
++++ b/README.md
+@@ -15,6 +15,8 @@ Lenders cap loans against tokenized stocks because the DEX liquidity they would
+ 
+ > Testnet only: NEAR testnet, plus Solana devnet for remote collateral. The collateral is mock NVDAx (`nvdax-mock.nectar.testnet`), standing in for tokenized equities such as xStocks, and the USDC is a mock too. Neither has any value. The market makers are our own demo accounts. No mainnet, no token, not audited.
+ 
++Terms such as quote, limit, Shield, Standard, health, Feed and keeper are defined in the [Glossary](#glossary).
++
+ ## 60-second path
+ 
+ On https://testnet.nectarlabs.io with a NEAR testnet wallet that holds a little testnet NEAR for gas (https://near-faucet.io/):
+@@ -40,7 +42,7 @@ Every NEAR transaction below returned final status `SuccessValue` on testnet arc
+ 3. **NEP-171 Position Notes.** Every quote and loan is an NFT in the collection "Nectar Position Notes" (`nft_metadata`, spec `nft-1.0.0`; 27 Notes at 2026-11-13T20:14Z). [GcHF75nW…](https://testnet.nearblocks.io/txns/GcHF75nWhNi1kVnQr5tZWFH1W4gA1LvQdGhH3NxH15mt) opens loan #4 and emits `nft_mint` of Note `p-4`. Transferring a Note with `nft_transfer` or `nft_transfer_call` moves the loan's rights: the new holder can self-settle and receives the collateral a full repay releases; the old holder can no longer self-settle or transfer it. Repay stays open to anyone, and the collateral still goes to the Note's holder. Tests: `v7_notes_self_settle_by_new_loan_owner`, `v7_notes_self_settle_old_owner_refused`, `v7_notes_transfer_owner_only`, `v7_notes_residual_collateral_goes_to_loan_note_owner` ([contracts/nectar-core/src/tests_notes.rs](contracts/nectar-core/src/tests_notes.rs)). For Solana and Base collateral the release still goes to the original depositor ([SECURITY.md](SECURITY.md), "What remains", item 12).
+ 4. **NEP-297 events read by the Feed.** The contract logs `EVENT_JSON` with standard `nectar`, version `2.0.0`, for example `oracle_updated` in [De6aVqqN…](https://testnet.nearblocks.io/txns/De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG). The Feed reads them from Neardata blocks; test `real nectar-core-v2 (2.0.0) log lines` ([services/feed/test/v2-events.test.ts](services/feed/test/v2-events.test.ts)) ingests real testnet log lines. The hosted Feed's `/health` reported 278 events indexed and 0 blocks of lag at 2026-11-13T20:13Z.
+ 5. **x402 with a NEP-366 `SignedDelegate`.** The agent signs a delegate action that calls `ft_transfer` on `usdc-mock` for 0.01 mock USDC; `x402-relayer.nectar.testnet` submits it: [6karZo8L…](https://testnet.nearblocks.io/txns/6karZo8LKP4UbkDP9hx34459egCTcbEcRoZbNTph6sk5) (2026-11-13T19:41Z). The same flow in an independent re-run: [4vW2tPF5…](https://testnet.nearblocks.io/txns/4vW2tPF5Gqemkm5uoafQE6eaXidSMSCuqLcDVMTTB77b) (2026-11-11).
+-6. **A price-bot key limited to `update_owner_price`.** [BHopF1cu…](https://testnet.nearblocks.io/txns/BHopF1cuKAMDFoCnKyNZPPKR3qVPgs5dYiKxx6jwWpao) adds a function-call key to `nectar.testnet` whose only allowed method is `update_owner_price` on `nectar-core-v2`, with a 5 NEAR allowance (still listed by `view_access_key_list` at 2026-11-13T20:13Z). Its first refresh: [De6aVqqN…](https://testnet.nearblocks.io/txns/De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG). At 2026-11-13T20:13Z the price was 58 s old.
++6. **A price-bot key limited to `update_owner_price`.** [BHopF1cu…](https://testnet.nearblocks.io/txns/BHopF1cuKAMDFoCnKyNZPPKR3qVPgs5dYiKxx6jwWpao) adds a function-call key to `nectar.testnet` whose only allowed method is `update_owner_price` on `nectar-core-v2`, with a 5 NEAR allowance (still listed by `view_access_key_list` at 2026-11-13T20:13Z). Its first refresh: [De6aVqqN…](https://testnet.nearblocks.io/txns/De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG). At 2026-11-13T20:13Z the price was 58 s old. The refresher checks every 15 s and re-asserts the price once it is 60 s old inside NYSE session windows, or 6 h old outside them (`ops.oracle_refresher` in [packages/config/config.yaml](packages/config/config.yaml), scheduled until 2026-11-18 23:59 UTC). The contract accepts a price up to 120 s old for a borrow while the session is open and up to 86,400 s (24 h) while it is closed (`max_age_ns_session`, `max_age_ns_closed` in `get_config` at block 277568411, 2026-11-13T22:10Z), so while the refresher runs a borrow works at any hour. A session counts as open only while the price is under 900 s old (`SESSION_MAX_PRICE_AGE_NS` in [contracts/nectar-core/src/lib.rs](contracts/nectar-core/src/lib.rs)).
+ 7. **OutLayer TEE quoter.** The keeper (function-call key only) calls `trigger_preliquidation`; the contract asks a hash-pinned OutLayer program for the discount, clamps it to the quote's cap and emits `settlement_signed`: [HrpQsuMW…](https://testnet.nearblocks.io/txns/HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u) (OutLayer request 16453). Attestation of an earlier request: [request 15148](https://testnet-api.outlayer.ai/attestations/by-request/15148). The TDX quote is not verified on chain.
+ 8. **1Click quotes as read-only reference.** The Feed fetches `dry: true` quotes and never deposits, because NEAR Intents has no testnet. NVDAx has no 1Click route, so its DEX depth term is 0 (`d_usd_e6` `0` in `get_exit_capacity`, 2026-11-13T20:13Z).
+ 9. **Chain Signatures for remote collateral.** The contract builds each release or settlement message (`NECTAR_SETTLE_V1|chain=solana-devnet|…` in the `settlement_signed` event of HrpQsuMW…) and `v1.signer-prod.testnet` signs it with a key derived per position. On Solana devnet the vault checks the signature before it pays the buyer: in [3cdcQru2…](https://explorer.solana.com/tx/3cdcQru2WH6dbN9qvqLsKVz5CppVikHSYEgbJF8WLS6DRwzECncHSM3f5ABSJXZ4EWSZoKSfhFFRwePgihL7pWJ6?cluster=devnet) the Ed25519 verify instruction runs first, then `nectar_vault` `Settle` (finalized, no error). The Base leg (secp256k1 key, EIP-712) ran only on a local fork of Base Sepolia, which has no public explorer; its round trip is recorded in [docs/EVIDENCE.md](docs/EVIDENCE.md).
+@@ -87,7 +89,7 @@ Hosts (each answered HTTP 200 on 2026-11-13T20:13Z; hosted until at least 2026-1
+ | Collateral | **mock** NVDAx (`nvdax-mock.nectar.testnet`), standing in for tokenized equities |
+ | USDC | **mock** (`usdc-mock.nectar.testnet`) |
+ | Market makers | our demo accounts (`buyer1`, `buyer2`) with quoter inputs we set, not independent market makers |
+-| Oracle | **owner oracle**: a price we set ($135.00 at 2026-11-13T20:13Z), re-asserted by a hosted bot whose key can call only `update_owner_price`. A Pyth path is built and tested in the sandbox, not live |
++| Oracle | **owner oracle**: a price we set ($135.00 at 2026-11-13T20:13Z), re-asserted by a hosted bot whose key can call only `update_owner_price`: once the price is 60 s old inside NYSE session windows and 6 h old outside them, against contract limits of 120 s (session open) and 24 h (closed). A Pyth path is built and tested in the sandbox, not live |
+ | OutLayer quoter | real TEE execution on testnet; if the call fails, the contract settles at the quote's cap |
+ | Solana leg | real, Solana devnet + NEAR testnet signer |
+ | Base leg | **local fork** of Base Sepolia (chain id 84532), not Base Sepolia |
+@@ -123,7 +125,7 @@ Hosts (each answered HTTP 200 on 2026-11-13T20:13Z; hosted until at least 2026-1
+ | An agent can borrow and pay for data on its own | $10 loan (#20) with a $0.03 fee, then 0.01 mock USDC paid: HTTP 402, then 200 with 168 CSV rows (2026-11-13T19:41Z) | [DTtVhTnS…](https://testnet.nearblocks.io/txns/DTtVhTnSDVRU163gFTAfgZZwuc35p1zRNFLu3c12w5TD), [6karZo8L…](https://testnet.nearblocks.io/txns/6karZo8LKP4UbkDP9hx34459egCTcbEcRoZbNTph6sk5), screenshot above |
+ | The price bot can do one thing only | its key may call `update_owner_price` on `nectar-core-v2` and nothing else | [BHopF1cu…](https://testnet.nearblocks.io/txns/BHopF1cuKAMDFoCnKyNZPPKR3qVPgs5dYiKxx6jwWpao) |
+ 
+-Every check, with commands, outputs and links: [docs/EVIDENCE.md](docs/EVIDENCE.md). What each evidence folder holds: [evidence/README.md](evidence/README.md).
++Every check, with commands, outputs and links: [docs/EVIDENCE.md](docs/EVIDENCE.md). Raw logs, including some transactions cited above that EVIDENCE does not repeat, are under evidence/; what each folder holds: [evidence/README.md](evidence/README.md).
+ 
+ ## Next
+ 
+@@ -194,7 +196,16 @@ flowchart TB
+ - **Limit**: what one loan may borrow, `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))`: the LTV cap on the collateral's value, or the haircut share of committed quotes `Q_c`, the Reserve `R_c` and DEX depth `D_c`, whichever is lower. At 2026-11-13T20:13Z it was $94.50 per mock NVDAx at a $135.00 price. When the market is closed, `D_c` is 0 and a larger haircut applies.
+ - **Exit capacity**: `(1−h_c)(Q_c+R_c+D_c)` for an asset, shared by all its loans; total debt must fit inside it. Headroom is capacity minus debt ($14,516.30 − $9,559.00 = $4,957.30 at 2026-11-13T20:13Z).
+ - **Shield**: protection paid at borrow time. A Weekend Shield (15 bps) sizes the loan at the weekend limit, and inside its window, which ends at the next market open, only committed buyers can settle it. An Event Shield (25 bps) covers an event window when one is set for the asset.
++- **Standard**: the protection choice without a Shield; the loan's limit follows the market session (open or closed parameters).
+ - **Note**: the NEP-171 token minted for every quote (`q-<id>`) and loan (`p-<id>`). Its holder holds the authority over that quote or loan.
++- **Health**: the loan's flag line divided by its current LTV; at 1 or above the loan is healthy, below 1 the keeper can trigger pre-liquidation (loan #22 showed 4.89).
++- **Flag line**: the pre-liquidation LTV the borrower picks at borrow time, within the asset's bounds; the flag price is the collateral price at which health reaches 1.
++- **Nectar Reserve**: one pooled committed buyer per asset that fills after the quotes; depositors put in USDC for shares, and its USDC is the `R_c` term of the limit.
++- **Profit-Lock**: self-settlement (`self_settle`): a healthy borrower sells just enough collateral to opted-in committed buyers to repay the debt plus a 50 bps fee, and keeps the rest.
++- **Keeper**: the bot in [services/keeper](services/keeper) that calls `trigger_preliquidation` and relays remote deposits, settlements and releases with a function-call key; it passes ids and never prices or signs.
++- **Feed**: the read-only indexer in [services/feed](services/feed) of the contract's NEP-297 events and views, served as REST and MCP; it holds no keys.
++- **x402**: an HTTP payment flow: the server answers 402 Payment Required with a price, the client pays (here 0.01 mock USDC through a NEP-366 `SignedDelegate`) and retries to get 200.
++- **Intear**: a NEAR wallet offered in the NEAR Connect selector; the screenshots were taken with it.
+ 
+ ## Run locally
+ 
+@@ -203,22 +214,26 @@ From a fresh clone, no keys needed. Node ≥ 22.22.2, pnpm 10.34.9. Timings are
+ ```bash
+ git clone https://github.com/NectarLabsio/nectar-labs.git && cd nectar-labs
+ pnpm i                         # 12 s
+-pnpm demo:testnet              # 4 s: read-only nectar-core-v2 views over public testnet RPC
++pnpm demo:testnet              # 4–40 s, depending on the RPC: read-only nectar-core-v2 views over public testnet RPC
+ pnpm verify                    # 36 s: lint, typecheck, unit tests, then the testnet views again
+ pnpm --filter web dev          # web app on http://localhost:3100, ready in 4 s
+ ```
+ 
++- `pnpm i` ends with "Ignored build scripts: core-js, secp256k1. Run pnpm approve-builds". That is expected; the quick start needs nothing approved.
++- If `pnpm demo:testnet` or `pnpm verify` fails with HTTP 429, the default RPC (FastNear) is rate-limiting your IP. Use the NEAR RPC instead: `NEAR_RPC_URL=https://rpc.testnet.near.org pnpm demo:testnet` passed in 39 s on 2026-11-13.
++
+ | Command | What it does |
+ | --- | --- |
+-| `pnpm demo:testnet` | runs [scripts/demo-testnet.mjs](scripts/demo-testnet.mjs): reads the ids from [packages/config/config.yaml](packages/config/config.yaml) and calls the contract over public RPC (default `https://test.rpc.fastnear.com`; override with `NEAR_RPC_URL`). No keys, no near CLI |
++| `pnpm demo:testnet` | runs [scripts/50-verify.sh](scripts/50-verify.sh), which runs [scripts/demo-testnet.mjs](scripts/demo-testnet.mjs): it reads the ids from [packages/config/config.yaml](packages/config/config.yaml) and calls the contract's views over public RPC (default `https://test.rpc.fastnear.com`; override with `NEAR_RPC_URL`). It prints the contract version, NVDAx exit capacity and oracle age, the pool, the first 16 quotes, the first 16 loans (#0–#15, with health for open ones) and explorer links. Both lists ask for `limit: 16` from index 0, so newer loans such as #22 are not listed. No keys, no near CLI |
+ | `pnpm verify` | lint, typecheck and unit tests across the workspace, then the testnet views |
+ | `pnpm --filter web dev` | the web app on http://localhost:3100 |
+ | `pnpm --filter docs-site build` | static docs build; a broken link fails it (24 s) |
+ | `pnpm --filter docs-site start` | docs on http://localhost:3000/ |
+-| `pnpm --filter feed start` | Feed REST on :8788 and MCP over HTTP at http://127.0.0.1:8789/mcp; no env needed ([services/feed/README.md](services/feed/README.md)) |
+-| `pnpm -s --filter feed mcp` | Feed MCP over stdio (read-only tools) |
++| `pnpm --filter feed start` | Feed REST on :8788 and MCP over HTTP at http://127.0.0.1:8789/mcp; no keys. With `FEED_DB_PATH` unset it writes its SQLite database to `~/.nectar/feed.sqlite` (creating the folder). To keep it in the clone, run `FEED_DB_PATH=./feed.sqlite pnpm --filter feed start`: pnpm runs the script from `services/feed`, so the file lands at `services/feed/feed.sqlite` ([services/feed/README.md](services/feed/README.md)) |
++| `pnpm -s --filter feed mcp` | Feed MCP over stdio (read-only tools); reads the same `FEED_DB_PATH` database |
+ | `pnpm --filter x402 demo:testnet` | the reference agent; needs the agent's testnet key ([services/x402/README.md](services/x402/README.md)) |
+ 
++- Locally, http://localhost:3100/ serves the landing page and the app routes start at http://localhost:3100/feed (the hosted app redirects / to /feed).
+ - Web pages: `/feed`, `/feed/NVDAx`, `/borrow`, `/quote/new`, `/console`, `/notes`, `/reserve`, `/shield`, `/agents`, `/keepers`, `/security`, `/talk`, `/docs`, `/legal/privacy` (also `cookies`, `terms`, `disclaimers`), and `/position/<id>`, `/quote/<id>`, `/note/<token id>` (for example `/note/q-0`).
+ - MCP tools: `get_exit_capacity`, `preview_borrow`, `list_quotes`, `explain_limit`, `quote_capacity`, `open_protected_stock_loan` (returns an unsigned call); `get_note` and `build_self_settle` return `not_available`. Arguments take `symbol`, for example `get_exit_capacity {"symbol":"NVDAx"}`. A raw HTTP client must send `accept: application/json, text/event-stream`.
+ - The keeper and the x402 server need testnet keys, which live in the OS keychain or `0600` files under `~/.nectar/`; see [services/keeper/README.md](services/keeper/README.md) and [services/x402/README.md](services/x402/README.md).

@@ -1,0 +1,3 @@
+files 245  relative links checked 72  broken 2
+BROKEN docs/EVIDENCE.md:520 …
+BROKEN docs/FACTS.md:223 /docs/domains/working-with-domains/add-a-domain

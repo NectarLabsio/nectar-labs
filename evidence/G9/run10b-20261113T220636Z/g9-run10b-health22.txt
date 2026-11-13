@@ -1,0 +1,1 @@
+block 277569469 {"value_usd_e6":"675000000","debt_usd_e6":"100000000","ltv_bps":1482,"pre_liq_ltv_bps":7250,"oracle_fresh":true,"triggerable":false}
