@@ -40,7 +40,8 @@ function blockText(b: FaucetBlock, symbol: string, amt: (v: string) => string): 
   }
 }
 
-export function TestAssets() {
+/** `onClaimed` (WO-74): called once after a claim batch returns with at least one minted token, so the page can re-read the balances it shows. */
+export function TestAssets({ onClaimed }: { onClaimed?: () => void } = {}) {
   const { config, views } = useChain();
   const { accountId, network } = useWallet();
   const signBatch = useSignBatch();
@@ -122,6 +123,7 @@ export function TestAssets() {
     });
     views?.invalidate();
     setPhase({ kind: "done", lines: [...lines, ...blocked] });
+    if (lines.some((l) => l.ok)) onClaimed?.();
   }
 
   return (

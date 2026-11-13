@@ -304,7 +304,7 @@ export function BorrowComposer({ initialProtection = "standard", title, lede, cr
         {cap.data && col ? <SessionBadge cap={cap.data} compact /> : null}
       </div>
       <Gate wallet action="borrow" blockOnPause>
-        <TestAssets />
+        <TestAssets onClaimed={bal.reload} />
         {cap.data && col ? <CorporateActionBanner cap={cap.data} symbol={col.symbol} /> : null}
         {chain === "solana" && solanaOn ? (
           <div className="nx-stack" style={{ gap: 20 }}>
