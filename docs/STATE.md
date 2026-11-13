@@ -25,6 +25,12 @@
 - 03ec6fed merged WO-67 (bd64f39): production (custom hosts) PASS 8/8; G9 run 6 FAIL step 3 only (README hosted-demo text pre-release; docs/GATE_FAIL_WO67.md).
   verify:quick 0. f5a3152: scripts/*.sh +x in git (G9 tooling note). WO-68 docs (README/DEMO_SCRIPT/HUMAN_HANDOFF) dispatched → then verifier G9 step 3 re-check.
 - x402 :8791 restarted (planned) with FEED_URL = hosted Feed (bqqk6anqo; evidence/rollout/x402-server-*.log); unpaid export.csv → 402.
+- 978b073 merged WO-67b: G9 run 6b step 3 PASS → G9 PASS for c95cd0c (product diff empty). README "quotes" row note = wording only.
+- Oracle schedule A (Kunal): config f34260a (tick 15 s, session ≥ 60 s, closed ≥ 6 h, allowance 5 NEAR) + WO-69 test (merge 7833aa3, verify:quick 0).
+  Refresher source = src-7833aa3… sha256 b59ffebc… (verify ok); RESTAGED on oracle-refresher (patch 1d6ac914…, SRC_URL 3 days from 02:43Z).
+  Kunal applies in the dashboard → orchestrator: key_generated pk → add-key FC nectar-core-v2 update_owner_price allowance 5 NEAR → show view_access_key.
+- Feed DB is on volume b9c5e39b at /data (FEED_DB_PATH /data/feed-neardata-20261113.sqlite): index persists. Sealing FEED_NEARDATA_API_KEY = dashboard
+  only (Railway docs: 3-dot menu → Seal; no API) → Kunal.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -447,7 +453,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T02:27:15Z · commit f5a3152
+Last activity: 2026-11-13T02:41:51Z · commit f34260a
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
