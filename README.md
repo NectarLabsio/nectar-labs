@@ -160,10 +160,10 @@ The docs site (`apps/docs-site`) carries the spec, and every protocol page has a
 Known limitations added 2026-11-11 (SECURITY.md "What remains" items 11 and 12): the web app refuses a Note transfer to a `0s` / `0u` account that does not exist yet (FACTS C-020, kept by Kunal's decision, D-029; the safe direction), and for remote (Solana / Base) positions the collateral release goes to the depositor recorded at deposit, not to the current Loan Note owner.
 Privacy facts (what the code does): the OutLayer TEE makes the discount computation verifiable (hash-pinned program, one attestation per request; G4). It is not a secrecy claim: in this demo the quoter parameters are operator-set and published in the docs, the OutLayer coordinator saw the plaintext (F-167), and each settlement's discount reveals their product q·γ; the PROD path is MM-owned secrets, no plaintext step and coarser outputs. Analytics are off by default, consent-gated and not configured in this build; fonts are self-hosted. The browser calls the NEAR and Solana RPC providers directly, so they see the user's IP and the account queried. Every storage key and third party: docs-site Legal › Privacy and Cookies.
 
-## Prior work (disclosure, Q-002 / Q-005): draft, approve TODO-H12
-Nectar Network (Kunal Drall) published research on exit-liquidity gaps for tokenized stocks before the
-hackathon (Oct 2026 product brief; SCF #42 material). That research is the baseline. All code,
-contracts, programs, services and sites in this repository were written during the hackathon window (from 2026-11-09).
+## Prior work (disclosure, Q-002 / Q-005)
+Before the hackathon, Kunal researched exit-liquidity gaps for tokenized stocks under Nectar Network (an October 2026 product brief and
+Stellar Community Fund #42 material). That research and the Nectar brand assets (logo, colour tokens) are the baseline. Nectar Network's separate Stellar testnet
+product shares no code with this repository. All code, contracts, programs, services and sites here were written during the hackathon window, starting 2026-11-09.
 
 ## Roadmap
 P0 core credit (G0–G3) → P1 TEE pricing, oracle (G5: owner-oracle fallback, disclosed), 1Click depth, Feed MCP (G4–G6) → P2 Solana leg via Chain Signatures, copilot (G7–G8) → G9 fresh-clone rehearsal.
@@ -171,7 +171,7 @@ PROD (not here): mainnet with a DAO owner and timelock, audit, real tokenized-eq
 Deliberately not built: other chains, a token, governance UI, mobile.
 
 ## Team
-Kunal Drall (Nectar Network). Team list pending confirmation (TODO-H10).
+Kunal (Nectar Network).
 
 ## License
 MIT © 2026 Nectar Network
