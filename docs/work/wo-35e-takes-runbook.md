@@ -10,13 +10,13 @@ and agent1.nectar.testnet during takes only. Owner mints to demo.nectar.testnet 
 4. Faucet: faucet_status(demo.nectar.testnet) can_claim true on both tokens (1 claim/h, cap 3; claim 1 used 12:43Z → claims 2 and 3 left). If S2 cannot claim, S3 may
    still run from an owner mint (off camera) but S2 needs the real claim.
 5. Local Feed :8788 and x402 :8791 STOPPED for S1–S4 (Kunal). Machine quiet: no agents running, `uptime` load < 3.
-## Take A (≥ 21:00Z), out ~/.nectar/demo-capture/take-a
-  CAPTURE_HEADED=1 node scripts/demo/takes/take.mjs --mode take --section 0,1,2,3,4 --sign --out ~/.nectar/demo-capture/take-a   (s0 = landing still)
+## Take A (≥ 21:00Z), out /Volumes/T7/nectar-demo-media/raw/take-a
+  CAPTURE_HEADED=1 node scripts/demo/takes/take.mjs --mode take --section 0,1,2,3,4 --sign --out /Volumes/T7/nectar-demo-media/raw/take-a   (s0 = landing still)
   then restart x402 (background): X402_PORT=8791 FEED_URL=https://feed-production-2f2776c9.up.railway.app X402_RELAYER_KEY_PATH=~/.nectar/keys/x402-relayer.json pnpm -s --filter x402 start
   check unpaid export.csv → 402; then
-  CAPTURE_HEADED=1 node scripts/demo/takes/take.mjs --mode take --section 5 --sign --out ~/.nectar/demo-capture/take-a
+  CAPTURE_HEADED=1 node scripts/demo/takes/take.mjs --mode take --section 5 --sign --out /Volumes/T7/nectar-demo-media/raw/take-a
   stop x402 again. gapcheck per section (motion ≤ 100, holds ≤ 120, transitions reported). Retake a failing section alone (S3 retake: owner mint if needed).
-## Take B (≥ 1 h after take A's faucet claim), out ~/.nectar/demo-capture/take-b — same steps.
+## Take B (≥ 1 h after take A's faucet claim), out /Volumes/T7/nectar-demo-media/raw/take-b — same steps.
 ## Edit (best take; per-section mix allowed only between complete takes of the same section, never inside a section)
   FFMPEG=~/.nectar/tools/node_modules/ffmpeg-static/ffmpeg node scripts/demo/capture/compose.mjs <take>/edit.json <work>/master --no-captions
   ... compose --captions → <work>/caps; encode.mjs both → nectar-demo.mp4, nectar-demo-captions.mp4 (+ -720p); srt.mjs; contact.mjs (1 frame / 5 s).
@@ -28,3 +28,6 @@ and agent1.nectar.testnet during takes only. Owner mints to demo.nectar.testnet 
   wrong URLs; on-screen numbers = the transactions. Then the verifier (has not seen the edit) checks the same list against shotlist.md and adds the take tx hashes to
   EVIDENCE. Send Kunal the master + contact sheet (files), nothing else public.
 ## Fallbacks (Kunal): no take passes by 03:00Z → best take; none usable → `pnpm demo:capture` captioned version.
+## Storage (Kunal 2026-11-13 ~17:15Z)
+Everything stays on T7, including the raw takes: /Volumes/T7/nectar-demo-media/raw/take-a, take-b. Keep ≥ 100 GB free on T7 before 20:50Z (cleanup of list A after
+Kunal approves it; never list C, never ~/.nectar, git objects or branches). Preflight adds `df -h /Volumes/T7` ≥ 100 GB free.

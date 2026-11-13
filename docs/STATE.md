@@ -101,6 +101,9 @@
   WO-87A targeted G3b PASS 5/5 (Lighthouse SITE 100, APP /borrow 100, DOCS dark 100 / light 97; e2e 28/28; 0 hydration errors) merge e59812d; WO-87B README
   9bc9931. Noted: docs light-theme footer links contrast 1.17:1 (pre-existing; after judging). Docs team page still "founder, Nectar Network" (asked Kunal).
   17:12Z machine quiet: no builds; stray next-server :3533 (old agent worktree) stopped; local Feed + x402 stopped; keeper + anvil up. Takes from 21:00Z.
+- ~17:15Z Kunal: delete the old WO-51 worktree (done via worktree remove -f -f; branch kept); T7 read-only survey by 18:15Z (agent running), then delete list A
+  after approval (never list C / ~/.nectar / git objects / branches), ≥100 GB free before 20:50Z, raw takes on T7; WO-51 ported onto main (WO-88, web agent;
+  merge-tree conflicted) and shipped with the brand changes before 19:30Z, revert both on any failure.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -523,7 +526,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T17:09:33Z · commit ecb876e
+Last activity: 2026-11-13T17:13:48Z · commit 71496d1
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
