@@ -1,0 +1,2 @@
+borrow-dark.json https://testnet.nectarlabs.io/borrow 2026-11-13T14:24:29.368Z a11y 100 failing a11y audits: []
+borrow-light.json https://testnet.nectarlabs.io/borrow 2026-11-13T14:24:37.565Z a11y 100 failing a11y audits: []

@@ -1,0 +1,38 @@
+## 2026-11-13T14:23:19Z app: curl -sL https://testnet.nectarlabs.io/borrow
+final_url=https://testnet.nectarlabs.io/borrow http=200 redirects=0
+chunks referenced: 14; dpl ids in HTML: 
+onClaimed in /_next/static/immutable/chunks/3htcm-0feao4j.js:
+    ),E=e.i(21423),B=e.i(77375);function T({onClaimed:e}={}){let{config:a,views:l}=(0,b.useChain)(),{accountId:i,
+    ,blockOnPause:!0,children:[(0,t.jsx)(T,{onClaimed:eT.reload}),eR.data&&V?(0,t.jsx)(f.U,{cap:eR.data,symbol:V.
+test-assets-connect marker in /_next/static/immutable/chunks/3htcm-0feao4j.js
+chunks with onClaimed: 1
+$ curl -sI https://testnet.nectarlabs.io/borrow
+age: 1873
+date: Fri, 13 Nov 2026 14:23:26 GMT
+etag: "d3e1527c2df7e646647a43dc8a22ceeb"
+x-matched-path: /borrow
+x-vercel-cache: HIT
+x-vercel-id: bom1::4tgwl-1794579806131-db42adb0c9f7
+## 2026-11-13T14:23:26Z legacy: curl -sL https://nectarlabs-app.vercel.app/borrow
+final_url=https://testnet.nectarlabs.io/borrow http=200 redirects=1
+chunks referenced: 14; dpl ids in HTML: 
+onClaimed in /_next/static/immutable/chunks/3htcm-0feao4j.js:
+    ),E=e.i(21423),B=e.i(77375);function T({onClaimed:e}={}){let{config:a,views:l}=(0,b.useChain)(),{accountId:i,
+    ,blockOnPause:!0,children:[(0,t.jsx)(T,{onClaimed:eT.reload}),eR.data&&V?(0,t.jsx)(f.U,{cap:eR.data,symbol:V.
+test-assets-connect marker in /_next/static/immutable/chunks/3htcm-0feao4j.js
+chunks with onClaimed: 1
+$ curl -sI https://testnet.nectarlabs.io/borrow
+age: 1877
+date: Fri, 13 Nov 2026 14:23:30 GMT
+etag: "d3e1527c2df7e646647a43dc8a22ceeb"
+x-matched-path: /borrow
+x-vercel-cache: HIT
+x-vercel-id: bom1::qlx9v-1794579810910-a4760cd26f31
+## chunk list + sha256 prefix diff (app vs legacy redirect target)
+identical: 14 chunks, same paths and sha256
+## docs host unchanged?
+age: 44408
+date: Fri, 13 Nov 2026 14:23:31 GMT
+etag: "6ba60869be4d0270e50e620b55124059"
+last-modified: Fri, 13 Nov 2026 02:03:23 GMT
+x-vercel-cache: HIT

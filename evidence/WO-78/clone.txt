@@ -1,0 +1,8 @@
+# 2026-11-13T14:22:42Z clone HEAD 2cd7a6e3f20d32c0058fe7bbe9e9001794cf9b47
+$ git diff --stat c95cd0c 1a95022 -- apps
+ apps/web/components/TestAssets.tsx            |  4 +++-
+ apps/web/components/borrow/BorrowComposer.tsx |  2 +-
+ apps/web/e2e/test-assets.spec.ts              | 25 +++++++++++++++++++++++--
+ 3 files changed, 27 insertions(+), 4 deletions(-)
+$ git diff --stat 1a95022 HEAD -- apps packages
+(exit 0)
