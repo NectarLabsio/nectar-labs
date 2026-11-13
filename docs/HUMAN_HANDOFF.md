@@ -147,18 +147,24 @@ What Claude Code does then: the orchestrator fills `site:`; the legal pages (pri
   values; the production guard passes; the deploy is promoted to production.
 Default if silent by 2026-11-13 12:00 UTC: no production promotion (previews only, noindex). The submission continues without hosting.
 
-## H-DEPLOY — approve production deploys                status: DONE 2026-11-13 (Kunal typed approval; release 4 = c95cd0c deployed ~02:00Z; web 1a95022 = WO-74 deployed 13:51Z, approved for that fix only; docs 963ab62 = WO-82 deployed 15:45Z, approved for the name change)   needed by: the release with WO-62b, WO-64, WO-62c (before recording)
+## H-DEPLOY — approve production deploys                status: DONE 2026-11-13 (Kunal typed approval; release 4 = c95cd0c deployed ~02:00Z; web 1a95022 = WO-74 deployed 13:51Z, approved for that fix only; docs 963ab62 = WO-82 deployed 15:45Z, approved for the name change; web + docs c9fd56b = WO-85/86 brand deployed ~16:58Z, approved by Kunal)   needed by: the release with WO-62b, WO-64, WO-62c (before recording)
 Done: Kunal typed his approval on 2026-11-13. Release 4 (commit c95cd0c) went to production at ~02:00Z: Vercel web dpl_Bm1uwQcX… (replaced at
   13:51Z, below), docs dpl_DpqAmb6… (replaced at 15:45Z, below). The
   verifier's acceptance on the custom hosts passed 8 of 8 items (docs/EVIDENCE.md §"WO-34 production (custom hosts)", 2026-11-13T02:05Z–02:40Z).
   Web redeploy 2026-11-13 13:51Z: Kunal approved deploying the WO-74 fix only (the borrow composer refreshes its balance after "Get test
-  assets"). Commit 1a95022 went to the web project as Vercel dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K with the Vercel CLI, because the claude.ai
+  assets"). Commit 1a95022 went to the web project as Vercel dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K (replaced at ~16:58Z, below) with the Vercel CLI, because the claude.ai
   connectors were down (evidence/WO-34/deploy-web-cli-20261113T135102Z.log). Docs were not redeployed then (dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE, c95cd0c).
   Verifier check: docs/EVIDENCE.md §"WO-34 production (web 1a95022, WO-74)" (WO-78).
   Docs redeploy 2026-11-13 15:45Z: Kunal approved a docs deploy for the WO-82 name change (the team and prior-work pages name Kunal).
-  Commit 963ab62 went to the docs project as Vercel dpl_AjmdN8xuNAJJEzXMb41N3uTTBb1r with the Vercel CLI, apps/docs-site/vercel.json carried
+  Commit 963ab62 went to the docs project as Vercel dpl_AjmdN8xuNAJJEzXMb41N3uTTBb1r (replaced at ~16:58Z, below) with the Vercel CLI, apps/docs-site/vercel.json carried
   at upload (evidence/WO-34/deploy-docs-cli-20261113T154455Z.log). Web was not redeployed (dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K, 1a95022).
   Verifier check: docs/EVIDENCE.md §"WO-34 production (docs 963ab62, WO-82)" (WO-83).
+  Web + docs redeploy 2026-11-13 ~16:58Z: Kunal approved the WO-85/86 brand change (footer "A Nectar Labs product · testnet · mock collateral",
+  copyright "© 2026 Nectar Labs"). Commit c9fd56b went to the web project as Vercel dpl_F8NmBUE5PzpsdYRw94QWsRX85hgH
+  (evidence/WO-34/deploy-web-cli-20261113T165654Z.log) and to the docs project as Vercel dpl_2gj8GAFNtCHUDHTtWYwmS55Yu2ks
+  (evidence/WO-34/deploy-docs-cli-20261113T165742Z.log), both with the Vercel CLI. They replace web dpl_4ExxeLH6… (1a95022) and docs dpl_AjmdN8xu…
+  (963ab62). Orchestrator smoke at 16:59Z: 0 failures (evidence/WO-34/prod-smoke-custom-20261113T165911Z.log).
+  Verifier check: docs/EVIDENCE.md §"WO-34 production (web + docs c9fd56b, WO-85/86 brand)" (WO-87).
   Any further production deploy needs Kunal's approval again. Original request kept below.
 Why a human: the web production deploy was denied by the auto-mode classifier on 2026-11-12, so production deploys need Kunal's approval in
   this session. Merged but not deployed: status host, docs at the root of docs.nectarlabs.io, platform-host 308s (WO-62b, WO-64), "Get test

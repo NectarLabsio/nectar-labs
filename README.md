@@ -8,13 +8,16 @@ Lenders cap LTV on tokenized stocks because DEX exit liquidity is revocable. Nec
 `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))` (PRD §4.2, decision D-009).
 
 ## Hosted demo (NEAR testnet, mock collateral)
-Production web runs commit 1a95022: release 4 plus WO-74 (the borrow composer refreshes its balance after "Get test assets"). It was deployed
-2026-11-13 13:51Z with the Vercel CLI as Vercel web dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K (evidence/WO-34/deploy-web-cli-20261113T135102Z.log). Kunal approved
-this fix only, and the CLI was used because the claude.ai connectors were down (HUMAN_HANDOFF H-DEPLOY). Its verifier acceptance: docs/EVIDENCE.md
-§"WO-34 production (web 1a95022, WO-74)" (WO-78). Production docs run commit 963ab62, the WO-82 merge (the team and prior-work pages name Kunal).
-It was deployed 2026-11-13 15:45Z with the Vercel CLI as Vercel docs dpl_AjmdN8xuNAJJEzXMb41N3uTTBb1r (evidence/WO-34/deploy-docs-cli-20261113T154455Z.log).
-Kunal approved this docs deploy for the name change (HUMAN_HANDOFF H-DEPLOY); web was not redeployed. Its verifier acceptance: docs/EVIDENCE.md
-§"WO-34 production (docs 963ab62, WO-82)" (WO-83). Before that the docs ran release 4, commit c95cd0c (Vercel docs dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE, deployed ~02:00Z).
+Production web and docs both run commit c9fd56b, which adds the WO-85/86 brand change: the footer reads "A Nectar Labs product · testnet ·
+mock collateral" and the copyright "© 2026 Nectar Labs". Against the earlier deploys the product diff is 2 lines in packages/ui/src/Nav.tsx (web,
+`git diff --stat 1a95022 c9fd56b -- apps/web packages`) and 1 line in apps/docs-site/docusaurus.config.ts (docs content = 963ab62 + copyright).
+Both were deployed 2026-11-13 ~16:58Z with the Vercel CLI as Vercel web dpl_F8NmBUE5PzpsdYRw94QWsRX85hgH and docs dpl_2gj8GAFNtCHUDHTtWYwmS55Yu2ks
+(evidence/WO-34/deploy-web-cli-20261113T165654Z.log, evidence/WO-34/deploy-docs-cli-20261113T165742Z.log). Kunal approved the brand change
+(HUMAN_HANDOFF H-DEPLOY). The orchestrator's smoke test at 16:59Z had 0 failures (evidence/WO-34/prod-smoke-custom-20261113T165911Z.log; no
+verifier record). The verifier acceptance: docs/EVIDENCE.md §"WO-34 production (web + docs c9fd56b, WO-85/86 brand)" (WO-87).
+Before that, web ran commit 1a95022 (release 4 plus WO-74, Vercel web dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K, deployed 13:51Z; §"WO-34 production
+(web 1a95022, WO-74)", WO-78) and docs ran commit 963ab62 (the WO-82 name change, Vercel docs dpl_AjmdN8xuNAJJEzXMb41N3uTTBb1r, deployed 15:45Z;
+§"WO-34 production (docs 963ab62, WO-82)", WO-83). Release 4, commit c95cd0c, ran both from ~02:00Z (web dpl_Bm1uwQcX…, docs dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE).
 Release 4's acceptance on the custom hosts, which covered the docs deployed then and the host routing: PASS, 8 of 8 items
 (docs/EVIDENCE.md §"WO-34 production (custom hosts)", 2026-11-13T02:05Z–02:40Z). Each later production deploy gets its own block in §"WO-34 production".
 Hosted until at least 2026-11-25 (`site.hosted_until` in `packages/config/config.yaml`). Hosts: `site.production_hosts` in the same file;
@@ -37,7 +40,7 @@ therefore run only while the operator runs the keeper.
 Checks: the orchestrator's public smoke test on the first deploy (2026-11-12 ~13:35Z) passed (evidence/WO-34/prod-smoke-20261112T133529Z.log: 28 app routes and 56 docs pages + 6 assets,
 0 failures; host redirects, HSTS and CSP present, no noindex; Chrome on the docs: 0 failed requests, 0 console errors). The verifier's production acceptance runs
 (one block per deployed release, with its result) are in docs/EVIDENCE.md §"WO-34 production"; earlier releases were checked on the platform
-hosts, release 4 on the custom hosts (§"WO-34 production (custom hosts)"), the 1a95022 web deploy in §"WO-34 production (web 1a95022, WO-74)", the 963ab62 docs deploy in §"WO-34 production (docs 963ab62, WO-82)". The orchestrator's
+hosts, release 4 on the custom hosts (§"WO-34 production (custom hosts)"), the 1a95022 web deploy in §"WO-34 production (web 1a95022, WO-74)", the 963ab62 docs deploy in §"WO-34 production (docs 963ab62, WO-82)", the c9fd56b web + docs deploy in §"WO-34 production (web + docs c9fd56b, WO-85/86 brand)". The orchestrator's
 production check of the WO-74 fix with a throwaway testnet account is self-attested (evidence/WO-74/prod-qa-check-20261113T140705Z.log; EVIDENCE
 §G9 run 9 note b: its last line shows the borrow button still disabled after 5 units were entered). No wallet has signed a borrow on the
 hosted app yet (docs/DEMO_SCRIPT.md "Real-wallet borrow on the hosted app"). All tokens are mocks with no value. Test assets: the mock tokens
