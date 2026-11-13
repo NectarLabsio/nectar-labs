@@ -1,0 +1,1064 @@
+{"ts":"2026-11-11T08:50:32.912Z","level":"info","service":"feed","msg":"feed_started","port":8788,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"8789","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
+{"ts":"2026-11-11T08:50:35.492Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:52:49.714Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095616 HTTP 429"}
+{"ts":"2026-11-11T08:54:22.648Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095655 HTTP 429"}
+{"ts":"2026-11-11T08:55:38.033Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:58:18.464Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-11T09:00:40.901Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:00:41.664Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-11T09:03:35.188Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095744 HTTP 429"}
+{"ts":"2026-11-11T09:05:43.533Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:08:51.429Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095774 HTTP 429"}
+{"ts":"2026-11-11T09:10:46.057Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:14:06.450Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095806 HTTP 429"}
+{"ts":"2026-11-11T09:15:48.762Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:20:51.347Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:25:53.788Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:28:47.595Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096042 HTTP 429"}
+{"ts":"2026-11-11T09:29:22.095Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096071 HTTP 429"}
+{"ts":"2026-11-11T09:30:56.533Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:30:56.942Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096100 HTTP 429"}
+{"ts":"2026-11-11T09:33:28.556Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096138 HTTP 429"}
+{"ts":"2026-11-11T09:35:59.228Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:36:21.237Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096168 HTTP 429"}
+{"ts":"2026-11-11T09:41:02.237Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:46:04.849Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:47:00.840Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096312 HTTP 429"}
+{"ts":"2026-11-11T09:47:35.836Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096342 HTTP 429"}
+{"ts":"2026-11-11T09:49:17.356Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096379 HTTP 429"}
+{"ts":"2026-11-11T09:51:07.772Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T09:51:29.770Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096417 HTTP 429"}
+{"ts":"2026-11-11T09:55:13.967Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096452 HTTP 429"}
+{"ts":"2026-11-11T09:56:10.619Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:01:13.152Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:02:41.859Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096513 HTTP 429"}
+{"ts":"2026-11-11T10:06:15.930Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:08:41.992Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096551 HTTP 429"}
+{"ts":"2026-11-11T10:11:19.037Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:13:56.381Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096580 HTTP 429"}
+{"ts":"2026-11-11T10:16:21.887Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:19:41.926Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096611 HTTP 429"}
+{"ts":"2026-11-11T10:21:24.317Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:25:34.142Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096647 HTTP 429"}
+{"ts":"2026-11-11T10:26:27.026Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:30:49.390Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096677 HTTP 429"}
+{"ts":"2026-11-11T10:31:29.931Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:36:32.951Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:37:18.068Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096719 HTTP 429"}
+{"ts":"2026-11-11T10:41:35.531Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:43:00.787Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096748 HTTP 429"}
+{"ts":"2026-11-11T10:46:38.227Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:48:50.847Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096777 HTTP 429"}
+{"ts":"2026-11-11T10:51:40.894Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T10:54:57.871Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096811 HTTP 429"}
+{"ts":"2026-11-11T10:56:43.793Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:00:17.096Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096842 HTTP 429"}
+{"ts":"2026-11-11T11:01:46.709Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:05:48.172Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096872 HTTP 429"}
+{"ts":"2026-11-11T11:06:49.354Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:11:00.776Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096901 HTTP 429"}
+{"ts":"2026-11-11T11:11:52.473Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:16:30.278Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096931 HTTP 429"}
+{"ts":"2026-11-11T11:16:55.323Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:21:58.029Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:22:02.708Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096961 HTTP 429"}
+{"ts":"2026-11-11T11:27:01.386Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:27:39.016Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277096990 HTTP 429"}
+{"ts":"2026-11-11T11:32:03.941Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:33:28.548Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097027 HTTP 429"}
+{"ts":"2026-11-11T11:37:06.769Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:39:00.142Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097057 HTTP 429"}
+{"ts":"2026-11-11T11:42:09.465Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:44:13.323Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097087 HTTP 429"}
+{"ts":"2026-11-11T11:47:12.343Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:49:25.862Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097117 HTTP 429"}
+{"ts":"2026-11-11T11:52:15.109Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T11:54:39.895Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097146 HTTP 429"}
+{"ts":"2026-11-11T11:57:17.584Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:00:14.855Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097181 HTTP 429"}
+{"ts":"2026-11-11T12:02:20.351Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:05:45.597Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097211 HTTP 429"}
+{"ts":"2026-11-11T12:07:23.053Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:11:09.594Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097243 HTTP 429"}
+{"ts":"2026-11-11T12:12:25.663Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:16:22.059Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097273 HTTP 429"}
+{"ts":"2026-11-11T12:17:28.219Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:21:33.955Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097302 HTTP 429"}
+{"ts":"2026-11-11T12:22:31.151Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:26:48.319Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097331 HTTP 429"}
+{"ts":"2026-11-11T12:27:33.762Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:32:06.079Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097362 HTTP 429"}
+{"ts":"2026-11-11T12:32:36.614Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:37:19.224Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097391 HTTP 429"}
+{"ts":"2026-11-11T12:37:39.411Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:42:32.163Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097420 HTTP 429"}
+{"ts":"2026-11-11T12:42:42.201Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:47:44.737Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:47:49.678Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097450 HTTP 429"}
+{"ts":"2026-11-11T12:52:47.715Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:53:03.013Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097481 HTTP 429"}
+{"ts":"2026-11-11T12:57:50.586Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T12:58:19.542Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097510 HTTP 429"}
+{"ts":"2026-11-11T13:02:53.246Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:03:33.047Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097540 HTTP 429"}
+{"ts":"2026-11-11T13:07:56.008Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:08:50.148Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097570 HTTP 429"}
+{"ts":"2026-11-11T13:12:58.926Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:14:09.619Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097602 HTTP 429"}
+{"ts":"2026-11-11T13:18:01.917Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:19:24.298Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097631 HTTP 429"}
+{"ts":"2026-11-11T13:23:10.915Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:24:37.720Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097661 HTTP 429"}
+{"ts":"2026-11-11T13:28:13.863Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:29:54.789Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097691 HTTP 429"}
+{"ts":"2026-11-11T13:33:16.356Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:35:08.948Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097723 HTTP 429"}
+{"ts":"2026-11-11T13:38:19.099Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:40:24.597Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097752 HTTP 429"}
+{"ts":"2026-11-11T13:43:22.079Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:45:40.352Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097781 HTTP 429"}
+{"ts":"2026-11-11T13:48:24.780Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:50:51.326Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097811 HTTP 429"}
+{"ts":"2026-11-11T13:53:27.813Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T13:56:03.476Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097841 HTTP 429"}
+{"ts":"2026-11-11T13:58:30.948Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:01:16.395Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097871 HTTP 429"}
+{"ts":"2026-11-11T14:03:33.770Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:06:28.326Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097901 HTTP 429"}
+{"ts":"2026-11-11T14:08:36.667Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:11:39.105Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097930 HTTP 429"}
+{"ts":"2026-11-11T14:13:39.347Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:16:50.416Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097960 HTTP 429"}
+{"ts":"2026-11-11T14:18:42.017Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:22:03.455Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277097991 HTTP 429"}
+{"ts":"2026-11-11T14:23:44.752Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:27:18.020Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098021 HTTP 429"}
+{"ts":"2026-11-11T14:28:47.427Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:32:32.561Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098050 HTTP 429"}
+{"ts":"2026-11-11T14:33:50.319Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:37:46.455Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098080 HTTP 429"}
+{"ts":"2026-11-11T14:38:52.851Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:43:00.656Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098109 HTTP 429"}
+{"ts":"2026-11-11T14:43:55.380Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:48:14.213Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098139 HTTP 429"}
+{"ts":"2026-11-11T14:48:58.077Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:53:28.678Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098168 HTTP 429"}
+{"ts":"2026-11-11T14:54:01.699Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T14:58:43.477Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098197 HTTP 429"}
+{"ts":"2026-11-11T14:59:04.122Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:03:54.210Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098227 HTTP 429"}
+{"ts":"2026-11-11T15:04:06.963Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:09:08.591Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098258 HTTP 429"}
+{"ts":"2026-11-11T15:09:09.811Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:14:12.769Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:15:34.878Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098300 HTTP 429"}
+{"ts":"2026-11-11T15:19:15.365Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:20:54.746Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098330 HTTP 429"}
+{"ts":"2026-11-11T15:24:18.133Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:26:17.247Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098361 HTTP 429"}
+{"ts":"2026-11-11T15:29:20.899Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:31:30.229Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098390 HTTP 429"}
+{"ts":"2026-11-11T15:34:24.218Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:36:38.377Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098405 HTTP 429"}
+{"ts":"2026-11-11T15:39:26.791Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:41:51.688Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098435 HTTP 429"}
+{"ts":"2026-11-11T15:44:30.102Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:47:03.594Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098466 HTTP 429"}
+{"ts":"2026-11-11T15:49:32.767Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:52:17.247Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098495 HTTP 429"}
+{"ts":"2026-11-11T15:54:35.438Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T15:57:41.663Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098525 HTTP 429"}
+{"ts":"2026-11-11T15:59:37.961Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:02:53.653Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098554 HTTP 429"}
+{"ts":"2026-11-11T16:04:47.107Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:08:07.633Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098586 HTTP 429"}
+{"ts":"2026-11-11T16:09:50.684Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:13:27.102Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098615 HTTP 429"}
+{"ts":"2026-11-11T16:14:56.292Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:18:43.045Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098645 HTTP 429"}
+{"ts":"2026-11-11T16:19:58.945Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:24:10.293Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098678 HTTP 429"}
+{"ts":"2026-11-11T16:25:03.483Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:29:38.292Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098708 HTTP 429"}
+{"ts":"2026-11-11T16:30:06.130Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:34:52.479Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098738 HTTP 429"}
+{"ts":"2026-11-11T16:35:08.997Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:40:13.684Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:40:24.741Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098771 HTTP 429"}
+{"ts":"2026-11-11T16:45:16.157Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:45:52.631Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098800 HTTP 429"}
+{"ts":"2026-11-11T16:50:18.963Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:51:11.672Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098831 HTTP 429"}
+{"ts":"2026-11-11T16:55:22.758Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T16:56:40.801Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098861 HTTP 429"}
+{"ts":"2026-11-11T17:00:25.296Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:02:06.836Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098893 HTTP 429"}
+{"ts":"2026-11-11T17:05:45.301Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"1Click /v0/tokens: not an array","retry_ms":5000}
+{"ts":"2026-11-11T17:05:57.209Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:07:35.807Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098922 HTTP 429"}
+{"ts":"2026-11-11T17:11:17.202Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"1Click /v0/tokens: not an array","retry_ms":5000}
+{"ts":"2026-11-11T17:11:32.396Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":10000}
+{"ts":"2026-11-11T17:12:02.398Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"The operation was aborted due to timeout","retry_ms":20000}
+{"ts":"2026-11-11T17:12:32.901Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":40000}
+{"ts":"2026-11-11T17:13:08.549Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098956 HTTP 429"}
+{"ts":"2026-11-11T17:13:32.904Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"1Click /v0/tokens: not an array","retry_ms":80000}
+{"ts":"2026-11-11T17:15:00.937Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:18:08.843Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T17:18:34.706Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277098985 HTTP 429"}
+{"ts":"2026-11-11T17:20:03.662Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:23:47.190Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099014 HTTP 429"}
+{"ts":"2026-11-11T17:25:06.623Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:29:32.541Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099048 HTTP 429"}
+{"ts":"2026-11-11T17:30:09.768Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:34:45.460Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099078 HTTP 429"}
+{"ts":"2026-11-11T17:35:12.587Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:39:45.707Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T17:40:15.707Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:40:15.760Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099113 HTTP 429"}
+{"ts":"2026-11-11T17:45:18.233Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:45:28.700Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099142 HTTP 429"}
+{"ts":"2026-11-11T17:50:28.749Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-11T17:50:41.479Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T17:50:58.054Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099171 HTTP 429"}
+{"ts":"2026-11-11T17:55:53.484Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"fetch failed"}
+{"ts":"2026-11-11T17:55:53.630Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-11T17:56:24.376Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099200 HTTP 429"}
+{"ts":"2026-11-11T18:00:56.826Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:01:46.751Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099229 HTTP 429"}
+{"ts":"2026-11-11T18:06:00.144Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:07:13.659Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099262 HTTP 429"}
+{"ts":"2026-11-11T18:11:02.670Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:12:36.905Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099291 HTTP 429"}
+{"ts":"2026-11-11T18:16:05.385Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:18:04.855Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099322 HTTP 429"}
+{"ts":"2026-11-11T18:21:08.314Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:23:27.848Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099351 HTTP 429"}
+{"ts":"2026-11-11T18:26:11.174Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:28:49.427Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099380 HTTP 429"}
+{"ts":"2026-11-11T18:31:13.780Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:34:07.925Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099411 HTTP 429"}
+{"ts":"2026-11-11T18:36:18.323Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:39:32.460Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099440 HTTP 429"}
+{"ts":"2026-11-11T18:41:21.122Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:44:58.645Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099469 HTTP 429"}
+{"ts":"2026-11-11T18:46:23.778Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:50:09.311Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099498 HTTP 429"}
+{"ts":"2026-11-11T18:51:26.324Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T18:55:26.383Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099527 HTTP 429"}
+{"ts":"2026-11-11T18:56:28.789Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:00:36.051Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099556 HTTP 429"}
+{"ts":"2026-11-11T19:01:31.764Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:05:46.074Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099585 HTTP 429"}
+{"ts":"2026-11-11T19:06:34.729Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:11:02.079Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099615 HTTP 429"}
+{"ts":"2026-11-11T19:11:39.714Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:16:17.831Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099644 HTTP 429"}
+{"ts":"2026-11-11T19:16:42.703Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:21:32.737Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099673 HTTP 429"}
+{"ts":"2026-11-11T19:21:46.659Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:26:47.982Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099702 HTTP 429"}
+{"ts":"2026-11-11T19:26:49.169Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:31:52.952Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:32:02.918Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099732 HTTP 429"}
+{"ts":"2026-11-11T19:36:55.388Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:37:18.933Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099761 HTTP 429"}
+{"ts":"2026-11-11T19:41:58.105Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:42:33.249Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099790 HTTP 429"}
+{"ts":"2026-11-11T19:47:00.732Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:47:47.851Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099819 HTTP 429"}
+{"ts":"2026-11-11T19:52:03.259Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:53:01.971Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099849 HTTP 429"}
+{"ts":"2026-11-11T19:57:06.025Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T19:58:19.256Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099878 HTTP 429"}
+{"ts":"2026-11-11T20:02:08.739Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:03:35.266Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099907 HTTP 429"}
+{"ts":"2026-11-11T20:07:11.326Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:08:35.473Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T20:08:48.170Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099936 HTTP 429"}
+{"ts":"2026-11-11T20:12:14.070Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:13:57.893Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099965 HTTP 429"}
+{"ts":"2026-11-11T20:17:34.783Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-11T20:17:34.785Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-11T20:19:12.543Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277099994 HTTP 429"}
+{"ts":"2026-11-11T20:22:37.385Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:24:12.778Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T20:24:25.152Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100023 HTTP 429"}
+{"ts":"2026-11-11T20:27:39.829Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:29:38.679Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100052 HTTP 429"}
+{"ts":"2026-11-11T20:32:43.143Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:34:39.624Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T20:34:52.703Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100081 HTTP 429"}
+{"ts":"2026-11-11T20:37:45.776Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:40:07.628Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100112 HTTP 429"}
+{"ts":"2026-11-11T20:42:48.221Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:45:21.297Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100141 HTTP 429"}
+{"ts":"2026-11-11T20:47:50.865Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:50:35.772Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100170 HTTP 429"}
+{"ts":"2026-11-11T20:52:53.634Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T20:55:49.905Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100199 HTTP 429"}
+{"ts":"2026-11-11T20:57:56.140Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:01:04.250Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100230 HTTP 429"}
+{"ts":"2026-11-11T21:02:58.853Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:06:05.206Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T21:06:13.467Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100259 HTTP 429"}
+{"ts":"2026-11-11T21:08:01.732Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:11:27.897Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100288 HTTP 429"}
+{"ts":"2026-11-11T21:13:04.327Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:16:36.910Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100317 HTTP 429"}
+{"ts":"2026-11-11T21:18:07.304Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:21:50.129Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100346 HTTP 429"}
+{"ts":"2026-11-11T21:23:10.015Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:27:05.859Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100377 HTTP 429"}
+{"ts":"2026-11-11T21:28:12.551Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:32:20.575Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100406 HTTP 429"}
+{"ts":"2026-11-11T21:33:14.972Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:37:34.594Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100435 HTTP 429"}
+{"ts":"2026-11-11T21:38:17.601Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:42:48.438Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100464 HTTP 429"}
+{"ts":"2026-11-11T21:43:20.182Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:48:03.551Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100495 HTTP 429"}
+{"ts":"2026-11-11T21:48:22.956Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:53:03.764Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T21:53:16.063Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100524 HTTP 429"}
+{"ts":"2026-11-11T21:53:25.524Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:58:28.268Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T21:58:30.672Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100553 HTTP 429"}
+{"ts":"2026-11-11T22:03:46.436Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100582 HTTP 429"}
+{"ts":"2026-11-11T22:03:48.899Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-11T22:03:48.899Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-11T22:08:56.529Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100611 HTTP 429"}
+{"ts":"2026-11-11T22:09:09.482Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-11T22:09:09.483Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-11T22:13:57.528Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T22:14:10.037Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100641 HTTP 429"}
+{"ts":"2026-11-11T22:14:12.544Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:19:15.236Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:19:23.337Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100670 HTTP 429"}
+{"ts":"2026-11-11T22:24:17.938Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:24:37.992Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100699 HTTP 429"}
+{"ts":"2026-11-11T22:29:20.374Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:29:51.544Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100728 HTTP 429"}
+{"ts":"2026-11-11T22:34:22.992Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:35:05.541Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100759 HTTP 429"}
+{"ts":"2026-11-11T22:39:25.852Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:40:19.404Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100788 HTTP 429"}
+{"ts":"2026-11-11T22:44:28.585Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:45:20.002Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T22:45:32.373Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100817 HTTP 429"}
+{"ts":"2026-11-11T22:49:31.167Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:50:32.588Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T22:50:45.204Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100846 HTTP 429"}
+{"ts":"2026-11-11T22:54:33.591Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T22:56:00.015Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100875 HTTP 429"}
+{"ts":"2026-11-11T22:59:36.056Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:01:14.055Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100904 HTTP 429"}
+{"ts":"2026-11-11T23:04:38.670Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:06:28.913Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100933 HTTP 429"}
+{"ts":"2026-11-11T23:09:41.088Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:11:29.166Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T23:11:41.586Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100962 HTTP 429"}
+{"ts":"2026-11-11T23:14:43.467Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:16:43.357Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T23:16:55.743Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277100991 HTTP 429"}
+{"ts":"2026-11-11T23:19:46.066Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:21:56.967Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T23:22:09.769Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101022 HTTP 429"}
+{"ts":"2026-11-11T23:24:48.470Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:27:23.963Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101051 HTTP 429"}
+{"ts":"2026-11-11T23:29:51.053Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:32:34.526Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101080 HTTP 429"}
+{"ts":"2026-11-11T23:34:53.776Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:37:49.821Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101109 HTTP 429"}
+{"ts":"2026-11-11T23:39:56.484Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:43:05.126Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101140 HTTP 429"}
+{"ts":"2026-11-11T23:44:59.407Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:48:18.950Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101169 HTTP 429"}
+{"ts":"2026-11-11T23:50:01.906Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:53:33.733Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101198 HTTP 429"}
+{"ts":"2026-11-11T23:55:04.358Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T23:58:48.707Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101227 HTTP 429"}
+{"ts":"2026-11-12T00:00:06.905Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:03:59.791Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101256 HTTP 429"}
+{"ts":"2026-11-12T00:05:09.700Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:09:13.979Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101285 HTTP 429"}
+{"ts":"2026-11-12T00:10:12.191Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:14:28.150Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101314 HTTP 429"}
+{"ts":"2026-11-12T00:15:14.901Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:19:42.950Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101343 HTTP 429"}
+{"ts":"2026-11-12T00:20:17.382Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:24:58.640Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101372 HTTP 429"}
+{"ts":"2026-11-12T00:25:20.164Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:30:13.516Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101401 HTTP 429"}
+{"ts":"2026-11-12T00:30:23.088Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:35:25.833Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:35:27.671Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101430 HTTP 429"}
+{"ts":"2026-11-12T00:40:28.758Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:40:41.744Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101459 HTTP 429"}
+{"ts":"2026-11-12T00:45:31.391Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:45:55.700Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101488 HTTP 429"}
+{"ts":"2026-11-12T00:50:33.838Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:51:09.874Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101518 HTTP 429"}
+{"ts":"2026-11-12T00:55:36.353Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T00:56:20.519Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101547 HTTP 429"}
+{"ts":"2026-11-12T01:00:39.216Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:01:36.374Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101576 HTTP 429"}
+{"ts":"2026-11-12T01:05:41.754Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:06:51.548Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101605 HTTP 429"}
+{"ts":"2026-11-12T01:10:44.615Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:12:08.269Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101636 HTTP 429"}
+{"ts":"2026-11-12T01:15:47.107Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:17:19.979Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101665 HTTP 429"}
+{"ts":"2026-11-12T01:20:49.548Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:22:34.427Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101694 HTTP 429"}
+{"ts":"2026-11-12T01:25:52.365Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:27:48.692Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101723 HTTP 429"}
+{"ts":"2026-11-12T01:30:54.941Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:33:02.743Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101753 HTTP 429"}
+{"ts":"2026-11-12T01:35:57.372Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:38:16.861Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101782 HTTP 429"}
+{"ts":"2026-11-12T01:40:59.890Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:43:31.070Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101811 HTTP 429"}
+{"ts":"2026-11-12T01:46:02.301Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:48:45.287Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101840 HTTP 429"}
+{"ts":"2026-11-12T01:51:04.710Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:53:55.682Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101869 HTTP 429"}
+{"ts":"2026-11-12T01:56:07.285Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T01:59:10.601Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101899 HTTP 429"}
+{"ts":"2026-11-12T02:01:09.991Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T02:04:22.541Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101928 HTTP 429"}
+{"ts":"2026-11-12T02:06:12.429Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T02:09:38.031Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101957 HTTP 429"}
+{"ts":"2026-11-12T02:26:23.256Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-12T02:26:23.257Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-12T02:26:23.261Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-12T02:26:31.051Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T03:51:47.414Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-12T03:51:47.416Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-12T03:51:47.419Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-12T04:09:06.587Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":10000}
+{"ts":"2026-11-12T04:09:06.588Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-12T04:09:06.590Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-12T04:11:23.792Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":20000}
+{"ts":"2026-11-12T05:01:19.922Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-12T05:01:20.134Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":40000}
+{"ts":"2026-11-12T05:01:20.143Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-12T05:14:29.748Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-12T05:14:29.753Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":80000}
+{"ts":"2026-11-12T05:14:29.765Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-12T05:15:55.392Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:19:44.577Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277101986 HTTP 429"}
+{"ts":"2026-11-12T05:20:58.817Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:24:58.533Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102015 HTTP 429"}
+{"ts":"2026-11-12T05:26:01.941Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:30:12.190Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102044 HTTP 429"}
+{"ts":"2026-11-12T05:31:04.962Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:35:30.009Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102073 HTTP 429"}
+{"ts":"2026-11-12T05:36:08.139Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:40:46.076Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102102 HTTP 429"}
+{"ts":"2026-11-12T05:41:12.846Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:46:19.922Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:46:31.391Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102135 HTTP 429"}
+{"ts":"2026-11-12T05:51:24.291Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:51:46.585Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102164 HTTP 429"}
+{"ts":"2026-11-12T05:56:29.192Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T05:57:06.508Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102195 HTTP 429"}
+{"ts":"2026-11-12T06:01:32.385Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:02:22.866Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102224 HTTP 429"}
+{"ts":"2026-11-12T06:06:36.265Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:07:43.136Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102254 HTTP 429"}
+{"ts":"2026-11-12T06:11:39.278Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:12:57.591Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102283 HTTP 429"}
+{"ts":"2026-11-12T06:16:42.639Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:18:14.801Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102313 HTTP 429"}
+{"ts":"2026-11-12T06:21:45.662Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:23:29.991Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102342 HTTP 429"}
+{"ts":"2026-11-12T06:26:49.191Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:28:47.826Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102371 HTTP 429"}
+{"ts":"2026-11-12T06:31:52.689Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:34:02.607Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102401 HTTP 429"}
+{"ts":"2026-11-12T06:36:56.099Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:39:20.453Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102430 HTTP 429"}
+{"ts":"2026-11-12T06:41:59.385Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:44:40.011Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102459 HTTP 429"}
+{"ts":"2026-11-12T06:47:02.321Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:49:58.824Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102488 HTTP 429"}
+{"ts":"2026-11-12T06:52:06.048Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T06:55:15.761Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102517 HTTP 429"}
+{"ts":"2026-11-12T06:57:09.333Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:00:30.538Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102546 HTTP 429"}
+{"ts":"2026-11-12T07:02:13.546Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:05:48.261Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102575 HTTP 429"}
+{"ts":"2026-11-12T07:07:16.653Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:11:21.265Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T07:12:19.701Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:16:34.749Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102604 HTTP 429"}
+{"ts":"2026-11-12T07:17:23.093Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:22:01.999Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102634 HTTP 429"}
+{"ts":"2026-11-12T07:22:26.441Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:27:17.321Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102663 HTTP 429"}
+{"ts":"2026-11-12T07:27:29.397Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:32:37.430Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:32:53.267Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102692 HTTP 429"}
+{"ts":"2026-11-12T07:37:40.613Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:38:06.125Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102723 HTTP 429"}
+{"ts":"2026-11-12T07:42:43.522Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:43:21.076Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102752 HTTP 429"}
+{"ts":"2026-11-12T07:47:46.490Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:48:37.541Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102781 HTTP 429"}
+{"ts":"2026-11-12T07:52:51.367Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:53:52.437Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102810 HTTP 429"}
+{"ts":"2026-11-12T07:57:57.448Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T07:59:10.893Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102841 HTTP 429"}
+{"ts":"2026-11-12T08:03:01.579Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:04:27.347Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102870 HTTP 429"}
+{"ts":"2026-11-12T08:08:05.167Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:09:43.180Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102899 HTTP 429"}
+{"ts":"2026-11-12T08:13:08.406Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:15:04.152Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102931 HTTP 429"}
+{"ts":"2026-11-12T08:18:13.274Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:20:25.298Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102960 HTTP 429"}
+{"ts":"2026-11-12T08:23:17.792Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:25:42.145Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277102989 HTTP 429"}
+{"ts":"2026-11-12T08:28:21.439Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:30:59.528Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103018 HTTP 429"}
+{"ts":"2026-11-12T08:33:26.667Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:36:17.048Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103047 HTTP 429"}
+{"ts":"2026-11-12T08:38:30.155Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:41:36.222Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103076 HTTP 429"}
+{"ts":"2026-11-12T08:43:33.437Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:46:52.757Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103105 HTTP 429"}
+{"ts":"2026-11-12T08:48:37.228Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:52:11.427Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103136 HTTP 429"}
+{"ts":"2026-11-12T08:53:41.869Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T08:57:29.965Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103165 HTTP 429"}
+{"ts":"2026-11-12T08:58:45.816Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:02:49.748Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103194 HTTP 429"}
+{"ts":"2026-11-12T09:03:49.636Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:08:10.858Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103225 HTTP 429"}
+{"ts":"2026-11-12T09:08:53.092Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:13:26.496Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103254 HTTP 429"}
+{"ts":"2026-11-12T09:13:55.875Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:18:42.648Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103283 HTTP 429"}
+{"ts":"2026-11-12T09:18:59.529Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:23:59.803Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103312 HTTP 429"}
+{"ts":"2026-11-12T09:24:03.140Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:29:06.672Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:29:13.514Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103341 HTTP 429"}
+{"ts":"2026-11-12T09:34:11.604Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:34:31.904Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103370 HTTP 429"}
+{"ts":"2026-11-12T09:39:15.118Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:39:50.635Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103399 HTTP 429"}
+{"ts":"2026-11-12T09:44:18.935Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:45:10.449Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103430 HTTP 429"}
+{"ts":"2026-11-12T09:49:23.046Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:50:28.702Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103459 HTTP 429"}
+{"ts":"2026-11-12T09:54:26.413Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T09:55:42.446Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103488 HTTP 429"}
+{"ts":"2026-11-12T09:59:29.791Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:00:55.988Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103517 HTTP 429"}
+{"ts":"2026-11-12T10:04:33.242Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:06:12.414Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103547 HTTP 429"}
+{"ts":"2026-11-12T10:09:36.727Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:11:34.627Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103576 HTTP 429"}
+{"ts":"2026-11-12T10:14:42.377Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:16:52.928Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103606 HTTP 429"}
+{"ts":"2026-11-12T10:19:46.085Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:22:37.564Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103635 HTTP 429"}
+{"ts":"2026-11-12T10:24:48.944Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:27:50.912Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103664 HTTP 429"}
+{"ts":"2026-11-12T10:29:59.374Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:35:09.834Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-12T10:35:14.122Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103713 HTTP 429"}
+{"ts":"2026-11-12T10:35:18.914Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:40:34.888Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:40:48.450Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103742 HTTP 429"}
+{"ts":"2026-11-12T10:45:37.815Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:46:02.421Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103772 HTTP 429"}
+{"ts":"2026-11-12T10:50:40.966Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:51:04.820Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T10:51:16.581Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103801 HTTP 429"}
+{"ts":"2026-11-12T10:55:44.976Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T10:56:49.167Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103830 HTTP 429"}
+{"ts":"2026-11-12T11:00:51.391Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T11:02:07.238Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103862 HTTP 429"}
+{"ts":"2026-11-12T11:05:56.326Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T11:07:38.157Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103891 HTTP 429"}
+{"ts":"2026-11-12T11:10:59.146Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T11:12:51.643Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103920 HTTP 429"}
+{"ts":"2026-11-12T11:16:01.801Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T11:18:08.640Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103951 HTTP 429"}
+{"ts":"2026-11-12T11:21:05.356Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T11:23:23.249Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277103980 HTTP 429"}
+{"ts":"2026-11-12T11:26:08.298Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T11:28:37.546Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104009 HTTP 429"}
+{"ts":"2026-11-12T11:31:10.957Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T11:33:53.921Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104038 HTTP 429"}
+{"ts":"2026-11-12T11:50:56.338Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T12:06:26.626Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T12:06:31.132Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:17:39.567Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-12T13:17:39.713Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-12T13:17:39.714Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-12T13:17:51.006Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:27:29.097Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:27:41.300Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104078 HTTP 429"}
+{"ts":"2026-11-12T13:32:31.660Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:32:59.009Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104108 HTTP 429"}
+{"ts":"2026-11-12T13:37:34.252Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:38:30.945Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104138 HTTP 429"}
+{"ts":"2026-11-12T13:42:37.590Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:43:46.415Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104167 HTTP 429"}
+{"ts":"2026-11-12T13:47:40.307Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:49:02.194Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104197 HTTP 429"}
+{"ts":"2026-11-12T13:52:43.249Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:54:16.273Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104227 HTTP 429"}
+{"ts":"2026-11-12T13:57:45.813Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T13:59:31.090Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104257 HTTP 429"}
+{"ts":"2026-11-12T14:02:48.559Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:04:44.339Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104286 HTTP 429"}
+{"ts":"2026-11-12T14:07:51.358Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:10:02.407Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104317 HTTP 429"}
+{"ts":"2026-11-12T14:12:56.739Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:15:15.942Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104347 HTTP 429"}
+{"ts":"2026-11-12T14:17:59.335Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:20:30.304Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104376 HTTP 429"}
+{"ts":"2026-11-12T14:23:02.092Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:25:44.237Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104406 HTTP 429"}
+{"ts":"2026-11-12T14:28:04.710Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:30:56.732Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104436 HTTP 429"}
+{"ts":"2026-11-12T14:33:07.981Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:36:11.883Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104466 HTTP 429"}
+{"ts":"2026-11-12T14:38:10.901Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:41:26.966Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104495 HTTP 429"}
+{"ts":"2026-11-12T14:43:13.583Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:46:42.648Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104524 HTTP 429"}
+{"ts":"2026-11-12T14:48:16.207Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:51:56.202Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104553 HTTP 429"}
+{"ts":"2026-11-12T14:53:18.797Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T14:57:11.704Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104584 HTTP 429"}
+{"ts":"2026-11-12T14:58:21.551Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:02:23.949Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104614 HTTP 429"}
+{"ts":"2026-11-12T15:03:24.001Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:07:37.207Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104644 HTTP 429"}
+{"ts":"2026-11-12T15:08:26.606Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:12:50.908Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104673 HTTP 429"}
+{"ts":"2026-11-12T15:13:29.028Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:18:03.859Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104703 HTTP 429"}
+{"ts":"2026-11-12T15:18:32.035Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:23:18.072Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104732 HTTP 429"}
+{"ts":"2026-11-12T15:23:34.803Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:28:30.707Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104761 HTTP 429"}
+{"ts":"2026-11-12T15:28:37.427Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:33:30.819Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T15:33:40.014Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:33:42.092Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104790 HTTP 429"}
+{"ts":"2026-11-12T15:38:42.804Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:38:55.719Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104819 HTTP 429"}
+{"ts":"2026-11-12T15:43:45.814Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:43:56.799Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T15:44:09.915Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104849 HTTP 429"}
+{"ts":"2026-11-12T15:48:48.487Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:49:10.011Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T15:49:21.860Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104878 HTTP 429"}
+{"ts":"2026-11-12T15:53:51.194Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:54:35.365Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104907 HTTP 429"}
+{"ts":"2026-11-12T15:58:53.813Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T15:59:50.982Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104936 HTTP 429"}
+{"ts":"2026-11-12T16:03:56.734Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:05:06.016Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104967 HTTP 429"}
+{"ts":"2026-11-12T16:08:59.607Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:10:18.653Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277104996 HTTP 429"}
+{"ts":"2026-11-12T16:14:02.455Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:15:32.436Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105025 HTTP 429"}
+{"ts":"2026-11-12T16:19:04.892Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:20:45.668Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105054 HTTP 429"}
+{"ts":"2026-11-12T16:24:07.640Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:25:58.609Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105083 HTTP 429"}
+{"ts":"2026-11-12T16:29:10.483Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:31:11.667Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105112 HTTP 429"}
+{"ts":"2026-11-12T16:34:13.284Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:36:25.002Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105141 HTTP 429"}
+{"ts":"2026-11-12T16:39:16.132Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:41:38.955Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105170 HTTP 429"}
+{"ts":"2026-11-12T16:44:18.779Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:46:40.198Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T16:46:51.095Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105199 HTTP 429"}
+{"ts":"2026-11-12T16:49:21.433Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:52:03.998Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105229 HTTP 429"}
+{"ts":"2026-11-12T16:54:24.327Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T16:57:17.890Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105258 HTTP 429"}
+{"ts":"2026-11-12T16:59:26.859Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:02:30.739Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105287 HTTP 429"}
+{"ts":"2026-11-12T17:04:29.610Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:07:47.463Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105316 HTTP 429"}
+{"ts":"2026-11-12T17:09:32.511Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:13:02.203Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105346 HTTP 429"}
+{"ts":"2026-11-12T17:14:35.370Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:18:22.945Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105375 HTTP 429"}
+{"ts":"2026-11-12T17:19:37.952Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:23:43.276Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105404 HTTP 429"}
+{"ts":"2026-11-12T17:24:40.874Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:28:57.333Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105433 HTTP 429"}
+{"ts":"2026-11-12T17:29:43.636Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:34:11.366Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105463 HTTP 429"}
+{"ts":"2026-11-12T17:34:46.307Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:39:24.753Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105492 HTTP 429"}
+{"ts":"2026-11-12T17:39:49.263Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:44:38.508Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105521 HTTP 429"}
+{"ts":"2026-11-12T17:44:52.122Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:49:52.512Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105550 HTTP 429"}
+{"ts":"2026-11-12T17:49:54.768Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:54:57.483Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T17:55:06.008Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105581 HTTP 429"}
+{"ts":"2026-11-12T18:00:00.303Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:00:19.974Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105610 HTTP 429"}
+{"ts":"2026-11-12T18:05:02.901Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:07:17.718Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105669 HTTP 429"}
+{"ts":"2026-11-12T18:10:06.069Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:12:34.244Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105698 HTTP 429"}
+{"ts":"2026-11-12T18:15:08.661Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:17:53.640Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105727 HTTP 429"}
+{"ts":"2026-11-12T18:20:21.424Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:23:08.943Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105758 HTTP 429"}
+{"ts":"2026-11-12T18:25:23.938Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:28:23.236Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105787 HTTP 429"}
+{"ts":"2026-11-12T18:30:26.844Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:33:38.613Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105816 HTTP 429"}
+{"ts":"2026-11-12T18:35:29.479Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:38:52.974Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105845 HTTP 429"}
+{"ts":"2026-11-12T18:40:32.228Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:44:46.576Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105881 HTTP 429"}
+{"ts":"2026-11-12T18:45:34.813Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:50:02.156Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105911 HTTP 429"}
+{"ts":"2026-11-12T18:50:37.314Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T18:55:15.536Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105940 HTTP 429"}
+{"ts":"2026-11-12T18:55:40.777Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:00:28.243Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105969 HTTP 429"}
+{"ts":"2026-11-12T19:00:43.572Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:05:42.688Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277105998 HTTP 429"}
+{"ts":"2026-11-12T19:05:46.293Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:10:54.259Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:10:55.474Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106027 HTTP 429"}
+{"ts":"2026-11-12T19:15:57.235Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:16:08.199Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106058 HTTP 429"}
+{"ts":"2026-11-12T19:20:59.841Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:21:22.420Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106087 HTTP 429"}
+{"ts":"2026-11-12T19:26:10.457Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:26:34.915Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106116 HTTP 429"}
+{"ts":"2026-11-12T19:31:12.959Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:31:46.866Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106145 HTTP 429"}
+{"ts":"2026-11-12T19:36:15.534Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:36:59.084Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106174 HTTP 429"}
+{"ts":"2026-11-12T19:41:18.009Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:42:11.807Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106203 HTTP 429"}
+{"ts":"2026-11-12T19:46:20.886Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:47:24.137Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106232 HTTP 429"}
+{"ts":"2026-11-12T19:51:23.473Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:52:36.245Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106261 HTTP 429"}
+{"ts":"2026-11-12T19:56:26.267Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T19:57:49.782Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106290 HTTP 429"}
+{"ts":"2026-11-12T20:01:48.487Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:01:48.488Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:03:02.463Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106320 HTTP 429"}
+{"ts":"2026-11-12T20:07:09.401Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:07:09.403Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:08:14.861Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106349 HTTP 429"}
+{"ts":"2026-11-12T20:12:36.120Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:12:36.123Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:13:27.072Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106378 HTTP 429"}
+{"ts":"2026-11-12T20:17:56.760Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:17:56.763Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:18:41.007Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106407 HTTP 429"}
+{"ts":"2026-11-12T20:23:17.457Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:23:17.459Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:23:57.465Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106436 HTTP 429"}
+{"ts":"2026-11-12T20:28:38.103Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:28:38.105Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:28:57.602Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T20:29:10.134Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106466 HTTP 429"}
+{"ts":"2026-11-12T20:33:58.716Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:33:58.718Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:34:23.964Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106495 HTTP 429"}
+{"ts":"2026-11-12T20:39:19.247Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-12T20:39:19.249Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T20:39:37.718Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106524 HTTP 429"}
+{"ts":"2026-11-12T20:44:22.229Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T20:44:37.874Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T20:44:51.580Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106553 HTTP 429"}
+{"ts":"2026-11-12T20:49:25.187Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T20:50:04.942Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106584 HTTP 429"}
+{"ts":"2026-11-12T20:54:27.976Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T20:55:22.997Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106613 HTTP 429"}
+{"ts":"2026-11-12T20:59:30.791Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:00:39.352Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106642 HTTP 429"}
+{"ts":"2026-11-12T21:04:33.741Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:05:51.567Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106671 HTTP 429"}
+{"ts":"2026-11-12T21:09:38.405Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:11:05.773Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106702 HTTP 429"}
+{"ts":"2026-11-12T21:14:41.430Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:16:20.302Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106731 HTTP 429"}
+{"ts":"2026-11-12T21:19:44.354Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:21:36.715Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106760 HTTP 429"}
+{"ts":"2026-11-12T21:24:46.938Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:26:54.152Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106789 HTTP 429"}
+{"ts":"2026-11-12T21:29:50.575Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:32:10.427Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106820 HTTP 429"}
+{"ts":"2026-11-12T21:34:53.437Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:37:26.215Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106849 HTTP 429"}
+{"ts":"2026-11-12T21:39:56.336Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:42:42.738Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106878 HTTP 429"}
+{"ts":"2026-11-12T21:44:59.537Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:47:56.702Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106907 HTTP 429"}
+{"ts":"2026-11-12T21:50:02.890Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:52:57.002Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-12T21:53:09.679Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106938 HTTP 429"}
+{"ts":"2026-11-12T21:55:05.549Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T21:58:24.966Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106967 HTTP 429"}
+{"ts":"2026-11-12T22:00:08.516Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:03:41.016Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277106996 HTTP 429"}
+{"ts":"2026-11-12T22:05:11.765Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:08:59.580Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107025 HTTP 429"}
+{"ts":"2026-11-12T22:10:14.892Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:14:17.868Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107054 HTTP 429"}
+{"ts":"2026-11-12T22:15:17.709Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:19:35.758Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107083 HTTP 429"}
+{"ts":"2026-11-12T22:20:20.573Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:24:56.752Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107112 HTTP 429"}
+{"ts":"2026-11-12T22:25:23.426Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:30:16.543Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107141 HTTP 429"}
+{"ts":"2026-11-12T22:30:26.880Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:35:30.856Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:35:34.459Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107170 HTTP 429"}
+{"ts":"2026-11-12T22:40:33.624Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:40:51.248Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107199 HTTP 429"}
+{"ts":"2026-11-12T22:45:36.942Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:46:06.163Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107230 HTTP 429"}
+{"ts":"2026-11-12T22:50:40.461Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T22:51:21.382Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107259 HTTP 429"}
+{"ts":"2026-11-12T22:55:42.721Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"fetch failed"}
+{"ts":"2026-11-12T22:55:42.866Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-12T22:56:41.496Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107288 HTTP 429"}
+{"ts":"2026-11-12T23:00:46.016Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:02:01.667Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107318 HTTP 429"}
+{"ts":"2026-11-12T23:05:48.660Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:07:18.439Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107347 HTTP 429"}
+{"ts":"2026-11-12T23:10:51.604Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:12:38.384Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107376 HTTP 429"}
+{"ts":"2026-11-12T23:15:54.415Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:17:56.859Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107405 HTTP 429"}
+{"ts":"2026-11-12T23:20:57.800Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:23:14.640Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107434 HTTP 429"}
+{"ts":"2026-11-12T23:26:01.229Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:28:30.616Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107463 HTTP 429"}
+{"ts":"2026-11-12T23:31:04.920Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:33:48.636Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107492 HTTP 429"}
+{"ts":"2026-11-12T23:36:09.067Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:39:06.011Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107523 HTTP 429"}
+{"ts":"2026-11-12T23:41:13.511Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:44:21.329Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107552 HTTP 429"}
+{"ts":"2026-11-12T23:46:16.113Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:49:42.476Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107581 HTTP 429"}
+{"ts":"2026-11-12T23:51:19.114Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-12T23:55:04.254Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107612 HTTP 429"}
+{"ts":"2026-11-12T23:56:22.868Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:00:21.180Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107641 HTTP 429"}
+{"ts":"2026-11-13T00:01:25.505Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:05:36.227Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107670 HTTP 429"}
+{"ts":"2026-11-13T00:06:28.464Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:11:01.992Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107700 HTTP 429"}
+{"ts":"2026-11-13T00:11:29.045Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-13T00:11:39.345Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:16:31.012Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T00:16:56.801Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"fetch failed"}
+{"ts":"2026-11-13T00:16:56.801Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-13T00:22:04.564Z","level":"warn","service":"feed","msg":"oneclick_pair_failed","pair":"wnear-usdc","error":"fetch failed"}
+{"ts":"2026-11-13T00:22:04.567Z","level":"info","service":"feed","msg":"oneclick_tick","sets":0,"dropped":1,"no_route":1}
+{"ts":"2026-11-13T00:25:08.999Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107732 HTTP 429"}
+{"ts":"2026-11-13T00:27:07.310Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:30:23.329Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107761 HTTP 429"}
+{"ts":"2026-11-13T00:32:09.751Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:35:35.151Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107790 HTTP 429"}
+{"ts":"2026-11-13T00:37:12.433Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:40:49.373Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107819 HTTP 429"}
+{"ts":"2026-11-13T00:42:15.285Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:46:04.288Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107850 HTTP 429"}
+{"ts":"2026-11-13T00:47:17.736Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:51:18.079Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107879 HTTP 429"}
+{"ts":"2026-11-13T00:52:20.592Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T00:56:32.121Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107908 HTTP 429"}
+{"ts":"2026-11-13T00:57:22.965Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:01:45.252Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107937 HTTP 429"}
+{"ts":"2026-11-13T01:02:25.391Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:06:58.464Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107966 HTTP 429"}
+{"ts":"2026-11-13T01:07:27.908Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:12:11.903Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277107995 HTTP 429"}
+{"ts":"2026-11-13T01:12:30.563Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:17:26.424Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108024 HTTP 429"}
+{"ts":"2026-11-13T01:17:33.101Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:22:35.518Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:22:40.044Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108053 HTTP 429"}
+{"ts":"2026-11-13T01:27:38.056Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:27:53.441Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108082 HTTP 429"}
+{"ts":"2026-11-13T01:32:41.522Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:33:08.142Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108113 HTTP 429"}
+{"ts":"2026-11-13T01:37:44.280Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:38:21.942Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108142 HTTP 429"}
+{"ts":"2026-11-13T01:42:47.229Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:43:36.590Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108171 HTTP 429"}
+{"ts":"2026-11-13T01:47:49.871Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:48:52.543Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108200 HTTP 429"}
+{"ts":"2026-11-13T01:52:52.534Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:54:07.307Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108231 HTTP 429"}
+{"ts":"2026-11-13T01:57:55.079Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T01:59:22.685Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108260 HTTP 429"}
+{"ts":"2026-11-13T02:02:57.655Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:04:38.266Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108289 HTTP 429"}
+{"ts":"2026-11-13T02:08:00.396Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:09:54.761Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108318 HTTP 429"}
+{"ts":"2026-11-13T02:13:03.153Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:15:11.671Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108348 HTTP 429"}
+{"ts":"2026-11-13T02:18:06.913Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:20:30.887Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108377 HTTP 429"}
+{"ts":"2026-11-13T02:23:09.512Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:25:44.113Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108406 HTTP 429"}
+{"ts":"2026-11-13T02:28:11.854Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:30:57.469Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108435 HTTP 429"}
+{"ts":"2026-11-13T02:33:14.880Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:36:12.158Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108465 HTTP 429"}
+{"ts":"2026-11-13T02:38:17.499Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:41:27.239Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108494 HTTP 429"}
+{"ts":"2026-11-13T02:43:19.859Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:46:42.790Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108523 HTTP 429"}
+{"ts":"2026-11-13T02:48:22.458Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:51:56.867Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108552 HTTP 429"}
+{"ts":"2026-11-13T02:53:25.153Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T02:57:12.192Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108582 HTTP 429"}
+{"ts":"2026-11-13T02:58:28.056Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T03:02:27.024Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108611 HTTP 429"}
+{"ts":"2026-11-13T03:03:31.391Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T03:07:42.846Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108640 HTTP 429"}
+{"ts":"2026-11-13T03:08:34.069Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T03:12:56.832Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108670 HTTP 429"}
+{"ts":"2026-11-13T03:13:36.884Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T04:16:35.213Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T04:16:35.359Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-13T04:16:35.361Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T04:16:40.365Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":10000}
+{"ts":"2026-11-13T04:31:58.486Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":20000}
+{"ts":"2026-11-13T04:31:58.487Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T04:31:58.488Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T05:15:23.134Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":40000}
+{"ts":"2026-11-13T05:15:23.135Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T05:15:23.137Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T05:48:07.986Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T05:48:07.991Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":80000}
+{"ts":"2026-11-13T05:48:07.996Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T06:16:25.061Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":160000}
+{"ts":"2026-11-13T06:16:25.063Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T06:16:25.065Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T06:49:41.969Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T06:49:41.970Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T06:49:41.971Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T07:17:27.252Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T07:17:27.398Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T07:17:27.401Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T07:50:23.929Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T07:50:24.075Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T07:50:24.077Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T08:18:30.065Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T08:18:30.066Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T08:18:30.068Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T09:05:31.959Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T09:05:32.217Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T09:05:32.219Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T09:35:58.019Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T09:35:58.229Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T09:35:58.231Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T10:09:05.136Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T10:09:05.137Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T10:09:05.138Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T10:37:08.058Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-13T10:37:08.058Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-13T10:37:08.067Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-13T10:52:11.820Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:09:57.652Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-13T11:10:01.201Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:15:04.436Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:15:11.652Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108699 HTTP 429"}
+{"ts":"2026-11-13T11:20:07.053Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:20:27.188Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108728 HTTP 429"}
+{"ts":"2026-11-13T11:25:09.849Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:25:41.228Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108757 HTTP 429"}
+{"ts":"2026-11-13T11:30:12.422Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:31:10.135Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108790 HTTP 429"}
+{"ts":"2026-11-13T11:35:15.117Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:36:24.805Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108819 HTTP 429"}
+{"ts":"2026-11-13T11:40:18.013Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:41:39.168Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108848 HTTP 429"}
+{"ts":"2026-11-13T11:45:21.797Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:46:56.297Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108878 HTTP 429"}
+{"ts":"2026-11-13T11:50:24.475Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:52:12.467Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108907 HTTP 429"}
+{"ts":"2026-11-13T11:55:26.945Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T11:57:26.059Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108936 HTTP 429"}
+{"ts":"2026-11-13T12:00:30.018Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:02:41.332Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108965 HTTP 429"}
+{"ts":"2026-11-13T12:05:32.734Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:07:56.478Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277108994 HTTP 429"}
+{"ts":"2026-11-13T12:10:35.246Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:13:08.039Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109024 HTTP 429"}
+{"ts":"2026-11-13T12:15:40.536Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:18:24.841Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109054 HTTP 429"}
+{"ts":"2026-11-13T12:20:43.270Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:23:38.835Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109083 HTTP 429"}
+{"ts":"2026-11-13T12:25:45.908Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:28:49.799Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109113 HTTP 429"}
+{"ts":"2026-11-13T12:30:48.425Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:34:04.158Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109144 HTTP 429"}
+{"ts":"2026-11-13T12:35:51.107Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:39:16.033Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109174 HTTP 429"}
+{"ts":"2026-11-13T12:40:53.506Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:44:27.754Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109203 HTTP 429"}
+{"ts":"2026-11-13T12:45:56.360Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:49:42.605Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109233 HTTP 429"}
+{"ts":"2026-11-13T12:50:59.007Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T12:54:55.084Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109263 HTTP 429"}
+{"ts":"2026-11-13T12:56:01.652Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:00:10.604Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109294 HTTP 429"}
+{"ts":"2026-11-13T13:01:04.705Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:05:23.512Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109324 HTTP 429"}
+{"ts":"2026-11-13T13:06:07.264Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:10:36.257Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109354 HTTP 429"}
+{"ts":"2026-11-13T13:11:09.863Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:15:50.342Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109383 HTTP 429"}
+{"ts":"2026-11-13T13:16:12.542Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:21:05.515Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109414 HTTP 429"}
+{"ts":"2026-11-13T13:21:15.026Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:26:17.737Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:26:21.775Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109443 HTTP 429"}
+{"ts":"2026-11-13T13:31:21.980Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:31:35.738Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109472 HTTP 429"}
+{"ts":"2026-11-13T13:36:24.905Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:36:47.844Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109501 HTTP 429"}
+{"ts":"2026-11-13T13:41:27.501Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:42:05.397Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109532 HTTP 429"}
+{"ts":"2026-11-13T13:46:30.893Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:47:19.299Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109562 HTTP 429"}
+{"ts":"2026-11-13T13:51:33.484Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:52:33.720Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109591 HTTP 429"}
+{"ts":"2026-11-13T13:56:38.936Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T13:57:45.290Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109621 HTTP 429"}
+{"ts":"2026-11-13T14:01:41.960Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T14:02:59.351Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109652 HTTP 429"}
+{"ts":"2026-11-13T14:06:44.795Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T14:08:11.349Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109681 HTTP 429"}
+{"ts":"2026-11-13T14:11:47.392Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T14:13:26.070Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109710 HTTP 429"}
+{"ts":"2026-11-13T14:16:49.888Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T14:18:35.397Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109728 HTTP 429"}
+{"ts":"2026-11-13T14:21:52.581Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T14:23:50.967Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109757 HTTP 429"}
+{"ts":"2026-11-13T14:26:55.290Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T14:29:03.874Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109789 HTTP 429"}
+{"ts":"2026-11-13T14:31:58.041Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-13T14:34:16.926Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277109819 HTTP 429"}

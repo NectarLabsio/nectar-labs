@@ -3,3 +3,183 @@
 {"ts":"2026-11-10T16:48:10.095Z","level":"info","service":"feed","msg":"neardata_cursor_init","height":277094034}
 {"ts":"2026-11-10T16:48:46.116Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094065 HTTP 429"}
 {"ts":"2026-11-10T16:49:09.709Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"WARNING! THIS ENDPOINT IS DEPRECATED! STOP USING IT NOW! Switch to https://fastnear.com or alternative RPC providers at https://docs.near.org/api/rpc/providers\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-10T16:49:23.173Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094094 HTTP 429"}
+{"ts":"2026-11-10T16:50:03.417Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"WARNING! THIS ENDPOINT IS DEPRECATED! STOP USING IT NOW! Switch to https://fastnear.com or alternative RPC providers at https://docs.near.org/api/rpc/providers\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-10T16:50:04.952Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094095 HTTP 429"}
+{"ts":"2026-11-10T16:51:25.213Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"WARNING! THIS ENDPOINT IS DEPRECATED! STOP USING IT NOW! Switch to https://fastnear.com or alternative RPC providers at https://docs.near.org/api/rpc/providers\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-10T16:51:46.914Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094125 HTTP 429"}
+{"ts":"2026-11-10T16:53:01.926Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T16:54:54.113Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094154 HTTP 429"}
+{"ts":"2026-11-10T16:58:04.635Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:00:20.690Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094183 HTTP 429"}
+{"ts":"2026-11-10T17:03:07.456Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:05:48.477Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094213 HTTP 429"}
+{"ts":"2026-11-10T17:08:10.290Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:11:14.548Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094242 HTTP 429"}
+{"ts":"2026-11-10T17:13:13.036Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:16:40.833Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094272 HTTP 429"}
+{"ts":"2026-11-10T17:18:18.877Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:22:05.604Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094303 HTTP 429"}
+{"ts":"2026-11-10T17:23:21.661Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:27:40.548Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094333 HTTP 429"}
+{"ts":"2026-11-10T17:28:26.377Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:33:05.482Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094365 HTTP 429"}
+{"ts":"2026-11-10T17:33:32.782Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:38:05.756Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"WARNING! THIS ENDPOINT IS DEPRECATED! STOP USING IT NOW! Switch to https://fastnear.com or alternative RPC providers at https://docs.near.org/api/rpc/providers\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-10T17:38:17.618Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094395 HTTP 429"}
+{"ts":"2026-11-10T17:38:35.560Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:43:17.879Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"WARNING! THIS ENDPOINT IS DEPRECATED! STOP USING IT NOW! Switch to https://fastnear.com or alternative RPC providers at https://docs.near.org/api/rpc/providers\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-10T17:43:29.642Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094424 HTTP 429"}
+{"ts":"2026-11-10T17:43:39.758Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:48:42.542Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:48:54.814Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094453 HTTP 429"}
+{"ts":"2026-11-10T17:53:45.437Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:54:20.708Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094482 HTTP 429"}
+{"ts":"2026-11-10T17:58:48.758Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T17:59:45.043Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094512 HTTP 429"}
+{"ts":"2026-11-10T18:03:51.157Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:05:12.303Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094543 HTTP 429"}
+{"ts":"2026-11-10T18:08:54.627Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:10:34.323Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094572 HTTP 429"}
+{"ts":"2026-11-10T18:13:58.151Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:16:02.445Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094602 HTTP 429"}
+{"ts":"2026-11-10T18:19:00.694Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:21:23.275Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094631 HTTP 429"}
+{"ts":"2026-11-10T18:24:03.232Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:26:47.424Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094661 HTTP 429"}
+{"ts":"2026-11-10T18:29:05.946Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:32:35.634Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094690 HTTP 429"}
+{"ts":"2026-11-10T18:34:08.729Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:39:11.363Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:39:47.764Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094740 HTTP 429"}
+{"ts":"2026-11-10T18:44:13.831Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:45:12.302Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094769 HTTP 429"}
+{"ts":"2026-11-10T18:49:16.689Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:50:34.301Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094798 HTTP 429"}
+{"ts":"2026-11-10T18:54:19.305Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T18:57:07.528Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-10T18:59:22.370Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:02:52.941Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-10T19:04:25.139Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:08:38.483Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-10T19:09:28.164Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:14:24.594Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}
+{"ts":"2026-11-10T19:14:30.750Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:19:33.404Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:19:50.038Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094834 HTTP 429"}
+{"ts":"2026-11-10T19:24:36.325Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:25:13.325Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094863 HTTP 429"}
+{"ts":"2026-11-10T19:29:38.947Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:30:35.823Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094892 HTTP 429"}
+{"ts":"2026-11-10T19:34:41.670Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:35:57.821Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094921 HTTP 429"}
+{"ts":"2026-11-10T19:39:44.718Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:41:19.839Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094950 HTTP 429"}
+{"ts":"2026-11-10T19:44:47.378Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:46:45.728Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277094979 HTTP 429"}
+{"ts":"2026-11-10T19:49:49.962Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:54:52.546Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-10T19:57:27.684Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095108 HTTP 429"}
+{"ts":"2026-11-10T19:58:01.680Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095108 HTTP 429"}
+{"ts":"2026-11-10T19:59:03.334Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095137 HTTP 429"}
+{"ts":"2026-11-10T19:59:52.552Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":5000}
+{"ts":"2026-11-10T19:59:57.556Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":10000}
+{"ts":"2026-11-10T20:00:07.563Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":20000}
+{"ts":"2026-11-10T20:00:23.343Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:00:23.346Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:00:27.568Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":40000}
+{"ts":"2026-11-10T20:01:07.575Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":80000}
+{"ts":"2026-11-10T20:02:27.582Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":160000}
+{"ts":"2026-11-10T20:03:03.352Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:03:03.355Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:05:07.588Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:08:03.363Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:08:03.366Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:10:07.596Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:13:03.373Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:13:03.376Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:15:07.603Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:18:03.383Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:18:03.386Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:20:07.610Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:23:03.396Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:23:03.398Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:25:07.617Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:28:03.407Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:28:03.409Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:30:07.624Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:33:03.418Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:33:03.420Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:35:07.630Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:38:03.426Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:38:03.428Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:40:07.637Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:43:03.435Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:43:03.438Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:45:07.642Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:48:03.447Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:48:03.450Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:50:07.647Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:53:03.457Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:53:03.461Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T20:55:07.654Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T20:58:03.469Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T20:58:03.472Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:00:07.662Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:03:03.478Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:03:03.481Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:05:07.668Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:08:03.488Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:08:03.491Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:10:07.674Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:13:03.498Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:13:03.501Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:15:07.680Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:18:03.510Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:18:03.514Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:20:07.687Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:23:03.522Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:23:03.525Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:25:07.693Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:28:03.532Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:28:03.536Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:30:07.700Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:33:03.542Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:33:03.545Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:35:07.708Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:38:03.554Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:38:03.558Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:40:07.714Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:43:03.566Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:43:03.570Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:45:07.722Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:48:03.579Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:48:03.583Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:50:07.729Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:53:03.591Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:53:03.595Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T21:55:07.735Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T21:58:03.603Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T21:58:03.606Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:00:07.741Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T22:03:03.613Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T22:03:03.616Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:05:07.747Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T22:08:03.625Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T22:08:03.629Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:10:07.753Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T22:13:03.637Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T22:13:03.640Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:15:07.759Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T22:18:03.649Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T22:18:03.654Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:20:07.765Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T22:23:03.662Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T22:23:03.668Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:25:07.771Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T22:28:03.676Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T22:28:03.679Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:30:07.778Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}
+{"ts":"2026-11-10T22:33:03.687Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"fetch failed"}
+{"ts":"2026-11-10T22:33:03.691Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"fetch failed"}
+{"ts":"2026-11-10T22:35:07.785Z","level":"warn","service":"feed","msg":"oneclick_tick_failed","error":"fetch failed","retry_ms":300000}

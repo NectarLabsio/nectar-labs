@@ -37,3 +37,6 @@ dist/
 nectar-demo-media/
 *.mp4
 *.mov
+
+# live log of the running keeper daemon (appended continuously; snapshot lives in EVIDENCE)
+evidence/rollout/keeper-20261112T140825Z.log

@@ -1,0 +1,3433 @@
+
+> nectar-labs@ verify:quick /Volumes/T7/nectar-labs
+> node scripts/check-no-branding-all.mjs && pnpm lint && pnpm typecheck && pnpm test
+
+no hackathon branding in landing, web app or docs site
+
+> nectar-labs@ lint /Volumes/T7/nectar-labs
+> pnpm -r --if-present lint
+
+Scope: 7 of 8 workspace projects
+packages/ui lint$ node scripts/check-no-literal-colors.mjs
+packages/ui lint: no literal colors outside tokens.css
+packages/ui lint: Done
+apps/web lint$ node ../../packages/ui/scripts/check-no-literal-colors.mjs && node scripts/check-no-branding.mjs
+apps/web lint: no literal colors outside tokens.css
+apps/web lint: no hackathon branding in UI sources
+apps/web lint: Done
+
+> nectar-labs@ typecheck /Volumes/T7/nectar-labs
+> pnpm -r --if-present typecheck
+
+Scope: 7 of 8 workspace projects
+apps/docs-site typecheck$ tsc
+packages/sdk typecheck$ tsc --noEmit -p tsconfig.json
+packages/ui typecheck$ tsc --noEmit -p tsconfig.json
+services/feed typecheck$ tsc --noEmit -p tsconfig.json
+services/feed typecheck: Done
+packages/ui typecheck: Done
+services/keeper typecheck$ tsc --noEmit -p tsconfig.json
+services/x402 typecheck$ tsc --noEmit -p tsconfig.json
+apps/docs-site typecheck: Done
+packages/sdk typecheck: Done
+services/x402 typecheck: Done
+services/keeper typecheck: Done
+apps/web typecheck$ next typegen && tsc --noEmit -p tsconfig.json
+apps/web typecheck: Generating route types...
+apps/web typecheck: ✓ Types generated successfully
+apps/web typecheck: Done
+
+> nectar-labs@ test /Volumes/T7/nectar-labs
+> pnpm -r --if-present test
+
+Scope: 7 of 8 workspace projects
+packages/sdk test$ vitest run
+packages/ui test$ node --test src/charts.test.ts
+services/feed test$ node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+services/keeper test$ node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+packages/ui test: TAP version 13
+services/feed test: TAP version 13
+services/keeper test: TAP version 13
+services/feed test: # Subtest: repo config defaults
+services/feed test:     # Subtest: flattens nested scalars and strips comments
+services/feed test:     ok 1 - flattens nested scalars and strips comments
+services/feed test:       ---
+services/feed test:       duration_ms: 0.750958
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: reads config.yaml with no env; env overrides; TODO-* is unset
+services/feed test:     ok 2 - reads config.yaml with no env; env overrides; TODO-* is unset
+services/feed test:       ---
+services/feed test:       duration_ms: 53.842959
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 1 - repo config defaults
+services/feed test:   ---
+services/feed test:   duration_ms: 58.711333
+services/feed test:   type: 'suite'
+services/feed test:   ...
+packages/ui test: # Subtest: health tone thresholds (Borrow artboard hc())
+packages/ui test: ok 1 - health tone thresholds (Borrow artboard hc())
+packages/ui test:   ---
+packages/ui test:   duration_ms: 22.352125
+packages/ui test:   type: 'test'
+packages/ui test:   ...
+packages/ui test: # Subtest: gauge fill: health 2.22 of 3 → 74%; capped at 100; zero for no loan
+packages/ui test: ok 2 - gauge fill: health 2.22 of 3 → 74%; capped at 100; zero for no loan
+packages/ui test:   ---
+packages/ui test:   duration_ms: 2.767416
+packages/ui test:   type: 'test'
+packages/ui test:   ...
+packages/ui test: # Subtest: stress bars: −10/−20/−30/−50 % of health 2.22, floored at 4 px
+packages/ui test: ok 3 - stress bars: −10/−20/−30/−50 % of health 2.22, floored at 4 px
+packages/ui test:   ---
+packages/ui test:   duration_ms: 0.455084
+packages/ui test:   type: 'test'
+packages/ui test:   ...
+packages/ui test: # Subtest: week chart: $78,720 in session / $61,600 closed on a $90k axis (Main artboard)
+packages/ui test: ok 4 - week chart: $78,720 in session / $61,600 closed on a $90k axis (Main artboard)
+packages/ui test:   ---
+packages/ui test:   duration_ms: 12.278625
+packages/ui test:   type: 'test'
+packages/ui test:   ...
+packages/ui test: # Subtest: session hours and nice axis
+packages/ui test: ok 5 - session hours and nice axis
+packages/ui test:   ---
+packages/ui test:   duration_ms: 154.326541
+packages/ui test:   type: 'test'
+packages/ui test:   ...
+packages/ui test: # Subtest: donut arcs: Q $65,000, R $5,000, D $12,000
+packages/ui test: ok 6 - donut arcs: Q $65,000, R $5,000, D $12,000
+packages/ui test:   ---
+packages/ui test:   duration_ms: 0.708541
+packages/ui test:   type: 'test'
+packages/ui test:   ...
+packages/ui test: # Subtest: ladder widths, slider fill, meter shares
+packages/ui test: ok 7 - ladder widths, slider fill, meter shares
+packages/ui test:   ---
+packages/ui test:   duration_ms: 0.392375
+packages/ui test:   type: 'test'
+packages/ui test:   ...
+packages/ui test: 1..7
+packages/ui test: # tests 7
+packages/ui test: # suites 0
+packages/ui test: # pass 7
+packages/ui test: # fail 0
+packages/ui test: # cancelled 0
+packages/ui test: # skipped 0
+packages/ui test: # todo 0
+packages/ui test: # duration_ms 649.603833
+packages/ui test: Done
+services/x402 test$ node --disable-warning=ExperimentalWarning --test "test/**/*.test.ts"
+services/x402 test: TAP version 13
+packages/sdk test:  RUN  v5.1.0 /Volumes/T7/nectar-labs/packages/sdk
+services/feed test: # Subtest: MCP stdio
+services/feed test:     # Subtest: writes only JSON-RPC to stdout (first byte is "{")
+services/feed test:     ok 1 - writes only JSON-RPC to stdout (first byte is "{")
+services/feed test:       ---
+services/feed test:       duration_ms: 1516.836709
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 2 - MCP stdio
+services/feed test:   ---
+services/feed test:   duration_ms: 1517.142708
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: NEP-297 parsing
+services/feed test:     # Subtest: accepts nectar events and rejects everything else with a reason
+services/feed test:     ok 1 - accepts nectar events and rejects everything else with a reason
+services/feed test:       ---
+services/feed test:       duration_ms: 36.2735
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 3 - NEP-297 parsing
+services/feed test:   ---
+services/feed test:   duration_ms: 55.264084
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: indexer store
+services/feed test:     # Subtest: ingests logs idempotently (restart / replay safe)
+services/feed test:     ok 1 - ingests logs idempotently (restart / replay safe)
+services/feed test:       ---
+services/feed test:       duration_ms: 24.440708
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: v2 settled_near (with dust_usd_e6) and settled_reserve (quote_id NULL) become event settlement rows
+services/feed test:     ok 2 - v2 settled_near (with dust_usd_e6) and settled_reserve (quote_id NULL) become event settlement rows
+services/feed test:       ---
+services/feed test:       duration_ms: 2.133583
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: view polling writes snapshots, quotes and Open→Settling transitions
+services/feed test:     ok 3 - view polling writes snapshots, quotes and Open→Settling transitions
+services/feed test:       ---
+services/feed test:       duration_ms: 4.644834
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: backs off on RPC failure and records the error
+services/feed test:     ok 4 - backs off on RPC failure and records the error
+services/feed test:       ---
+services/feed test:       duration_ms: 3.781875
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: tx-status source feeds receipt logs once per tx
+services/feed test:     ok 5 - tx-status source feeds receipt logs once per tx
+services/feed test:       ---
+services/feed test:       duration_ms: 7.869458
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..5
+services/feed test: ok 4 - indexer store
+services/feed test:   ---
+services/feed test:   duration_ms: 44.230083
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: REST API
+services/feed test:     # Subtest: serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+services/feed test:     ok 1 - serves feed, asset, settlements, healthz over HTTP with 10 s cache and no account ids
+services/feed test:       ---
+services/feed test:       duration_ms: 313.363458
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: healthz is 503 when the indexer has not polled recently
+services/feed test:     ok 2 - healthz is 503 when the indexer has not polled recently
+services/feed test:       ---
+services/feed test:       duration_ms: 1.5175
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: export.csv: header + one row per snapshot, text/csv, no account ids
+services/feed test:     ok 3 - export.csv: header + one row per snapshot, text/csv, no account ids
+services/feed test:       ---
+services/feed test:       duration_ms: 1.917333
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: openapi.yaml documents exactly the served routes
+services/feed test:     ok 4 - openapi.yaml documents exactly the served routes
+services/feed test:       ---
+services/feed test:       duration_ms: 3.0995
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 5 - REST API
+services/feed test:   ---
+services/feed test:   duration_ms: 320.646125
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: single-port Feed server (FEED_SINGLE_PORT=1)
+services/feed test:     # Subtest: serves REST, /health and POST /mcp tools/list on one port
+services/feed test:     ok 1 - serves REST, /health and POST /mcp tools/list on one port
+services/feed test:       ---
+services/feed test:       duration_ms: 322.485875
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: PORT wins in single-port mode; local defaults unchanged otherwise
+services/feed test:     ok 2 - PORT wins in single-port mode; local defaults unchanged otherwise
+services/feed test:       ---
+services/feed test:       duration_ms: 0.751667
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 6 - single-port Feed server (FEED_SINGLE_PORT=1)
+services/feed test:   ---
+services/feed test:   duration_ms: 324.517292
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: CORS allowlist (FEED_CORS_ORIGINS)
+services/feed test:     # Subtest: allows exactly the listed origins on REST and /mcp, refuses others
+services/feed test:     ok 1 - allows exactly the listed origins on REST and /mcp, refuses others
+services/feed test:       ---
+services/feed test:       duration_ms: 221.899208
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: unset keeps today's `*` and no preflight handling
+services/feed test:     ok 2 - unset keeps today's `*` and no preflight handling
+services/feed test:       ---
+services/feed test:       duration_ms: 11.127375
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: rejects malformed origins
+services/feed test:     ok 3 - rejects malformed origins
+services/feed test:       ---
+services/feed test:       duration_ms: 29.421292
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..3
+services/feed test: ok 7 - CORS allowlist (FEED_CORS_ORIGINS)
+services/feed test:   ---
+services/feed test:   duration_ms: 262.999708
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: /health
+services/feed test:     # Subtest: reports lag against the Neardata head, contract ids and version
+services/feed test:     ok 1 - reports lag against the Neardata head, contract ids and version
+services/feed test:       ---
+services/feed test:       duration_ms: 1.879333
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: indexer_cursor / indexer_lag_blocks: Neardata cursor and final − cursor; null in views-only mode (WO-71)
+services/feed test:     ok 2 - indexer_cursor / indexer_lag_blocks: Neardata cursor and final − cursor; null in views-only mode (WO-71)
+services/feed test:       ---
+services/feed test:       duration_ms: 1.667958
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 8 - /health
+services/feed test:   ---
+services/feed test:   duration_ms: 4.945917
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: FEED_START_BLOCK
+services/feed test:     # Subtest: parses head, head-N and heights
+services/feed test:     ok 1 - parses head, head-N and heights
+services/feed test:       ---
+services/feed test:       duration_ms: 0.68225
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: an empty DB starts N blocks behind the final head; a saved cursor wins
+services/feed test:     ok 2 - an empty DB starts N blocks behind the final head; a saved cursor wins
+services/feed test:       ---
+services/feed test:       duration_ms: 2.436167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 9 - FEED_START_BLOCK
+services/feed test:   ---
+services/feed test:   duration_ms: 3.699458
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: RPC fallback
+services/feed test:     # Subtest: orders D-025 primary first; NEAR_RPC_URL alone stays single
+services/feed test:     ok 1 - orders D-025 primary first; NEAR_RPC_URL alone stays single
+services/feed test:       ---
+services/feed test:       duration_ms: 1.282
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: moves to the next backend on error and sticks to the one that answered
+services/feed test:     ok 2 - moves to the next backend on error and sticks to the one that answered
+services/feed test:       ---
+services/feed test:       duration_ms: 11.51675
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 10 - RPC fallback
+services/feed test:   ---
+services/feed test:   duration_ms: 12.9665
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: Neardata key source (FEED_NEARDATA_API_KEY)
+services/feed test:     # Subtest: value from FEED_NEARDATA_API_KEY; the path wins when both are set; neither = keyless
+services/feed test:     ok 1 - value from FEED_NEARDATA_API_KEY; the path wins when both are set; neither = keyless
+services/feed test:       ---
+services/feed test:       duration_ms: 0.309625
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 11 - Neardata key source (FEED_NEARDATA_API_KEY)
+services/feed test:   ---
+services/feed test:   duration_ms: 0.396
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: Feed MCP (in-memory transport)
+services/feed test:     # Subtest: lists exactly the read-only tools (four feed + four skill)
+services/feed test:     ok 1 - lists exactly the read-only tools (four feed + four skill)
+services/feed test:       ---
+services/feed test:       duration_ms: 248.924917
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+services/feed test:     ok 2 - get_exit_capacity returns capacity plus "no 1Click route" for NVDAx
+services/feed test:       ---
+services/feed test:       duration_ms: 41.499875
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: list_quotes never returns buyer identities
+services/feed test:     ok 3 - list_quotes never returns buyer identities
+services/feed test:       ---
+services/feed test:       duration_ms: 7.1935
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: preview_borrow relays the contract view; refuses without live views
+services/feed test:     ok 4 - preview_borrow relays the contract view; refuses without live views
+services/feed test:       ---
+services/feed test:       duration_ms: 57.12275
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: explain_limit renders the D-009 formula with live numbers and the contract check
+services/feed test:     ok 5 - explain_limit renders the D-009 formula with live numbers and the contract check
+services/feed test:       ---
+services/feed test:       duration_ms: 101.497792
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: DB-only mode serves from the Feed store; unknown symbol is a tool error
+services/feed test:     ok 6 - DB-only mode serves from the Feed store; unknown symbol is a tool error
+services/feed test:       ---
+services/feed test:       duration_ms: 8.126417
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: usd() formats e6 amounts
+services/feed test:     ok 7 - usd() formats e6 amounts
+services/feed test:       ---
+services/feed test:       duration_ms: 0.354
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..7
+services/feed test: ok 12 - Feed MCP (in-memory transport)
+services/feed test:   ---
+services/feed test:   duration_ms: 466.310125
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: Feed MCP (Streamable HTTP, stateless)
+services/feed test:     # Subtest: serves tools/list and tools/call over POST /mcp
+services/feed test:     ok 1 - serves tools/list and tools/call over POST /mcp
+services/feed test:       ---
+services/feed test:       duration_ms: 387.366
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 13 - Feed MCP (Streamable HTTP, stateless)
+services/feed test:   ---
+services/feed test:   duration_ms: 388.49825
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: neardata block shape (captured fixture)
+services/feed test:     # Subtest: reads the height and extracts only nectar-core receipts
+services/feed test:     ok 1 - reads the height and extracts only nectar-core receipts
+services/feed test:       ---
+services/feed test:       duration_ms: 2.009417
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: skips failed receipts
+services/feed test:     ok 2 - skips failed receipts
+services/feed test:       ---
+services/feed test:       duration_ms: 0.973167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 14 - neardata block shape (captured fixture)
+services/feed test:   ---
+services/feed test:   duration_ms: 5.068792
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: NeardataSource
+services/feed test:     # Subtest: ingests the event, advances the cursor, and is idempotent on replay
+services/feed test:     ok 1 - ingests the event, advances the cursor, and is idempotent on replay
+services/feed test:       ---
+services/feed test:       duration_ms: 4.554041
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: starts at the final block without a cursor or start height, and caps blocks per poll
+services/feed test:     ok 2 - starts at the final block without a cursor or start height, and caps blocks per poll
+services/feed test:       ---
+services/feed test:       duration_ms: 1.630708
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: rejects a block whose height does not match the request
+services/feed test:     ok 3 - rejects a block whose height does not match the request
+services/feed test:       ---
+services/feed test:       duration_ms: 15.239167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: a Neardata outage is a poll error with backoff, not a crash
+services/feed test:     ok 4 - a Neardata outage is a poll error with backoff, not a crash
+services/feed test:       ---
+services/feed test:       duration_ms: 0.958833
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 15 - NeardataSource
+services/feed test:   ---
+services/feed test:   duration_ms: 22.750292
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click recorded fixtures (F-062)
+services/feed test:     # Subtest: the recorded live dry quotes verify with the SDK manager key
+services/feed test:     ok 1 - the recorded live dry quotes verify with the SDK manager key
+services/feed test:       ---
+services/feed test:       duration_ms: 305.640792
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: any tampering breaks the signature
+services/feed test:     ok 2 - any tampering breaks the signature
+services/feed test:       ---
+services/feed test:       duration_ms: 82.535542
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: the token list has no NVDA route (F-063)
+services/feed test:     ok 3 - the token list has no NVDA route (F-063)
+services/feed test:       ---
+services/feed test:       duration_ms: 87.874375
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..3
+services/feed test: ok 16 - 1Click recorded fixtures (F-062)
+services/feed test:   ---
+services/feed test:   duration_ms: 477.435792
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click helpers
+services/feed test:     # Subtest: toE6 parses decimal strings without floats
+services/feed test:     ok 1 - toE6 parses decimal strings without floats
+services/feed test:       ---
+services/feed test:       duration_ms: 0.534583
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: unitsForUsd sizes the notional in base units
+services/feed test:     ok 2 - unitsForUsd sizes the notional in base units
+services/feed test:       ---
+services/feed test:       duration_ms: 0.158959
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: buildDryQuote always sets dry:true and INTENTS rails
+services/feed test:     ok 3 - buildDryQuote always sets dry:true and INTENTS rails
+services/feed test:       ---
+services/feed test:       duration_ms: 2.715958
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: sizes are 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD (default $1,000)
+services/feed test:     ok 4 - sizes are 0.5x / 1x / 2x of ONECLICK_NOTIONAL_USD (default $1,000)
+services/feed test:       ---
+services/feed test:       duration_ms: 1.204458
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 17 - 1Click helpers
+services/feed test:   ---
+services/feed test:   duration_ms: 5.453333
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click impact math (base units, C-014)
+services/feed test:     # Subtest: rate_e6 handles decimals 24 in / 6 out
+services/feed test:     ok 1 - rate_e6 handles decimals 24 in / 6 out
+services/feed test:       ---
+services/feed test:       duration_ms: 0.364209
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: rate_e6 handles decimals 6 in / 24 out (inverse direction)
+services/feed test:     ok 2 - rate_e6 handles decimals 6 in / 24 out (inverse direction)
+services/feed test:       ---
+services/feed test:       duration_ms: 0.363292
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: impact_bps floors, is 0 for the reference and for better rates
+services/feed test:     ok 3 - impact_bps floors, is 0 for the reference and for better rates
+services/feed test:       ---
+services/feed test:       duration_ms: 0.339333
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..3
+services/feed test: ok 18 - 1Click impact math (base units, C-014)
+services/feed test:   ---
+services/feed test:   duration_ms: 1.276125
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click client is dry-only (Q-007)
+services/feed test:     # Subtest: refuses a non-dry body before any network call
+services/feed test:     ok 1 - refuses a non-dry body before any network call
+services/feed test:       ---
+services/feed test:       duration_ms: 0.642959
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 19 - 1Click client is dry-only (Q-007)
+services/feed test:   ---
+services/feed test:   duration_ms: 0.707917
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click sampler (3 sizes)
+services/feed test:     # Subtest: NVDAx: no_route from the token list, no quote sent; ref pair: verified 3-size set from base units
+services/feed test:     ok 1 - NVDAx: no_route from the token list, no quote sent; ref pair: verified 3-size set from base units
+services/feed test:       ---
+services/feed test:       duration_ms: 272.515875
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: NVDAx becomes "route" (and is sampled) as soon as the token list carries it
+services/feed test:     ok 2 - NVDAx becomes "route" (and is sampled) as soon as the token list carries it
+services/feed test:       ---
+services/feed test:       duration_ms: 65.364625
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: drops the whole set when one of the three signatures does not verify
+services/feed test:     ok 3 - drops the whole set when one of the three signatures does not verify
+services/feed test:       ---
+services/feed test:       duration_ms: 146.920625
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: drops a set whose response does not echo the request (validly signed but for another amount)
+services/feed test:     ok 4 - drops a set whose response does not echo the request (validly signed but for another amount)
+services/feed test:       ---
+services/feed test:       duration_ms: 61.66425
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..4
+services/feed test: ok 20 - 1Click sampler (3 sizes)
+services/feed test:   ---
+services/feed test:   duration_ms: 546.874042
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: FEED_FIXTURES=1: GET /api/oneclick from recorded fixtures
+services/feed test:     # Subtest: serves the documented shape with verified pairs and NVDAx no_route
+services/feed test:     ok 1 - serves the documented shape with verified pairs and NVDAx no_route
+services/feed test:       ---
+services/feed test:       duration_ms: 106.496208
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..1
+services/feed test: ok 21 - FEED_FIXTURES=1: GET /api/oneclick from recorded fixtures
+services/feed test:   ---
+services/feed test:   duration_ms: 106.63725
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: 1Click live (NECTAR_IT=1; read-only, dry only)
+services/feed test: ok 22 - 1Click live (NECTAR_IT=1; read-only, dry only) # SKIP
+services/feed test:   ---
+services/feed test:   duration_ms: 0.083042
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: Feed RPC fallback + views-mode /health (WO-35k)
+services/feed test:     # Subtest: a 429 on the first endpoint → the second serves the view
+services/feed test:     ok 1 - a 429 on the first endpoint → the second serves the view
+services/feed test:       ---
+services/feed test:       duration_ms: 3.932459
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: views mode: head = latest view block (stale neardata_final ignored), lag 0, history unavailable, rpc status
+services/feed test:     ok 2 - views mode: head = latest view block (stale neardata_final ignored), lag 0, history unavailable, rpc status
+services/feed test:       ---
+services/feed test:       duration_ms: 8.455334
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: views mode: /api/settlements is an empty list with the marker, never view-synthesized rows
+services/feed test:     ok 3 - views mode: /api/settlements is an empty list with the marker, never view-synthesized rows
+services/feed test:       ---
+services/feed test:       duration_ms: 1.24625
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: indexed mode: head never below the last indexed block; lag consistent
+services/feed test:     ok 4 - indexed mode: head never below the last indexed block; lag consistent
+services/feed test:       ---
+services/feed test:       duration_ms: 1.51575
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: history marker defaults from source
+services/feed test:     ok 5 - history marker defaults from source
+services/feed test:       ---
+services/feed test:       duration_ms: 0.327375
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..5
+services/feed test: ok 23 - Feed RPC fallback + views-mode /health (WO-35k)
+services/feed test:   ---
+services/feed test:   duration_ms: 17.748
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: agent skill: tool schemas
+services/feed test:     # Subtest: registers the four skill tools, read-only, with the PRD §10.5 inputs
+services/feed test:     ok 1 - registers the four skill tools, read-only, with the PRD §10.5 inputs
+services/feed test:       ---
+services/feed test:       duration_ms: 68.734292
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: schema rejects a bad account id and a float-y borrow amount
+services/feed test:     ok 2 - schema rejects a bad account id and a float-y borrow amount
+services/feed test:       ---
+services/feed test:       duration_ms: 127.715542
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: parseUsdE6 is exact
+services/feed test:     ok 3 - parseUsdE6 is exact
+services/feed test:       ---
+services/feed test:       duration_ms: 5.742792
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..3
+services/feed test: ok 24 - agent skill: tool schemas
+services/feed test:   ---
+services/feed test:   duration_ms: 203.128084
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: agent skill: open_protected_stock_loan
+services/feed test:     # Subtest: v1: unsigned-call snapshot, v1 fee fields marked absent, health table
+services/feed test:     ok 1 - v1: unsigned-call snapshot, v1 fee fields marked absent, health table
+services/feed test:       ---
+services/feed test:       duration_ms: 31.777625
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: v1: a borrow the contract would refuse returns the preview and no call
+services/feed test:     ok 2 - v1: a borrow the contract would refuse returns the preview and no call
+services/feed test:       ---
+services/feed test:       duration_ms: 14.853125
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: v1: pay_to and referrer are refused (v1 would silently ignore them)
+services/feed test:     ok 3 - v1: pay_to and referrer are refused (v1 would silently ignore them)
+services/feed test:       ---
+services/feed test:       duration_ms: 8.166042
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: v2: fee stack from preview_borrow, pay_to + referrer in msg, v2 gas
+services/feed test:     ok 4 - v2: fee stack from preview_borrow, pay_to + referrer in msg, v2 gas
+services/feed test:       ---
+services/feed test:       duration_ms: 4.390458
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: v2: plain borrow keeps the v1 msg shape and gas; pre_liq override changes the -20% row
+services/feed test:     ok 5 - v2: plain borrow keeps the v1 msg shape and gas; pre_liq override changes the -20% row
+services/feed test:       ---
+services/feed test:       duration_ms: 3.581709
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: v2: aggregate_limit refusal; referrer == borrower refused before any view
+services/feed test:     ok 6 - v2: aggregate_limit refusal; referrer == borrower refused before any view
+services/feed test:       ---
+services/feed test:       duration_ms: 5.951792
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: pre_liq_ltv_bps refusal (SR-33)
+services/feed test:         # Subtest: v2: above pre_liq but under the LTV cap fails with the contract reason and no call
+services/feed test:         ok 1 - v2: above pre_liq but under the LTV cap fails with the contract reason and no call
+services/feed test:           ---
+services/feed test:           duration_ms: 6.645416
+services/feed test:           type: 'test'
+services/feed test:           ...
+services/feed test:         # Subtest: boundary matches math::triggerable: exactly at pre_liq passes, one e6 above fails
+services/feed test:         ok 2 - boundary matches math::triggerable: exactly at pre_liq passes, one e6 above fails
+services/feed test:           ---
+services/feed test:           duration_ms: 74.07775
+services/feed test:           type: 'test'
+services/feed test:           ...
+services/feed test:         # Subtest: the same borrow passes at a pre_liq that allows it
+services/feed test:         ok 3 - the same borrow passes at a pre_liq that allows it
+services/feed test:           ---
+services/feed test:           duration_ms: 11.813959
+services/feed test:           type: 'test'
+services/feed test:           ...
+services/feed test:         # Subtest: v2: value uses the multiplier, as the contract does
+services/feed test:         ok 4 - v2: value uses the multiplier, as the contract does
+services/feed test:           ---
+services/feed test:           duration_ms: 13.214834
+services/feed test:           type: 'test'
+services/feed test:           ...
+services/feed test:         # Subtest: v1: the deployed contract has the same rule
+services/feed test:         ok 5 - v1: the deployed contract has the same rule
+services/feed test:           ---
+services/feed test:           duration_ms: 2.512542
+services/feed test:           type: 'test'
+services/feed test:           ...
+services/feed test:         # Subtest: an earlier contract refusal keeps its own reason
+services/feed test:         ok 6 - an earlier contract refusal keeps its own reason
+services/feed test:           ---
+services/feed test:           duration_ms: 28.399375
+services/feed test:           type: 'test'
+services/feed test:           ...
+services/feed test:         1..6
+services/feed test:     ok 7 - pre_liq_ltv_bps refusal (SR-33)
+services/feed test:       ---
+services/feed test:       duration_ms: 137.098917
+services/feed test:       type: 'suite'
+services/feed test:       ...
+services/feed test:     # Subtest: shield returns unsupported_until_v2_shields; no live views is a clear error
+services/feed test:     ok 8 - shield returns unsupported_until_v2_shields; no live views is a clear error
+services/feed test:       ---
+services/feed test:       duration_ms: 15.630167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: healthTable matches model.csv demo_borrow (ltv 6250, not triggerable at pre_liq 7500)
+services/feed test:     ok 9 - healthTable matches model.csv demo_borrow (ltv 6250, not triggerable at pre_liq 7500)
+services/feed test:       ---
+services/feed test:       duration_ms: 0.191375
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..9
+services/feed test: ok 25 - agent skill: open_protected_stock_loan
+services/feed test:   ---
+services/feed test:   duration_ms: 223.021041
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: agent skill: companions
+services/feed test:     # Subtest: quote_capacity on v1 marks aggregate fields absent; on v2 returns total debt + headroom
+services/feed test:     ok 1 - quote_capacity on v1 marks aggregate fields absent; on v2 returns total debt + headroom
+services/feed test:       ---
+services/feed test:       duration_ms: 50.328583
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: get_note and build_self_settle return not_available
+services/feed test:     ok 2 - get_note and build_self_settle return not_available
+services/feed test:       ---
+services/feed test:       duration_ms: 3.826666
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 26 - agent skill: companions
+services/feed test:   ---
+services/feed test:   duration_ms: 54.337333
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: agent skill: keyless guarantee
+services/feed test:     # Subtest: skill.ts and mcp.ts import no fs/crypto-key APIs and never touch process.env or key paths
+services/feed test:     ok 1 - skill.ts and mcp.ts import no fs/crypto-key APIs and never touch process.env or key paths
+services/feed test:       ---
+services/feed test:       duration_ms: 1.343125
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: every tool runs with process.env locked (any read throws)
+services/feed test:     ok 2 - every tool runs with process.env locked (any read throws)
+services/feed test:       ---
+services/feed test:       duration_ms: 47.29225
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..2
+services/feed test: ok 27 - agent skill: keyless guarantee
+services/feed test:   ---
+services/feed test:   duration_ms: 48.836666
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: # Subtest: real nectar-core-v2 (2.0.0) log lines
+services/feed test:     # Subtest: every fixture line is a final, successful nectar-core-v2 receipt with version 2.0.0
+services/feed test:     ok 1 - every fixture line is a final, successful nectar-core-v2 receipt with version 2.0.0
+services/feed test:       ---
+services/feed test:       duration_ms: 1.588583
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (nectar.testnet oracle refresh): oracle_updated stored at block 277503817
+services/feed test:     ok 2 - De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG (nectar.testnet oracle refresh): oracle_updated stored at block 277503817
+services/feed test:       ---
+services/feed test:       duration_ms: 3.970167
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: 7XGiZJKggMWRDcfpqZU7kahvdXLBn4TcZc1PkwV2KVFf (buyer2 ft_transfer_call): quote_funded → quotes row; nep171 nft_mint ignored
+services/feed test:     ok 3 - 7XGiZJKggMWRDcfpqZU7kahvdXLBn4TcZc1PkwV2KVFf (buyer2 ft_transfer_call): quote_funded → quotes row; nep171 nft_mint ignored
+services/feed test:       ---
+services/feed test:       duration_ms: 1.398958
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: EeZmHGNsmgqAEMUwjw3UV1Yy8H6mDhTbnZu5UCzsr44w (borrower1 borrow): position_opened → position 0 Open NVDAx
+services/feed test:     ok 4 - EeZmHGNsmgqAEMUwjw3UV1Yy8H6mDhTbnZu5UCzsr44w (borrower1 borrow): position_opened → position 0 Open NVDAx
+services/feed test:       ---
+services/feed test:       duration_ms: 2.18675
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: 8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3 (keeper-v2 confirm_remote_deposit): remote position_opened → position 2 Open; remote_* ignored
+services/feed test:     ok 5 - 8XXvnBVNHNcMx8tuhzrjcnFnxBZNEkPWx9FJAtDQdmh3 (keeper-v2 confirm_remote_deposit): remote position_opened → position 2 Open; remote_* ignored
+services/feed test:       ---
+services/feed test:       duration_ms: 1.01
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: 54eukmJTtQ2PpvYvYxaGeU8Z4gZwg5dpamFFuqWZiMpA (borrower1 repay): repaid stored, position status left to views
+services/feed test:     ok 6 - 54eukmJTtQ2PpvYvYxaGeU8Z4gZwg5dpamFFuqWZiMpA (borrower1 repay): repaid stored, position status left to views
+services/feed test:       ---
+services/feed test:       duration_ms: 0.993166
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u (keeper-v2 trigger_preliquidation): preliq_triggered → position 3 Settling; quoter_requested ignored
+services/feed test:     ok 7 - HrpQsuMWQcTZZmDgFbqxk8Mk5A1ZzjgiHzJ2f9HYdy4u (keeper-v2 trigger_preliquidation): preliq_triggered → position 3 Settling; quoter_requested ignored
+services/feed test:       ---
+services/feed test:       duration_ms: 0.633791
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     # Subtest: all fixtures together: 6 events, replay is a no-op, REST exposes them without account ids
+services/feed test:     ok 8 - all fixtures together: 6 events, replay is a no-op, REST exposes them without account ids
+services/feed test:       ---
+services/feed test:       duration_ms: 104.373083
+services/feed test:       type: 'test'
+services/feed test:       ...
+services/feed test:     1..8
+services/feed test: ok 28 - real nectar-core-v2 (2.0.0) log lines
+services/feed test:   ---
+services/feed test:   duration_ms: 117.667375
+services/feed test:   type: 'suite'
+services/feed test:   ...
+services/feed test: 1..28
+services/feed test: # tests 89
+services/feed test: # suites 29
+services/feed test: # pass 89
+services/feed test: # fail 0
+services/feed test: # cancelled 0
+services/feed test: # skipped 0
+services/feed test: # todo 0
+services/feed test: # duration_ms 2364.929875
+services/feed test: Done
+services/x402 test: # Subtest: borrow guard: expectation from the agent inputs + config.yaml
+services/x402 test:     # Subtest: defaults: NVDAx token and core from config, 1 NVDAx, $10, pre-liq range from the collateral entry
+services/x402 test:     ok 1 - defaults: NVDAx token and core from config, 1 NVDAx, $10, pre-liq range from the collateral entry
+services/x402 test:       ---
+services/x402 test:       duration_ms: 1.231209
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: env overrides (the inputs it sends); DEMO_PRE_LIQ_LTV_BPS pins an exact value
+services/x402 test:     ok 2 - env overrides (the inputs it sends); DEMO_PRE_LIQ_LTV_BPS pins an exact value
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.372292
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses bad inputs and missing or non-testnet ids before any network call
+services/x402 test:     ok 3 - refuses bad inputs and missing or non-testnet ids before any network call
+services/x402 test:       ---
+services/x402 test:       duration_ms: 5.6525
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..3
+services/x402 test: ok 1 - borrow guard: expectation from the agent inputs + config.yaml
+services/x402 test:   ---
+services/x402 test:   duration_ms: 8.313958
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: # Subtest: borrow guard: verifyBorrowCall
+services/x402 test:     # Subtest: the honest Feed call passes and the agent signs its own byte-identical rebuild
+services/x402 test:     ok 1 - the honest Feed call passes and the agent signs its own byte-identical rebuild
+services/x402 test:       ---
+services/x402 test:       duration_ms: 1.495625
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: accepts an explicit memo: null (SDK tx.borrow shape)
+services/x402 test:     ok 2 - accepts an explicit memo: null (SDK tx.borrow shape)
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.333791
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses the review scenario: ft_transfer of the whole balance to an attacker on usdc-mock
+services/x402 test:     ok 3 - refuses the review scenario: ft_transfer of the whole balance to an attacker on usdc-mock
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.8015
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses ft_transfer_call to another receiver
+services/x402 test:     ok 4 - refuses ft_transfer_call to another receiver
+services/x402 test:       ---
+services/x402 test:       duration_ms: 3.27925
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses a bigger amount than requested
+services/x402 test:     ok 5 - refuses a bigger amount than requested
+services/x402 test:       ---
+services/x402 test:       duration_ms: 1.429042
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses a call addressed to another token
+services/x402 test:     ok 6 - refuses a call addressed to another token
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.866459
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses a msg that redirects proceeds (pay_to) or adds a referrer or shield
+services/x402 test:     ok 7 - refuses a msg that redirects proceeds (pay_to) or adds a referrer or shield
+services/x402 test:       ---
+services/x402 test:       duration_ms: 1.058
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses a different borrow amount, collateral or msg variant
+services/x402 test:     ok 8 - refuses a different borrow amount, collateral or msg variant
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.545958
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses a msg whose bytes differ from the rebuild (duplicate keys, whitespace)
+services/x402 test:     ok 9 - refuses a msg whose bytes differ from the rebuild (duplicate keys, whitespace)
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.204583
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses pre-liq outside the collateral range, or not the pinned value
+services/x402 test:     ok 10 - refuses pre-liq outside the collateral range, or not the pinned value
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.289292
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses deposit other than 1 yocto, gas above 300 Tgas, extra fields and non-objects
+services/x402 test:     ok 11 - refuses deposit other than 1 yocto, gas above 300 Tgas, extra fields and non-objects
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.343666
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..11
+services/x402 test: ok 2 - borrow guard: verifyBorrowCall
+services/x402 test:   ---
+services/x402 test:   duration_ms: 12.35275
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/keeper test: # Subtest: base: calldata byte-exactness (eip712_vectors.json, cast calldata)
+services/keeper test:     # Subtest: settle preliq_pos7: selector, encoding, digest and signer
+services/keeper test:     ok 1 - settle preliq_pos7: selector, encoding, digest and signer
+services/keeper test:       ---
+services/keeper test:       duration_ms: 24.48375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: settle self_pos0_max: selector, encoding, digest and signer
+services/keeper test:     ok 2 - settle self_pos0_max: selector, encoding, digest and signer
+services/keeper test:       ---
+services/keeper test:       duration_ms: 11.846917
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: release pos42_nonce_max: selector, encoding, digest and signer
+services/keeper test:     ok 3 - release pos42_nonce_max: selector, encoding, digest and signer
+services/keeper test:       ---
+services/keeper test:       duration_ms: 20.704916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: release pos7: selector, encoding, digest and signer
+services/keeper test:     ok 4 - release pos7: selector, encoding, digest and signer
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.364667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: ERC-8021 suffix: appended verbatim only when injected
+services/keeper test:     ok 5 - ERC-8021 suffix: appended verbatim only when injected
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.4545
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: rejects bad kind, non-canonical numbers, u64 overflow and bad v
+services/keeper test:     ok 6 - rejects bad kind, non-canonical numbers, u64 overflow and bad v
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.736791
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: slotKey = keccak256(abi.encode(id, depositor)) (§E), from the raw 64-byte encoding
+services/keeper test:     ok 7 - slotKey = keccak256(abi.encode(id, depositor)) (§E), from the raw 64-byte encoding
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.665
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..7
+services/keeper test: ok 1 - base: calldata byte-exactness (eip712_vectors.json, cast calldata)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 65.6875
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: base: Foundry keystore (generated in the test)
+services/keeper test:     # Subtest: decrypts to the same key and address; the password file newline is stripped
+services/keeper test:     ok 1 - decrypts to the same key and address; the password file newline is stripped
+services/keeper test:       ---
+services/keeper test:       duration_ms: 17.382958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: wrong password → MAC mismatch; tampered ciphertext → MAC mismatch
+services/keeper test:     ok 2 - wrong password → MAC mismatch; tampered ciphertext → MAC mismatch
+services/keeper test:       ---
+services/keeper test:       duration_ms: 7.198208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses a group-readable password file, path-like account names, non-v3 / non-scrypt files
+services/keeper test:     ok 3 - refuses a group-readable password file, path-like account names, non-v3 / non-scrypt files
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.33875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a mismatching address field is refused
+services/keeper test:     ok 4 - a mismatching address field is refused
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.686792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: raw key env vars are detected; config needs the keystore triple, never a key
+services/keeper test:     ok 5 - raw key env vars are detected; config needs the keystore triple, never a key
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.24575
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..5
+services/keeper test: ok 2 - base: Foundry keystore (generated in the test)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 33.728583
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: base: chain-id refusal
+services/keeper test:     # Subtest: 84532 only; 8453 and anything else refused; mainnet RPC hosts refused
+services/keeper test:     ok 1 - 84532 only; 8453 and anything else refused; mainnet RPC hosts refused
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.4455
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a relay whose RPC reports 8453 never reads NEAR, signs or relays
+services/keeper test:     ok 2 - a relay whose RPC reports 8453 never reads NEAR, signs or relays
+services/keeper test:       ---
+services/keeper test:       duration_ms: 28.060167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..2
+services/keeper test: ok 3 - base: chain-id refusal
+services/keeper test:   ---
+services/keeper test:   duration_ms: 28.626875
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: base: relay with a mocked RPC
+services/keeper test:     # Subtest: settle: signs settle calldata to the vault once, relays the 0x hash; a second tick sends nothing
+services/keeper test:     ok 1 - settle: signs settle calldata to the vault once, relays the 0x hash; a second tick sends nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 7.656792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: builder suffix (when injected) ends the calldata
+services/keeper test:     ok 2 - builder suffix (when injected) ends the calldata
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.634625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: restart after broadcast: the stored hash is relayed by receipt, nothing re-signed
+services/keeper test:     ok 3 - restart after broadcast: the stored hash is relayed by receipt, nothing re-signed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.7755
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: stored hash without a receipt: wait (tx_pending), then after the timeout re-evaluate from chain state
+services/keeper test:     ok 4 - stored hash without a receipt: wait (tx_pending), then after the timeout re-evaluate from chain state
+services/keeper test:       ---
+services/keeper test:       duration_ms: 22.75575
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: nonce already used (landed elsewhere / before a crash): relays the event tx, nothing signed
+services/keeper test:     ok 5 - nonce already used (landed elsewhere / before a crash): relays the event tx, nothing signed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.219042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: vault position closed (nonce unused), expired signature, wrong vault authority → skip with backoff, nothing signed
+services/keeper test:     ok 6 - vault position closed (nonce unused), expired signature, wrong vault authority → skip with backoff, nothing signed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 39.357667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a tampered view (field != signed digest), a foreign vault or chain, a bad v is refused before any signing
+services/keeper test:     ok 7 - a tampered view (field != signed digest), a foreign vault or chain, a bad v is refused before any signing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.608458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a reverted tx clears the stored hash and backs off
+services/keeper test:     ok 8 - a reverted tx clears the stored hash and backs off
+services/keeper test:       ---
+services/keeper test:       duration_ms: 10.935
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: release: release calldata, then relay_release_result with the 0x hash
+services/keeper test:     ok 9 - release: release calldata, then relay_release_result with the 0x hash
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.400125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: only base-sepolia positions: Solana / NEAR-held positions are never looked at
+services/keeper test:     ok 10 - only base-sepolia positions: Solana / NEAR-held positions are never looked at
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.805084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: deposit watcher (OutLayer read on): confirm_remote_deposit once amount >= reserved and authority matches; then cooldown
+services/keeper test:     ok 11 - deposit watcher (OutLayer read on): confirm_remote_deposit once amount >= reserved and authority matches; then cooldown
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.866292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-8: a squatter slot under another depositor is invisible to the deposit watcher
+services/keeper test:     ok 12 - SR-8: a squatter slot under another depositor is invisible to the deposit watcher
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.696166
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-28: without attestation or an OutLayer read, a deposit is reported unsupported and never confirmed
+services/keeper test:     ok 13 - SR-28: without attestation or an OutLayer read, a deposit is reported unsupported and never confirmed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.18125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: an unchanged deposit is retried on a doubling, capped cooldown, never abandoned; a changed amount re-arms it
+services/keeper test:     ok 14 - N4: an unchanged deposit is retried on a doubling, capped cooldown, never abandoned; a changed amount re-arms it
+services/keeper test:       ---
+services/keeper test:       duration_ms: 18.199958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: late and short deposits are confirmed once the reservation has expired
+services/keeper test:     ok 15 - N4: late and short deposits are confirmed once the reservation has expired
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.691292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: a position already marked Expired on NEAR is watched; with a proven deposit it is left alone
+services/keeper test:     ok 16 - N4: a position already marked Expired on NEAR is watched; with a proven deposit it is left alone
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.569792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+services/keeper test:     ok 17 - N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.548958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4, attest mode: a late full deposit is attested; a short one is not, because attestation books the reserved units
+services/keeper test:     ok 18 - N4, attest mode: a late full deposit is attested; a short one is not, because attestation books the reserved units
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.896333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N3: a settled slot under NEAR's authority with the current nonce unused relays the older leg, nothing signed
+services/keeper test:     ok 19 - N3: a settled slot under NEAR's authority with the current nonce unused relays the older leg, nothing signed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.241459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N3: a released slot relays the older release
+services/keeper test:     ok 20 - N3: a released slot relays the older release
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.9605
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N3: no log yet → retried with backoff, not dropped
+services/keeper test:     ok 21 - N3: no log yet → retried with backoff, not dropped
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.383833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N3: a slot closed under another key, or by the other op, is not relayed and not searched
+services/keeper test:     ok 22 - N3: a slot closed under another key, or by the other op, is not relayed and not searched
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.355333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a check in flight or a proven deposit is not confirmed
+services/keeper test:     ok 23 - a check in flight or a proven deposit is not confirmed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.634167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-29: a used nonce scans logs from the reservation block, however long the keeper was down
+services/keeper test:     ok 24 - SR-29: a used nonce scans logs from the reservation block, however long the keeper was down
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.821125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-29: a used nonce with no log yet is retried after backoff, not dropped
+services/keeper test:     ok 25 - SR-29: a used nonce with no log yet is retried after backoff, not dropped
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.153667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-1: a nonce burned on another slot does not count as landed
+services/keeper test:     ok 26 - SR-1: a nonce burned on another slot does not count as landed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 11.707125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a landed-leg lookup is bound to the committed depositor
+services/keeper test:     ok 27 - a landed-leg lookup is bound to the committed depositor
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.876916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-31: a position naming a vault other than the pinned one is refused before any signing
+services/keeper test:     ok 28 - SR-31: a position naming a vault other than the pinned one is refused before any signing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.040958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a missing committed depositor is read from get_position; none at all skips
+services/keeper test:     ok 29 - a missing committed depositor is read from get_position; none at all skips
+services/keeper test:       ---
+services/keeper test:       duration_ms: 7.550083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: BASE_KEEPER_ATTEST=1: keeper_attest_deposit(position_id, tx_ref, depositor) instead
+services/keeper test:     ok 30 - BASE_KEEPER_ATTEST=1: keeper_attest_deposit(position_id, tx_ref, depositor) instead
+services/keeper test:       ---
+services/keeper test:       duration_ms: 9.397291
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: /healthz carries the base section
+services/keeper test:     ok 31 - /healthz carries the base section
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.955584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..31
+services/keeper test: ok 4 - base: relay with a mocked RPC
+services/keeper test:   ---
+services/keeper test:   duration_ms: 185.220875
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: base: ViemEvmPort against a local JSON-RPC stub
+services/keeper test:     # Subtest: findEventTx: a newer event from a squatter slot with the same (id, nonce) is passed over
+services/keeper test:     ok 1 - findEventTx: a newer event from a squatter slot with the same (id, nonce) is passed over
+services/keeper test:       ---
+services/keeper test:       duration_ms: 107.629833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2c: a leg landed through another contract is found from the vault log
+services/keeper test:     ok 2 - N2c: a leg landed through another contract is found from the vault log
+services/keeper test:       ---
+services/keeper test:       duration_ms: 26.596916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2c: a direct call on this slot beats a newer tx whose slot cannot be read
+services/keeper test:     ok 3 - N2c: a direct call on this slot beats a newer tx whose slot cannot be read
+services/keeper test:       ---
+services/keeper test:       duration_ms: 10.131459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N3: without a nonce filter, an event whose nonce this slot never consumed is passed over
+services/keeper test:     ok 4 - N3: without a nonce filter, an event whose nonce this slot never consumed is passed over
+services/keeper test:       ---
+services/keeper test:       duration_ms: 13.288042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: findEventTx: scans from the given block through every chunk, beyond the lookback window
+services/keeper test:     ok 5 - findEventTx: scans from the given block through every chunk, beyond the lookback window
+services/keeper test:       ---
+services/keeper test:       duration_ms: 8.328209
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: blockAtOrBefore: binary search over block timestamps
+services/keeper test:     ok 6 - blockAtOrBefore: binary search over block timestamps
+services/keeper test:       ---
+services/keeper test:       duration_ms: 29.140166
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..6
+services/keeper test: ok 5 - base: ViemEvmPort against a local JSON-RPC stub
+services/keeper test:   ---
+services/keeper test:   duration_ms: 195.691375
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: health maths vs contracts/nectar-core/tests/model.csv
+services/keeper test:     # Subtest: CSV has limit rows and the health + limit columns
+services/keeper test:     ok 1 - CSV has limit rows and the health + limit columns
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.258167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: demo_borrow
+services/keeper test:     ok 2 - health: demo_borrow
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.401708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: demo_borrow
+services/keeper test:     ok 3 - limit: demo_borrow
+services/keeper test:       ---
+services/keeper test:       duration_ms: 16.338834
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: demo_price_155
+services/keeper test:     ok 4 - health: demo_price_155
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.419041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: demo_price_155
+services/keeper test:     ok 5 - limit: demo_price_155
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.281083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: demo_price_140
+services/keeper test:     ok 6 - health: demo_price_140
+services/keeper test:       ---
+services/keeper test:       duration_ms: 55.665875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: demo_price_140
+services/keeper test:     ok 7 - limit: demo_price_140
+services/keeper test:       ---
+services/keeper test:       duration_ms: 16.778459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: open_session_counts_depth
+services/keeper test:     ok 8 - health: open_session_counts_depth
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.474167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: open_session_counts_depth
+services/keeper test:     ok 9 - limit: open_session_counts_depth
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.374292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: zero_capacity
+services/keeper test:     ok 10 - health: zero_capacity
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.666292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: zero_capacity
+services/keeper test:     ok 11 - limit: zero_capacity
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.124875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: reserve_only_no_quotes
+services/keeper test:     ok 12 - health: reserve_only_no_quotes
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.074291
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: reserve_only_no_quotes
+services/keeper test:     ok 13 - limit: reserve_only_no_quotes
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.07075
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: below_static_no_premium
+services/keeper test:     ok 14 - health: below_static_no_premium
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.055
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: below_static_no_premium
+services/keeper test:     ok 15 - limit: below_static_no_premium
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.068833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: above_pre_liq
+services/keeper test:     ok 16 - health: above_pre_liq
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.053667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: above_pre_liq
+services/keeper test:     ok 17 - limit: above_pre_liq
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.070084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: value_zero
+services/keeper test:     ok 18 - health: value_zero
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.145667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: value_zero
+services/keeper test:     ok 19 - limit: value_zero
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.232
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_00
+services/keeper test:     ok 20 - health: grid_limit_00
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.0575
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_00
+services/keeper test:     ok 21 - limit: grid_limit_00
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.073583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_01
+services/keeper test:     ok 22 - health: grid_limit_01
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.053666
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_01
+services/keeper test:     ok 23 - limit: grid_limit_01
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.058125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_02
+services/keeper test:     ok 24 - health: grid_limit_02
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_02
+services/keeper test:     ok 25 - limit: grid_limit_02
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.056
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_03
+services/keeper test:     ok 26 - health: grid_limit_03
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.048083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_03
+services/keeper test:     ok 27 - limit: grid_limit_03
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.0575
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_04
+services/keeper test:     ok 28 - health: grid_limit_04
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.049041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_04
+services/keeper test:     ok 29 - limit: grid_limit_04
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.053292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_05
+services/keeper test:     ok 30 - health: grid_limit_05
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.05325
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_05
+services/keeper test:     ok 31 - limit: grid_limit_05
+services/keeper test:       ---
+services/keeper test:       duration_ms: 41.383666
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_06
+services/keeper test:     ok 32 - health: grid_limit_06
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.092709
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_06
+services/keeper test:     ok 33 - limit: grid_limit_06
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.066584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_07
+services/keeper test:     ok 34 - health: grid_limit_07
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.056917
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_07
+services/keeper test:     ok 35 - limit: grid_limit_07
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.138125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_08
+services/keeper test:     ok 36 - health: grid_limit_08
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.108083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_08
+services/keeper test:     ok 37 - limit: grid_limit_08
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.107167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_09
+services/keeper test:     ok 38 - health: grid_limit_09
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.05725
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_09
+services/keeper test:     ok 39 - limit: grid_limit_09
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.061375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_10
+services/keeper test:     ok 40 - health: grid_limit_10
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.078625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_10
+services/keeper test:     ok 41 - limit: grid_limit_10
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.063583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_11
+services/keeper test:     ok 42 - health: grid_limit_11
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.054375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_11
+services/keeper test:     ok 43 - limit: grid_limit_11
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.23375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_12
+services/keeper test:     ok 44 - health: grid_limit_12
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.089584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_12
+services/keeper test:     ok 45 - limit: grid_limit_12
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.069167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_13
+services/keeper test:     ok 46 - health: grid_limit_13
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.056083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_13
+services/keeper test:     ok 47 - limit: grid_limit_13
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.061292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_14
+services/keeper test:     ok 48 - health: grid_limit_14
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.053916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_14
+services/keeper test:     ok 49 - limit: grid_limit_14
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.058333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_15
+services/keeper test:     ok 50 - health: grid_limit_15
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.053958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_15
+services/keeper test:     ok 51 - limit: grid_limit_15
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.064333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_16
+services/keeper test:     ok 52 - health: grid_limit_16
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.413084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_16
+services/keeper test:     ok 53 - limit: grid_limit_16
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.13925
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_17
+services/keeper test:     ok 54 - health: grid_limit_17
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.995084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_17
+services/keeper test:     ok 55 - limit: grid_limit_17
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.105292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_18
+services/keeper test:     ok 56 - health: grid_limit_18
+services/keeper test:       ---
+services/keeper test:       duration_ms: 10.536208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_18
+services/keeper test:     ok 57 - limit: grid_limit_18
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.12675
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_19
+services/keeper test:     ok 58 - health: grid_limit_19
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.070666
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_19
+services/keeper test:     ok 59 - limit: grid_limit_19
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.062833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_20
+services/keeper test:     ok 60 - health: grid_limit_20
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.050541
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_20
+services/keeper test:     ok 61 - limit: grid_limit_20
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.055041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_21
+services/keeper test:     ok 62 - health: grid_limit_21
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_21
+services/keeper test:     ok 63 - limit: grid_limit_21
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.055708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_22
+services/keeper test:     ok 64 - health: grid_limit_22
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.046208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_22
+services/keeper test:     ok 65 - limit: grid_limit_22
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.052583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_limit_23
+services/keeper test:     ok 66 - health: grid_limit_23
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.047834
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_limit_23
+services/keeper test:     ok 67 - limit: grid_limit_23
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.052291
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: agg_a_borrow
+services/keeper test:     ok 68 - health: agg_a_borrow
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.046708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: agg_a_borrow
+services/keeper test:     ok 69 - limit: agg_a_borrow
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.082625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: agg_b_full
+services/keeper test:     ok 70 - health: agg_b_full
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.047417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: agg_b_full
+services/keeper test:     ok 71 - limit: agg_b_full
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051917
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: agg_b_headroom
+services/keeper test:     ok 72 - health: agg_b_headroom
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.047916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: agg_b_headroom
+services/keeper test:     ok 73 - limit: agg_b_headroom
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.052541
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: agg_b_one_more
+services/keeper test:     ok 74 - health: agg_b_one_more
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: agg_b_one_more
+services/keeper test:     ok 75 - limit: agg_b_one_more
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.052917
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: agg_after_repay
+services/keeper test:     ok 76 - health: agg_after_repay
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.046
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: agg_after_repay
+services/keeper test:     ok 77 - limit: agg_after_repay
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.054
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: agg_a_price_130
+services/keeper test:     ok 78 - health: agg_a_price_130
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.045458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: agg_a_price_130
+services/keeper test:     ok 79 - limit: agg_a_price_130
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.049625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: agg_after_settle
+services/keeper test:     ok 80 - health: agg_after_settle
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.0475
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: agg_after_settle
+services/keeper test:     ok 81 - limit: agg_after_settle
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.050958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: mult_pre_split
+services/keeper test:     ok 82 - health: mult_pre_split
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.043791
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: mult_pre_split
+services/keeper test:     ok 83 - limit: mult_pre_split
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.917542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: mult_post_split
+services/keeper test:     ok 84 - health: mult_post_split
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.126375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: mult_post_split
+services/keeper test:     ok 85 - limit: mult_post_split
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.075792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: mult_dividend_2pct
+services/keeper test:     ok 86 - health: mult_dividend_2pct
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.064833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: mult_dividend_2pct
+services/keeper test:     ok 87 - limit: mult_dividend_2pct
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.090125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_00
+services/keeper test:     ok 88 - health: grid_mult_00
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.06
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_00
+services/keeper test:     ok 89 - limit: grid_mult_00
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.096625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_01
+services/keeper test:     ok 90 - health: grid_mult_01
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_01
+services/keeper test:     ok 91 - limit: grid_mult_01
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.059125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_02
+services/keeper test:     ok 92 - health: grid_mult_02
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.050083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_02
+services/keeper test:     ok 93 - limit: grid_mult_02
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.269334
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_03
+services/keeper test:     ok 94 - health: grid_mult_03
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.083875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_03
+services/keeper test:     ok 95 - limit: grid_mult_03
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.668833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_04
+services/keeper test:     ok 96 - health: grid_mult_04
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.072542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_04
+services/keeper test:     ok 97 - limit: grid_mult_04
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.060375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_05
+services/keeper test:     ok 98 - health: grid_mult_05
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.050459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_05
+services/keeper test:     ok 99 - limit: grid_mult_05
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.052875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_06
+services/keeper test:     ok 100 - health: grid_mult_06
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.046792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_06
+services/keeper test:     ok 101 - limit: grid_mult_06
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.052209
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_07
+services/keeper test:     ok 102 - health: grid_mult_07
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.048709
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_07
+services/keeper test:     ok 103 - limit: grid_mult_07
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.05175
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_08
+services/keeper test:     ok 104 - health: grid_mult_08
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.048333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_08
+services/keeper test:     ok 105 - limit: grid_mult_08
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.05325
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_09
+services/keeper test:     ok 106 - health: grid_mult_09
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.04775
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_09
+services/keeper test:     ok 107 - limit: grid_mult_09
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_10
+services/keeper test:     ok 108 - health: grid_mult_10
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.047458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_10
+services/keeper test:     ok 109 - limit: grid_mult_10
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.051
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: health: grid_mult_11
+services/keeper test:     ok 110 - health: grid_mult_11
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.138334
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: limit: grid_mult_11
+services/keeper test:     ok 111 - limit: grid_mult_11
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.083208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: every limit row was checked
+services/keeper test:     ok 112 - every limit row was checked
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.260042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..112
+services/keeper test: ok 6 - health maths vs contracts/nectar-core/tests/model.csv
+services/keeper test:   ---
+services/keeper test:   duration_ms: 181.389458
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: health maths edge cases
+services/keeper test:     # Subtest: V == 0 with debt is infinitely leveraged and breached
+services/keeper test:     ok 1 - V == 0 with debt is infinitely leveraged and breached
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.160833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: rejects negatives and bad divisors
+services/keeper test:     ok 2 - rejects negatives and bad divisors
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.436417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: closed session forces D_c = 0 and uses the weekend haircut
+services/keeper test:     ok 3 - closed session forces D_c = 0 and uses the weekend haircut
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.205833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: aggregate headroom floors at 0 when total debt exceeds capacity
+services/keeper test:     ok 4 - aggregate headroom floors at 0 when total debt exceeds capacity
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.139333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: TokenIncludesMultiplier ignores M; a 2-for-1 split with halved price leaves V unchanged
+services/keeper test:     ok 5 - TokenIncludesMultiplier ignores M; a 2-for-1 split with halved price leaves V unchanged
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.129458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: reads v1 views: no multiplier / total debt ⇒ defaults; session from market_session_open; missing ⇒ closed
+services/keeper test:     ok 6 - reads v1 views: no multiplier / total debt ⇒ defaults; session from market_session_open; missing ⇒ closed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.895625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: reads v2 views
+services/keeper test:     ok 7 - reads v2 views
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.990125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..7
+services/keeper test: ok 7 - health maths edge cases
+services/keeper test:   ---
+services/keeper test:   duration_ms: 3.4405
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: testnet integration (read-only)
+services/keeper test: ok 8 - testnet integration (read-only) # SKIP set NECTAR_IT=1
+services/keeper test:   ---
+services/keeper test:   duration_ms: 0.492459
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: keeper loop
+services/keeper test:     # Subtest: triggers only Open + triggerable + fresh positions, paging through list_positions
+services/keeper test:     ok 1 - triggers only Open + triggerable + fresh positions, paging through list_positions
+services/keeper test:       ---
+services/keeper test:       duration_ms: 15.193375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: backs off per position after a failed call, persisted across restart
+services/keeper test:     ok 2 - backs off per position after a failed call, persisted across restart
+services/keeper test:       ---
+services/keeper test:       duration_ms: 8.914458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: marks runs interrupted by a crash as failed on restart
+services/keeper test:     ok 3 - marks runs interrupted by a crash as failed on restart
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.476
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: logs health_mismatch when contract verdict disagrees with local maths, and still follows the contract
+services/keeper test:     ok 4 - logs health_mismatch when contract verdict disagrees with local maths, and still follows the contract
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.17875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: RPC outage: tick fails, consecutive errors grow, delay backs off, healthz degrades
+services/keeper test:     ok 5 - RPC outage: tick fails, consecutive errors grow, delay backs off, healthz degrades
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.500125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: logs JSON lines with no address fields
+services/keeper test:     ok 6 - logs JSON lines with no address fields
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.324875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..6
+services/keeper test: ok 9 - keeper loop
+services/keeper test:   ---
+services/keeper test:   duration_ms: 132.481583
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: backoff and method allowlist
+services/keeper test:     # Subtest: doubles up to the cap; jitter only shortens
+services/keeper test:     ok 1 - doubles up to the cap; jitter only shortens
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.900542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: the writer refuses any method outside the function-call key scope
+services/keeper test:     ok 2 - the writer refuses any method outside the function-call key scope
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.812417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..2
+services/keeper test: ok 10 - backoff and method allowlist
+services/keeper test:   ---
+services/keeper test:   duration_ms: 2.3065
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: key file
+services/keeper test:     # Subtest: loads a 0600 near-cli credentials file
+services/keeper test:     ok 1 - loads a 0600 near-cli credentials file
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.603167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses group/world-readable files
+services/keeper test:     ok 2 - refuses group/world-readable files
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.062417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses missing, non-JSON, keyless and wrong-account files without echoing contents
+services/keeper test:     ok 3 - refuses missing, non-JSON, keyless and wrong-account files without echoing contents
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.4525
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 11 - key file
+services/keeper test:   ---
+services/keeper test:   duration_ms: 5.31125
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: config
+services/keeper test:     # Subtest: treats TODO-* ids as unset and falls back to config.yaml
+services/keeper test:     ok 1 - treats TODO-* ids as unset and falls back to config.yaml
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.476584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: still requires KEEPER_KEY_PATH (no default key)
+services/keeper test:     ok 2 - still requires KEEPER_KEY_PATH (no default key)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.497792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: parses ids, defaults and the key path
+services/keeper test:     ok 3 - parses ids, defaults and the key path
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.959
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 12 - config
+services/keeper test:   ---
+services/keeper test:   duration_ms: 3.189334
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: near-rpc fallback (WO-35k)
+services/keeper test:     # Subtest: a 429 on the first endpoint → the second serves; the switch is logged by host only
+services/keeper test:     ok 1 - a 429 on the first endpoint → the second serves; the switch is logged by host only
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.629834
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: both FastNEAR hosts throttled / 503 → dRPC serves; then a cooled endpoint is skipped on the next call
+services/keeper test:     ok 2 - both FastNEAR hosts throttled / 503 → dRPC serves; then a cooled endpoint is skipped on the next call
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.255417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a contract error is final: no rotation, no cooldown
+services/keeper test:     ok 3 - a contract error is final: no rotation, no cooldown
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.135417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a hung endpoint times out and the next one serves
+services/keeper test:     ok 4 - a hung endpoint times out and the next one serves
+services/keeper test:       ---
+services/keeper test:       duration_ms: 81.395958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: every endpoint failing rethrows the last transport error after the passes
+services/keeper test:     ok 5 - every endpoint failing rethrows the last transport error after the passes
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.8235
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: classifies transport errors and leaves request errors alone
+services/keeper test:     ok 6 - classifies transport errors and leaves request errors alone
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.473
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: endpoint order: NEAR_RPC_URL first then the fallbacks; loopback / NEAR_RPC_FALLBACK=off stay alone; NEAR_RPC_URLS exact
+services/keeper test:     ok 7 - endpoint order: NEAR_RPC_URL first then the fallbacks; loopback / NEAR_RPC_FALLBACK=off stay alone; NEAR_RPC_URLS exact
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.585417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: mirrors packages/sdk TESTNET_RPC_FALLBACKS, and the Feed copy is byte-identical
+services/keeper test:     ok 8 - mirrors packages/sdk TESTNET_RPC_FALLBACKS, and the Feed copy is byte-identical
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.656792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..8
+services/keeper test: ok 13 - near-rpc fallback (WO-35k)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 110.001416
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher config
+services/keeper test:     # Subtest: reads accounts.owner/core and ops.oracle_refresher from config.yaml, and the near-rpc.ts fallback list
+services/keeper test:     ok 1 - reads accounts.owner/core and ops.oracle_refresher from config.yaml, and the near-rpc.ts fallback list
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.507791
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: parses the real packages/config/config.yaml (owner nectar.testnet, core nectar-core-v2)
+services/keeper test:     ok 2 - parses the real packages/config/config.yaml (owner nectar.testnet, core nectar-core-v2)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.078583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses a missing key path, bad GENERATE, a zoneless run_until or a session threshold ≥ 900 s
+services/keeper test:     ok 3 - refuses a missing key path, bad GENERATE, a zoneless run_until or a session threshold ≥ 900 s
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.097583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 14 - oracle refresher config
+services/keeper test:   ---
+services/keeper test:   duration_ms: 13.39075
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher decision branches
+services/keeper test:     # Subtest: session open: fresh below 600 s, refresh at 600 s
+services/keeper test:     ok 1 - session open: fresh below 600 s, refresh at 600 s
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.647416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: stale_price counts as in-session (refresh at ≥ 600 s although session_open is false)
+services/keeper test:     ok 2 - stale_price counts as in-session (refresh at ≥ 600 s although session_open is false)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.139209
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: closed (outside_hours, no_calendar, forced_closed): fresh below 43,200 s, refresh at 43,200 s
+services/keeper test:     ok 3 - closed (outside_hours, no_calendar, forced_closed): fresh below 43,200 s, refresh at 43,200 s
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.4355
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: skips when the source is Pyth (enum object) and when there is no price yet
+services/keeper test:     ok 4 - skips when the source is Pyth (enum object) and when there is no price yet
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.36225
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: rejects malformed views (number price, missing session fields)
+services/keeper test:     ok 5 - rejects malformed views (number price, missing session fields)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.522375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..5
+services/keeper test: ok 15 - oracle refresher decision branches
+services/keeper test:   ---
+services/keeper test:   duration_ms: 2.501625
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher tick
+services/keeper test:     # Subtest: re-asserts exactly the on-chain price (verbatim U128 string, also above 2^53) and logs decision, age, tx hash, rpc
+services/keeper test:     ok 1 - re-asserts exactly the on-chain price (verbatim U128 string, also above 2^53) and logs decision, age, tx hash, rpc
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.53975
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: fresh price: one view, no transaction
+services/keeper test:     ok 2 - fresh price: one view, no transaction
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.627792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: skips when oracle_source is Pyth, however old the price
+services/keeper test:     ok 3 - skips when oracle_source is Pyth, however old the price
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.277125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a failed or rejected tx is an error (backoff), never a retry with another price
+services/keeper test:     ok 4 - a failed or rejected tx is an error (backoff), never a retry with another price
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.3675
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: RPC errors back off exponentially and reset after a good tick
+services/keeper test:     ok 5 - RPC errors back off exponentially and reset after a good tick
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.007167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..5
+services/keeper test: ok 16 - oracle refresher tick
+services/keeper test:   ---
+services/keeper test:   duration_ms: 4.121375
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher key permission (amendment)
+services/keeper test:     # Subtest: waits (no view, no tx) while the access key does not exist, then proceeds
+services/keeper test:     ok 1 - waits (no view, no tx) while the access key does not exist, then proceeds
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.32525
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses FullAccess, another method, extra methods, all methods and another receiver — logs and skips, never throws
+services/keeper test:     ok 2 - refuses FullAccess, another method, extra methods, all methods and another receiver — logs and skips, never throws
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.042208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a refused key keeps the loop alive until run_until (no crash loop)
+services/keeper test:     ok 3 - a refused key keeps the loop alive until run_until (no crash loop)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.334875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 17 - oracle refresher key permission (amendment)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 1.79125
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher run_until
+services/keeper test:     # Subtest: ticks every tick_s and stops cleanly at run_until (last sleep clipped to run_until)
+services/keeper test:     ok 1 - ticks every tick_s and stops cleanly at run_until (last sleep clipped to run_until)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.289417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: past run_until: no tick at all; createOracleRefresher returns stopped before touching the key
+services/keeper test:     ok 2 - past run_until: no tick at all; createOracleRefresher returns stopped before touching the key
+services/keeper test:       ---
+services/keeper test:       duration_ms: 47.470167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an abort signal ends the loop
+services/keeper test:     ok 3 - an abort signal ends the loop
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.487041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 18 - oracle refresher run_until
+services/keeper test:   ---
+services/keeper test:   duration_ms: 48.415292
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher transaction (no deposit, 30 Tgas, update_owner_price only)
+services/keeper test:     # Subtest: refreshCall is the only call shape: deposit 0, gas 30 Tgas, core, exact args
+services/keeper test:     ok 1 - refreshCall is the only call shape: deposit 0, gas 30 Tgas, core, exact args
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.216542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: NearRefresherChain sends exactly that through the signer (mocked RPC) and decodes the bool result
+services/keeper test:     ok 2 - NearRefresherChain sends exactly that through the signer (mocked RPC) and decodes the bool result
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.856167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: accessKey maps AccessKeyDoesNotExistError to null and rethrows anything else
+services/keeper test:     ok 3 - accessKey maps AccessKeyDoesNotExistError to null and rethrows anything else
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.295541
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 19 - oracle refresher transaction (no deposit, 30 Tgas, update_owner_price only)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 4.538625
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher key file
+services/keeper test:     # Subtest: refuses a key whose account_id is not config accounts.owner, a key without account_id, and a public/private mismatch
+services/keeper test:     ok 1 - refuses a key whose account_id is not config accounts.owner, a key without account_id, and a public/private mismatch
+services/keeper test:       ---
+services/keeper test:       duration_ms: 34.02225
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: GENERATE=1 with no file: writes {account_id, public_key, private_key} 0600 in a new 0700 dir and logs only the public key, once
+services/keeper test:     ok 2 - GENERATE=1 with no file: writes {account_id, public_key, private_key} 0600 in a new 0700 dir and logs only the public key, once
+services/keeper test:       ---
+services/keeper test:       duration_ms: 24.857542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..2
+services/keeper test: ok 20 - oracle refresher key file
+services/keeper test:   ---
+services/keeper test:   duration_ms: 59.068958
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle refresher entrypoint (exit codes, no network)
+services/keeper test:     # Subtest: exits 1 on a key/owner mismatch and on a missing key without GENERATE, without key material in the output
+services/keeper test:     ok 1 - exits 1 on a key/owner mismatch and on a missing key without GENERATE, without key material in the output
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1517.071667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: exits 0 after run_until without generating a key
+services/keeper test:     ok 2 - exits 0 after run_until without generating a key
+services/keeper test:       ---
+services/keeper test:       duration_ms: 267.574833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..2
+services/keeper test: ok 21 - oracle refresher entrypoint (exit codes, no network)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 1785.232167
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle updater config (gating)
+services/keeper test:     # Subtest: is disabled without PYTH_API_KEY_PATH
+services/keeper test:     ok 1 - is disabled without PYTH_API_KEY_PATH
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.039166
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: is disabled without the updater account or key path, or with TODO placeholders
+services/keeper test:     ok 2 - is disabled without the updater account or key path, or with TODO placeholders
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.540292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: is disabled without feed ids, with a malformed id, or when reusing the keeper account
+services/keeper test:     ok 3 - is disabled without feed ids, with a malformed id, or when reusing the keeper account
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.430875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: enabled config has the documented defaults and normalised ids
+services/keeper test:     ok 4 - enabled config has the documented defaults and normalised ids
+services/keeper test:       ---
+services/keeper test:       duration_ms: 21.609583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: createOracleUpdater refuses a world-readable API key file
+services/keeper test:     ok 5 - createOracleUpdater refuses a world-readable API key file
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.39325
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: createOracleUpdater builds an updater when everything is present (no network)
+services/keeper test:     ok 6 - createOracleUpdater builds an updater when everything is present (no network)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.508333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..6
+services/keeper test: ok 22 - oracle updater config (gating)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 42.06725
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: oracle updater run (fixture)
+services/keeper test:     # Subtest: parses the Hermes hex update
+services/keeper test:     ok 1 - parses the Hermes hex update
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.936291
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+services/keeper test:     ok 2 - fetches with the configured auth header, reads the fee view, pushes with fee as deposit
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.685042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: honours a custom header and raw scheme
+services/keeper test:     ok 3 - honours a custom header and raw scheme
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.231208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: 401 → logged failure with status, no push, key never logged, backoff grows
+services/keeper test:     ok 4 - 401 → logged failure with status, no push, key never logged, backoff grows
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.496375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: non-200 bodies echoing the key are redacted
+services/keeper test:     ok 5 - non-200 bodies echoing the key are redacted
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.904292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: refuses a fee above the cap and a non-U128 fee
+services/keeper test:     ok 6 - refuses a fee above the cap and a non-U128 fee
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.047125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a failed update_price_feeds surfaces as an error
+services/keeper test:     ok 7 - a failed update_price_feeds surfaces as an error
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.674416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: redact ignores tiny secrets
+services/keeper test:     ok 8 - redact ignores tiny secrets
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.094417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..8
+services/keeper test: ok 23 - oracle updater run (fixture)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 11.681333
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: solana: preimage transcription
+services/keeper test:     # Subtest: the vector key reproduces the recorded v1 signature; the recorded program id is not a Solana address
+services/keeper test:     ok 1 - the vector key reproduces the recorded v1 signature; the recorded program id is not a Solana address
+services/keeper test:       ---
+services/keeper test:       duration_ms: 50.364125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: parses the recorded v1 vector (kind 0) and round-trips
+services/keeper test:     ok 2 - parses the recorded v1 vector (kind 0) and round-trips
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.384875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: kind from the suffix: PRELIQ = 1, SELF = 2
+services/keeper test:     ok 3 - kind from the suffix: PRELIQ = 1, SELF = 2
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.466416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: rejects non-canonical numbers and u64 overflow
+services/keeper test:     ok 4 - rejects non-canonical numbers and u64 overflow
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.448625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: parses a release message
+services/keeper test:     ok 5 - parses a release message
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.465958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..5
+services/keeper test: ok 24 - solana: preimage transcription
+services/keeper test:   ---
+services/keeper test:   duration_ms: 74.4445
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: solana: instruction bytes and account order (solana/deploy.md)
+services/keeper test:     # Subtest: settle data is discriminator + borsh args, byte for byte
+services/keeper test:     ok 1 - settle data is discriminator + borsh args, byte for byte
+services/keeper test:       ---
+services/keeper test:       duration_ms: 27.006333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: release data is discriminator + position_id u64 + nonce u64 + expires i64
+services/keeper test:     ok 2 - release data is discriminator + position_id u64 + nonce u64 + expires i64
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.231958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: [ed25519 verify, settle]: recorded signature verifies; v2 accounts in order with roles
+services/keeper test:     ok 3 - [ed25519 verify, settle]: recorded signature verifies; v2 accounts in order with roles
+services/keeper test:       ---
+services/keeper test:       duration_ms: 39.23825
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: [ed25519 verify, release]: v2 accounts move no tokens; recipient must be the depositor
+services/keeper test:     ok 4 - [ed25519 verify, release]: v2 accounts move no tokens; recipient must be the depositor
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.197167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: §E seeds: the position PDA depends on the depositor, the nonce PDA on the slot and the authority
+services/keeper test:     ok 5 - §E seeds: the position PDA depends on the depositor, the nonce PDA on the slot and the authority
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.861667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: §E seeds: the nonce PDA is exactly [b"nonce", position, authority, nonce_le]
+services/keeper test:     ok 6 - §E seeds: the nonce PDA is exactly [b"nonce", position, authority, nonce_le]
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.223833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: matches the vault client (solana/client, checked against the program): PDAs, layouts, settle and release
+services/keeper test:     ok 7 - matches the vault client (solana/client, checked against the program): PDAs, layouts, settle and release
+services/keeper test:       ---
+services/keeper test:       duration_ms: 160.654334
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: NonceRecord v2: Anchor discriminator rule, 91 bytes, every field decoded
+services/keeper test:     ok 8 - NonceRecord v2: Anchor discriminator rule, 91 bytes, every field decoded
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.9225
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: Position account offsets (deploy.md) and NEAR authority decoding
+services/keeper test:     ok 9 - Position account offsets (deploy.md) and NEAR authority decoding
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.168958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..9
+services/keeper test: ok 25 - solana: instruction bytes and account order (solana/deploy.md)
+services/keeper test:   ---
+services/keeper test:   duration_ms: 256.675167
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: solana: relay with a mocked RPC
+services/keeper test:     # Subtest: settle: sends [ed25519, settle] once, relays the tx sig; a second tick sends nothing
+services/keeper test:     ok 1 - settle: sends [ed25519, settle] once, relays the tx sig; a second tick sends nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 206.241125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: restart after a landed tx: a valid record and its tx → no send, relays that tx
+services/keeper test:     ok 2 - restart after a landed tx: a valid record and its tx → no send, relays that tx
+services/keeper test:       ---
+services/keeper test:       duration_ms: 17.734042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: position PDA closed (without our nonce) or signature expired → skip with backoff, nothing sent
+services/keeper test:     ok 3 - position PDA closed (without our nonce) or signature expired → skip with backoff, nothing sent
+services/keeper test:       ---
+services/keeper test:       duration_ms: 57.238792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a tampered preimage (fields != pending) is refused before any send
+services/keeper test:     ok 4 - a tampered preimage (fields != pending) is refused before any send
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.63
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: v1 (no contract_version): releases and deposits are not attempted
+services/keeper test:     ok 5 - v1 (no contract_version): releases and deposits are not attempted
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.462791
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: v2 release: sends [ed25519, release]; falls back to relay_settlement_result if relay_release_result is missing
+services/keeper test:     ok 6 - v2 release: sends [ed25519, release]; falls back to relay_settlement_result if relay_release_result is missing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 11.612333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: v2 deposit watcher: confirm_remote_deposit only when amount >= reserved and authority matches; then cooldown
+services/keeper test:     ok 7 - v2 deposit watcher: confirm_remote_deposit only when amount >= reserved and authority matches; then cooldown
+services/keeper test:       ---
+services/keeper test:       duration_ms: 8.052084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: chain gate (WO-29b): Base positions next to Solana ones are skipped before any pending view or parse
+services/keeper test:     ok 8 - chain gate (WO-29b): Base positions next to Solana ones are skipped before any pending view or parse
+services/keeper test:       ---
+services/keeper test:       duration_ms: 19.535958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: chain gate: a Solana-pinned v2 position uses its pinned vault; a non-Solana primary chain is skipped
+services/keeper test:     ok 9 - chain gate: a Solana-pinned v2 position uses its pinned vault; a non-Solana primary chain is skipped
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.147209
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: the Vault account decodes (mint after the symbol)
+services/keeper test:     ok 10 - the Vault account decodes (mint after the symbol)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.68425
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..10
+services/keeper test: ok 26 - solana: relay with a mocked RPC
+services/keeper test:   ---
+services/keeper test:   duration_ms: 341.793542
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: SR-2: a nonce PDA is proof only when the vault wrote it
+services/keeper test:     # Subtest: a system-owned account at the nonce PDA is not accepted: the leg is sent, the attacker signature is never relayed
+services/keeper test:     ok 1 - a system-owned account at the nonce PDA is not accepted: the leg is sent, the attacker signature is never relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 243.113041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a system-owned nonce PDA with no position to settle relays nothing
+services/keeper test:     ok 2 - a system-owned nonce PDA with no position to settle relays nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 10.790041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with short data is refused: nothing sent, nothing relayed
+services/keeper test:     ok 3 - a program-owned record with short data is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 67.562958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with wrong discriminator is refused: nothing sent, nothing relayed
+services/keeper test:     ok 4 - a program-owned record with wrong discriminator is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 22.1345
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with version 1 is refused: nothing sent, nothing relayed
+services/keeper test:     ok 5 - a program-owned record with version 1 is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.925625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with another vault is refused: nothing sent, nothing relayed
+services/keeper test:     ok 6 - a program-owned record with another vault is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 15.793792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with another authority is refused: nothing sent, nothing relayed
+services/keeper test:     ok 7 - a program-owned record with another authority is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.221667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with another nonce is refused: nothing sent, nothing relayed
+services/keeper test:     ok 8 - a program-owned record with another nonce is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 88.106083
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with another position is refused: nothing sent, nothing relayed
+services/keeper test:     ok 9 - a program-owned record with another position is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 11.1445
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with the other op is refused: nothing sent, nothing relayed
+services/keeper test:     ok 10 - a program-owned record with the other op is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 74.140542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a program-owned record with another kind is refused: nothing sent, nothing relayed
+services/keeper test:     ok 11 - a program-owned record with another kind is refused: nothing sent, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 39.037625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2a: a valid record is proof whatever the slot shows now: reopened, withdrawn, or any status
+services/keeper test:     ok 12 - N2a: a valid record is proof whatever the slot shows now: reopened, withdrawn, or any status
+services/keeper test:       ---
+services/keeper test:       duration_ms: 110.999166
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2d: a landing tx with trailing instruction bytes (Anchor ignores them) is the landing tx
+services/keeper test:     ok 13 - N2d: a landing tx with trailing instruction bytes (Anchor ignores them) is the landing tx
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.988584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2b: padding appended after the landing does not hide it: pages to the oldest and reads that first
+services/keeper test:     ok 14 - N2b: padding appended after the landing does not hide it: pages to the oldest and reads that first
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.455041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2b: a rate-limited listing resumes from its cursor on the next attempt
+services/keeper test:     ok 15 - N2b: a rate-limited listing resumes from its cursor on the next attempt
+services/keeper test:       ---
+services/keeper test:       duration_ms: 34.993709
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2b: the per-tick budget stops the search and the next tick continues it, nothing relayed meanwhile
+services/keeper test:     ok 16 - N2b: the per-tick budget stops the search and the next tick continues it, nothing relayed meanwhile
+services/keeper test:       ---
+services/keeper test:       duration_ms: 24.969333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2b: a finished nonce walk is not repeated while the slot fallback is still running
+services/keeper test:     ok 17 - N2b: a finished nonce walk is not repeated while the slot fallback is still running
+services/keeper test:       ---
+services/keeper test:       duration_ms: 18.7395
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2b: a search that finds nothing starts over next time, so a landing indexed later is seen
+services/keeper test:     ok 18 - N2b: a search that finds nothing starts over next time, so a landing indexed later is seen
+services/keeper test:       ---
+services/keeper test:       duration_ms: 13.7365
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N2b: when the nonce history does not show the landing, the slot history does
+services/keeper test:     ok 19 - N2b: when the nonce history does not show the landing, the slot history does
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.366792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a valid record on a Settled position (not yet withdrawn) relays the landed tx
+services/keeper test:     ok 20 - a valid record on a Settled position (not yet withdrawn) relays the landed tx
+services/keeper test:       ---
+services/keeper test:       duration_ms: 23.979708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a landed release (status Released) relays the tx that ran it
+services/keeper test:     ok 21 - a landed release (status Released) relays the tx that ran it
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.650291
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a position already Settled or Released with no record for this nonce is not sent or relayed
+services/keeper test:     ok 22 - a position already Settled or Released with no record for this nonce is not sent or relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 9.062208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a tx on another slot that lists the committed slot as trailing accounts is not the landing tx
+services/keeper test:     ok 23 - a tx on another slot that lists the committed slot as trailing accounts is not the landing tx
+services/keeper test:       ---
+services/keeper test:       duration_ms: 78.911625
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a squatter settling its own slot with the public signature leaves the committed slot unlanded: the leg is sent
+services/keeper test:     ok 24 - a squatter settling its own slot with the public signature leaves the committed slot unlanded: the leg is sent
+services/keeper test:       ---
+services/keeper test:       duration_ms: 16.276167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: only a tx that ran this vault instruction on this slot is relayed, wherever it sits among padding transfers
+services/keeper test:     ok 25 - only a tx that ran this vault instruction on this slot is relayed, wherever it sits among padding transfers
+services/keeper test:       ---
+services/keeper test:       duration_ms: 16.958459
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a valid record with only a transfer in its history → skip with backoff, nothing relayed
+services/keeper test:     ok 26 - a valid record with only a transfer in its history → skip with backoff, nothing relayed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 60.286708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-1: a nonce burned on another slot is a different PDA and does not block the leg
+services/keeper test:     ok 27 - SR-1: a nonce burned on another slot is a different PDA and does not block the leg
+services/keeper test:       ---
+services/keeper test:       duration_ms: 20.246084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N1: a nonce burned on this slot under another key is a different PDA: the leg is sent under NEAR's authority
+services/keeper test:     ok 28 - N1: a nonce burned on this slot under another key is a different PDA: the leg is sent under NEAR's authority
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.394584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a release whose recipient is not the committed depositor is refused before any send
+services/keeper test:     ok 29 - a release whose recipient is not the committed depositor is refused before any send
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.175417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: unknown authority or depositor skips; the depositor falls back to get_position
+services/keeper test:     ok 30 - unknown authority or depositor skips; the depositor falls back to get_position
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.869584
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..30
+services/keeper test: ok 27 - SR-2: a nonce PDA is proof only when the vault wrote it
+services/keeper test:   ---
+services/keeper test:   duration_ms: 1110.340416
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: N3: an older nonce of this leg landed before a re-sign
+services/keeper test:     # Subtest: settled slot, no record for the current nonce: relays the older tx, sends nothing
+services/keeper test:     ok 1 - settled slot, no record for the current nonce: relays the older tx, sends nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 26.697167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: withdrawn slot (account gone): the older tx is still found through the slot history
+services/keeper test:     ok 2 - withdrawn slot (account gone): the older tx is still found through the slot history
+services/keeper test:       ---
+services/keeper test:       duration_ms: 18.575125
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a release that landed under an older nonce is relayed as the release
+services/keeper test:     ok 3 - a release that landed under an older nonce is relayed as the release
+services/keeper test:       ---
+services/keeper test:       duration_ms: 24.602167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a leg the depositor ran under its own key is never relayed as NEAR's
+services/keeper test:     ok 4 - a leg the depositor ran under its own key is never relayed as NEAR's
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.375084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an older candidate record that is system-owned proves nothing
+services/keeper test:     ok 5 - an older candidate record that is system-owned proves nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.139167
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an older candidate record that is absent proves nothing
+services/keeper test:     ok 6 - an older candidate record that is absent proves nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.721542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an older candidate record that is the wrong op proves nothing
+services/keeper test:     ok 7 - an older candidate record that is the wrong op proves nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.409417
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an older candidate record that is another position proves nothing
+services/keeper test:     ok 8 - an older candidate record that is another position proves nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 15.996292
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an older candidate record that is a nonce that does not derive this address proves nothing
+services/keeper test:     ok 9 - an older candidate record that is a nonce that does not derive this address proves nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.302458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a slot left by the other op is not searched
+services/keeper test:     ok 10 - a slot left by the other op is not searched
+services/keeper test:       ---
+services/keeper test:       duration_ms: 11.894458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an open slot is sent to, not searched
+services/keeper test:     ok 11 - an open slot is sent to, not searched
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.811
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..11
+services/keeper test: ok 28 - N3: an older nonce of this leg landed before a re-sign
+services/keeper test:   ---
+services/keeper test:   duration_ms: 173.700167
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: SR-8: depositor-bound slots
+services/keeper test:     # Subtest: a squatter slot for the same id under another depositor is never read
+services/keeper test:     ok 1 - a squatter slot for the same id under another depositor is never read
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.795916
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: an account at the slot recording another depositor is refused
+services/keeper test:     ok 2 - an account at the slot recording another depositor is refused
+services/keeper test:       ---
+services/keeper test:       duration_ms: 9.390875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a pre-funded (system-owned) slot counts as not deposited
+services/keeper test:     ok 3 - a pre-funded (system-owned) slot counts as not deposited
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.123208
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 29 - SR-8: depositor-bound slots
+services/keeper test:   ---
+services/keeper test:   duration_ms: 21.736667
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: SR-11: deposits below the reserved units do not trigger confirm
+services/keeper test:     # Subtest: top-level units are 0, the reserved amount binds: 1 unit against 1e12 reserved is never confirmed
+services/keeper test:     ok 1 - top-level units are 0, the reserved amount binds: 1 unit against 1e12 reserved is never confirmed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 8.036042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a Settled or Released slot is not an open deposit, however large its amount
+services/keeper test:     ok 2 - a Settled or Released slot is not an open deposit, however large its amount
+services/keeper test:       ---
+services/keeper test:       duration_ms: 9.137333
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a position without reserved_units is not confirmed
+services/keeper test:     ok 3 - a position without reserved_units is not confirmed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.828542
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: a rejected confirm is spaced out, never abandoned; a changed amount re-arms it
+services/keeper test:     ok 4 - N4: a rejected confirm is spaced out, never abandoned; a changed amount re-arms it
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.746084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: the cooldown doubles per unchanged attempt, and the count survives a restart
+services/keeper test:     ok 5 - the cooldown doubles per unchanged attempt, and the count survives a restart
+services/keeper test:       ---
+services/keeper test:       duration_ms: 36.29375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a failing confirm keeps the same doubling cooldown: the error backoff never shortens it
+services/keeper test:     ok 6 - a failing confirm keeps the same doubling cooldown: the error backoff never shortens it
+services/keeper test:       ---
+services/keeper test:       duration_ms: 11.317416
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: cappedCooldownMs: doubles from the base, stops at the cap, survives huge attempt counts
+services/keeper test:     ok 7 - cappedCooldownMs: doubles from the base, stops at the cap, survives huge attempt counts
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.218833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: a full deposit that arrives after expiry is confirmed, so it can be released
+services/keeper test:     ok 8 - N4: a full deposit that arrives after expiry is confirmed, so it can be released
+services/keeper test:       ---
+services/keeper test:       duration_ms: 9.997875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: a short deposit is confirmed once the reservation has expired, and not before
+services/keeper test:     ok 9 - N4: a short deposit is confirmed once the reservation has expired, and not before
+services/keeper test:       ---
+services/keeper test:       duration_ms: 7.126084
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: a position already marked Expired on NEAR is watched too (status Closed at the top level)
+services/keeper test:     ok 10 - N4: a position already marked Expired on NEAR is watched too (status Closed at the top level)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.308042
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: an Expired position with a proven deposit is left alone
+services/keeper test:     ok 11 - N4: an Expired position with a proven deposit is left alone
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.295583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+services/keeper test:     ok 12 - N4: an expired, still-empty slot costs no NEAR call and is polled slowly
+services/keeper test:       ---
+services/keeper test:       duration_ms: 4.401708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: N4: an expired slot under another authority is still not confirmed
+services/keeper test:     ok 13 - N4: an expired slot under another authority is still not confirmed
+services/keeper test:       ---
+services/keeper test:       duration_ms: 5.072458
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: confirm_in_flight: no confirm
+services/keeper test:     ok 14 - confirm_in_flight: no confirm
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.778667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: deposit_already_proven: no confirm
+services/keeper test:     ok 15 - deposit_already_proven: no confirm
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.756958
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..15
+services/keeper test: ok 30 - SR-11: deposits below the reserved units do not trigger confirm
+services/keeper test:   ---
+services/keeper test:   duration_ms: 125.546125
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: SR-12 / SR-31: program and mint are pinned
+services/keeper test:     # Subtest: SR-12: a look-alike vault under another mint changes nothing
+services/keeper test:     ok 1 - SR-12: a look-alike vault under another mint changes nothing
+services/keeper test:       ---
+services/keeper test:       duration_ms: 13.806792
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: a vault PDA that is missing, foreign-owned or for another mint or symbol is refused
+services/keeper test:     ok 2 - a vault PDA that is missing, foreign-owned or for another mint or symbol is refused
+services/keeper test:       ---
+services/keeper test:       duration_ms: 14.861667
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-31: a lying RPC pointing at another program is refused before the fee payer signs (pinned position)
+services/keeper test:     ok 3 - SR-31: a lying RPC pointing at another program is refused before the fee payer signs (pinned position)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.698708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: SR-31: the same through the collateral primary remote_chain
+services/keeper test:     ok 4 - SR-31: the same through the collateral primary remote_chain
+services/keeper test:       ---
+services/keeper test:       duration_ms: 2.698583
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: config: the relay defaults to config.yaml, env overrides, and an unpinned relay refuses to start
+services/keeper test:     ok 5 - config: the relay defaults to config.yaml, env overrides, and an unpinned relay refuses to start
+services/keeper test:       ---
+services/keeper test:       duration_ms: 3.124875
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: config: differing solana.program_id and solana.vault_program are refused
+services/keeper test:     ok 6 - config: differing solana.program_id and solana.vault_program are refused
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.212375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..6
+services/keeper test: ok 31 - SR-12 / SR-31: program and mint are pinned
+services/keeper test:   ---
+services/keeper test:   duration_ms: 37.803666
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: # Subtest: KitSolanaPort against a local JSON-RPC stub
+services/keeper test:     # Subtest: getTransaction: resolves loaded addresses and flattens inner instructions
+services/keeper test:     ok 1 - getTransaction: resolves loaded addresses and flattens inner instructions
+services/keeper test:       ---
+services/keeper test:       duration_ms: 33.036375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: getTransaction: a failed or unknown tx is not a success
+services/keeper test:     ok 2 - getTransaction: a failed or unknown tx is not a success
+services/keeper test:       ---
+services/keeper test:       duration_ms: 12.841375
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: getSignaturesForAddress: one page per call, the cursor is passed, failed txs are marked
+services/keeper test:     ok 3 - getSignaturesForAddress: one page per call, the cursor is passed, failed txs are marked
+services/keeper test:       ---
+services/keeper test:       duration_ms: 6.6785
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 32 - KitSolanaPort against a local JSON-RPC stub
+services/keeper test:   ---
+services/keeper test:   duration_ms: 52.761209
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/x402 test: # Subtest: demo-agent subprocess: verifies the MCP call before signing
+services/x402 test:     # Subtest: hostile MCP (ft_transfer to an attacker on usdc-mock): exit 3, clear message, zero RPC requests
+services/x402 test:     ok 1 - hostile MCP (ft_transfer to an attacker on usdc-mock): exit 3, clear message, zero RPC requests
+services/x402 test:       ---
+services/x402 test:       duration_ms: 957.428
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/keeper test: # Subtest: startup full-access refusal
+services/keeper test:     # Subtest: refuses a FullAccess key with a clear message
+services/keeper test:     ok 1 - refuses a FullAccess key with a clear message
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.768833
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: accepts function-call keys (limited and unlimited)
+services/keeper test:     ok 2 - accepts function-call keys (limited and unlimited)
+services/keeper test:       ---
+services/keeper test:       duration_ms: 1.736708
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     # Subtest: does not refuse when the key cannot be read (RPC down); healthz reports it
+services/keeper test:     ok 3 - does not refuse when the key cannot be read (RPC down); healthz reports it
+services/keeper test:       ---
+services/keeper test:       duration_ms: 0.378041
+services/keeper test:       type: 'test'
+services/keeper test:       ...
+services/keeper test:     1..3
+services/keeper test: ok 33 - startup full-access refusal
+services/keeper test:   ---
+services/keeper test:   duration_ms: 5.323583
+services/keeper test:   type: 'suite'
+services/keeper test:   ...
+services/keeper test: 1..33
+services/keeper test: # tests 327
+services/keeper test: # suites 33
+services/keeper test: # pass 327
+services/keeper test: # fail 0
+services/keeper test: # cancelled 0
+services/keeper test: # skipped 0
+services/keeper test: # todo 0
+services/keeper test: # duration_ms 3616.411708
+services/keeper test: Done
+services/x402 test:     # Subtest: hostile MCP (honest call with a bigger amount and pay_to): exit 3, zero RPC requests
+services/x402 test:     ok 2 - hostile MCP (honest call with a bigger amount and pay_to): exit 3, zero RPC requests
+services/x402 test:       ---
+services/x402 test:       duration_ms: 456.200792
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: honest MCP: passes the guard and signs exactly the rebuilt call
+services/x402 test:     ok 3 - honest MCP: passes the guard and signs exactly the rebuilt call
+services/x402 test:       ---
+services/x402 test:       duration_ms: 508.005875
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..3
+services/x402 test: ok 3 - demo-agent subprocess: verifies the MCP call before signing
+services/x402 test:   ---
+services/x402 test:   duration_ms: 2018.480625
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: # Subtest: X402_RELAYER_KEY_JSON
+services/x402 test:     # Subtest: parses a near-cli credentials JSON
+services/x402 test:     ok 1 - parses a near-cli credentials JSON
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.856208
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: errors never carry the key material
+services/x402 test:     ok 2 - errors never carry the key material
+services/x402 test:       ---
+services/x402 test:       duration_ms: 74.517
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: refuses a FullAccess key and an unreadable permission (fail closed); accepts a function-call key
+services/x402 test:     ok 3 - refuses a FullAccess key and an unreadable permission (fail closed); accepts a function-call key
+services/x402 test:       ---
+services/x402 test:       duration_ms: 27.705875
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: config: env key excludes the file path and the HTTP facilitator; never stored in config
+services/x402 test:     ok 4 - config: env key excludes the file path and the HTTP facilitator; never stored in config
+services/x402 test:       ---
+services/x402 test:       duration_ms: 19.854708
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..4
+services/x402 test: ok 4 - X402_RELAYER_KEY_JSON
+services/x402 test:   ---
+services/x402 test:   duration_ms: 125.679041
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: # Subtest: x402 hosted listener
+services/x402 test:     # Subtest: X402_PORT wins, then PORT, then 8790
+services/x402 test:     ok 1 - X402_PORT wins, then PORT, then 8790
+services/x402 test:       ---
+services/x402 test:       duration_ms: 2.642917
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: serves /health without secrets and applies the CORS allowlist
+services/x402 test:     ok 2 - serves /health without secrets and applies the CORS allowlist
+services/x402 test:       ---
+services/x402 test:       duration_ms: 136.28725
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: /health is 503 when the Feed upstream is down
+services/x402 test:     ok 3 - /health is 503 when the Feed upstream is down
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.459375
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..3
+services/x402 test: ok 5 - x402 hosted listener
+services/x402 test:   ---
+services/x402 test:   duration_ms: 141.328708
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: # Subtest: x402 paid export (mocked facilitator chain + mocked RPC)
+services/x402 test:     # Subtest: 402 challenge names usdc-mock, 10000, near:testnet, treasury
+services/x402 test:     ok 1 - 402 challenge names usdc-mock, 10000, near:testnet, treasury
+services/x402 test:       ---
+services/x402 test:       duration_ms: 104.425583
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: 402 -> NEP-366 SignedDelegate payment -> 200 with the CSV
+services/x402 test:     ok 2 - 402 -> NEP-366 SignedDelegate payment -> 200 with the CSV
+services/x402 test:       ---
+services/x402 test:       duration_ms: 331.298875
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: insufficient balance is refused by the facilitator (no settlement)
+services/x402 test:     ok 3 - insufficient balance is refused by the facilitator (no settlement)
+services/x402 test:       ---
+services/x402 test:       duration_ms: 60.973
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: feed down -> 502 and the payment is not settled
+services/x402 test:     ok 4 - feed down -> 502 and the payment is not settled
+services/x402 test:       ---
+services/x402 test:       duration_ms: 56.369709
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..4
+services/x402 test: ok 6 - x402 paid export (mocked facilitator chain + mocked RPC)
+services/x402 test:   ---
+services/x402 test:   duration_ms: 577.613959
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: # Subtest: HTTP facilitator (SR-32)
+services/x402 test:     # Subtest: every endpoint answers 401 without the shared secret and nothing settles
+services/x402 test:     ok 1 - every endpoint answers 401 without the shared secret and nothing settles
+services/x402 test:       ---
+services/x402 test:       duration_ms: 71.366542
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: a stranger payment that settles unpinned is refused here, even with the secret
+services/x402 test:     ok 2 - a stranger payment that settles unpinned is refused here, even with the secret
+services/x402 test:       ---
+services/x402 test:       duration_ms: 79.3915
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: pins each route term; missing requirements are refused
+services/x402 test:     ok 3 - pins each route term; missing requirements are refused
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.758542
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: malformed body with the secret is a 400 and settles nothing
+services/x402 test:     ok 4 - malformed body with the secret is a 400 and settles nothing
+services/x402 test:       ---
+services/x402 test:       duration_ms: 3.653792
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: our own paid route settles through the HTTP facilitator with the secret
+services/x402 test:     ok 5 - our own paid route settles through the HTTP facilitator with the secret
+services/x402 test:       ---
+services/x402 test:       duration_ms: 59.001666
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test: # Failed to fetch supported kinds from facilitator: Error: Facilitator getSupported failed (401): {"error":"unauthorized"}
+services/x402 test:     # Subtest: a resource server without the secret cannot start against it
+services/x402 test:     ok 6 - a resource server without the secret cannot start against it
+services/x402 test:       ---
+services/x402 test:       duration_ms: 2.7965
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: config: in-process by default; the listener needs a secret and ignores X402_HOST
+services/x402 test:     ok 7 - config: in-process by default; the listener needs a secret and ignores X402_HOST
+services/x402 test:       ---
+services/x402 test:       duration_ms: 4.000291
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: shared secret: 0600 file only, long enough, errors carry no contents
+services/x402 test:     ok 8 - shared secret: 0600 file only, long enough, errors carry no contents
+services/x402 test:       ---
+services/x402 test:       duration_ms: 7.671833
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..8
+services/x402 test: ok 7 - HTTP facilitator (SR-32)
+services/x402 test:   ---
+services/x402 test:   duration_ms: 230.514375
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: # Subtest: wrong network refused
+services/x402 test:     # Subtest: config refuses mainnet hints and non-testnet network ids
+services/x402 test:     ok 1 - config refuses mainnet hints and non-testnet network ids
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.398208
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: the agent refuses a near:mainnet challenge before signing
+services/x402 test:     ok 2 - the agent refuses a near:mainnet challenge before signing
+services/x402 test:       ---
+services/x402 test:       duration_ms: 2.6995
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: loadConfig: usdc-mock asset, 0.01 USDC, near:testnet from config.yaml
+services/x402 test:     ok 3 - loadConfig: usdc-mock asset, 0.01 USDC, near:testnet from config.yaml
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.414542
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..3
+services/x402 test: ok 8 - wrong network refused
+services/x402 test:   ---
+services/x402 test:   duration_ms: 3.63225
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: # Subtest: key paths
+services/x402 test:     # Subtest: missing key path is a clear error naming the env variable
+services/x402 test:     ok 1 - missing key path is a clear error naming the env variable
+services/x402 test:       ---
+services/x402 test:       duration_ms: 0.31675
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     # Subtest: loads a 0600 near-cli file, refuses a group-readable one and a mismatched account; errors carry no key
+services/x402 test:     ok 2 - loads a 0600 near-cli file, refuses a group-readable one and a mismatched account; errors carry no key
+services/x402 test:       ---
+services/x402 test:       duration_ms: 1.769917
+services/x402 test:       type: 'test'
+services/x402 test:       ...
+services/x402 test:     1..2
+services/x402 test: ok 9 - key paths
+services/x402 test:   ---
+services/x402 test:   duration_ms: 2.1965
+services/x402 test:   type: 'suite'
+services/x402 test:   ...
+services/x402 test: 1..9
+services/x402 test: # tests 41
+services/x402 test: # suites 9
+services/x402 test: # pass 41
+services/x402 test: # fail 0
+services/x402 test: # cancelled 0
+services/x402 test: # skipped 0
+services/x402 test: # todo 0
+services/x402 test: # duration_ms 3774.604708
+services/x402 test: Done
+packages/sdk test:  Test Files  13 passed (13)
+packages/sdk test:       Tests  218 passed (218)
+packages/sdk test:    Start at  20:42:30
+packages/sdk test:    Duration  3.38s (import 76%, transform 12%, tests 11%, worker 1%)
+packages/sdk test: Done
+apps/web test$ node --test --test-reporter=spec --import ./scripts/node-test-shims.mjs lib/api/api.test.ts lib/api/health.test.ts lib/copilot/verify.test.ts lib/hosts.test.ts lib/test-assets.test.ts
+apps/web test: ✔ same-origin: Sec-Fetch-Site same-origin passes; cross-site, same-site, foreign Origin and header-less requests are refused (17.038958ms)
+apps/web test: ✔ guardJsonPost: cross-origin → 403, text/plain → 415, > 8 KB → 413, bad JSON → 400, good → parsed (3.3495ms)
+apps/web test: ✔ readCappedText: stops at the cap even without (or with a lying) content-length (1.023083ms)
+apps/web test: ✔ token bucket: 5 per minute per client, refills, separate keys, bounded memory (0.417834ms)
+apps/web test: ✔ POST /api/copilot: a global ceiling holds when clients rotate x-forwarded-for (1.550292ms)
+apps/web test: ✔ POST /api/copilot: 429 after 5 live calls from one client, other clients still served; fixture has its own bucket (1.877333ms)
+apps/web test: ✔ POST /api/copilot: rejected requests never reach NEAR AI or the fixture (1.564541ms)
+apps/web test: ✔ POST /api/copilot: live body is built server-side with max_tokens; upstream errors are generic (0.730875ms)
+apps/web test: ✔ feed proxy allow-list: documented paths pass; '.', '..' and anything else → 404 (0.617291ms)
+apps/web test: ✔ health: a good read is served and reused for 5 s (one RPC read) (1.968667ms)
+apps/web test: ✔ health: every provider refuses → the last good snapshot while ≤ 60 s old, ok with stale_s and rpc_error (0.249625ms)
+apps/web test: ✔ health: a snapshot older than 60 s is not served: ok:false with the reason, no values (0.141291ms)
+apps/web test: ✔ health: a reused stale answer is dropped once its snapshot passes 60 s (0.272209ms)
+apps/web test: ✔ health: no good snapshot yet, or one for another contract → ok:false (0.263333ms)
+apps/web test: ✔ health: concurrent callers share one read (0.595042ms)
+apps/web test:   sample quote TCB status: UpToDate (accepted: true)
+apps/web test: ✔ DCAP: Phala sample TDX quote verifies against Intel root with recorded collateral (98.284666ms)
+apps/web test: ✔ DCAP: patched report_data breaks the quote signature (52.213459ms)
+apps/web test: ✔ quote offsets match dcap-qvl Quote.parse (report_data, mr_config_id) (1.305042ms)
+apps/web test: ✔ fixture: signature, hashes, model id and report_data pass; DCAP fails → answer hidden (75.770833ms)
+apps/web test: ✔ gate logic: with an accepted DCAP verdict over the same quote bytes the answer is released (7.797125ms)
+apps/web test: ✔ R2-03: an exchange signed for other notes or another model is not verified, even with an accepted DCAP verdict (9.497541ms)
+apps/web test: ✔ R2-04/R2-12: live body carries max_tokens and no tools; fixture body has neither (0.179958ms)
+apps/web test: ✔ negative: tampered response, stale nonce, foreign signer, gateway signature (15.154959ms)
+apps/web test: ✔ F-075: MRCONFIGID check is a prefix match on 01 || sha256(app_compose) (2.733958ms)
+apps/web test: ✔ F-074/F-076/C-018: request paths carry no provider param or aliasing header; 404 backoff grows (0.988ms)
+apps/web test: ✔ F-077: NRAS verdict needs overall=true and both nonces equal ours (7.0905ms)
+apps/web test: ✔ system prompt forbids prices and amounts; request carries it (0.086125ms)
+apps/web test: ﹣ live round trip (only with --live and NEAR_AI_API_KEY) (0.037875ms) # fixture run (pass --live)
+apps/web test: ✔ readHosts: local mode, two-host mode, full mode (0.847458ms)
+apps/web test: ✔ docsUrl: DOCS_URL without trailing slash, no APP_URL fallback (0.179833ms)
+apps/web test: ✔ parseLegacyHosts: kinds, case, unset targets, canonical hosts and junk dropped (0.596ms)
+apps/web test: ✔ local mode: everything is served as-is (0.277167ms)
+apps/web test: ✔ www.<site> → SITE (301), path and query kept (0.095334ms)
+apps/web test: ✔ legacy hosts → their origin (308), same path + query, before any other rule (0.214833ms)
+apps/web test: ✔ docs: SITE, APP and STATUS /docs[/<rest>] → DOCS root (308), prefix dropped, query kept (1.126583ms)
+apps/web test: ✔ status host: / serves the status page, /status → /, other paths → their canonical host (0.585542ms)
+apps/web test: ✔ SITE and APP /status → STATUS root (308) when STATUS_URL is set (0.550625ms)
+apps/web test: ✔ STATUS_URL unset: today's split (status on SITE) (0.797041ms)
+apps/web test: ✔ two-host split unchanged (0.331875ms)
+apps/web test: ✔ canonicalOrigin and hostKind (0.112584ms)
+apps/web test: ✔ local mode (SITE_URL / APP_URL unset): shown on app routes (0.759541ms)
+apps/web test: ✔ hosted: shown on the APP host, hidden on the SITE host (0.304459ms)
+apps/web test: ✔ never on a landing path, in either mode (0.111375ms)
+apps/web test: ✔ hosted, unknown host (preview deployment, served like local mode): shown (0.122875ms)
+apps/web test: ℹ tests 44
+apps/web test: ℹ suites 0
+apps/web test: ℹ pass 43
+apps/web test: ℹ fail 0
+apps/web test: ℹ cancelled 0
+apps/web test: ℹ skipped 1
+apps/web test: ℹ todo 0
+apps/web test: ℹ duration_ms 540.762167
+apps/web test: Done

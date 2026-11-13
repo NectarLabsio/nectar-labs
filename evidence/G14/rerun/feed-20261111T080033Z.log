@@ -1,2 +1,22 @@
 {"ts":"2026-11-11T08:00:33.864Z","level":"info","service":"feed","msg":"feed_started","port":8788,"core":"nectar-core-v2.nectar.testnet","nvdax":"nvdax-mock.nectar.testnet","mcp_port":"8789","oneclick":true,"fixtures":false,"sources":"views+neardata","poll_ms":10000}
 {"ts":"2026-11-11T08:00:36.352Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:04:23.469Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095267 HTTP 429"}
+{"ts":"2026-11-11T08:04:45.445Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata last_block HTTP 429"}
+{"ts":"2026-11-11T08:05:38.871Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:05:40.525Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095296 HTTP 429"}
+{"ts":"2026-11-11T08:07:14.754Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095326 HTTP 429"}
+{"ts":"2026-11-11T08:10:41.646Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:11:29.494Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095374 HTTP 429"}
+{"ts":"2026-11-11T08:15:43.998Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:16:29.725Z","level":"error","service":"feed","msg":"poll_failed","source":"views","error":"{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"Rate limits exceeded. For higher rate limits get a subscription at https://fastnear.com\"}, \"id\": \"1\"}"}
+{"ts":"2026-11-11T08:16:39.586Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095403 HTTP 429"}
+{"ts":"2026-11-11T08:20:46.498Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:21:56.164Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095434 HTTP 429"}
+{"ts":"2026-11-11T08:25:48.829Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:27:58.172Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095464 HTTP 429"}
+{"ts":"2026-11-11T08:30:51.667Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:33:57.417Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095493 HTTP 429"}
+{"ts":"2026-11-11T08:35:54.035Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:39:12.027Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"neardata block 277095524 HTTP 429"}
+{"ts":"2026-11-11T08:40:56.467Z","level":"info","service":"feed","msg":"oneclick_tick","sets":1,"dropped":0,"no_route":1}
+{"ts":"2026-11-11T08:46:06.573Z","level":"error","service":"feed","msg":"poll_failed","source":"neardata","error":"The operation was aborted due to timeout"}

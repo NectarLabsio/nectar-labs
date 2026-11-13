@@ -1,0 +1,12 @@
+{"ts":"2026-11-13T02:28:44.283Z","service":"x402","msg":"x402_started","port":8791,"network":"near:testnet","asset":"usdc-mock.nectar.testnet","amount":"10000","pay_to":"nectar.testnet","facilitator":"in-process (relayer x402-relayer.nectar.testnet, key file)","feed":"https://feed-production-2f2776c9.up.railway.app","facilitator_http":"off","cors":"off"}
+{"ts":"2026-11-13T02:28:49.454Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T11:44:36.469Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T11:44:36.483Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T11:44:53.215Z","service":"x402","msg":"paid","network":"near:testnet","transaction":"7dfoTwqXVav4rCT18PPb5C76Xc13E3325C6ZUvnUYsYt"}
+{"ts":"2026-11-13T12:28:54.327Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T12:28:54.334Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T12:29:03.646Z","service":"x402","msg":"paid","network":"near:testnet","transaction":"8bXCY34SVYv5b7vJ4GLfWkbJtQdqbSSBJsrzPCE75XRk"}
+{"ts":"2026-11-13T12:39:46.804Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T12:44:27.325Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T12:44:27.335Z","service":"x402","msg":"payment_required","status":402}
+{"ts":"2026-11-13T12:44:36.779Z","service":"x402","msg":"paid","network":"near:testnet","transaction":"H1aMBqoRS4QSwgShBb7GcdkNwQm9Nh4Jvm5E7t5fCzHY"}
