@@ -1,0 +1,195 @@
+{
+  "mode": "rehearsal",
+  "sign": true,
+  "sections": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "explorer": "nearrocks",
+  "results": [
+    {
+      "section": 1,
+      "title": "Market",
+      "selectors": {
+        "[data-testid=hero-capacity]": true,
+        "/feed NVDAx link": true,
+        "[data-testid=market-exit]": true,
+        "[data-testid=market-ladder] tbody tr": true
+      },
+      "notes": [
+        "ladder rows have no hover tooltip or notice period; the cursor rests on the first row (caption carries the 7-day notice)"
+      ],
+      "duration_s": 12.7,
+      "frames": {
+        "p0": 366
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 184,
+        "pages": {
+          "p0": {
+            "fps": 28.8,
+            "max_gap_ms": 184
+          }
+        }
+      }
+    },
+    {
+      "section": 2,
+      "title": "Test assets",
+      "selectors": {
+        "nav \"Borrow\"": true,
+        "[data-testid=wallet-button]": true,
+        "[data-testid=test-assets-button]": true,
+        "sign modal \"Review: Get test assets\"": true,
+        "faucet popup": true
+      },
+      "notes": [
+        "/borrow scrolls itself to y=786 after the nav click; the take scrolls back to the top (eased)"
+      ],
+      "wallet": "demo.nectar.testnet",
+      "faucet_popup": {
+        "host": "wallet.intear.tech",
+        "path": "/send-transactions",
+        "title": "Intear Wallet",
+        "headings": [
+          "Approve Transactions"
+        ],
+        "buttons": [
+          "? (disabled)",
+          "demo.nectar.testnet",
+          "?",
+          "Show args",
+          "Show args",
+          "Approve",
+          "Cancel"
+        ],
+        "approve": "enabled"
+      },
+      "faucet_result": "Test assets sent Received 5 NVDAx. tx FpZ1RLFDLeYFARbAX2xcvux79mDt2DRHfdEKaY42ubkF Received 500 USDC. tx 2Dkw3rd2Bz475W87fuhKx9r7hw61d6DcjFPCQ73HETv6",
+      "faucet_tx_NVDAx": "FpZ1RLFDLeYFARbAX2xcvux79mDt2DRHfdEKaY42ubkF",
+      "faucet_tx_USDC": "2Dkw3rd2Bz475W87fuhKx9r7hw61d6DcjFPCQ73HETv6",
+      "balance_note": "You lock Balance 0.00 NVDAx NVDAx Collateral value appears h",
+      "duration_s": 68.7,
+      "frames": {
+        "p0": 1645,
+        "p1": 391
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 483,
+        "pages": {
+          "p0": {
+            "fps": 30.2,
+            "max_gap_ms": 333
+          },
+          "p1": {
+            "fps": 18.7,
+            "max_gap_ms": 483
+          }
+        }
+      }
+    },
+    {
+      "section": 3,
+      "title": "Borrow",
+      "selectors": {
+        "[data-testid=amt-units] input": true,
+        "[data-testid=amt-borrow] input": true,
+        "[data-testid=borrow-limit]": true,
+        "[data-testid=protection-standard]": true,
+        "[data-testid=preview-fees]": true,
+        "[data-testid=borrow-outcome]": true,
+        "[data-testid=review-borrow]": true
+      },
+      "notes": [
+        "\"Review borrow\" is disabled (More than your balance: 0 mock NVDAx, the faucet was not signed)"
+      ],
+      "protection": "standard",
+      "preview": "You receive $99.70 after $0.30 in fees 4.89 health after Comfortable Flagged if NVDAx falls below $27.57, 79.6% from here. If NVDAx falls 4.40 Price −10% : health 4.40 3.91 Price −20% : health 3.91 3.43 Price −30% : heal",
+      "duration_s": 11.6,
+      "frames": {
+        "p0": 359
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 266,
+        "pages": {
+          "p0": {
+            "fps": 30.9,
+            "max_gap_ms": 266
+          }
+        }
+      }
+    },
+    {
+      "section": 4,
+      "title": "Position",
+      "selectors": {
+        "ring \"Health at the simulated price\"": true,
+        "#sim": true,
+        "explorer tx summary": true
+      },
+      "notes": [
+        "no new loan in this run: stand-in /position/15 opened off camera (with --sign the take clicks \"View loan #<id>\")",
+        "no borrow tx in this run: explorer stand-in De6aVqqN…",
+        "Near Rocks shows no \"Success\" label; the summary card (hash, signer, receiver, block) is held 2 s"
+      ],
+      "sim": "$72.20, health 5.78",
+      "duration_s": 10.7,
+      "frames": {
+        "p0": 249,
+        "p1": 64
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 264,
+        "pages": {
+          "p0": {
+            "fps": 30.9,
+            "max_gap_ms": 132
+          },
+          "p1": {
+            "fps": 13.7,
+            "max_gap_ms": 264
+          }
+        }
+      }
+    },
+    {
+      "section": 5,
+      "title": "Agent",
+      "selectors": {
+        "terminal #term": true,
+        "explorer tx summary": true
+      },
+      "notes": [
+        "Near Rocks shows no \"Success\" label; the summary card (hash, signer, receiver, block) is held 2 s"
+      ],
+      "command": "pnpm -s --filter x402 demo:testnet",
+      "output": "borrow_verified, borrow_sent, challenge 402, paid_fetch 200",
+      "duration_s": 33.3,
+      "frames": {
+        "p0": 1236,
+        "p1": 63
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 270,
+        "pages": {
+          "p0": {
+            "fps": 39.9,
+            "max_gap_ms": 84
+          },
+          "p1": {
+            "fps": 16.3,
+            "max_gap_ms": 270
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+take: mode rehearsal · sections 1,2,3,4,5 · SIGN (wallet approvals on) · headed · profile ~/.nectar/demo-chrome-profile · out ~/.nectar/demo-capture/rehearsal-1
+explorer: nearblocks blocked (HTTP 403, "Just a moment...") → tab switch uses testnet.near.rocks
+— s1 Market
+  note: ladder rows have no hover tooltip or notice period; the cursor rests on the first row (caption carries the 7-day notice)
+  s1: 12.7 s · gapcheck FAIL max 184 ms {"p0":{"fps":28.8,"max_gap_ms":184}}
+— s2 Test assets
+  note: /borrow scrolls itself to y=786 after the nav click; the take scrolls back to the top (eased)
+  popup: {"host":"wallet.intear.tech","path":"/send-transactions","title":"Intear Wallet","headings":["Approve Transactions"],"buttons":["? (disabled)","demo.nectar.testnet","?","Show args","Show args","Approve","Cancel"],"approve":"enabled"}
+  s2: 68.7 s · gapcheck FAIL max 483 ms {"p0":{"fps":30.2,"max_gap_ms":333},"p1":{"fps":18.7,"max_gap_ms":483}}
+— s3 Borrow
+  note: "Review borrow" is disabled (More than your balance: 0 mock NVDAx, the faucet was not signed)
+  s3: 11.6 s · gapcheck FAIL max 266 ms {"p0":{"fps":30.9,"max_gap_ms":266}}
+— s4 Position
+  note: no new loan in this run: stand-in /position/15 opened off camera (with --sign the take clicks "View loan #<id>")
+  note: no borrow tx in this run: explorer stand-in De6aVqqN…
+  note: Near Rocks shows no "Success" label; the summary card (hash, signer, receiver, block) is held 2 s
+  s4: 10.7 s · gapcheck FAIL max 264 ms {"p0":{"fps":30.9,"max_gap_ms":132},"p1":{"fps":13.7,"max_gap_ms":264}}
+— s5 Agent
+  note: Near Rocks shows no "Success" label; the summary card (hash, signer, receiver, block) is held 2 s
+  s5: 33.3 s · gapcheck FAIL max 270 ms {"p0":{"fps":39.9,"max_gap_ms":84},"p1":{"fps":16.3,"max_gap_ms":270}}
+take: 5 section take(s) → ~/.nectar/demo-capture/rehearsal-1/edit.json · report ~/.nectar/demo-capture/rehearsal-1/run.json
+s1 Market: 12.7 s · gapcheck FAIL 184 ms · selectors 4/4
+s2 Test assets: 68.7 s · gapcheck FAIL 483 ms · selectors 5/5
+s3 Borrow: 11.6 s · gapcheck FAIL 266 ms · selectors 7/7
+s4 Position: 10.7 s · gapcheck FAIL 264 ms · selectors 3/3
+s5 Agent: 33.3 s · gapcheck FAIL 270 ms · selectors 2/2
+exit 0
