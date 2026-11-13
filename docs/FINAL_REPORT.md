@@ -1,203 +1,183 @@
-# FINAL_REPORT.md: final status audit, re-run on submission-rc (verifier, read-only)
+# FINAL_REPORT.md: final status audit, re-run on submission-rc 7f51c0b (verifier, read-only)
 
-Order: docs/work/final-audit.md (Kunal, 2026-11-12). Audit started **2026-11-12 17:08:04Z = 22:38 IST**; probes ran 17:08Z to 17:12Z.
-Time left to 2026-11-14 23:59 UTC: **2 d 6 h 51 min**.
-Labels: VERIFIED (re-run in this audit) · SELF-ATTESTED (agent or orchestrator log only) · FALLBACK (disclosed) · FAILED · OPEN · NOT RE-CHECKED
-(the last recorded result is cited, but nothing was re-run in this audit).
-Tooling limit: this verifier's sandbox blocks git commands aimed at the main checkout. Repo checks ran in the worktree, which shares the object store and
-refs. The main checkout's working-tree status could not be read.
+Order: docs/work/final-audit.md (Kunal, 2026-11-12). Audit started **2026-11-13 11:34:33Z = 17:04 IST**. Probes ran from 11:34Z to 11:41Z.
+Time left to 2026-11-14 23:59 UTC: **1 d 12 h 19 min** (measured at 11:40Z).
+Marks: **VERIFIED** (re-run in this audit) · **SELF-ATTESTED** (agent or orchestrator log only) · **FALLBACK** (disclosed) · **FAILED** · **OPEN** ·
+**NOT RE-CHECKED** (the last recorded result is cited, but nothing was re-run in this audit).
+Tooling limit: the sandbox refuses `git -C /Volumes/T7/nectar-labs`. All repo checks ran in this worktree, which shares the object store and refs.
+The main checkout's working-tree status could not be read.
 
 ## Done
 
 ### 1. Repo
-| Item | Status | Evidence (this run) | Commit |
-| --- | --- | --- | --- |
-| submission-rc → 4b20f05 ("chore: STATE — all gates green on release 3") | VERIFIED | `git rev-parse submission-rc^{commit}` = `git rev-parse main` = 4b20f0578bd6… | 4b20f05 |
-| Commits after the tag | VERIFIED: 0 | `git log submission-rc..main` is empty | 4b20f05 |
-| Product code since release 3 | VERIFIED: none | `git diff --stat 5f011bb submission-rc -- apps packages services contracts solana evm quoter` prints 0 lines | 5f011bb..4b20f05 |
-| Secret scan, full history | VERIFIED: no leaks | `gitleaks detect --source . --log-opts=--all --redact` (8.30.1): "476 commits scanned … no leaks found". The repo `.gitleaks.toml` uses the default rules plus one allowlist that matches only 64-hex content hashes (`version_key`, `code_hash`, `sha256` …) | all refs |
-| .env committed | VERIFIED: none | `git log --all --diff-filter=A --name-only` → only `.env.example` and `apps/web/.env.example` | all refs |
-| Private-key patterns at the tag | VERIFIED: none | `git grep` for `ed25519:<80+ base58>`, PEM `PRIVATE KEY` and `"secret_key"` turned up only `Signature: ed25519:…` lines in evidence/G13 and evidence/G14 tx logs. Those are public transaction signatures | 4b20f05 |
-| Remote | VERIFIED: no remote | `git remote -v` prints nothing, so nothing has been pushed | — |
-| Worktree clean | VERIFIED (own worktree) / NOT RE-CHECKED (main checkout, blocked) | `git status --short` empty before this report | — |
-| ~/.nectar or home paths in tracked files | NOT RE-CHECKED | Last result: G3b run 7 (k) found only the 6 `contracts/nectar-core/tests/fixtures/*.wasm` files with a home path | 4c2a0bb |
+| Item | Mark | Evidence (this run) |
+| --- | --- | --- |
+| submission-rc → 7f51c0b21d86… ("chore: STATE — refresher key + first refresh, …") | **VERIFIED** | `git rev-parse submission-rc^{commit}` = `git rev-parse main` = HEAD of this worktree |
+| Commits after the tag | **VERIFIED**: 0 | `git log submission-rc..main` is empty |
+| Product code since release 4 (c95cd0c) | **VERIFIED**: 2 files | `git diff --stat c95cd0c submission-rc -- apps packages services contracts solana evm quoter` lists packages/config/config.yaml (the `oracle_refresher` block: tick 60→15 s, session 600→60 s, closed 43200→21600 s, allowance "1"→"5") and services/keeper/test/oracle-refresher.test.ts (WO-69). Both are keeper-only. No verifier gate covers this delta; the orchestrator's `verify:quick` 0 is **SELF-ATTESTED** (STATE) |
+| Worktree clean | **VERIFIED** (own worktree) / **NOT RE-CHECKED** (main checkout, sandbox) | `git status --short` was empty before this report |
+| Secret scan, full history | **VERIFIED**: no leaks | `gitleaks detect --source . --log-opts=--all --redact` (8.30.1): "525 commits scanned … no leaks found" |
+| .env committed | **VERIFIED**: none | `git log --all --diff-filter=A --name-only` → only `.env.example` and `apps/web/.env.example` |
+| Private-key patterns at the tag | **VERIFIED**: none | `git grep` for `ed25519:<80+ base58>`, PEM `PRIVATE KEY` and `"secret_key"` found only `Signature: ed25519:…` lines in evidence/C, G13 and G14 tx logs. Those are public tx signatures |
+| ~/.nectar and home paths | **VERIFIED**: path strings, no key material | Outside *.md, `~/.nectar/<dir>` path references appear as defaults and in log lines (keys ×36, solana ×22, evm ×6, deploy ×3, feed.sqlite ×2, keeper.sqlite, base, submission-request-id). This is the layout CLAUDE.md prescribes (".env holds paths and ids only"). A real home path appears only inside 7 binary wasm fixtures (6 × contracts/nectar-core/tests/fixtures, 1 × contracts/mock-ft/tests/fixtures/mock-ft-deployed.wasm), as compiler build paths |
+| Remote | **VERIFIED**: none | `git remote -v` prints nothing, so nothing has been pushed |
 
-### 2. Gates (none re-run in this audit; last verifier result from docs/EVIDENCE.md:3-51)
-| Gate | Last result | Commit | Run by |
-| --- | --- | --- | --- |
-| G0 toolchain | PASS 2026-11-09T23:09Z | b3a9090 | verifier |
-| G1 contract tests | PASS (v7 09c4316). The gas-rows re-check (67/67 methods, max receipt 67.61 Tgas) ran on 48b5c5a | 48b5c5a | verifier |
-| G2 / G2b deploy | G2 PASS 5f27f44. G2b PASS after D-027 (2.2.1-v7; rebuilt wasm byte-identical to code_hash 3mv4LRm6…) | 3ab3026 | verifier |
-| G3 web | PASS 2026-11-09 | 176914f | verifier |
-| **G3b** | re-run 7 PASS except (d) on 4c2a0bb, plus 7b (d) PASS on 5f011bb, so runs 7 + 7b cover release 3. One deviation: nodejs22.x is not observable; Node is pinned by engines `>=22.22.2 <23`. Item (h) was run by the orchestrator and reviewed by the verifier | 4c2a0bb + 5f011bb | verifier |
-| G4 OutLayer | PASS (attestation by request; TDX quote present, not verified) | d87eef6 | verifier |
-| **G5 oracle** | **FALLBACK (disclosed)** | 706d940 | verifier |
-| G6 1Click | PASS (dry quotes only) | fea52b7 | verifier |
-| G7 Solana + signer | PASS on re-run after D-027 (read-only, both chains) | 3ab3026 | verifier |
-| **G8 copilot** | **PASS (fixture)**: no live answer; H7 key absent | df4706f | verifier |
-| **G9** | run 5 (every step except 3) on 5dd2a50 + run 5b (step 3) on 88b99b3 | 5dd2a50 + 88b99b3 | verifier |
-| G10 | PASS with open items F-351/F-352/F-353 | 09c4316 | verifier |
-| G11 | PASS (608 unit + 50 sandbox) | 3ab3026 | verifier |
-| G12 | PASS on a local fork of Base Sepolia (D-026), not Base Sepolia | 7bface5 | verifier |
-| **G13** | **PASS on a local fork of Base Sepolia**, which is a disclosed fallback. ERC-8021 suffix not appended | 3ab3026 | verifier |
-| G14 x402 | PASS (paid call, position #15) | 48b5c5a | verifier |
-| WO-34 production (release 3) | PASS on all 4 items | 5f011bb | verifier |
+### 2. Gates (none re-run here; last result per docs/EVIDENCE.md:3-57)
+| Gate | Last result | Commit | Run by | Mark |
+| --- | --- | --- | --- | --- |
+| G0 | PASS 2026-11-09T23:09Z | b3a9090 | verifier | NOT RE-CHECKED |
+| G1 | PASS. v7 on 09c4316; gas rows 67/67 on 48b5c5a | 48b5c5a | verifier | NOT RE-CHECKED |
+| G2 / G2b | G2 PASS 5f27f44. G2b PASS after D-027 (2.2.1-v7, rebuilt wasm = code_hash 3mv4LRm6…) | 3ab3026 | verifier | NOT RE-CHECKED |
+| G3 | PASS | 176914f | verifier | NOT RE-CHECKED |
+| **G3b** | re-run 8 (31809b1; every product assertion PASS) + 8b (c95cd0c; (d), (k), (p) PASS). Runs 8 + 8b cover c95cd0c | c95cd0c | verifier | NOT RE-CHECKED |
+| G4 | PASS (attestation by request; TDX quote present, not verified) | d87eef6 | verifier | NOT RE-CHECKED |
+| **G5** | **FALLBACK (disclosed)**: owner oracle, no live Pyth price | 706d940 | verifier | FALLBACK |
+| G6 | PASS (dry quotes only) | fea52b7 | verifier | NOT RE-CHECKED |
+| G7 | PASS after D-027 (read-only, both chains) | 3ab3026 | verifier | NOT RE-CHECKED |
+| **G8** | **PASS (fixture)**. No live answer: H7 key absent | df4706f | verifier | FALLBACK |
+| **G9** | run 6 (b7fa381, product c95cd0c): every step except 3. Run 6b (8a54b4c, product c95cd0c): step 3 PASS | b7fa381 + 8a54b4c | verifier | NOT RE-CHECKED |
+| G10 | PASS with open items F-351/F-352/F-353 | 09c4316 | verifier | NOT RE-CHECKED |
+| G11 | PASS (608 unit + 51 sandbox). Delta mock-ft (WO-66 n) PASS on 31809b1 | 3ab3026 / 31809b1 | verifier | NOT RE-CHECKED |
+| G12 | PASS on a local fork of Base Sepolia (D-026) | 7bface5 | verifier | FALLBACK |
+| **G13** | **PASS on a local fork of Base Sepolia** (disclosed fallback). ERC-8021 suffix not appended | 3ab3026 | verifier | FALLBACK |
+| G14 | PASS (paid call, position #15) | 48b5c5a | verifier | NOT RE-CHECKED |
+| WO-34 production (custom hosts) | PASS 8/8 | c95cd0c | verifier | NOT RE-CHECKED |
 
-README fallback wording, verified by reading it in this run:
-- G5: README.md:47 says "**owner oracle (disclosed)**, badge in UI … The Pyth path is built and sandbox-tested … but is not live … **G5: FALLBACK (disclosed).**"
-- G8: README.md:51 says "**built; no live NEAR AI answer has been verified yet.** Live mode needs key H7".
-- G13: README.md:44 says "on **a local fork of Base Sepolia** (anvil, chain id 84532)". README.md:114 says "built; runs only on a local fork … a real Base Sepolia deploy waits on deployer funds (H15)".
-- README.md:139 states the same statuses.
+README fallback wording, **VERIFIED** by reading it in this run:
+- G5: README.md:58 says "**owner oracle (disclosed)**, badge in UI | in use for NVDAx. The Pyth path is built and sandbox-tested …". README.md:164 says "oracle (G5: owner-oracle fallback, disclosed)".
+- G8: README.md:62 says "**built; no live NEAR AI answer has been verified yet.** Live mode needs key H7".
+- G13: README.md:55 says "on **a local fork of Base Sepolia** (anvil, chain id 84532)". Local anvil :8545 answers `eth_chainId` 0x14a34 (84532), block 0x3668664.
+- EVIDENCE note: the summary table has no row for G9 run 6b. The run exists only as the § block at EVIDENCE.md:1159.
 
 ### 3. Last round's items
-| Item | Status | Evidence |
+| Item | Mark | Evidence |
 | --- | --- | --- |
-| Cookie banner does not cover the wallet list | NOT RE-CHECKED (no browser run in this audit) | Last checks: G3b run 7 found the real selector 6/6 in the viewport (4c2a0bb), and G9 run 5 saw 6 wallets in the Chrome selector with 0 CSP messages (5dd2a50). apps/packages have not changed since 5f011bb |
-| agent1 has mock NVDAx for ≥ 6 x402 runs | VERIFIED | `ft_balance_of agent1.nectar.testnet` on nvdax-mock = **"8000000"** at block 277391943; decimals 6, so 8 NVDAx. Each run uses DEMO_UNITS, default `'1000000'` = 1 NVDAx (services/x402/src/borrow-guard.ts:84). That is **8 runs** |
-| Does transferring a Position Note transfer the loan? | VERIFIED (code read; tests not executed) | `nft_transfer` (contracts/nectar-core/src/notes.rs:557) → `move_note` (notes.rs:332-349) sets `position.borrower = to`. Tests: tests_notes.rs:352 `v7_notes_residual_collateral_goes_to_loan_note_owner`, :365 `v7_notes_self_settle_by_new_loan_owner`, :379 `v7_notes_self_settle_old_owner_refused`, :470 `v7_notes_loan_transfer_refused_while_settling`. Limits: repay is permissionless, and for remote positions the release goes to the original depositor (SECURITY.md:149, item 12). **Answer: the borrower role and the residual collateral move with the Note. The debt can be repaid by anyone. Remote collateral does not follow the Note** |
-| No privacy-track framing | VERIFIED | Tracks are `["defi","security","agents"]` (SUBMISSION.md:18). The dry-run payload has 0 "privacy" matches. README.md:131 and SUBMISSION.md:61 say `privacy` is **not entered**. X_POST.md has 0 hits for "privacy". The production landing has 0 "confidential". The 3 corrected claims ("never joined to IPs", "instead of being published", private/confidential TEE wording) have 0 hits in README, SUBMISSION, X_POST, apps/web, packages/ui and apps/docs-site/docs |
-| @x402/core advisory | SELF-ATTESTED (reachability not re-derived) | GHSA-mrhx-c7xc-m3w5 / CVE-2023-54404: **high**, CVSS 7.5, zod < 4.6.6, memory exhaustion. It is present through `@x402/core` 2.18.0 → zod 3.25.76. Per SECURITY.md:123, F-385 and F-451 it is **not reachable from untrusted input**: the payment header is regex-checked and `JSON.parse`d, and zod runs only on facilitator responses. Residual risk: a hostile operator-set facilitator |
-| Which commit G9 last ran on | VERIFIED | Run 5 on 5dd2a50 (all steps except 3) and run 5b on 88b99b3 (step 3), per EVIDENCE.md:5,7. `git diff --stat 88b99b3 submission-rc` covers 8 files, including docs/SUBMISSION.md and 4 evidence/G9/run5b-* files. The product-path diff is empty |
+| Cookie banner does not cover the wallet list | NOT RE-CHECKED | No browser run in this audit. Last: WO-34 custom hosts item (5), 6/6 wallets reach their prompt with 0 CSP violations (c95cd0c, 02:05Z–02:40Z) |
+| agent1 has mock NVDAx for ≥ 6 x402 runs | **VERIFIED** | `ft_balance_of agent1.nectar.testnet` = **"8000000"** at block 277504627 (6 decimals, so 8 NVDAx). One run uses 1 NVDAx (DEMO_UNITS default), so **8 runs** |
+| Does transferring a Position Note transfer the loan? | **VERIFIED** (code read; tests not executed) | `nft_transfer` (contracts/nectar-core/src/notes.rs:557) → `move_note` (notes.rs:332). Tests at tests_notes.rs:352 `v7_notes_residual_collateral_goes_to_loan_note_owner`, :365 `v7_notes_self_settle_by_new_loan_owner`, :379 `v7_notes_self_settle_old_owner_refused`, :470 `v7_notes_loan_transfer_refused_while_settling`. Answer: the borrower role and the residual collateral move with the Note. Repay is permissionless. Remote collateral does not follow the Note (SECURITY.md item 12) |
+| No privacy-track framing | **VERIFIED** | Tracks `["defi","security","agents"]` (SUBMISSION.md:18). The dry-run payload has 0 "privacy" matches. README.md:142 and SUBMISSION.md:61 say `privacy` is **not entered**. X_POST.md: 0 "privacy". Production SITE, DOCS and STATUS HTML: 0 "confidential", 0 "privacy track". "never joined to IP" and "instead of being published": 0 hits in README, SUBMISSION, X_POST, apps/web, packages/ui and apps/docs-site |
+| @x402/core advisory | **SELF-ATTESTED** (reachability) | GHSA-mrhx-c7xc-m3w5 / CVE-2023-54404, **high**, CVSS 7.5, zod < 4.6.6 (SECURITY.md:123). Presence **VERIFIED**: services/x402 pins `@x402/core` 2.18.0, the lockfile holds zod@3.25.76 and zod@4.6.7, and @x402/core is imported in services/x402/src/server.ts:12 and agent.ts:6. Non-reachability from untrusted input is per SECURITY.md:123 / F-385 / F-451 and was not re-derived. `pnpm audit` printed nothing in this run |
+| Which commit G9 last ran on | **VERIFIED** | Run 6 on b7fa381 and run 6b on 8a54b4c, both product c95cd0c (EVIDENCE.md:5, :1159). submission-rc adds only the keeper-only delta listed in §1 |
 
 ### 4. WO-34 deploy
-| Item | Status | Evidence |
+| Item | Mark | Evidence (11:35:16Z unless noted) |
 | --- | --- | --- |
-| nectarlabs.io and its DNS | VERIFIED: does not resolve | `curl https://nectarlabs.io/` → 000 (no answer). Unregistered per F-395. Nobody controls it. H-DOMAIN CLOSED ("go for it, i will set domain later"); H-DNS N/A (HUMAN_HANDOFF.md:92,112) |
-| SITE https://nectarlabs.vercel.app | VERIFIED 200 (17:09:35Z) | `/borrow` → 308 to APP/borrow |
-| APP https://nectarlabs-app.vercel.app | VERIFIED | `/` → 307 to /feed; `/feed` 200; `/borrow` 200 |
-| DOCS = APP/docs | VERIFIED 200 | `/docs` 200, `/docs/start/quick-start` 200, 0 `x-robots-tag` headers on /docs |
-| Docs origin https://nectarlabs-docs.vercel.app/docs/ | VERIFIED 200 | — |
-| Feed https://feed-production-2f2776c9.up.railway.app/health | VERIFIED 200 | ok true, commit 3974b5b, chain_head_source view_block, history "unavailable", events_indexed 0 |
-| Vercel projects nectar-labs-web / nectar-labs-docs; Railway project nectar-labs; deployment ids web dpl_BJNxqx…, docs dpl_DQubre… | SELF-ATTESTED | STATE.md:27-29,133-135. Not queried through a connector in this run |
-| Crawl and host check | NOT RE-CHECKED | Last: WO-34 production (release 3), verifier, 16:40Z–17:01Z. Crawl: 90 internal routes all 200, 0 of our console errors. LH 100/100. Host check: release 3974b5b, 14 hosts, 0 missing on /legal/privacy (EVIDENCE.md:6,10) |
-| Keeper and x402 hosted or local | VERIFIED local (ports) / SELF-ATTESTED (keys) | :8790, :8791, :8788, :8789 and :8545 each answer HTTP on 127.0.0.1, but `GET /health` → **404** on all five, so service health is not confirmed in this run. README.md:21-23: "the keeper and the x402 facilitator run on the operator's machine, with keys in the OS keychain or `0600` files under `~/.nectar/`" |
-| Plan costs | SELF-ATTESTED | Vercel Hobby $0 (F-402). Railway ≈ $0.64/mo: Free is $0 within the $1 credit, Hobby is $5 flat, and the max-RAM case ($2.32) exceeds the Free credit (F-444–F-451, STATE.md:81) |
-| README "Hosted demo" | VERIFIED | README.md:10-23: SITE/APP/DOCS/Feed URLs = those probed above. It names no deployed commit and points to EVIDENCE §"WO-34 production". Hosted until ≥ 2026-11-25 |
-| Timebox 2026-11-13 18:00 UTC | VERIFIED met | Production answered 200 on 2026-11-12 17:09Z, 24 h 50 min before the timebox. Release 3 is the deployed release per EVIDENCE.md:6. The Feed reports commit 3974b5b; services/feed is unchanged since then |
+| nectarlabs.io and its DNS | **VERIFIED** (registration, DNS) / SELF-ATTESTED (who controls it) | whois: created 2026-11-12T18:54:47Z, registrar HOSTINGER operations UAB, expires 2027-11-12. NS ns1/ns2.vercel-dns.com. A 216.198.79.1 / .65. Per STATE (2026-11-12 19:31Z), Kunal added the domain to the Vercel team. HUMAN_HANDOFF: H-DOMAIN CLOSED, H-DNS CLOSED (Vercel DNS, no records needed). FACTS F-395 ("not registered") is superseded |
+| SITE https://nectarlabs.io | **VERIFIED** 200 | `/borrow` 308 → https://testnet.nectarlabs.io/borrow; www 308 → apex |
+| APP https://testnet.nectarlabs.io | **VERIFIED** | `/` 307 → /feed; `/feed` 200; `/borrow` 200; `/docs` 308 → https://docs.nectarlabs.io/ |
+| DOCS https://docs.nectarlabs.io | **VERIFIED** 200 | `/start/quick-start` 200 |
+| STATUS https://status.nectarlabs.io | **VERIFIED** 200 | — |
+| Legacy hosts | **VERIFIED** 308 | nectarlabs.vercel.app → apex; nectarlabs-app.vercel.app/feed → testnet …/feed; nectarlabs-docs.vercel.app → docs |
+| Vercel projects and deployments (web dpl_Bm1uwQcX…, docs dpl_DpqAmb6…), Railway project, Feed deploy 8acfc7a5, refresher deploy 67d55980 | SELF-ATTESTED | STATE top block. No connector query in this run |
+| Crawl and host check | NOT RE-CHECKED | Last: WO-34 custom hosts (c95cd0c): smoke-prod 43 ok / 0 failures; crawl 84 internal routes, all 200 (EVIDENCE.md:6) |
+| Keeper and x402 hosted or local | **VERIFIED** local / SELF-ATTESTED keys | :8790 `/healthz` 200: ok true, last_tick_ok true, 6 open positions, uptime 77,278 s, rpc failovers 994. :8791 `/health` 200: ok true, facilitator in-process, feed_upstream 200. The local Feed :8788 `/healthz` 503: ok false, last poll 2026-11-11T09:45Z, error "neardata block 277108819 HTTP 429" (stale; x402 now uses the hosted Feed). Keys: README.md:30 says "OS keychain or `0600` files under `~/.nectar/`" |
+| Oracle refresher (Railway) | **VERIFIED** on chain / SELF-ATTESTED (service liveness) | tx BHopF1cu… = nectar.testnet AddKey, SuccessValue. `view_access_key_list nectar.testnet`: 1 FullAccess + `ed25519:3qurjD6A…` FunctionCall, receiver nectar-core-v2, methods ["update_owner_price"], allowance left 4.99972 NEAR. tx De6aVqqN… = FunctionCall update_owner_price, SuccessValue; receipt HKym9cr1… at block 277503817 logs `oracle_updated` NVDAx. `get_exit_capacity {"symbol":"NVDAx"}` at block 277504654 (11:36:25Z): oracle_age_s 501 (= 11:28Z refresh), oracle_fresh true, session_open false, session_reason outside_hours. Only one refresh so far, which fits the 6 h closed-hours schedule. The first in-session refresh (60 s cadence) is due at 14:30Z |
+| Plan costs | SELF-ATTESTED | Vercel Hobby $0 (F-402). Railway ≈ $0.64/mo on the Free $1 credit (F-444–F-451) |
+| README "Hosted demo" | **VERIFIED** (hosts) / **FAILED** (Feed row) | README.md:10-30: release 4 c95cd0c, and SITE/APP/DOCS/STATUS/legacy behaviour = the probes above. The Feed row (README.md:26, repeated at :61) says the Feed is "configured to index contract events from block 277398512" and that events before 277398512 are missing. Live /health says start_block **277503800** (the 11:36Z workaround), and no nectar-core v2 event can be indexed at all (§7) |
+| Timebox 2026-11-13 18:00 UTC | **VERIFIED** met | Release 4 answered on all four custom hosts at 11:35Z, 6 h 25 min before the timebox |
 
 ### 5. Claims audit (README, landing, docs, SUBMISSION, X_POST)
 | Claim | Evidence | Verdict |
 | --- | --- | --- |
-| Core v2 contract, mock USDC, mock NVDAx, owner: "live (testnet)" (README.md:29-38) | EVIDENCE §G2b (3ab3026); `get_exit_capacity` answered at block 277392077 in this run | supported |
-| Aggregate limit + Weekend Oracle Guard live (README.md:39) | §G2b; this run: capacity 12,096.915 USD, headroom 2,867.915 USD, session_reason stale_price | supported |
-| OutLayer TEE quoter + attested remote deposits live (README.md:40-41) | §G4, §G7 | supported |
-| Solana round trip (README.md:42) | §G7 (3ab3026) | supported |
-| Base spoke (README.md:44, 114) | §G12/§G13, local fork | supported, says "local fork" |
-| x402 paid Feed export live (README.md:43) | §G14 (48b5c5a, #15) | supported |
-| Position Notes live (README.md:45) | §G2b `nft_tokens`, §G14 `nft_mint p-4` | supported |
-| Oracle (README.md:47) | §G5 | FALLBACK, disclosed |
-| Copilot (README.md:51) | §G8 fixture | "built; no live answer", disclosed |
-| P1/P2 "live on testnet" (README.md:122-128) | §G4, §G7 | supported |
-| **README.md:153 "P1 TEE pricing, live oracle, 1Click depth, Feed MCP (G4–G6)"** | G5 is FALLBACK | **unsupported wording.** This is a phase-plan line, but "live oracle" contradicts G5 |
-| Hosted demo URLs (README.md:10-23, X_POST) | probes in §4 | supported |
-| Tracks defi/security/agents (README.md:131, SUBMISSION.md:18) | dry-run payload | supported |
-| SUBMISSION.md:3 "Status: DRAFT, 2026-11-11 … as of commit a677689" | the header predates release 3; the body cites runs 5 + 5b (SUBMISSION.md:88) | stale header (cosmetic) |
-| Landing (production server HTML, 17:1xZ) | "local fork" ×3, 0 Base sentences without it, 0 "hackathon", 0 "insurance", 0 "without liquidation", 0 "0123456789", 0 "until the Reserve ships", "testnet" ×29, "mock" ×11 | supported. The hydrated text was not re-checked (last: EVIDENCE.md:6 PASS) |
-| Docs site and product UI copy rules | `grep -rliE hackathon` and `insurance\|without liquidations` over apps/web, packages/ui and apps/docs-site (excluding tests) → 0 files | supported |
-| "live" counts | README 22, SUBMISSION 6, X_POST 0. Every README "live" row cites an EVIDENCE section, except line 153 above | see above |
-| Base wording in README/SUBMISSION | README.md:45 and :144 say "Solana and Base positions" without "local fork" on the same line. These describe the mechanism, and the deployment claim at README.md:44 says local fork. SUBMISSION.md:34 says "Base-fork" | acceptable; a docs agent may add "(local fork)" |
+| Core v2, mock USDC, mock NVDAx "live (testnet)" | §G2b. In this run, get_exit_capacity answered at block 277504654 | supported |
+| Owner oracle (README.md:58) | §G5; refresher txs above | FALLBACK, disclosed |
+| Base spoke (README.md:55) | §G12/§G13; anvil 84532 answers locally | supported, says "local fork" |
+| Copilot (README.md:62) | §G8 fixture | "built; no live answer", disclosed |
+| x402 paid export, Position Notes, Solana, OutLayer "live" rows | §G14, §G2b, §G7, §G4 (not re-run) | supported by EVIDENCE |
+| Hosted demo hosts (README.md:10-25) | §4 probes | supported |
+| **Hosted Feed "configured to index contract events" (README.md:26, :61)** | §7: Feed parser accepts version 1.0.0 only; the contract emits 2.0.0; start block is now 277503800 | **FAILED: unsupported and stale** |
+| Tracks defi/security/agents | dry-run payload | supported |
+| Landing (production HTML, 11:39Z) | "local fork" ×3; the 3 Base sentences all say "local fork of Base Sepolia, not on Base Sepolia"; 0 "hackathon", 0 "insurance", 0 "without liquidation", 0 "confidential"; "testnet" ×58, "mock" ×22. DOCS and STATUS: 0 of the banned terms too. Hydrated text not re-checked | supported |
+| Product UI copy rules | `grep -rliE hackathon` and `insurance\|without liquidations\|never joined to IP\|instead of being published` over apps/web, packages/ui and apps/docs-site (tests excluded) → 0 files | supported |
+| "live" counts | README 21, SUBMISSION 5, X_POST 0, landing 6 (incl. markup) | each README row cites an EVIDENCE §; not re-run |
+| The 3 corrected privacy claims | 0 hits (§3) | still corrected |
 
 ### 6. Security (SECURITY.md, read in this run)
-"What remains" (SECURITY.md:131-149) lists 12 items, all open or partial by design:
-1. SR-5 remote capacity is checked only at origination.
-2. SR-6 gas reserve can be worn down by keeper reads.
-3. SR-7 no B20 `isAuthorized` at funding, so a Base leg can be stranded.
-4. SR-4 EVM remainder is pushed.
-5. SR-15 no mint binding in `vault_read`.
-6. Keeper relays are advisory (not verified on chain).
-7. Keeper residuals.
-8. Base runs on a local fork.
-9. Not reviewed: callback-gas failure branches, upgrade safety, 18–24-decimal collateral, MEV.
-10. Single owner key.
-11. C-020.
-12. Remote Loan Notes do not carry the collateral release.
-
-The dependency advisories (SECURITY.md:123-127) are zod (above) and docs-site tinypool, serialize-javascript, uuid and deepmerge, all build-time or dev-server
-only (SELF-ATTESTED). **C-020** (FACTS.md:367): "implicit account" scope. The web/SDK treat only 64-hex and `0x` ids as implicit, so `0s`/`0u` take
-the `view_account` path. **Decided by Kunal 2026-11-11 (D-029): keep; known limitation 11.** Status: closed by decision.
+"What remains" (SECURITY.md:131-149) lists 12 items, all open or partial by design: (1) SR-5 remote capacity checked only at origination · (2) SR-6 gas
+reserve can be worn down by keeper reads · (3) SR-7 no B20 `isAuthorized` at funding · (4) SR-4 EVM remainder pushed · (5) SR-15 no mint binding in
+`vault_read` · (6) keeper relays advisory · (7) keeper residuals · (8) Base on a local fork · (9) not reviewed: callback-gas failure branches, upgrade safety,
+18–24-decimal collateral, MEV · (10) single owner key · (11) C-020 · (12) remote Loan Notes do not carry the collateral release.
+Dependencies (SECURITY.md:123-127): zod (above) and the docs-site build-time advisories (tinypool, serialize-javascript, …) are **SELF-ATTESTED**.
+**C-020** (FACTS.md:386): "implicit account" scope (`0s`/`0u`). Kept by Kunal's decision D-029 as known limitation 11, so it is closed by decision.
 
 ### 7. Demo readiness
-| Item | Status | Evidence |
+| Item | Mark | Evidence |
 | --- | --- | --- |
-| Feed lag | VERIFIED | 17:09:40Z: Feed `last_indexed_block` 277391891, RPC `block final` 277391900, so **9 blocks (≈ 9 s)**. The Feed's own `lag_blocks` is 0 against its view_block chain_head; poll_age 3 s. No event history (views mode, H-NEARDATA) |
-| Stray preview server on :3217 | **OPEN** | `lsof` shows `node 14369 *:3217` = `next-server (v16.4.5)`, up 1 d 01:37:45. Not stopped (host services are off limits to me) |
-| Kunal's real-wallet borrow | **OPEN** | Not reported. Needs his testnet account id; mint mock NVDAx to it first (STATE.md:141) |
-| Owner price for recording | VERIFIED | `get_exit_capacity NVDAx` at block 277392077: price 135000000, `oracle_age_s` 7207, `oracle_fresh` true, `session_open` false, `session_reason` "stale_price". The NYSE-hours open session needs a price < 15 min old (DEMO_SCRIPT.md:3-9). It goes stale ≈ 2026-11-13 15:10Z (H-ORACLE) |
-| DEMO_SCRIPT "Before recording" steps | VERIFIED read | Steps 1-8 (DEMO_SCRIPT.md:21-119): state snapshot, background services, Base vault redeploy if the fork restarted, price walk + remote quotes, remote lifecycle, other state, browser tabs + wallet, two manual checks. **The step-1 snapshot is dated 2026-11-11T08:25Z** and predates positions #14/#15 and the 15:12Z price refresh. Re-snapshot before recording |
+| Feed lag | **VERIFIED** lag 0 / **FAILED** event indexing | 12 samples, 11:36:30Z–11:37:12Z: HTTP 200, `last_indexed_block` = `chain_head`, lag 0, poll_age 0–2 s. A probe at 11:35:22Z returned **ok false** (poll_age 4 s against the 3 × FEED_POLL_MS = 3 s freshness window, services/feed/src/api.ts:128-129). Lag 0 does not prove the Neardata cursor caught up: views polling also advances `last_block` (db.ts:205-209), and the cursor `neardata_height` is not exposed. **Event test: still FAILED at 11:40:44Z.** events_indexed 0 with start_block 277503800, although the refresh receipt's `oracle_updated` sits in block 277503817. **Root cause found in this run, beyond STATE's speed diagnosis:** the receipt log reads `"standard":"nectar","version":"2.0.0"` (contracts/nectar-core/src/events.rs:8). The Feed accepts only `NECTAR_VERSION = '1.0.0'` (services/feed/src/events.ts:7, :34), and services/feed/test/feed.test.ts:54 asserts that a `nectar` `2.0.0` event is rejected as `bad_version`. So the hosted Feed drops every nectar-core-v2 event at any indexing speed. `/api/settlements` → `items: []` |
+| Stray preview server on :3217 | **VERIFIED** gone | `lsof -iTCP:3217 -sTCP:LISTEN` is empty; curl :3217 → 000 |
+| Kunal's real-wallet borrow | **OPEN** | Not reported. demo.nectar.testnet holds **0** mock NVDAx (block 277504628), so DEMO_SCRIPT step 5 (test assets) is still to do |
+| DEMO_SCRIPT "Before recording" | **VERIFIED** read / stale text | 8 steps (DEMO_SCRIPT.md:10-54): time window, fresh price, production, wallet import, test assets, x402, tabs, rehearse. **Step 2 is stale:** it says the refresher is "STAGED, not running, until Kunal applies it" and "re-asserts the price every 10 min". On chain it runs (above), and config is now 60 s in session. Step 2 is right that a borrow needs a price < 120 s old (`max_age_ns_session`, lib.rs:381). The state snapshot is from 2026-11-12T20:07Z |
 
 ### 8. Submission payload
-`bash scripts/submit.sh --dry-run` (worktree = 4b20f05) → **exit 0**, "payload still has TODO-H placeholders — not sendable", "(dry run — nothing sent)".
-Keys: requestId, projectName, leadName, email, size, tracks, nearAddress, projectUrl, demoUrl, consent, plus `idea`. **`website` absent.**
+`bash scripts/submit.sh --dry-run` (worktree = 7f51c0b) → **exit 0**, "payload still has TODO-H placeholders — not sendable", "(dry run — nothing sent)". **VERIFIED**.
 | Field | State |
 | --- | --- |
 | requestId | GENERATE-ONCE at first `--send` |
 | projectName | `Nectar Labs` (filled) |
 | leadName, email, size | `TODO-H10` |
-| tracks | `["defi","security","agents"]` (filled; dry run shows defi/security/agents once each) |
-| nearAddress | `TODO-H14` (mainnet payout account, Kunal only) |
+| tracks | `["defi","security","agents"]` (filled) |
+| nearAddress | `TODO-H14` |
 | projectUrl | `TODO-H2` |
 | demoUrl | `TODO-H3` |
-| idea | filled (block) |
 | consent | `TODO-H14` |
+| idea | filled |
+| website | absent (0 matches), correct |
 
-Order (SUBMISSION.md:21, HACKATHON rule): **H2 repo public → H11 video in the H3 X post → fill fields → dry run with 0 TODO-H → H1 send.** A sent submission cannot be edited.
+Order: **H2 repo public → H11 video in the H3 X post → fill fields → dry run with 0 TODO-H → H1 send.** A sent submission can't be edited.
 
-### 9. Handoffs (HUMAN_HANDOFF.md, statuses read in this run)
-- DONE / CLOSED: H-TOOLCHAIN, H-TOOLCHAIN-SOLANA, H-NEAR-FAUCET (+v7), H-SOL-AIRDROP, H-DOMAIN, H-LEGAL, H-HOST, H9, H16 (nfts not added), H17 ("fire-sales").
-- N/A or out of scope: H-DNS (no domain), H5 (superseded), H6 (mainnet).
-- OPEN, Kunal only, blocking H1: H10, H12, H14, H2, H11, H3, H1.
-- OPEN, operational: H-ORACLE (stale ≈ 2026-11-13 15:10Z), H-EXPLORER (G9, non-blocking).
-- OPEN, optional (defaults keep the disclosed fallbacks): H-NEARDATA, H-KEYS, H13 (Pyth, G5 stays FALLBACK), H7 (G8 stays fixture), H8, H4, H15, H-GUARD-V7, H18, H19, H20.
-- Other human steps: kill PID 14369; real-wallet borrow account id.
+### 9. Handoffs (docs/HUMAN_HANDOFF.md headings, read in this run)
+- DONE / CLOSED: H-TOOLCHAIN, H-TOOLCHAIN-SOLANA, H-NEAR-FAUCET (+v7), H-SOL-AIRDROP, H-DOMAIN, H-DNS, H-LEGAL, H-DEPLOY, H-NEARDATA, H-HOST, H9, H16, H17.
+- N/A or superseded: H5, H6.
+- OPEN, Kunal only, blocking H1: H10, H12, H2, H11, H3, H14, H1.
+- OPEN, operational: H-EXPLORER (non-blocking).
+- OPEN, optional (the default keeps the disclosed fallback): H13, H7, H8, H4, H15, H-KEYS, H-GUARD-V7, H18, H19, H20.
+- **Out of date compared with chain and STATE:** H-ORACLE says "WAITING (staged, Kunal applies)", but the refresher key and the first refresh are on chain (§4). H-DEMO-WALLET says OPEN, but STATE says the orchestrator did it.
+- Other human steps (STATE): the Feed product fix decision, sealing FEED_NEARDATA_API_KEY in the Railway dashboard, installing ffmpeg (WO-35), the Weekend Shield decision (WO-35), and the real-wallet borrow.
 - Defaults if silent: as written in each entry. Not re-read line by line in this run.
 
 ## Failed or open
 | What is missing | Owner | Est. time |
 | --- | --- | --- |
-| README.md:153 says "live oracle" in the phase line while G5 is FALLBACK (copy rule) | docs agent (README only, no product code) | 5 min + G9 step-3 re-check |
-| SUBMISSION.md:3 header still says "DRAFT, 2026-11-11 … a677689" | docs agent | 2 min |
-| DEMO_SCRIPT step-1 snapshot is from 2026-11-11 | orchestrator (read-only views) | 10 min |
-| Local services answer 404 on `/health` (:8790 :8791 :8788 :8789), so health is unconfirmed | orchestrator: confirm the right health path | 5 min |
-| Stray next-server PID 14369 on :3217 | Kunal | 1 min |
-| Real-wallet borrow | Kunal (agent mints NVDAx first) | 15 min |
+| **Hosted Feed indexes no nectar-core-v2 event**: version filter `1.0.0` against the emitted `2.0.0` (events.ts:7; test feed.test.ts:54 locks it in). This is product code after the freeze. Fix = accept 2.0.0 (and check NECTAR_EVENTS covers the v7 events), plus concurrent block fetch, plus a Railway redeploy (approval) | Kunal decides; keeper agent (services/feed) | 30–60 min + redeploy + re-test |
+| README.md:26 and :61 Feed rows: start block 277398512 → 277503800, and "configured to index contract events" while none can be indexed | docs agent (after Kunal's decision) | 10 min + G9 step-3 re-check |
+| /health flaps to ok false / 503 with FEED_POLL_MS 1000 (3 s freshness window) | keeper agent / orchestrator config | 5 min |
+| DEMO_SCRIPT step 2 and HUMAN_HANDOFF H-ORACLE / H-DEMO-WALLET out of date | docs agent | 10 min |
+| EVIDENCE summary table lacks a G9 run 6b row | verifier | 2 min |
+| Real-wallet borrow; test assets for demo.nectar.testnet (0 NVDAx) | Kunal (faucet, 1 claim/h) | 15 min |
 | Payload TODO-H10/H14/H2/H3, video H11 | Kunal | see below |
-| Cookie banner, crawl, host check, hydrated landing, home-path grep, test suites | not re-run in this audit (last verifier runs PASS) | — |
+| Cookie banner, crawl, host check, hydrated landing, test suites | not re-run in this audit (last verifier runs PASS) | — |
 
 ## Self-attested only
-- Vercel and Railway project ids and deployment ids (STATE.md, orchestrator smoke logs evidence/WO-34/prod-smoke-release3-*).
-- Plan costs (FACTS F-402, F-444–F-451).
-- Keys location for the keeper/x402 (README.md:21-23).
-- G3b item (h), orchestrator-run and verifier-reviewed.
-- @x402/core / zod non-reachability (SECURITY.md:123, F-385/F-451).
-- Docs-site advisories build-time only.
+- Vercel/Railway project and deployment ids, the refresher's Railway service liveness, and who controls the registrar account (STATE).
+- Plan costs (F-402, F-444–F-451). Keeper/x402 key location (README.md:30).
+- zod non-reachability (SECURITY.md:123, F-385/F-451) and the docs-site advisories (build-time only).
+- `verify:quick` 0 on WO-69 (the config + keeper-test delta between c95cd0c and the tag).
 
 ## Needs Kunal (ordered by deadline)
-1. **Now:** stop the stray preview server with `kill 14369` (it serves :3217).
-2. **Before 2026-11-13 15:10Z, and ≤ 15 min before any NYSE-hours recording (14:30–21:00 UTC):** H-ORACLE. Either run `scripts/ops/refresh-owner-price.sh`
-   yourself, or tell the orchestrator to run the one-shot refresh each session (RUNBOOK). Repeat before judging, 16–18 Nov.
-3. **2026-11-13:** send the testnet account id for the real-wallet borrow. The agent mints mock NVDAx, then you borrow at APP /borrow.
-4. **Before H2:** H12 (prior-work wording in README) and H10 (leadName, email, size; second-project check, Q-015).
-5. **2026-11-14 morning:** H2. Add a public remote, push main + tags, make the repo public (HUMAN_HANDOFF.md:224). Never done by an agent.
-6. **After H2:** H11 video, then H3 X post with the video (docs/X_POST.md, URLs = vercel.app).
-7. **Before H1:** H14. Mainnet payout account from your own wallet, and consent text agreed. Fill SUBMISSION.md, then `bash scripts/submit.sh --dry-run` until it shows 0 TODO-H.
-8. **By 2026-11-14 23:59 UTC:** H1 send (`scripts/submit.sh --send`, per HUMAN_HANDOFF.md:232). It cannot be edited after sending.
-- Optional: H-NEARDATA key (dashboard.fastnear.com) for Feed event history; H-EXPLORER; H13; H7.
+1. **Before 14:30Z today (the only NYSE session before the deadline):** decide the Feed. Option (a): approve a product fix (accept event version 2.0.0, plus concurrent fetch) and a Railway redeploy. Option (b): keep views-only, and the docs agent corrects README.md:26/:61. The UI's event-history banner already discloses views mode.
+2. **Before the take (14:30–21:00Z):** claim faucet test assets for demo.nectar.testnet (APP /borrow "Get test assets"; balance now 0). At 14:30Z, check that the refresher starts its 60 s cadence (`get_exit_capacity {"symbol":"NVDAx"}` oracle_age_s < 120). Install ffmpeg, and decide on the Weekend Shield (WO-35).
+3. **2026-11-13:** report the real-wallet borrow result.
+4. **Before H2:** H12 (prior-work wording) and H10 (leadName, email, size; Q-015 check). Seal FEED_NEARDATA_API_KEY in the Railway dashboard (3-dot menu → Seal).
+5. **2026-11-14 morning:** H2. Add the remote https://github.com/NectarLabsio/nectar-labs, push main + tags, make the repo public (never done by an agent).
+6. **After H2:** H11 video, then H3 X post with the video (docs/X_POST.md).
+7. **Before H1:** H14 (mainnet payout account, consent). Fill SUBMISSION.md, then run `bash scripts/submit.sh --dry-run` until it shows 0 TODO-H.
+8. **By 2026-11-14 23:59Z:** H1 send (`scripts/submit.sh --send`, in your shell with HUMAN_CONFIRMED=1). It cannot be edited after sending.
 
 ## Critical path to H1 (UTC)
 | When | Step |
 | --- | --- |
-| 2026-11-12 17:12Z (now) | Production on release 3, all gates green, submission-rc = 4b20f05, 0 commits after |
-| Nov 12–13 | Docs fixes (README:153, SUBMISSION:3); if merged, move submission-rc and re-check G9 step 3 (≈ 30 min) |
-| Nov 13 before 15:10Z | H-ORACLE refresh |
-| Nov 13 14:30–21:00Z | Re-snapshot, price refresh ≤ 15 min before, record the video (H11); real-wallet borrow |
-| Nov 14 ≤ 12:00Z | H10, H12 done; H2 push + public |
-| Nov 14 ≤ 15:00Z | H3 X post with video; G9 rehearsal against the public URL (SUBMISSION.md:88) |
-| Nov 14 ≤ 18:00Z | H14 filled; dry run with 0 TODO-H (internal package deadline 18:00Z) |
-| Nov 14 ≤ 20:00Z (target), 23:59Z (hard) | H1 send |
+| 2026-11-13 11:41Z (now) | Production = release 4 c95cd0c on 4 custom hosts; submission-rc = 7f51c0b; 0 commits after; refresher key + 1 refresh on chain |
+| 11-13 ≤ 14:00Z | Feed decision; if fixed: feed agent → verify → redeploy → event test; README Feed rows corrected; move submission-rc and re-check G9 step 3 (≈ 30 min) |
+| 11-13 14:30Z | Refresher in-session cadence observed; demo test assets claimed |
+| 11-13 14:30–21:00Z | Rehearse, record (H11), real-wallet borrow; one-shot refresh < 60 s before the borrow beat if the cadence slips |
+| 11-14 ≤ 12:00Z | H10, H12; H2 push + public |
+| 11-14 ≤ 15:00Z | H3 X post with video; G9 rehearsal against the public repo URL |
+| 11-14 ≤ 18:00Z | H14 filled; dry run with 0 TODO-H (internal package deadline) |
+| 11-14 ≤ 20:00Z (target), 23:59Z (hard) | H1 send |
 
 ## Risks (top 5, each with its fallback)
-1. **Owner price goes stale during judging (16–18 Nov), so borrows are refused or limits drop to the closed session.** Fallback: a daily one-shot refresh (H-ORACLE). The UI shows the closed-session limit and the reason, which is disclosed.
-2. **Public RPC rate limits (FastNEAR 429, no CORS on 429).** Fallback: the 4-endpoint RPC fallback in the SDK, keeper and Feed (WO-35k). The Feed runs in views mode.
-3. **The keeper runs only on the operator's machine, so settlement and remote relays pause when it is off.** Fallback: disclosed in README.md:21-23. `resign_remote_settlement` plus the web "Re-sign settlement" button; H-KEYS for a hosted keeper.
-4. **Submission-order mistake (send before the repo is public or the post is up; a sent payload can't be edited).** Fallback: the dry-run refusal on TODO-H, the SUBMISSION.md:88 checklist, and the H1 guard (`HUMAN_CONFIRMED=1` only in Kunal's shell).
-5. **A late copy fix after the freeze moves submission-rc away from the gated commit.** Fallback: docs-only changes, `git diff --stat 5f011bb <new> -- apps packages services contracts` empty, plus a G9 step-3 re-check, as done for run 5b.
+1. **The Feed shows no event history** (version filter), so settlement links and event panels stay empty during the demo and judging. Fallback: views-mode snapshots plus the UI event-history banner (disclosed), and README text corrected to "no events indexed".
+2. **The oracle price goes stale** if the Railway refresher stops or the 5 NEAR allowance runs out, which refuses borrows or drops limits to the closed session. Fallback: the RUNBOOK one-shot `update_owner_price` with the current price. The UI shows the closed-session reason.
+3. **An open-session borrow needs a price < 120 s old.** The 60 s cadence plus RPC failovers (994 on the keeper) can miss it. Fallback: a one-shot refresh < 60 s before the borrow beat (DEMO_SCRIPT step 2).
+4. **The keeper runs only on the operator's machine**, so settlement and remote relays pause when it is off. Fallback: disclosed (README.md:30), `resign_remote_settlement` and the web "Re-sign settlement" button; H-KEYS for a hosted keeper.
+5. **A submission-order mistake, or a late fix that moves submission-rc off the gated commit.** Fallback: the dry-run refusal on TODO-H, the H1 guard (`HUMAN_CONFIRMED=1` only in Kunal's shell), docs-only changes with an empty product diff, plus a G9 step-3 re-check.
