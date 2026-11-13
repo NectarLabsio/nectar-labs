@@ -1,0 +1,235 @@
+{
+  "mode": "rehearsal",
+  "sign": false,
+  "sections": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "explorer": "nearrocks",
+  "results": [
+    {
+      "section": 1,
+      "title": "Market",
+      "selectors": {
+        "[data-testid=hero-capacity]": true,
+        "/feed NVDAx link": true,
+        "[data-testid=market-exit]": true,
+        "[data-testid=market-ladder] tbody tr": true
+      },
+      "notes": [
+        "ladder rows have no hover tooltip or notice period; the cursor rests on the first row (caption carries the 7-day notice)"
+      ],
+      "duration_s": 13.5,
+      "frames": {
+        "p0": 482
+      },
+      "gapcheck": {
+        "pass": true,
+        "max_gap_ms": 83,
+        "pages": {
+          "p0": {
+            "fps": 35.7,
+            "max_gap_ms": 83
+          }
+        }
+      }
+    },
+    {
+      "section": 2,
+      "title": "Test assets",
+      "selectors": {
+        "nav \"Borrow\"": true,
+        "[data-testid=wallet-button]": true,
+        "[data-testid=test-assets-button]": true,
+        "sign modal \"Review: Get test assets\"": true,
+        "faucet popup": true,
+        "faucet popup Cancel": true
+      },
+      "notes": [
+        "/borrow scrolls itself to y=793 after the nav click; the take scrolls back to the top (eased)"
+      ],
+      "wallet": "demo.nectar.testnet",
+      "faucet_popup": {
+        "host": "wallet.intear.tech",
+        "path": "/send-transactions",
+        "title": "Intear Wallet",
+        "headings": [
+          "Approve Transactions"
+        ],
+        "buttons": [
+          "? (disabled)",
+          "demo.nectar.testnet",
+          "?",
+          "Show args",
+          "Show args",
+          "Approve",
+          "Cancel"
+        ],
+        "approve": "enabled"
+      },
+      "faucet_cancel_ms": {
+        "ready": 476,
+        "move": 5503,
+        "click": 3445
+      },
+      "faucet_result": "Wallet rejected the request Nothing was sent.",
+      "balance_note": "You lock Balance 5.00 NVDAx NVDAx Collateral value appears h",
+      "duration_s": 30.5,
+      "frames": {
+        "p0": 611,
+        "p1": 292
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 351,
+        "pages": {
+          "p0": {
+            "fps": 26.3,
+            "max_gap_ms": 351
+          },
+          "p1": {
+            "fps": 23.6,
+            "max_gap_ms": 299
+          }
+        }
+      }
+    },
+    {
+      "section": 3,
+      "title": "Borrow",
+      "selectors": {
+        "[data-testid=amt-units] input": true,
+        "[data-testid=amt-borrow] input": true,
+        "[data-testid=borrow-limit]": true,
+        "[data-testid=protection-standard]": true,
+        "[data-testid=preview-fees]": true,
+        "[data-testid=borrow-outcome]": true,
+        "[data-testid=review-borrow]": true,
+        "drawer \"Review borrow\"": true,
+        "[data-testid=show-wallet-payload]": true,
+        "[data-testid=wallet-payload]": true,
+        "[data-testid=confirm-in-wallet]": true,
+        "sign modal \"Review: …\"": true,
+        "borrow popup": true,
+        "borrow popup Cancel": true
+      },
+      "notes": [
+        "the app adds its own sign modal (\"Open wallet to sign\") between \"Confirm in wallet\" and the wallet"
+      ],
+      "protection": "standard",
+      "preview": "You receive $99.70 after $0.30 in fees 4.89 health after Comfortable Flagged if NVDAx falls below $27.57, 79.6% from here. If NVDAx falls 4.40 Price −10% : health 4.40 3.91 Price −20% : health 3.91 3.43 Price −30% : heal",
+      "borrow_popup": {
+        "host": "wallet.intear.tech",
+        "path": "/send-transactions",
+        "title": "Intear Wallet",
+        "headings": [
+          "Approve Transactions"
+        ],
+        "buttons": [
+          "? (disabled)",
+          "demo.nectar.testnet",
+          "?",
+          "Show args",
+          "Approve",
+          "Cancel"
+        ],
+        "approve": "enabled"
+      },
+      "borrow_cancel_ms": {
+        "ready": 513,
+        "move": 1807,
+        "click": 3276
+      },
+      "borrow_after_cancel": "User rejected the transaction",
+      "duration_s": 34.3,
+      "frames": {
+        "p0": 784,
+        "p1": 204
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 284,
+        "pages": {
+          "p0": {
+            "fps": 26.7,
+            "max_gap_ms": 284
+          },
+          "p1": {
+            "fps": 24.5,
+            "max_gap_ms": 200
+          }
+        }
+      }
+    },
+    {
+      "section": 4,
+      "title": "Position",
+      "selectors": {
+        "ring \"Health at the simulated price\"": true,
+        "#sim": true,
+        "explorer tx summary": true
+      },
+      "notes": [
+        "no new loan in this run: stand-in /position/16 opened off camera (with --sign the take clicks \"View loan #<id>\")",
+        "no borrow tx in this run: explorer stand-in De6aVqqN…",
+        "Near Rocks shows no \"Success\" label; the summary card (hash, signer, receiver, block) is held 2 s"
+      ],
+      "sim": "$72.20, health 5.78",
+      "duration_s": 10.7,
+      "frames": {
+        "p0": 333,
+        "p1": 92
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 450,
+        "pages": {
+          "p0": {
+            "fps": 39.1,
+            "max_gap_ms": 450
+          },
+          "p1": {
+            "fps": 21,
+            "max_gap_ms": 250
+          }
+        }
+      }
+    },
+    {
+      "section": 5,
+      "title": "Agent",
+      "selectors": {
+        "terminal #term": true,
+        "explorer tx summary": true
+      },
+      "notes": [
+        "no agent borrow tx (dry run): explorer stand-in De6aVqqN…",
+        "Near Rocks shows no \"Success\" label; the summary card (hash, signer, receiver, block) is held 2 s"
+      ],
+      "command": "echo dry-run",
+      "output": "dry-run",
+      "duration_s": 6.9,
+      "frames": {
+        "p0": 288,
+        "p1": 78
+      },
+      "gapcheck": {
+        "pass": false,
+        "max_gap_ms": 123,
+        "pages": {
+          "p0": {
+            "fps": 54.6,
+            "max_gap_ms": 50
+          },
+          "p1": {
+            "fps": 24.4,
+            "max_gap_ms": 123
+          }
+        }
+      }
+    }
+  ]
+}

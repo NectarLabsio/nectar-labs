@@ -1,0 +1,29 @@
+take: mode rehearsal · sections 1,2,3,4,5 · no --sign (every wallet popup is cancelled) · headed · profile ~/.nectar/demo-chrome-profile · out ~/.nectar/demo-capture/measure-1
+explorer: nearblocks blocked (HTTP 403, "Just a moment...") → tab switch uses testnet.near.rocks
+— s1 Market
+  note: ladder rows have no hover tooltip or notice period; the cursor rests on the first row (caption carries the 7-day notice)
+  s1: 13.5 s · gapcheck PASS max 83 ms {"p0":{"fps":35.7,"max_gap_ms":83}}
+— s2 Test assets
+  note: /borrow scrolls itself to y=793 after the nav click; the take scrolls back to the top (eased)
+  popup: {"host":"wallet.intear.tech","path":"/send-transactions","title":"Intear Wallet","headings":["Approve Transactions"],"buttons":["? (disabled)","demo.nectar.testnet","?","Show args","Show args","Approve","Cancel"],"approve":"enabled"}
+  s2: 30.5 s · gapcheck FAIL max 351 ms {"p0":{"fps":26.3,"max_gap_ms":351},"p1":{"fps":23.6,"max_gap_ms":299}}
+— s3 Borrow
+  note: the app adds its own sign modal ("Open wallet to sign") between "Confirm in wallet" and the wallet
+  popup: {"host":"wallet.intear.tech","path":"/send-transactions","title":"Intear Wallet","headings":["Approve Transactions"],"buttons":["? (disabled)","demo.nectar.testnet","?","Show args","Approve","Cancel"],"approve":"enabled"}
+  s3: 34.3 s · gapcheck FAIL max 284 ms {"p0":{"fps":26.7,"max_gap_ms":284},"p1":{"fps":24.5,"max_gap_ms":200}}
+— s4 Position
+  note: no new loan in this run: stand-in /position/16 opened off camera (with --sign the take clicks "View loan #<id>")
+  note: no borrow tx in this run: explorer stand-in De6aVqqN…
+  note: Near Rocks shows no "Success" label; the summary card (hash, signer, receiver, block) is held 2 s
+  s4: 10.7 s · gapcheck FAIL max 450 ms {"p0":{"fps":39.1,"max_gap_ms":450},"p1":{"fps":21,"max_gap_ms":250}}
+— s5 Agent
+  note: no agent borrow tx (dry run): explorer stand-in De6aVqqN…
+  note: Near Rocks shows no "Success" label; the summary card (hash, signer, receiver, block) is held 2 s
+  s5: 6.9 s · gapcheck FAIL max 123 ms {"p0":{"fps":54.6,"max_gap_ms":50},"p1":{"fps":24.4,"max_gap_ms":123}}
+take: 5 section take(s) → ~/.nectar/demo-capture/measure-1/edit.json · report ~/.nectar/demo-capture/measure-1/run.json
+s1 Market: 13.5 s · gapcheck PASS 83 ms · selectors 4/4
+s2 Test assets: 30.5 s · gapcheck FAIL 351 ms · selectors 6/6
+s3 Borrow: 34.3 s · gapcheck FAIL 284 ms · selectors 14/14
+s4 Position: 10.7 s · gapcheck FAIL 450 ms · selectors 3/3
+s5 Agent: 6.9 s · gapcheck FAIL 123 ms · selectors 2/2
+exit 0
