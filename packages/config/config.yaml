@@ -126,7 +126,8 @@ faucet: # WO-53/WO-54c "Get test assets": public mint on the mock tokens (Kunal 
 ops:
   oracle_refresher: # H-ORACLE option A on Railway (Kunal 2026-11-12): FC key on nectar.testnet → nectar-core-v2 update_owner_price only
     run_until: "2026-11-18T23:59:00Z"
-    tick_s: 60
-    session_max_age_s: 600 # inside NYSE session windows: re-assert when the price is ≥ 10 min old (session opens below 15 min, lib.rs:75)
-    closed_max_age_s: 43200 # outside session windows: re-assert when ≥ 12 h old (borrows need < 24 h)
-    allowance_near: "1" # WO-63 estimate: ~0.003 NEAR of allowance per tx (30 Tgas prepaid), ~36 tx per NYSE day
+    tick_s: 15
+    session_max_age_s: 60 # Kunal 2026-11-13 option A: in NYSE session windows re-assert at ≥ 60 s (loader minimum), so the price is ≤ ~75 s old;
+                          # an open session needs < 120 s for a borrow (get_config max_age_ns_session, lib.rs:381) and < 900 s to stay open (lib.rs:75)
+    closed_max_age_s: 21600 # Kunal 2026-11-13: outside session windows re-assert at ≥ 6 h, so the price never crosses 24 h (weekend, before Monday's open)
+    allowance_near: "5" # Kunal 2026-11-13: cap; ≤ 0.003 NEAR of allowance per tx (30 Tgas prepaid), ~325 tx per NYSE day; measured burn 0.00028 NEAR/tx
