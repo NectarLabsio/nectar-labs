@@ -108,7 +108,7 @@ export function Footer({ columns, Link = A, brandBase = "/brand", email, giant }
           <div className="brand">
             <Lockup base={brandBase} size="footer" Link={Link} />
             <p>Committed liquidity, verifiable settlement.</p>
-            <p>A Nectar Network product · testnet · mock collateral</p>
+            <p>A Nectar Labs product · testnet · mock collateral</p>
           </div>
           {columns.map((c) => (
             <div className="fcol" key={c.title}>
