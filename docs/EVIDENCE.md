@@ -2,6 +2,7 @@
 
 | Gate | Status | UTC | Commit | Evidence |
 | --- | --- | --- | --- | --- |
+| WO-35 after-close takes (2026-11-13 21:00–21:16Z) (WO-96) | Txs 11/11 verified on testnet RPC, all SuccessValue: take A 5/5, take B 6/6, with the events named in shotlist.md. Frame review: 1 FIX-BEFORE-SENDING. Chrome shows "Debugger paused in another tab" for 2 frames at 0:48.000–0:48.067 in the master, the captioned version and the 720p master. The rest is minor or cosmetic (loading skeletons, flag price $27.59 vs $27.57, caption over the Weekend Shield card), plus 2 items for Kunal to decide: the footer email and the amber `owner · 62s · no conf` badge. Captions 5/5 match shotlist.md. On-screen numbers match: loan #22, $100, 15 bps / $0.15, $99.55, 402 → 200. Session closed (outside_hours) is cited from shotlist.md, NOT RE-CHECKED. "Relayer submitted nothing" (take B attempt 3) is NOT VERIFIED | 2026-11-13T21:35Z (finished) | deefdda | evidence/WO-35/weekend-frame-review-20261113T213157Z.md, evidence/WO-35/weekend-txcheck-20261113T213157Z.log (see §WO-35 after-close takes) |
 | WO-34 production (web + docs c9fd56b, WO-85/86 brand) (WO-87 A) | PASS, 5/5 items. The deploy source commit is SELF-ATTESTED. Items 4 and 5b were added at 17:13Z–17:16Z, which replaces the INCOMPLETE status of the 17:07Z write-up (details below). (4) Lighthouse a11y: SITE / 100/100, APP /borrow 100/100, DOCS / dark 100. DOCS light (`?docusaurus-theme=light`) scores 97/97 because color-contrast fails on 29 footer link items (axe: #ebedf0 on #ffffff, 1.17:1); flagged. (5b) `PW_CHANNEL=chrome npx playwright test e2e/claims.spec.ts e2e/test-assets.spec.ts` on the config's own webServer (:3100, which was free): 28 passed, exit 0. Earlier write-up: (1) PASS: smoke-prod.sh with the 4 custom hosts and 5 legacy pairs: failures 0, exit 0. (2) PASS: the served HTML of SITE /, APP /borrow, APP /feed and STATUS / has "A Nectar Labs product" ×1 and "© 2026 Nectar Labs" ×1. DOCS / and /project/team have "© 2026 Nectar Labs" ×1; at c9fd56b the docs footer has no product line. All 6 pages have 0 "Nectar Network product" and 0 "2026 Nectar Network". Hydrated Chrome, 12 loads: the footer is correct on all 12 and old brand strings appear 0 times. (3) PASS: SITE /, APP /borrow, STATUS / and DOCS / at 1440 and 400 px show 0 console, page or hydration errors and 0 failed requests. (4) Lighthouse: NOT RE-CHECKED (still running at the stop). (5) Branding check on c9fd56b: exit 0, PASS. e2e: NOT RE-CHECKED because of a harness error. I set PORT=3387, but `pnpm start` is `next start -p 3100`, so the webServer timed out after 120 s and 0 tests ran. Deploy source commit is SELF-ATTESTED | 2026-11-13T17:01Z–17:16Z | c9fd56b (web dpl_F8NmBUE5PzpsdYRw94QWsRX85hgH, docs dpl_2gj8GAFNtCHUDHTtWYwmS55Yu2ks) | evidence/WO-87/, evidence/WO-87/probe/site-footer-hydrated.png (see §WO-34 production (web + docs c9fd56b, WO-85/86 brand)) |
 | G9 run 9b (WO-80, step 4 re-check) | PASS, which resolves the G9 run 9 FAIL. Product unchanged: `git diff --stat d863f55 0904aec -- apps packages services contracts` is empty, so run 9 items 1–3 and 5–7 carry over. Step 4: README:3, :11–16, :34–39, Feed rows :29/:66 and :150 match EVIDENCE (§WO-34 production (web 1a95022, WO-74), §custom hosts, §G14, §G9 run 3) and HUMAN_HANDOFF H-DEPLOY. Live: APP /borrow chunk 3htcm-0feao4j.js has `{onClaimed:eT.reload}`, DOCS last-modified 02:03:23Z (unchanged), Feed /health ok true ×3 at commit 37dfec9 with start_block 277503800, CORS SITE/APP/STATUS only, smoke-prod 43 ok / 0 failures | 2026-11-13T14:27Z–14:33Z | 0904aec | evidence/G9/run9b-20261113T1427Z/ (see §G9 run 9b) |
 | WO-34 production (web 1a95022, WO-74) (WO-78) | PASS, 5/5 items; 2 parts are SELF-ATTESTED (the source commit of the deploy and the production QA claim). (1) smoke-prod.sh with the 4 custom hosts and 5 legacy pairs exits 0: 43 ok, 0 failures (28 app routes, 56 docs pages + 6 assets). (2) One APP /borrow chunk has the WO-74 path, `T({onClaimed:e}={})` and `(0,t.jsx)(T,{onClaimed:eT.reload})`. nectarlabs-app.vercel.app/borrow 308s to the same page, and its 14 chunks have the same paths and sha256. (3) Hydrated Chrome, 4 loads of APP /borrow and SITE / at 1440 and 400 px: 0 console errors, 0 page errors, 0 hydration errors, 0 failed requests. (4) Lighthouse a11y on APP /borrow: 100 dark, 100 light. (5) G9 run 9 web-delta specs 28/28 and evidence/WO-74/prod-qa-check-20261113T140705Z.log (0.00 → 5.00 NVDAx with no reload) are cited, not re-run. Docs were not redeployed (last-modified 02:03:23Z) | 2026-11-13T14:21Z–14:25Z | 2cd7a6e (product 1a95022; web dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K, docs dpl_DpqAmb6WtoFAm1m8agyK1cEw6yrE) | evidence/WO-78/, evidence/WO-78/probe/app-borrow-hydrated.png (see §WO-34 production (web 1a95022, WO-74)) |
@@ -74,6 +75,60 @@ Explorer: https://testnet.nearblocks.io/address/nectar-core.nectar.testnet  (ope
 Views: get_collateral → {...}
 Notes: faucet rate-limited once; retried after 90 s.
 ```
+
+## WO-35 after-close takes (2026-11-13 21:00–21:16Z)
+
+- Run: verifier, WO-96, base deefdda. This is a read-only review: no builds, no tests, no product change. I had not seen the edit before.
+- Inputs (read-only, in the demo media folder outside the repo): `demo/weekend/` nectar-demo.mp4 (1080p master, 88.23 s),
+  nectar-demo-captions.mp4, shotlist.md, nectar-demo.srt; `raw/take-a/txs.json` and `raw/take-b/txs.json`.
+- **Session closed:** shotlist.md and take-a/txs.json say `get_exit_capacity` NVDAx at block 277562411 (21:00:36Z) returned
+  `session_open: false`, `session_reason: outside_hours`, owner oracle $135.00 and headroom $2,537.92. I did NOT RE-CHECK this view.
+  The video agrees: "Weekend parameters" badge, "Weekend parameters are on" card, oracle $135.00, free to borrow $2,537, haircut 25 %.
+- **Tx check:** one script, `EXPERIMENTAL_tx_status` on rpc.testnet.near.org, calls 2.5 s apart, no 429s.
+  Log: evidence/WO-35/weekend-txcheck-20261113T213157Z.log.
+
+Take A (recorded 21:00:50Z–21:03:59Z, used in the edit):
+
+| Step | Tx | Signer → receiver, method | Status | Events |
+| --- | --- | --- | --- | --- |
+| s2 faucet NVDAx | [35FK4ZjN…](https://testnet.nearblocks.io/txns/35FK4ZjNSeReYvzUNdEfsE5xdjsLUfGknomdFto27qG8) | demo → nvdax-mock, faucet_mint | SuccessValue | ft_mint |
+| s2 faucet USDC | [G68Lvp41…](https://testnet.nearblocks.io/txns/G68Lvp41UADX1MS5ABefhcSVbEsEJEZZ3oWZsNTQSMCf) | demo → usdc-mock, faucet_mint | SuccessValue | ft_mint |
+| s3 borrow | [9uwAk6Vy…](https://testnet.nearblocks.io/txns/9uwAk6Vyun9s2bi2wu1a7H5er3pRLpuVN3HYgYvsEfni) | demo → nvdax-mock, ft_transfer_call | SuccessValue | shield_opened (#22, Weekend, fee_bps 15, fee_usd_e6 150000, window_end_ns 1794839400000000000 = 2026-11-16 14:30Z); position_opened (#22, units 5000000, debt_usd_e6 100000000, premium 150000, origination 300000, net 99550000); nft_mint |
+| s5 agent borrow | [8QrZ9cSX…](https://testnet.nearblocks.io/txns/8QrZ9cSXJ8twiZa1qCAN11TXkmg1d8n1oDF2RqrJqiek) | agent1 → nvdax-mock, ft_transfer_call | SuccessValue | position_opened (#23, units 1000000, debt 10000000, premium 0, origination 30000, net 9970000); nft_mint |
+| s5 x402 payment | [AJ1Tf7f3…](https://testnet.nearblocks.io/txns/AJ1Tf7f3iNtGmS17oGdSGMfmcX5WF3YSHGkj9XGvks7w) | x402-relayer.nectar.testnet → agent1, Delegate (NEP-366): ft_transfer on usdc-mock by agent1 | SuccessValue | none (the mock FT emits no events). The HTTP 402 → 200 is only in the terminal log in the video, 1:15 |
+
+Take B (recorded 21:05:40Z–21:15:29Z, backup, not used in the edit):
+
+| Step | Tx | Signer → receiver, method | Status | Events / note |
+| --- | --- | --- | --- | --- |
+| off-camera owner mint 5 NVDAx | [4PL3GhLt…](https://testnet.nearblocks.io/txns/4PL3GhLtoEC9U4SSCYa9D9ueUVkFLoqqLx78GHNtadpn) | nectar.testnet → nvdax-mock, mint | SuccessValue | none |
+| off-camera oracle refresh | [4ZpoqRuD…](https://testnet.nearblocks.io/txns/4ZpoqRuDVoA35sKXGnZEa9sRgP1LVgdfrLnACoBgSUj5) | nectar.testnet → nectar-core-v2, update_owner_price | SuccessValue | oracle_updated |
+| s2 | n/a | skipped: the demo faucet cap was reached (15 NVDAx claimed) | n/a | n/a |
+| s3 borrow | [475VLHwE…](https://testnet.nearblocks.io/txns/475VLHwE9Nvkgq2kc15NWVQJLDyLmvcyD2Y2fNAURF1W) | demo → nvdax-mock, ft_transfer_call | SuccessValue | shield_opened (#24, Weekend, 15 bps, 150000); position_opened (#24, debt 100000000, net 99550000); nft_mint |
+| s5 attempt 1 | [EKKyuLng…](https://testnet.nearblocks.io/txns/EKKyuLngYHqFKYvkbUgpzknSJ67P4CfVgeAkRPiMhrqV) | agent1 → nvdax-mock, ft_transfer_call | SuccessValue (borrow landed) | position_opened #25. Payment FAILED: FastNear RPC 429 while it built the payment payload (from txs.json) |
+| s5 attempt 2 | [HUrPnuei…](https://testnet.nearblocks.io/txns/HUrPnueisaxizthuNC2DGd6yWJ2m2hymbbEkYvtMVkLX) | agent1 → nvdax-mock, ft_transfer_call | SuccessValue (borrow landed) | position_opened #26. Payment FAILED: settle_failed invalid_exact_near_storage_check_failed (from txs.json) |
+| s5 attempt 3 | [DBJQqSas…](https://testnet.nearblocks.io/txns/DBJQqSasjTGbY6wJGT5yS4tbjjf4gCdJp3rn3NhkecUs) | agent1 → nvdax-mock, ft_transfer_call | SuccessValue (borrow landed) | position_opened #27. Payment FAILED: settle_failed settlement_failed. "Relayer submitted nothing" is from txs.json and NOT VERIFIED: I made no history query on x402-relayer.nectar.testnet |
+
+So the three take B s5 attempts left 3 extra agent1 loans open (#25–#27, $10 each). The payment failures are as claimed in
+take-b/txs.json. The only payment tx this review saw is take A's AJ1Tf7f3.
+
+- **Explorer links:** recorded, not opened with WebFetch, because of the known 403 to WebFetch (see §G2). Proof is the RPC tx status above.
+  In the video, NEAR Rocks shows 9uwAk6Vy at block 277,562,578 (NFTMint p-22) and 8QrZ9cSX at block 277,562,714 (p-23).
+- **Frame review** (evidence/WO-35/weekend-frame-review-20261113T213157Z.md). I read 1 frame/s over 0–87 s, with full-resolution
+  crops at 16 timestamps. The scene-change check found 33 change points, all covered. The overlay sweep looked at every one of the
+  2,647 frames.
+  - **FIX BEFORE SENDING:** 0:48.000–0:48.067 (2 frames), a yellow Chrome banner "Debugger paused in another tab, click to
+    switch to that tab." It is in the master, the captioned version and the 720p master.
+  - **For Kunal to decide:** the footer email `kunal@nectarnetwork.fun` at 0:03–0:04 and 0:55, and the amber price badge
+    `owner · 62s · no conf` at 0:05–0:11.
+  - **Minor:** loading skeletons at 0:03–0:04 and 0:55; near.rocks "Loading transaction…" at 1:02–1:03 and 1:20; behind the
+    Loan opened drawer at 0:53–0:54, a red "More than your balance" error and the no-balance notice; flag price $27.59 vs
+    $27.57 on the Loan #22 screen at 0:56–1:01; a nearly empty terminal at 1:06–1:08.
+  - **Cosmetic:** the "Who stands behind" column is cut off at 0:05–0:11; "$0.15" wraps at 0:37; the caption covers the
+    Weekend Shield card at 0:27–0:31; the 402 and 200 log lines share one timestamp at 1:15.
+  - **Not found anywhere:** error toasts, localhost or wrong URLs, the copilot "Key missing" notice, hackathon branding.
+  - **Matches:** on-screen numbers match shotlist.md (loan #22, $100 debt, 15 bps / $0.15, $99.55 net, agent 402 → 200).
+    The 5 captions match shotlist.md and the srt.
 
 ## G13
 
