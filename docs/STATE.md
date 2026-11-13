@@ -49,6 +49,12 @@
   services/feed/src/events.ts accepts only event version 1.0.0; nectar-core-v2 emits 2.0.0 → the hosted Feed indexes no v2 event (product bug → Kunal).
   The "sequential fetch too slow" diagnosis above was wrong: with FEED_POLL_MS 1000 poll_age stays 0–2 s, health 12/12 200 at 11:45Z.
   x402 paid download 11:44Z: 402 → 200, 168 rows, tx 7dfoTwqXVav4rCT18PPb5C76Xc13E3325C6ZUvnUYsYt. WO-70 docs dispatched (README Feed rows, handoffs).
+- ~11:55Z Kunal: Weekend Shield A (takes after 21:00Z close, weekend-limits caption; retakes Saturday; rehearsal before close with Standard);
+  fix Feed v2 now (WO-71, keeper, dispatched); ffmpeg installed by Kunal (~/.nectar/tools, libx264 CRF 18 path tested; F-470); oracle key record OK.
+- WO-35b merged a1931e6 (compose/encode/contact/srt/endcard; AVFoundation fallback). WO-35a merged 0bd8266 (recorder/human/gapcheck/terminal):
+  4K gapcheck FAILS on the WebGL landing; on /feed/NVDAx headless 167 ms FAIL, headed (CAPTURE_HEADED=1) 100 ms PASS (4b8063b) → takes run headed,
+  machine quiet. WO-35c take script dispatched (never signs). Open to Kunal: S1 notice-period hover (no tooltip in product → caption), S4 explorer
+  (no NEXT_PUBLIC_EXPLORER_TX → tab switch to nearblocks).
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -471,7 +477,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T11:34:53Z · commit 7f51c0b
+Last activity: 2026-11-13T12:04:16Z · commit e03afbf
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
