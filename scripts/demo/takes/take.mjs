@@ -51,11 +51,12 @@ const opt = (n, d = null) => { const i = argv.indexOf(n); return i >= 0 && argv[
 const MODE = opt('--mode');
 const SIGN = flag('--sign');
 const SECTION = opt('--section', 'all');
-if (!['rehearsal', 'take'].includes(MODE) || !(SECTION === 'all' || /^[1-5]$/.test(SECTION))) {
-  console.error('usage: node scripts/demo/takes/take.mjs --mode rehearsal|take [--section 1..5|all] [--sign] [--out dir]');
+// Comma lists (orchestrator, 2026-11-13): `--section 1,2,3,4` runs S1–S4 in one browser (local x402 stays stopped), then `--section 5` after its restart.
+if (!['rehearsal', 'take'].includes(MODE) || !(SECTION === 'all' || /^[1-5](,[1-5])*$/.test(SECTION))) {
+  console.error('usage: node scripts/demo/takes/take.mjs --mode rehearsal|take [--section 1..5|1,2,3,4|all] [--sign] [--out dir]');
   process.exit(2);
 }
-const SECTIONS = SECTION === 'all' ? [1, 2, 3, 4, 5] : [Number(SECTION)];
+const SECTIONS = SECTION === 'all' ? [1, 2, 3, 4, 5] : SECTION.split(',').map(Number);
 const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\..*/, '');
 const OUT = resolve(opt('--out') ?? defaultTakeDir(`wo35c-${MODE}-${stamp}`));
 const PROFILE_ARG = opt('--profile');
