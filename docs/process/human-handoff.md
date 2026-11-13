@@ -391,3 +391,15 @@ What Kunal does (2 min): open https://faucet.solana.com (GitHub sign-in raises t
 `3pF3vKewQdsKd4TEZvWYZrHZfRRJnzW3EsgtU3x8bZgS` (deployer, 5 SOL if allowed) and 1 SOL to `82hq1LTc9cuYsdkKxYQVQ6p4qxvYM9hdrQ6V8zW7HVa7` (keeper fee payer); reply `H-SOL-AIRDROP done`.
 What Claude Code does then: `scripts/05-solana.sh` (mint), the vault deploy per solana/deploy.md, `init_vault`, config update, G7 run.
 Meanwhile: retries the CLI airdrop with backoff. Default if silent at 2026-11-13 12:00 UTC: the Solana leg stays local-validator only (25/25 anchor tests) + the NEAR-side signer round trip, disclosed (cut order).
+
+## H-REFRESHER-EXTEND — keep the price refresher running to 2026-11-25   status: OPEN   needed by: 2026-11-18 23:59 UTC
+Why human: the refresher stops itself (exit 0) at `ops.oracle_refresher.run_until` = 2026-11-18T23:59:00Z, read from packages/config/config.yaml in its
+Railway source deploy (services/keeper/src/oracle-refresher.ts:70; no env override). Kunal wants the hosted app, Feed and refresher up until at least
+2026-11-25. Without a refresh the closed-market price limit (24 h, `max_age_ns_closed`) runs out about 2026-11-19 23:59 UTC and borrows answer "oracle stale".
+Changing config.yaml on main would make the product diff against production non-empty, and main is frozen after the send.
+What Claude Code does: after the send, on branch `next`, sets run_until to "2026-11-25T23:59:00Z" (TODO-H-REFRESHER-EXTEND comment), runs the keeper tests,
+stages the Railway redeploy of service oracle-refresher (796516c0…) from that commit, and checks the FC key allowance (4.93 NEAR left; ~0.09 NEAR per NYSE day).
+What Kunal does (2 min): accept the staged Railway deploy (the tool refuses accept-deploy for agents), reply `H-REFRESHER-EXTEND done`.
+Then Claude Code checks the refresher log line `run_until: 2026-11-25T23:59:00.000Z` and a fresh `oracle_updated` event.
+Default if silent by 2026-11-18 23:59 UTC: the refresher stops; README already states run_until 2026-11-18; borrows keep working until the price is
+24 h old, then fail closed ("oracle stale"); the daily check reports it.
