@@ -1,4 +1,20 @@
-## NOW (2026-11-13 ~21:40Z) — after-close takes DONE; Weekend Shield video sent to Kunal; WO-92 step 2 dispatched
+## NOW (2026-11-13 ~21:50Z) — WO-92 step 2 deployed (54bdd32); WO-95b (scripts + CI) still running; then step 3
+- PRODUCTION = 54bdd3221c0b… (artifact src-54bdd32….tar.gz sha256 3c919536…, verify ok): web dpl_C82s82HaQiU4KLGwvCfhv9Fe91dN (nectarlabs.io +
+  aliases), docs dpl_DiUxyPb5KcfYaF2Ai8CaFpyfWogw (docs.nectarlabs.io). smoke-prod 4 hosts: web 28 routes, docs 56 pages + 6 assets, failures 0
+  (evidence/WO-34/smoke-prod-wo92s2-*.log). Live checks: /borrow copilot shows "Recorded fixture" / "Live answers are off on this server", no
+  "Key missing"; docs /concepts/position-notes has 0 move_note, names nft_transfer_call. Feed 37dfec9 and refresher 7833aa3 unchanged.
+- Merged since 21:40Z: WO-93 (copilot copy), WO-94 (README stills, closed-market borrow claim, Intear wording, post 1 restored, docs-site method
+  names), WO-96 (EVIDENCE "WO-35 after-close takes", 11/11 txs; frame review evidence/WO-35/weekend-frame-review-*.md), WO-95a (docs/process/
+  moves: STATE is now docs/process/state.md, work orders docs/process/work/; LICENSE; .claude keeps settings+hooks — agents/ and agent-memory/
+  untracked + gitignored, local copies restored after the merge; FACTS-nectar-labs.md and 03-borrow-preview.png removed; host-grep dumps removed).
+  verify:quick 0 after each merge.
+- Videos: Chrome infobar "Debugger paused in another tab" (x 880–1039, y 12–21) found by WO-96 in the weekend video (2 frames) and by the
+  orchestrator's scan in the quick take (30 frames: 0:22.9, 1:01.4, 1:21.0, 1:41.5). Patched with ffmpeg delogo on the composed frames
+  (originals in demo/<name>/pre-banner-fix/), all 8 MP4s re-encoded, re-scan 0 hits; replacements sent to Kunal ~21:40Z.
+- Open review items for Kunal (WO-96): footer contact kunal@nectarnetwork.fun visible in the video (0:03, 0:55); amber price badge
+  "owner · 62s · no conf"; position page flag price $27.59 vs repay panel "Flag price after" $27.57 (product rounding, not fixable under the freeze).
+
+## (2026-11-13 ~21:40Z) — after-close takes DONE; Weekend Shield video sent to Kunal; WO-92 step 2 dispatched
 - Take A 21:00:50–21:03:59Z, market closed (outside_hours, block 277562411): all sections gapcheck PASS. Weekend borrow 9uwAk6Vy… (#22,
   shield_opened Weekend 15 bps) SuccessValue; agent 8QrZ9cSX… + x402 AJ1Tf7f3… → 200. Hashes: nectar-demo-media/raw/take-a/txs.json.
 - Take B: owner mint 4PL3GhLt… + owner refresh 4ZpoqRuD… off camera; S2 skipped (faucet cap 15 reached); S3 weekend borrow 475VLHwE… (#24);

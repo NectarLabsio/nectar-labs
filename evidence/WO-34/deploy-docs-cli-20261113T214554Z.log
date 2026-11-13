@@ -1,0 +1,43 @@
+<claude-code-hint v="1" type="plugin" value="vercel@claude-plugins-official" />
+Vercel CLI 65.14.0
+  Inspect         https://vercel.com/kunals-projects-35d3a237/nectar-labs-docs/DiUxyPb5KcfYaF2Ai8CaFpyfWogw
+  Production      https://nectar-labs-docs-568w9zsyy-kunals-projects-35d3a237.vercel.app
+▲ Aliased         https://docs.nectarlabs.io
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_DiUxyPb5KcfYaF2Ai8CaFpyfWogw",
+    "url": "https://nectar-labs-docs-568w9zsyy-kunals-projects-35d3a237.vercel.app",
+    "productionUrl": "https://docs.nectarlabs.io",
+    "inspectorUrl": "https://vercel.com/kunals-projects-35d3a237/nectar-labs-docs/DiUxyPb5KcfYaF2Ai8CaFpyfWogw",
+    "readyState": "READY",
+    "target": "production",
+    "environment": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_DiUxyPb5KcfYaF2Ai8CaFpyfWogw",
+    "buildMachine": {
+      "cores": 2,
+      "memory": 8192,
+      "machine": "basic",
+      "selectionType": "fixed",
+      "selectionSource": "plan-default"
+    },
+    "deploymentProtection": [
+      "vercel_authentication"
+    ]
+  },
+  "message": "Deployment nectar-labs-docs-568w9zsyy-kunals-projects-35d3a237.vercel.app ready. Production URL: https://docs.nectarlabs.io",
+  "next": [
+    {
+      "command": "vercel curl https://docs.nectarlabs.io",
+      "when": "Verify deployment, including when Deployment Protection is enabled"
+    },
+    {
+      "command": "vercel inspect nectar-labs-docs-568w9zsyy-kunals-projects-35d3a237.vercel.app --scope kunals-projects-35d3a237",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod --scope kunals-projects-35d3a237",
+      "when": "Promote to production"
+    }
+  ]
+}
