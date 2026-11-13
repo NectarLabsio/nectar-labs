@@ -71,6 +71,12 @@
   Vercel create_deployment (web, production) ~13:19Z: connector timed out; later calls time out or say "credential validation failed", so it is
   unknown whether it registered; production still serves release-4 chunks (watcher b58ahpl83). QA account qa-faucet-1113.nectar.testnet created
   (0.2 NEAR, tx 6uPS14NW), imported into Intear in ~/.nectar/qa-chrome-profile, connected to testnet.nectarlabs.io (no claim yet).
+- 13:45Z Kunal published main to GitHub (origin main = b6d6f41). WO-75 merged 12414bc (repo URL in README + SUBMISSION; X_POST still TODO-H2, not in
+  scope). G9 run 8 from the public URL PASS (ff78580, merge 7772f0c). Connectors down (outage per Kunal) → Vercel CLI login by Kunal; web deployed via CLI
+  13:51Z: dpl_4ExxeLH65Mb2dfWLyaqQFykbpw2K READY production (src 1a95022, stub folder ~/.nectar/deploy/vercel-web-1a95022); smoke-prod 0 failures.
+  Production QA 14:07Z with throwaway qa-faucet-1113b.nectar.testnet (Intear private-key import, ~/.nectar/qa2-chrome-profile): balance 0.00 → 5.00 NVDAx
+  after the claim WITHOUT reload (evidence/WO-74/prod-qa-check-20261113T140705Z.log). qa-faucet-1113 also claimed (browser closed early). G9 run 9 (WO-77)
+  dispatched on d863f55 → then submission-rc → Kunal pushes the tag.
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -493,7 +499,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T12:48:58Z · commit 1f70296
+Last activity: 2026-11-13T13:57:54Z · commit 7772f0c
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
