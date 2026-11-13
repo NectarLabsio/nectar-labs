@@ -17,7 +17,7 @@ Format the builder relies on: one row per API field, column 1 = API field name i
 | `size` | `TODO-H10` | one of `1`, `2 - 4`, `4 - 6`, `6 - 8`, `8+`, exactly as written; `1` if H10 says "Kunal only" |
 | `tracks` | `["defi","security","agents"]` | Kunal's H16 reply in session, 2026-11-11: "H16 defi security agents" (D-028). `privacy` dropped by Kunal; `nfts` not entered (H16 closed 2026-11-12, see "Tracks" below) |
 | `nearAddress` | `TODO-H14` | **mainnet** payout account, made by Kunal in his own wallet; never created or invented by an agent; must match the regex in HACKATHON.md |
-| `projectUrl` | `TODO-H2` | public repo URL after H2; ≤ 300 chars; each repo is submitted once |
+| `projectUrl` | `https://github.com/NectarLabsio/nectar-labs` | public repo; Kunal pushed main 2026-11-13 (H2); ≤ 300 chars; each repo is submitted once |
 | `demoUrl` | `TODO-H3` | URL of the **public X demo post** (H3) carrying the video (H11). HACKATHON.md: send only once the repo is public and the post is up |
 | `idea` | (block below) | 20-2000 chars |
 | `consent` | `TODO-H14` | becomes `true` only after Kunal reads and agrees to: "I agree that the organizers may use these details to review our submission and contact us about this hackathon." |
@@ -83,7 +83,7 @@ mode only, any `TODO-H`; it does not yet check track ids or duplicates (rule 3).
 H10 + H14 (identity, payout account, consent) → H12 (prior work) → H2 (repo public) → H11 (video) → H3 (X post; its URL = `demoUrl`) →
 G9 PASS from the public URL → H1 (Kunal sends).
 G9 today: PASS on release 3 (5f011bb) from a local fresh clone (docs/EVIDENCE.md §G9 runs 5 + 5b: run 5, 2026-11-12T16:40Z–16:47Z on 5dd2a50, every step except 3, recorded in 87be719;
-run 5b, 17:02Z–17:05Z on 88b99b3, step 3, recorded in b945f42; product code equals 5f011bb in both; the clone URL is TODO-H2, so the verifier used the local path).
+run 5b, 17:02Z–17:05Z on 88b99b3, step 3, recorded in b945f42; product code equals 5f011bb in both; the repo was not public yet, so the verifier used the local path).
 Earlier: PASS on 3107a1a (run 3, 837cd12) and on 0af5cdd (89f83ee); the first run's FAIL (c5f6349) is superseded. A re-run from the public URL follows H2.
 Pre-send checklist: G9 PASS (local clone: done, runs 5 + 5b recorded in 87be719 + b945f42; public URL: after H2) · no `TODO-H` in the dry run · `gitleaks detect --log-opts=--all` clean · README "Live on testnet" table
 matches EVIDENCE · tracks re-checked against the G9 MCP result.

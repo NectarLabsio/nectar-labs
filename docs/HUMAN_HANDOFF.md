@@ -290,7 +290,9 @@ Default if silent: captioned silent video path given in SUBMISSION.md; URL field
 What Kunal does: read README "Prior work", edit if needed, reply `H12 approved`.
 Default if silent: drafted text stands with the note "draft — approve" removed only after H12.
 
-## H2 — repo public, push, final tag                 status: OPEN   needed by: Nov 14   NEVER by an agent
+## H2 — repo public, push, final tag                 status: PUSH DONE, tags pending   needed by: Nov 14   NEVER by an agent
+Done 2026-11-13: Kunal pushed main to https://github.com/NectarLabsio/nectar-labs (public; `git ls-remote origin` main = b6d6f41). Tags follow after the final
+  `submission-rc` move. README quick start and SUBMISSION `projectUrl` filled (WO-75).
 Tag: `submission-rc` already exists, so `git tag submission-rc` fails. The orchestrator moves it (`git tag -f submission-rc <commit>`) after
   G9 run 4; Kunal does not tag.
 What Kunal does (after the tag has moved): `git remote add origin <url> && git push -u origin main --tags`, then make the repo public in GitHub
