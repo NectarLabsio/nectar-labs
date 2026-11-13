@@ -108,7 +108,7 @@ export function Footer({ columns, Link = A, brandBase = "/brand", email, giant }
           <div className="brand">
             <Lockup base={brandBase} size="footer" Link={Link} />
             <p>Committed liquidity, verifiable settlement.</p>
-            <p>A Nectar Network product · testnet · mock collateral</p>
+            <p>A Nectar Labs product · testnet · mock collateral</p>
           </div>
           {columns.map((c) => (
             <div className="fcol" key={c.title}>
@@ -149,7 +149,7 @@ export function Footer({ columns, Link = A, brandBase = "/brand", email, giant }
           ))}
         </nav>
         <div className="fbar">
-          <span>© 2026 Nectar Network · MIT License · Unaudited testnet software</span>
+          <span>© 2026 Nectar Labs · MIT License · Unaudited testnet software</span>
           <span className="r">
             <button type="button" className="ghost" onClick={openConsent}>
               Cookie settings
