@@ -1,0 +1,68 @@
+--- routes
+web dev ready after 4 s 200 / 200 /borrow 200 /feed 200 /feed/NVDAx 200 /quote/new 200 /console 200 /notes 200 /reserve 200 /shield 200 /agents 200 /keepers 200 /security 200 /talk 200 /docs 200 /legal/privacy 200 /legal/cookies 200 /legal/terms 200 /legal/disclaimers 200 /position/0 200 /quote/0 200 /note/q-0 200 /status 404 /markets 404 /earn 
+--- feed
+{"ok":true,"last_indexed_block":277518209,"chain_head":277518209,"chain_head_source":"neardata_final","lag_blocks":0,"indexer_cursor":277518209,"indexer_lag_blocks":0,"last_poll_at":"2026-11-13T13:49:00.695Z","poll_age_s":1,"last_error":"","source":"views+neardata","start_block":"head","events_indexed":0,"history":"indexed","rpc":{"endpoints":["test.rpc.fastnear.com","rpc.testnet.fastnear.com","near-testnet.drpc.org","testnet-rpc.intea.rs"],"last_served":"test.rpc.fastnear.com","failovers":0,"cooling":[]},"contracts":{"core":"nectar-core-v2.nectar.testnet","usdc":"usdc-mock.nectar.testnet","nv
+
+initialize: {"name":"nectar-feed","version":"0.3.0"}
+notification: 202
+tools/list: 8 get_exit_capacity,preview_borrow,list_quotes,explain_limit,open_protected_stock_loan,quote_capacity,get_note,build_self_settle
+get_exit_capacity: {
+  "symbol": "NVDAx",
+  "source": "view",
+  "block_height": 277518212,
+  "q_usd_e6": "16119220000",
+  "r_usd_e6": "10000000",
+  "d_usd_e6": "0",
+  "haircut_bps": 2500,
+  "session_open": false,
+  "oracle_price_usd_e6": "135000000",
+  "oracle_age_s": "8455",
+  "oracle_fresh": true,
+  "b_c_usd_per_unit_e6": "94500000",
+  "limit_bps_effective": 7000,
+  "capacity_usd_e6": "12096915000",
+  "oracle_sour
+{"ts":"2026-11-13T13:49:03.541Z","level":"info","service":"feed-mcp","msg":"mcp_stdio_ready","live_views":true}
+initialize: {"name":"nectar-feed","version":"0.3.0"}
+tools/list: 8 get_exit_capacity,preview_borrow,list_quotes,explain_limit,open_protected_stock_loan,quote_capacity,get_note,build_self_settle
+get_exit_capacity: {
+  "symbol": "NVDAx",
+  "source": "view",
+  "block_height": 277518216,
+  "q_usd_e6": "16119220000",
+  "r_usd_e6": "10000000",
+  "d_usd_e6": "0",
+  "haircut_bps": 2500,
+  "session_open": false,
+  "oracle_price_usd_e6": "135000000",
+  "oracle_age_s": "8457",
+  "oracle_fresh": true,
+  "b_c_usd_per_unit_e6": "94500000",
+  "limit_bps_effective": 7000,
+  "capacity_usd_e6": "12096915000",
+  "oracle_sour
+--- submission
+{"requestId":"GENERATE-ONCE","projectName":"Nectar Labs","leadName":"TODO-H10","email":"TODO-H10","size":"TODO-H10","tracks":["defi","security","agents"],"nearAddress":"TODO-H14","projectUrl":"TODO-H2","demoUrl":"TODO-H3","idea":"Problem: lenders cap
+exit=0
+--- branding
+no hackathon branding in landing, web app or docs site
+exit=0
+copy-rule hits:        3
+built docs files with 'hackathon':        0
+host-grep lines:    24799, non-history:        4, ac.nectarlabs.io non-history: 0
+apps/web/components/Shields.tsx:3:// these components only read its views and build the exact msg the sign modal shows. Copy rule: never "insurance".
+apps/web/components/landing/Landing.tsx:5:// Copy rules: never "insurance", never "without liquidations"; testnet and mock collateral disclosed.
+packages/sdk/src/shields.ts:19:/** Copy rule (PRD §4.9, §12.1): a Shield is never described as insurance. */
+README.md:18:https://testnet.nectarlabs.io/borrow (mock assets, no value; not on the Site or Status hosts). The 5 earlier vercel.app hosts redirect (308) to the
+apps/web/.env.example:17:# Example: old-site.example.dev=site,old-app.example.dev=app (the real *.vercel.app list lives in the Vercel env only).
+apps/web/lib/hosts.ts:38: * The real list (the `*.vercel.app` names) lives in the Vercel env only. A project-domain redirect for a vercel.app host is not
+apps/web/lib/test-assets.test.ts:28:  assert.equal(testAssetsAllowed(HOSTED, "nectar-git-branch.vercel.app", "/borrow"), true);
+--- ports
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    56878 lemmalabs   21u  IPv4 0xcf6b43b3ccedfd29      0t0  TCP localhost:8788 (LISTEN)
+node    56878 lemmalabs   22u  IPv4 0x7122103aeb4624dc      0t0  TCP localhost:8789 (LISTEN)
+...
+COMMAND   PID      USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    56878 lemmalabs   21u  IPv4 0xcf6b43b3ccedfd29      0t0  TCP localhost:8788 (LISTEN)
+node    56878 lemmalabs   22u  IPv4 0x7122103aeb4624dc      0t0  TCP localhost:8789 (LISTEN)
+--- clone status

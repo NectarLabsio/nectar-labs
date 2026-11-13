@@ -1,0 +1,10 @@
+## 2026-11-13T13:49:44Z production release check: does APP /borrow ship the WO-74 'onClaimed' prop?
+chunks referenced by https://testnet.nectarlabs.io/borrow:       14
+chunks with onClaimed: 0
+TestAssets marker present in some chunk: yes
+$ curl -sI https://testnet.nectarlabs.io/borrow | x-vercel-id / age / etag
+age: 42579
+date: Fri, 13 Nov 2026 13:49:51 GMT
+etag: "fa7bda6f2e188617bdd48c8b3e71f780"
+x-vercel-cache: HIT
+x-vercel-id: bom1::cpsrl-1794577791256-6b2bfed4eacb
