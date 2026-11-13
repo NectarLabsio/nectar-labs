@@ -62,6 +62,15 @@
 - 12:41Z FROZEN: G9 run 7 PASS on d92a199 (45579cd; merge e2d9ee4), verify:quick 0; submission-rc (local) → e2d9ee4. WO-35c take script merged 7ada907
   (dry-run, nothing signed; explorer = testnet.near.rocks because nearblocks shows automated Chrome a Cloudflare wall). Next: rehearsal headed,
   rehearsal mode (Standard), --sign (Kunal approved signing in rehearsal): faucet claim 1/3, one Standard loan, one agent run.
+- ~13:10Z Kunal: fix balance + web deploy (this fix only), test with a throwaway account, targeted prod re-check, then G9, then submission-rc, live before
+  20:00Z; 4K; stop local Feed + x402 during S1-4 (restart x402 for S5); 100 ms on motion, 120 ms on holds (gapcheck 07bd8e9); 5 NVDAx per take; owner
+  mints to demo.nectar.testnet off camera approved. Kunal asked to publish the code to github.com/NectarLabsio/nectar-labs: that repo is PUBLIC and EMPTY;
+  origin remote added; the guard hook allows the upload only with HUMAN_CONFIRMED (Kunal-only), so Kunal runs it; 269 commits dated 2026-11-10 carry
+  Co-Authored-By trailers (Kunal decides; removing them rewrites every cited hash).
+- WO-74 merged 1a95022 (TestAssets onClaimed then composer bal.reload; e2e 28/28; web 43/0). Tarball src-1a95022 sha256 74626b00 (verify ok).
+  Vercel create_deployment (web, production) ~13:19Z: connector timed out; later calls time out or say "credential validation failed", so it is
+  unknown whether it registered; production still serves release-4 chunks (watcher b58ahpl83). QA account qa-faucet-1113.nectar.testnet created
+  (0.2 NEAR, tx 6uPS14NW), imported into Intear in ~/.nectar/qa-chrome-profile, connected to testnet.nectarlabs.io (no claim yet).
 - Next (was): WO-67 verifier (production acceptance + G9 run 6) → submission-rc → FINAL_REPORT audit → freeze.
 
 ## (2026-11-12 ~19:40Z) — Kunal's pre-recording round (A domains · B claim fixes · C test assets · D demo · E freeze by 2026-11-13 13:30Z)
@@ -484,7 +493,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T12:40:08Z · commit 7ada907
+Last activity: 2026-11-13T12:48:58Z · commit 1f70296
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
