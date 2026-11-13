@@ -1,0 +1,63 @@
+## 2026-11-13T12:34:10Z scripts/demo checks
+$ git ls-files scripts/demo
+scripts/demo/capture/CAPTURE.md
+scripts/demo/capture/EDIT.md
+scripts/demo/capture/apptest.mjs
+scripts/demo/capture/compose.mjs
+scripts/demo/capture/contact.mjs
+scripts/demo/capture/encode.mjs
+scripts/demo/capture/encode.swift
+scripts/demo/capture/endcard.html
+scripts/demo/capture/gapcheck.mjs
+scripts/demo/capture/human.mjs
+scripts/demo/capture/recorder.mjs
+scripts/demo/capture/srt.mjs
+scripts/demo/capture/terminal/index.html
+scripts/demo/capture/terminal/server.mjs
+scripts/demo/intear-setup.mjs
+$ git grep -n -I -i -E 'ed25519:[1-9A-HJ-NP-Za-km-z]{40,}|secret_key|private_key|privateKey|seed_phrase|mnemonic|BEGIN .*PRIVATE|0x[0-9a-fA-F]{64}' -- scripts/demo
+scripts/demo/intear-setup.mjs:22:const WORDS = String(KEY.seed_phrase).trim().split(/\s+/);
+scripts/demo/intear-setup.mjs:25:const secrets = () => [String(KEY.private_key), ...(existsSync(PW_FILE) ? [readFileSync(PW_FILE, 'utf8').trim()] : [])].filter((s) => s.length > 3);
+$ git grep -n -I -E '[/]Users[/]|[/]home[/][a-z]|[/]Volumes[/]|~[/][.]nectar' -- scripts/demo
+scripts/demo/capture/CAPTURE.md:5:1.65.0 (system Google Chrome). Never point any of this at `~/.nectar/demo-chrome-profile` for testing: use a throwaway profile.
+scripts/demo/capture/CAPTURE.md:33:const { chromium } = createRequire('/Volumes/T7/nectar-labs/apps/web/package.json')('@playwright/test');
+scripts/demo/capture/CAPTURE.md:39:await startTake(ctx, defaultTakeDir('take-01'));  // ~/.nectar/demo-capture/take-01 (internal disk)
+scripts/demo/capture/CAPTURE.md:92:and user names masked, then the `--replace` pairs (e.g. `--replace /Volumes/T7/nectar-labs=.`). The child gets `NO_COLOR=1
+scripts/demo/capture/EDIT.md:30:    { "intro": "/Volumes/T7/nectar-demo-media/intro/nectar-intro-6s.mp4" },
+scripts/demo/capture/EDIT.md:31:    { "take": "~/.nectar/demo-capture/take-a", "section": 1 },
+scripts/demo/capture/EDIT.md:32:    { "take": "~/.nectar/demo-capture/take-a", "section": 3, "caption": "optional override" },
+scripts/demo/capture/apptest.mjs:12:const { chromium } = createRequire('/Volumes/T7/nectar-labs/apps/web/package.json')('@playwright/test');
+scripts/demo/capture/compose.mjs:19:const DEFAULT_BASE = '/Volumes/T7/nectar-demo-media/intro/endcard-base.png';
+scripts/demo/capture/encode.mjs:16:const MAIN_CHECKOUT = '/Volumes/T7/nectar-labs'; // worktrees have no node_modules (disk rule); fall back to the main checkout
+scripts/demo/capture/recorder.mjs:309:  const { chromium } = createRequire('/Volumes/T7/nectar-labs/apps/web/package.json')('@playwright/test');
+scripts/demo/capture/terminal/server.mjs:10://   --replace /Volumes/T7/nectar-labs=.       extra literal replacement in every streamed line (after $HOME → ~)
+scripts/demo/intear-setup.mjs:4:// - The phrase is read here from ~/.nectar/keys/demo.nectar.testnet.json and typed into the page; it is never printed.
+scripts/demo/intear-setup.mjs:7:// - An Intear password (if asked) is generated once and stored at ~/.nectar/keys/demo-intear-password (0600); never printed.
+scripts/demo/intear-setup.mjs:16:const req = createRequire('/Volumes/T7/nectar-labs/apps/web/package.json');
+scripts/demo/intear-setup.mjs:85:  if (!existsSync(PW_FILE)) { writeFileSync(PW_FILE, randomBytes(18).toString('base64url') + '\n', { mode: 0o600 }); chmodSync(PW_FILE, 0o600); out('password: generated ~/.nectar/keys/dem
+$ git grep -n -I -i -E 'seed|phrase' -- scripts/demo
+scripts/demo/capture/compose.mjs:480:  let seed = 7;
+scripts/demo/capture/compose.mjs:481:  const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648);
+scripts/demo/intear-setup.mjs:3:// the testnet app, without the recovery phrase ever reaching stdout, a log, a screenshot or the transcript.
+scripts/demo/intear-setup.mjs:4:// - The phrase is read here from ~/.nectar/keys/demo.nectar.testnet.json and typed into the page; it is never printed.
+scripts/demo/intear-setup.mjs:5:// - Every printed string passes redact(): each phrase word, the private key and the generated password become "•••".
+scripts/demo/intear-setup.mjs:9://   open:<url> · click:<visible text> · role:<role>=<name> · seed · password · press:<key> · wait:<ms> · page:<n|last> · probe · pages
+scripts/demo/intear-setup.mjs:22:const WORDS = String(KEY.seed_phrase).trim().split(/\s+/);
+scripts/demo/intear-setup.mjs:23:if (WORDS.length !== 12 && WORDS.length !== 24) throw new Error(`unexpected phrase length ${WORDS.length}`);
+scripts/demo/intear-setup.mjs:75:async function typeSeed(p) {
+scripts/demo/intear-setup.mjs:79:  if (n !== WORDS.length) throw new Error(`seed: expected ${WORDS.length} text fields, found ${n}; not typing`);
+scripts/demo/intear-setup.mjs:81:  out(`seed: typed ${WORDS.length} words into ${n} text fields`);
+scripts/demo/intear-setup.mjs:102:    else if (cmd === 'seed') { await typeSeed(page); await settle(page, 800); }
+$ git grep -l -I -i -E 'seed[-_ ]?phrase|mnemonic' -- ':!docs' ':!evidence' ':!*.md'   (committed code that names a seed phrase)
+evm/lib/forge-std/src/StdCheats.sol
+evm/lib/forge-std/src/Vm.sol
+pnpm-lock.yaml
+scripts/demo/intear-setup.mjs
+scripts/ops/create-demo-account.mjs
+services/keeper/src/base.ts
+services/keeper/test/base.test.ts
+solana/Cargo.lock
+$ gitleaks dir scripts/demo
+
+[90m6:04PM[0m [32mINF[0m [1mscanned ~138974 bytes (138.97 KB) in 45.3ms[0m
+[90m6:04PM[0m [32mINF[0m [1mno leaks found[0m

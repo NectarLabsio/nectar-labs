@@ -1,0 +1,13 @@
+# 2026-11-13T12:35:01Z $ pnpm --filter docs-site build
+
+> docs-site@0.1.0 build /private/tmp/verify-G9-r7-20261113T123302Z/repo/apps/docs-site
+> docusaurus build
+
+[INFO] [en] Creating an optimized production build...
+[webpackbar] ℹ Compiling Client
+[webpackbar] ℹ Compiling Server
+[webpackbar] ✔ Server: Compiled successfully in 15.26s
+[webpackbar] ✔ Client: Compiled successfully in 22.81s
+[SUCCESS] Generated static files in "build".
+[INFO] Use `npm run serve` command to test your build locally.
+# exit=0 seconds=42

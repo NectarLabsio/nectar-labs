@@ -1,0 +1,17 @@
+10:'/api/feed'
+183:'/api/feed'
+$ GET /api/feed/events -> 404
+{"error":"not found"}
+$ GET /api/feed/events?limit=5 -> 404
+{"error":"not found"}
+$ GET /api/feed/history -> 404
+{"error":"not found"}
+$ GET /api/feed/NVDAx -> 404
+{"error":"not found"}
+$ GET /api/feed -> 200
+{"as_of_block":277510813,"as_of":"2026-11-13T12:37:13.735Z","assets":[{"symbol":"NVDAx","q_usd_e6":"16119220000","r_usd_e6":"10000000","d_usd_e6":"0","haircut_bps":2500,"session_open":false,"oracle_price_usd_e6":"135000000","oracle_age_s":4146,"oracle_fresh":true,"b_c_usd_per_unit_e6":"94500000","limit_bps_effective":7000,"block_height":277510812,"observed_at":"2026-11-13T12:37:12.331Z"}]}
+$ RPC tx 8bXCY34SVYv5b7vJ4GLfWkbJtQdqbSSBJsrzPCE75XRk sender x402-relayer.nectar.testnet
+status {"SuccessValue":""} signer x402-relayer.nectar.testnet receiver agent1.nectar.testnet block_hash 7U7hjLdHCFcJZR1hCUkoLLx6zX71xjS75dDz3tHuuoEc
+$ RPC tx De6aVqqNvfyemXtpuGP6quaUNcZgN2xP6cCXHXEwvfZG sender nectar.testnet
+status {"SuccessValue":"dHJ1ZQ=="} signer nectar.testnet receiver nectar-core-v2.nectar.testnet block_hash 6etooFigF2SaBhhCxQygyRmhspsqudhbanfV6JwRJfmJ
+  log nectar-core-v2.nectar.testnet EVENT_JSON:{"standard":"nectar","version":"2.0.0","event":"oracle_updated","data":[{"symbol":"NVDAx","price_usd_e6":"135000000"}]}

@@ -1,0 +1,52 @@
+# 2026-11-13T12:33:54Z $ pnpm i
+Scope: all 8 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +1656
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 1656, reused 141, downloaded 0, added 0
+
+   ╭──────────────────────────────────────────────────────────────────────╮
+   │                                                                      │
+   │                 Update available! 10.34.9 → 12.18.0.                 │
+   │                 Changelog: https://pnpm.io/v/12.18.0                 │
+   │   To update, run: curl -fsSL https://get.pnpm.io/install.sh | sh -   │
+   │                                                                      │
+   ╰──────────────────────────────────────────────────────────────────────╯
+
+Progress: resolved 1656, reused 890, downloaded 0, added 0
+Progress: resolved 1656, reused 1194, downloaded 0, added 0
+Progress: resolved 1656, reused 1381, downloaded 0, added 0
+Progress: resolved 1656, reused 1504, downloaded 0, added 0
+Progress: resolved 1656, reused 1608, downloaded 0, added 85
+Progress: resolved 1656, reused 1609, downloaded 0, added 401
+Progress: resolved 1656, reused 1610, downloaded 0, added 605
+Progress: resolved 1656, reused 1610, downloaded 0, added 930
+Progress: resolved 1656, reused 1610, downloaded 0, added 1070
+Progress: resolved 1656, reused 1610, downloaded 0, added 1151
+Progress: resolved 1656, reused 1610, downloaded 0, added 1223
+Progress: resolved 1656, reused 1610, downloaded 0, added 1276
+Progress: resolved 1656, reused 1610, downloaded 0, added 1313
+Progress: resolved 1656, reused 1610, downloaded 0, added 1384
+Progress: resolved 1656, reused 1610, downloaded 0, added 1485
+Progress: resolved 1656, reused 1610, downloaded 0, added 1542
+Progress: resolved 1656, reused 1610, downloaded 0, added 1619
+Progress: resolved 1656, reused 1610, downloaded 0, added 1653
+Progress: resolved 1656, reused 1610, downloaded 0, added 1654
+Progress: resolved 1656, reused 1610, downloaded 0, added 1655
+Progress: resolved 1656, reused 1610, downloaded 0, added 1656, done
+
+devDependencies:
++ yaml 2.9.1
+
+. prepare$ git config core.hooksPath .githooks 2>/dev/null || true
+. prepare: Done
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: core-js@3.51.0, secp256k1@5.0.1.                    │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 24.1s using pnpm v10.34.9
+# exit=0 seconds=25

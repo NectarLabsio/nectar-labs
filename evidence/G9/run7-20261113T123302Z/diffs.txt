@@ -1,0 +1,13 @@
+## 2026-11-13T12:33:55Z product diff
+$ git diff --stat c95cd0c d92a199 -- apps contracts
+(exit 0)
+$ git diff --stat c95cd0c d92a199 -- packages services | tail -n 3
+ services/feed/test/v2-events.test.ts               | 108 +++++++++++++++++++
+ services/keeper/test/oracle-refresher.test.ts      |   2 +-
+ 11 files changed, 317 insertions(+), 17 deletions(-)
+$ git log --oneline -1 37dfec9
+37dfec9 merge: WO-71 — Feed indexes nectar-core-v2 events (1.0.0 + 2.0.0), settled_reserve, /health indexer_cursor/lag
+$ git merge-base --is-ancestor 37dfec9 d92a199
+(exit 0)
+$ git diff --stat 37dfec9 d92a199 -- services/feed
+(exit 0)
