@@ -17,6 +17,8 @@ Lenders cap loans against tokenized stocks because the DEX liquidity they would 
 
 Terms such as quote, limit, Shield, Standard, health, Feed and keeper are defined in the [Glossary](#glossary).
 
+Submitted version: tag `submission-rc` (commit 1df03d2, plus this line).
+
 ## 60-second path
 
 On https://testnet.nectarlabs.io with a NEAR testnet wallet that holds a little testnet NEAR for gas (https://near-faucet.io/):
