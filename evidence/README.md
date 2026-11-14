@@ -42,6 +42,16 @@ Raw logs, JSON and screenshots behind [docs/EVIDENCE.md](../docs/EVIDENCE.md), w
 
 [wo-10b](wo-10b/), [wo-10c](wo-10c/), [wo-12](wo-12/), [wo-15](wo-15/), [wo-21](wo-21/), [wo-29a](wo-29a/): build and test logs from individual modules while they were written.
 
+## Scripts restored for the evidence
+
+These scripts were removed from the tree on 2026-11-13 as unused and restored on 2026-11-14, because the logs below came from them. They need operator keys under `~/.nectar/` and are not part of the quick start.
+
+| Script | What it ran | Logs from it, and where they are cited |
+| --- | --- | --- |
+| [scripts/27-base-fork.sh](../scripts/27-base-fork.sh) | `start`: an anvil fork of Base Sepolia (chain id 84532) on 127.0.0.1:8545; `fund`: fork-only balances for the EVM keystore accounts; `stop` | [G12/anvil-20261110T173327Z.log](G12/anvil-20261110T173327Z.log), [G12/fork-fund.log](G12/fork-fund.log); the fork that [G13/summary.md](G13/summary.md) and the G12/G13 rows of docs/EVIDENCE.md describe |
+| [scripts/56-solana-deploy.sh](../scripts/56-solana-deploy.sh) | the devnet deploy of `nectar_vault` described in [solana/deploy.md](../solana/deploy.md): mock NVDAx mint, program keypair kept outside the repo, build, deploy, then `init_vault` through script 57 | [solana/deploy-20261110T123936Z.log](solana/deploy-20261110T123936Z.log) (first run; `init_vault` failed on a missing module), [solana/deploy-20261110T124326Z.log](solana/deploy-20261110T124326Z.log) (program `ENZaNFHo…`, vault `HGSFKMWW…`); the program the G7 rows of docs/EVIDENCE.md use |
+| [scripts/57-vault-init.mjs](../scripts/57-vault-init.mjs) | `init_vault("NVDAx")` for the deployed program; called by script 56 | the `init_vault(NVDAx)` step in both logs above |
+
 ## Large files (over 1 MB)
 
 No file under `evidence/` is over 5 MB. These are over 1 MB and are kept on purpose:
