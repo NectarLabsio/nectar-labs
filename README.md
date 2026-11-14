@@ -207,6 +207,23 @@ flowchart TB
 - **x402**: an HTTP payment flow: the server answers 402 Payment Required with a price, the client pays (here 0.01 mock USDC through a NEP-366 `SignedDelegate`) and retries to get 200.
 - **Intear**: a NEAR wallet offered in the NEAR Connect selector; the screenshots were taken with it.
 
+## Repository layout
+
+| Path | What it holds |
+| --- | --- |
+| [contracts/](contracts) | `nectar-core`, the hub contract on NEAR testnet; `mock-ft`, the mock NVDAx and USDC tokens; sandbox-only stubs and helper scripts |
+| [apps/web](apps/web) | the web app, https://testnet.nectarlabs.io |
+| [apps/docs-site](apps/docs-site) | the docs site (Docusaurus), https://docs.nectarlabs.io |
+| [landing/](landing) | the static landing page design; the web app's home page is its React port |
+| [packages/](packages) | `config` (account ids and parameters in `config.yaml`), `sdk` (the TypeScript SDK the web app uses), `ui` (design tokens, styles, fonts, logo) |
+| [services/](services) | `keeper` (the keeper and the price refresher), `feed` (the read-only REST and MCP indexer), `x402` (the paid CSV server and the reference agent) |
+| [quoter/](quoter) | the Rust program OutLayer runs in a TEE: the pre-liquidation discount and the Solana vault reads |
+| [solana/](solana) | `nectar_vault`, the Anchor program on Solana devnet that holds remote collateral, with its client and tests |
+| [evm/](evm) | the Foundry project for the EVM vault (`NectarVaultBase`), run only on a local fork of Base Sepolia |
+| [scripts/](scripts) | numbered deploy, seed and gate scripts, the quick-start checks, deploy and demo tooling |
+| [docs/](docs) | EVIDENCE, FACTS, RUNBOOK, SUBMISSION, the demo script and screenshots; [docs/process/](docs/process) holds the build log (work orders, state, decisions) |
+| [evidence/](evidence) | raw logs behind docs/EVIDENCE.md ([index](evidence/README.md)) |
+
 ## Run locally
 
 From a fresh clone, no keys needed. Node ≥ 22.22.2, pnpm 10.34.9. Timings are from a fresh-clone rehearsal from the public GitHub URL on 2026-11-13.
@@ -238,6 +255,11 @@ pnpm --filter web dev          # web app on http://localhost:3100, ready in 4 s
 - MCP tools: `get_exit_capacity`, `preview_borrow`, `list_quotes`, `explain_limit`, `quote_capacity`, `open_protected_stock_loan` (returns an unsigned call); `get_note` and `build_self_settle` return `not_available`. Arguments take `symbol`, for example `get_exit_capacity {"symbol":"NVDAx"}`. A raw HTTP client must send `accept: application/json, text/event-stream`.
 - The keeper and the x402 server need testnet keys, which live in the OS keychain or `0600` files under `~/.nectar/`; see [services/keeper/README.md](services/keeper/README.md) and [services/x402/README.md](services/x402/README.md).
 - More docs, including how this was built: [docs/README.md](docs/README.md).
+
+## Known issues
+
+- Two flag prices on the loan page: the "Flag price" figure and the Repay tab's "Flag price after" (before any amount is entered) can differ by a few cents, for example $27.59 and $27.57 on loan #22. Both round the loan-to-value to whole basis points: the contract rounds up (`ltv_bps` in [contracts/nectar-core/src/math.rs](contracts/nectar-core/src/math.rs)), the Repay tab rounds down. The higher figure comes from the contract.
+- No transaction link after some borrows: with the Intear wallet, a borrow sent as one transaction returns no transaction hash to the app, so the success notification has no "View transaction" link, although the borrow steps say the link is there. The borrow is the latest `ft_transfer_call` to `nvdax-mock.nectar.testnet` on your account's explorer page, `https://testnet.nearblocks.io/address/<your account>`.
 
 ## Security
 
