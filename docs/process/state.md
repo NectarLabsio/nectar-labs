@@ -1,4 +1,22 @@
-## NOW (2026-11-13 ~22:20Z) — WO-92 steps 1–3 done except the tag move; G9 run 10c PASS on da1100b; main 99245af
+## NOW (2026-11-14 ~03:15Z) — Kunal's pre-tag list done; H3 in; dry run 0 TODO-H; tag waits for GitHub CI (rust job)
+- Kunal pushed main b1d75d3 ~02:57Z. GitHub CI run 43549058116: node job PASS; rust job built the wasm, `cargo test --workspace` running at 03:10Z.
+  Earlier runs on 126e47b / b6d6f41 failed (old invalid workflow). Rule (Kunal): no tag move until CI is green; red → fix or remove the workflow first.
+- 1a13d2d: scripts 27-base-fork.sh (G12/G13 fork), 56-solana-deploy.sh + 57-vault-init.mjs (evidence/solana/deploy-*.log) restored from 80a4ec9^,
+  indexed in evidence/README.md "Scripts restored for the evidence". Not restored (nothing cited): stills-now.mjs (03-borrow-preview, removed),
+  still-agent-now.mjs (old still 06; current 06 is from the quick take, 971cd60), test-guard.sh (superseded by test-guard-v7.sh).
+- c325694: README "Repository layout" (incl. quoter/, solana/, evm/, landing/) + "Known issues" (flag price: contract `ltv_bps` rounds up
+  (math.rs:273) → "Flag price" $27.59; Repay tab rounds down → "Flag price after" $27.57; Intear single-tx borrow returns no hash → no toast link,
+  find it as the latest ft_transfer_call to nvdax-mock on the account's nearblocks page).
+- 54f94c9: x-post post 1 = Weekend Shield video (take A, captioned 1280×720), "so you can still borrow over the weekend" (263 chars); quick-take video
+  not used; 9uwAk6Vy FINAL/SuccessValue, shield_opened + position_opened + nft_mint, 0 failed receipts (rpc.testnet.near.org 03:02Z).
+- Refresher end date: NOT an env var or Railway setting — run_until is read only from packages/config/config.yaml (oracle-refresher.ts:70);
+  NECTAR_CONFIG_PATH only selects a file inside the image → needs a repo change + redeploy (H-REFRESHER-EXTEND, on `next` after the send).
+- H3 = https://x.com/nectarlabsio/status/2121438063369052421. 666e71d: demoUrl filled; idea = Kunal's 2026-11-14 text, evidence-checked, 1997 chars
+  (changes: "verified depth" → "a Reserve and owner-set DEX depth" (set_dex_depth owner-only); Weekend Shield "weekend-safe" → contract behaviour;
+  agents "can … (so far a scripted agent)"; "NVDAx and USDC are mock tokens"); README Architecture + Next aligned. Dry run exit 0, 0 TODO-H, no website.
+- NEXT: CI green → README "Submitted version" line → move submission-rc (annotated, tagger kunal-drall) → report; Kunal pushes main + tag, then sends.
+
+## (2026-11-13 ~22:20Z) — WO-92 steps 1–3 done except the tag move; G9 run 10c PASS on da1100b; main 99245af
 - G9: run 10 (d55ba25) FAIL 2 quoted links → fixed 0c475f7; run 10b FAIL README read time (orchestrator's WO-98 said ~22:10Z; block 277568411 is
   21:58:51Z) → fixed da1100b; run 10c PASS 5/5. Quick start < 3 min (default FastNear RPC 429s from this IP; README names the
   NEAR_RPC_URL=https://rpc.testnet.near.org fallback); gitleaks 0 in 635 commits; dry run: website absent, 1 TODO (H3 demoUrl); product diff
@@ -597,7 +615,7 @@ Keeper: single FC key, full-access deleted (D-012). Key files (0600): ~/.nectar/
 Parent nectar.testnet has <1 NEAR left: any extra deploy needs a faucet top-up (H-NEAR-FAUCET).
 
 Verified on: 2026-11-10T00:15Z UTC (daily verify)
-Last activity: 2026-11-13T22:14:21Z · commit da1100b
+Last activity: 2026-11-13T22:16:58Z · commit b1d75d3
 Quoter (WO-9, daa91e5): 34 vectors, wasm 92,355 B, version_key sha256 3ce17749ae1b997971d97efa8f79110b586273e39bf9ca00c61a2bdf14ea6cc2
   (reproducible across checkout paths via quoter/build.sh). Web (WO-12, 2b21cbc): Feed oracle/settlement/1Click badges, console owner forms, keepers triggers; e2e 122 pass; lighthouse 100 (console 98).
   Proposed feed fields (oracle_conf_bps, quoter, outlayer_execution_url, keeper) must land in services/feed/openapi.yaml (WO-11b/next).
