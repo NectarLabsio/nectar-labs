@@ -1,6 +1,6 @@
 # SUBMISSION.md — payload draft, never sent by an agent
 
-Status: **DRAFT until Kunal sends, 2026-11-13** (`idea` re-checked for WO-92 against the final README; every claim backed by docs/EVIDENCE.md or a tx checked on testnet RPC, last on 2026-11-13T20:12Z, see the table under the idea). Fields follow "Submission API" in docs/process/hackathon.md (verified 2026-11-09; re-read the published
+Status: **DRAFT until Kunal sends, 2026-11-14** (`idea` is Kunal's 2026-11-14 text; each sentence was checked against docs/EVIDENCE.md, the code or the live contract on 2026-11-14, and only what the evidence does not support was changed, see "2026-11-14 idea: sentence → evidence" under the idea). Fields follow "Submission API" in docs/process/hackathon.md (verified 2026-11-09; re-read the published
 https://nearhackathon.com/HACKATHON.md on Nov 14 before sending, F-001). Only Kunal sends it (H1). Agents run the submit
 script with `--dry-run` only. The JSON payload holds personal data (name, email, payout account), so it is printed, never committed.
 
@@ -18,27 +18,48 @@ Format the builder relies on: one row per API field, column 1 = API field name i
 | `tracks` | `["defi","security","agents"]` | Kunal's H16 reply in session, 2026-11-11: "H16 defi security agents" (D-028). `privacy` dropped by Kunal; `nfts` not entered (H16 closed 2026-11-12, see "Tracks" below) |
 | `nearAddress` | `kunal-drall.near` | Kunal's H14 reply, 2026-11-13: account `kunal-drall.near`, consent yes. **Mainnet** payout account in Kunal's own wallet, not created by an agent; matches the regex in HACKATHON.md (line 155) |
 | `projectUrl` | `https://github.com/NectarLabsio/nectar-labs` | public repo; Kunal pushed main 2026-11-13 (H2); ≤ 300 chars; each repo is submitted once |
-| `demoUrl` | `TODO-H3` | URL of the **public X demo post** (H3) carrying the video (H11). HACKATHON.md: send only once the repo is public and the post is up |
+| `demoUrl` | `https://x.com/nectarlabsio/status/2121438063369052421` | URL of the **public X demo post** (H3) carrying the video (H11). HACKATHON.md: send only once the repo is public and the post is up |
 | `idea` | (block below) | 20-2000 chars |
 | `consent` | `true` | Kunal's H14 reply, 2026-11-13: `consent yes`, his agreement to: "I agree that the organizers may use these details to review our submission and contact us about this hackathon." |
 
 Never sent: `website`. It is a spam trap: any non-empty value rejects the submission (F-007). The builder must not emit that key,
-and must not add any key outside the 11 above. Demo video `TODO-H11` is not an API field: it is attached to the X post (H3).
+and must not add any key outside the 11 above. The demo video (H11) is not an API field: it is attached to the X post (H3), https://x.com/nectarlabsio/status/2121438063369052421.
 
 ### idea
 ```text
-Problem: lenders cap loans against tokenized stocks because the DEX liquidity they would sell into can disappear, most of all when the stock market is closed. Without a buyer they can count on, they set a low limit or sell early.
+Nectar: the buyer behind every loan.
 
-What Nectar Labs does: market makers escrow time-locked USDC buy quotes in a NEAR contract. A borrower's limit rests on those quotes, B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c)), and the borrower pays a limit premium on the capacity above the static limit; 70% of it goes to the committed buyers, shared with the Reserve pro rata. If a loan turns unhealthy, its collateral goes to the committed buyer at a capped discount instead of a DEX.
+Problem: a lender's limit depends on who buys the collateral if a loan goes bad. For tokenized stocks that answer gets thin at night and on weekends, so lenders cut limits or sell into empty markets.
 
-NEAR's role: (1) nectar-core-v2 (Rust, near-sdk 5.30.1) escrows the quotes, takes deposits through NEP-141 ft_transfer_call and enforces each loan's limit and a shared capacity per asset. (2) Every quote and loan is an NEP-171 Note; transferring it moves the loan's rights. (3) Agents pay for data over x402 with NEP-366 signed delegate actions, and our price bot's key can call only update_owner_price. (4) A keeper with a function-call key triggers pre-liquidation; a hash-pinned OutLayer TEE program prices the discount under the quote's cap, and Chain Signatures signs each release or settlement for collateral in a Solana devnet vault, which checks the Ed25519 signature before it pays.
+What we built (NEAR testnet, mock collateral): market makers escrow USDC as buy quotes with a notice period and a maximum discount. A borrower deposits a tokenized stock and borrows up to the lower of a price-based limit and what those committed quotes, a Reserve and owner-set DEX depth can absorb, after a haircut that widens when the market is closed. A Weekend Shield sizes the loan at the weekend limit, and until the open only committed buyers can settle it. If a position breaks, a keeper triggers the sale and escrowed USDC repays the loan.
 
-Real vs mock: NEAR testnet and Solana devnet only. The collateral (NVDAx) and USDC are mock tokens, the market makers are our demo accounts, the price is an owner oracle, the Base leg ran on a local fork of Base Sepolia, and 1Click quotes are read-only. No token, no mainnet, not audited (SECURITY.md lists what is open).
+Architecture: one Rust contract, nectar-core-v2, holds the quote escrow, positions and limit math. It takes collateral through NEP-141 ft_transfer_call, emits NEP-297 events and records each loan as a NEP-171 Position Note. A Feed service indexes those events and serves REST and MCP, so agents can read limits and open loans signed with their own keys (so far a scripted agent); paid data uses x402 with NEP-366 meta-transactions. A price refresher holds a function-call key that can call only update_owner_price. Cross-chain settlement uses Chain Signatures; the Base leg is tested on a local fork of Base Sepolia.
 
-Try it: https://testnet.nectarlabs.io ("Get test assets" on /borrow). From a clone, pnpm i && pnpm demo:testnet reads the testnet contract over public RPC. Every claim links a testnet tx or a test in the README; gate logs are in docs/EVIDENCE.md.
+Mock: NVDAx and USDC are mock tokens, the price is an owner oracle, and the market makers are our own test accounts.
+
+Next: this build becomes the cross-chain layer of Nectar, a protocol for credit sized to a sale arranged before the loan. NEAR coordinates settlement on Solana and Base through Chain Signatures and, when a lender or grant funds it, native BTC held under a NEAR-derived key. Before mainnet: real market makers on testnet, a production oracle and an audit.
+
+Try it: testnet.nectarlabs.io (Get test assets, then borrow). Code and evidence: github.com/NectarLabsio/nectar-labs
 ```
 
-Claim → evidence (docs/EVIDENCE.md gate table as of a677689, quoted exactly; "re-run after D-027" rows are 2026-11-11T08:02Z–08:25Z, clone 3ab3026; the G14 402 → 200 and first G1 2.2.1 gas-row rows are 2026-11-11T13:52Z–14:18Z, clone 45ed1f3; the G14-on-HEAD and G1 re-check rows are 15:01Z–15:25Z, clone 48b5c5a):
+2026-11-14 idea: sentence → evidence (RPC reads on rpc.testnet.near.org on 2026-11-14 from 03:02Z, at the blocks cited)
+| Sentence | Evidence | Changed from Kunal's text |
+| --- | --- | --- |
+| quotes: escrowed USDC, notice period, maximum discount | README glossary "Quote"; `min_notice_period_ns` 604800000000000 in `get_config` (2026-11-13) | none |
+| limit: lower of the price-based limit and what quotes, Reserve and depth absorb after a haircut that widens when closed | `B_c = min(LTV_c·V_c, (1−h_c)(Q_c+R_c+D_c))` (README glossary "Limit"); `get_exit_capacity` at block 277557669 (in session: haircut 1000 bps, r $10, d 0) and block 277562578 (closed: 25 % haircut, d 0) | "plus verified depth" → "a Reserve and owner-set DEX depth": `set_dex_depth` is owner-only (contracts/nectar-core/src/lib.rs:1411-1415) and `R_c` is in the limit |
+| Weekend Shield | README glossary "Shield"; 9uwAk6Vy… `shield_opened` Weekend 15 bps for loan #22 (FINAL, SuccessValue, 2026-11-14T03:02Z) | "is a weekend-safe limit with committed buyers behind it" → what the contract does; no Weekend Shield window has yet run to its end (README "What this does not prove") |
+| keeper triggers the sale, escrowed USDC repays the loan | `trigger_preliquidation` is keeper-only and refuses a healthy position (lib.rs:1573-1591); loan #10: trigger 6TKH53Xp…, settlement repays $370.44 from the buyer's escrow, position Closed (README table, EVIDENCE §G7 re-run) | none |
+| one contract holds escrow, positions and limit math; NEP-141 `ft_transfer_call`; NEP-297 events | README "Architecture"; E2suM2LC… `ft_transfer_call` → position #15 | none |
+| each loan a NEP-171 Position Note | `mint_note(position_note_id(id))` on every local and remote open (lib.rs:661, remote.rs:369); `nft_token` p-0, p-3, p-4, p-20 and p-22 exist (blocks 277599724–277599767); `contract_version` 2.2.1-v7 | none |
+| agents read limits and open loans with their own keys over the Feed MCP | MCP tools in README "Run locally"; services/x402/src/demo-agent.ts calls `open_protected_stock_loan` and signs the unsigned call itself; loan #20 DTtVhTnS… | "agents read … and open loans" → "agents can … (so far a scripted agent)": no LLM agent has used the MCP tools (README "What this does not prove") |
+| x402 with NEP-366 | 6karZo8L… action `Delegate` (table below) | none |
+| price refresher key | BHopF1cu…; `view_access_key_list nectar.testnet`: method_names [update_owner_price] (table below) | none |
+| cross-chain settlement uses Chain Signatures; Base leg on a local fork | G7 re-run: authority == live `derived_public_key` (domain 1), Ed25519 instruction before the vault instruction; G13 re-run on the fork: ecrecover == authority (derived key, domain 0) | none |
+| mock line | README "What is real, what is mock" | "NVDAx is a mock token" → "NVDAx and USDC are mock tokens" (the text says "escrow USDC") |
+| Next | plan, not a claim; matches README "Next" | none |
+| Get test assets | the button label in apps/web/components/TestAssets.tsx | none |
+
+Claim → evidence for the 2026-11-13 text (most rows still apply; docs/EVIDENCE.md gate table as of a677689, quoted exactly; "re-run after D-027" rows are 2026-11-11T08:02Z–08:25Z, clone 3ab3026; the G14 402 → 200 and first G1 2.2.1 gas-row rows are 2026-11-11T13:52Z–14:18Z, clone 45ed1f3; the G14-on-HEAD and G1 re-check rows are 15:01Z–15:25Z, clone 48b5c5a):
 | Claim in `idea` | Gate / test |
 | --- | --- |
 | escrowed quotes back the limit; shared capacity per asset | view `get_exit_capacity {"symbol":"NVDAx"}` at block 277557669 (2026-11-13T20:13:44Z): q $16,119.22, r $10, d 0, haircut 1000 bps, capacity $14,516.298, total debt $9,559.00, headroom $4,957.298; refusal tx 9ykovXkm… (`remote_loan_refused {reason: aggregate_limit}`, G7 re-run chain.log; RPC SuccessValue 2026-11-13) |

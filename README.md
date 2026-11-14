@@ -129,7 +129,7 @@ Every check, with commands, outputs and links: [docs/EVIDENCE.md](docs/EVIDENCE.
 
 ## Next
 
-This build becomes Nectar's cross-chain layer: NEAR coordinates settlement on other chains through Chain Signatures and, later, native BTC custody, once a lender or a grant funds it. Shields, Profit-Lock, Position Notes, x402 credit and the Reserve stay features of this build until a partner lender exists.
+This build becomes the cross-chain layer of Nectar, a protocol for credit sized to a sale arranged before the loan. NEAR coordinates settlement on Solana and Base through Chain Signatures and, when a lender or grant funds it, native BTC held under a NEAR-derived key. Before mainnet: real market makers on testnet, a production oracle and an audit. Shields, Profit-Lock, Position Notes, x402 credit and the Reserve stay features of this build until a partner lender exists.
 
 ## Architecture
 
@@ -185,10 +185,11 @@ flowchart TB
   X402 -->|"SignedDelegate via x402-relayer"| TOK
 ```
 
-- `nectar-core` ([contracts/nectar-core](contracts/nectar-core)) holds all state: quotes, positions, the pool and an O(1) fee index. Tokens enter only through `ft_transfer_call` → `ft_on_transfer(msg)`; any token other than USDC or a configured collateral is refused.
-- The keeper passes ids and never prices or signs; the contract re-checks everything. On pre-liquidation the contract asks the pinned OutLayer program for the discount and clamps it to `[0, max_discount_bps]`; if the call fails, it settles at the cap. The same program reads the Solana vault to confirm remote deposits.
-- For remote collateral the contract builds the release or settlement message itself and gets a signature over the raw bytes from Chain Signatures, one derived key per position. The keeper only carries the signed message to the vault.
-- The browser never calls the Feed host directly: the web app proxies a fixed list of read-only Feed paths.
+- One Rust contract, `nectar-core-v2` ([contracts/nectar-core](contracts/nectar-core)), holds the quote escrow, positions and limit math, with the pool and an O(1) fee index. It takes collateral through NEP-141 `ft_transfer_call` → `ft_on_transfer(msg)` and refuses any token other than USDC or a configured collateral. It emits NEP-297 events and records each loan as a NEP-171 Position Note (each quote gets one too).
+- If a position breaks, the keeper triggers the sale and escrowed USDC repays the loan. The keeper passes ids and never prices or signs; the contract re-checks everything. On pre-liquidation the contract asks the pinned OutLayer program for the discount and clamps it to `[0, max_discount_bps]`; if the call fails, it settles at the cap. The same program reads the Solana vault to confirm remote deposits.
+- The Feed indexes those events and serves REST and MCP, so agents can read limits and open loans signed with their own keys (so far a scripted agent, the reference agent in services/x402). Paid data uses x402 with NEP-366 meta-transactions. The browser never calls the Feed host directly: the web app proxies a fixed list of read-only Feed paths.
+- The price refresher holds a function-call key that can call only `update_owner_price`.
+- Cross-chain settlement uses Chain Signatures: for remote collateral the contract builds the release or settlement message itself and gets a signature over the raw bytes, one derived key per position, and the keeper only carries the signed message to the vault. The Base leg is tested on a local fork of Base Sepolia.
 
 ### Glossary
 
