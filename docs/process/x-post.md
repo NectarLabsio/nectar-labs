@@ -1,5 +1,9 @@
 # x-post.md — draft only; Kunal posts it himself (H3). Never posted by an agent.
 
+Posted by Kunal 2026-11-14 (H3): https://x.com/nectarlabsio/status/2121438063369052421 — public per X oEmbed, read 2026-11-14 ~03:20Z, with media. Post 1 as posted:
+"Stock market closed? Lenders lose their price, so they cut your limit or sell your shares. Nectar backs your limit with buy quotes market makers
+escrow on-chain, so you can still borrow over the weekend. Built at NEAR HACKATHON, on testnet. @NEARProtocol #NEARHackathon"
+
 Rules (docs/process/hackathon.md "2. The demo post"): lead with the user problem; say it was built at NEAR HACKATHON; tag @NEARProtocol and #NEARHackathon;
 attach the video or screenshots; explain NEAR's role concretely; link the demo and the repo and ask a real question. Each post ≤ 280 characters
 (X counts every link as 23). Started from Kunal's 3-post draft (WO-89, 2026-11-13); every claim checked against docs/EVIDENCE.md or testnet RPC
